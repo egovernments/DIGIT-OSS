@@ -31,6 +31,7 @@ const Developerinfo = (props) => {
   const dataIcons = props.dataForIcons;
   const landScheduleData = props.ApiResponseData;
   const Purpose = props.purpose;
+  
   const applicationStatus = props.applicationStatus;
   let user = Digit.UserService.getUser();
   const userRoles = user?.info?.roles?.map((e) => e.code) || [];

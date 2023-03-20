@@ -15,7 +15,7 @@ import axios from "axios";
 import { ScrutinyRemarksContext } from "../../../../context/remarks-data-context";
 import DataGridDemo from "./PatwariHQ";
 // import AddIcon from "@mui/icons-material/Add";
-import TemplatesPatwar from "./TemplatePatwari";
+// import TemplatesPatwar from "./TemplatePatwari";
 
 const ScrutitnyForms = ({ apiResponse, applicationNumber, refreshScrutinyData , histeroyData, feeandcharges , applicationStatus }) => {
   const personalInfoRef = useRef();
@@ -384,11 +384,11 @@ console.log("roleData",rolesDate )
           histeroyData={histeroyData}
         ></ScrutinyDevelopment>
       </div>
-      <div style={{ position: "relative", width: "100%", height: "100%", display: "flex" }}>
+      {/* <div style={{ position: "relative", width: "100%", height: "100%", display: "flex" }}>
         <TemplatesPatwar
            ApiResponseData={apiResponse !== undefined ? apiResponse?.ApplicantPurpose : null}
         ></TemplatesPatwar>
-      </div>
+      </div> */}
 
       
 

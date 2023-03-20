@@ -305,7 +305,7 @@ const DataGridDemo = (props) => {
 
     return (
         <Form ref={props.generalInfoRef}>
-
+                 
             <Form.Group className="justify-content-center" controlId="formBasicEmail" style={{ border: "2px solid #e9ecef", margin: 10, padding: 20 }}>
 
 

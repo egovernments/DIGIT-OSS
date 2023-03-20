@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Row, Col, Card, Container, Form } from "react-bootstrap";
+import { Row, Col, Card, Container, Form ,Button } from "react-bootstrap";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import { useForm } from "react-hook-form";
 import axios from "axios";
@@ -12,6 +12,8 @@ const Records = (props) => {
   const authToken = Digit.UserService.getUser()?.access_token || null;
   const userInfo = Digit.UserService.getUser()?.info || {};
   const [businessService, setBusinessService] = useState("");
+  const [tableDate, setTableDate] = useState("");
+  const [iDApplication, setIDApplication] = useState("");
   const {
     register,
     handleSubmit,
@@ -91,7 +93,8 @@ const Records = async (data) => {
     const Resp = await axios.post(`/tl-services/v1/_search?${watch("selectService")}=${LOINumber}`, loiRequest);
     console.log(Resp, "RRRRRRRRRRR");
     setBusinessService(Resp?.data?.Licenses?.[0]?.businessService)
-    // setDevelopmentPlan(Resp?.data?.Licenses?.[0]?.tradeLicenseDetail?.additionalDetail?.[0]?.ApplicantPurpose?.AppliedLandDetails?.[0]?.developmentPlan)
+    setTableDate(Resp?.data?.Licenses?.[0])
+    setIDApplication(Resp?.data?.Licenses?.[0].applicationNumber)
     // setPurpose(Resp?.data?.Licenses?.[0]?.tradeLicenseDetail?.additionalDetail?.[0]?.ApplicantPurpose?.purpose)
     // setTotalArea(Resp?.data?.Licenses?.[0]?.tradeLicenseDetail?.additionalDetail?.[0]?.ApplicantPurpose?.totalArea)
     console.log("verfication", businessService)
@@ -115,6 +118,43 @@ const Records = async (data) => {
   //   onChange={(e) => handleshowhide(e)}
   //   setShowhide(getuser);
   // };
+  const handleshow19 = async (e) => {
+    const payload = {
+
+      "RequestInfo": {
+
+        "apiId": "Rainmaker",
+
+        "ver": ".01",
+
+        "ts": null,
+
+        "action": "_update",
+
+        "did": "1",
+
+        "key": "",
+
+        "msgId": "20170310130900|en_IN",
+
+        "authToken": ""
+
+      }
+    }
+    const Resp = await axios.post(`/tl-services/new/license/pdf?applicationNumber=${iDApplication}`, payload, { responseType: "arraybuffer" })
+
+    console.log("logger12345...", Resp.data, userInfo)
+
+    const pdfBlob = new Blob([Resp.data], { type: 'application/pdf' });
+    const pdfUrl = URL.createObjectURL(pdfBlob);
+    window.open(pdfUrl);
+
+    console.log("logger123456...", pdfBlob, pdfUrl);
+
+  };
+  const handleChange = (e) => {
+    this.setState({ isRadioSelected: true });
+  };
   
   
 
@@ -142,7 +182,7 @@ const Records = async (data) => {
 
 <Card>
   
-          <Card.Body style={{ overflowY: "auto", height: 200 , maxWidth: "98%", marginBottom:5}}>
+          <Card.Body style={{ overflowY: "auto", height: 200 , maxWidth: "98%", marginBottom:5 , paddingLeft: 5, marginLeft : 15}}>
             <Row>
             <Col className="col-3">
             
@@ -150,7 +190,7 @@ const Records = async (data) => {
                     Select By User Details <span style={{ color: "red" }}>*</span>
                   </h4>
 
-                <select className="Inputcontrol"  class="form-control" {...register("selectService")} >
+                <select style={{height:50}}className="Inputcontrol"  class="form-control" {...register("selectService")} >
                   <option value="">----Select value-----</option>
                   <option value="applicationNumber">Application Number</option>
                   <option value="loiNumber">LOI Number</option>
@@ -181,7 +221,7 @@ const Records = async (data) => {
               {loiPatternErr ? <p style={{color: 'red'}}>Please enter the valid LOI Number*</p> : " "}
             </Col>
             <Col className="col-4">
-                <button style={{transform: "translateY(35px)" , color:"#ffff"}} type="submit" onClick={handleLoiNumber} id="btnSearch" class="submit-bar submit-bar-take-action submit-bar-search">
+                <button style={{ color:"#ffff" , marginRight:"-190"}} type="submit" onClick={handleLoiNumber} id="btnSearch" class="submit-bar submit-bar-take-action submit-bar-search">
                <b>Search </b> 
                 </button>
             </Col>
@@ -191,7 +231,7 @@ const Records = async (data) => {
 </Card>
 {businessService === "TL" &&
         <Card>
-          <Card.Body style={{ overflowY: "auto", height: 200 , maxWidth: "98%", backgroundColor: "#C6C6C6" ,   padding:2 }}>
+          <Card.Body style={{ overflowY: "auto", height: 300 , maxWidth: "98%", backgroundColor: "#C6C6C6" ,   padding:2 }}>
             <Form>
             <div >
         <table id="datatables-basics" class="table table-striped table-bordered table-responsive" >
@@ -207,23 +247,37 @@ const Records = async (data) => {
                     <th>Aging with User</th>
                     <th>Subject</th>
                      <th>Last User</th>
-                   <th>Time Consumed(%)</th>
+                   <th>View PDF</th>
                 </tr>
             </thead>
             <tbody>
 
                 <tr>
                     <td>1</td>
-                    <td class="text-center"><span class="badge badge-warning">TCP</span></td>
-                    <td>LC-4108A</td>
-                    <td>TCP-OFA/2510/2020</td>
-                    <td>New Licence Application For Area 4046.86 SqMtrs, Purpose: Commercial, Activity: Dhaba </td>
-                    <td class="text-center"><button class="btn btn-info" ><i class="fa fa-eye"><VisibilityIcon color="info" className="icon" /></i></button></td>
+                    {/* <td class="text-center"><span class="badge badge-warning">TCP</span></td> */}
+                    <td>{tableDate?.applicationNumber}</td>
+                    <td>{new Date(tableDate?.applicationDate).toLocaleDateString("en-GB")} 
+                    {/* {new Date(tableDate?.applicationDate).toLocaleTimeString("en-US")} */}
+                    </td>
+                    <td>{tableDate?.tcpDairyNumber}</td>
+                    <td>{tableDate?.status}</td>
+                    <td>{new Date(tableDate?.tradeLicenseDetail?.auditDetails?.createdTime).toLocaleTimeString("en-US")}</td>
+                    <td>{tableDate?.applicationNumber}</td>
+                    <td>{tableDate?.lastModifiedTime}</td>
+                    <td>{tableDate?.applicationNumber}</td>
+                    <td>{tableDate?.applicationNumber}</td>
+                    {/* <td class="text-center"><button class="btn btn-info" ><i class="fa fa-eye"><VisibilityIcon color="info" className="icon"  onChange1={handleChange} name="Submit" onClick={handleshow19}/></i></button></td> */}
+                    <td><div className="col-sm-2">
+          <Button style={{ textAlign: "right" }} value="Submit" id="Submit" onChange1={handleChange} name="Submit" onClick={handleshow19}>Views PDF</Button>
+            </div></td>
+                    {/* <td>{tableDate?.applicationNumber}</td>
+                    <td>{tableDate?.applicationNumber}</td> */}
+                    {/* <td class="text-center"><button class="btn btn-info" ><i class="fa fa-eye"><VisibilityIcon color="info" className="icon" /></i></button></td>
                     <td>28/08/2020</td>
                     <td>22</td>
-                    <td>22</td>
-                    <td class="text-center"><span class="badge badge-secondary"><b>8%</b></span></td>
-                    <td class="text-center"><span class="badge badge-warning"><i class="fa fa-file"></i>&nbsp; Mark File</span></td>
+                    <td>22</td> */}
+                    {/* <td class="text-center"><span class="badge badge-secondary"><b>8%</b></span></td>
+                    <td class="text-center"><span class="badge badge-warning"><i class="fa fa-file"></i>&nbsp; Mark File</span></td> */}
                 </tr>
                 
                 

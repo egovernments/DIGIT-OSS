@@ -36,6 +36,7 @@ const AppliedLandinfo = (props) => {
 
   const dataIcons = props.dataForIcons;
   const DetailsofAppliedLand = props.ApiResponseData;
+  const applicationStatus = props.applicationStatus;
   console.log("personal info applicant data4", DetailsofAppliedLand);
   let user = Digit.UserService.getUser();
   const userRoles = user?.info?.roles?.map((e) => e.code) || [];
@@ -479,6 +480,7 @@ let Tree = ({ data }) => {
         selectedFieldData={selectedFieldData}
         fieldValue={fieldValue}
         remarksUpdate={currentRemarks}
+        applicationStatus={applicationStatus}
       ></ModalChild>
 
       <div>

@@ -23,6 +23,13 @@ function ModalChild(props) {
   const dateTime = new Date();
   const authToken = Digit.UserService.getUser()?.access_token || null;
   const { id } = useParams();
+  const userRolesArray = userInfo?.roles.filter((user) => user.code !=="EMPLOYEE" );
+  const filterDataRole = userRolesArray?.[0]?.code;
+  const designation = userRolesArray?.[0]?.name;
+
+  console.log("usern23233" , userRolesArray );
+  console.log("usern23" , filterDataRole );
+  console.log("usern23434" , designation );
 
 
   const handlemodalsubmit = async () => {
@@ -53,9 +60,10 @@ function ModalChild(props) {
           documentId: null,
           ts: dateTime.toUTCString(),
           bussinessServiceName : bussinessService,
-          designation : userInfo?.name || null,
-          employeeName : userInfo?.roles?.[1]?.name || null,
-         role : userInfo?.roles?.[1]?.code ,
+          designation : designation,
+          name : userInfo?.name || null,
+          employeeName : userInfo?.name || null,
+         role : filterDataRole,
          applicationStatus : applicationStatus
         },
       };
@@ -91,7 +99,9 @@ function ModalChild(props) {
   }, [props.selectedFieldData]);
 
   console.log("Isdata" , status )
-  console.log("username" , userInfo?.roles?.[1]?.code  )
+
+  // let empCode = "EMPLOYEE";
+  
 
   return (
     <Modal

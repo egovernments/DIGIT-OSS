@@ -1,4 +1,4 @@
-import { Checkbox, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from "@mui/material";
+
 import React, { useContext, useEffect, useState } from "react";
 import { Row, Col, Card, Container, Form, Button } from "react-bootstrap";
 import axios from "axios";
@@ -9,6 +9,12 @@ import { getDocShareholding } from "../ScrutinyDevelopment/docview.helper";
 import Visibility from "@mui/icons-material/Visibility";
 import FileDownload from "@mui/icons-material/FileDownload";
 import { IconButton } from "@mui/material";
+import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
+import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
+
+import {  Box,
+  Collapse,
+  } from "@mui/material";
 
 // import { Scrollbars } from 'react-custom-scrollbars';
 
@@ -88,7 +94,84 @@ const ScrutinyDevelopment = (props) => {
 
 
   // const sumdataTime = props.remarksum;
-  // const [applicationId, setApplicationId] = useState("");
+//   // const [applicationId, setApplicationId] = useState("");
+//   const [open, setOpen] = useState<Number[]>([]);
+// const handleClick = (clickedIndex: Number) => {
+//   if(open.includes(clickedIndex)){
+//     const openCopy = open.filter((element) => {return element !== clickedIndex});
+//     setOpen(openCopy);
+//   } else {
+//     const openCopy = [...open];
+//     openCopy.push(clickedIndex);
+//     setOpen(openCopy);
+//   }
+// }
+
+// const [open, setOpen] = useState <Number[]>([]);
+// const handleClick = (clickedIndex: Number) => {
+//   if(open.includes(clickIndex)){
+//     const openCopy = open.filter((element) => {return element !== clickedIndex});
+//     setOpen(openCopy);
+//   } else {
+//     const openCopy = [...open];
+//     openCopy.push(clickedIndex);
+//     setOpen(openCopy);
+//   }
+// }
+// const [data,setData] = useState([]);
+const [datailsShown , setDatailsShown] = useState([]);
+const toggleshown = userID => {
+  const  showState = datailsShown.slice();
+  const index = showState.indexOf(userID);
+  if(index >= 0 ){
+    showState.splice(index, 1);
+    setDatailsShown(showState);
+  }
+  else{
+    showState.push(userID);
+    setDatailsShown(showState);
+  }
+}
+const [data,setData] = useState([]);
+const toggleshown1 = employeeName => {
+  const  showState = data.slice();
+  const index = showState.indexOf(employeeName);
+  if(index >= 0 ){
+    showState.splice(index, 1);
+    setData(showState);
+  }
+  else{
+    showState.push(employeeName);
+    setData(showState);
+  }
+}
+const [dataTwo,setDataTwo] = useState([]);
+const toggleshown2 = role => {
+  const  showState = dataTwo.slice();
+  const index = showState.indexOf(role);
+  if(index >= 0 ){
+    showState.splice(index, 1);
+    setDataTwo(showState);
+  }
+  else{
+    showState.push(role);
+    setDataTwo(showState);
+  }
+}
+const [dataFrist,setDataFrist] = useState([]);
+const toggleshown3 = designation => {
+  const  showState = dataFrist.slice();
+  const index = showState.indexOf(designation);
+  if(index >= 0 ){
+    showState.splice(index, 1);
+    setDataFrist(showState);
+  }
+  else{
+    showState.push(designation);
+    setDataFrist(showState);
+  }
+}
+console.log("log123Disrenu" ,id);
   return (
     <Container
       className="justify-content-center"
@@ -102,25 +185,19 @@ const ScrutinyDevelopment = (props) => {
       }}
     >
       <Row class="remarkshelp">
-        <div class="currentremarks">
+        <div 
+        // class="currentremarks"
+         >
           <div class="WhatsNewCard" style={{ backgroundColor: "#ddf2cf" }}>
             <p class="text-center" ><h4>Current Remarks</h4></p>
             <Row>
 
               <Col>
                 <b>Application Id.</b>
-                {remarkDataResp?.[0]?.applicationId}
+                {id}
               </Col>
-              {/* <Col>
-              <b>Service Id.</b>
-              {remarkDataResp?.[0]?.bussinessServiceName}
-            </Col>
-            <Col>
-              <b> Diary No.</b>
-              {remarkDataResp?.[0]?.bussinessServiceName}
-            </Col> */}
             </Row>
-            <Row>
+            {/* <Row>
 
               <Col>
                 <b>Field Name</b>
@@ -135,73 +212,289 @@ const ScrutinyDevelopment = (props) => {
 
               </Col>
 
-            </Row>
+            </Row> */}
 
-            {remarkDataResp !== null ? (
-              remarkDataResp.map((el, i) => {
-                return (
 
-                  <div>
-                    <hr style={{ marginTop: 5, marginBottom: 5 }}></hr>
-                    {/* <Row>
-                  <Col>
-                      <b>{el.applicationId}</b>
-                    </Col>
-                    <Col>
-                      {" "}
-                      <b>{el.bussinessServiceName}</b>
-                    </Col>
-                    <Col>
-                     
+            <div>
+              <Form.Group>
+               <div>
+               {remarkDataResp !== null ?  (
+                      remarkDataResp?.map((el,  index) => {
+                        return (
+                          <div>
+                            <p> 
+                 <IconButton
+                    onClick={() => toggleshown1(el.employeeName)}
+                  >
+                    {data.includes(index)?(
+                      <KeyboardArrowUpIcon />  
+                    ) : (
+                     <p><KeyboardArrowUpIcon /><b>{el.role}</b></p>   
                       
+                    )}
                    
-                    </Col>
-                  </Row> */}
+                  </IconButton>
+                 
+                  </p>
+                 
+                   <div className="additional-info">
+                   {data.includes(el.employeeName) && (
+                    <Box >
+                     
+                    <p>
+                    <IconButton
+                           onClick={() => toggleshown(el.userID)}
+                         >
+                           {datailsShown.includes(index)? (
+                           
+                              <KeyboardArrowUpIcon /> 
+                            ) : (
+                           <p><KeyboardArrowDownIcon /><b style={{ color: "#ff0000" }}>{el.disApprovedfiledDetails?.[0]?.isApproved}</b></p>
+                          
+                           )}
+                           
+                         </IconButton>
+                         </p>
+                          
+                              
+                             
+                             {datailsShown.includes(el.userID) && (  
+                  <table colSpan = "2" className="table table-bordered" style={{ backgroundColor: "#ddf2cf" }}>
+                    <thead>
 
-                    <Row>
-                      <Col>
-                        <b>{el.fieldIdL}</b>
-                      </Col>
-                      <Col>
-                        {" "}
-                        <b>{el.fieldValue}</b>
-                      </Col>
-                      <Col>
+                      <tr className="border-bottom-0">
+                        <th class="fw-normal pb-0 border-bottom-0 align-top">
+                          Sr.No
+                        </th>
+                        <th class="fw-normal pb-0 border-bottom-0 align-top">
+                          Filed Name
+                        </th>
+                        <th class="fw-normal pb-0 border-bottom-0 align-top">
+                          Filed value
+                        </th>
+                        <th class="fw-normal pb-0 border-bottom-0 align-top">
+                          Status
+                        </th>
 
-                        <b>{el.isApproved}</b>
+                        <th class="fw-normal pb-0 border-bottom-0 align-top">
+                          Remarks
+                        </th>
+                      </tr>
+                      <tr>
 
-                      </Col>
+                      </tr>
+
+
+                    </thead>
+                     <tbody>
+                 
+                     {el?.disApprovedfiledDetails !== null ? (
+           el?.disApprovedfiledDetails?.map((el, i) => {
+                      return (
+                    
+                           <tr >
+
+                                <td>
+                                  {i + 1}
+                                </td>
+                                <td>
+                                  <b>{el.name}</b>
+                                </td>
+                                <td>
+                                  <b>{el.value}</b>
+                                </td>
+
+                                <td>
+                                  <b>{el.isApproved}</b>
+                                </td>
+                                <td>
+                                  <i>{el.remarks}</i>
+                                </td>
+
+                              </tr>
+                                 );
+                                })
+                              ) : (
+                                <p></p>
+                              )}
+                           </tbody>
+                          </table>
+                          )}  
+                   <p> 
+                        <IconButton
+                           onClick={() => toggleshown3(el.designation)}
+                         >
+                           {dataFrist.includes(index)? (
+                             <KeyboardArrowUpIcon /> 
+                           ) : (
+                             <p><KeyboardArrowDownIcon /><b style={{ color: "#2874A6"}}>{el.condApprovedfiledDetails?.[0]?.isApproved}</b></p>
+                           )}
+                         
+                         </IconButton>
+                         </p>
+                         {dataFrist.includes(el.designation) && (      
+                                <table colSpan = "3" className="table table-bordered" style={{ backgroundColor: "#ddf2cf" }}>
+                                  <thead>
+              
+                                    <tr className="border-bottom-0">
+                                      <th class="fw-normal pb-0 border-bottom-0 align-top">
+                                        Sr.No
+                                      </th>
+                                      <th class="fw-normal pb-0 border-bottom-0 align-top">
+                                        Filed Name
+                                      </th>
+                                      <th class="fw-normal pb-0 border-bottom-0 align-top">
+                                        Filed value
+                                      </th>
+                                      <th class="fw-normal pb-0 border-bottom-0 align-top">
+                                        Status
+                                      </th>
+              
+                                      <th class="fw-normal pb-0 border-bottom-0 align-top">
+                                        Remarks
+                                      </th>
+                                    </tr>
+                                    <tr>
+              
+                                    </tr>
+              
+              
+                                  </thead>
+                                   <tbody>
+                                   {el?.condApprovedfiledDetails.map((el, i) => (
+                                         <tr >
+              
+                                              <td>
+                                                {i + 1}
+                                              </td>
+                                              <td>
+                                                <b>{el.name}</b>
+                                              </td>
+                                              <td>
+                                                <b>{el.value}</b>
+                                              </td>
+              
+                                              <td>
+                                                <b>{el.isApproved}</b>
+                                              </td>
+                                              <td>
+                                                <i>{el.remarks}</i>
+                                              </td>
+              
+                                            </tr>
+                                               ))
+                                              }
+                                         </tbody>
+                                      
+                                        </table>
+                              )}     
+           <p> 
+                                     <IconButton
+                           onClick={() => toggleshown2(el.role)}
+                         >
+                           {dataTwo.includes(index)? (
+                             <KeyboardArrowUpIcon /> 
+                           ) : (
+                            <p><KeyboardArrowDownIcon /><b style={{ color: "#09cb3d" }}>{el.approvedfiledDetails?.[0]?.isApproved}</b></p>
+                           )}
+                           
+                         </IconButton>
+                         </p>
+                              
+                              
+                              {dataTwo.includes(el.role) && ( 
+                                <table colSpan = "4" className="table table-bordered" style={{ backgroundColor: "#ddf2cf" }}>
+                                  <thead>
+              
+                                    <tr className="border-bottom-0">
+                                      <th class="fw-normal pb-0 border-bottom-0 align-top">
+                                        Sr.No
+                                      </th>
+                                      <th class="fw-normal pb-0 border-bottom-0 align-top">
+                                        Filed Name
+                                      </th>
+                                      <th class="fw-normal pb-0 border-bottom-0 align-top">
+                                        Filed value
+                                      </th>
+                                      <th class="fw-normal pb-0 border-bottom-0 align-top">
+                                        Status
+                                      </th>
+              
+                                      <th class="fw-normal pb-0 border-bottom-0 align-top">
+                                        Remarks
+                                      </th>
+                                    </tr>
+                                    <tr>
+              
+                                    </tr>
+              
+              
+                                  </thead>
+                                   <tbody>
+                                   {el?.approvedfiledDetails.map((el, i) => (
+                                         <tr >
+              
+                                              <td>
+                                                {i + 1}
+                                              </td>
+                                              <td>
+                                                <b>{el.name}</b>
+                                              </td>
+                                              <td>
+                                                <b>{el.value}</b>
+                                              </td>
+              
+                                              <td>
+                                                <b>{el.isApproved}</b>
+                                              </td>
+                                              <td>
+                                                <i>{el.remarks}</i>
+                                              </td>
+              
+                                            </tr>
+                                              ))
+                                            }
+                                         </tbody>
+                                        </table>
+                                         )}     
+                        
+                        
+                      <Row style={{ margin: 4 }}>
+                      <b style={{ textAlign: "right", marginRight: 2 }}>{el.designation}</b>
+                     <b style={{ textAlign: "right" }}>{el.employeeName}</b>
+                     </Row>
+                     <Row style={{ margin: 4 }}>
+
+                     <b style={{ textAlign: "right" }}>{el.createdOn}</b>
+                     <b style={{ textAlign: "right" }}>
+                     {/* {new Date(el.createdOn).toLocaleDateString("en-GB")} {new Date(el.ts).toLocaleTimeString("en-US")} */}
+                   </b>
                     </Row>
+                      </Box>
+                     )}
+                        
+                        </div>
+      
+                          </div>
+                        );
+                      })
+                    ) : (
+                      <p></p>
+                    )}
 
+                  
 
-                    <Row>
-                      <p style={{margin: 5 }}><b>Remarks:</b></p>
-                      <p>
-                      <i>{el.comment}</i>
-                      </p>
-                    </Row>
+                  
+                </div>
+                    
+              </Form.Group>
 
-                    <Row style={{ margin: 4 }}>
-                    <b style={{ textAlign: "right" }}>{el.employeeName}</b>
-                    <b style={{ textAlign: "right" ,marginRight:2}}>{el.designation}</b>
-                      {/* <b style={{ textAlign: "right" }}>{el.userid}</b>
-                       */}
-                    </Row>
-
-                    <Row style={{ margin: 4 }}>
-                      <b style={{ textAlign: "right" }}>
-                        {new Date(el.ts).toLocaleDateString("en-GB")} {new Date(el.ts).toLocaleTimeString("en-US")}
-                      </b>
-                    </Row>
-                  </div>
-                );
-              })
-            ) : (
-              <p></p>
-            )}
+            </div>
           </div>
+
         </div>
-        <div class="histroryremarks">
+
+        {/* <div class="histroryremarks">
           <div class="WhatsNewCard" style={{ backgroundColor: "#ddf2cf" }}>
 
 
@@ -211,15 +504,13 @@ const ScrutinyDevelopment = (props) => {
               {histeroyData?.data?.processInstances?.map((item, index) => (
                 <div key={index}>
                   <hr style={{ marginTop: 5, marginBottom: 5 }}></hr>
-                  {/* {index} */}
+                  
                   {item.comment}
                   <div className="text-right">
-                    {/* {item?.assigner?.map((item, index) => ( */}
+                   
                     <div class="font-weight-bold">
-                      {item?.assigner?.name}
                     </div>
-                    {/* ))
-              } */}
+               
                   </div>
                   <div className="text-right">
                     {item?.documents?.map((item, index) => (
@@ -235,7 +526,7 @@ const ScrutinyDevelopment = (props) => {
                             <FileDownload color="primary" className="mx-1" />
                           </IconButton>
                         </div>
-                        {/* {item?.fileStoreId} */}
+                   
                       </div>
                     ))
                     }
@@ -248,8 +539,9 @@ const ScrutinyDevelopment = (props) => {
             </div>
 
           </div>
-        </div>
+        </div> */}
       </Row>
+
 
       {/* {JSON.stringify(userRoles)}
       {JSON.stringify(showRemarksSection)} */}

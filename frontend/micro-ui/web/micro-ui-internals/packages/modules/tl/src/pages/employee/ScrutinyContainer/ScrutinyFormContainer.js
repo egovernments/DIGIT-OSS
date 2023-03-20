@@ -301,7 +301,7 @@ const ScrutinyFormcontainer = (props) => {
 
     if (mutate) {
       console.log("TCPac234",)
-      // return;
+   
       setIsEnableLoader(true);
       mutate(data, {
         onError: (error, variables) => {
@@ -384,7 +384,7 @@ const ScrutinyFormcontainer = (props) => {
           </div>
           <div className="col-sm-2">
             <b><p className="head-font">TCP Case Number:</p></b>
-            <b><p className="head-font">{applicationData?.tcpCaseNumber.substring(0, 7)}</p></b>
+            {/* <b><p className="head-font">{applicationData?.tcpCaseNumber.substring(0, 7)}</p></b> */}
           </div>
           <div className="col-sm-2">
             <b><p className="head-font">TCP Dairy Number: </p></b>
