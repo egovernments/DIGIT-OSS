@@ -42,7 +42,12 @@ const SubMenu = ({ item }) => {
     collections: <CollectionIcon />,
   };
   const leftIconArray = item?.icon?.leftIcon?.split?.(":")?.[1] || item?.leftIcon?.split?.(":")[1];
-  const leftIcon = IconsObject[leftIconArray] || IconsObject.collections;
+  let leftIcon = IconsObject[leftIconArray] || IconsObject.collections;
+  const iconArr=item?.icon?.leftIcon?.split?.(":")|| item?.leftIcon?.split?.(":");
+  if(iconArr?.[0]=='dynamic'){
+    var IconComp = require("@egovernments/digit-ui-react-components")?.[iconArr?.[1]];
+    leftIcon=IconComp?<IconComp/>:leftIcon;
+  }
   const getModuleName = item?.moduleName?.replace(/[ -]/g, "_");
   const appendTranslate = t(`ACTION_TEST_${getModuleName}`);
   const trimModuleName = t(appendTranslate?.length > 20 ? appendTranslate.substring(0, 20) + "..." : appendTranslate);

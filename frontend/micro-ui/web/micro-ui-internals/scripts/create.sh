@@ -1,3 +1,3 @@
 #!/bin/bash
 
-./scripts/run.sh dss
+./scripts/run.sh core

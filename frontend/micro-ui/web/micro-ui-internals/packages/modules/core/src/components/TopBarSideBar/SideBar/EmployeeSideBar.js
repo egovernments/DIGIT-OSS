@@ -35,23 +35,25 @@ const EmployeeSideBar = () => {
       element.style.padding = "0";
     });
   };
-
   const configEmployeeSideBar = {};
-
   data?.actions
     .filter((e) => e.url === "url")
     .forEach((item) => {
+      let index = item.path.split(".")[0];
       if (search == "" && item.path !== "") {
-        let index = item.path.split(".")[0];
-        if (index === "TradeLicense") index = "Trade License";
+        index = item.path.split(".")[0];
         if (!configEmployeeSideBar[index]) {
           configEmployeeSideBar[index] = [item];
         } else {
           configEmployeeSideBar[index].push(item);
         }
-      } else if (item.path !== "" && item?.displayName?.toLowerCase().includes(search.toLowerCase())) {
-        let index = item.path.split(".")[0];
-        if (index === "TradeLicense") index = "Trade License";
+      } else if (
+        item.path !== "" &&
+        t(`ACTION_TEST_${index?.toUpperCase()?.replace(/[ -]/g, "_")}`)
+          ?.toLowerCase()
+          .includes(search.toLowerCase())
+      ) {
+        index = item.path.split(".")[0];
         if (!configEmployeeSideBar[index]) {
           configEmployeeSideBar[index] = [item];
         } else {
@@ -90,12 +92,15 @@ const EmployeeSideBar = () => {
         });
       }
     }
-    res.splice(0,1);
-    const indx = res.findIndex(a => a.moduleName === "HOME");
-    const home = res.splice(indx,1);
-    res.sort((a,b) => a.moduleName.localeCompare(b.moduleName));
-    home?.[0] && res.splice(0,0,home[0]);
-    return res.map((item, index) => {
+    if (res.find((a) => a.moduleName === "HOME")) {
+      const home = res?.filter((ob) => ob?.moduleName === "HOME");
+      let res1 = res?.filter((ob) => ob?.moduleName !== "HOME");
+      res = res1.sort((a, b) => a.moduleName.localeCompare(b.moduleName));
+      home?.[0] && res.unshift(home[0]);
+    } else {
+      res.sort((a, b) => a.moduleName.localeCompare(b.moduleName));
+    }
+    return res?.map((item, index) => {
       return <SubMenu item={item} key={index + 1} />;
     });
   };
