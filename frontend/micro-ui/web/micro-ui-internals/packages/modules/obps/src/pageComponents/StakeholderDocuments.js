@@ -18,6 +18,7 @@ import { getDocShareholding } from "../../../tl/src/pages/employee/ScrutinyBasic
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import { Button, Placeholder } from "react-bootstrap";
 import Spinner from "../components/Loader/index";
+import CusToaster from "../components/Toaster";
 const StakeholderDocuments = ({ t, config, onSelect, userType, formData, setError: setFormError, clearErrors: clearFormErrors, formState }) => {
   const tenantId = Digit.ULBService.getCurrentTenantId();
   const stateId = Digit.ULBService.getStateId();
@@ -38,6 +39,7 @@ const StakeholderDocuments = ({ t, config, onSelect, userType, formData, setErro
   const [registeredIrrevocablePaternshipDeed, setRegisteredIrrevocablePaternshipDeed] = useState("");
   const [affidavitAndPancard, setAffidavitAndPancard] = useState("");
   const [anyOtherDoc, setAnyOtherDoc] = useState("");
+
   // const [docList, setDocList] = useState({});
   if (isopenlink)
     window.onunload = function () {
@@ -305,6 +307,8 @@ function SelectDocument({ t, document: doc, setDocuments, documentsUploadList, e
   //   setDocList(docs.documentUid);
   // });
 
+  const [showToastError, setShowToastError] = useState({ label: "", error: false, success: false });
+
   // setDocList(documents);
   const { setValue, getValues, watch } = useForm();
   // const [docList, setDocList] = useState({});
@@ -372,12 +376,14 @@ function SelectDocument({ t, document: doc, setDocuments, documentsUploadList, e
             setLoading(false);
             if (response?.data?.files?.length > 0) {
               setUploadedFile(response?.data?.files[0]?.fileStoreId);
+              setShowToastError({ label: "File Uploaded Successfully", error: false, success: true });
             } else {
-              setError(t("CS_FILE_UPLOAD_ERROR"));
+              setShowToastError({ label: t("CS_FILE_UPLOAD_ERROR"), error: true, success: false });
+              // setError(t("CS_FILE_UPLOAD_ERROR"));
             }
           } catch (err) {
             setLoading(false);
-            setError(t("CS_FILE_UPLOAD_ERROR"));
+            setShowToastError({ label: t("CS_FILE_UPLOAD_ERROR"), error: true, success: false });
           }
         }
       }
@@ -464,6 +470,16 @@ function SelectDocument({ t, document: doc, setDocuments, documentsUploadList, e
           }
         </div>
       </div>
+      {showToastError && (
+        <CusToaster
+          label={showToastError?.label}
+          success={showToastError?.success}
+          error={showToastError?.error}
+          onClose={() => {
+            setShowToastError({ label: "", success: false, error: false });
+          }}
+        />
+      )}
     </div>
   );
 }

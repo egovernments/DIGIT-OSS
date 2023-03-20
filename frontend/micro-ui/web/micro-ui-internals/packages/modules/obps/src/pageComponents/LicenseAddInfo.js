@@ -58,6 +58,8 @@ import TableHead from "@mui/material/TableHead";
 import TablePagination from "@mui/material/TablePagination";
 import TableRow from "@mui/material/TableRow";
 
+import CusToaster from "../components/Toaster";
+
 const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex }) => {
   let validation = {};
   const { pathname: url } = useLocation();
@@ -318,7 +320,7 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
   } = useForm([{ Sr: "", name: "", mobileNumber: "", email: "", PAN: "", Aadhar: "" }]);
   const [success, setError] = useState(null);
   const [showToast, setShowToast] = useState(null);
-  const [showToastError, setShowToastError] = useState(null);
+  const [showToastError, setShowToastError] = useState({ label: "", error: false, success: false });
   // const handleChange = (e) => {
   //   this.setState({ isRadioSelected: true });
   // };
@@ -623,26 +625,17 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
     console.log("logFile", file);
     if (type === "existingColonizer") {
       if (getValues("existingColonizerFiles")?.includes(file.name)) {
-        setShowToastError({ key: "error" });
-        setTimeout(() => {
-          setShowToastError(null);
-        }, 2000);
+        setShowToastError({ label: "Duplicate file Selected", error: true, success: false });
         return;
       }
     } else if (type === "shareholdingPattern") {
       if (getValues("shareholdingPatternFiles")?.includes(file.name)) {
-        setShowToastError({ key: "error" });
-        setTimeout(() => {
-          setShowToastError(null);
-        }, 2000);
+        setShowToastError({ label: "Duplicate file Selected", error: true, success: false });
         return;
       }
     } else if (type === "directorInfoPdf") {
       if (getValues("directorInfoPdfFiles")?.includes(file.name)) {
-        setShowToastError({ key: "error" });
-        setTimeout(() => {
-          setShowToastError(null);
-        }, 2000);
+        setShowToastError({ label: "Duplicate file Selected", error: true, success: false });
         return;
       }
     }
@@ -659,10 +652,7 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
         return response;
       });
       setLoading(false);
-      setShowToast({ key: "success" });
-      setTimeout(() => {
-        setShowToast(null);
-      }, 2000);
+      setShowToastError({ label: "File Uploaded Successfully", error: false, success: true });
       console.log(Resp?.data?.files?.[0]?.fileStoreId, fieldName, type, index);
 
       if (type === "existingColonizer") {
@@ -2762,26 +2752,13 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
                   </Col>
                 )}
             </div>
-            {showToast && (
-              <Toast
-                success={showToast?.key === "success" ? true : false}
-                label="Document Uploaded Successfully"
-                autoClose={true}
-                isDleteBtn={true}
-                onClose={() => {
-                  setShowToast(null);
-                  setError(null);
-                }}
-              />
-            )}
             {showToastError && (
-              <Toast
-                error={showToastError?.key === "error" ? true : false}
-                label="Duplicate file Selected"
-                isDleteBtn={true}
+              <CusToaster
+                label={showToastError?.label}
+                success={showToastError?.success}
+                error={showToastError?.error}
                 onClose={() => {
-                  setShowToastError(null);
-                  setError(null);
+                  setShowToastError({ label: "", success: false, error: false });
                 }}
               />
             )}
