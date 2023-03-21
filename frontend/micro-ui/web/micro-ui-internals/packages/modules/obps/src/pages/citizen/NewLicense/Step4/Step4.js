@@ -1127,7 +1127,7 @@ const AppliedDetailForm = (props) => {
 
                     <div className="col col-3">
                       <h6 style={{ display: "flex" }}>
-                        Idemnity Bond<span style={{ color: "red" }}>*</span>
+                        Indemnity Bond<span style={{ color: "red" }}>*</span>
                       </h6>
                       <label>
                         <FileUpload style={{ cursor: "pointer" }} color="primary" />
