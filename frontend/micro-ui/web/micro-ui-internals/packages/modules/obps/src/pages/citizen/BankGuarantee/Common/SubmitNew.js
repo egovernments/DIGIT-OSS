@@ -5,10 +5,16 @@ import OutlinedInput from "@mui/material/OutlinedInput";
 import { useForm } from "react-hook-form";
 import axios from "axios";
 import { styled } from "@mui/material/styles";
-import Dialog from "@mui/material/Dialog";
-import DialogTitle from "@mui/material/DialogTitle";
-import DialogContent from "@mui/material/DialogContent";
+import { Dialog } from "@mui/material";
 import DialogActions from "@mui/material/DialogActions";
+import DialogContent from "@mui/material/DialogContent";
+import DialogContentText from "@mui/material/DialogContentText";
+import DialogTitle from "@mui/material/DialogTitle";
+import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
+// import Dialog from "@mui/material/Dialog";
+// import DialogTitle from "@mui/material/DialogTitle";
+// import DialogContent from "@mui/material/DialogContent";
+// import DialogActions from "@mui/material/DialogActions";
 import IconButton from "@mui/material/IconButton";
 import CloseIcon from "@mui/icons-material/Close";
 import Typography from "@mui/material/Typography";
@@ -29,21 +35,26 @@ const BootstrapDialog = styled(Dialog)(({ theme }) => ({
 }));
 function SubmitNew() {
   const [open, setOpen] = React.useState(false);
-
+  const [open1, setOpen1] = React.useState(false);
   const handleClickOpen = () => {
     setOpen(true);
   };
+
   const handleClose = () => {
     setOpen(false);
   };
+  const handleClose1 = () => {
+    setOpen1(false);
+  };
   const [ServicePlanDataLabel, setServicePlanDataLabel] = useState([]);
   const [existingBgNumber, setExistingBgNumber] = useState("");
-
+  const [getDisable, setDisable] = useState(true);
   // const [getShow, setShow] = useState({ submit: false });
   const userInfo = Digit.UserService.getUser()?.info || {};
   const [typeOfBg, setTypeOfBg] = useState("");
   const [SubmissionSearch, setSubmissionSearch] = useState({});
   const [searchExistingBg, setSearchExistingBg] = useState({});
+  const [applicationNumber, setApplicationNumber] = useState();
   const {
     register,
     handleSubmit,
@@ -55,6 +66,7 @@ function SubmitNew() {
   } = useForm({});
   const tenantId = Digit.ULBService.getCurrentTenantId();
   const [noOfRows, setNoOfRows] = useState(1);
+
   const bankSubmitNew = async (data) => {
     const token = window?.localStorage?.getItem("token");
     console.log("token", token);
@@ -113,6 +125,7 @@ function SubmitNew() {
       };
       const Resp = await axios.post("/tl-services/bank/guarantee/_create", postDistrict);
       setServicePlanDataLabel(Resp.data);
+      setApplicationNumber(Resp.data.newBankGuaranteeList[0].applicationNumber);
     } catch (error) {
       console.log("helloriya", error.message);
     }
@@ -242,7 +255,8 @@ function SubmitNew() {
     };
     try {
       const Resp = await axios.post(`/tl-services/bank/guarantee/_update`, payload);
-
+      setOpen(true);
+      setApplicationNumber(Resp.data.newBankGuaranteeList[0].applicationNumber);
       console.log("service......", Submitform);
       // setSearchExistingBg(Submitform);
     } catch (error) {
@@ -290,106 +304,109 @@ function SubmitNew() {
 
     console.log("loiloiloi");
   };
+  var date = new Date("Wed, 04 May 2022");
+  var year = date.toLocaleString("default", { year: "numeric" });
+  var month = date.toLocaleString("default", { month: "2-digit" });
+  var day = date.toLocaleString("default", { day: "2-digit" });
 
+  // Generate yyyy-mm-dd date string
+  var formattedDate = year + "-" + month + "-" + day;
   return (
-    <form onSubmit={handleSubmit(bankSubmitNew)}>
-      <div className="card" style={{ width: "126%", border: "5px solid #1266af" }}>
-        <h4 style={{ fontSize: "25px", marginLeft: "21px" }}> Bank Guarantee/Mortgage Submission </h4>
-        <div className="card">
-          <div className="row-12">
-            <div className="Col md={4} xxl lg-4">
-              <FormControl>
-                <h2 className="FormLable">
-                  Enter LOI Number<span style={{ color: "red" }}>*</span>
-                </h2>
+    <React.Fragment>
+      <form onSubmit={handleSubmit(bankSubmitNew)}>
+        <div className="card" style={{ width: "126%", border: "5px solid #1266af" }}>
+          <h4 style={{ fontSize: "25px", marginLeft: "21px" }}> Bank Guarantee/Mortgage Submission </h4>
+          <div className="card">
+            <div className="row-12">
+              <div className="Col md={4} xxl lg-4">
+                <FormControl>
+                  <h2 className="FormLable">
+                    Enter LOI Number<span style={{ color: "red" }}>*</span>
+                  </h2>
 
-                <input
-                  type="text"
-                  className="form-control"
-                  placeholder=""
-                  {...register("loiNumber")}
-                  disabled={existingBgNumber?.length > 0 ? true : false}
-                />
-              </FormControl>
-              &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
-              <FormControl>
-                <h2 className="FormLable">
-                  Type of fee<span style={{ color: "red" }}>*</span>
-                </h2>
+                  <OutlinedInput
+                    type="text"
+                    className="Inputcontrol"
+                    placeholder=""
+                    {...register("loiNumber")}
+                    disabled={existingBgNumber?.length > 0 ? true : false}
+                  />
+                </FormControl>
+                &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
+                <FormControl>
+                  <h2 className="FormLable">
+                    Type of fee<span style={{ color: "red" }}>*</span>
+                  </h2>
 
-                <select
-                  className="Inputcontrol"
-                  class="form-control"
-                  placeholder=""
-                  {...register("typeOfBg")}
-                  disabled={existingBgNumber?.length > 0 ? true : false}
-                >
-                  <option value="IDW"> IDW</option>
-                  <option value="EDC">EDC</option>
-                  <option value="SPE">SPE</option>
-                </select>
-              </FormControl>
-              &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
-              <button
-                // id="btnClear"
+                  <select
+                    className="Inputcontrol"
+                    class="form-control"
+                    placeholder=""
+                    {...register("typeOfBg")}
+                    disabled={existingBgNumber?.length > 0 ? true : false}
+                  >
+                    <option value="IDW"> IDW</option>
+                    <option value="EDC">EDC</option>
+                    <option value="SPE">SPE</option>
+                  </select>
+                </FormControl>
+                {/* <button
+               
                 type="button"
                 class="btn btn-primary btn-md center-block"
                 onClick={submitNewFormSubmitHandler}
               >
                 Search
-              </button>
+              </button> */}
+              </div>
             </div>
-          </div>
-          &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
-          <label htmlFor="businessService">
-            <input
-              {...register("businessService")}
-              type="radio"
-              name="businessService"
-              id="businessService1"
-              value="BG_NEW"
-              onChange={(e) => handleshowhide(e)}
-            />
-            &nbsp; Bank Gurantee &nbsp;&nbsp;
-          </label>
-          <label htmlFor="businessService">
-            <input
-              {...register("businessService")}
-              type="radio"
-              name="businessService"
-              id="businessService2"
-              value="BG_MORTGAGE"
-              onClick={handleLoiNumber}
-              onChange={(e) => handleshowhide(e)}
-            />
-            &nbsp; Mortgage &nbsp;&nbsp;
-          </label>
-          &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
-          {showhide === "BG_NEW" && (
-            <div>
-              <div className="col-12">
+            &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
+            <label htmlFor="businessService">
+              <input
+                {...register("businessService")}
+                type="radio"
+                name="businessService"
+                id="businessService1"
+                value="BG_NEW"
+                onChange={(e) => handleshowhide(e)}
+              />
+              &nbsp; Bank Gurantee &nbsp;&nbsp;
+            </label>
+            <label htmlFor="businessService">
+              <input
+                {...register("businessService")}
+                type="radio"
+                name="businessService"
+                id="businessService2"
+                value="BG_MORTGAGE"
+                onClick={handleLoiNumber}
+                onChange={(e) => handleshowhide(e)}
+              />
+              &nbsp; Mortgage &nbsp;&nbsp;
+            </label>
+            {/* &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; */}
+            {showhide === "BG_NEW" && (
+              <div>
                 {watch("typeOfBg") === "SPE" && (
-                  <div className="row-12">
-                    <div className="col md={4} xxl lg-4">
-                      <FormControl>
-                        <h2 className="FormLable">
-                          Amount (in fig)<span style={{ color: "red" }}>*</span>
-                        </h2>
+                  <div className="col-12">
+                    <FormControl>
+                      <h2 className="FormLable">
+                        Amount (in fig)<span style={{ color: "red" }}>*</span>
+                      </h2>
 
-                        <input type="text" className="form-control" placeholder="" {...register("amountInFig")} />
-                      </FormControl>
-                      &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
-                      <FormControl>
-                        <h2 className="FormLable">
-                          Amount (in words)<span style={{ color: "red" }}>*</span>
-                        </h2>
+                      <OutlinedInput type="text" className="Inputcontrol" placeholder="" {...register("amountInFig")} />
+                    </FormControl>
+                    &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
+                    <FormControl>
+                      <h2 className="FormLable">
+                        Amount (in words)<span style={{ color: "red" }}>*</span>
+                      </h2>
 
-                        <input type="text" className="form-control" placeholder="" {...register("amountInWords")} />
-                      </FormControl>
-                    </div>
+                      <OutlinedInput type="text" className="Inputcontrol" placeholder="" {...register("amountInWords")} />
+                    </FormControl>
                   </div>
                 )}
-                <br></br>
+                &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
                 {watch("typeOfBg") === "IDW" && (
                   <div className="row-12">
                     <div className="col-12">
@@ -397,16 +414,22 @@ function SubmitNew() {
                         <h2 className="FormLable">
                           Amount (in fig)<span style={{ color: "red" }}>*</span>
                         </h2>
-
-                        <input
-                          type="text"
-                          className="form-control"
-                          id="standard-disabled"
-                          label="Disabled"
+                        <TextField
+                          disabled
+                          readOnly={existingBgNumber?.length > 0 ? true : false}
+                          id="outlined-disabled"
                           {...register("amountInFig")}
-                          readOnly
-                          disabled={existingBgNumber?.length > 0 ? true : false}
                         />
+
+                        {/* <OutlinedInput
+                        type="text"
+                        className="Inputcontrol"
+                        id="standard-disabled"
+                        label="Disabled"
+                        {...register("amountInFig")}
+                        readOnly
+                        disabled={existingBgNumber?.length > 0 ? true : false}
+                      /> */}
                       </FormControl>
                       &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
                       <FormControl>
@@ -414,9 +437,9 @@ function SubmitNew() {
                           Amount (in words)<span style={{ color: "red" }}>*</span>
                         </h2>
 
-                        <input
+                        <OutlinedInput
                           type="text"
-                          className="form-control"
+                          className="Inputcontrol"
                           placeholder=""
                           {...register("amountInWords")}
                           disabled={existingBgNumber?.length > 0 ? true : false}
@@ -433,16 +456,21 @@ function SubmitNew() {
                         <h2 className="FormLable">
                           Amount (in fig)<span style={{ color: "red" }}>*</span>
                         </h2>
-
-                        <input
-                          type="text"
-                          className="form-control"
-                          id="standard-disabled"
-                          label="Disabled"
+                        <TextField
+                          disabled
+                          readOnly={existingBgNumber?.length > 0 ? true : false}
+                          id="outlined-disabled"
                           {...register("amountInFig")}
-                          readOnly
-                          disabled={existingBgNumber?.length > 0 ? true : false}
                         />
+                        {/* <OutlinedInput
+                        type="text"
+                        className="Inputcontrol"
+                        id="standard-disabled"
+                        label="Disabled"
+                        {...register("amountInFig")}
+                        readOnly
+                        disabled={existingBgNumber?.length > 0 ? true : false}
+                      /> */}
                       </FormControl>
                       &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
                       <FormControl>
@@ -450,9 +478,9 @@ function SubmitNew() {
                           Amount (in words)<span style={{ color: "red" }}>*</span>
                         </h2>
 
-                        <input
+                        <OutlinedInput
                           type="text"
-                          className="form-control"
+                          className="Inputcontrol"
                           placeholder=""
                           {...register("amountInWords")}
                           disabled={existingBgNumber?.length > 0 ? true : false}
@@ -461,140 +489,137 @@ function SubmitNew() {
                     </div>
                   </div>
                 )}
-              </div>
-              <br></br>
-              <div className="col-12">
-                <FormControl>
-                  <h2 className="FormLable">
-                    Enter Bank Guarantee No.<span style={{ color: "red" }}>*</span>
-                  </h2>
-
-                  <OutlinedInput type="text" className="Inputcontrol" placeholder="" {...register("bgNumber")} />
-                </FormControl>
                 &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
-                <FormControl>
-                  <h2 className="FormLable">
-                    Enter Bank Name<span style={{ color: "red" }}>*</span>
-                  </h2>
+                <div className="col-12">
+                  <FormControl>
+                    <h2 className="FormLable">
+                      Enter Bank Guarantee No.<span style={{ color: "red" }}>*</span>
+                    </h2>
 
-                  <OutlinedInput type="text" className="Inputcontrol" placeholder="" {...register("bankName")} />
-                </FormControl>
+                    <OutlinedInput type="text" className="Inputcontrol" placeholder="" {...register("bgNumber")} />
+                  </FormControl>
+                  &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
+                  <FormControl>
+                    <h2 className="FormLable">
+                      Enter Bank Name<span style={{ color: "red" }}>*</span>
+                    </h2>
+
+                    <OutlinedInput type="text" className="Inputcontrol" placeholder="" {...register("bankName")} />
+                  </FormControl>
+                  &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
+                  <FormControl>
+                    <h2 className="FormLable">
+                      Expiry Date<span style={{ color: "red" }}>*</span>
+                    </h2>
+
+                    <OutlinedInput type="date" className="Inputcontrol" placeholder={formattedDate} {...register("validity")} />
+                  </FormControl>
+                  &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
+                  <FormControl>
+                    <h2 className="FormLable">
+                      Claim Period<span style={{ color: "red" }}>*</span>
+                    </h2>
+
+                    <select className="Inputcontrol" class="form-control" placeholder="" {...register("claimPeriod")}>
+                      <option> 0</option>
+                      <option>1</option>
+                      <option> 2</option>
+                      <option>3</option>
+                      <option> 4</option>
+                      <option>5</option>
+                      <option> 6</option>
+                      <option>7</option>
+                      <option> 8</option>
+                      <option>9</option>
+                      <option> 10</option>
+                      <option>11</option>
+                      <option> 12</option>
+                    </select>
+                  </FormControl>
+                </div>
                 &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
-                <FormControl>
-                  <h2 className="FormLable">
-                    Expiry Date<span style={{ color: "red" }}>*</span>
-                  </h2>
+                <div className="col-12">
+                  <FormControl>
+                    <h2 className="FormLable">
+                      Country of origin<span style={{ color: "red" }}>*</span>
+                    </h2>
 
-                  <OutlinedInput type="datepicker" className="Inputcontrol" placeholder="" {...register("validity")} format="yyyy-MM-dd" />
-                </FormControl>
-                &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
-                <FormControl>
-                  <h2 className="FormLable">
-                    Claim Period<span style={{ color: "red" }}>*</span>
-                  </h2>
+                    <select className="Inputcontrol" class="form-control" placeholder="" {...register("originCountry")}>
+                      <option>------</option>
+                      <option value="1"> Indian</option>
+                      <option value="2">Foreign</option>
+                    </select>
+                  </FormControl>
+                  &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
+                  <label>
+                    <h2>Upload B.G. softcopy </h2>
+                    <FileUpload color="primary" />
 
-                  <select className="Inputcontrol" class="form-control" placeholder="" {...register("claimPeriod")}>
-                    <option> 0</option>
-                    <option>1</option>
-                    <option> 2</option>
-                    <option>3</option>
-                    <option> 4</option>
-                    <option>5</option>
-                    <option> 6</option>
-                    <option>7</option>
-                    <option> 8</option>
-                    <option>9</option>
-                    <option> 10</option>
-                    <option>11</option>
-                    <option> 12</option>
-                  </select>
-                </FormControl>
-              </div>
-              &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
-              <div className="col-12">
-                <FormControl>
-                  <h2 className="FormLable">
-                    Country of origin<span style={{ color: "red" }}>*</span>
-                  </h2>
-
-                  <select className="Inputcontrol" class="form-control" placeholder="" {...register("originCountry")}>
-                    <option>------</option>
-                    <option value="1"> Indian</option>
-                    <option value="2">Foreign</option>
-                  </select>
-                </FormControl>
-                &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
-                <label>
-                  <h2>Upload B.G. softcopy </h2>
-                  <FileUpload color="primary" />
-
-                  <input
-                    type="file"
-                    accept="application/pdf/jpeg/png"
-                    style={{ display: "none" }}
-                    onChange={(e) => getDocumentData(e?.target?.files[0], "uploadBg")}
-                  />
-
-                  {fileStoreId?.uploadBg ? (
-                    <a onClick={() => getDocShareholding(fileStoreId?.uploadBg)} className="btn btn-sm ">
-                      <VisibilityIcon color="info" className="icon" />
-                    </a>
-                  ) : (
-                    <p></p>
-                  )}
-                  <h3 style={{}}>{watch("uploadBgFileName") ? watch("uploadBgFileName") : null}</h3>
-                </label>
-                &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
-                <label>
-                  <h2>Hardcopy Submitted at TCP office. </h2>
-
-                  <label htmlFor="licenseApplied">
-                    <input {...register("licenseApplied")} type="radio" value="Y" id="licenseApplied" />
-                    &nbsp; Yes &nbsp;&nbsp;
-                  </label>
-                  <label htmlFor="licenseApplied">
                     <input
-                      {...register("licenseApplied")}
-                      type="radio"
-                      value="N"
-                      id="licenseApplied"
-                      className="btn btn-primary"
-                      onClick={handleClickOpen}
+                      type="file"
+                      accept="application/pdf/jpeg/png"
+                      style={{ display: "none" }}
+                      onChange={(e) => getDocumentData(e?.target?.files[0], "uploadBg")}
                     />
-                    &nbsp; No &nbsp;&nbsp;
+
+                    {fileStoreId?.uploadBg ? (
+                      <a onClick={() => getDocShareholding(fileStoreId?.uploadBg)} className="btn btn-sm ">
+                        <VisibilityIcon color="info" className="icon" />
+                      </a>
+                    ) : (
+                      <p></p>
+                    )}
+                    <h3 style={{}}>{watch("uploadBgFileName") ? watch("uploadBgFileName") : null}</h3>
                   </label>
-                  <h3 className="error-message" style={{ color: "red" }}>
-                    {errors?.licenseApplied && errors?.licenseApplied?.message}
-                  </h3>
-                </label>
-                {watch("licenseApplied") === "Y" && (
-                  <div>
-                    <div className="row">
-                      <div className="col col-12">
-                        <label>
-                          <h2>
-                            Upload Receipt of Submission.
-                            <span style={{ color: "red" }}>*</span>
-                          </h2>
-                          <FileUpload color="primary" />
+                </div>
+                &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
+                <div className="col-12">
+                  <label>
+                    <h2>Hardcopy Submitted at TCP office. </h2>
+                    <label htmlFor="licenseApplied">
+                      <input {...register("licenseApplied")} type="radio" value="Y" id="licenseApplied" />
+                      &nbsp; Yes &nbsp;&nbsp;
+                    </label>
+                    <label htmlFor="licenseApplied">
+                      <input
+                        {...register("licenseApplied")}
+                        type="radio"
+                        value="N"
+                        id="licenseApplied"
+                        className="btn btn-primary"
+                        onClick={handleClickOpen}
+                      />
+                      &nbsp; No &nbsp;&nbsp;
+                    </label>
+                    &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
+                    {watch("licenseApplied") === "Y" && (
+                      <div>
+                        <div className="row">
+                          <div className="col col-12">
+                            <label>
+                              <h2>
+                                Upload Receipt of Submission.
+                                <span style={{ color: "red" }}>*</span>
+                              </h2>
+                              <FileUpload color="primary" />
 
-                          <input
-                            type="file"
-                            accept="application/pdf/jpeg/png"
-                            style={{ display: "none" }}
-                            onChange={(e) => getDocumentData(e?.target?.files[0], "tcpSubmissionReceived")}
-                          />
+                              <input
+                                type="file"
+                                accept="application/pdf/jpeg/png"
+                                style={{ display: "none" }}
+                                onChange={(e) => getDocumentData(e?.target?.files[0], "tcpSubmissionReceived")}
+                              />
 
-                          {fileStoreId?.tcpSubmissionReceived ? (
-                            <a onClick={() => getDocShareholding(fileStoreId?.tcpSubmissionReceived)} className="btn btn-sm ">
-                              <VisibilityIcon color="info" className="icon" />
-                            </a>
-                          ) : (
-                            <p></p>
-                          )}
-                          <h3 style={{}}>{watch("tcpSubmissionReceivedFileName") ? watch("tcpSubmissionReceivedFileName") : null}</h3>
-                        </label>
-                        {/* <div>
+                              {fileStoreId?.tcpSubmissionReceived ? (
+                                <a onClick={() => getDocShareholding(fileStoreId?.tcpSubmissionReceived)} className="btn btn-sm ">
+                                  <VisibilityIcon color="info" className="icon" />
+                                </a>
+                              ) : (
+                                <p></p>
+                              )}
+                              <h3 style={{}}>{watch("tcpSubmissionReceivedFileName") ? watch("tcpSubmissionReceivedFileName") : null}</h3>
+                            </label>
+                            {/* <div>
                         <input
                           type="file"
                           className="form-control"
@@ -605,27 +630,32 @@ function SubmitNew() {
                       <h3 className="error-message" style={{ color: "red" }}>
                         {errors?.tcpSubmissionReceived && errors?.tcpSubmissionReceived?.message}
                       </h3> */}
+                          </div>
+                        </div>
                       </div>
-                    </div>
-                  </div>
-                )}
-                {watch("licenseApplied") === "N" && (
-                  <div>
-                    <BootstrapDialog onClose={handleClose} aria-labelledby="customized-dialog-title" open={open}>
-                      {/* <BootstrapDialogTitle id="customized-dialog-title" onClose={handleClose}>
+                    )}
+                    {watch("licenseApplied") === "N" && (
+                      <div>
+                        <BootstrapDialog onClose={handleClose} aria-labelledby="customized-dialog-title" open={open}>
+                          {/* <BootstrapDialogTitle id="customized-dialog-title" onClose={handleClose}>
           Modal title
         </BootstrapDialogTitle> */}
-                      <DialogContent dividers>
-                        <Typography gutterBottom>Submit Hardcopy of B.G. at TCP office.</Typography>
-                      </DialogContent>
-                      <DialogActions>
-                        <Button autoFocus onClick={handleClose}>
-                          Close
-                        </Button>
-                      </DialogActions>
-                    </BootstrapDialog>
-                  </div>
-                )}
+                          <DialogContent dividers>
+                            <Typography gutterBottom>Submit Hardcopy of B.G. at TCP office.</Typography>
+                          </DialogContent>
+                          <DialogActions>
+                            <Button autoFocus onClick={handleClose}>
+                              Close
+                            </Button>
+                          </DialogActions>
+                        </BootstrapDialog>
+                      </div>
+                    )}
+                    <h3 className="error-message" style={{ color: "red" }}>
+                      {errors?.licenseApplied && errors?.licenseApplied?.message}
+                    </h3>
+                  </label>
+                </div>
                 {watch("originCountry") === "2" && (
                   <div>
                     <div className="row">
@@ -654,61 +684,91 @@ function SubmitNew() {
                     </div>
                   </div>
                 )}
-              </div>
-              &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
-              <div className="col-3">
-                <FormControl>
-                  <h2>Existing B.G. No. (In case of replacement, extension, renewal enter bank guarantee number)</h2>
-                  <OutlinedInput
-                    type="text"
-                    className="Inputcontrol"
-                    placeholder=""
-                    {...register("existingBgNumber")}
-                    onChange={(e) => setExistingBgNumber(e.target.value)}
-                    onClick={existingBgFormSubmitHandler}
-                  />
-                </FormControl>
-                {/* &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
-              <button
-                // id="btnClear"
-                type="button"
-                class="btn btn-primary btn-md center-block"
-                onClick={existingBgFormSubmitHandler}
-              >
-                Search
-              </button>{" "} */}
-              </div>
-            </div>
-          )}
-          {showhide === "BG_MORTGAGE" && (
-            <div>
-              <div className="table table-bordered table-responsive " style={{ backgroundColor: "rgb(251 251 253))", width: "629px" }}>
-                <thead>
-                  <tr>
-                    <th scope="col">Khasra No</th>
-                    <th scope="col">Area to be Mortgaged (in sq meters)</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <th className="fw-normal" style={{ textAlign: "center" }}>
+                &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
+                <div className="row-12">
+                  <div className="col-6">
+                    <div className="form-check">
+                      <input
+                        onClick={(e) => {
+                          if (e.target.checked) {
+                            setDisable(false);
+                          } else {
+                            setDisable(true);
+                          }
+                          // setDisable(e.target.checked);
+                        }}
+                        className="form-check-input"
+                        formControlName="agreeCheck"
+                        type="checkbox"
+                        value=""
+                        id="flexCheckDefault"
+                      />
+
+                      <label className="checkbox" for="flexCheckDefault">
+                        Existing B.G. No. (In case of replacement, extension, renewal enter bank guarantee number.{" "}
+                      </label>
+                    </div>
+                    <div className="col-6">
                       <input
                         type="text"
+                        disabled={getDisable}
                         className="form-control"
                         placeholder=""
-                        disabled
-                        {...register("khasraNumber")}
-                        onChange={(e) => setKhasraNumber(e.target.value)}
-                        value={khasraNumber}
+                        {...register("existingBgNumber")}
+                        onChange={(e) => setExistingBgNumber(e.target.value)}
+                        onClick={existingBgFormSubmitHandler}
                       />
-                    </th>
-                    <th className="fw-normal" style={{ textAlign: "center" }}>
-                      <input type="number" className="form-control" placeholder="" {...register("areaToBeMortgagedInSqMtrs")} />
-                    </th>
-                  </tr>
-                </tbody>
+                    </div>
+                  </div>
+                </div>
+                {/* <div className="">
+                <div className="form-check">
+                  <input className="form-check-input" formControlName="agreeCheck" type="checkbox" value="existingBgNumber" id="flexCheckDefault" />
+
+                  <h2 className="checkbox" for="flexCheckDefault">
+                    Existing B.G. No. (In case of replacement, extension, renewal enter bank guarantee number &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
+                    <OutlinedInput
+                      type="text"
+                      className="Inputcontrol"
+                      placeholder=""
+                      {...register("existingBgNumber")}
+                      onChange={(e) => setExistingBgNumber(e.target.value)}
+                      onClick={existingBgFormSubmitHandler}
+                    />
+                  </h2>
+                </div>
+              </div> */}
               </div>
-              {/* <tr>
+            )}
+            {showhide === "BG_MORTGAGE" && (
+              <div>
+                <div className="table table-bordered table-responsive " style={{ backgroundColor: "rgb(251 251 253))", width: "629px" }}>
+                  <thead>
+                    <tr>
+                      <th scope="col">Khasra No</th>
+                      <th scope="col">Area to be Mortgaged (in sq meters)</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <th className="fw-normal" style={{ textAlign: "center" }}>
+                        <input
+                          type="text"
+                          className="form-control"
+                          placeholder=""
+                          disabled
+                          {...register("khasraNumber")}
+                          onChange={(e) => setKhasraNumber(e.target.value)}
+                          value={khasraNumber}
+                        />
+                      </th>
+                      <th className="fw-normal" style={{ textAlign: "center" }}>
+                        <input type="number" className="form-control" placeholder="" {...register("areaToBeMortgagedInSqMtrs")} />
+                      </th>
+                    </tr>
+                  </tbody>
+                </div>
+                {/* <tr>
                     <th className="fw-normal" style={{ textAlign: "center" }}>
                       <input type="text" className="form-control" placeholder="" disabled />
                     </th>
@@ -716,20 +776,20 @@ function SubmitNew() {
                       <input type="number" className="form-control" placeholder="" />
                     </th>
                   </tr> */}
-              <div class="row-12" className="align-right">
-                <div className="col col-3">
-                  <h2>Area Total</h2>
-                  <input
-                    type="number"
-                    placeholder={watch("areaToBeMortgagedInSqMtrs")}
-                    {...register("totalKhasraAreaToMortgage")}
-                    className="form-control"
-                    disabled
-                  />
-                  &nbsp;&nbsp;
+                <div class="row-12" className="align-right">
+                  <div className="col col-3">
+                    <h2>Total Area (in acres)</h2>
+                    <input
+                      type="number"
+                      placeholder={watch("areaToBeMortgagedInSqMtrs")}
+                      {...register("totalKhasraAreaToMortgage")}
+                      className="form-control"
+                      disabled
+                    />
+                    &nbsp;&nbsp;
+                  </div>
                 </div>
-              </div>
-              {/* <tr>
+                {/* <tr>
                     <th className="fw-normal" style={{ textAlign: "center" }}>
                       <h2>Area Total</h2>
                     </th>
@@ -738,166 +798,199 @@ function SubmitNew() {
                     </th>
                   </tr> */}
 
-              <h5 className="card-title fw-bold">Enter Plot</h5>
-              <div className="table table-bordered table-responsive" style={{ backgroundColor: "rgb(251 251 253))", width: "629px" }}>
-                <thead>
-                  <tr>
-                    <th scope="col">Plot No</th>
-                    <th scope="col">Area (in sq meters)</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {[...Array(noOfRows)].map((elementInArray, index) => {
-                    return (
-                      <tr>
-                        <th className="fw-normal" style={{ textAlign: "center" }}>
-                          <input type="text" className="form-control" placeholder="" {...register("plotNumber")} />
-                        </th>
-                        <th className="fw-normal" style={{ textAlign: "center" }}>
-                          <input type="number" className="form-control" placeholder="" {...register("areaInSqMtrs")} />
-                        </th>
-                      </tr>
-                    );
-                  })}
-                </tbody>
-              </div>
-
-              <div class="row-12" className="align-right">
-                <div className="col col-3">
-                  <h2>Area Total</h2>
-
-                  <input type="number" className="form-control" placeholder="" {...register("totalPlotAreaToMortgage")} />
+                <h5 className="card-title fw-bold">Enter Plot</h5>
+                <div className="table table-bordered table-responsive" style={{ backgroundColor: "rgb(251 251 253))", width: "629px" }}>
+                  <thead>
+                    <tr>
+                      <th scope="col">Plot No</th>
+                      <th scope="col">Area (in sq meters)</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {[...Array(noOfRows)].map((elementInArray, index) => {
+                      return (
+                        <tr>
+                          <th className="fw-normal" style={{ textAlign: "center" }}>
+                            <input type="text" className="form-control" placeholder="" {...register("plotNumber")} />
+                          </th>
+                          <th className="fw-normal" style={{ textAlign: "center" }}>
+                            <input type="number" className="form-control" placeholder="" {...register("areaInSqMtrs")} />
+                          </th>
+                        </tr>
+                      );
+                    })}
+                  </tbody>
                 </div>
-                <button type="button" class="btn btn-primary me-3" onClick={() => setNoOfRows(noOfRows + 1)}>
-                  Add
-                </button>
-                <button type="button" class="btn btn-danger" onClick={() => setNoOfRows(noOfRows - 1)}>
-                  Delete
-                </button>
-              </div>
+                <th>
+                  <button type="button" class="btn btn-primary me-3" onClick={() => setNoOfRows(noOfRows + 1)}>
+                    Add
+                  </button>{" "}
+                  &nbsp;&nbsp;
+                  <button type="button" class="btn btn-danger" onClick={() => setNoOfRows(noOfRows - 1)}>
+                    Delete
+                  </button>
+                </th>
 
-              <br></br>
-              <h5>Upload Documents</h5>
-              <br></br>
-              <div className="row">
-                <div className="col col-3">
-                  <h2 style={{ display: "flex" }}>Upload layout plan earmarking land to be mortgaged</h2>
-                  <label>
-                    <FileUpload style={{ cursor: "pointer" }} color="primary" />
+                <div class="row-12" className="align-right">
+                  <div className="col col-3">
+                    <h2>Total Area (in acres)</h2>
                     <input
-                      type="file"
-                      style={{ display: "none" }}
-                      onChange={(e) => getDocumentData(e?.target?.files[0], "mortgageLayoutPlan")}
-                      accept="application/pdf/jpeg/png"
+                      type="number"
+                      placeholder={watch("areaInSqMtrs")}
+                      {...register("totalPlotAreaToMortgage")}
+                      className="form-control"
+                      disabled
                     />
-                  </label>
-                  {watch("mortgageLayoutPlan") && (
-                    <a onClick={() => getDocShareholding(watch("mortgageLayoutPlan"), setLoader)} className="btn btn-sm ">
-                      <VisibilityIcon color="info" className="icon" />
-                    </a>
-                  )}
-
-                  <h3 className="error-message" style={{ color: "red" }}>
-                    {errors?.mortgageLayoutPlan && errors?.mortgageLayoutPlan?.message}
-                  </h3>
+                    {/* <input type="number" className="form-control" placeholder="" {...register("totalPlotAreaToMortgage")} /> */}
+                  </div>
                 </div>
 
-                <div className="col col-3">
-                  <h2 style={{ display: "flex" }}>
-                    Mortgage Deed <span style={{ color: "red" }}>*</span>{" "}
-                  </h2>
-                  <label>
-                    <FileUpload style={{ cursor: "pointer" }} color="primary" />
-                    <input
-                      type="file"
-                      style={{ display: "none" }}
-                      onChange={(e) => getDocumentData(e?.target?.files[0], "mortgageDeed")}
-                      accept="application/pdf/jpeg/png"
-                    />
-                  </label>
-                  {watch("mortgageDeed") && (
-                    <a onClick={() => getDocShareholding(watch("mortgageDeed"), setLoader)} className="btn btn-sm ">
-                      <VisibilityIcon color="info" className="icon" />
-                    </a>
-                  )}
+                <br></br>
+                <h5>Upload Documents</h5>
+                <br></br>
+                <div className="row">
+                  <div className="col col-12">
+                    <h2 style={{ display: "flex" }}>Upload layout plan earmarking land to be mortgaged</h2>
+                    <label>
+                      <FileUpload style={{ cursor: "pointer" }} color="primary" />
+                      <input
+                        type="file"
+                        style={{ display: "none" }}
+                        onChange={(e) => getDocumentData(e?.target?.files[0], "mortgageLayoutPlan")}
+                        accept="application/pdf/jpeg/png"
+                      />
+                    </label>
+                    {watch("mortgageLayoutPlan") && (
+                      <a onClick={() => getDocShareholding(watch("mortgageLayoutPlan"), setLoader)} className="btn btn-sm ">
+                        <VisibilityIcon color="info" className="icon" />
+                      </a>
+                    )}
 
-                  <h3 className="error-message" style={{ color: "red" }}>
-                    {errors?.mortgageDeed && errors?.mortgageDeed?.message}
-                  </h3>
+                    <h3 className="error-message" style={{ color: "red" }}>
+                      {errors?.mortgageLayoutPlan && errors?.mortgageLayoutPlan?.message}
+                    </h3>
+                  </div>
                 </div>
+                <div className="row">
+                  <div className="col col-4">
+                    <h2 style={{ display: "flex" }}>
+                      Mortgage Deed <span style={{ color: "red" }}>*</span>{" "}
+                    </h2>
+                    <label>
+                      <FileUpload style={{ cursor: "pointer" }} color="primary" />
+                      <input
+                        type="file"
+                        style={{ display: "none" }}
+                        onChange={(e) => getDocumentData(e?.target?.files[0], "mortgageDeed")}
+                        accept="application/pdf/jpeg/png"
+                      />
+                    </label>
+                    {watch("mortgageDeed") && (
+                      <a onClick={() => getDocShareholding(watch("mortgageDeed"), setLoader)} className="btn btn-sm ">
+                        <VisibilityIcon color="info" className="icon" />
+                      </a>
+                    )}
 
-                <div className="col col-3">
-                  <h2 style={{ display: "flex" }}>
-                    Land schedule and Plot numbers <span style={{ color: "red" }}>*</span>
-                  </h2>
-                  <label>
-                    <FileUpload style={{ cursor: "pointer" }} color="primary" />
-                    <input
-                      type="file"
-                      style={{ display: "none" }}
-                      onChange={(e) => getDocumentData(e?.target?.files[0], "mortgageLandScheduleAndPlotNumbersDoc")}
-                      accept="application/pdf/jpeg/png"
-                    />
-                  </label>
-                  {watch("mortgageLandScheduleAndPlotNumbersDoc") && (
-                    <a onClick={() => getDocShareholding(watch("mortgageLandScheduleAndPlotNumbersDoc"), setLoader)} className="btn btn-sm ">
-                      <VisibilityIcon color="info" className="icon" />
-                    </a>
-                  )}
+                    <h3 className="error-message" style={{ color: "red" }}>
+                      {errors?.mortgageDeed && errors?.mortgageDeed?.message}
+                    </h3>
+                  </div>
 
-                  <h3 className="error-message" style={{ color: "red" }}>
-                    {errors?.mortgageLandScheduleAndPlotNumbersDoc && errors?.mortgageLandScheduleAndPlotNumbersDoc?.message}
-                  </h3>
+                  <div className="col col-4">
+                    <h2 style={{ display: "flex" }}>
+                      Land schedule and Plot numbers <span style={{ color: "red" }}>*</span>
+                    </h2>
+                    <label>
+                      <FileUpload style={{ cursor: "pointer" }} color="primary" />
+                      <input
+                        type="file"
+                        style={{ display: "none" }}
+                        onChange={(e) => getDocumentData(e?.target?.files[0], "mortgageLandScheduleAndPlotNumbersDoc")}
+                        accept="application/pdf/jpeg/png"
+                      />
+                    </label>
+                    {watch("mortgageLandScheduleAndPlotNumbersDoc") && (
+                      <a onClick={() => getDocShareholding(watch("mortgageLandScheduleAndPlotNumbersDoc"), setLoader)} className="btn btn-sm ">
+                        <VisibilityIcon color="info" className="icon" />
+                      </a>
+                    )}
+
+                    <h3 className="error-message" style={{ color: "red" }}>
+                      {errors?.mortgageLandScheduleAndPlotNumbersDoc && errors?.mortgageLandScheduleAndPlotNumbersDoc?.message}
+                    </h3>
+                  </div>
+                </div>
+                <div className="row">
+                  <div className="col col-12">
+                    <h2 style={{ display: "flex" }}>
+                      Undertaking Amended/supplementary/addendum mortage deed specifying plots/flats/shops and appropriate licenced land to be
+                      mortgaged upon approval of building plans
+                    </h2>
+                    <label>
+                      <FileUpload style={{ cursor: "pointer" }} color="primary" />
+                      <input
+                        type="file"
+                        style={{ display: "none" }}
+                        onChange={(e) => getDocumentData(e?.target?.files[0], "mortgageDeedAfterBPApproval")}
+                        accept="application/pdf/jpeg/png"
+                      />
+                    </label>
+                    {watch("mortgageDeedAfterBPApproval") && (
+                      <a onClick={() => getDocShareholding(watch("mortgageDeedAfterBPApproval"), setLoader)} className="btn btn-sm ">
+                        <VisibilityIcon color="info" className="icon" />
+                      </a>
+                    )}
+
+                    <h3 className="error-message" style={{ color: "red" }}>
+                      {errors?.mortgageDeedAfterBPApproval && errors?.mortgageDeedAfterBPApproval?.message}
+                    </h3>
+                  </div>
                 </div>
               </div>
-              <div className="row">
-                <div className="col col-12">
-                  <h2 style={{ display: "flex" }}>
-                    Undertaking Amended/supplementary/addendum mortage deed specifying plots/flats/shops and appropriate licenced land to be mortgaged
-                    upon approval of building plans
-                  </h2>
-                  <label>
-                    <FileUpload style={{ cursor: "pointer" }} color="primary" />
-                    <input
-                      type="file"
-                      style={{ display: "none" }}
-                      onChange={(e) => getDocumentData(e?.target?.files[0], "mortgageDeedAfterBPApproval")}
-                      accept="application/pdf/jpeg/png"
-                    />
-                  </label>
-                  {watch("mortgageDeedAfterBPApproval") && (
-                    <a onClick={() => getDocShareholding(watch("mortgageDeedAfterBPApproval"), setLoader)} className="btn btn-sm ">
-                      <VisibilityIcon color="info" className="icon" />
-                    </a>
-                  )}
-
-                  <h3 className="error-message" style={{ color: "red" }}>
-                    {errors?.mortgageDeedAfterBPApproval && errors?.mortgageDeedAfterBPApproval?.message}
-                  </h3>
-                </div>
+            )}
+            <br></br>
+            <div class="row-12" className="align-right">
+              <div className="col-4">
+                <Button variant="contained" class="btn btn-primary btn-md center-block">
+                  Cancel
+                </Button>
+                &nbsp;
+                <Button type="submit" class="btn btn-primary btn-md center-block">
+                  Submit
+                </Button>
+                &nbsp;
+                <Button variant="contained" class="btn btn-primary btn-md center-block" type="button" onClick={updateSubmitFormSubmitHandler}>
+                  {" "}
+                  Update
+                </Button>
               </div>
-            </div>
-          )}
-          <br></br>
-          <div class="row-12" className="align-right">
-            <div className="col-4">
-              <Button variant="contained" class="btn btn-primary btn-md center-block">
-                Cancel
-              </Button>
-              &nbsp;
-              <Button variant="contained" type="submit" class="btn btn-primary btn-md center-block">
-                Submit
-              </Button>
-              &nbsp;
-              <Button variant="contained" class="btn btn-primary btn-md center-block" type="button" onClick={updateSubmitFormSubmitHandler}>
-                {" "}
-                Update
-              </Button>
             </div>
           </div>
         </div>
-      </div>
-    </form>
+      </form>
+      <Dialog open1={open1} onClose={handleClose1} aria-labelledby="alert-dialog-title" aria-describedby="alert-dialog-description">
+        <DialogTitle id="alert-dialog-title">Bank Guarantee Submission</DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+            <p>
+              Your Bank Guarantee is submitted successfully{" "}
+              <span>
+                <CheckCircleOutlineIcon style={{ color: "blue", variant: "filled" }} />
+              </span>
+            </p>
+            <p>
+              Please Note down your Application Number <span style={{ padding: "5px", color: "blue" }}>{applicationNumber}</span> for further
+              assistance
+            </p>
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose1} autoFocus>
+            Ok
+          </Button>
+        </DialogActions>
+      </Dialog>
+    </React.Fragment>
   );
 }
 

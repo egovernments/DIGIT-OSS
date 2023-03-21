@@ -401,9 +401,17 @@ const ApllicantPuropseForm = (props) => {
   //   setPotentialOptions({ data: potential, isLoading: false });
   // }, [PotentialType]);
 
+  // useEffect(() => {
+  //   const district = DistrictType?.["common-masters"]?.District?.map(function (data) {
+  //     return { value: data?.districtCode, label: data?.name, distCodeTCP: data?.distCodeTCP };
+  //   });
+  //   setDistrictOptions({ data: district, isLoading: false });
+  // }, [DistrictType]);
+
   useEffect(() => {
     const district = DistrictType?.["common-masters"]?.District?.map(function (data) {
-      return { value: data?.districtCode, label: data?.name, distCodeTCP: data?.distCodeTCP };
+      console.log("data", data);
+      return { value: data?.disCode, label: data?.disName, distCodeTCP: data?.distCodeTCP };
     });
     setDistrictOptions({ data: district, isLoading: false });
   }, [DistrictType]);
@@ -535,6 +543,46 @@ const ApllicantPuropseForm = (props) => {
     }
   };
 
+  const getToptions = async (val) => {
+    const payload = {
+      RequestInfo: {
+        apiId: "Rainmaker",
+        ver: "v1",
+        ts: 0,
+        action: "_search",
+        did: "",
+        key: "",
+        msgId: "090909",
+        authToken: "",
+        correlationId: null,
+      },
+      MdmsCriteria: {
+        tenantId: "hr",
+        moduleDetails: [
+          {
+            tenantId: "hr",
+            moduleName: "common-masters",
+            masterDetails: [
+              {
+                name: "tehsil",
+                filter: `[?(@.tehCode=="${val}")]`,
+              },
+            ],
+          },
+        ],
+      },
+    };
+    try {
+      const Resp = await axios.post("/egov-mdms-service/v1/_search", payload);
+      console.log("Resp?.data?.MdmsRes?.", Resp?.data?.MdmsRes?.["common-masters"]);
+      const sectorPlan = Resp?.data?.MdmsRes?.["common-masters"]?.Sector?.map(function (data) {
+        return { value: data?.sectorCode, label: data?.sectorNo };
+      });
+    } catch (error) {
+      return error;
+    }
+  };
+
   // useEffect(() => {
   //   const sectorPlan = sectorType?.["common-masters"]?.Sector?.map(function (data) {
   //     return { value: data?.devPlanCode, label: data?.sectorNo };
@@ -555,28 +603,109 @@ const ApllicantPuropseForm = (props) => {
   };
 
   const getTehslidata = async (data) => {
+    const payload = {
+      RequestInfo: {
+        apiId: "Rainmaker",
+        ver: "v1",
+        ts: 0,
+        action: "_search",
+        did: "",
+        key: "",
+        msgId: "090909",
+        authToken: "",
+        correlationId: null,
+      },
+      MdmsCriteria: {
+        tenantId: "hr",
+        moduleDetails: [
+          {
+            tenantId: "hr",
+            moduleName: "common-masters",
+            masterDetails: [
+              {
+                name: "tehsil",
+                filter: `[?(@.disCode=="${data}")]`,
+              },
+            ],
+          },
+        ],
+      },
+    };
     try {
-      const Resp = await axios.post("/egov-mdms-service/v1/_tehsil?dCode=" + data, datapost, {});
-      const tehsilData = Resp?.data?.map((el) => {
-        return { label: el?.name, id: el?.code, value: el?.code };
+      const Resp = await axios.post("/egov-mdms-service/v1/_search", payload);
+      const tehsilData = Resp?.data?.MdmsRes?.["common-masters"]?.tehsil?.map(function (data) {
+        console.log("tehsil", data);
+        return { value: data?.tehCode, label: data?.tehName };
       });
       setTehsilDataLabels({ data: tehsilData, isLoading: false });
     } catch (error) {
       return error;
     }
   };
+  // const getTehslidata = async (data) => {
+  //   try {
+  //     const Resp = await axios.post("/egov-mdms-service/v1/_tehsil?dCode=" + data, datapost, {});
+  //     const tehsilData = Resp?.data?.map((el) => {
+  //       return { label: el?.name, id: el?.code, value: el?.code };
+  //     });
+  //     setTehsilDataLabels({ data: tehsilData, isLoading: false });
+  //   } catch (error) {
+  //     return error;
+  //   }
+  // };
 
-  const getRevenuStateData = async (code) => {
+  const getRevenuStateData = async (data) => {
+    const payload = {
+      RequestInfo: {
+        apiId: "Rainmaker",
+        ver: "v1",
+        ts: 0,
+        action: "_search",
+        did: "",
+        key: "",
+        msgId: "090909",
+        authToken: "",
+        correlationId: null,
+      },
+      MdmsCriteria: {
+        tenantId: "hr",
+        moduleDetails: [
+          {
+            tenantId: "hr",
+            moduleName: "common-masters",
+            masterDetails: [
+              {
+                name: "village",
+                filter: `[?(@.tehCode=="${data}")]`,
+              },
+            ],
+          },
+        ],
+      },
+    };
     try {
-      const Resp = await axios.post("/egov-mdms-service/v1/_village?" + "dCode=" + district + "&" + "tCode=" + code, datapost, {});
-      const revenData = Resp?.data?.map((el) => {
-        return { label: el?.name, id: el?.khewats, value: el?.code, khewats: el?.khewats, code: el?.code };
+      const Resp = await axios.post("/egov-mdms-service/v1/_search", payload);
+      const revenData = Resp?.data?.MdmsRes?.["common-masters"]?.village?.map(function (data) {
+        console.log("village", data);
+        return { value: data?.nvCODE, label: data?.villageName };
       });
       setRevenueDataLabels({ data: revenData, isLoading: false });
     } catch (error) {
       return error;
     }
   };
+
+  // const getRevenuStateData = async (code) => {
+  //   try {
+  //     const Resp = await axios.post("/egov-mdms-service/v1/_village?" + "dCode=" + district + "&" + "tCode=" + code, datapost, {});
+  //     const revenData = Resp?.data?.map((el) => {
+  //       return { label: el?.name, id: el?.khewats, value: el?.code, khewats: el?.khewats, code: el?.code };
+  //     });
+  //     setRevenueDataLabels({ data: revenData, isLoading: false });
+  //   } catch (error) {
+  //     return error;
+  //   }
+  // };
 
   const getMustilData = async (code) => {
     try {
@@ -1188,7 +1317,7 @@ const ApllicantPuropseForm = (props) => {
                   data={revenueDataLabels?.data}
                   labels="Revenue Estate"
                   loading={revenueDataLabels?.isLoading}
-                  onChange={(e) => getMustilData(e.code)}
+                  onChange={(e) => getMustilData(e.value)}
                 />
 
                 <h3 className="error-message" style={{ color: "red" }}>
