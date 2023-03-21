@@ -1292,7 +1292,7 @@ Note: The term “Collaboration agreement" shall include all Development agreeme
                      {/* <th class="fw-normal py-0 border-top-0"> */}
                        <ReportProblemIcon
                       style={{
-                        display: hideRemarks || hideRemarksPatwari ?"none":"block",
+                        display: hideRemarks ?"none":"block",
 
                         color: fieldIconColors.district
                       }}
