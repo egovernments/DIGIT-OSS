@@ -152,6 +152,7 @@ const ScrutinyFormcontainer = (props) => {
   });
 
   const applicationDetailsTemp = Digit.Hooks.tl.useApplicationDetail(t, tenantId, id);
+ 
 
 
 
@@ -201,7 +202,16 @@ const ScrutinyFormcontainer = (props) => {
     setWarningPopUp(false);
   }
 
+  const [open, setOpen] = useState(false)
+
+    // const handleClickOpen = () => {
+    //     setOpen(true);
+    //   };
+
+    
+
   const submitAction = async (data, nocData = false, isOBPS = {}) => {
+  
     setIsEnableLoader(true);
     if (typeof data?.customFunctionToExecute === "function") {
       data?.customFunctionToExecute({ ...data });
@@ -227,75 +237,7 @@ const ScrutinyFormcontainer = (props) => {
       }
     }
 
-    if (data.Licenses[0].action === "APPROVE_SITE_VERIFICATION") {
-
-
-      let requestInfo = {
-
-        RequestInfo: {
-          apiId: "Rainmaker",
-          ver: "v1",
-          ts: 0,
-          action: "_search",
-          did: "",
-          key: "",
-          msgId: "090909",
-          requesterId: "",
-          authToken: authToken,
-          userInfo: userInfo
-
-        }
-      }
-      console.log("TCPaccess", requestInfo)
-      // return;
-
-      try {
-        const Resp = await axios.post(`/tl-services/new/getDeptToken?applicationNumber=${id}`, requestInfo).then((response) => {
-          return response?.data;
-        });
-        // setApplicationData(Resp?.Licenses[0]);
-        SetLastUpdate(Resp?.Licenses[0]?.tcpLoiNumber);
-    console.log("update" , Resp?.Licenses[0]);
-
-      } catch (error) {
-        console.log(error);
     
-      }
-
-      const payload = {
-
-        "RequestInfo": {
-
-          "apiId": "Rainmaker",
-
-          "ver": ".01",
-
-          "ts": null,
-
-          "action": "_update",
-
-          "did": "1",
-
-          "key": "",
-
-          "msgId": "20170310130900|en_IN",
-
-          "authToken": authToken
-
-        }
-      }
-      const Resp = await axios.post(`/tl-services/loi/report/_create?applicationNumber=${id}&userId=${userInfo?.id}&hqUserId=2247`, payload, { responseType: "arraybuffer" })
-
-      console.log("logger12345...", Resp.data, userInfo)
-
-      const pdfBlob = new Blob([Resp.data], { type: 'application/pdf' });
-      const pdfUrl = URL.createObjectURL(pdfBlob);
-      window.open(pdfUrl);
-
-      console.log("logger123456...", pdfBlob, pdfUrl);
-
-
-    }
 
 
 
@@ -329,20 +271,113 @@ const ScrutinyFormcontainer = (props) => {
         },
       });
     }
+    if (data.Licenses[0].action === "APPROVE_SITE_VERIFICATION") {
 
-    closeModal();
+      let requesttoloi = {
+        "RequestInfo": {
+          "apiId": "Rainmaker",
+          "msgId": "1669293303096|en_IN",
+          "authToken": authToken
+  
+        }
+      }
+      try {
+        const Resp = await axios.post(`/tl-services/v1/_search?tenantId=hr&applicationNumber=${id}`, requesttoloi).then((response) => {
+          return response?.data;
+        });
+        console.log("AfterLoiUpdate", Resp, Resp?.Licenses);
+        
+  
+      } catch (error) {
+        console.log(error);
+      }
+
+
+      let requestInfo = {
+
+        RequestInfo: {
+          apiId: "Rainmaker",
+          ver: "v1",
+          ts: 0,
+          action: "_search",
+          did: "",
+          key: "",
+          msgId: "090909",
+          requesterId: "",
+          authToken: authToken,
+          userInfo: userInfo
+
+        }
+      }
+      console.log("TCPaccess", requestInfo)
+      // return;
+
+      try {
+        const Resp = await axios.post(`/tl-services/new/getDeptToken?applicationNumber=${id}`, requestInfo).then((response) => {
+          return response?.data;
+        });
+        // setApplicationData(Resp?.Licenses[0]);
+        SetLastUpdate(Resp?.Licenses[0]);
+    console.log("updateLicenses" , Resp?.Licenses[0]?.tcpLoiNumber);
+
+      } catch (error) {
+        console.log(error);
+    
+      }
+     
+      const payload = {
+
+        "RequestInfo": {
+
+          "apiId": "Rainmaker",
+
+          "ver": ".01",
+
+          "ts": null,
+
+          "action": "_update",
+
+          "did": "1",
+
+          "key": "",
+
+          "msgId": "20170310130900|en_IN",
+
+          "authToken": authToken
+
+        }
+      }
+      const Resp = await axios.post(`/tl-services/loi/report/_create?applicationNumber=${id}&userId=${userInfo?.id}&hqUserId=2247`, payload, { responseType: "arraybuffer" })
+
+      console.log("logger12345...", Resp.data, userInfo)
+
+      const pdfBlob = new Blob([Resp.data], { type: 'application/pdf' });
+      const pdfUrl = URL.createObjectURL(pdfBlob);
+      window.open(pdfUrl);
+
+      console.log("logger123456...", pdfBlob, pdfUrl);
+
+
+
+
+    }
+
     // closeModal();
-    // setTimeout(() => {
-    //   setShowToast();
-    //   window.location.href = `/digit-ui/employee/tl/servicePlanInbox`
-    // }, 3000);
+
+    setTimeout(() => {
+      closeModal()
+      window.location.href = `/digit-ui/employee/tl/inbox`
+      }, 3000);
   };
 
   useEffect(() => {
     console.log("log123...applicationDetailsAPI", applicationDetailsTemp)
-    console.log("LastUpdate" , lastUpdate)
+   
+
+  
     if (applicationDetailsTemp?.data) {
       setApplicationDetails(applicationDetailsTemp?.data)
+      
     }
   }, [applicationDetailsTemp?.data])
 
@@ -361,7 +396,7 @@ const ScrutinyFormcontainer = (props) => {
     getScrutinyData();
   }, [])
 
-
+  console.log("meri update34" , lastUpdate)
   return (
     <Card className="formColorEmp">
       <Card.Header className="head-application" >
@@ -384,7 +419,7 @@ const ScrutinyFormcontainer = (props) => {
           </div>
           <div className="col-sm-2">
             <b><p className="head-font">TCP Case Number:</p></b>
-            {/* <b><p className="head-font">{applicationData?.tcpCaseNumber.substring(0, 7)}</p></b> */}
+            <b><p className="head-font">{applicationData?.tcpCaseNumber.substring(0, 7)}</p></b>
           </div>
           <div className="col-sm-2">
             <b><p className="head-font">TCP Dairy Number: </p></b>
@@ -471,6 +506,30 @@ const ScrutinyFormcontainer = (props) => {
             <Button style={{ textAlign: "right" }}> <a href="http://localhost:3000/digit-ui/employee/tl/Loi" >Generate LOI</a></Button>
           </div> */}
           {/* )} */}
+          
+          {/* ////////////////////done////////////////////////////////// */}
+          {/* <Dialog
+    open={open}
+    onClose={handleClose}
+    aria-labelledby="alert-dialog-title"
+    aria-describedby="alert-dialog-description"
+    >
+    <DialogTitle id="alert-dialog-title">
+    Patwari_HQ Remarks
+    </DialogTitle>
+    <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+            <p>Your Service Plan is submitted successfully <span><CheckCircleOutlineIcon style={{color: 'blue', variant: 'filled'}}/></span></p>
+            <p>Please Note down your Application Number <span style={{padding: '5px', color: 'blue'}}>Patwari_HQ Remarks</span> for further assistance</p>
+          </DialogContentText>
+    </DialogContent>
+    <DialogActions>
+          <Button onClick={handleClose} autoFocus>
+            Ok
+          </Button>
+    </DialogActions>
+
+    </Dialog> */}
 
 
         </Row>
