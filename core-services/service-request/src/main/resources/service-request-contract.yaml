@@ -1,0 +1,507 @@
+---
+openapi: 3.0.3
+info:
+  title: Service Request
+  description: |
+    API specs for service attribute definition and capture service attribute 
+    details 
+    
+  contact:
+    name: Digit
+    email: info@egovernments.org
+  version: '1.0.0'
+
+paths:
+  "/service/definition/v1/_create":
+    post:
+      tags:
+      - Service Definition
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ServiceDefinitionRequest'
+      responses:
+        '202':
+          description: Request accepted.
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ServiceDefinitionResponse'
+        '400':
+          description: Invalid input.
+          content:
+            '*/*':
+              schema:
+                $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/ErrorRes'
+  "/service/definition/v1/_update":
+    post:
+      tags:
+      - Service Definition
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ServiceDefinitionRequest'
+      responses:
+        '202':
+          description: Request accepted.
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ServiceDefinitionResponse'
+        '400':
+          description: Invalid input.
+          content:
+            '*/*':
+              schema:
+                $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/ErrorRes'
+  "/service/definition/v1/_search":
+    post:
+      tags:
+      - Service Definition
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ServiceDefinitionSearchRequest'
+      responses:
+        '202':
+          description: Request accepted.
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ServiceDefinitionResponse'
+        '400':
+          description: Invalid input.
+          content:
+            '*/*':
+              schema:
+                $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/ErrorRes'
+  
+  "/service/v1/_create":
+    post:
+      tags:
+      - Service
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ServiceRequest'
+      responses:
+        '202':
+          description: Request accepted.
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ServiceResponse'
+        '400':
+          description: Invalid input.
+          content:
+            '*/*':
+              schema:
+                $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/ErrorRes'
+  "/service/v1/_update":
+    post:
+      tags:
+      - Service
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ServiceRequest'
+      responses:
+        '202':
+          description: Request accepted.
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ServiceResponse'
+        '400':
+          description: Invalid input.
+          content:
+            '*/*':
+              schema:
+                $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/ErrorRes'
+  "/service/v1/_search":
+    post:
+      tags:
+      - Service
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ServiceSearchRequest'
+      responses:
+        '202':
+          description: Request accepted.
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ServiceResponse'
+        '400':
+          description: Invalid input.
+          content:
+            '*/*':
+              schema:
+                $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/ErrorRes'
+
+components:
+  schemas:
+    ServiceDefinition:
+      description: Holds the Service Definition details json object.
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique identifier of the record
+          minLength: 2
+          maxLength: 64
+          readOnly: true
+        tenantId:
+          type: string
+          description: 'Tenant Identifier'
+          example: pb.amritsar
+          minLength: 2
+          maxLength: 64
+        code:
+          type: string
+          description: unique namespaced service code to identify the attribute config for code
+          minLength: 2
+          maxLength: 64
+        isActive:
+          type: boolean
+          description: >-
+            If false then consider this as soft deleted record
+          default: true
+        attributes:
+          type: array
+          items:
+            $ref: '#/components/schemas/AttributeDefinition'
+        auditDetails:
+          $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/AuditDetails'
+        additionalDetails:
+          type: object
+          description: Any additional key-value pair to be stored with the service.
+        clientId:
+          type: string
+          description: Client Id for service definition
+          minLength: 2
+          maxLength: 64
+      required: [code,attributes]
+        
+    
+    AttributeDefinition:
+      description: Hold the attribute definition fields details as json object.
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique identifier of the record
+          format: varchar
+          readOnly: true
+          minLength: 2
+          maxLength: 64
+        tenantId:
+          type: string
+          description: 'Tenant Identifier'
+          example: pb.amritsar
+          minLength: 2
+          maxLength: 64
+        code:
+          type: string
+          description: unique code of attribute.
+          format: varchar
+          minLength: 2
+          maxLength: 64
+        dataType:
+          type: string
+          description: defines the attribute type
+          enum:
+           - String
+           - Number
+           - Text
+           - Datetime
+           - SingleValueList
+           - MultiValueList
+           - File
+        values:
+          description: >-
+            values we can pass if field type is selected
+            as('singlevaluelist','multivaluelist'). 
+          type: array
+          items:
+            type: string
+            maxItems: 100
+            minItems: 1
+        isActive:
+          type: boolean
+          description: >-
+            if the value is true then the attribute will appear in search
+          default: true
+        required:
+          type: boolean
+          description: value will be true if field is 
+           mandatory otherwise false.
+        regEx:
+          type: string
+          description: Define the regular expression for field data validations
+          minLength: 2
+          maxLength: 64
+        order:
+          type: string
+          description: order of the attributes for FE support
+        auditDetails:
+          $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/AuditDetails'
+        additionalDetails:
+          type: object
+          description: Any additional key-value pair to be stored with the service. 
+      required: [code,dataType,isActive,reuired]
+    
+    Service:
+      description: Hold the Service field details as json object.
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique identifier of the record
+          format: varchar
+          readOnly: true
+        tenantId:
+          type: string
+          description: 'Tenant Identifier'
+          example: pb.amritsar
+          minLength: 2
+          maxLength: 64
+        serviceDefId:
+          type: string
+          description: Service definition id 
+          minLength: 2
+          maxLength: 64
+        referenceId:
+          type: string
+          description: if service is delivered for specific entity then we link this to that entity
+          minLength: 2
+          maxLength: 64
+        accountId:
+          type: string
+          description: 'Account id of the individual'
+          minLength: 2
+          maxLength: 64
+        clientId:
+          type: string
+          description: 'Client Id for service'
+          minLength: 2
+          maxLength: 64
+        attributes:
+          description: >-
+            values we can pass if field type is selected
+            as('singlevaluelist','multivaluelist'). 
+          type: array
+          items:
+            $ref:  '#/components/schemas/AttributeValue'
+        
+        auditDetails:
+          $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/AuditDetails'
+        additionalDetails:
+          type: object
+          description: Any additional key-value pair to be stored with the service. 
+      required: [tenantId,serviceDefId,attributes,accountId]
+    
+    
+    AttributeValue:
+      description: Hold the attribute details as object.
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique identifier of the record
+          format: varchar
+          readOnly: true
+        attributeCode:
+          type: string
+          description: Unique code of attribute from attributedefinition
+        value:
+          description: >-
+            values we can pass if field type is selected
+            as('singlevaluelist','multivaluelist'). 
+          type: object
+        auditDetails:
+          $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/AuditDetails'
+        additionalDetails:
+          type: object
+          description: Any additional key-value pair to be stored with the service. 
+          
+      required: [attributeCode,value]
+    
+    ServiceDefinitionCriteria:
+      type: object
+      description: The object will contain all the search parameters for Service Definition. 
+      properties:
+        tenantId:
+          type: string
+          description: 'Tenant Identifier'
+          example: pb.amritsar
+          minLength: 2
+          maxLength: 64
+        ids:
+          type: array
+          description: Search by service definition ids
+          format: uuid
+          items:
+            type: string
+        code:
+          description: Search by service definition code
+          type: array
+          format: uuid
+          items:
+            type: string
+        clientId:
+          type: string
+          description: 'Client Id'
+          minLength: 2
+          maxLength: 64
+      required: [tenantId]
+      
+    ServiceCriteria:
+      type: object
+      description: The object will contain all the search parameters for Service . 
+      properties:
+        tenantId:
+          type: string
+          description: 'Tenant Identifier'
+          example: pb.amritsar
+          minLength: 2
+          maxLength: 64
+        ids:
+          type: array
+          description: Search by service ids
+          format: uuid
+          items:
+            type: string
+        serviceDefIds:
+          description: Search by service definition ids
+          type: array
+          format: uuid
+          items:
+            type: string
+        referenceIds:
+          description: Search by service reference ids
+          type: array
+          format: uuid
+          items:
+            type: string
+        accountId:
+          type: string
+          description: 'Account Id of individual'
+          minLength: 2
+          maxLength: 64
+        clientId:
+          type: string
+          description: 'Client Id'
+          minLength: 2
+          maxLength: 64
+      required: [tenantId]
+    
+    Pagination:
+      type: object
+      description: Pagination details 
+      properties:
+        limit:
+          type: number
+          format: integer
+          description: Limit for total no of records in single search
+            max limit should be defined as environment variable
+          default: 10
+          maximum: 100
+        offSet:
+          type: number
+          description: offset or page no
+          default: 0
+        totalCount:
+          type: number
+          description: Total count for a particular criteria
+          readOnly: true
+        sortBy:
+          type: string
+          description: result sorting order
+        order:
+          type: string
+          description: Sorting order 
+          enum:
+            - asc
+            - desc
+    
+    
+    ServiceDefinitionSearchRequest:
+      type: object
+      properties:
+        requestInfo:
+          $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/RequestInfo'
+        serviceDefinitionCriteria:
+          $ref: '#/components/schemas/ServiceDefinitionCriteria'
+        pagination:
+          $ref: '#/components/schemas/Pagination'
+      required: [requestInfo,serviceDefinition]
+       
+    
+    
+    
+    ServiceSearchRequest:
+      type: object
+      properties:
+        requestInfo:
+          $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/RequestInfo'
+        serviceDefinition:
+          $ref: '#/components/schemas/ServiceCriteria'
+        pagination:
+          $ref: '#/components/schemas/Pagination'
+      required: [requestInfo,serviceDefinition]
+       
+    
+    
+    
+    ServiceDefinitionRequest:
+      type: object
+      properties:
+        requestInfo:
+          $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/RequestInfo'
+        serviceDefinition:
+          $ref: '#/components/schemas/ServiceDefinition'
+      required: [requestInfo,serviceDefinition]
+       
+    
+    ServiceDefinitionResponse:
+      type: object
+      properties:
+        responseInfo:
+          $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/ResponseInfo'
+        serviceDefinition:
+          type: array
+          items:
+            $ref: '#/components/schemas/ServiceDefinition'
+        pagination:
+          $ref: '#/components/schemas/Pagination'
+    
+    ServiceRequest:
+      type: object
+      properties:
+        requestInfo:
+          $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/RequestInfo'
+        service:
+          $ref: '#/components/schemas/Service'
+      required: [requestInfo,serviceDefinition]
+       
+    
+    ServiceResponse:
+      type: object
+      properties:
+        responseInfo:
+          $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/ResponseInfo'
+        service:
+          type: array
+          items:
+            $ref: '#/components/schemas/Service'
+        pagination:
+          $ref: '#/components/schemas/Pagination'
+     
