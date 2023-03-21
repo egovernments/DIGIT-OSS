@@ -237,7 +237,7 @@ const PersonalinfoChild = (props) => {
 
                 <div style={{ display: "flex" }}>
                   <Form.Control className={classes.formControl}
-                    placeholder={personalinfo !== null ? personalinfo?.devDetail?.addInfo?.name : null}
+                    placeholder={personalinfo !== null ? personalinfo?.devDetail?.addInfo?.companyName : null}
                     disabled></Form.Control>
                   &nbsp;&nbsp;
                   <ReportProblemIcon
@@ -302,7 +302,7 @@ const PersonalinfoChild = (props) => {
 
                 <div style={{ display: "flex" }}>
                   <Form.Control className={classes.formControl}
-                    placeholder={personalinfo !== null ? personalinfo?.devDetail?.addInfo?.emailId : null}
+                    placeholder={personalinfo !== null ? personalinfo?.devDetail?.addInfo?.email : null}
                     disabled></Form.Control>
                   &nbsp;&nbsp;
                   <ReportProblemIcon

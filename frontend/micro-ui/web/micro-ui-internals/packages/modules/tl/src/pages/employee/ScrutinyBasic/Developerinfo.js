@@ -678,7 +678,7 @@ const Developerinfo = (props) => {
                       </div>
                     </Col>
                     <Col className="ms-auto" md={4} xxl lg="4">
-                      {/* <div className="col col-4"> */}
+                      
                       <h6>Third-party right created&nbsp; </h6>
 
                       <div className="d-flex flex-row align-items-center my-1 ">
@@ -735,7 +735,7 @@ const Developerinfo = (props) => {
                             
                               <div className="d-flex flex-row  align-items-center">
                               <Form.Control placeholder={landScheduleData !== null ? landScheduleData?.thirdPartyRemark : null}
-                              // height={30} style={{ maxWidth: 200, marginRight: 5 }} 
+                              
                               className={classes.formLabel}
                               disabled></Form.Control>
                         <ReportProblemIcon
@@ -1356,20 +1356,20 @@ const Developerinfo = (props) => {
                 2. Any encumbrance with respect to following :&nbsp;&nbsp;
               </h5>
               <div className="d-flex mt-2 align-items-center">
-                <input type="radio" disabled value="rehan/mortgage" name="rehan/mortgage" checked={landScheduleData?.encumburance === "rehan/mortgage" ? true : false} />
-                <label className="m-0 mx-2" htmlFor="rehan/mortgage">Rehan / Mortgage</label>
+                <input type="radio" disabled value="rehan" name="rehan" checked={landScheduleData?.encumburance === "rehan" ? true : false} />
+                <label className="m-0 mx-2" htmlFor="rehan">Rehan / Mortgage</label>
                 &nbsp;&nbsp;
-                <input type="radio" disabled value="patta/lease" name="patta/lease" checked={landScheduleData?.encumburance === "patta/lease" ? true : false} />
-                <label className="m-0 mx-2" htmlFor="patta/lease">Patta/Lease</label>
+                <input type="radio" disabled value="patta" name="patta" checked={landScheduleData?.encumburance === "patta" ? true : false} />
+                <label className="m-0 mx-2" htmlFor="patta">Patta/Lease</label>
                 &nbsp;&nbsp;
-                <input type="radio" disabled value="gair/marusi" name="gair/marusi" checked={landScheduleData?.encumburance === "gair/marusi" ? true : false} />
-                <label className="m-0 mx-2" htmlFor="gair/marusi">Gair/Marusi</label>
-                &nbsp;&nbsp;
-                <input type="radio" disabled value="anyOther" name="anyOther" checked={landScheduleData?.encumburance === "anyOther" ? true : false} />
-                <label className="m-0 mx-2" htmlFor="anyOther">Any Other</label>
+                <input type="radio" disabled value="gair" name="gair" checked={landScheduleData?.encumburance === "gair" ? true : false} />
+                <label className="m-0 mx-2" htmlFor="gair">Gair/Marusi</label>
                 &nbsp;&nbsp;
                 <input type="radio" disabled value="anyOther" name="anyOther" checked={landScheduleData?.encumburance === "anyOther" ? true : false} />
                 <label className="m-0 mx-2" htmlFor="anyOther">Any Other</label>
+                &nbsp;&nbsp;
+                <input type="radio" disabled value="loan" name="loan" checked={landScheduleData?.encumburance === "loan" ? true : false} />
+                <label className="m-0 mx-2" htmlFor="loan">Loan</label>
                 &nbsp;&nbsp;
                 <input type="radio" disabled value="none" name="none" checked={landScheduleData?.encumburance === "none" ? true : false} />
                 <label className="m-0 mx-2" htmlFor="none">none</label>
@@ -2320,6 +2320,54 @@ const Developerinfo = (props) => {
                 {landScheduleData?.siteApproachable === "N" && (
 
                   <div >
+                    <div>
+                      <h6>(a)  Enter Width in Meters</h6>
+                      <div className="d-flex flex-row align-items-center my-2 ">
+                      &nbsp;&nbsp;
+                        <Form.Control placeholder={landScheduleData !== null ? landScheduleData?.anyOtherRemark : null}
+                      className={classes.formLabel}
+                      disabled></Form.Control>
+                        <ReportProblemIcon
+                          style={{
+                            display: hideRemarks ? "none" : "block",
+                            color: fieldIconColors.ordersUpload
+                          }}
+                          onClick={() => {
+                            setLabelValue("Orders Upload"),
+                              setOpennedModal("ordersUpload")
+                            setSmShow(true),
+                              console.log("modal open"),
+                              setFieldValue(landScheduleData?.approachFromProposedSector === "Y" ? "Yes" : landScheduleData?.approachFromProposedSector === "N" ? "No" : null);
+                          }}
+                        ></ReportProblemIcon>
+                      </div>
+
+                      
+                    </div>
+                    <div>
+                      <h6>(b)  Whether irrevocable consent from such developer/ colonizer for uninterrupted usage of such internal road for the purpose of development of the colony by the applicant or by its agencies and for usage by its allottees submitted</h6>
+                      <div className="d-flex flex-row align-items-center my-2 ">
+                      &nbsp;&nbsp;
+                        <input type="radio" disabled value="Yes" checked={landScheduleData?.approachFromProposedSector === "Y" ? true : false} />
+                        <label className="m-0  mx-2" for="Yes">Yes</label>&nbsp;&nbsp;
+                        <input type="radio" disabled value="No" checked={landScheduleData?.approachFromProposedSector === "N" ? true : false} />
+                        <label className="m-0 mx-2" for="No">No</label>
+                        <ReportProblemIcon
+                          style={{
+                            display: hideRemarks ? "none" : "block",
+                            color: fieldIconColors.ordersUpload
+                          }}
+                          onClick={() => {
+                            setLabelValue("Orders Upload"),
+                              setOpennedModal("ordersUpload")
+                            setSmShow(true),
+                              console.log("modal open"),
+                              setFieldValue(landScheduleData?.approachFromProposedSector === "Y" ? "Yes" : landScheduleData?.approachFromProposedSector === "N" ? "No" : null);
+                          }}
+                        ></ReportProblemIcon>
+                      </div>
+                      
+                    </div>
                     <h5 className="text-black  mb-2">(i)  Details of proposed approach.</h5>
                     <div className="my-2 mx-2">
                       <div className="d-flex flex-row align-items-center my-2 ">
