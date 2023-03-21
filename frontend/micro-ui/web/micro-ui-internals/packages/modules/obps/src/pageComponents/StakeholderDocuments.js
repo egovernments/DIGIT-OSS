@@ -17,10 +17,13 @@ import { useForm } from "react-hook-form";
 import { getDocShareholding } from "../../../tl/src/pages/employee/ScrutinyBasic/ScrutinyDevelopment/docview.helper";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import { Button, Placeholder } from "react-bootstrap";
+import Spinner from "../components/Loader/index";
+import CusToaster from "../components/Toaster";
 const StakeholderDocuments = ({ t, config, onSelect, userType, formData, setError: setFormError, clearErrors: clearFormErrors, formState }) => {
   const tenantId = Digit.ULBService.getCurrentTenantId();
   const stateId = Digit.ULBService.getStateId();
   const userInfo = Digit.UserService.getUser();
+  const [documentsUploadList, setDocumentsList] = useState([]);
   const [documents, setDocuments] = useState(formData?.documents?.documents || []);
   const [tradeType, setTradeType] = useState("");
   const [error, setError] = useState(null);
@@ -36,6 +39,7 @@ const StakeholderDocuments = ({ t, config, onSelect, userType, formData, setErro
   const [registeredIrrevocablePaternshipDeed, setRegisteredIrrevocablePaternshipDeed] = useState("");
   const [affidavitAndPancard, setAffidavitAndPancard] = useState("");
   const [anyOtherDoc, setAnyOtherDoc] = useState("");
+
   // const [docList, setDocList] = useState({});
   if (isopenlink)
     window.onunload = function () {
@@ -62,8 +66,8 @@ const StakeholderDocuments = ({ t, config, onSelect, userType, formData, setErro
       const getDevDetails = await axios.get(`/user/developer/_getDeveloperById?id=${userInfo?.info?.id}&isAllData=true`, requestResp, {});
       const developerDataGet = getDevDetails?.data;
       setTradeType(developerDataGet?.devDetail[0]?.applicantType?.licenceType);
-      setDocuments(developerDataGet?.devDetail[0]?.licensesDoc);
-      // console.log("TRADETYPE", tradeType);
+      setDocumentsList(developerDataGet?.devDetail[0]?.licensesDoc);
+      // console.log("TRADETYPE", documentsUploadList);
 
       let filtredBpaDocs = [];
       if (data?.StakeholderRegistraition?.TradeTypetoRoleMapping) {
@@ -159,19 +163,18 @@ const StakeholderDocuments = ({ t, config, onSelect, userType, formData, setErro
   useEffect(() => {
     let count = 0;
     // console.log("DEVC", documents);
-    bpaTaxDocuments.map((doc) => {
+    bpaTaxDocuments?.map((doc) => {
       let isRequired = false;
 
-      documents.map((data) => {
-        // if (doc.required && data !== null && data && doc.code == `${data.documentType.split(".")[0]}.${data.documentType.split(".")[1]}`) {
+      documents?.map((data) => {
+        // if (doc.required == true && data !== null && doc.code == `${data.documentType.split(".")[0]}.${data.documentType.split(".")[1]}`) {
         //   isRequired = true;
         // }
         // if (doc.required && doc.code == `${data.documentType.split(".")[0]}.${data.documentType.split(".")[1]}`) {
         // }
         // console.log("ALLOW", data);
 
-        if (doc.required == true && data !== null && data && doc.code == data.documentType) {
-          // console.log("YES");
+        if (doc?.required == true && data !== null && doc?.code == data?.documentType) {
           isRequired = true;
         }
 
@@ -186,14 +189,24 @@ const StakeholderDocuments = ({ t, config, onSelect, userType, formData, setErro
         } else if (data.documentType === "APPL.BPAREG_OTHERS") {
           setAnyOtherDoc(data?.documentUid);
         }
+
+        // if (doc.required == false && doc.code === "APPL.BPAREG_OTHERS") {
+        //   setEnableSubmit(false);
+        // }
       });
 
       if (!isRequired && doc.required == true) {
         count = count + 1;
+        console.log("+_+_+_+", count);
       }
     });
-    if ((count == "0" || count == 0) && documents.length > 0) setEnableSubmit(false);
-    else setEnableSubmit(true);
+    if (((count == "0" || count == 0 || count < 1) && documents?.length > 0) || documentsUploadList?.length > 0) {
+      setEnableSubmit(false);
+    } else if (count < 1 || count == 0) {
+      setEnableSubmit(false);
+    } else {
+      setEnableSubmit(true);
+    }
   }, [documents, checkRequiredFields]);
   const navigate = useHistory();
 
@@ -260,6 +273,7 @@ const StakeholderDocuments = ({ t, config, onSelect, userType, formData, setErro
                       error={error}
                       setError={setError}
                       setDocuments={setDocuments}
+                      documentsUploadList={documentsUploadList}
                       documents={documents}
                       setCheckRequiredFields={setCheckRequiredFields}
                       isCitizenUrl={isCitizenUrl}
@@ -287,10 +301,13 @@ const StakeholderDocuments = ({ t, config, onSelect, userType, formData, setErro
   );
 };
 
-function SelectDocument({ t, document: doc, setDocuments, error, setError, documents, setCheckRequiredFields, isCitizenUrl }) {
+function SelectDocument({ t, document: doc, setDocuments, documentsUploadList, error, setError, documents, setCheckRequiredFields, isCitizenUrl }) {
+  const [loader, setLoading] = useState(false);
   // const docData = documents?.map((docs, index) => {
   //   setDocList(docs.documentUid);
   // });
+
+  const [showToastError, setShowToastError] = useState({ label: "", error: false, success: false });
 
   // setDocList(documents);
   const { setValue, getValues, watch } = useForm();
@@ -311,7 +328,7 @@ function SelectDocument({ t, document: doc, setDocuments, error, setError, docum
   const [uploadedFile, setUploadedFile] = useState(() => filteredDocument?.fileStoreId || null);
   setValue("finalDocList", filteredDocument?.fileStoreId);
   // setArticlesOfAssociation(uploadedFile);
-  // console.log("FILTEREDDOC", articlesOfAssociation);
+  // console.log("FILTEREDDOC", doc);
 
   // console.log("HGHGHG", docList);
   const handleSelectDocument = (value) => setSelectedDocument(value);
@@ -353,15 +370,20 @@ function SelectDocument({ t, document: doc, setDocuments, error, setError, docum
           setError(t(`NOT_SUPPORTED_FILE_TYPE`));
         } else {
           try {
+            setLoading(true);
             setUploadedFile(null);
             const response = await Digit.UploadServices.Filestorage("PT", file, tenantId?.split(".")[0]);
+            setLoading(false);
             if (response?.data?.files?.length > 0) {
               setUploadedFile(response?.data?.files[0]?.fileStoreId);
+              setShowToastError({ label: "File Uploaded Successfully", error: false, success: true });
             } else {
-              setError(t("CS_FILE_UPLOAD_ERROR"));
+              setShowToastError({ label: t("CS_FILE_UPLOAD_ERROR"), error: true, success: false });
+              // setError(t("CS_FILE_UPLOAD_ERROR"));
             }
           } catch (err) {
-            setError(t("CS_FILE_UPLOAD_ERROR"));
+            setLoading(false);
+            setShowToastError({ label: t("CS_FILE_UPLOAD_ERROR"), error: true, success: false });
           }
         }
       }
@@ -369,65 +391,95 @@ function SelectDocument({ t, document: doc, setDocuments, error, setError, docum
   }, [file]);
 
   return (
-    <div className="doc-upload-field" style={{ marginBottom: "24px" }}>
-      <CardLabel style={{ marginBottom: "10px" }}>
-        {doc?.required ? `${t(`BPAREG_HEADER_${doc?.code?.replace(".", "_")}`)} *` : `${t(`BPAREG_HEADER_${doc?.code?.replace(".", "_")}`)}`}
-      </CardLabel>
-      {doc?.info ? (
-        <div style={{ fontSize: "12px", color: "#505A5F", fontWeight: 400, lineHeight: "15px", marginBottom: "10px" }}>{`${t(doc?.info)}`}</div>
-      ) : null}
-      {/* {JSON.stringify(doc?.code)} */}
+    <div>
+      {loader && <Spinner />}
 
-      <div className="" style={{ display: "flex", alignItems: "center" }}>
-        <UploadFile
-          extraStyleName={"OBPS"}
-          accept="image/*, .pdf, .png, .jpeg, .jpg"
-          onUpload={selectfile}
-          // required={uploadedFile && doc.required !== true ? false : uploadedFile && doc.required === true ? false : true}
-          onDelete={() => {
-            setUploadedFile(null);
-            setCheckRequiredFields(true);
-          }}
-          message={uploadedFile ? `1 ${t(`CS_ACTION_FILEUPLOADED`)}` : t(`CS_ACTION_NO_FILEUPLOADED`)}
-          iserror={error}
-        />
-        <span style={{ margin: "0 0.5rem" }}>
-          {doc?.code === "ARTICLES_OF_ASSOCIATION" ? (
-            <button
-              type="button"
-              title="View Document"
-              onClick={() => getDocShareholding(documents[0]?.articlesOfAssociation)}
-              className="btn btn-sm col-md-6"
-            >
-              <VisibilityIcon color="info" className="icon" />
-            </button>
-          ) : doc?.code === "REGISTERED_IRREVOCABLE_PARTNERSHIP_DEED" ? (
-            <button
-              type="button"
-              title="View Document"
-              onClick={() => getDocShareholding(documents[0]?.registeredIrrevocablePaternshipDeed)}
-              className="btn btn-sm col-md-6"
-            >
-              <VisibilityIcon color="info" className="icon" />
-            </button>
-          ) : doc?.code === "MEMORANDUM_OF_ARTICLES" ? (
-            <button
-              type="button"
-              title="View Document"
-              onClick={() => getDocShareholding(documents[0]?.memorandumOfArticles)}
-              className="btn btn-sm col-md-6"
-            >
-              <VisibilityIcon color="info" className="icon" />
-            </button>
-          ) : doc?.code === "APPL.BPAREG_OTHERS" ? (
-            <button type="button" title="View Document" onClick={() => getDocShareholding(documents[0]?.anyOtherDoc)} className="btn btn-sm col-md-6">
-              <VisibilityIcon color="info" className="icon" />
-            </button>
-          ) : (
-            ""
-          )}
-        </span>
+      <div className="doc-upload-field" style={{ marginBottom: "24px" }}>
+        <CardLabel style={{ marginBottom: "10px" }}>
+          {doc?.required ? `${t(`BPAREG_HEADER_${doc?.code?.replace(".", "_")}`)} *` : `${t(`BPAREG_HEADER_${doc?.code?.replace(".", "_")}`)}`}
+        </CardLabel>
+        {/* {doc?.info ? (
+          <div style={{ fontSize: "12px", color: "#505A5F", fontWeight: 400, lineHeight: "15px", marginBottom: "10px" }}>{`${t(doc?.info)}`}</div>
+        ) : null} */}
+        {/* {JSON.stringify(doc?.code)} */}
+
+        <div className="" style={{ display: "flex", alignItems: "center" }}>
+          <UploadFile
+            extraStyleName={"OBPS"}
+            accept="image/*, .pdf, .png, .jpeg, .jpg"
+            onUpload={selectfile}
+            onDelete={() => {
+              setUploadedFile(null);
+              setCheckRequiredFields(true);
+            }}
+            message={uploadedFile ? `1 ${t(`CS_ACTION_FILEUPLOADED`)}` : t(``)}
+            iserror={error}
+          />
+          {/* {JSON.stringify(documentsUploadList?.[0])} */}
+          {
+            <div className="col-md-4">
+              {doc?.code === "ARTICLES_OF_ASSOCIATION" && documentsUploadList?.length > 0 ? (
+                <button
+                  type="button"
+                  title="View Document"
+                  onClick={() => getDocShareholding(documentsUploadList[0]?.articlesOfAssociation)}
+                  className="btn btn-sm btn-info"
+                >
+                  <VisibilityIcon fill="#fff" className="icon" /> View Uploaded Document
+                </button>
+              ) : doc?.code === "REGISTERED_IRREVOCABLE_PARTNERSHIP_DEED" && documentsUploadList?.length > 0 ? (
+                <button
+                  type="button"
+                  title="View Document"
+                  onClick={() => getDocShareholding(documentsUploadList[0]?.registeredIrrevocablePaternshipDeed)}
+                  className="btn btn-sm btn-info"
+                >
+                  <VisibilityIcon fill="#fff" className="icon" /> View Uploaded Document
+                </button>
+              ) : doc?.code === "AFFIDAVIT_AND_PANCARD" && documentsUploadList?.length > 0 ? (
+                <button
+                  type="button"
+                  title="View Document"
+                  onClick={() => getDocShareholding(documentsUploadList[0]?.affidavitAndPancard)}
+                  className="btn btn-sm btn-info"
+                >
+                  <VisibilityIcon fill="#fff" className="icon" /> View Uploaded Document
+                </button>
+              ) : doc?.code === "MEMORANDUM_OF_ARTICLES" && documentsUploadList?.length > 0 ? (
+                <button
+                  type="button"
+                  title="View Document"
+                  onClick={() => getDocShareholding(documentsUploadList[0]?.memorandumOfArticles)}
+                  className="btn btn-sm btn-info"
+                >
+                  <VisibilityIcon fill="#fff" className="icon" /> View Uploaded Document
+                </button>
+              ) : doc?.code === "APPL.BPAREG_OTHERS" && documentsUploadList?.[0]?.anyOtherDoc ? (
+                <button
+                  type="button"
+                  title="View Document"
+                  onClick={() => getDocShareholding(documentsUploadList[0]?.anyOtherDoc)}
+                  className="btn btn-sm btn-info"
+                >
+                  <VisibilityIcon fill="#fff" className="icon" /> View Uploaded Document
+                </button>
+              ) : (
+                ""
+              )}
+            </div>
+          }
+        </div>
       </div>
+      {showToastError && (
+        <CusToaster
+          label={showToastError?.label}
+          success={showToastError?.success}
+          error={showToastError?.error}
+          onClose={() => {
+            setShowToastError({ label: "", success: false, error: false });
+          }}
+        />
+      )}
     </div>
   );
 }

@@ -19,7 +19,8 @@ import { useLocation } from "react-router-dom";
 import { Toast, CardLabelError } from "@egovernments/digit-ui-react-components";
 import _ from "lodash";
 import CusToaster from "../../../../components/Toaster";
-
+import InfoIcon from "@mui/icons-material/Info";
+import Tooltip from "@mui/material/Tooltip";
 const ApllicantPuropseForm = (props) => {
   const datapost = {
     RequestInfo: {
@@ -400,9 +401,17 @@ const ApllicantPuropseForm = (props) => {
   //   setPotentialOptions({ data: potential, isLoading: false });
   // }, [PotentialType]);
 
+  // useEffect(() => {
+  //   const district = DistrictType?.["common-masters"]?.District?.map(function (data) {
+  //     return { value: data?.districtCode, label: data?.name, distCodeTCP: data?.distCodeTCP };
+  //   });
+  //   setDistrictOptions({ data: district, isLoading: false });
+  // }, [DistrictType]);
+
   useEffect(() => {
     const district = DistrictType?.["common-masters"]?.District?.map(function (data) {
-      return { value: data?.districtCode, label: data?.name, distCodeTCP: data?.distCodeTCP };
+      console.log("data", data);
+      return { value: data?.disCode, label: data?.disName, distCodeTCP: data?.distCodeTCP };
     });
     setDistrictOptions({ data: district, isLoading: false });
   }, [DistrictType]);
@@ -534,6 +543,46 @@ const ApllicantPuropseForm = (props) => {
     }
   };
 
+  const getToptions = async (val) => {
+    const payload = {
+      RequestInfo: {
+        apiId: "Rainmaker",
+        ver: "v1",
+        ts: 0,
+        action: "_search",
+        did: "",
+        key: "",
+        msgId: "090909",
+        authToken: "",
+        correlationId: null,
+      },
+      MdmsCriteria: {
+        tenantId: "hr",
+        moduleDetails: [
+          {
+            tenantId: "hr",
+            moduleName: "common-masters",
+            masterDetails: [
+              {
+                name: "tehsil",
+                filter: `[?(@.tehCode=="${val}")]`,
+              },
+            ],
+          },
+        ],
+      },
+    };
+    try {
+      const Resp = await axios.post("/egov-mdms-service/v1/_search", payload);
+      console.log("Resp?.data?.MdmsRes?.", Resp?.data?.MdmsRes?.["common-masters"]);
+      const sectorPlan = Resp?.data?.MdmsRes?.["common-masters"]?.Sector?.map(function (data) {
+        return { value: data?.sectorCode, label: data?.sectorNo };
+      });
+    } catch (error) {
+      return error;
+    }
+  };
+
   // useEffect(() => {
   //   const sectorPlan = sectorType?.["common-masters"]?.Sector?.map(function (data) {
   //     return { value: data?.devPlanCode, label: data?.sectorNo };
@@ -554,28 +603,109 @@ const ApllicantPuropseForm = (props) => {
   };
 
   const getTehslidata = async (data) => {
+    const payload = {
+      RequestInfo: {
+        apiId: "Rainmaker",
+        ver: "v1",
+        ts: 0,
+        action: "_search",
+        did: "",
+        key: "",
+        msgId: "090909",
+        authToken: "",
+        correlationId: null,
+      },
+      MdmsCriteria: {
+        tenantId: "hr",
+        moduleDetails: [
+          {
+            tenantId: "hr",
+            moduleName: "common-masters",
+            masterDetails: [
+              {
+                name: "tehsil",
+                filter: `[?(@.disCode=="${data}")]`,
+              },
+            ],
+          },
+        ],
+      },
+    };
     try {
-      const Resp = await axios.post("/egov-mdms-service/v1/_tehsil?dCode=" + data, datapost, {});
-      const tehsilData = Resp?.data?.map((el) => {
-        return { label: el?.name, id: el?.code, value: el?.code };
+      const Resp = await axios.post("/egov-mdms-service/v1/_search", payload);
+      const tehsilData = Resp?.data?.MdmsRes?.["common-masters"]?.tehsil?.map(function (data) {
+        console.log("tehsil", data);
+        return { value: data?.tehCode, label: data?.tehName };
       });
       setTehsilDataLabels({ data: tehsilData, isLoading: false });
     } catch (error) {
       return error;
     }
   };
+  // const getTehslidata = async (data) => {
+  //   try {
+  //     const Resp = await axios.post("/egov-mdms-service/v1/_tehsil?dCode=" + data, datapost, {});
+  //     const tehsilData = Resp?.data?.map((el) => {
+  //       return { label: el?.name, id: el?.code, value: el?.code };
+  //     });
+  //     setTehsilDataLabels({ data: tehsilData, isLoading: false });
+  //   } catch (error) {
+  //     return error;
+  //   }
+  // };
 
-  const getRevenuStateData = async (code) => {
+  const getRevenuStateData = async (data) => {
+    const payload = {
+      RequestInfo: {
+        apiId: "Rainmaker",
+        ver: "v1",
+        ts: 0,
+        action: "_search",
+        did: "",
+        key: "",
+        msgId: "090909",
+        authToken: "",
+        correlationId: null,
+      },
+      MdmsCriteria: {
+        tenantId: "hr",
+        moduleDetails: [
+          {
+            tenantId: "hr",
+            moduleName: "common-masters",
+            masterDetails: [
+              {
+                name: "village",
+                filter: `[?(@.tehCode=="${data}")]`,
+              },
+            ],
+          },
+        ],
+      },
+    };
     try {
-      const Resp = await axios.post("/egov-mdms-service/v1/_village?" + "dCode=" + district + "&" + "tCode=" + code, datapost, {});
-      const revenData = Resp?.data?.map((el) => {
-        return { label: el?.name, id: el?.khewats, value: el?.code, khewats: el?.khewats, code: el?.code };
+      const Resp = await axios.post("/egov-mdms-service/v1/_search", payload);
+      const revenData = Resp?.data?.MdmsRes?.["common-masters"]?.village?.map(function (data) {
+        console.log("village", data);
+        return { value: data?.nvCODE, label: data?.villageName };
       });
       setRevenueDataLabels({ data: revenData, isLoading: false });
     } catch (error) {
       return error;
     }
   };
+
+  // const getRevenuStateData = async (code) => {
+  //   try {
+  //     const Resp = await axios.post("/egov-mdms-service/v1/_village?" + "dCode=" + district + "&" + "tCode=" + code, datapost, {});
+  //     const revenData = Resp?.data?.map((el) => {
+  //       return { label: el?.name, id: el?.khewats, value: el?.code, khewats: el?.khewats, code: el?.code };
+  //     });
+  //     setRevenueDataLabels({ data: revenData, isLoading: false });
+  //   } catch (error) {
+  //     return error;
+  //   }
+  // };
 
   const getMustilData = async (code) => {
     try {
@@ -1187,7 +1317,7 @@ const ApllicantPuropseForm = (props) => {
                   data={revenueDataLabels?.data}
                   labels="Revenue Estate"
                   loading={revenueDataLabels?.isLoading}
-                  onChange={(e) => getMustilData(e.code)}
+                  onChange={(e) => getMustilData(e.value)}
                 />
 
                 <h3 className="error-message" style={{ color: "red" }}>
@@ -1292,12 +1422,11 @@ const ApllicantPuropseForm = (props) => {
                     <div className="row ">
                       <div className="col col-4">
                         <label>
-                          <h2
-                            data-toggle="tooltip"
-                            data-placement="top"
-                            title=" Name of the developer company / Firm/ LLP etc. with whom collaboration agreement entered."
-                          >
+                          <h2>
                             Name of the developer company .<span style={{ color: "red" }}>*</span>
+                            <Tooltip title=" Name of the developer company / Firm/ LLP etc. with whom collaboration agreement entered.">
+                              <InfoIcon style={{ cursor: "pointer" }} color="primary"></InfoIcon>
+                            </Tooltip>
                           </h2>
                         </label>
                         <Form.Control type="text" className="form-control" placeholder="" {...register("developerCompany")} required="required" />
@@ -1351,12 +1480,11 @@ const ApllicantPuropseForm = (props) => {
                       </div>
                       <div className="col col-4">
                         <label>
-                          <h2
-                            data-toggle="tooltip"
-                            data-placement="top"
-                            title="  Name of authorized signatory on behalf of developer to sign Collaboration agreement."
-                          >
+                          <h2>
                             Name of authorized signatory on behalf of developer.<span style={{ color: "red" }}>*</span>
+                            <Tooltip title="  Name of authorized signatory on behalf of developer to sign Collaboration agreement.">
+                              <InfoIcon style={{ cursor: "pointer" }} color="primary"></InfoIcon>
+                            </Tooltip>
                           </h2>
                         </label>
                         <Form.Control type="text" className="form-control" placeholder="" {...register("nameAuthSign")} />
@@ -1379,35 +1507,60 @@ const ApllicantPuropseForm = (props) => {
                     <br></br>
                     <br></br>
                     <div className="row ">
-                      <div className="col col-4">
+                      <div className="col col-3">
+                        <h6 style={{ display: "flex" }}>
+                          Collaboration document <span style={{ color: "red" }}>*</span>
+                        </h6>
                         <label>
-                          <h2 data-toggle="tooltip" data-placement="top" title="Upload Document" style={{ marginTop: "-4px" }}>
-                            Collaboration document <span style={{ color: "red" }}>*</span>{" "}
-                            <FileUpload style={{ cursor: "pointer" }} color="primary" />
-                            <div>
-                              <input
-                                type="file"
-                                accept="application/pdf/jpeg/png"
-                                style={{ display: "none" }}
-                                onChange={(e) => getDocumentData(e?.target?.files[0], "registeringAuthorityDocFileName")}
-                              />
-                            </div>
-                          </h2>
+                          <FileUpload style={{ cursor: "pointer" }} color="primary" />
+                          <input
+                            type="file"
+                            style={{ display: "none" }}
+                            onChange={(e) => getDocumentData(e?.target?.files[0], "registeringAuthorityDocFileName")}
+                            accept="application/pdf/jpeg/png"
+                          />
                         </label>
+                        {watch("registeringAuthorityDocFileName") && (
+                          <a onClick={() => getDocShareholding(watch("registeringAuthorityDocFileName"), setLoader)} className="btn btn-sm ">
+                            <VisibilityIcon color="info" className="icon" />
+                          </a>
+                        )}
+                      </div>
 
-                        {/* <h3>{watch("registeringAuthorityDocFileName")}</h3> */}
-                        <h3 className="error-message" style={{ color: "red" }}>
-                          {errors?.registeringAuthorityDocFileName && errors?.registeringAuthorityDocFileName?.message}
-                        </h3>
+                      <div className="col col-3">
+                        <h6 style={{ display: "flex" }}>Upload SPA/GPA of authorized signatory on behalf of land owner</h6>
+                        <label>
+                          <FileUpload style={{ cursor: "pointer" }} color="primary" />
+                          <input
+                            type="file"
+                            style={{ display: "none" }}
+                            onChange={(e) => getDocumentData(e?.target?.files[0], "landOwnerSPAGPADoc")}
+                            accept="application/pdf/jpeg/png"
+                          />
+                        </label>
+                        {watch("landOwnerSPAGPADoc") && (
+                          <a onClick={() => getDocShareholding(watch("landOwnerSPAGPADoc"), setLoader)} className="btn btn-sm ">
+                            <VisibilityIcon color="info" className="icon" />
+                          </a>
+                        )}
+                      </div>
 
-                        {/* <input
-                          type="file"
-                          style={{ marginTop: "-6px" }}
-                          className="form-control"
-                          accept="application/pdf"
-                          required
-                          onChange={(e) => getDocumentData(e?.target?.files[0], "registeringAuthorityDoc")}
-                        /> */}
+                      <div className="col col-3">
+                        <h6 style={{ display: "flex" }}>Upload SPA/GPA of authorized signatory on behalf of developer</h6>
+                        <label>
+                          <FileUpload style={{ cursor: "pointer" }} color="primary" />
+                          <input
+                            type="file"
+                            style={{ display: "none" }}
+                            onChange={(e) => getDocumentData(e?.target?.files[0], "developerSPAGPADoc")}
+                            accept="application/pdf/jpeg/png"
+                          />
+                        </label>
+                        {watch("developerSPAGPADoc") && (
+                          <a onClick={() => getDocShareholding(watch("developerSPAGPADoc"), setLoader)} className="btn btn-sm ">
+                            <VisibilityIcon color="info" className="icon" />
+                          </a>
+                        )}
                       </div>
                     </div>
                   </div>
@@ -1538,17 +1691,17 @@ const ApllicantPuropseForm = (props) => {
                       <tr>
                         <th>
                           <h2>
-                            Kanal (in acres) <span style={{ color: "red" }}>*</span>
+                            Kanal <span style={{ color: "red" }}>*</span>
                           </h2>
                         </th>
                         <th>
                           <h2>
-                            Marla (in acres) <span style={{ color: "red" }}>*</span>
+                            Marla <span style={{ color: "red" }}>*</span>
                           </h2>
                         </th>
                         <th>
                           <h2>
-                            Sarsai (in acres) <span style={{ color: "red" }}>*</span>
+                            Sarsai <span style={{ color: "red" }}>*</span>
                           </h2>
                         </th>
                         <th>

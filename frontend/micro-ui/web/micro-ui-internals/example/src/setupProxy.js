@@ -3,7 +3,7 @@ const { createProxyMiddleware } = require("http-proxy-middleware");
 const createProxy = createProxyMiddleware({
   //target: process.env.REACT_APP_PROXY_API || "https://uat.digit.org",
   // target: process.env.REACT_APP_PROXY_API || "https://qa.digit.org",
-  target: process.env.REACT_APP_PROXY_API || "http://103.166.62.118:80",
+  target: process.env.REACT_APP_PROXY_API || "http://tcp.abm.com:80",
   changeOrigin: true,
 });
 // const assetsProxy = createProxyMiddleware({

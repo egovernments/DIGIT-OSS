@@ -14,6 +14,7 @@ import { VALIDATION_SCHEMA } from "../../../../utils/schema/step5";
 import ScrollToTop from "@egovernments/digit-ui-react-components/src/atoms/ScrollToTop";
 import FileUpload from "@mui/icons-material/FileUpload";
 import { Toast } from "@egovernments/digit-ui-react-components";
+
 const FeesChargesForm = (props) => {
   const location = useLocation();
   const history = useHistory();
@@ -26,6 +27,7 @@ const FeesChargesForm = (props) => {
   const [showToast, setShowToast] = useState(null);
   const [showToastError, setShowToastError] = useState(null);
   const [getShow, setShow] = useState({ submit: false, payNow: false });
+  const [consentButton, setConsentButton] = useState(false);
   const [getData, setData] = useState({ caseNumber: "", dairyNumber: "", status: "" });
   const [getCalculatedData, setCalculatedData] = useState(null);
 
@@ -114,6 +116,8 @@ const FeesChargesForm = (props) => {
       // setValue("licenseFee", charges?.licenseFeeCharges);
       // setValue("conversionCharges", charges?.conversionCharges);
       setValue("payableNow", Resp.data?.totalFee);
+      setValue("totalScrutinyFee", Resp.data?.totalScruitnyFee);
+      setValue("totalLicenseFee", Resp.data?.totalLicenceFee);
     } catch (error) {
       return error;
     }
@@ -140,6 +144,7 @@ const FeesChargesForm = (props) => {
     try {
       const Resp = await axios.post(`/tl-services/new/license/pdf?applicationNumber=${props.getId}`, payload, { responseType: "arraybuffer" });
       setLoader(false);
+      setConsentButton(true);
       const pdfBlob = new Blob([Resp.data], { type: "application/pdf" });
       const pdfUrl = URL.createObjectURL(pdfBlob);
       window.open(pdfUrl);
@@ -149,15 +154,15 @@ const FeesChargesForm = (props) => {
     }
   };
 
-  const getSubmitDataLabel = async () => {
-    try {
-      const Resp = await axios.get(`http://103.166.62.118:80/land-services/new/licenses/_get?id=${props.getId}`).then((response) => {
-        return response;
-      });
-    } catch (error) {
-      return error;
-    }
-  };
+  // const getSubmitDataLabel = async () => {
+  //   try {
+  //     const Resp = await axios.get(`http://103.166.62.118:80/land-services/new/licenses/_get?id=${props.getId}`).then((response) => {
+  //       return response;
+  //     });
+  //   } catch (error) {
+  //     return error;
+  //   }
+  // };
 
   const getWholeData = async () => {
     try {
@@ -171,9 +176,9 @@ const FeesChargesForm = (props) => {
     getWholeData();
   }, []);
 
-  useEffect(() => {
-    getSubmitDataLabel();
-  }, []);
+  // useEffect(() => {
+  //   getSubmitDataLabel();
+  // }, []);
 
   const [fileStoreId, setFileStoreId] = useState({});
   const [selectedFiles, setSelectedFiles] = useState([]);
@@ -205,14 +210,14 @@ const FeesChargesForm = (props) => {
     }
   };
 
-  const dataArea = props?.getLicData?.ApplicantPurpose?.AppliedLandDetails?.[0]?.kanal;
-  const dataAreaMarla = props?.getLicData?.ApplicantPurpose?.AppliedLandDetails?.[0]?.marla;
-  const dataAreaSarai = props?.getLicData?.ApplicantPurpose?.AppliedLandDetails?.[0]?.sarsai;
-  const dataAreaBigha = props?.getLicData?.ApplicantPurpose?.AppliedLandDetails?.[0]?.bigha;
-  const dataAreaBiswa = props?.getLicData?.ApplicantPurpose?.AppliedLandDetails?.[0]?.biswa;
-  const dataAreaBiswansi = props?.getLicData?.ApplicantPurpose?.AppliedLandDetails?.[0]?.biswansi;
-  const totalAreaAcre =
-    dataArea * 0.125 + dataAreaMarla * 0.0062 + dataAreaSarai * 0.00069 + dataAreaBigha * 0.33 + dataAreaBiswa * 0.0309 + dataAreaBiswansi * 0.619;
+  // const dataArea = props?.getLicData?.ApplicantPurpose?.AppliedLandDetails?.[0]?.kanal;
+  // const dataAreaMarla = props?.getLicData?.ApplicantPurpose?.AppliedLandDetails?.[0]?.marla;
+  // const dataAreaSarai = props?.getLicData?.ApplicantPurpose?.AppliedLandDetails?.[0]?.sarsai;
+  // const dataAreaBigha = props?.getLicData?.ApplicantPurpose?.AppliedLandDetails?.[0]?.bigha;
+  // const dataAreaBiswa = props?.getLicData?.ApplicantPurpose?.AppliedLandDetails?.[0]?.biswa;
+  // const dataAreaBiswansi = props?.getLicData?.ApplicantPurpose?.AppliedLandDetails?.[0]?.biswansi;
+  // const totalAreaAcre =
+  //   dataArea * 0.125 + dataAreaMarla * 0.0062 + dataAreaSarai * 0.00069 + dataAreaBigha * 0.33 + dataAreaBiswa * 0.0309 + dataAreaBiswansi * 0.619;
 
   // const handleWorkflow = async () => {
   //   const token = window?.localStorage?.getItem("token");
@@ -444,8 +449,16 @@ const FeesChargesForm = (props) => {
                   )}
                   <div className="row">
                     <div className="col col-4">
+                      <h6>Total Scrutiny Fee</h6>
+                      <input type="text" className="form-control" disabled {...register("totalScrutinyFee")} />
+                    </div>
+                    <div className="col col-4">
+                      <h6>Total License Fee (25%)</h6>
+                      <input type="text" className="form-control" disabled {...register("totalLicenseFee")} />
+                    </div>
+                    <div className="col col-4">
                       <h6 data-toggle="tooltip" data-placement="top" title="Total Fees (License fee 25% + Scrutiny Fees)">
-                        (i)&nbsp;Amount Payable <span style={{ color: "red" }}>*</span>&nbsp;&nbsp;
+                        Amount Payable
                       </h6>
                       <input type="text" className="form-control" disabled {...register("payableNow")} />
                     </div>
@@ -537,12 +550,21 @@ const FeesChargesForm = (props) => {
                     <p className="text-black">The following is undertaken: </p>
                     <ul className="Undertakings">
                       <li>I hereby declare that the details furnished above are true and correct to the best of my knowledge.</li>
-                      <button className="btn btn-primary" onClick={() => setmodal1(true)}>
-                        Read More
+                      <button
+                        className="btn btn-primary"
+                        onClick={() => {
+                          // if (e.target.checked) {
+                          // setShow({ payNow: false, submit: false });
+                          showPdf();
+                          // }
+                          // setmodal1(true)
+                        }}
+                      >
+                        Review Application
                       </button>
                     </ul>
                   </div>
-                  <Modal
+                  {/* <Modal
                     size="lg"
                     isOpen={modal1}
                     toggle={() => setmodal(!modal1)}
@@ -560,31 +582,33 @@ const FeesChargesForm = (props) => {
                       </h2>
                     </ModalBody>
                     <ModalFooter toggle={() => setmodal(!modal1)}></ModalFooter>
-                  </Modal>
-                  <div className="">
-                    <div className="form-check">
-                      <input
-                        onClick={(e) => {
-                          if (e.target.checked) {
-                            setShow({ payNow: false, submit: true });
-                            showPdf();
-                          }
-                        }}
-                        className="form-check-input"
-                        formControlName="agreeCheck"
-                        type="checkbox"
-                        value=""
-                        // checked={getData?.status === "FEESANDCHARGES" ? true : false}
-                        id="flexCheckDefault"
-                      />
-                      <label className="checkbox" for="flexCheckDefault">
-                        I agree and accept the terms and conditions.
-                        <span className="text-danger">
-                          <b>*</b>
-                        </span>
-                      </label>
+                  </Modal> */}
+                  {(consentButton || getData?.status === "FEESANDCHARGES") && (
+                    <div className="">
+                      <div className="form-check">
+                        <input
+                          onClick={(e) => {
+                            if (e.target.checked) {
+                              setShow({ payNow: false, submit: true });
+                              // showPdf();
+                            } else setShow({ payNow: false, submit: false });
+                          }}
+                          className="form-check-input"
+                          formControlName="agreeCheck"
+                          type="checkbox"
+                          value=""
+                          // checked={getData?.status === "FEESANDCHARGES" ? true : false}
+                          id="flexCheckDefault"
+                        />
+                        <label className="checkbox" for="flexCheckDefault">
+                          I agree and accept the terms and conditions.
+                          <span className="text-danger">
+                            <b>*</b>
+                          </span>
+                        </label>
+                      </div>
                     </div>
-                  </div>
+                  )}
                   <div class="row">
                     <div class="col-sm-12 text-right">
                       {getShow?.submit && getData?.status !== "FEESANDCHARGES" && (

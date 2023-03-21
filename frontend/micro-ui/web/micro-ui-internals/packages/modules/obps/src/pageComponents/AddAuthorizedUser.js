@@ -56,6 +56,7 @@ import TableRow from "@mui/material/TableRow";
 //for Redux use only
 // import { setAurthorizedUserData } from "../Redux/Slicer/Slicer";
 // import { useDispatch } from "react-redux";
+import CusToaster from "../components/Toaster";
 
 const AddAuthorizeduser = ({ t, config, onSelect, formData, isUserRegistered = true }) => {
   const { pathname: url } = useLocation();
@@ -65,7 +66,7 @@ const AddAuthorizeduser = ({ t, config, onSelect, formData, isUserRegistered = t
   const stateId = Digit.ULBService.getStateId();
   const [success, setError] = useState(null);
   const [showToast, setShowToast] = useState(null);
-  const [showToastError, setShowToastError] = useState(null);
+  const [showToastError, setShowToastError] = useState({ label: "", error: false, success: false });
   const { setValue, getValues, watch } = useForm();
   const [Documents, setDocumentsData] = useState({});
   const [data, setData] = useState();
@@ -125,7 +126,7 @@ const AddAuthorizeduser = ({ t, config, onSelect, formData, isUserRegistered = t
       const getDevDetails = await axios.get(`/user/developer/_getDeveloperById?id=${userInfo?.info?.id}&isAllData=true`, requestResp, {});
       const developerDataGet = getDevDetails?.data;
       setData(developerDataGet);
-      console.log("ADDAUTHUSER", getDevDetails?.data?.devDetail[0]?.aurthorizedUserInfoArray);
+      // console.log("ADDAUTHUSER", getDevDetails?.data?.devDetail[0]?.aurthorizedUserInfoArray);
       // setAurthorizedUserInfoArray(getDevDetails?.data?.devDetail[0]?.aurthorizedUserInfoArray || [
       //   {
       //     userName: getDevDetails?.data?.devDetail[0]?.licenceDetails?.mobileNumber,
@@ -228,7 +229,7 @@ const AddAuthorizeduser = ({ t, config, onSelect, formData, isUserRegistered = t
   const [showhide, setShowhide] = useState("No");
 
   function setGenderName(value) {
-    console.log("GENDER", value);
+    // console.log("GENDER", value);
     setGender(value);
     setPanIsValid(false);
   }
@@ -346,18 +347,12 @@ const AddAuthorizeduser = ({ t, config, onSelect, formData, isUserRegistered = t
   const getDocumentData = async (file, fieldName, fromTable, index) => {
     if (fromTable) {
       if (getValues("authorizedUserFiles")?.includes(file.name)) {
-        setShowToastError({ key: "error" });
-        setTimeout(() => {
-          setShowToastError(null);
-        }, 2000);
+        setShowToastError({ label: "Duplicate file Selected", error: true, success: false });
         return;
       }
     } else {
       if (getValues("modalFiles")?.includes(file.name)) {
-        setShowToastError({ key: "error" });
-        setTimeout(() => {
-          setShowToastError(null);
-        }, 2000);
+        setShowToastError({ label: "Duplicate file Selected", error: true, success: false });
         return;
       }
     }
@@ -374,10 +369,7 @@ const AddAuthorizeduser = ({ t, config, onSelect, formData, isUserRegistered = t
         return response;
       });
       setLoading(false);
-      setShowToast({ key: "success" });
-      setTimeout(() => {
-        setShowToast(null);
-      }, 2000);
+      setShowToastError({ label: "File Uploaded Successfully", error: false, success: true });
       if (fromTable) {
         let temp = aurthorizedUserInfoArray;
         temp[index][fieldName] = Resp?.data?.files?.[0]?.fileStoreId;
@@ -431,7 +423,7 @@ const AddAuthorizeduser = ({ t, config, onSelect, formData, isUserRegistered = t
     setLoading(true);
     // if(aurthorizedMobileNumber!=="" && aurthorizedUserName!=="" && aurthorizedMobileNumber!=="" && aurthorizedEmail!==""){
     const user = {
-      userName: aurthorizedMobileNumber,
+      userName: aurthorizedEmail,
       name: aurthorizedUserName,
       gender: gender.value,
       mobileNumber: aurthorizedMobileNumber,
@@ -494,10 +486,7 @@ const AddAuthorizeduser = ({ t, config, onSelect, formData, isUserRegistered = t
       handleCloseAuthuser();
     } catch (error) {
       setLoading(false);
-      setToastError(error?.response?.data?.Errors?.[0]?.code);
-      setTimeout(() => {
-        setToastError(null);
-      }, 2000);
+      setShowToastError({ label: error?.response?.data?.Errors?.[0]?.code, error: true, success: false });
       console.log("ERROR ====> ", error.response, error);
     }
     // getAdhaarPdf();
@@ -549,6 +538,7 @@ const AddAuthorizeduser = ({ t, config, onSelect, formData, isUserRegistered = t
         aurthorizedUserInfoArray: aurthorizedUserInfoArray,
       },
     };
+    setLoading(true);
     Digit.OBPSService.CREATEDeveloper(developerRegisterData, tenantId)
       .then((result, err) => {
         // localStorage.setItem('devRegId',JSON.stringify(result?.id));
@@ -564,8 +554,10 @@ const AddAuthorizeduser = ({ t, config, onSelect, formData, isUserRegistered = t
         };
         //1, units
         onSelect("", data, "", true);
+        setLoading(false);
       })
       .catch((e) => {
+        setLoading(false);
         setIsDisableForNext(false);
         setShowToast({ key: "error" });
         setError(e?.response?.data?.Errors[0]?.message || null);
@@ -1102,24 +1094,13 @@ const AddAuthorizeduser = ({ t, config, onSelect, formData, isUserRegistered = t
             }}
           />
         )}
-        {showToast && (
-          <Toast
-            success={showToast?.key === "success" ? true : false}
-            label="Document Uploaded Successfully"
-            isDleteBtn={true}
-            onClose={() => {
-              setShowToast(null);
-            }}
-          />
-        )}
         {showToastError && (
-          <Toast
-            error={showToastError?.key === "error" ? true : false}
-            label="Duplicate file Selected"
-            isDleteBtn={true}
+          <CusToaster
+            label={showToastError?.label}
+            success={showToastError?.success}
+            error={showToastError?.error}
             onClose={() => {
-              setShowToastError(null);
-              setError(null);
+              setShowToastError({ label: "", success: false, error: false });
             }}
           />
         )}

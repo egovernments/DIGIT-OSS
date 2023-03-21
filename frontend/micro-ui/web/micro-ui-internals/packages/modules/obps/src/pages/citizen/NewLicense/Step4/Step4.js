@@ -32,6 +32,8 @@ import NumberInput from "../../../../components/NumberInput";
 import FileUpload from "@mui/icons-material/FileUpload";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import CusToaster from "../../../../components/Toaster";
+import InfoIcon from "@mui/icons-material/Info";
+import Tooltip from "@mui/material/Tooltip";
 
 const AppliedDetailForm = (props) => {
   const location = useLocation();
@@ -367,21 +369,21 @@ const AppliedDetailForm = (props) => {
     }
   }, [stepData]);
 
-  const getSubmitDataLabel = async () => {
-    try {
-      const Resp = await axios.get(`http://103.166.62.118:80/land-services/new/licenses/_get?id=${props.getId}`).then((response) => {
-        return response;
-      });
-    } catch (error) {
-      return error;
-    }
-  };
+  // const getSubmitDataLabel = async () => {
+  //   try {
+  //     const Resp = await axios.get(`http://103.166.62.118:80/land-services/new/licenses/_get?id=${props.getId}`).then((response) => {
+  //       return response;
+  //     });
+  //   } catch (error) {
+  //     return error;
+  //   }
+  // };
 
   const handleWheel = (e) => e.target.blur();
 
-  useEffect(() => {
-    getSubmitDataLabel();
-  }, []);
+  // useEffect(() => {
+  //   getSubmitDataLabel();
+  // }, []);
 
   const getDocumentData = async (file, fieldName) => {
     if (selectedFiles.includes(file.name)) {
@@ -980,7 +982,7 @@ const AppliedDetailForm = (props) => {
                   </h6>
                   <div className="row mt-3 ">
                     <div className="col col-3">
-                      <h6 style={{ display: "flex" }} data-toggle="tooltip" data-placement="top">
+                      <h6 style={{ display: "flex" }}>
                         Layout Plan in pdf<span style={{ color: "red" }}>*</span>
                       </h6>
                       <label>
@@ -999,7 +1001,7 @@ const AppliedDetailForm = (props) => {
                       )}
                     </div>
                     <div className="col col-3">
-                      <h6 style={{ display: "flex" }} data-toggle="tooltip" data-placement="top">
+                      <h6 style={{ display: "flex" }}>
                         Layout Plan in dxf<span style={{ color: "red" }}>*</span>
                       </h6>
                       <label>
@@ -1019,15 +1021,14 @@ const AppliedDetailForm = (props) => {
                     </div>
 
                     <div className="col col-3">
-                      <h6
-                        style={{ display: "flex" }}
-                        data-toggle="tooltip"
-                        data-placement="top"
-                        title="Undertaking that no change has been made in the phasing "
-                      >
-                        Undertaking<span style={{ color: "red" }}>*</span>
-                      </h6>
                       <label>
+                        <h6 style={{ display: "flex" }}>
+                          Undertaking<span style={{ color: "red" }}>*</span>
+                          <Tooltip title="Undertaking that no change has been made in the phasing ">
+                            <InfoIcon style={{ cursor: "pointer" }} color="primary"></InfoIcon>
+                          </Tooltip>
+                        </h6>
+
                         <FileUpload style={{ cursor: "pointer" }} color="primary" />
                         <input
                           type="file"
@@ -1035,17 +1036,117 @@ const AppliedDetailForm = (props) => {
                           onChange={(e) => getDocumentData(e?.target?.files[0], "undertaking")}
                           accept="application/pdf/jpeg/png"
                         />
+
+                        {watch("undertaking") && (
+                          <a onClick={() => getDocShareholding(watch("undertaking"), setLoader)} className="btn btn-sm ">
+                            <VisibilityIcon color="info" className="icon" />
+                          </a>
+                        )}
                       </label>
-                      {watch("undertaking") && (
-                        <a onClick={() => getDocShareholding(watch("undertaking"), setLoader)} className="btn btn-sm ">
+                    </div>
+
+                    <div className="col col-3">
+                      <h6 style={{ display: "flex" }}>
+                        Development Plan<span style={{ color: "red" }}>*</span>
+                      </h6>
+                      <label>
+                        <FileUpload style={{ cursor: "pointer" }} color="primary" />
+                        <input
+                          type="file"
+                          style={{ display: "none" }}
+                          onChange={(e) => getDocumentData(e?.target?.files[0], "developmentPlan")}
+                          accept="application/pdf/jpeg/png"
+                        />
+                      </label>
+                      {watch("developmentPlan") && (
+                        <a onClick={() => getDocShareholding(watch("developmentPlan"), setLoader)} className="btn btn-sm ">
                           <VisibilityIcon color="info" className="icon" />
                         </a>
                       )}
                     </div>
+
                     <div className="col col-3">
-                      <h6 style={{ display: "flex" }} data-toggle="tooltip" data-placement="top" title="Any other relevant document">
-                        Any other relevant document<span style={{ color: "red" }}>*</span>
+                      <h6 style={{ display: "flex" }}>
+                        Sectoral Plan<span style={{ color: "red" }}>*</span>
                       </h6>
+                      <label>
+                        <FileUpload style={{ cursor: "pointer" }} color="primary" />
+                        <input
+                          type="file"
+                          style={{ display: "none" }}
+                          onChange={(e) => getDocumentData(e?.target?.files[0], "sectoralPlan")}
+                          accept="application/pdf/jpeg/png"
+                        />
+                      </label>
+                      {watch("sectoralPlan") && (
+                        <a onClick={() => getDocShareholding(watch("sectoralPlan"), setLoader)} className="btn btn-sm ">
+                          <VisibilityIcon color="info" className="icon" />
+                        </a>
+                      )}
+                    </div>
+
+                    <div className="col col-3">
+                      <h6 style={{ display: "flex" }}>
+                        Explanatory note<span style={{ color: "red" }}>*</span>
+                      </h6>
+                      <label>
+                        <FileUpload style={{ cursor: "pointer" }} color="primary" />
+                        <input
+                          type="file"
+                          style={{ display: "none" }}
+                          onChange={(e) => getDocumentData(e?.target?.files[0], "explanatoryNote")}
+                          accept="application/pdf/jpeg/png"
+                        />
+                      </label>
+                      {watch("explanatoryNote") && (
+                        <a onClick={() => getDocShareholding(watch("explanatoryNote"), setLoader)} className="btn btn-sm ">
+                          <VisibilityIcon color="info" className="icon" />
+                        </a>
+                      )}
+                    </div>
+
+                    <div className="col col-3">
+                      <h6 style={{ display: "flex" }}>
+                        Guide Map<span style={{ color: "red" }}>*</span>
+                      </h6>
+                      <label>
+                        <FileUpload style={{ cursor: "pointer" }} color="primary" />
+                        <input
+                          type="file"
+                          style={{ display: "none" }}
+                          onChange={(e) => getDocumentData(e?.target?.files[0], "guideMap")}
+                          accept="application/pdf/jpeg/png"
+                        />
+                      </label>
+                      {watch("guideMap") && (
+                        <a onClick={() => getDocShareholding(watch("guideMap"), setLoader)} className="btn btn-sm ">
+                          <VisibilityIcon color="info" className="icon" />
+                        </a>
+                      )}
+                    </div>
+
+                    <div className="col col-3">
+                      <h6 style={{ display: "flex" }}>
+                        Idemnity Bond<span style={{ color: "red" }}>*</span>
+                      </h6>
+                      <label>
+                        <FileUpload style={{ cursor: "pointer" }} color="primary" />
+                        <input
+                          type="file"
+                          style={{ display: "none" }}
+                          onChange={(e) => getDocumentData(e?.target?.files[0], "idemnityBondDoc")}
+                          accept="application/pdf/jpeg/png"
+                        />
+                      </label>
+                      {watch("idemnityBondDoc") && (
+                        <a onClick={() => getDocShareholding(watch("idemnityBondDoc"), setLoader)} className="btn btn-sm ">
+                          <VisibilityIcon color="info" className="icon" />
+                        </a>
+                      )}
+                    </div>
+
+                    <div className="col col-3">
+                      <h6 style={{ display: "flex" }}>Any other relevant document</h6>
                       <label>
                         <FileUpload style={{ cursor: "pointer" }} color="primary" />
                         <input

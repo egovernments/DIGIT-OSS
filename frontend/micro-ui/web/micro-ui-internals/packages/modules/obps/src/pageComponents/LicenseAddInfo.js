@@ -58,6 +58,8 @@ import TableHead from "@mui/material/TableHead";
 import TablePagination from "@mui/material/TablePagination";
 import TableRow from "@mui/material/TableRow";
 
+import CusToaster from "../components/Toaster";
+
 const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex }) => {
   let validation = {};
   const { pathname: url } = useLocation();
@@ -162,7 +164,7 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
         },
       };
       const getDevDetails = await axios.get(`/user/developer/_getDeveloperById?id=${userInfo?.info?.id}&isAllData=true`, requestResp, {});
-      setLoading(false);
+
       const developerDataGet = getDevDetails?.data;
       const developerDataGetDocs = getDevDetails?.data?.devDetail[0]?.addInfo;
       setDeveloperDataAddinfo(developerDataGetDocs);
@@ -205,19 +207,20 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
       setRegisteredMobileNumber(developerDataGet?.devDetail[0]?.addInfo?.registeredContactNo);
       // setShowDevTypeFields(valueOfDrop);
       let totalRemainingShareholdingPattern = 100;
-      console.log("log123", developerDataGet?.devDetail[0]?.addInfo);
+      // console.log("log123", developerDataGet?.devDetail[0]?.addInfo);
       developerDataGet?.devDetail[0]?.addInfo?.shareHoldingPatterens.forEach((item, index) => {
-        console.log("log123", item, item.percentage, item.percentage.split("%"));
+        // console.log("log123", item, item.percentage, item.percentage.split("%"));
         totalRemainingShareholdingPattern -= Number(item.percentage.split("%")[0]);
-        console.log("log123", item.percentage, item.percentage.split("%")[0], totalRemainingShareholdingPattern);
+        // console.log("log123", item.percentage, item.percentage.split("%")[0], totalRemainingShareholdingPattern);
       });
       setRemainingStakeholderPercentage(Number(totalRemainingShareholdingPattern));
-      console.log(
-        "log123",
-        totalRemainingShareholdingPattern,
-        developerDataGet?.devDetail[0]?.addInfo?.shareHoldingPatterens,
-        developerDataGet?.devDetail[0]?.addInfo?.shareHoldingPatterens[0].percentage.split("%")[0]
-      );
+      // console.log(
+      //   "log123",
+      //   totalRemainingShareholdingPattern,
+      //   developerDataGet?.devDetail[0]?.addInfo?.shareHoldingPatterens,
+      //   developerDataGet?.devDetail[0]?.addInfo?.shareHoldingPatterens[0].percentage.split("%")[0]
+      // );
+      setLoading(false);
     } catch (error) {
       setLoading(false);
       console.log(error);
@@ -297,7 +300,7 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
     const purpose = PurposeType?.["common-masters"]?.Purpose?.map(function (data) {
       return { value: data?.purposeCode, label: data?.name };
     });
-    console.log("log123", purpose);
+    // console.log("log123", purpose);
     setPurposeOptions({ data: purpose, isLoading: false });
   }, [PurposeType]);
 
@@ -317,7 +320,7 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
   } = useForm([{ Sr: "", name: "", mobileNumber: "", email: "", PAN: "", Aadhar: "" }]);
   const [success, setError] = useState(null);
   const [showToast, setShowToast] = useState(null);
-  const [showToastError, setShowToastError] = useState(null);
+  const [showToastError, setShowToastError] = useState({ label: "", error: false, success: false });
   // const handleChange = (e) => {
   //   this.setState({ isRadioSelected: true });
   // };
@@ -466,7 +469,7 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
   }
 
   function setGenderName(value) {
-    console.log("GENDER", value.target.value);
+    // console.log("GENDER", value.target.value);
     setGender(value.target.value);
     setPanIsValid(false);
   }
@@ -622,26 +625,17 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
     console.log("logFile", file);
     if (type === "existingColonizer") {
       if (getValues("existingColonizerFiles")?.includes(file.name)) {
-        setShowToastError({ key: "error" });
-        setTimeout(() => {
-          setShowToastError(null);
-        }, 2000);
+        setShowToastError({ label: "Duplicate file Selected", error: true, success: false });
         return;
       }
     } else if (type === "shareholdingPattern") {
       if (getValues("shareholdingPatternFiles")?.includes(file.name)) {
-        setShowToastError({ key: "error" });
-        setTimeout(() => {
-          setShowToastError(null);
-        }, 2000);
+        setShowToastError({ label: "Duplicate file Selected", error: true, success: false });
         return;
       }
     } else if (type === "directorInfoPdf") {
       if (getValues("directorInfoPdfFiles")?.includes(file.name)) {
-        setShowToastError({ key: "error" });
-        setTimeout(() => {
-          setShowToastError(null);
-        }, 2000);
+        setShowToastError({ label: "Duplicate file Selected", error: true, success: false });
         return;
       }
     }
@@ -658,10 +652,7 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
         return response;
       });
       setLoading(false);
-      setShowToast({ key: "success" });
-      setTimeout(() => {
-        setShowToast(null);
-      }, 2000);
+      setShowToastError({ label: "File Uploaded Successfully", error: false, success: true });
       console.log(Resp?.data?.files?.[0]?.fileStoreId, fieldName, type, index);
 
       if (type === "existingColonizer") {
@@ -1849,7 +1840,7 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
                                           {input + 1}
                                         </StyledTableCell>
                                         <StyledTableCell>{elementInArray.name}</StyledTableCell>
-                                        <StyledTableCell>{elementInArray.designation}</StyledTableCell>
+                                        <StyledTableCell>{elementInArray.designition}</StyledTableCell>
                                         <StyledTableCell>{elementInArray.percentage}</StyledTableCell>
                                         <StyledTableCell>
                                           <div className="row">
@@ -2659,7 +2650,7 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
                                     onChange={SelectExistingColonizerName}
                                     // onChange={(e) => setExistingColonizerDetails({ ...existingColonizerDetails, name: e.target.value})}
                                     className="form-control"
-                                    maxLength={10}
+                                    maxLength={30}
                                   />
                                   {existingColonizerDetails.name &&
                                     existingColonizerDetails.name.length > 0 &&
@@ -2761,26 +2752,13 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
                   </Col>
                 )}
             </div>
-            {showToast && (
-              <Toast
-                success={showToast?.key === "success" ? true : false}
-                label="Document Uploaded Successfully"
-                autoClose={true}
-                isDleteBtn={true}
-                onClose={() => {
-                  setShowToast(null);
-                  setError(null);
-                }}
-              />
-            )}
             {showToastError && (
-              <Toast
-                error={showToastError?.key === "error" ? true : false}
-                label="Duplicate file Selected"
-                isDleteBtn={true}
+              <CusToaster
+                label={showToastError?.label}
+                success={showToastError?.success}
+                error={showToastError?.error}
                 onClose={() => {
-                  setShowToastError(null);
-                  setError(null);
+                  setShowToastError({ label: "", success: false, error: false });
                 }}
               />
             )}

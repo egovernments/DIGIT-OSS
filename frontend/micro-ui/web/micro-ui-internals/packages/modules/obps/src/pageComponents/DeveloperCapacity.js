@@ -40,6 +40,7 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TablePagination from "@mui/material/TablePagination";
 import TableRow from "@mui/material/TableRow";
+import CusToaster from "../components/Toaster";
 
 const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) => {
   const { pathname: url } = useLocation();
@@ -57,7 +58,7 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
     const usersResponse = await Digit.UserService.userSearch(tenantId, { uuid: [uuid] }, {});
     setParentId(usersResponse?.user[0]?.parentId);
     setGenderMF(usersResponse?.user[0]?.gender);
-    console.log("USERID", usersResponse?.user[0]?.gender);
+    // console.log("USERID", usersResponse?.user[0]?.gender);
   }, [userInfo?.info?.uuid]);
 
   const { data: optionsArrList } = Digit.Hooks.obps.useMDMS(stateId, "common-masters", ["Purpose"]);
@@ -198,7 +199,7 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
       });
       setDocumentsData(developerDataGet?.devDetail[0]?.capacityDevelopAColony?.documents);
       setTradeType(developerDataGet?.devDetail[0]?.applicantType?.licenceType);
-      console.log("TRADETYPE", developerDataGet?.devDetail[0]?.applicantType?.licenceType);
+      // console.log("TRADETYPE", developerDataGet?.devDetail[0]?.applicantType?.licenceType);
     } catch (error) {
       console.log(error);
     }
@@ -361,7 +362,7 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
     const purpose = PurposeType?.["common-masters"]?.Purpose?.map(function (data) {
       return { value: data?.purposeCode, label: data?.name };
     });
-    console.log("log123", purpose);
+    // console.log("log123", purpose);
     setPurposeOptions({ data: purpose, isLoading: false });
   }, [PurposeType]);
 
@@ -461,7 +462,7 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
   const handleChange = (e) => {
     this.setState({ isRadioSelected: true });
   };
-
+  const [showToastError, setShowToastError] = useState(null);
   const devTypeFlagVal = localStorage.getItem("devTypeValueFlag");
   // const getDocumentData = async () => {
   //     if (file === null) {
@@ -491,47 +492,32 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
   const getDocumentData = async (file, fieldName, formType) => {
     if (formType === "devTypeDocument") {
       if (getValues("devTypeDocument")?.includes(file.name)) {
-        setShowToastError({ key: "error" });
-        setTimeout(() => {
-          setShowToastError(null);
-        }, 2000);
+        setShowToastError({ label: "Duplicate file Selected", error: true, success: false });
         return;
       }
     } else if (formType === "hrduModalActFile") {
       if (getValues("hrduModalActFile")?.includes(file.name)) {
-        setShowToastError({ key: "error" });
-        setTimeout(() => {
-          setShowToastError(null);
-        }, 2000);
+        setShowToastError({ label: "Duplicate file Selected", error: true, success: false });
         return;
       }
     } else if (formType === "designatedDirectorsFile") {
       if (getValues("designatedDirectorsFile")?.includes(file.name)) {
-        setShowToastError({ key: "error" });
-        setTimeout(() => {
-          setShowToastError(null);
-        }, 2000);
+        setShowToastError({ label: "Duplicate file Selected", error: true, success: false });
         return;
       }
     } else if (formType === "alreadyObtaileLicFile") {
       if (getValues("alreadyObtaileLicFile")?.includes(file.name)) {
-        setShowToastError({ key: "error" });
-        setTimeout(() => {
-          setShowToastError(null);
-        }, 2000);
+        setShowToastError({ label: "Duplicate file Selected", error: true, success: false });
         return;
       }
     } else if (formType === "outsideHrDocY") {
       if (getValues("outsideHrDocY")?.includes(file.name)) {
-        setShowToastError({ key: "error" });
+        setShowToastError({ label: "Duplicate file Selected", error: true, success: false });
         return;
       }
     } else if (formType === "techicalExpertFile") {
       if (getValues("techicalExpertFile")?.includes(file.name)) {
-        setShowToastError({ key: "error" });
-        setTimeout(() => {
-          setShowToastError(null);
-        }, 2000);
+        setShowToastError({ label: "Duplicate file Selected", error: true, success: false });
         return;
       }
     }
@@ -549,14 +535,12 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
       });
 
       setLoading(false);
-      setShowToast({ key: "success" });
-      setTimeout(() => {
-        setShowToast(null);
-      }, 2000);
-      console.log(Resp?.data?.files);
+      setShowToastError({ label: "File Uploaded Successfully", error: false, success: true });
+
+      // console.log(Resp?.data?.files);
       setValue(fieldName, Resp?.data?.files?.[0]?.fileStoreId);
       // setDocId(Resp?.data?.files?.[0]?.fileStoreId);
-      console.log("getValues()=====", getValues(), { ...Documents, ...getValues() }, Documents);
+      // console.log("getValues()=====", getValues(), { ...Documents, ...getValues() }, Documents);
       setDocumentsData({ ...Documents, ...getValues() });
       //   setLoader(false);
 
@@ -602,26 +586,6 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
       console.log(error.message);
     }
   };
-
-  const getDocData = async () => {
-    if (
-      (Documents?.sectorAndDevelopmentPlan !== null || Documents?.sectorAndDevelopmentPlan !== undefined) &&
-      (sectorAndDevelopmentPlan !== null || sectorAndDevelopmentPlan !== "")
-    ) {
-      try {
-        const response = await axios.get(`/filestore/v1/files/url?tenantId=${tenantId}&fileStoreIds=${Documents?.sectorAndDevelopmentPlan}`, {});
-        const FILDATA = response.data?.fileStoreIds[0]?.url;
-        setFIleUrl(FILDATA);
-        console.log("GET DOCUMENT LABEL", FILDATA);
-      } catch (error) {
-        console.log(error.message);
-      }
-    }
-  };
-
-  useEffect(() => {
-    getDocData();
-  }, [Documents?.sectorAndDevelopmentPlan]);
 
   const setpurposeType = (data) => {
     const getDevTypeValue = data?.value;
@@ -735,14 +699,17 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
         },
       ],
     };
+    setLoading(true);
     Digit.OBPSService.BPAREGCreate(payload, tenantId)
       .then((result, err) => {
         setIsDisableForNext(false);
         let data = { result: result, formData: formData, Correspondenceaddress: Correspondenceaddress, isAddressSame: isAddressSame };
         //1, units
         onSelect("", data, "", true);
+        setLoading(false);
       })
       .catch((e) => {
+        setLoading(false);
         setIsDisableForNext(false);
         // setShowToast({ key: "error" });
         setError(e?.response?.data?.Errors[0]?.message || null);
@@ -882,19 +849,21 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
           t={t}
           isDisabled={
             (data?.devDetail[0]?.addInfo?.showDevTypeFields === "Individual" ||
-            data?.devDetail[0]?.addInfo?.showDevTypeFields === "Proprietorship Firm"
+            data?.devDetail[0]?.addInfo?.showDevTypeFields === "Proprietorship Firm" ||
+            data?.devDetail[0]?.addInfo?.showDevTypeFields === "Hindu Undivided Family"
               ? !Documents?.companyBalanceSheet || !Documents?.individualCertificateCA
               : data?.devDetail[0]?.addInfo?.showDevTypeFields === "Company" ||
                 data?.devDetail[0]?.addInfo?.showDevTypeFields === "Society" ||
                 data?.devDetail[0]?.addInfo?.showDevTypeFields === "Trust" ||
                 data?.devDetail[0]?.addInfo?.showDevTypeFields === "Institution"
-              ? !Documents?.companyBalanceSheet || !Documents?.paidUpCapital
+              ? !Documents?.companyBalanceSheet || !Documents?.paidUpCapital || !Documents?.reservesAndSurplus
               : data?.devDetail[0]?.addInfo?.showDevTypeFields === "Limited Liability Partnership" ||
                 data?.devDetail[0]?.addInfo?.showDevTypeFields === "Firm" ||
                 data?.devDetail[0]?.addInfo?.showDevTypeFields === "Partnership Firm"
-              ? !Documents?.networthPartners || !Documents?.networthFirm
+              ? !Documents?.networthPartners || !Documents?.networthFirm || !Documents?.fullyConvertibleDebenture
               : false) ||
-            ((permissionGrantedHRDU === "Y" && capacityDevelopColonyHdruAct?.length) || permissionGrantedHRDU === "N"
+            ((permissionGrantedHRDU === "Y" && capacityDevelopColonyHdruAct?.length) ||
+            (permissionGrantedHRDU === "N" && technicalCapacityOutsideHaryana === "N")
               ? false
               : technicalCapacityOutsideHaryana === "Y" &&
                 technicalCapacityOutsideHaryanaDetails.authority &&
@@ -902,8 +871,6 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
                 technicalCapacityOutsideHaryanaDetails.statusOfDevelopment &&
                 technicalCapacityOutsideHaryanaDetails.location &&
                 technicalCapacityOutsideHaryanaDetails.projectArea
-              ? false
-              : technicalCapacityOutsideHaryana === "N"
               ? false
               : true)
           }
@@ -1756,6 +1723,7 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
               <div className="card-body">
                 <p>1. I/ We hereby submit the following information/ enclose the relevant documents:-</p>
                 {data?.devDetail[0]?.addInfo?.showDevTypeFields === "Individual" ||
+                data?.devDetail[0]?.addInfo?.showDevTypeFields === "Limited Liability Partnership" ||
                 data?.devDetail[0]?.addInfo?.showDevTypeFields === "Proprietorship Firm" ||
                 data?.devDetail[0]?.addInfo?.showDevTypeFields === "Hindu Undivided Family" ? (
                   <p className="ml-1">
@@ -1765,12 +1733,13 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
                 ) : (
                   <p className="d-none"></p>
                 )}
-                {data?.devDetail[0]?.addInfo?.showDevTypeFields === "Company" && (
-                  <p className="ml-1">
-                    (i) Whether the Developer has earlier been granted permission to set up a colony under HDRU Act, 1975:{" "}
-                    <span className="text-danger font-weight-bold">*</span>
-                  </p>
-                )}
+                {data?.devDetail[0]?.addInfo?.showDevTypeFields === "Company" ||
+                  (data?.devDetail[0]?.addInfo?.showDevTypeFields === "Partnership Firm" && (
+                    <p className="ml-1">
+                      (i) Whether the Developer has earlier been granted permission to set up a colony under HDRU Act, 1975:{" "}
+                      <span className="text-danger font-weight-bold">*</span>
+                    </p>
+                  ))}
                 <div className="form-group ml-1">
                   <input
                     type="radio"
@@ -2880,14 +2849,13 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
       </div>
       {/* <div style={{ disabled: "true", height: "30px", width: "100%", fontSize: "14px" }}></div> */}
       {/* {showToast && <Toast error={showToast?.key === "error" ? true : false} label={error} isDleteBtn={true} onClose={() => { setShowToast(null); setError(null); }} />} */}
-      {showToast && (
-        <Toast
-          success={showToast?.key === "success" ? true : false}
-          label="Document Uploaded Successfully"
-          isDleteBtn={true}
+      {showToastError && (
+        <CusToaster
+          label={showToastError?.label}
+          success={showToastError?.success}
+          error={showToastError?.error}
           onClose={() => {
-            setShowToast(null);
-            setError(null);
+            setShowToastError({ label: "", success: false, error: false });
           }}
         />
       )}
