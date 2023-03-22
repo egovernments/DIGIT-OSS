@@ -109,7 +109,6 @@ const FeesChargesForm = (props) => {
       // const Resp = await axios.post("/tl-calculator/v1/_calculator", payload);
       const Resp = await axios.post(`/tl-calculator/v1/_getPaymentEstimate`, payload);
       const charges = Resp.data?.Calculations?.[0]?.tradeTypeBillingIds;
-      console.log("resp", Resp.data?.feesTypeCalculationDto);
       CalculationApi(Resp?.data?.feesTypeCalculationDto);
       setCalculatedData(Resp.data);
       // setValue("scrutinyFee", charges?.scrutinyFeeCharges);
