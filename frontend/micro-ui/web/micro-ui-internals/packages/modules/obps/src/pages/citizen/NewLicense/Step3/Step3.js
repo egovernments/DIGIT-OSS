@@ -2787,9 +2787,9 @@ const LandScheduleForm = (props) => {
                     <div className="col col-3">
                       <h2 style={{ display: "flex" }}>
                         Shajra Plan <span style={{ color: "red" }}>*</span>
-                        <Tooltip title=" Click here for instructions to Upload Copy of Shajra Plan.">
+                        {/* <Tooltip title=" Click here for instructions to Upload Copy of Shajra Plan.">
                           <InfoIcon style={{ cursor: "pointer" }} color="primary"></InfoIcon>
-                        </Tooltip>
+                        </Tooltip> */}
                       </h2>
                       <span>
                         {" "}
@@ -2836,8 +2836,9 @@ const LandScheduleForm = (props) => {
                         <input
                           type="file"
                           style={{ display: "none" }}
-                          onChange={(e) => getDocumentData(e?.target?.files[0], "c")}
-                          accept=".dxf/.zip"
+                          onChange={(e) => getDocumentData(e?.target?.files[0], "copyOfShajraPlan")}
+                          accept="application/pdf/jpeg/png"
+                          // accept=".dxf/.zip"
                         />
                       </label>
                       {watch("copyOfShajraPlan") ? (
