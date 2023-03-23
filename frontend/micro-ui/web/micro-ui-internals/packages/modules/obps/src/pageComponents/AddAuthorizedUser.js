@@ -487,7 +487,7 @@ const AddAuthorizeduser = ({ t, config, onSelect, formData, isUserRegistered = t
     } catch (error) {
       setLoading(false);
       setShowToastError({ label: error?.response?.data?.Errors?.[0]?.code, error: true, success: false });
-      console.log("ERROR ====> ", error.response, error);
+      // console.log("ERROR ====> ", error.response, error);
     }
     // getAdhaarPdf();
     // getDigitalSignPdf();

@@ -197,7 +197,7 @@ const StakeholderDocuments = ({ t, config, onSelect, userType, formData, setErro
 
       if (!isRequired && doc.required == true) {
         count = count + 1;
-        console.log("+_+_+_+", count);
+        // console.log("+_+_+_+", count);
       }
     });
     if (((count == "0" || count == 0 || count < 1) && documents?.length > 0) || documentsUploadList?.length > 0) {

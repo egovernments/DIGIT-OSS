@@ -110,7 +110,7 @@ const LicenseType = ({ t, config, onSelect, userType, formData }) => {
 
   const selectLicenseType = (e) => {
     setLicenseTypeSelected(e.target.value);
-    console.log("log123", licenceTypeSelected);
+    // console.log("log123", licenceTypeSelected);
   };
 
   const setDevType = (e) => {
@@ -118,7 +118,7 @@ const LicenseType = ({ t, config, onSelect, userType, formData }) => {
     setLicenseTypeCom(`${licenceTypeSelected}.${getDevTypeValue}`);
     setShowDevTypeFields(e.target.value);
     // setValue(getDevTypeValue);
-    console.log("DEVTYPE", licenceTypeCombined);
+    // console.log("DEVTYPE", licenceTypeCombined);
     localStorage.setItem("devTypeValueFlag", getDevTypeValue);
 
     // alert(licenceTypeCombined);
