@@ -39,9 +39,11 @@ const FeesChargesForm = (props) => {
     watch,
   } = useForm({
     mode: "onChange",
+
     reValidateMode: "onChange",
     // resolver: yupResolver(VALIDATION_SCHEMA),
     shouldFocusError: true,
+    defaultValues: { termsAndConditions: false },
   });
 
   const FeesChrgesFormSubmitHandler = async (data) => {
@@ -297,6 +299,7 @@ const FeesChargesForm = (props) => {
     try {
       const Resp = await axios.post(`/tl-services/new/licenses/object/_getByApplicationNumber?applicationNumber=${id}`, payload);
       const userData = Resp?.data?.LicenseDetails?.[0];
+      if (Resp?.data?.applicationStatus === "FEESANDCHARGES") setValue("termsAndConditions", true);
       setData({ caseNumber: Resp?.data?.caseNumber, dairyNumber: Resp?.data?.dairyNumber, status: Resp?.data?.applicationStatus });
       setValue("purpose", userData?.ApplicantPurpose?.purpose);
       setValue("developmentPlan", userData?.ApplicantPurpose?.AppliedLandDetails?.[0]?.developmentPlan);
@@ -549,18 +552,21 @@ const FeesChargesForm = (props) => {
                     <p className="text-black">The following is undertaken: </p>
                     <ul className="Undertakings">
                       <li>I hereby declare that the details furnished above are true and correct to the best of my knowledge.</li>
-                      <button
-                        className="btn btn-primary"
-                        onClick={() => {
-                          // if (e.target.checked) {
-                          // setShow({ payNow: false, submit: false });
-                          showPdf();
-                          // }
-                          // setmodal1(true)
+                      <div
+                        style={{
+                          color: "#fff",
+                          backgroundColor: " #0069d9",
+                          borderColor: "#0062cc",
+                          cursor: "pointer",
+                          width: "16%",
+                          padding: "8px 0",
+                          borderRadius: "5px",
+                          textAlign: "center",
                         }}
+                        onClick={() => showPdf()}
                       >
                         Review Application
-                      </button>
+                      </div>
                     </ul>
                   </div>
                   {/* <Modal
@@ -586,18 +592,15 @@ const FeesChargesForm = (props) => {
                     <div className="">
                       <div className="form-check">
                         <input
+                          type="checkbox"
+                          {...register("termsAndConditions")}
+                          className="mx-3"
+                          id="flexCheckDefault"
                           onClick={(e) => {
                             if (e.target.checked) {
                               setShow({ payNow: false, submit: true });
-                              // showPdf();
                             } else setShow({ payNow: false, submit: false });
                           }}
-                          className="form-check-input"
-                          formControlName="agreeCheck"
-                          type="checkbox"
-                          value=""
-                          // checked={getData?.status === "FEESANDCHARGES" ? true : false}
-                          id="flexCheckDefault"
                         />
                         <label className="checkbox" for="flexCheckDefault">
                           I agree and accept the terms and conditions.
@@ -630,28 +633,6 @@ const FeesChargesForm = (props) => {
                       )}
                     </div>
                   </div>
-                  {/* {showToast && (
-                    <Toast
-                      success={showToast?.key === "success" ? true : false}
-                      label="Document Uploaded Successfully"
-                      isDleteBtn={true}
-                      onClose={() => {
-                        setShowToast(null);
-                        setError(null);
-                      }}
-                    />
-                  )}
-                  {showToastError && (
-                    <Toast
-                      error={showToastError?.key === "error" ? true : false}
-                      label="Duplicate file Selected"
-                      isDleteBtn={true}
-                      onClose={() => {
-                        setShowToastError(null);
-                        setError(null);
-                      }}
-                    />
-                  )} */}
                 </Col>
               </Row>
             </Form.Group>
