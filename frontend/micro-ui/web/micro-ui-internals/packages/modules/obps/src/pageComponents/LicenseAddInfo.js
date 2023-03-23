@@ -612,7 +612,7 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
 
   const setDevType = (data) => {
     const getDevTypeValue = data?.value;
-    console.log("data123", data);
+    // console.log("data123", data);
     setShowDevTypeFields(getDevTypeValue);
     // localStorage.setItem('devTypeValueFlag', getDevTypeValue)
     resetForm();
@@ -622,7 +622,7 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
   //   console.log(value);
   // }
   const getDocumentData = async (file, fieldName, type, index) => {
-    console.log("logFile", file);
+    // console.log("logFile", file);
     if (type === "existingColonizer") {
       if (getValues("existingColonizerFiles")?.includes(file.name)) {
         setShowToastError({ label: "Duplicate file Selected", error: true, success: false });
@@ -679,7 +679,7 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
         let temp = DirectorData;
         temp[index].uploadPdf = Resp?.data?.files?.[0]?.fileStoreId;
         setDirectorData([...temp]);
-        console.log("set into directorInfo case", temp, DirectorData);
+        // console.log("set into directorInfo case", temp, DirectorData);
         if (getValues("directorInfoPdfFiles")) {
           setValue("directorInfoPdfFiles", [...getValues("directorInfoPdfFiles"), file.name]);
         } else {
@@ -688,7 +688,7 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
       } else {
         setValue(fieldName, Resp?.data?.files?.[0]?.fileStoreId);
         // setDocId(Resp?.data?.files?.[0]?.fileStoreId);
-        console.log("getValues()=====", getValues());
+        // console.log("getValues()=====", getValues());
         setDocumentsData(getValues());
       }
     } catch (error) {
@@ -751,7 +751,7 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
         }
         setCompanyName(Resp.data.companyName);
         setIncorporation(Resp.data.incorporationDate);
-        setUserEmail(Resp.data.email);
+        setUserEmailInd(Resp.data.email);
         //console.log(Resp.data.Email)
         setRegistered(Resp.data.registeredAddress);
         setMobile(Resp.data.registeredContactNo);
@@ -829,7 +829,7 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
   const deleteTableRows = (i) => {
     const rows = [...modalValuesArray];
     let tempRows = rows.splice(i, 1);
-    console.log("log123", tempRows);
+    // console.log("log123", tempRows);
     // if(remainingStakeholderPercentage === 100){
     setRemainingStakeholderPercentage(Number(remainingStakeholderPercentage) + Number(tempRows[0].percentage.split("%")[0]));
     // }
@@ -843,7 +843,7 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
 
   // if (isLoading) return <Loader />;
   const goNext = async (e) => {
-    console.log("DIN123", formData?.result, formData?.result?.Licenses[0]?.id, formData);
+    // console.log("DIN123", formData?.result, formData?.result?.Licenses[0]?.id, formData);
     // const cin_match = cin_Number.match(Digit.Utils.getPattern('CIN'));
     // if(!cin_match) {
     //   alert("NOT Matched");
@@ -1672,20 +1672,21 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
                         </div>
                         <div className="col col-4">
                           <div className="form-group ">
-                            <label htmlFor="email">
+                            <label htmlFor="emailId">
                               {" "}
                               Email <span className="text-danger font-weight-bold">*</span>
                             </label>
                             <input
-                              type={"email"}
-                              name="email"
-                              value={email}
-                              onChange={(e) => setUserEmailId(e.target.value)}
+                              type="text"
+                              value={emailId}
+                              placeholder={emailId}
+                              name="emailId"
+                              required={true}
+                              onChange={setUserEmailIndVal}
                               className="form-control"
-                              disabled={showDevTypeFields === "Company"}
                             />
-                            {email && email.length > 0 && !email.match(Digit.Utils.getPattern("Email")) && (
-                              <CardLabelError style={{ width: "100%", marginTop: "-15px", fontSize: "16px", marginBottom: "12px", color: "red" }}>
+                            {emailId && emailId.length > 0 && !emailId.match(Digit.Utils.getPattern("Email")) && (
+                              <CardLabelError style={{ width: "100%", marginTop: "5px", fontSize: "16px", marginBottom: "12px", color: "red" }}>
                                 {"Invalid Email Address"}
                               </CardLabelError>
                             )}
