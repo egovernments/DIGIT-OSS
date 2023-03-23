@@ -529,12 +529,19 @@ const ApllicantFormStep1 = (props) => {
                                   <td>{item?.name}</td>
                                   <td>{item?.contactNumber}</td>
                                   <td
+                                    style={{
+                                      color: " #1266af",
+                                      fontSize: " 12px",
+                                      fontWeight: "bold",
+                                      cursor: "pointer",
+                                      textDecorationLine: "underline",
+                                    }}
                                     onClick={() => {
-                                      getDocShareholding(item?.uploadPdf, setLoader);
-                                      // else setShowToastError({ label: "No pdf here", error: true, success: false });
+                                      if (item?.uploadPdf) getDocShareholding(item?.uploadPdf, setLoader);
+                                      else setShowToastError({ label: "No pdf here", error: true, success: false });
                                     }}
                                   >
-                                    {item?.uploadPdf ? <VisibilityIcon color="info" className="icon" /> : "No PDF here"}
+                                    <VisibilityIcon color="info" className="icon" />
                                   </td>
                                 </tr>
                               );
@@ -569,12 +576,19 @@ const ApllicantFormStep1 = (props) => {
 
                                   <td>{it?.percentage}</td>
                                   <td
+                                    style={{
+                                      color: " #1266af",
+                                      fontSize: " 12px",
+                                      fontWeight: "bold",
+                                      cursor: "pointer",
+                                      textDecorationLine: "underline",
+                                    }}
                                     onClick={() => {
-                                      getDocShareholding(it?.uploadPdf, setLoader);
-                                      // else setShowToastError({ label: "No pdf here", error: true, success: false });
+                                      if (it?.uploadPdf) getDocShareholding(it?.uploadPdf, setLoader);
+                                      else setShowToastError({ label: "No pdf here", error: true, success: false });
                                     }}
                                   >
-                                    {it?.uploadPdf ? <VisibilityIcon color="info" className="icon" /> : "No PDF here"}
+                                    <VisibilityIcon color="info" className="icon" />
                                   </td>
                                 </tr>
                               );
@@ -689,45 +703,39 @@ const ApllicantFormStep1 = (props) => {
           <br></br>
           <div className="row-12">
             <div className="col md={4} xxl lg-4">
-              {developerDataLabel?.aurthorizedUserInfoArray?.[0]?.uploadDigitalSignaturePdf && (
-                <FormControl>
-                  <div
-                    style={{ cursor: "pointer" }}
-                    onClick={() => {
-                      if (developerDataLabel?.aurthorizedUserInfoArray?.[0]?.uploadDigitalSignaturePdf)
-                        getDocShareholding(developerDataLabel?.aurthorizedUserInfoArray?.[0]?.uploadDigitalSignaturePdf, setLoader);
-                      else setShowToastError({ label: "No pdf here", error: true, success: false });
-                    }}
-                    id="btnSearch"
-                    class=""
-                  >
-                    View Upload Digital Signature <VisibilityIcon color="info" className="icon" />
-                  </div>
-                </FormControl>
-              )}
+              <FormControl>
+                <div
+                  style={{ cursor: "pointer" }}
+                  onClick={() => {
+                    if (developerDataLabel?.aurthorizedUserInfoArray?.[0]?.uploadDigitalSignaturePdf)
+                      getDocShareholding(developerDataLabel?.aurthorizedUserInfoArray?.[0]?.uploadDigitalSignaturePdf, setLoader);
+                    else setShowToastError({ label: "No pdf here", error: true, success: false });
+                  }}
+                  id="btnSearch"
+                  class=""
+                >
+                  View Upload Digital Signature <VisibilityIcon color="info" className="icon" />
+                </div>
+              </FormControl>
               &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp;
-              {developerDataLabel?.aurthorizedUserInfoArray?.[0]?.uploadBoardResolution && (
-                <FormControl>
-                  <div
-                    style={{ cursor: "pointer" }}
-                    onClick={() => {
-                      if (developerDataLabel?.aurthorizedUserInfoArray?.[0]?.uploadBoardResolution)
-                        getDocShareholding(developerDataLabel?.aurthorizedUserInfoArray?.[0]?.uploadBoardResolution, setLoader);
-                      else setShowToastError({ label: "No pdf here", error: true, success: false });
-                    }}
-                    id="btnSearch"
-                    class=""
-                  >
-                    View Upload Board Resolution <VisibilityIcon color="info" className="icon" />
-                  </div>
-                </FormControl>
-              )}
+              <FormControl>
+                <div
+                  style={{ cursor: "pointer" }}
+                  onClick={() => {
+                    if (developerDataLabel?.aurthorizedUserInfoArray?.[0]?.uploadBoardResolution)
+                      getDocShareholding(developerDataLabel?.aurthorizedUserInfoArray?.[0]?.uploadBoardResolution, setLoader);
+                    else setShowToastError({ label: "No pdf here", error: true, success: false });
+                  }}
+                  id="btnSearch"
+                  class=""
+                >
+                  View Upload Board Resolution <VisibilityIcon color="info" className="icon" />
+                </div>
+              </FormControl>
               &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp;
               {developerDataLabel?.addInfo?.showDevTypeFields != "Hindu Undivided Family" &&
                 developerDataLabel?.addInfo?.showDevTypeFields != "Proprietorship Firm" &&
-                developerDataLabel?.addInfo?.showDevTypeFields != "Individual" &&
-                developerDataLabel?.addInfo?.showDevTypeFields != "Partnership Firm" &&
-                developerDataLabel?.licensesDoc?.[0]?.memorandumOfArticles && (
+                developerDataLabel?.addInfo?.showDevTypeFields != "Partnership Firm" && (
                   <FormControl>
                     <div
                       style={{ cursor: "pointer" }}
@@ -747,8 +755,9 @@ const ApllicantFormStep1 = (props) => {
           </div>
           <div className="row mt-4">
             <div className="col col-4">
+              <h2 style={{ display: "flex" }}>Upload Board resolution </h2>
+
               <label>
-                Upload Board resolution
                 <FileUpload style={{ cursor: "pointer" }} color="primary" />
                 <input
                   type="file"
@@ -757,7 +766,6 @@ const ApllicantFormStep1 = (props) => {
                   onChange={(e) => getDocumentData(e?.target?.files[0], "boardResolutionDoc")}
                 />
               </label>
-
               {watch("boardResolutionDoc") && (
                 <a onClick={() => getDocShareholding(watch("boardResolutionDoc"), setLoader)} className="btn btn-sm ">
                   <VisibilityIcon color="info" className="icon" />
@@ -765,8 +773,8 @@ const ApllicantFormStep1 = (props) => {
               )}
             </div>
             <div className="col col-4">
+              <h2 style={{ display: "flex" }}>Consent degree certificate of Architect </h2>
               <label>
-                Consent degree certificate of Architect
                 <FileUpload style={{ cursor: "pointer" }} color="primary" />
                 <input
                   type="file"
@@ -783,8 +791,8 @@ const ApllicantFormStep1 = (props) => {
               )}
             </div>
             <div className="col col-4">
+              <h2 style={{ display: "flex" }}>Consent degree certificate of Engineer</h2>
               <label>
-                Consent degree certificate of Engineer
                 <FileUpload style={{ cursor: "pointer" }} color="primary" />
                 <input
                   type="file"
