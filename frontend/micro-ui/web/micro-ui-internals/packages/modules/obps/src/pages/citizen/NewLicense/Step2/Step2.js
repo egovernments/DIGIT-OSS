@@ -10,6 +10,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import WorkingTable from "../../../../components/Table";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
+import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import { VALIDATION_SCHEMA, MODAL_VALIDATION_SCHEMA } from "../../../../utils/schema/step2";
 import ReactMultiSelect from "../../../../../../../react-components/src/atoms/ReactMultiSelect";
 import Spinner from "../../../../components/Loader";
@@ -184,7 +185,7 @@ const ApllicantPuropseForm = (props) => {
       title: "Action",
       dataIndex: "",
       render: (data) => (
-        <div>
+        <div style={{ width: "116px", display: "flex", justifyContent: "space-between" }}>
           <EditIcon
             style={{ cursor: "pointer" }}
             onClick={() => {
@@ -201,6 +202,16 @@ const ApllicantPuropseForm = (props) => {
               setModalData(filteredData);
             }}
             color="error"
+          />
+          <ContentCopyIcon
+            onClick={() => {
+              var obj = data;
+              const arrB = JSON.parse(JSON.stringify(obj));
+              const length = modalData?.length + 1;
+              arrB["rowid"] = length.toString();
+              setModalData([arrB, ...modalData]);
+            }}
+            style={{ cursor: "pointer" }}
           />
         </div>
       ),
@@ -410,7 +421,6 @@ const ApllicantPuropseForm = (props) => {
 
   useEffect(() => {
     const district = DistrictType?.["common-masters"]?.District?.map(function (data) {
-      console.log("data", data);
       return { value: data?.disCode, label: data?.disName, distCodeTCP: data?.distCodeTCP };
     });
     setDistrictOptions({ data: district, isLoading: false });
@@ -574,7 +584,6 @@ const ApllicantPuropseForm = (props) => {
     };
     try {
       const Resp = await axios.post("/egov-mdms-service/v1/_search", payload);
-      console.log("Resp?.data?.MdmsRes?.", Resp?.data?.MdmsRes?.["common-masters"]);
       const sectorPlan = Resp?.data?.MdmsRes?.["common-masters"]?.Sector?.map(function (data) {
         return { value: data?.sectorCode, label: data?.sectorNo };
       });
@@ -634,7 +643,6 @@ const ApllicantPuropseForm = (props) => {
     try {
       const Resp = await axios.post("/egov-mdms-service/v1/_search", payload);
       const tehsilData = Resp?.data?.MdmsRes?.["common-masters"]?.tehsil?.map(function (data) {
-        console.log("tehsil", data);
         return { value: data?.tehCode, label: data?.tehName };
       });
       setTehsilDataLabels({ data: tehsilData, isLoading: false });
@@ -686,7 +694,6 @@ const ApllicantPuropseForm = (props) => {
     try {
       const Resp = await axios.post("/egov-mdms-service/v1/_search", payload);
       const revenData = Resp?.data?.MdmsRes?.["common-masters"]?.village?.map(function (data) {
-        console.log("village", data);
         return { value: data?.nvCODE, label: data?.villageName };
       });
       setRevenueDataLabels({ data: revenData, isLoading: false });
@@ -902,16 +909,9 @@ const ApllicantPuropseForm = (props) => {
       }
       return sumA;
     };
-    console.log("nameArrayB", nameArray);
-    console.log("nameArrayB", nameArrayB);
-
-    console.log("a", mixedSum(nameArray));
-    console.log("b", mixedSumB(nameArrayB));
 
     const totalVal = mixedSum(nameArray) + mixedSumB(nameArrayB);
     setTotlArea(totalVal?.toFixed(3));
-    // console.log("nameArray", sum, check);
-    // console.log("nameArray==", totalVal);
   }, [modalData]);
 
   const handleWorkflow = async () => {
@@ -1046,7 +1046,6 @@ const ApllicantPuropseForm = (props) => {
 
   useEffect(() => {
     const val = watch("marla") * 0.0062 + watch("sarsai") * 0.00069 + watch("kanal") * 0.125;
-    // console.log("val==", val);
     setValue("consolidatedTotal", isNaN(val) ? "N/A" : val?.toFixed(3));
   }, [watch("sarsai"), watch("marla"), watch("kanal")]);
 
@@ -1058,12 +1057,10 @@ const ApllicantPuropseForm = (props) => {
     if (watch("nonConsolidationType") == "kachha") {
       const valueA = watch("bigha") * 1008 + watch("biswa") * 50.41 + watch("biswansi") * 2.52;
       setValue("nonConsolidatedTotal", isNaN(valueA) ? "N/A" : (valueA / 4840)?.toFixed(3));
-      // console.log("here");
     }
     if (watch("nonConsolidationType") == "pucka") {
       const valueB = watch("bigha") * 3025 + watch("biswa") * 151.25 + watch("biswansi") * 7.56;
       setValue("nonConsolidatedTotal", isNaN(valueB) ? "N/A" : (valueB / 4840)?.toFixed(3));
-      // console.log("too");
     }
   }, [watch("bigha"), watch("biswa"), watch("biswansi")]);
 

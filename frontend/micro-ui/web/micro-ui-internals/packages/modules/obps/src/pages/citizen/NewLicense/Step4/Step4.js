@@ -364,7 +364,6 @@ const AppliedDetailForm = (props) => {
     }
     if (valueData) {
       const test = valueData?.PurposeDetails;
-      console.log("test==", test);
       setNewDataA(valueData?.PurposeDetails);
     }
   }, [stepData]);
@@ -605,10 +604,6 @@ const AppliedDetailForm = (props) => {
     setNewDataA(updatedDataA);
     return updatedDataA;
   };
-
-  useEffect(() => {
-    console.log("newDataA", newDataA);
-  }, [newDataA]);
 
   const getFarAllData = () => {
     // const id = newDataA

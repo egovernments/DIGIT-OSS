@@ -604,7 +604,7 @@ const ApllicantFormStep1 = (props) => {
           <div classname="card" style={{ marginLeft: "-2px", paddingRight: "10px", marginTop: "5px", marginBottom: "52px" }}>
             <h5 className="card-title fw-bold">Authorized Person Information </h5>
             <div className="row-12">
-              <div className=" col md={3} xxl lg-3">
+              <div className="col md={3} xxl lg-3">
                 <FormControl>
                   <h2>
                     Name <span style={{ color: "red" }}>*</span>
