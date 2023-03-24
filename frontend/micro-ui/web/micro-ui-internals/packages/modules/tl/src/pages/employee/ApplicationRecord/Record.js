@@ -186,11 +186,11 @@ const Records = async (data) => {
             <Row>
             <Col className="col-3">
             
-              <h4 class="h4">
+              <h4 class="h4" style={{marginBottom : 16}}>
                     Select By User Details <span style={{ color: "red" }}>*</span>
                   </h4>
 
-                <select style={{height:50}}className="Inputcontrol"  class="form-control" {...register("selectService")} >
+                <select style={{height:45}}className="Inputcontrol"  class="form-control" {...register("selectService")} >
                   <option value="">----Select value-----</option>
                   <option value="applicationNumber">Application Number</option>
                   <option value="loiNumber">LOI Number</option>
@@ -207,7 +207,7 @@ const Records = async (data) => {
               <div>
                 <label>
                   <h4 class="h4">
-                    LOI Number <span style={{ color: "red" }}>*</span>
+                    Application <span style={{ color: "red" }}>*</span>
                   </h4>
                 </label>
               </div>
@@ -221,7 +221,7 @@ const Records = async (data) => {
               {loiPatternErr ? <p style={{color: 'red'}}>Please enter the valid LOI Number*</p> : " "}
             </Col>
             <Col className="col-4">
-                <button style={{ color:"#ffff" , marginRight:"-190"}} type="submit" onClick={handleLoiNumber} id="btnSearch" class="submit-bar submit-bar-take-action submit-bar-search">
+                <button style={{ color:"#ffff" }} type="submit" onClick={handleLoiNumber} id="btnSearch" class="submit-bar submit-bar-take-action submit-bar-search">
                <b>Search </b> 
                 </button>
             </Col>
@@ -245,8 +245,7 @@ const Records = async (data) => {
                     <th>Aging</th>
                     <th>User</th>
                     <th>Aging with User</th>
-                    <th>Subject</th>
-                     <th>Last User</th>
+                  <th>Last User</th>
                    <th>View PDF</th>
                 </tr>
             </thead>
@@ -262,22 +261,16 @@ const Records = async (data) => {
                     <td>{tableDate?.tcpDairyNumber}</td>
                     <td>{tableDate?.status}</td>
                     <td>{new Date(tableDate?.tradeLicenseDetail?.auditDetails?.createdTime).toLocaleTimeString("en-US")}</td>
-                    <td>{tableDate?.applicationNumber}</td>
+                    <td>{tableDate?.status}</td>
                     <td>{tableDate?.lastModifiedTime}</td>
-                    <td>{tableDate?.applicationNumber}</td>
-                    <td>{tableDate?.applicationNumber}</td>
+                    {/* <td>{tableDate?.applicationNumber}</td> */}
+                    <td></td>
+               
                     {/* <td class="text-center"><button class="btn btn-info" ><i class="fa fa-eye"><VisibilityIcon color="info" className="icon"  onChange1={handleChange} name="Submit" onClick={handleshow19}/></i></button></td> */}
                     <td><div className="col-sm-2">
           <Button style={{ textAlign: "right" }} value="Submit" id="Submit" onChange1={handleChange} name="Submit" onClick={handleshow19}>Views PDF</Button>
             </div></td>
-                    {/* <td>{tableDate?.applicationNumber}</td>
-                    <td>{tableDate?.applicationNumber}</td> */}
-                    {/* <td class="text-center"><button class="btn btn-info" ><i class="fa fa-eye"><VisibilityIcon color="info" className="icon" /></i></button></td>
-                    <td>28/08/2020</td>
-                    <td>22</td>
-                    <td>22</td> */}
-                    {/* <td class="text-center"><span class="badge badge-secondary"><b>8%</b></span></td>
-                    <td class="text-center"><span class="badge badge-warning"><i class="fa fa-file"></i>&nbsp; Mark File</span></td> */}
+                   
                 </tr>
                 
                 

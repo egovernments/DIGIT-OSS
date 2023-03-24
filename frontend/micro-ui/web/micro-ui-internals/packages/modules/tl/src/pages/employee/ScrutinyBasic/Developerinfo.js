@@ -24,6 +24,8 @@ import CommercialLicense from "./PuropseStep3/CommercialLicense";
 import LowDensityEco from "./PuropseStep3/LowDensityEco";
 import CyberPark from "./PuropseStep3/CyberPark";
 import RetirementHousing from "./PuropseStep3/RetirementHousing";
+import InfoIcon from "@mui/icons-material/Info";
+import Tooltip from "@mui/material/Tooltip";
 // import CommercialPlottedForm from "./Puropse/CommercialPlottedForm";
 
 const Developerinfo = (props) => {
@@ -31,7 +33,7 @@ const Developerinfo = (props) => {
   const dataIcons = props.dataForIcons;
   const landScheduleData = props.ApiResponseData;
   const Purpose = props.purpose;
-  
+
   const applicationStatus = props.applicationStatus;
   let user = Digit.UserService.getUser();
   const userRoles = user?.info?.roles?.map((e) => e.code) || [];
@@ -213,11 +215,11 @@ const Developerinfo = (props) => {
   const [smShow, setSmShow] = useState(false);
   const [labelValue, setLabelValue] = useState("");
   const Colors = {
-    Conditional:"#2874A6",
-    approved:"#09cb3d",
-    disapproved:"#ff0000",
-   
-    info:"#FFB602"
+    Conditional: "#2874A6",
+    approved: "#09cb3d",
+    disapproved: "#ff0000",
+
+    info: "#FFB602"
   }
   const [selectedFieldData, setSelectedFieldData] = useState();
   const [fieldValue, setFieldValue] = useState("");
@@ -232,8 +234,8 @@ const Developerinfo = (props) => {
     specifyOthers: Colors.info,
     typeOfLand: Colors.info,
     thirdPartyRightCreated: Colors.info,
-    thirdPartyRemark:Colors.info,
-    thirdPartyDoc:Colors.info,
+    thirdPartyRemark: Colors.info,
+    thirdPartyDoc: Colors.info,
 
     migrationPolicy: Colors.info,
     encumbrance: Colors.info,
@@ -286,15 +288,15 @@ const Developerinfo = (props) => {
     areaMigration: Colors.info,
     balanceOfParentLicence: Colors.info,
     siteApproachable: Colors.info,
-    minimumApproachFour : Colors.info,
-    minimumApproachEleven : Colors.info,
-    alreadyConstructedSector : Colors.info,
+    minimumApproachFour: Colors.info,
+    minimumApproachEleven: Colors.info,
+    alreadyConstructedSector: Colors.info,
 
-    landOwnerDonated : Colors.info,
-    adjoiningOthersLand : Colors.info,
-    applicantHasDonated : Colors.info,
-    giftDeedHibbanama : Colors.info,
-    adjoiningOwnLand:color.info,
+    landOwnerDonated: Colors.info,
+    adjoiningOthersLand: Colors.info,
+    applicantHasDonated: Colors.info,
+    giftDeedHibbanama: Colors.info,
+    adjoiningOwnLand: color.info,
     joiningOwnLand: Colors.info,
   })
 
@@ -581,9 +583,9 @@ const Developerinfo = (props) => {
                             color: fieldIconColors.siteLoc
                           }}
                           onClick={() => {
-                              setLabelValue("Site Location Purpose"),
+                            setLabelValue("Site Location Purpose"),
                               setOpennedModal("siteLoc")
-                              setSmShow(true),
+                            setSmShow(true),
                               console.log("modal open"),
                               setFieldValue(landScheduleData !== null ? landScheduleData?.siteLoc : null);
                           }}
@@ -678,7 +680,7 @@ const Developerinfo = (props) => {
                       </div>
                     </Col>
                     <Col className="ms-auto" md={4} xxl lg="4">
-                      
+
                       <h6>Third-party right created&nbsp; </h6>
 
                       <div className="d-flex flex-row align-items-center my-1 ">
@@ -732,52 +734,52 @@ const Developerinfo = (props) => {
                           <div className="col col-4">
 
                             <label> Remark </label>
-                            
-                              <div className="d-flex flex-row  align-items-center">
+
+                            <div className="d-flex flex-row  align-items-center">
                               <Form.Control placeholder={landScheduleData !== null ? landScheduleData?.thirdPartyRemark : null}
-                              
-                              className={classes.formLabel}
-                              disabled></Form.Control>
-                        <ReportProblemIcon
-                          style={{
-                            display: hideRemarks ? "none" : "block",
-                            // display: hideRemarksPatwari?"none":"block",
-                            color: fieldIconColors.thirdPartyRemark
-                          }}
-                          onClick={() => {
-                            setLabelValue("Third Party Remark"),
-                              setOpennedModal("thirdPartyRemark")
-                            setSmShow(true),
-                              console.log("modal open"),
-                              setFieldValue(landScheduleData !== null ? landScheduleData?.thirdPartyRemark : null);
-                          }}
-                        ></ReportProblemIcon>
-                      </div>
+
+                                className={classes.formLabel}
+                                disabled></Form.Control>
+                              <ReportProblemIcon
+                                style={{
+                                  display: hideRemarks ? "none" : "block",
+                                  // display: hideRemarksPatwari?"none":"block",
+                                  color: fieldIconColors.thirdPartyRemark
+                                }}
+                                onClick={() => {
+                                  setLabelValue("Third Party Remark"),
+                                    setOpennedModal("thirdPartyRemark")
+                                  setSmShow(true),
+                                    console.log("modal open"),
+                                    setFieldValue(landScheduleData !== null ? landScheduleData?.thirdPartyRemark : null);
+                                }}
+                              ></ReportProblemIcon>
+                            </div>
                           </div>
                           <div className="col col-4">
                             <label> Document Download </label>
 
-                            
-                             
+
+
                             <div className="d-flex flex-row  align-items-center">
-                            <IconButton onClick={() => getDocShareholding(landScheduleData?.thirdPartyDoc)}>
-                              <DownloadForOfflineIcon color="primary" className="mx-1" />
-                            </IconButton>
-                        <ReportProblemIcon
-                          style={{
-                            display: hideRemarks ? "none" : "block",
-                            // display: hideRemarksPatwari?"none":"block",
-                            color: fieldIconColors.thirdPartyDoc
-                          }}
-                          onClick={() => {
-                            setLabelValue("Third Party Document"),
-                              setOpennedModal("thirdPartyDoc")
-                            setSmShow(true),
-                              console.log("modal open"),
-                              setFieldValue(landScheduleData !== null ? landScheduleData?.thirdPartyDoc : null);
-                          }}
-                        ></ReportProblemIcon>
-                      </div>
+                              <IconButton onClick={() => getDocShareholding(landScheduleData?.thirdPartyDoc)}>
+                                <DownloadForOfflineIcon color="primary" className="mx-1" />
+                              </IconButton>
+                              <ReportProblemIcon
+                                style={{
+                                  display: hideRemarks ? "none" : "block",
+                                  // display: hideRemarksPatwari?"none":"block",
+                                  color: fieldIconColors.thirdPartyDoc
+                                }}
+                                onClick={() => {
+                                  setLabelValue("Third Party Document"),
+                                    setOpennedModal("thirdPartyDoc")
+                                  setSmShow(true),
+                                    console.log("modal open"),
+                                    setFieldValue(landScheduleData !== null ? landScheduleData?.thirdPartyDoc : null);
+                                }}
+                              ></ReportProblemIcon>
+                            </div>
 
                           </div>
                         </div>
@@ -1652,8 +1654,11 @@ const Developerinfo = (props) => {
               </div>
 
               <div className="col col-4 p-1">
-                <h6 data-toggle="tooltip" data-placement="top" title="If any revenue rasta abuts to the applied site ?">
+                <h6 >
                   (b) Revenue rasta
+                  <Tooltip title="If any revenue rasta abuts to the applied site ?">
+                    <InfoIcon style={{ cursor: "pointer" }} color="primary"></InfoIcon>
+                  </Tooltip>
                 </h6>
                 <div className="d-flex flex-row align-items-center my-1 ">
                   <input type="radio" disabled value="Yes" checked={landScheduleData?.revenueRasta === "Y" ? true : false} />
@@ -1689,8 +1694,11 @@ const Developerinfo = (props) => {
               </div>
 
               <div className="col col-4 p-1">
-                <h6 data-toggle="tooltip" data-placement="top" title="Watercourse running along boundary through the applied site ?">
+                <h6 >
                   (c) Watercourse
+                  <Tooltip title="Watercourse running along boundary through the applied site ?">
+                    <InfoIcon style={{ cursor: "pointer" }} color="primary"></InfoIcon>
+                  </Tooltip>
                 </h6>
 
                 <div className="d-flex flex-row align-items-center my-1 ">
@@ -1769,8 +1777,11 @@ const Developerinfo = (props) => {
               {/* <br></br> */}
 
               <div className="col col-4 p-1">
-                <h6 data-toggle="tooltip" data-placement="top" title="If any other owners' land is sandwiched within applied land.">
-                  (e) Whether Others Land fall within Applied Land
+                <h6 >
+                  (e) Whether Others Land fall
+                  <Tooltip title="Whether Others Land fall within Applied Land">
+                    <InfoIcon style={{ cursor: "pointer" }} color="primary"></InfoIcon>
+                  </Tooltip>
                 </h6>
                 <div className="d-flex flex-row align-items-center my-1 ">
                   <input type="radio" disabled value="Yes" checked={landScheduleData?.landSandwiched === "Y" ? true : false} />
@@ -1864,7 +1875,7 @@ const Developerinfo = (props) => {
                           <label className="m-0">Date of section 6 notification</label>
                           <div className="d-flex flex-row align-items-center my-1 ">
                             <Form.Control
-                              // height={30} style={{ maxWidth: 200, marginRight: 5 }} 
+
                               className={classes.formLabel}
                               disabled placeholder={landScheduleData?.sectionSix} ></Form.Control>
                             <ReportProblemIcon
@@ -1885,6 +1896,32 @@ const Developerinfo = (props) => {
                         </div>
                       </div>
                     </div>
+                    <div className="row mx-1">
+                      <div className="col col-12">
+                        <label>
+                          <h2>Date of Award</h2>
+                        </label>
+                        <div className="d-flex flex-row align-items-center my-1 ">
+                          <Form.Control
+
+                            className={classes.formLabel}
+                            disabled placeholder={landScheduleData?.rewardDate} ></Form.Control>
+                          <ReportProblemIcon
+                            style={{
+                              display: hideRemarks ? "none" : "block",
+                              color: fieldIconColors.dateOfSection6Notification
+                            }}
+                            onClick={() => {
+                              setLabelValue("Date of section 6 notification"),
+                                setOpennedModal("dateOfSection6Notification")
+                              setSmShow(true),
+                                console.log("modal open"),
+                                setFieldValue(landScheduleData !== null ? landScheduleData?.rewardDate : null);
+                            }}
+                          ></ReportProblemIcon>
+                        </div>
+                      </div>
+                    </div>
                   </div>
                 )}
 
@@ -1897,10 +1934,11 @@ const Developerinfo = (props) => {
               <div >
                 <div className="row mx-1">
                   <div className="col col-12 p-1">
-                    <h6 data-toggle="tooltip" data-placement="top" title="Whether details/orders of release/exclusion of land uploaded.">
+
+                    <h6>
                       (g)  Whether Land Released/Excluded from aqusition proceeding.
                     </h6>
-                    {/* <InfoIcon style={{color:"blue"}}/>  */}
+
                     <div className="d-flex flex-row align-items-center my-1 ">
 
                       <input type="radio" disabled value="Yes" checked={landScheduleData?.orderUpload === "Y" ? true : false} />
@@ -2077,9 +2115,7 @@ const Developerinfo = (props) => {
 
             <div className="row mx-1">
               <div className="col col-12 p-1">
-                <h6
-                // data-toggle="tooltip" data-placement="top" title="Whether details/orders of release/exclusion of land uploaded."
-                >
+                <h6>
                   (h)  Details of existing approach as per policy dated 20-10-20.
                 </h6>
                 <div className="d-flex flex-row align-items-center my-1 ">
@@ -2103,152 +2139,227 @@ const Developerinfo = (props) => {
                 </div>
                 {landScheduleData?.siteApproachable === "Y" && (
                   <div className="my-2 mx-2">
-                    <h6>(a)  Approach available from minimum 4 karam (22 ft) wide revenue rasta</h6>
-                    <div className="d-flex flex-row align-items-center my-1 ">
-                      &nbsp;&nbsp;
-                      <input type="radio" disabled value="Yes" checked={landScheduleData?.minimumApproachFour === "Y" ? true : false} />
-                      <label className="m-0  mx-2" for="Yes">Yes</label>&nbsp;&nbsp;
-                      <input type="radio" disabled value="No" checked={landScheduleData?.minimumApproachFour === "N" ? true : false} />
-                      <label className="m-0 mx-2" for="No">No</label>
-                      <ReportProblemIcon
-                        style={{
-                          display: hideRemarks ? "none" : "block",
-                          color: fieldIconColors.ordersUpload
-                        }}
-                        onClick={() => {
-                          setLabelValue("(a)  Approach available from minimum 4 karam (22 ft) wide revenue rasta"),
-                            setOpennedModal("minimumApproachFour")
-                          setSmShow(true),
-                            console.log("modal open"),
-                            setFieldValue(landScheduleData?.minimumApproachFour === "Y" ? "Yes" : landScheduleData?.minimumApproachFour === "N" ? "No" : null);
-                        }}
-                      ></ReportProblemIcon>
-                    </div>
-
-                    <h6>(b)  Approach available from minimum 11 feet wide revenue rasta and applied site abuts acquired alignment of the sector road and there is no stay regarding construction on the land falling under the abutting sector road</h6>
-                    <div className="d-flex flex-row align-items-center my-1 ">
-                      &nbsp;&nbsp;
-                      <input type="radio" disabled value="Yes" checked={landScheduleData?.minimumApproachEleven === "Y" ? true : false} />
-                      <label className="m-0  mx-2" for="Yes">Yes</label>&nbsp;&nbsp;
-                      <input type="radio" disabled value="No" checked={landScheduleData?.minimumApproachEleven === "N" ? true : false} />
-                      <label className="m-0 mx-2" for="No">No</label>
-                      <ReportProblemIcon
-                        style={{
-                          display: hideRemarks ? "none" : "block",
-                          color: fieldIconColors.minimumApproachEleven
-                        }}
-                        onClick={() => {
-                          setLabelValue("(b) Approach available from minimum 11 feet wide revenue rasta and applied site abuts acquired alignment of the sector road and there is no stay regarding construction on the land falling under the abutting sector road"),
-                            setOpennedModal("minimumApproachEleven")
-                          setSmShow(true),
-                            console.log("modal open"),
-                            setFieldValue(landScheduleData?.minimumApproachEleven === "Y" ? "Yes" : landScheduleData?.minimumApproachEleven === "N" ? "No" : null);
-                        }}
-                      ></ReportProblemIcon>
-                    </div>
-
-                    <h6>(c)  Applied site abouts already constructed sector road or internal circulation road of approved sectoral plan (of min. 18m/24m width as the case may be) provided its entire stretch required for approach is licenced and is further leading upto atleast 4 karam wide revenue rasta.</h6>
-                    <div className="d-flex flex-row align-items-center my-1 ">
-                      &nbsp;&nbsp;
-                      <input type="radio" disabled value="Yes" checked={landScheduleData?.alreadyConstructedSector === "Y" ? true : false} />
-                      <label className="m-0  mx-2" for="Yes">Yes</label>&nbsp;&nbsp;
-                      <input type="radio" disabled value="No" checked={landScheduleData?.alreadyConstructedSector === "N" ? true : false} />
-                      <label className="m-0 mx-2" for="No">No</label>
-                      <ReportProblemIcon
-                        style={{
-                          display: hideRemarks ? "none" : "block",
-                          color: fieldIconColors.alreadyConstructedSector
-                        }}
-                        onClick={() => {
-                          setLabelValue("(c) Applied site abouts already constructed sector road or internal circulation road of approved sectoral plan (of min. 18m/24m width as the case may be) provided its entire stretch required for approach is licenced and is further leading upto atleast 4 karam wide revenue rasta."),
-                            setOpennedModal("alreadyConstructedSector")
-                          setSmShow(true),
-                            console.log("modal open"),
-                            setFieldValue(landScheduleData?.alreadyConstructedSector === "Y" ? "Yes" : landScheduleData?.alreadyConstructedSector === "N" ? "No" : null);
-                        }}
-                      ></ReportProblemIcon>
-                    </div>
-
-                    <h6>(d)  Applied land is accessible from a minimum 4 karam wide rasta through adjoining own land of the applicant (but not applied for licence).</h6>
-                    <div className="d-flex flex-row align-items-center my-1 ">
-                      &nbsp;&nbsp;
-                      <input type="radio" disabled value="Yes" checked={landScheduleData?.joiningOwnLand === "Y" ? true : false} />
-                      <label className="m-0  mx-2" for="Yes">Yes</label>&nbsp;&nbsp;
-                      <input type="radio" disabled value="No" checked={landScheduleData?.joiningOwnLand === "N" ? true : false} />
-                      <label className="m-0 mx-2" for="No">No</label>
-                      <ReportProblemIcon
-                        style={{
-                          display: hideRemarks ? "none" : "block",
-                          color: fieldIconColors.joiningOwnLand
-                        }}
-                        onClick={() => {
-                          setLabelValue("(d)  Applied land is accessible from a minimum 4 karam wide rasta through adjoining own land of the applicant (but not applied for licence)"),
-                            setOpennedModal("joiningOwnLand")
-                          setSmShow(true),
-                            console.log("modal open"),
-                            setFieldValue(landScheduleData?.joiningOwnLand === "Y" ? "Yes" : landScheduleData?.joiningOwnLand === "N" ? "No" : null);
-                        }}
-                      ></ReportProblemIcon>
-                    </div>
-
-                    {landScheduleData?.joiningOwnLand === "Y" && (
-                      <div className="my-2 mx-2">
-                        <h6>(d1)  If applicable, whether the applicant has donated at least 4 karam wide strip from its adjoining own land in favour of the Gram Panchayat/Municipality, in order to connect the applied site to existing 4 karam rasta?</h6>
+                    <div className="row">
+                      <div class="col-sm-7 text-left">
+                        <h6>(a)  Approach available from minimum 4 karam (22 ft) wide revenue rasta</h6>
+                      </div>
+                      <div class="col-sm-1 text-right">
+                      </div>
+                      <div class="col-sm-3 text-right">
                         <div className="d-flex flex-row align-items-center my-1 ">
                           &nbsp;&nbsp;
-                          <input type="radio" disabled value="Yes" checked={landScheduleData?.applicantHasDonated === "Y" ? true : false} />
+                          <input type="radio" disabled value="Yes" checked={landScheduleData?.minimumApproachFour === "Y" ? true : false} />
                           <label className="m-0  mx-2" for="Yes">Yes</label>&nbsp;&nbsp;
-                          <input type="radio" disabled value="No" checked={landScheduleData?.applicantHasDonated === "N" ? true : false} />
-                          <label className="m-0 mx-2" for="No">NO</label>
+                          <input type="radio" disabled value="No" checked={landScheduleData?.minimumApproachFour === "N" ? true : false} />
+                          <label className="m-0 mx-2" for="No">No</label>
+                        </div>
+                      </div>
+                      <div class="col-sm-1 text-right">
+                        <ReportProblemIcon
+                          style={{
+                            display: hideRemarks ? "none" : "block",
+                            color: fieldIconColors.ordersUpload
+                          }}
+                          onClick={() => {
+                            setLabelValue("(a)  Approach available from minimum 4 karam (22 ft) wide revenue rasta"),
+                              setOpennedModal("minimumApproachFour")
+                            setSmShow(true),
+                              console.log("modal open"),
+                              setFieldValue(landScheduleData?.minimumApproachFour === "Y" ? "Yes" : landScheduleData?.minimumApproachFour === "N" ? "No" : null);
+                          }}
+                        ></ReportProblemIcon>
+                      </div>
+                    </div>
+                    <br></br>
+                    <div className="row">
+                      <div class="col-sm-7 text-left">
+                        <h6>(b)  Approach available from minimum 11 feet wide revenue rasta and applied site abuts acquired alignment of the sector road and there is no stay regarding construction on the land falling under the abutting sector road</h6>
+                      </div>
+                      <div class="col-sm-1 text-right">
+                      </div>
+                      <div class="col-sm-3 text-right">
+                        <div className="d-flex flex-row align-items-center my-1 ">
+                          &nbsp;&nbsp;
+                          <input type="radio" disabled value="Yes" checked={landScheduleData?.minimumApproachEleven === "Y" ? true : false} />
+                          <label className="m-0  mx-2" for="Yes">Yes</label>&nbsp;&nbsp;
+                          <input type="radio" disabled value="No" checked={landScheduleData?.minimumApproachEleven === "N" ? true : false} />
+                          <label className="m-0 mx-2" for="No">No</label>
+                        </div></div>
+
+                      <div class="col-sm-1 text-right">
+                        <ReportProblemIcon
+                          style={{
+                            display: hideRemarks ? "none" : "block",
+                            color: fieldIconColors.minimumApproachEleven
+                          }}
+                          onClick={() => {
+                            setLabelValue("(b) Approach available from minimum 11 feet wide revenue rasta and applied site abuts acquired alignment of the sector road and there is no stay regarding construction on the land falling under the abutting sector road"),
+                              setOpennedModal("minimumApproachEleven")
+                            setSmShow(true),
+                              console.log("modal open"),
+                              setFieldValue(landScheduleData?.minimumApproachEleven === "Y" ? "Yes" : landScheduleData?.minimumApproachEleven === "N" ? "No" : null);
+                          }}
+                        ></ReportProblemIcon>
+                      </div>
+                    </div>
+                    <br></br>
+                    <div className="row">
+                      <div class="col-sm-7 text-left">
+                        <h6>(c)  Applied site abouts already constructed sector road or internal circulation road of approved sectoral plan (of min. 18m/24m width as the case may be) provided its entire stretch required for approach is licenced and is further leading upto atleast 4 karam wide revenue rasta.</h6>
+                      </div>
+                      <div class="col-sm-1 text-right">
+                      </div>
+                      <div class="col-sm-3 text-right">
+                        <div className="d-flex flex-row align-items-center my-1 ">
+                          &nbsp;&nbsp;
+                          <input type="radio" disabled value="Yes" checked={landScheduleData?.alreadyConstructedSector === "Y" ? true : false} />
+                          <label className="m-0  mx-2" for="Yes">Yes</label>&nbsp;&nbsp;
+                          <input type="radio" disabled value="No" checked={landScheduleData?.alreadyConstructedSector === "N" ? true : false} />
+                          <label className="m-0 mx-2" for="No">No</label>
+                        </div>
+                      </div>
+                      <div class="col-sm-1 text-right">
+                        <ReportProblemIcon
+                          style={{
+                            display: hideRemarks ? "none" : "block",
+                            color: fieldIconColors.alreadyConstructedSector
+                          }}
+                          onClick={() => {
+                            setLabelValue("(c) Applied site abouts already constructed sector road or internal circulation road of approved sectoral plan (of min. 18m/24m width as the case may be) provided its entire stretch required for approach is licenced and is further leading upto atleast 4 karam wide revenue rasta."),
+                              setOpennedModal("alreadyConstructedSector")
+                            setSmShow(true),
+                              console.log("modal open"),
+                              setFieldValue(landScheduleData?.alreadyConstructedSector === "Y" ? "Yes" : landScheduleData?.alreadyConstructedSector === "N" ? "No" : null);
+                          }}
+                        ></ReportProblemIcon>
+                      </div>
+                    </div>
+                    <br></br>
+                    <div className="row">
+                      <div class="col-sm-7 text-left">
+                        <h6>(d)  Applied land is accessible from a minimum 4 karam wide rasta through adjoining own land of the applicant (but not applied for licence).</h6>
+                      </div>
+                      <div class="col-sm-1 text-right">
+                      </div>
+                      <div class="col-sm-3 text-right">
+                        <div className="d-flex flex-row align-items-center my-1 ">
+                          &nbsp;&nbsp;
+                          <input type="radio" disabled value="Yes" checked={landScheduleData?.adjoiningOwnLand === "Y" ? true : false} />
+                          <label className="m-0  mx-2" for="Yes">Yes</label>&nbsp;&nbsp;
+                          <input type="radio" disabled value="No" checked={landScheduleData?.adjoiningOwnLand === "N" ? true : false} />
+                          <label className="m-0 mx-2" for="No">No</label>
+                        </div>
+                      </div>
+
+                      <div class="col-sm-1 text-right">
+                        <ReportProblemIcon
+                          style={{
+                            display: hideRemarks ? "none" : "block",
+                            color: fieldIconColors.joiningOwnLand
+                          }}
+                          onClick={() => {
+                            setLabelValue("(d)  Applied land is accessible from a minimum 4 karam wide rasta through adjoining own land of the applicant (but not applied for licence)"),
+                              setOpennedModal("joiningOwnLand")
+                            setSmShow(true),
+                              console.log("modal open"),
+                              setFieldValue(landScheduleData?.adjoiningOwnLand === "Y" ? "Yes" : landScheduleData?.adjoiningOwnLand === "N" ? "No" : null);
+                          }}
+                        ></ReportProblemIcon>
+                      </div>
+                    </div>
+                    <br></br>
+
+                    {landScheduleData?.adjoiningOwnLand === "Y" && (
+                      <div className="row">
+                        <div class="col-sm-7 text-left">
+                          <h6>(d1)  If applicable, whether the applicant has donated at least 4 karam wide strip from its adjoining own land in favour of the Gram Panchayat/Municipality, in order to connect the applied site to existing 4 karam rasta?</h6>
+                        </div>
+                        <div class="col-sm-1 text-right">
+                        </div>
+                        <div class="col-sm-3 text-right">
+                          <div className="d-flex flex-row align-items-center my-1 ">
+                            &nbsp;&nbsp;
+                            <input type="radio" disabled value="Yes" checked={landScheduleData?.applicantHasDonated === "Y" ? true : false} />
+                            <label className="m-0  mx-2" for="Yes">Yes</label>&nbsp;&nbsp;
+                            <input type="radio" disabled value="No" checked={landScheduleData?.applicantHasDonated === "N" ? true : false} />
+                            <label className="m-0 mx-2" for="No">NO</label>
+                            <ReportProblemIcon
+                              style={{
+                                display: hideRemarks ? "none" : "block",
+                                color: fieldIconColors.applicantHasDonated
+                              }}
+                              onClick={() => {
+                                setLabelValue("(d1)  If applicable, whether the applicant has donated at least 4 karam wide strip from its adjoining own land in favour of the Gram Panchayat/Municipality, in order to connect the applied site to existing 4 karam rasta?"),
+                                  setOpennedModal("applicantHasDonated")
+                                setSmShow(true),
+                                  console.log("modal open"),
+                                  setFieldValue(landScheduleData?.applicantHasDonated === "Y" ? "Yes" : landScheduleData?.applicantHasDonated === "N" ? "No" : null);
+                              }}
+                            ></ReportProblemIcon>
+                          </div>
+                        </div>
+                        <div class="col-sm-1 text-right">
                           <ReportProblemIcon
                             style={{
                               display: hideRemarks ? "none" : "block",
-                              color: fieldIconColors.applicantHasDonated
+                              color: fieldIconColors.joiningOwnLand
                             }}
                             onClick={() => {
-                              setLabelValue("(d1)  If applicable, whether the applicant has donated at least 4 karam wide strip from its adjoining own land in favour of the Gram Panchayat/Municipality, in order to connect the applied site to existing 4 karam rasta?"),
-                                setOpennedModal("applicantHasDonated")
+                              setLabelValue("(d)  Applied land is accessible from a minimum 4 karam wide rasta through adjoining own land of the applicant (but not applied for licence)"),
+                                setOpennedModal("joiningOwnLand")
                               setSmShow(true),
                                 console.log("modal open"),
                                 setFieldValue(landScheduleData?.applicantHasDonated === "Y" ? "Yes" : landScheduleData?.applicantHasDonated === "N" ? "No" : null);
                             }}
                           ></ReportProblemIcon>
                         </div>
-                        {landScheduleData?.applicantHasDonated === "Y" && (
-                          <div className="col col-3 p-1">
-
-                            <h6>Upload copy of Gift Deed/ Hibbanama</h6>
-                            <div className="d-flex flex-row align-items-center my-1 ">
-                              &nbsp;&nbsp;
-                              <IconButton onClick={() => getDocShareholding(landScheduleData?.giftDeedHibbanama)}>
-                                <DownloadForOfflineIcon color="primary" className="mx-1" />
-                              </IconButton>
-                              <ReportProblemIcon
-                                style={{
-                                  display: hideRemarks ? "none" : "block",
-                                  color: fieldIconColors.giftDeedHibbanama
-                                }}
-                                onClick={() => {
-                                  setLabelValue("Upload copy of Gift Deed/ Hibbanama"),
-                                    setOpennedModal("giftDeedHibbanama")
-                                  setSmShow(true),
-                                    console.log("modal open"),
-                                    setFieldValue(landScheduleData !== null ? landScheduleData?.giftDeedHibbanama : null);
-                                }}
-                              ></ReportProblemIcon>
-                            </div>
-                          </div>
-                        )}
                       </div>
                     )}
 
+                    {landScheduleData?.applicantHasDonated === "Y" && (
+                      <div className="row">
+                     
+                      <div className="col col-3 p-1">
+
+                        <h6>Upload copy of Gift Deed/ Hibbanama</h6>
+                        <div className="d-flex flex-row align-items-center my-1 ">
+                          &nbsp;&nbsp;
+                          <IconButton onClick={() => getDocShareholding(landScheduleData?.giftDeedHibbanama)}>
+                            <DownloadForOfflineIcon color="primary" className="mx-1" />
+                          </IconButton>
+                          <ReportProblemIcon
+                            style={{
+                              display: hideRemarks ? "none" : "block",
+                              color: fieldIconColors.giftDeedHibbanama
+                            }}
+                            onClick={() => {
+                              setLabelValue("Upload copy of Gift Deed/ Hibbanama"),
+                                setOpennedModal("giftDeedHibbanama")
+                              setSmShow(true),
+                                console.log("modal open"),
+                                setFieldValue(landScheduleData !== null ? landScheduleData?.giftDeedHibbanama : null);
+                            }}
+                          ></ReportProblemIcon>
+                        </div>
+                      </div>
+                      </div>
+                    )}
+                      <div className="row">
+                        <div class="col-sm-7 text-left">
                     <h6>(e)  Applied land is accessible from a minimum 4 karam wide rasta through adjoining other’s land</h6>
+                    </div>
+                    <div class="col-sm-1 text-right">
+                        </div>
+                        <div class="col-sm-3 text-right">
                     <div className="d-flex flex-row align-items-center my-1 ">
                       &nbsp;&nbsp;
                       <input type="radio" disabled value="Yes" checked={landScheduleData?.adjoiningOthersLand === "Y" ? true : false} />
                       <label className="m-0  mx-2" for="Yes">Yes</label>&nbsp;&nbsp;
                       <input type="radio" disabled value="No" checked={landScheduleData?.adjoiningOthersLand === "N" ? true : false} />
                       <label className="m-0 mx-2" for="No">NO</label>
+                      </div>
+                      </div>
+                      <div class="col-sm-1 text-right">
                       <ReportProblemIcon
                         style={{
                           display: hideRemarks ? "none" : "block",
@@ -2263,15 +2374,25 @@ const Developerinfo = (props) => {
                         }}
                       ></ReportProblemIcon>
                     </div>
+                    </div>
+
                     {landScheduleData?.adjoiningOthersLand === "Y" && (
-                      <div>
+                     <div className="row">
+                        <div class="col-sm-7 text-left">
                         <h6>(e1)  whether the land-owner of the adjoining land has donated at least 4 karam wide strip of land to the Gram Panchayat/Municipality, in a manner that the applied site gets connected to existing public rasta of atleast 4 karam width?</h6>
+                        </div>
+                        <div class="col-sm-1 text-right">
+                        </div>
+                        <div class="col-sm-3 text-right">
                         <div className="d-flex flex-row align-items-center my-1 ">
                           &nbsp;&nbsp;
                           <input type="radio" disabled value="Yes" checked={landScheduleData?.landOwnerDonated === "Y" ? true : false} />
                           <label className="m-0  mx-2" for="Yes">Yes</label>&nbsp;&nbsp;
                           <input type="radio" disabled value="No" checked={landScheduleData?.landOwnerDonated === "N" ? true : false} />
                           <label className="m-0 mx-2" for="No">NO</label>
+                          </div>
+                          </div>
+                          <div class="col-sm-1 text-right">
                           <ReportProblemIcon
                             style={{
                               display: hideRemarks ? "none" : "block",
@@ -2286,8 +2407,9 @@ const Developerinfo = (props) => {
                             }}
                           ></ReportProblemIcon>
                         </div>
-                      </div>
-                    )}
+                        </div>
+                      )}
+
                     {landScheduleData?.landOwnerDonated === "Y" && (
                       <div className="col col-3 p-1">
 
@@ -2315,12 +2437,41 @@ const Developerinfo = (props) => {
                     )}
 
                   </div>
+                 
+                 
                 )}
 
                 {landScheduleData?.siteApproachable === "N" && (
 
                   <div >
-                    <div>
+                    <div className="row">
+                      <div class="col-sm-8 text-left">
+                        <label>
+                          <h2>(a)&nbsp;&nbsp;Enter Width in Meters</h2>{" "}
+                        </label>
+                      </div>
+                      <div class="col-sm-3 text-right">
+                        <Form.Control placeholder={landScheduleData !== null ? landScheduleData?.anyOtherRemark : null}
+                          className={classes.formLabel}
+                          disabled></Form.Control>
+                      </div>
+                      <div class="col-sm-1 text-right">
+                        <ReportProblemIcon
+                          style={{
+                            display: hideRemarks ? "none" : "block",
+                            color: fieldIconColors.ordersUpload
+                          }}
+                          onClick={() => {
+                            setLabelValue("Orders Upload"),
+                              setOpennedModal("ordersUpload")
+                            setSmShow(true),
+                              console.log("modal open"),
+                              setFieldValue(landScheduleData?.approachFromProposedSector === "Y" ? "Yes" : landScheduleData?.approachFromProposedSector === "N" ? "No" : null);
+                          }}
+                        ></ReportProblemIcon>
+                      </div>
+                    </div>
+                    {/* <div>
                       <h6>(a)  Enter Width in Meters</h6>
                       <div className="d-flex flex-row align-items-center my-2 ">
                       &nbsp;&nbsp;
@@ -2343,15 +2494,25 @@ const Developerinfo = (props) => {
                       </div>
 
                       
-                    </div>
-                    <div>
-                      <h6>(b)  Whether irrevocable consent from such developer/ colonizer for uninterrupted usage of such internal road for the purpose of development of the colony by the applicant or by its agencies and for usage by its allottees submitted</h6>
-                      <div className="d-flex flex-row align-items-center my-2 ">
-                      &nbsp;&nbsp;
-                        <input type="radio" disabled value="Yes" checked={landScheduleData?.approachFromProposedSector === "Y" ? true : false} />
-                        <label className="m-0  mx-2" for="Yes">Yes</label>&nbsp;&nbsp;
-                        <input type="radio" disabled value="No" checked={landScheduleData?.approachFromProposedSector === "N" ? true : false} />
-                        <label className="m-0 mx-2" for="No">No</label>
+                    </div> */}
+                    <br></br>
+                    <div className="row">
+                      <div class="col-sm-7 text-left">
+                        <h6>(b)  Whether irrevocable consent from such developer/ colonizer for uninterrupted usage of such internal road for the purpose of development of the colony by the applicant or by its agencies and for usage by its allottees submitted</h6>
+                      </div>
+
+                      <div class="col-sm-1 text-right">
+                      </div>
+                      <div class="col-sm-3 text-right">
+                        <div className="d-flex flex-row align-items-center my-2 ">
+                          &nbsp;&nbsp;
+                          <input type="radio" disabled value="Yes" checked={landScheduleData?.approachFromProposedSector === "Y" ? true : false} />
+                          <label className="m-0  mx-2" for="Yes">Yes</label>&nbsp;&nbsp;
+                          <input type="radio" disabled value="No" checked={landScheduleData?.approachFromProposedSector === "N" ? true : false} />
+                          <label className="m-0 mx-2" for="No">No</label>
+                        </div>
+                      </div>
+                      <div class="col-sm-1 text-right">
                         <ReportProblemIcon
                           style={{
                             display: hideRemarks ? "none" : "block",
@@ -2366,8 +2527,59 @@ const Developerinfo = (props) => {
                           }}
                         ></ReportProblemIcon>
                       </div>
-                      
+
                     </div>
+                    <div className="row">
+                      <div class="col-sm-7 text-left">
+                        <h2>(c)&nbsp;&nbsp;Access from NH/SR</h2>
+                      </div>
+                      <div class="col-sm-1 text-right">
+                      </div>
+                      <div class="col-sm-3 text-right">
+                        <div className="d-flex flex-row align-items-center my-2 ">
+                          &nbsp;&nbsp;
+                          <input type="radio" disabled value="Yes" checked={landScheduleData?.approachFromProposedSector === "Y" ? true : false} />
+                          <label className="m-0  mx-2" for="Yes">Yes</label>&nbsp;&nbsp;
+                          <input type="radio" disabled value="No" checked={landScheduleData?.approachFromProposedSector === "N" ? true : false} />
+                          <label className="m-0 mx-2" for="No">No</label>
+                        </div>
+                      </div>
+                      <div class="col-sm-1 text-right">
+                        <ReportProblemIcon
+                          style={{
+                            display: hideRemarks ? "none" : "block",
+                            color: fieldIconColors.ordersUpload
+                          }}
+                          onClick={() => {
+                            setLabelValue("Orders Upload"),
+                              setOpennedModal("ordersUpload")
+                            setSmShow(true),
+                              console.log("modal open"),
+                              setFieldValue(landScheduleData?.approachFromProposedSector === "Y" ? "Yes" : landScheduleData?.approachFromProposedSector === "N" ? "No" : null);
+                          }}
+                        ></ReportProblemIcon>
+                      </div>
+                      {/* {watch("NHSRAccess") === "Y" && (
+                            <div className="col col-3 mt-3">
+                              <h2 style={{ display: "flex" }}>'Upload access permission from competent authority</h2>
+                              <label>
+                                <FileUpload style={{ cursor: "pointer" }} color="primary" />
+                                <input
+                                  type="file"
+                                  style={{ display: "none" }}
+                                  onChange={(e) => getDocumentData(e?.target?.files[0], "accessPermissionAuthority")}
+                                  accept="application/pdf/jpeg/png"
+                                />
+                              </label>
+                              {watch("accessPermissionAuthority") && (
+                                <a onClick={() => getDocShareholding(watch("accessPermissionAuthority"), setLoader)} className="btn btn-sm ">
+                                  <VisibilityIcon color="info" className="icon" />
+                                </a>
+                              )}
+                            </div>
+                          )} */}
+                    </div>
+                    <br></br>
                     <h5 className="text-black  mb-2">(i)  Details of proposed approach.</h5>
                     <div className="my-2 mx-2">
                       <div className="d-flex flex-row align-items-center my-2 ">
