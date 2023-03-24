@@ -2,11 +2,11 @@
 # Changelog
 All notable changes to this module will be documented in this file.
 
-## 1.3.0 - 2023-03-15
+## 1.3.0 - 2023-03-31
 
- - Introduced seperate tab for vehicle
- - Seperated the Apis -Create, update and search
- - linking and delinking  of vehicle introduced seperatly. 
+ - Introduced seperate tab for vehicle.
+ - Seperated the Apis -Create, update and search.
+ - vehicle linking and delinking with vendor introduced seperatly. 
   
 ## 1.2.0 - 2022-08-04
 
