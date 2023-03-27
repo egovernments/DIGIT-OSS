@@ -2,11 +2,11 @@
 # Changelog
 All notable changes to this module will be documented in this file.
 
-## 1.3.0 - 2023-03-15
+## 1.3.0 - 2023-03-31
 
- - Introduced seperate tab for vendor and driver
- - Seperated the Apis -Create, update and search for both vendor and vehicle
- - linking and delinking  of driver with vendor introduced seperatly
+ - Introduced seperate tab for vendor and driver.
+ - Seperated the Apis -Create, update and search for both vendor and driver.
+ - linking and delinking  of driver with vendor introduced seperatly.
 
 ## 1.2.0 - 2022-08-04
 
