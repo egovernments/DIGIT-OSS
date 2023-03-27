@@ -28,7 +28,7 @@ class CollectionChartRow extends React.Component {
 		let code = this.props.chartData['id'] ? this.props.chartData['id'] : "";
 		if (code) {
 			let filters = _.cloneDeep(this.props.filters)
-			if(code == 'todaysCollection'  || code == 'wstodaysCollection'){			   
+			if(code == 'todaysCollection'  || code == 'wstodaysCollection' || code == 'ptTodaysCollection'|| code == 'overviewtodaysCollection'){			   
 	           filters['duration'] = {
 	            title: "TODAY",
                 startDate: (moment().startOf('day').unix()) * 1000,
