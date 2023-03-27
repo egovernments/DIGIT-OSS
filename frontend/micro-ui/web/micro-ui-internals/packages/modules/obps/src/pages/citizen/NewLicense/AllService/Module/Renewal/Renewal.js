@@ -12,6 +12,13 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogActions from "@mui/material/DialogActions";
 import Typography from "@mui/material/Typography";
 import { Button } from "@material-ui/core";
+import ReactMultiSelect from "../../../../../../../../../react-components/src/atoms/ReactMultiSelect";
+
+const RenewalFor = [
+  { label: "Year", value: "year" },
+  { label: "Month", value: "month" },
+];
+
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   "& .MuiDialogContent-root": {
     padding: theme.spacing(2),
@@ -66,15 +73,16 @@ function renewalClu() {
               &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
               <FormControl>
                 <h2>
-                  {" "}
                   Renewal For <span style={{ color: "red" }}>*</span>
                 </h2>
 
-                <select className="Inputcontrol" class="form-control" {...register("selectService")} onChange={(e) => handleshowhide(e)}>
+                <ReactMultiSelect control={control} name="selectService" placeholder="Renewal For" data={RenewalFor} labels="Far" />
+
+                {/* <select className="Inputcontrol" class="form-control" {...register("selectService")} onChange={(e) => handleshowhide(e)}>
                   <option value=" ">----Select value-----</option>
                   <option value="1">Year</option>
                   <option value="2">Month</option>
-                </select>
+                </select> */}
               </FormControl>{" "}
               &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
               <FormControl>
@@ -170,7 +178,7 @@ function renewalClu() {
                       <span style={{ color: "red" }}>*</span>
                     </h2>
 
-                    <input type="number" className="form-control" placeholder="" {...register("tehsil")} />
+                    <input type="text" className="form-control" placeholder="" {...register("tehsil")} />
                   </FormControl>{" "}
                   &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
                   <FormControl>
@@ -179,7 +187,7 @@ function renewalClu() {
                       District <span style={{ color: "red" }}>*</span>{" "}
                     </h2>
 
-                    <input type="email" className="form-control" placeholder="" {...register("district")} />
+                    <input type="text" className="form-control" placeholder="" {...register("district")} />
                   </FormControl>{" "}
                   &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
                   <FormControl>
@@ -200,8 +208,7 @@ function renewalClu() {
                     {watch("renewalApplied") === "2" && (
                       <div className="col md={4} xxl lg-12">
                         <h2></h2>
-
-                        <input type="text" className="form-control" placeholder="" />
+                        <input type="text" className="form-control" placeholder="" {...register("renewalAppliedText")} />
                       </div>
                     )}
                   </FormControl>{" "}
@@ -212,7 +219,7 @@ function renewalClu() {
                       Renewal Amount <span style={{ color: "red" }}>*</span>{" "}
                     </h2>
 
-                    <input type="email" className="form-control" disabled placeholder="" {...register("renewalAmount")} />
+                    <input type="text" className="form-control" disabled placeholder="" {...register("renewalAmount")} />
                   </FormControl>
                 </div>
                 <br></br>
@@ -413,8 +420,7 @@ function renewalClu() {
                       <div className="col md={4} xxl lg-4">
                         <FormControl>
                           <h2></h2>
-
-                          <input type="text" className="form-control" placeholder="" />
+                          <input type="text" className="form-control" placeholder="" {...register("compilanceLicenseText")} />
                         </FormControl>
                       </div>
                     )}
