@@ -2,12 +2,12 @@
 # Changelog
 All notable changes to this module will be documented in this file.
 
-## 1.3.0 - 2023-03-15
+## 1.3.0 - 2023-03-31
 - Introduce two new workflow in the system .  
 - FSM_ADVANCE_PAY_SERVICE and FSM_ZERO_PAY_SERVICE .
-- Allowed part payment/full payment / post payment.
-- Allowed update number of trips 'n' times .
-- Introduced Zero price application .
+- Allowed part payment/full payment/post payment.
+- Allowed update number of trips 'n' times.
+- Introduced Zero price application.
 
 ## 1.2.0 - 2022-08-04
 - Unrestricted service request assignment in  ULB employee flow
@@ -19,8 +19,8 @@ All notable changes to this module will be documented in this file.
 
 ## 1.0.3
 
-- Added condition to check the pit dimension to be less than 100.
-- Make Property and sub property as mandatory while creating FSM.
+- Added condition to check the pit dimention to be less than 100.
+- Make Property and sub property as mandetory while creating FSM.
 - FSTP Plant mapping changes.
 - Added plain search service.
 
@@ -33,3 +33,4 @@ All notable changes to this module will be documented in this file.
 - Citizen Rating issues fixed
 - Payment link correction sent in sms
 - workflow modification to allow re-assign DSO at multiple stages
+
