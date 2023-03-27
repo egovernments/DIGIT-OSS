@@ -100,7 +100,8 @@ class Dashboard extends Component {
     _.each(chartsData, (k, v) => {
       let code = v,requestBody;
       if (code) {
-        if(code == 'todaysCollection'  || code == 'wstodaysCollection' || code == 'ptTodaysCollection'|| code == 'overviewtodaysCollection'){
+        //To send date interval for today collection
+        if(code.toLocaleLowerCase().includes("today")){	
            filters1 = _.cloneDeep(filters)
            filters1['duration'] = {
               title: "TODAY",
