@@ -504,4 +504,3 @@ components:
             $ref: '#/components/schemas/Service'
         pagination:
           $ref: '#/components/schemas/Pagination'
-     
