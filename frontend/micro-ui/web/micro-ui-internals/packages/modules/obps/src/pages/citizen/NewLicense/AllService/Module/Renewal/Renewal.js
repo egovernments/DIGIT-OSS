@@ -511,7 +511,7 @@ function renewalClu() {
                                 <input type="text" className="form-control" placeholder="" {...register("total")} />
                               </td>
                               <td style={{ textAlign: "center" }}>
-                                <input type="text" className="form-control" placeholder="" {...register("remark")} />
+                                <input type="text" className="form-control" placeholder="" {...register("edcRemark")} />
                               </td>
                             </tr>
                             <tr>
@@ -531,7 +531,7 @@ function renewalClu() {
                                 <input type="text" className="form-control" placeholder="" {...register("total")} />
                               </td>
                               <td style={{ textAlign: "center" }}>
-                                <input type="text" className="form-control" placeholder="" {...register("remark")} />
+                                <input type="text" className="form-control" placeholder="" {...register("otsRemark")} />
                               </td>
                             </tr>
                           </tbody>
@@ -601,7 +601,7 @@ function renewalClu() {
                                 <input type="text" className="form-control" placeholder="" {...register("total")} />
                               </td>
                               <td style={{ textAlign: "center" }}>
-                                <input type="text" className="form-control" placeholder="" {...register("remark")} />
+                                <input type="text" className="form-control" placeholder="" {...register("sidcRemark")} />
                               </td>
                             </tr>
                           </tbody>
@@ -753,7 +753,7 @@ function renewalClu() {
                       <FormControl>
                         <h2>Remark</h2>
 
-                        <input type="text" className="form-control" placeholder="" />
+                        <input type="text" className="form-control" placeholder="" {...register("advertisementRemark")} />
                       </FormControl>
                     </div>
                   </div>
@@ -781,7 +781,7 @@ function renewalClu() {
                       <FormControl>
                         <h2>Remark</h2>
 
-                        <input type="text" className="form-control" placeholder="" />
+                        <input type="text" className="form-control" placeholder="" {...register("annualRemark")} />
                       </FormControl>
                     </div>
                   </div>
@@ -808,7 +808,7 @@ function renewalClu() {
                       <FormControl>
                         <h2>Remark</h2>
 
-                        <input type="text" className="form-control" placeholder="" />
+                        <input type="text" className="form-control" placeholder="" {...register("detailRemark")} />
                       </FormControl>
                     </div>
                   </div>
@@ -835,7 +835,7 @@ function renewalClu() {
                       <FormControl>
                         <h2>Remark</h2>
 
-                        <input type="text" className="form-control" placeholder="" />
+                        <input type="text" className="form-control" placeholder="" {...register("copiesRemark")} />
                       </FormControl>
                     </div>
                   </div>
@@ -964,7 +964,7 @@ function renewalClu() {
                             </label>
                           </th>
                           <td style={{ textAlign: "center" }}>
-                            <input type="date" className="form-control" placeholder="" {...register("date")} />
+                            <input type="date" className="form-control" placeholder="" {...register("statusDate")} />
                           </td>
                           <td style={{ textAlign: "center" }}>
                             <input type="text" className="form-control" placeholder="" {...register("areaInAcre")} />
@@ -1043,7 +1043,7 @@ function renewalClu() {
                                 <div className="col md={4} xxl lg-12">
                                   <h2>Date</h2>
 
-                                  <input type="date" className="form-control" placeholder="" />
+                                  <input type="date" className="form-control" placeholder="" {...register("date")} />
                                 </div>
                               </div>
                             )}
@@ -1052,7 +1052,7 @@ function renewalClu() {
                                 <div className="col md={4} xxl lg-12">
                                   <h2>Remark</h2>
 
-                                  <input type="text" className="form-control" placeholder="" />
+                                  <input type="text" className="form-control" placeholder="" {...register("buildingRemark")} />
                                 </div>
                               </div>
                             )}
@@ -1073,13 +1073,13 @@ function renewalClu() {
                                   <FormControl>
                                     <h2>Remark</h2>
 
-                                    <input type="date" className="form-control" placeholder="" />
+                                    <input type="date" className="form-control" placeholder="" {...register("ocRemark")} />
                                   </FormControl>
                                   &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
                                   <FormControl>
                                     <h2>Till Date</h2>
 
-                                    <input type="date" className="form-control" placeholder="" />
+                                    <input type="date" className="form-control" placeholder="" {...register("tillDate")} />
                                   </FormControl>
                                 </div>
                               </div>
@@ -1095,7 +1095,7 @@ function renewalClu() {
                                       <label>
                                         <h2>Valid upto</h2>
                                       </label>
-                                      <input type="date" placeholder="" className="form-control" />
+                                      <input type="date" placeholder="" className="form-control" {...register("validUpto")} />
                                       <div>
                                         <h2>If out of date then redirect to extension of Cs.</h2>
                                       </div>
@@ -1197,7 +1197,7 @@ function renewalClu() {
                   <div className="col md={4} xxl lg-4">
                     <h2>Amount</h2>
 
-                    <input type="text" placeholder="" className="form-control" />
+                    <input type="text" placeholder="" className="form-control" {...register("compositionAmount")} />
                   </div>
                 )}
                 <br></br>
@@ -1249,7 +1249,7 @@ function renewalClu() {
                             </label>
                           </td>
                           <td style={{ textAlign: "center" }}>
-                            <input type="file" className="form-control" placeholder="" {...register("uploadIncomeTax")} />
+                            <input type="file" className="form-control" placeholder="" {...register("uploadExplanatoryNote")} />
                           </td>
                         </tr>
                         <tr>
@@ -1264,7 +1264,7 @@ function renewalClu() {
                             </label>
                           </td>
                           <td style={{ textAlign: "center" }}>
-                            <input type="file" className="form-control" placeholder="" {...register("uploadIncomeTax")} />
+                            <input type="file" className="form-control" placeholder="" {...register("uploadStatusDevelopment")} />
                           </td>
                         </tr>
                         <tr>
@@ -1279,7 +1279,7 @@ function renewalClu() {
                             </label>
                           </td>
                           <td style={{ textAlign: "center" }}>
-                            <input type="file" className="form-control" placeholder="" {...register("uploadIncomeTax")} />
+                            <input type="file" className="form-control" placeholder="" {...register("uploadOldLicence")} />
                           </td>
                         </tr>
                       </tbody>
@@ -1295,7 +1295,7 @@ function renewalClu() {
                         Amount <span style={{ color: "red" }}>*</span>
                       </h2>
 
-                      <input type="text" className="form-control" placeholder="" readOnly {...register("amount")} />
+                      <input type="text" className="form-control" placeholder="" readOnly {...register("oldAmount")} />
                     </FormControl>
                     &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
                     <FormControl>

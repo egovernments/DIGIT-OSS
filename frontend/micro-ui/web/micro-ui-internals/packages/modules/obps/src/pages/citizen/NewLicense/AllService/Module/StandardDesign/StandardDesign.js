@@ -3,8 +3,17 @@ import { Button } from "@material-ui/core";
 import FormControl from "@mui/material/FormControl";
 import { useForm } from "react-hook-form";
 import OutlinedInput from "@mui/material/OutlinedInput";
-
+import axios from "axios";
+import { getDocShareholding } from "../../../docView/docView.help";
 function Standard() {
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    control,
+    watch,
+    setValue,
+  } = useForm({});
   const [selects, setSelects] = useState();
   const [showhide, setShowhide] = useState("");
 
@@ -13,9 +22,71 @@ function Standard() {
 
     setShowhide(getuser);
   };
-  const { register, handleSubmit } = useForm();
-  const standardDesign = (data) => console.log(data);
-
+  // const { register, handleSubmit } = useForm();
+  const [beneficialInterestLabel, setBeneficialInterestLabel] = useState([]);
+  // const standardDesign = (data) => console.log(data);
+  const standardDesign = async (data) => {
+    console.log("data", data);
+    const token = window?.localStorage?.getItem("token");
+    const userInfo = Digit.UserService.getUser()?.info || {};
+    try {
+      const postDistrict = {
+        RequestInfo: {
+          apiId: "Rainmaker",
+          ver: "v1",
+          ts: 0,
+          action: "_search",
+          did: "",
+          key: "",
+          msgId: "090909",
+          requesterId: "",
+          authToken: token,
+          userInfo: userInfo,
+        },
+        ApprovalStandardEntity: [
+          {
+            ...data,
+          },
+        ],
+      };
+      const Resp = await axios.post("/tl-services/_ApprovalStandard/_create", postDistrict);
+      setBeneficialInterestLabel(Resp.data);
+      // setApplicationNumber(Resp.data.changeBeneficial.applicationNumber);
+    } catch (error) {}
+  };
+  const [fileStoreId, setFileStoreId] = useState({});
+  const [selectedFiles, setSelectedFiles] = useState([]);
+  const [loader, setLoader] = useState(false);
+  const getDocumentData = async (file, fieldName) => {
+    if (selectedFiles.includes(file.name)) {
+      setShowToastError({ key: "error" });
+      return;
+    }
+    const formData = new FormData();
+    formData.append("file", file);
+    formData.append("tenantId", "hr");
+    formData.append("module", "property-upload");
+    formData.append("tag", "tag-property");
+    setLoader(true);
+    try {
+      const Resp = await axios.post("/filestore/v1/files", formData, {});
+      setValue(fieldName, Resp?.data?.files?.[0]?.fileStoreId);
+      setFileStoreId({ ...fileStoreId, [fieldName]: Resp?.data?.files?.[0]?.fileStoreId });
+      // setDocId(Resp?.data?.files?.[0]?.fileStoreId);
+      // if (fieldName === "uploadBg") {
+      //   setValue("uploadBgFileName", file.name);
+      // }
+      // if (fieldName === "tcpSubmissionReceived") {
+      //   setValue("tcpSubmissionReceivedFileName", file.name);
+      // }
+      setSelectedFiles([...selectedFiles, file.name]);
+      setLoader(false);
+      setShowToast({ key: "success" });
+    } catch (error) {
+      setLoader(false);
+      return error.message;
+    }
+  };
   return (
     <form onSubmit={handleSubmit(standardDesign)}>
       <div className="card" style={{ width: "126%", border: "5px solid #1266af" }}>
@@ -34,8 +105,17 @@ function Standard() {
                 <h2 className="FormLable">
                   Plan <span style={{ color: "red" }}>*</span>
                 </h2>
+                <div>
+                  <input
+                    type="file"
+                    className="form-control"
+                    accept="application/pdf/jpeg/png"
+                    onChange={(e) => getDocumentData(e?.target?.files[0], "plan")}
+                  />
 
-                <input type="file" placeholder="" className="form-control" {...register("plan")} />
+                  {watch("plan") && <a onClick={() => getDocShareholding(watch("plan"), setLoader)} className="btn btn-sm "></a>}
+                </div>
+                {/* <input type="file" placeholder="" className="form-control" {...register("plan")} /> */}
               </FormControl>
               &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
               <FormControl>
@@ -43,8 +123,17 @@ function Standard() {
                   {" "}
                   Any other Document <span style={{ color: "red" }}>*</span>
                 </h2>
+                <div>
+                  <input
+                    type="file"
+                    className="form-control"
+                    accept="application/pdf/jpeg/png"
+                    onChange={(e) => getDocumentData(e?.target?.files[0], "otherDocument")}
+                  />
 
-                <input type="file" placeholder="" className="form-control" {...register("otherDocument")} />
+                  {watch("otherDocument") && <a onClick={() => getDocShareholding(watch("otherDocument"), setLoader)} className="btn btn-sm "></a>}
+                </div>
+                {/* <input type="file" placeholder="" className="form-control" {...register("otherDocument")} /> */}
               </FormControl>
             </div>
           </div>
