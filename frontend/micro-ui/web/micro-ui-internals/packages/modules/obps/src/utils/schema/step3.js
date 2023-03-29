@@ -72,8 +72,8 @@ const VALIDATION_SCHEMA = Yup.object().shape({
   mutation: Yup.string().required("Only pdf,jpeg,png image required"),
 
   jambandhi: Yup.string().required("Only pdf,jpeg,png image required"),
-  detailsOfLease: Yup.string().required("Only pdf,jpeg,png image required"),
-  addSalesDeed: Yup.string().required("Only pdf,jpeg,png image required"),
+  // detailsOfLease: Yup.string().required("Only pdf,jpeg,png image required"),
+  // addSalesDeed: Yup.string().required("Only pdf,jpeg,png image required"),
   copyofSpaBoard: Yup.string().required("Only pdf,jpeg,png image required"),
   // copyofSpaBoard: Yup.string()
   //   .required("Only pdf,jpeg,png image required")

@@ -3,18 +3,45 @@ import { Button } from "@material-ui/core";
 import FormControl from "@mui/material/FormControl";
 import { useForm } from "react-hook-form";
 import OutlinedInput from "@mui/material/OutlinedInput";
-
+import axios from "axios";
+import { getDocShareholding } from "../../../docView/docView.help";
 function TransferLicense() {
   const {
     register,
     handleSubmit,
     formState: { errors },
     control,
+    watch,
     setValue,
   } = useForm({});
+  const [beneficialInterestLabel, setBeneficialInterestLabel] = useState([]);
+  // const transferLic = (data) => console.log(data);
+  const transferLic = async (data) => {
+    console.log("data", data);
+    const token = window?.localStorage?.getItem("token");
+    const userInfo = Digit.UserService.getUser()?.info || {};
+    try {
+      const postDistrict = {
+        Transfer: {
+          ...data,
+        },
 
-  const transferLic = (data) => console.log(data);
-
+        RequestInfo: {
+          apiId: "Rainmaker",
+          ver: ".01",
+          ts: null,
+          action: "_update",
+          did: "1",
+          key: "",
+          msgId: "20170310130900|en_IN",
+          authToken: token,
+        },
+      };
+      const Resp = await axios.post("/tl-services/TransferOfLicenseRequest/_create", postDistrict);
+      setBeneficialInterestLabel(Resp.data);
+      // setApplicationNumber(Resp.data.changeBeneficial.applicationNumber);
+    } catch (error) {}
+  };
   const [selects, setSelects] = useState();
   const [showhide, setShowhide] = useState("");
 
@@ -28,7 +55,39 @@ function TransferLicense() {
 
     setSelects(getu);
   };
-
+  const [fileStoreId, setFileStoreId] = useState({});
+  const [selectedFiles, setSelectedFiles] = useState([]);
+  const [loader, setLoader] = useState(false);
+  const getDocumentData = async (file, fieldName) => {
+    if (selectedFiles.includes(file.name)) {
+      setShowToastError({ key: "error" });
+      return;
+    }
+    const formData = new FormData();
+    formData.append("file", file);
+    formData.append("tenantId", "hr");
+    formData.append("module", "property-upload");
+    formData.append("tag", "tag-property");
+    setLoader(true);
+    try {
+      const Resp = await axios.post("/filestore/v1/files", formData, {});
+      setValue(fieldName, Resp?.data?.files?.[0]?.fileStoreId);
+      setFileStoreId({ ...fileStoreId, [fieldName]: Resp?.data?.files?.[0]?.fileStoreId });
+      // setDocId(Resp?.data?.files?.[0]?.fileStoreId);
+      // if (fieldName === "uploadBg") {
+      //   setValue("uploadBgFileName", file.name);
+      // }
+      // if (fieldName === "tcpSubmissionReceived") {
+      //   setValue("tcpSubmissionReceivedFileName", file.name);
+      // }
+      setSelectedFiles([...selectedFiles, file.name]);
+      setLoader(false);
+      setShowToast({ key: "success" });
+    } catch (error) {
+      setLoader(false);
+      return error.message;
+    }
+  };
   return (
     <form onSubmit={handleSubmit(transferLic)}>
       <div className="card" style={{ width: "126%", border: "5px solid #1266af" }}>
@@ -158,7 +217,19 @@ function TransferLicense() {
                                 <span style={{ color: "red" }}>*</span>
                               </td>
                               <td>
-                                <input type="file" placeholder="" className="form-control" {...register("undertakingThirdParty")}></input>
+                                <div>
+                                  <input
+                                    type="file"
+                                    className="form-control"
+                                    accept="application/pdf/jpeg/png"
+                                    onChange={(e) => getDocumentData(e?.target?.files[0], "undertakingThirdParty")}
+                                  />
+
+                                  {watch("undertakingThirdParty") && (
+                                    <a onClick={() => getDocShareholding(watch("undertakingThirdParty"), setLoader)} className="btn btn-sm "></a>
+                                  )}
+                                </div>
+                                {/* <input type="file" placeholder="" className="form-control" {...register("undertakingThirdParty")}></input> */}
                               </td>
                             </tr>
                             <tr>
@@ -170,7 +241,19 @@ function TransferLicense() {
                                 of application for transfer of license <span style={{ color: "red" }}>*</span>
                               </td>
                               <td>
-                                <input type="file" placeholder="" className="form-control" {...register("colonizerSeeking")}></input>
+                                <div>
+                                  <input
+                                    type="file"
+                                    className="form-control"
+                                    accept="application/pdf/jpeg/png"
+                                    onChange={(e) => getDocumentData(e?.target?.files[0], "colonizerSeeking")}
+                                  />
+
+                                  {watch("colonizerSeeking") && (
+                                    <a onClick={() => getDocShareholding(watch("colonizerSeeking"), setLoader)} className="btn btn-sm "></a>
+                                  )}
+                                </div>
+                                {/* <input type="file" placeholder="" className="form-control" {...register("colonizerSeeking")}></input> */}
                               </td>
                             </tr>
                             <tr>
@@ -181,7 +264,19 @@ function TransferLicense() {
                                 <span style={{ color: "red" }}>*</span>
                               </td>
                               <td>
-                                <input type="file" placeholder="" className="form-control" {...register("consentLetter")}></input>
+                                <div>
+                                  <input
+                                    type="file"
+                                    className="form-control"
+                                    accept="application/pdf/jpeg/png"
+                                    onChange={(e) => getDocumentData(e?.target?.files[0], "consentLetter")}
+                                  />
+
+                                  {watch("consentLetter") && (
+                                    <a onClick={() => getDocShareholding(watch("consentLetter"), setLoader)} className="btn btn-sm "></a>
+                                  )}
+                                </div>
+                                {/* <input type="file" placeholder="" className="form-control" {...register("consentLetter")}></input> */}
                               </td>
                             </tr>
                             <tr>
@@ -191,7 +286,19 @@ function TransferLicense() {
                                 Board resolution of authorized signatory <span style={{ color: "red" }}>*</span>
                               </td>
                               <td>
-                                <input type="file" placeholder="" className="form-control" {...register("boardResolution")}></input>
+                                <div>
+                                  <input
+                                    type="file"
+                                    className="form-control"
+                                    accept="application/pdf/jpeg/png"
+                                    onChange={(e) => getDocumentData(e?.target?.files[0], "boardResolution")}
+                                  />
+
+                                  {watch("boardResolution") && (
+                                    <a onClick={() => getDocShareholding(watch("boardResolution"), setLoader)} className="btn btn-sm "></a>
+                                  )}
+                                </div>
+                                {/* <input type="file" placeholder="" className="form-control" {...register("boardResolution")}></input> */}
                               </td>
                             </tr>
                             <tr>
@@ -203,7 +310,19 @@ function TransferLicense() {
                                 <span style={{ color: "red" }}>*</span>
                               </td>
                               <td>
-                                <input type="file" placeholder="" className="form-control" {...register("objectionCertificate")}></input>
+                                <div>
+                                  <input
+                                    type="file"
+                                    className="form-control"
+                                    accept="application/pdf/jpeg/png"
+                                    onChange={(e) => getDocumentData(e?.target?.files[0], "objectionCertificate")}
+                                  />
+
+                                  {watch("objectionCertificate") && (
+                                    <a onClick={() => getDocShareholding(watch("objectionCertificate"), setLoader)} className="btn btn-sm "></a>
+                                  )}
+                                </div>
+                                {/* <input type="file" placeholder="" className="form-control" {...register("objectionCertificate")}></input> */}
                               </td>
                             </tr>
                             <tr>
@@ -213,7 +332,19 @@ function TransferLicense() {
                                 ‘shareholder(s)’ as per prescribed policy parameters for grant of a license l<span style={{ color: "red" }}>*</span>
                               </td>
                               <td>
-                                <input type="file" placeholder="" className="form-control" {...register("technicalFinancialCapacity")}></input>
+                                <div>
+                                  <input
+                                    type="file"
+                                    className="form-control"
+                                    accept="application/pdf/jpeg/png"
+                                    onChange={(e) => getDocumentData(e?.target?.files[0], "technicalFinancialCapacity")}
+                                  />
+
+                                  {watch("technicalFinancialCapacity") && (
+                                    <a onClick={() => getDocShareholding(watch("technicalFinancialCapacity"), setLoader)} className="btn btn-sm "></a>
+                                  )}
+                                </div>
+                                {/* <input type="file" placeholder="" className="form-control" {...register("technicalFinancialCapacity")}></input> */}
                               </td>
                             </tr>
                             <tr>
@@ -222,7 +353,19 @@ function TransferLicense() {
                                 An undertaking to pay the balance administrative charges before final approval <span style={{ color: "red" }}>*</span>
                               </td>
                               <td>
-                                <input type="file" placeholder="" className="form-control" {...register("undertakingBalance")}></input>
+                                <div>
+                                  <input
+                                    type="file"
+                                    className="form-control"
+                                    accept="application/pdf/jpeg/png"
+                                    onChange={(e) => getDocumentData(e?.target?.files[0], "undertakingBalance")}
+                                  />
+
+                                  {watch("undertakingBalance") && (
+                                    <a onClick={() => getDocShareholding(watch("undertakingBalance"), setLoader)} className="btn btn-sm "></a>
+                                  )}
+                                </div>
+                                {/* <input type="file" placeholder="" className="form-control" {...register("undertakingBalance")}></input> */}
                               </td>
                             </tr>
                             <tr>
@@ -232,7 +375,19 @@ function TransferLicense() {
                                 <span style={{ color: "red" }}>*</span>
                               </td>
                               <td>
-                                <input type="file" placeholder="" className="form-control" {...register("justificationRequest")}></input>
+                                <div>
+                                  <input
+                                    type="file"
+                                    className="form-control"
+                                    accept="application/pdf/jpeg/png"
+                                    onChange={(e) => getDocumentData(e?.target?.files[0], "justificationRequest")}
+                                  />
+
+                                  {watch("justificationRequest") && (
+                                    <a onClick={() => getDocShareholding(watch("justificationRequest"), setLoader)} className="btn btn-sm "></a>
+                                  )}
+                                </div>
+                                {/* <input type="file" placeholder="" className="form-control" {...register("justificationRequest")}></input> */}
                               </td>
                             </tr>
                             <tr>
@@ -243,7 +398,19 @@ function TransferLicense() {
                                 <span style={{ color: "red" }}>*</span>
                               </td>
                               <td>
-                                <input type="file" placeholder="" className="form-control" {...register("administrativeCharges")}></input>
+                                <div>
+                                  <input
+                                    type="file"
+                                    className="form-control"
+                                    accept="application/pdf/jpeg/png"
+                                    onChange={(e) => getDocumentData(e?.target?.files[0], "administrativeCharges")}
+                                  />
+
+                                  {watch("administrativeCharges") && (
+                                    <a onClick={() => getDocShareholding(watch("administrativeCharges"), setLoader)} className="btn btn-sm "></a>
+                                  )}
+                                </div>
+                                {/* <input type="file" placeholder="" className="form-control" {...register("administrativeCharges")}></input> */}
                               </td>
                             </tr>
                             <tr>
@@ -254,7 +421,19 @@ function TransferLicense() {
                                 <span style={{ color: "red" }}>*</span>
                               </td>
                               <td>
-                                <input type="file" placeholder="" className="form-control" {...register("statusRegarding")}></input>
+                                <div>
+                                  <input
+                                    type="file"
+                                    className="form-control"
+                                    accept="application/pdf/jpeg/png"
+                                    onChange={(e) => getDocumentData(e?.target?.files[0], "statusRegarding")}
+                                  />
+
+                                  {watch("statusRegarding") && (
+                                    <a onClick={() => getDocShareholding(watch("statusRegarding"), setLoader)} className="btn btn-sm "></a>
+                                  )}
+                                </div>
+                                {/* <input type="file" placeholder="" className="form-control" {...register("statusRegarding")}></input> */}
                               </td>
                             </tr>
                             <tr>
@@ -265,7 +444,19 @@ function TransferLicense() {
                                 <span style={{ color: "red" }}>*</span>
                               </td>
                               <td>
-                                <input type="file" placeholder="" className="form-control" {...register("registrationStatus")}></input>
+                                <div>
+                                  <input
+                                    type="file"
+                                    className="form-control"
+                                    accept="application/pdf/jpeg/png"
+                                    onChange={(e) => getDocumentData(e?.target?.files[0], "registrationStatus")}
+                                  />
+
+                                  {watch("registrationStatus") && (
+                                    <a onClick={() => getDocShareholding(watch("registrationStatus"), setLoader)} className="btn btn-sm "></a>
+                                  )}
+                                </div>
+                                {/* <input type="file" placeholder="" className="form-control" {...register("registrationStatus")}></input> */}
                               </td>
                             </tr>
                             <tr>
@@ -275,7 +466,19 @@ function TransferLicense() {
                                 Any Other Document <span style={{ color: "red" }}>*</span>
                               </td>
                               <td>
-                                <input type="file" placeholder="" className="form-control" {...register("otherDocument")}></input>
+                                <div>
+                                  <input
+                                    type="file"
+                                    className="form-control"
+                                    accept="application/pdf/jpeg/png"
+                                    onChange={(e) => getDocumentData(e?.target?.files[0], "otherDocument")}
+                                  />
+
+                                  {watch("otherDocument") && (
+                                    <a onClick={() => getDocShareholding(watch("otherDocument"), setLoader)} className="btn btn-sm "></a>
+                                  )}
+                                </div>
+                                {/* <input type="file" placeholder="" className="form-control" {...register("otherDocument")}></input> */}
                               </td>
                             </tr>
                           </tbody>
@@ -308,7 +511,19 @@ function TransferLicense() {
                                 <span style={{ color: "red" }}>*</span>
                               </td>
                               <td>
-                                <input type="file" placeholder="" className="form-control" {...register("creationThirdParty")}></input>
+                                <div>
+                                  <input
+                                    type="file"
+                                    className="form-control"
+                                    accept="application/pdf/jpeg/png"
+                                    onChange={(e) => getDocumentData(e?.target?.files[0], "creationThirdParty")}
+                                  />
+
+                                  {watch("creationThirdParty") && (
+                                    <a onClick={() => getDocShareholding(watch("creationThirdParty"), setLoader)} className="btn btn-sm "></a>
+                                  )}
+                                </div>
+                                {/* <input type="file" placeholder="" className="form-control" {...register("creationThirdParty")}></input> */}
                               </td>
                             </tr>
                             <tr>
@@ -320,7 +535,19 @@ function TransferLicense() {
                                 of application for transfer of license <span style={{ color: "red" }}>*</span>
                               </td>
                               <td>
-                                <input type="file" placeholder="" className="form-control" {...register("colonizerSeekingTransfer")}></input>
+                                <div>
+                                  <input
+                                    type="file"
+                                    className="form-control"
+                                    accept="application/pdf/jpeg/png"
+                                    onChange={(e) => getDocumentData(e?.target?.files[0], "colonizerSeekingTransfer")}
+                                  />
+
+                                  {watch("colonizerSeekingTransfer") && (
+                                    <a onClick={() => getDocShareholding(watch("colonizerSeekingTransfer"), setLoader)} className="btn btn-sm "></a>
+                                  )}
+                                </div>
+                                {/* <input type="file" placeholder="" className="form-control" {...register("colonizerSeekingTransfer")}></input> */}
                               </td>
                             </tr>
                             <tr>
@@ -330,7 +557,19 @@ function TransferLicense() {
                                 <span style={{ color: "red" }}>*</span>
                               </td>
                               <td>
-                                <input type="file" placeholder="" className="form-control" {...register("consentLetterNewEntity")}></input>
+                                <div>
+                                  <input
+                                    type="file"
+                                    className="form-control"
+                                    accept="application/pdf/jpeg/png"
+                                    onChange={(e) => getDocumentData(e?.target?.files[0], "consentLetterNewEntity")}
+                                  />
+
+                                  {watch("consentLetterNewEntity") && (
+                                    <a onClick={() => getDocShareholding(watch("consentLetterNewEntity"), setLoader)} className="btn btn-sm "></a>
+                                  )}
+                                </div>
+                                {/* <input type="file" placeholder="" className="form-control" {...register("consentLetterNewEntity")}></input> */}
                               </td>
                             </tr>
                             <tr>
@@ -340,7 +579,19 @@ function TransferLicense() {
                                 <span style={{ color: "red" }}>*</span>
                               </td>
                               <td>
-                                <input type="file" placeholder="" className="form-control" {...register("boardResolutionSignatory")}></input>
+                                <div>
+                                  <input
+                                    type="file"
+                                    className="form-control"
+                                    accept="application/pdf/jpeg/png"
+                                    onChange={(e) => getDocumentData(e?.target?.files[0], "boardResolutionSignatory")}
+                                  />
+
+                                  {watch("boardResolutionSignatory") && (
+                                    <a onClick={() => getDocShareholding(watch("boardResolutionSignatory"), setLoader)} className="btn btn-sm "></a>
+                                  )}
+                                </div>
+                                {/* <input type="file" placeholder="" className="form-control" {...register("boardResolutionSignatory")}></input> */}
                               </td>
                             </tr>
                             <tr>
@@ -350,7 +601,19 @@ function TransferLicense() {
                                 <span style={{ color: "red" }}>*</span>
                               </td>
                               <td>
-                                <input type="file" placeholder="" className="form-control" {...register("statusRegistration")}></input>
+                                <div>
+                                  <input
+                                    type="file"
+                                    className="form-control"
+                                    accept="application/pdf/jpeg/png"
+                                    onChange={(e) => getDocumentData(e?.target?.files[0], "statusRegistration")}
+                                  />
+
+                                  {watch("statusRegistration") && (
+                                    <a onClick={() => getDocShareholding(watch("statusRegistration"), setLoader)} className="btn btn-sm "></a>
+                                  )}
+                                </div>
+                                {/* <input type="file" placeholder="" className="form-control" {...register("statusRegistration")}></input> */}
                               </td>
                             </tr>
                             <tr>
@@ -360,7 +623,19 @@ function TransferLicense() {
                                 <span style={{ color: "red" }}>*</span>
                               </td>
                               <td>
-                                <input type="file" placeholder="" className="form-control" {...register("documentOther")}></input>
+                                <div>
+                                  <input
+                                    type="file"
+                                    className="form-control"
+                                    accept="application/pdf/jpeg/png"
+                                    onChange={(e) => getDocumentData(e?.target?.files[0], "documentOther")}
+                                  />
+
+                                  {watch("documentOther") && (
+                                    <a onClick={() => getDocShareholding(watch("documentOther"), setLoader)} className="btn btn-sm "></a>
+                                  )}
+                                </div>
+                                {/* <input type="file" placeholder="" className="form-control" {...register("documentOther")}></input> */}
                               </td>
                             </tr>
                           </tbody>
@@ -393,7 +668,19 @@ function TransferLicense() {
                                 <span style={{ color: "red" }}>*</span>
                               </td>
                               <td>
-                                <input type="file" placeholder="" className="form-control" {...register("thirdPartyLicensedArea")}></input>
+                                <div>
+                                  <input
+                                    type="file"
+                                    className="form-control"
+                                    accept="application/pdf/jpeg/png"
+                                    onChange={(e) => getDocumentData(e?.target?.files[0], "thirdPartyLicensedArea")}
+                                  />
+
+                                  {watch("thirdPartyLicensedArea") && (
+                                    <a onClick={() => getDocShareholding(watch("thirdPartyLicensedArea"), setLoader)} className="btn btn-sm "></a>
+                                  )}
+                                </div>
+                                {/* <input type="file" placeholder="" className="form-control" {...register("thirdPartyLicensedArea")}></input> */}
                               </td>
                             </tr>
                             <tr>
@@ -403,7 +690,19 @@ function TransferLicense() {
                                 <span style={{ color: "red" }}>*</span>
                               </td>
                               <td>
-                                <input type="file" placeholder="" className="form-control" {...register("newEntityChange")}></input>
+                                <div>
+                                  <input
+                                    type="file"
+                                    className="form-control"
+                                    accept="application/pdf/jpeg/png"
+                                    onChange={(e) => getDocumentData(e?.target?.files[0], "newEntityChange")}
+                                  />
+
+                                  {watch("newEntityChange") && (
+                                    <a onClick={() => getDocShareholding(watch("newEntityChange"), setLoader)} className="btn btn-sm "></a>
+                                  )}
+                                </div>
+                                {/* <input type="file" placeholder="" className="form-control" {...register("newEntityChange")}></input> */}
                               </td>
                             </tr>
                             <tr>
@@ -413,7 +712,19 @@ function TransferLicense() {
                                 Board resolution of authorized signatory<span style={{ color: "red" }}>*</span>
                               </td>
                               <td>
-                                <input type="file" placeholder="" className="form-control" {...register("authorizedSignatory")}></input>
+                                <div>
+                                  <input
+                                    type="file"
+                                    className="form-control"
+                                    accept="application/pdf/jpeg/png"
+                                    onChange={(e) => getDocumentData(e?.target?.files[0], "authorizedSignatory")}
+                                  />
+
+                                  {watch("authorizedSignatory") && (
+                                    <a onClick={() => getDocShareholding(watch("authorizedSignatory"), setLoader)} className="btn btn-sm "></a>
+                                  )}
+                                </div>
+                                {/* <input type="file" placeholder="" className="form-control" {...register("authorizedSignatory")}></input> */}
                               </td>
                             </tr>
                             <tr>
@@ -425,7 +736,19 @@ function TransferLicense() {
                                 <span style={{ color: "red" }}>*</span>
                               </td>
                               <td>
-                                <input type="file" placeholder="" className="form-control" {...register("noObjection")}></input>
+                                <div>
+                                  <input
+                                    type="file"
+                                    className="form-control"
+                                    accept="application/pdf/jpeg/png"
+                                    onChange={(e) => getDocumentData(e?.target?.files[0], "noObjection")}
+                                  />
+
+                                  {watch("noObjection") && (
+                                    <a onClick={() => getDocShareholding(watch("noObjection"), setLoader)} className="btn btn-sm "></a>
+                                  )}
+                                </div>
+                                {/* <input type="file" placeholder="" className="form-control" {...register("noObjection")}></input> */}
                               </td>
                             </tr>
                             <tr>
@@ -436,7 +759,22 @@ function TransferLicense() {
                                 <span style={{ color: "red" }}>*</span>
                               </td>
                               <td>
-                                <input type="file" placeholder="" className="form-control" {...register("documentsTechnicalFianncial")}></input>
+                                <div>
+                                  <input
+                                    type="file"
+                                    className="form-control"
+                                    accept="application/pdf/jpeg/png"
+                                    onChange={(e) => getDocumentData(e?.target?.files[0], "documentsTechnicalFianncial")}
+                                  />
+
+                                  {watch("documentsTechnicalFianncial") && (
+                                    <a
+                                      onClick={() => getDocShareholding(watch("documentsTechnicalFianncial"), setLoader)}
+                                      className="btn btn-sm "
+                                    ></a>
+                                  )}
+                                </div>
+                                {/* <input type="file" placeholder="" className="form-control" {...register("documentsTechnicalFianncial")}></input> */}
                               </td>
                             </tr>
                             <tr>
@@ -446,7 +784,19 @@ function TransferLicense() {
                                 <span style={{ color: "red" }}>*</span>
                               </td>
                               <td>
-                                <input type="file" placeholder="" className="form-control" {...register("undertakingPay")}></input>
+                                <div>
+                                  <input
+                                    type="file"
+                                    className="form-control"
+                                    accept="application/pdf/jpeg/png"
+                                    onChange={(e) => getDocumentData(e?.target?.files[0], "undertakingPay")}
+                                  />
+
+                                  {watch("undertakingPay") && (
+                                    <a onClick={() => getDocShareholding(watch("undertakingPay"), setLoader)} className="btn btn-sm "></a>
+                                  )}
+                                </div>
+                                {/* <input type="file" placeholder="" className="form-control" {...register("undertakingPay")}></input> */}
                               </td>
                             </tr>
                             <tr>
@@ -456,7 +806,19 @@ function TransferLicense() {
                                 <span style={{ color: "red" }}>*</span>
                               </td>
                               <td>
-                                <input type="file" placeholder="" className="form-control" {...register("justificationChange")}></input>
+                                <div>
+                                  <input
+                                    type="file"
+                                    className="form-control"
+                                    accept="application/pdf/jpeg/png"
+                                    onChange={(e) => getDocumentData(e?.target?.files[0], "justificationChange")}
+                                  />
+
+                                  {watch("justificationChange") && (
+                                    <a onClick={() => getDocShareholding(watch("justificationChange"), setLoader)} className="btn btn-sm "></a>
+                                  )}
+                                </div>
+                                {/* <input type="file" placeholder="" className="form-control" {...register("justificationChange")}></input> */}
                               </td>
                             </tr>
                             <tr>
@@ -466,7 +828,19 @@ function TransferLicense() {
                                 <span style={{ color: "red" }}>*</span>
                               </td>
                               <td>
-                                <input type="file" placeholder="" className="form-control" {...register("requestJustification")}></input>
+                                <div>
+                                  <input
+                                    type="file"
+                                    className="form-control"
+                                    accept="application/pdf/jpeg/png"
+                                    onChange={(e) => getDocumentData(e?.target?.files[0], "requestJustification")}
+                                  />
+
+                                  {watch("requestJustification") && (
+                                    <a onClick={() => getDocShareholding(watch("requestJustification"), setLoader)} className="btn btn-sm "></a>
+                                  )}
+                                </div>
+                                {/* <input type="file" placeholder="" className="form-control" {...register("requestJustification")}></input> */}
                               </td>
                             </tr>
                             <tr>
@@ -477,7 +851,19 @@ function TransferLicense() {
                                 <span style={{ color: "red" }}>*</span>
                               </td>
                               <td>
-                                <input type="file" placeholder="" className="form-control" {...register("administrativeChargesCases")}></input>
+                                <div>
+                                  <input
+                                    type="file"
+                                    className="form-control"
+                                    accept="application/pdf/jpeg/png"
+                                    onChange={(e) => getDocumentData(e?.target?.files[0], "administrativeChargesCases")}
+                                  />
+
+                                  {watch("administrativeChargesCases") && (
+                                    <a onClick={() => getDocShareholding(watch("administrativeChargesCases"), setLoader)} className="btn btn-sm "></a>
+                                  )}
+                                </div>
+                                {/* <input type="file" placeholder="" className="form-control" {...register("administrativeChargesCases")}></input> */}
                               </td>
                             </tr>
                             <tr>
@@ -488,7 +874,19 @@ function TransferLicense() {
                                 <span style={{ color: "red" }}>*</span>
                               </td>
                               <td>
-                                <input type="file" placeholder="" className="form-control" {...register("registrationRera")}></input>
+                                <div>
+                                  <input
+                                    type="file"
+                                    className="form-control"
+                                    accept="application/pdf/jpeg/png"
+                                    onChange={(e) => getDocumentData(e?.target?.files[0], "registrationRera")}
+                                  />
+
+                                  {watch("registrationRera") && (
+                                    <a onClick={() => getDocShareholding(watch("registrationRera"), setLoader)} className="btn btn-sm "></a>
+                                  )}
+                                </div>
+                                {/* <input type="file" placeholder="" className="form-control" {...register("registrationRera")}></input> */}
                               </td>
                             </tr>
                             <tr>
@@ -498,7 +896,19 @@ function TransferLicense() {
                                 Any Other Document <span style={{ color: "red" }}>*</span>
                               </td>
                               <td>
-                                <input type="file" placeholder="" className="form-control" {...register("document")}></input>
+                                <div>
+                                  <input
+                                    type="file"
+                                    className="form-control"
+                                    accept="application/pdf/jpeg/png"
+                                    onChange={(e) => getDocumentData(e?.target?.files[0], "document")}
+                                  />
+
+                                  {watch("document") && (
+                                    <a onClick={() => getDocShareholding(watch("document"), setLoader)} className="btn btn-sm "></a>
+                                  )}
+                                </div>
+                                {/* <input type="file" placeholder="" className="form-control" {...register("document")}></input> */}
                               </td>
                             </tr>
                           </tbody>
@@ -530,7 +940,19 @@ function TransferLicense() {
                                 <span style={{ color: "red" }}>*</span>
                               </td>
                               <td>
-                                <input type="file" placeholder="" className="form-control" {...register("craetionLicensedArea")}></input>
+                                <div>
+                                  <input
+                                    type="file"
+                                    className="form-control"
+                                    accept="application/pdf/jpeg/png"
+                                    onChange={(e) => getDocumentData(e?.target?.files[0], "craetionLicensedArea")}
+                                  />
+
+                                  {watch("craetionLicensedArea") && (
+                                    <a onClick={() => getDocShareholding(watch("craetionLicensedArea"), setLoader)} className="btn btn-sm "></a>
+                                  )}
+                                </div>
+                                {/* <input type="file" placeholder="" className="form-control" {...register("craetionLicensedArea")}></input> */}
                               </td>
                             </tr>
                             <tr>
@@ -540,7 +962,19 @@ function TransferLicense() {
                                 <span style={{ color: "red" }}>*</span>
                               </td>
                               <td>
-                                <input type="file" placeholder="" className="form-control" {...register("justificationEntity")}></input>
+                                <div>
+                                  <input
+                                    type="file"
+                                    className="form-control"
+                                    accept="application/pdf/jpeg/png"
+                                    onChange={(e) => getDocumentData(e?.target?.files[0], "justificationEntity")}
+                                  />
+
+                                  {watch("justificationEntity") && (
+                                    <a onClick={() => getDocShareholding(watch("justificationEntity"), setLoader)} className="btn btn-sm "></a>
+                                  )}
+                                </div>
+                                {/* <input type="file" placeholder="" className="form-control" {...register("justificationEntity")}></input> */}
                               </td>
                             </tr>
                             <tr>
@@ -550,7 +984,19 @@ function TransferLicense() {
                                 <span style={{ color: "red" }}>*</span>
                               </td>
                               <td>
-                                <input type="file" placeholder="" className="form-control" {...register("resolutionBoardSignatory")}></input>
+                                <div>
+                                  <input
+                                    type="file"
+                                    className="form-control"
+                                    accept="application/pdf/jpeg/png"
+                                    onChange={(e) => getDocumentData(e?.target?.files[0], "resolutionBoardSignatory")}
+                                  />
+
+                                  {watch("resolutionBoardSignatory") && (
+                                    <a onClick={() => getDocShareholding(watch("resolutionBoardSignatory"), setLoader)} className="btn btn-sm "></a>
+                                  )}
+                                </div>
+                                {/* <input type="file" placeholder="" className="form-control" {...register("resolutionBoardSignatory")}></input> */}
                               </td>
                             </tr>
                             <tr>
@@ -560,7 +1006,19 @@ function TransferLicense() {
                                 <span style={{ color: "red" }}>*</span>
                               </td>
                               <td>
-                                <input type="file" placeholder="" className="form-control" {...register("registrationProjectRera")}></input>
+                                <div>
+                                  <input
+                                    type="file"
+                                    className="form-control"
+                                    accept="application/pdf/jpeg/png"
+                                    onChange={(e) => getDocumentData(e?.target?.files[0], "registrationProjectRera")}
+                                  />
+
+                                  {watch("registrationProjectRera") && (
+                                    <a onClick={() => getDocShareholding(watch("registrationProjectRera"), setLoader)} className="btn btn-sm "></a>
+                                  )}
+                                </div>
+                                {/* <input type="file" placeholder="" className="form-control" {...register("registrationProjectRera")}></input> */}
                               </td>
                             </tr>
                             <tr>
@@ -570,7 +1028,19 @@ function TransferLicense() {
                                 <span style={{ color: "red" }}>*</span>
                               </td>
                               <td>
-                                <input type="file" placeholder="" className="form-control" {...register("anyOtherDoc")}></input>
+                                <div>
+                                  <input
+                                    type="file"
+                                    className="form-control"
+                                    accept="application/pdf/jpeg/png"
+                                    onChange={(e) => getDocumentData(e?.target?.files[0], "anyOtherDoc")}
+                                  />
+
+                                  {watch("anyOtherDoc") && (
+                                    <a onClick={() => getDocShareholding(watch("anyOtherDoc"), setLoader)} className="btn btn-sm "></a>
+                                  )}
+                                </div>
+                                {/* <input type="file" placeholder="" className="form-control" {...register("anyOtherDoc")}></input> */}
                               </td>
                             </tr>
                           </tbody>
