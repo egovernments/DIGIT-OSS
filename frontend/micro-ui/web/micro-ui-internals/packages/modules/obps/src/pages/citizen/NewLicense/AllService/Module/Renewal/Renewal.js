@@ -19,6 +19,8 @@ import { getDocShareholding } from "../../../docView/docView.help";
 import axios from "axios";
 import Spinner from "../../../../../../components/Loader";
 import CusToaster from "../../../../../../components/Toaster";
+import { VALIDATION_SCHEMA } from "../../../../../../utils/schema/renewal";
+import { yupResolver } from "@hookform/resolvers/yup";
 
 const RenewalFor = [
   { label: "Year", value: "year" },
@@ -45,11 +47,18 @@ function renewalClu() {
   const {
     register,
     handleSubmit,
+    watch,
     formState: { errors },
     control,
     setValue,
-    watch,
-  } = useForm({});
+    getValues,
+    trigger,
+  } = useForm({
+    mode: "onChange",
+    reValidateMode: "onChange",
+    resolver: yupResolver(VALIDATION_SCHEMA),
+    shouldFocusError: true,
+  });
 
   const renewal = (data) => console.log(data);
   const [modal, setmodal] = useState(false);
@@ -108,6 +117,9 @@ function renewalClu() {
 
                     <input type="number" className="form-control" placeholder="" {...register("licenseNo")} />
                   </FormControl>
+                  <h3 className="error-message" style={{ color: "red" }}>
+                    {errors?.licenseNo && errors?.licenseNo?.message}
+                  </h3>
                 </div>
                 <div className="col col-3 ">
                   <FormControl>
@@ -118,6 +130,9 @@ function renewalClu() {
 
                     <input type="date" className="form-control" placeholder="" {...register("validUpto")} />
                   </FormControl>
+                  <h3 className="error-message" style={{ color: "red" }}>
+                    {errors?.validUpto && errors?.validUpto?.message}
+                  </h3>
                 </div>
                 <div className="col col-3 ">
                   <FormControl>
@@ -141,6 +156,9 @@ function renewalClu() {
                       }}
                     />
                   </FormControl>
+                  <h3 className="error-message" style={{ color: "red" }}>
+                    {errors?.renewalRequiredUpto && errors?.renewalRequiredUpto?.message}
+                  </h3>
                 </div>
                 <div className="col col-3 ">
                   <FormControl>
@@ -157,6 +175,9 @@ function renewalClu() {
 
                     <input type="text" className="form-control" placeholder="" {...register("colonizerName")} />
                   </FormControl>
+                  <h3 className="error-message" style={{ color: "red" }}>
+                    {errors?.colonizerName && errors?.colonizerName?.message}
+                  </h3>
                 </div>
               </div>
               <div className="row gy-3 mt-3">
@@ -170,6 +191,9 @@ function renewalClu() {
 
                     <input type="text" className="form-control" placeholder="" {...register("colonyType")} />
                   </FormControl>
+                  <h3 className="error-message" style={{ color: "red" }}>
+                    {errors?.colonyType && errors?.colonyType?.message}
+                  </h3>
                 </div>
 
                 <div className="col col-3 ">
@@ -181,6 +205,9 @@ function renewalClu() {
 
                     <input type="text" className="form-control" placeholder="" {...register("areaAcres")} />
                   </FormControl>
+                  <h3 className="error-message" style={{ color: "red" }}>
+                    {errors?.areaAcres && errors?.areaAcres?.message}
+                  </h3>
                 </div>
 
                 <div className="col col-3 ">
@@ -191,6 +218,9 @@ function renewalClu() {
 
                     <input type="text" className="form-control" placeholder="" {...register("sectorNo")} />
                   </FormControl>
+                  <h3 className="error-message" style={{ color: "red" }}>
+                    {errors?.sectorNo && errors?.sectorNo?.message}
+                  </h3>
                 </div>
                 <div className="col col-3 ">
                   <FormControl>
@@ -201,6 +231,9 @@ function renewalClu() {
 
                     <input type="text" className="form-control" placeholder="" {...register("revenueEstate")} />
                   </FormControl>
+                  <h3 className="error-message" style={{ color: "red" }}>
+                    {errors?.revenueEstate && errors?.revenueEstate?.message}
+                  </h3>
                 </div>
               </div>
               <div>
@@ -404,6 +437,9 @@ function renewalClu() {
                     &nbsp;&nbsp;
                     <input {...register("transferredPortion")} type="radio" value="NA" id="no" /> &nbsp; NA
                   </label>
+                  <h3 className="error-message" style={{ color: "red" }}>
+                    {errors?.transferredPortion && errors?.transferredPortion?.message}
+                  </h3>
                   {/* {watch("transferredPortion") === "1" && (
                       <div className="row-12">
                         <div className="col md={4} xxl lg-4">
@@ -448,6 +484,9 @@ function renewalClu() {
                     &nbsp;&nbsp;
                     <input {...register("imposedSpecificCondition")} type="radio" value="no" id="no" /> &nbsp; No
                   </label>
+                  <h3 className="error-message" style={{ color: "red" }}>
+                    {errors?.imposedSpecificCondition && errors?.imposedSpecificCondition?.message}
+                  </h3>
                   {watch("imposedSpecificCondition") === "yes" && (
                     <div className="col md={4} xxl lg-4">
                       <FormControl>
@@ -471,6 +510,9 @@ function renewalClu() {
                     &nbsp;&nbsp;
                     <input {...register("courtCases")} type="radio" value="no" id="no" /> &nbsp; No
                   </label>
+                  <h3 className="error-message" style={{ color: "red" }}>
+                    {errors?.courtCases && errors?.courtCases?.message}
+                  </h3>
                   {watch("courtCases") === "yes" && (
                     <div className="col md={4} xxl lg-4">
                       <FormControl>
@@ -910,13 +952,27 @@ function renewalClu() {
                         <input {...register("obtainedOCPart")} type="radio" value="no" id="renewalAppliedUnderSectionno" /> &nbsp; No
                       </label>
                     </div>
+                    <h3 className="error-message" style={{ color: "red" }}>
+                      {errors?.obtainedOCPart && errors?.obtainedOCPart?.message}
+                    </h3>
                     {watch("obtainedOCPart") == "yes" && (
                       <div className="row gy-3">
                         <div className="col col-5">
                           <div>
                             <h2>Covered Area (In sq meters)</h2>
-                            <input type="number" className="form-control" placeholder="" {...register("coveredArea")} minLength={1} maxLength={8} />
+                            <input
+                              type="number"
+                              className="form-control"
+                              placeholder=""
+                              {...register("coveredArea")}
+                              required
+                              minLength={1}
+                              maxLength={8}
+                            />
                           </div>
+                          <h3 className="error-message" style={{ color: "red" }}>
+                            {errors?.coveredArea && errors?.coveredArea?.message}
+                          </h3>
                         </div>
                         <div className="col col-4">
                           <div>
@@ -925,11 +981,15 @@ function renewalClu() {
                               type="number"
                               className="form-control"
                               placeholder=""
+                              required
                               {...register("proportionateSiteArea")}
                               minLength={1}
                               maxLength={8}
                             />
                           </div>
+                          <h3 className="error-message" style={{ color: "red" }}>
+                            {errors?.proportionateSiteArea && errors?.proportionateSiteArea?.message}
+                          </h3>
                         </div>
                         <div className="col col-3">
                           <h2>
@@ -969,6 +1029,9 @@ function renewalClu() {
                         <input {...register("obtainedCCPart")} type="radio" value="no" id="obtainedCCPartno" /> &nbsp; No
                       </label>
                     </div>
+                    <h3 className="error-message" style={{ color: "red" }}>
+                      {errors?.obtainedCCPart && errors?.obtainedCCPart?.message}
+                    </h3>
                     {watch("obtainedCCPart") == "yes" && (
                       <div className="row gy-3">
                         <div className="col col-5">
