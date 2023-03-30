@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import FormControl from "@mui/material/FormControl";
 import { useForm } from "react-hook-form";
 import OutlinedInput from "@mui/material/OutlinedInput";
@@ -13,6 +13,14 @@ import DialogActions from "@mui/material/DialogActions";
 import Typography from "@mui/material/Typography";
 import { Button } from "@material-ui/core";
 import ReactMultiSelect from "../../../../../../../../../react-components/src/atoms/ReactMultiSelect";
+import FileUpload from "@mui/icons-material/FileUpload";
+import VisibilityIcon from "@mui/icons-material/Visibility";
+import { getDocShareholding } from "../../../docView/docView.help";
+import axios from "axios";
+import Spinner from "../../../../../../components/Loader";
+import CusToaster from "../../../../../../components/Toaster";
+import { VALIDATION_SCHEMA } from "../../../../../../utils/schema/renewal";
+import { yupResolver } from "@hookform/resolvers/yup";
 
 const RenewalFor = [
   { label: "Year", value: "year" },
@@ -39,175 +47,256 @@ function renewalClu() {
   const {
     register,
     handleSubmit,
+    watch,
     formState: { errors },
     control,
     setValue,
-    watch,
-  } = useForm({});
+    getValues,
+    trigger,
+  } = useForm({
+    mode: "onChange",
+    reValidateMode: "onChange",
+    resolver: yupResolver(VALIDATION_SCHEMA),
+    shouldFocusError: true,
+  });
 
   const renewal = (data) => console.log(data);
   const [modal, setmodal] = useState(false);
+  const [loader, setLoader] = useState(false);
+  const [selectedFiles, setSelectedFiles] = useState([]);
+  const [showToastError, setShowToastError] = useState({ label: "", error: false, success: false });
+  const [fileStoreId, setFileStoreId] = useState({});
+
+  const getDocumentData = async (file, fieldName) => {
+    if (selectedFiles.includes(file.name)) {
+      setShowToastError({ label: "Duplicate file Selected", error: true, success: false });
+      return;
+    }
+    const formData = new FormData();
+    formData.append("file", file);
+    formData.append("tenantId", "hr");
+    formData.append("module", "property-upload");
+    formData.append("tag", "tag-property");
+    setLoader(true);
+    try {
+      const Resp = await axios.post("/filestore/v1/files", formData, {});
+      setValue(fieldName, Resp?.data?.files?.[0]?.fileStoreId);
+      setFileStoreId({ ...fileStoreId, [fieldName]: Resp?.data?.files?.[0]?.fileStoreId });
+
+      setSelectedFiles([...selectedFiles, file.name]);
+      setLoader(false);
+      setShowToastError({ label: "File Uploaded Successfully", error: false, success: true });
+    } catch (error) {
+      setLoader(false);
+      return error.message;
+    }
+  };
+
+  useEffect(() => {
+    const date_1 = new Date(watch("validUpto"));
+    const date_2 = new Date();
+    const difference = date_1.getTime() - date_2.getTime();
+    const TotalDays = Math.ceil(difference / (1000 * 3600 * 24));
+    setValue("delayInDays", TotalDays);
+  }, [watch("renewalApplied")]);
+
   return (
-    <form onSubmit={handleSubmit(renewal)}>
-      <div className="card" style={{ width: "126%", border: "5px solid #1266af" }}>
-        <h4 style={{ fontSize: "25px", marginLeft: "21px" }}>Renewal</h4>
-        <div className="card">
-          <div className="row-12">
-            <div className="row gy-3">
-              <div className="col col-3 ">
-                <FormControl>
-                  <h2>
-                    License No.<span style={{ color: "red" }}>*</span>
-                  </h2>
+    <div>
+      {loader && <Spinner />}
+      <form onSubmit={handleSubmit(renewal)}>
+        <div className="card" style={{ width: "126%", border: "5px solid #1266af" }}>
+          <h4 style={{ fontSize: "25px", marginLeft: "21px" }}>Renewal</h4>
+          <div className="card">
+            <div className="row-12">
+              <div className="row gy-3">
+                <div className="col col-3 ">
+                  <FormControl>
+                    <h2>
+                      License No.<span style={{ color: "red" }}>*</span>
+                    </h2>
 
-                  <input type="number" className="form-control" placeholder="" {...register("licenseNo")} />
-                </FormControl>
-              </div>
-              <div className="col col-3 ">
-                <FormControl>
-                  <h2>
-                    {" "}
-                    Valid Upto <span style={{ color: "red" }}>*</span>
-                  </h2>
+                    <input type="number" className="form-control" placeholder="" {...register("licenseNo")} />
+                  </FormControl>
+                  <h3 className="error-message" style={{ color: "red" }}>
+                    {errors?.licenseNo && errors?.licenseNo?.message}
+                  </h3>
+                </div>
+                <div className="col col-3 ">
+                  <FormControl>
+                    <h2>
+                      {" "}
+                      Valid Upto <span style={{ color: "red" }}>*</span>
+                    </h2>
 
-                  <input type="date" className="form-control" placeholder="" {...register("validUpto")} />
-                </FormControl>
-              </div>
-              <div className="col col-3 ">
-                <FormControl>
-                  <h2>
-                    Renewal required upto <span style={{ color: "red" }}>*</span>
-                  </h2>
-                  <input type="date" {...register("renewalRequiredUpto")} className="form-control" />
+                    <input type="date" className="form-control" placeholder="" {...register("validUpto")} />
+                  </FormControl>
+                  <h3 className="error-message" style={{ color: "red" }}>
+                    {errors?.validUpto && errors?.validUpto?.message}
+                  </h3>
+                </div>
+                <div className="col col-3 ">
+                  <FormControl>
+                    <h2>
+                      Renewal required upto <span style={{ color: "red" }}>*</span>
+                    </h2>
+                    <input
+                      type="date"
+                      {...register("renewalRequiredUpto")}
+                      className="form-control"
+                      onChange={(e) => {
+                        const dateA = new Date(e?.target?.value);
+                        const dateB = new Date(watch("validUpto"));
 
-                  {/* <ReactMultiSelect control={control} name="selectService" placeholder="Renewal For" data={RenewalFor} labels="Far" /> */}
-                </FormControl>
-              </div>
-              <div className="col col-3 ">
-                <FormControl>
-                  <h2>
-                    Period of renewal(In months) <span style={{ color: "red" }}>*</span>
-                  </h2>
-                  <input type="date" {...register("renewalRequiredUpto")} className="form-control" />
+                        const monthDiff = dateA.getMonth() - dateB.getMonth();
+                        const yearDiff = dateA.getYear() - dateB.getYear();
 
-                  {/* <ReactMultiSelect control={control} name="selectService" placeholder="Renewal For" data={RenewalFor} labels="Far" /> */}
-                </FormControl>
-              </div>
-              <div className="col col-3 ">
-                <FormControl>
-                  <h2>
-                    {" "}
-                    Name of Colonizer <span style={{ color: "red" }}>*</span>
-                  </h2>
+                        const diff = monthDiff + yearDiff * 12;
+                        setValue("renewalRequiredUpto", diff);
+                        console.log("value", e?.target?.value, diff);
+                      }}
+                    />
+                  </FormControl>
+                  <h3 className="error-message" style={{ color: "red" }}>
+                    {errors?.renewalRequiredUpto && errors?.renewalRequiredUpto?.message}
+                  </h3>
+                </div>
+                <div className="col col-3 ">
+                  <FormControl>
+                    <h2>Period of renewal(In months)</h2>
+                    <input type="text" {...register("renewalRequiredUpto")} className="form-control" disabled />
+                  </FormControl>
+                </div>
+                <div className="col col-3 ">
+                  <FormControl>
+                    <h2>
+                      {" "}
+                      Name of Colonizer <span style={{ color: "red" }}>*</span>
+                    </h2>
 
-                  <input type="text" className="form-control" placeholder="" {...register("colonizerName")} />
-                </FormControl>
+                    <input type="text" className="form-control" placeholder="" {...register("colonizerName")} />
+                  </FormControl>
+                  <h3 className="error-message" style={{ color: "red" }}>
+                    {errors?.colonizerName && errors?.colonizerName?.message}
+                  </h3>
+                </div>
               </div>
-            </div>
-            <div className="row gy-3">
-              <div className="col col-3 ">
-                <FormControl>
-                  <h2>
-                    {" "}
-                    Type of Colony
-                    <span style={{ color: "red" }}>*</span>
-                  </h2>
+              <div className="row gy-3 mt-3">
+                <div className="col col-3 ">
+                  <FormControl>
+                    <h2>
+                      {" "}
+                      Type of Colony
+                      <span style={{ color: "red" }}>*</span>
+                    </h2>
 
-                  <input type="text" className="form-control" placeholder="" {...register("colonyType")} />
-                </FormControl>
-              </div>
+                    <input type="text" className="form-control" placeholder="" {...register("colonyType")} />
+                  </FormControl>
+                  <h3 className="error-message" style={{ color: "red" }}>
+                    {errors?.colonyType && errors?.colonyType?.message}
+                  </h3>
+                </div>
 
-              <div className="col col-3 ">
-                <FormControl>
-                  <h2>
-                    Area in Acres
-                    <span style={{ color: "red" }}>*</span>
-                  </h2>
+                <div className="col col-3 ">
+                  <FormControl>
+                    <h2>
+                      Area in Acres
+                      <span style={{ color: "red" }}>*</span>
+                    </h2>
 
-                  <input type="text" className="form-control" placeholder="" {...register("areaAcres")} />
-                </FormControl>
-              </div>
+                    <input type="text" className="form-control" placeholder="" {...register("areaAcres")} />
+                  </FormControl>
+                  <h3 className="error-message" style={{ color: "red" }}>
+                    {errors?.areaAcres && errors?.areaAcres?.message}
+                  </h3>
+                </div>
 
-              <div className="col col-3 ">
-                <FormControl>
-                  <h2>
-                    Sector No. <span style={{ color: "red" }}>*</span>
-                  </h2>
+                <div className="col col-3 ">
+                  <FormControl>
+                    <h2>
+                      Sector No. <span style={{ color: "red" }}>*</span>
+                    </h2>
 
-                  <input type="text" className="form-control" placeholder="" {...register("sectorNo")} />
-                </FormControl>
-              </div>
-              <div className="col col-3 ">
-                <FormControl>
-                  <h2>
-                    Revenue estate
-                    <span style={{ color: "red" }}>*</span>{" "}
-                  </h2>
+                    <input type="text" className="form-control" placeholder="" {...register("sectorNo")} />
+                  </FormControl>
+                  <h3 className="error-message" style={{ color: "red" }}>
+                    {errors?.sectorNo && errors?.sectorNo?.message}
+                  </h3>
+                </div>
+                <div className="col col-3 ">
+                  <FormControl>
+                    <h2>
+                      Revenue estate
+                      <span style={{ color: "red" }}>*</span>{" "}
+                    </h2>
 
-                  <input type="text" className="form-control" placeholder="" {...register("revenueEstate")} />
-                </FormControl>
+                    <input type="text" className="form-control" placeholder="" {...register("revenueEstate")} />
+                  </FormControl>
+                  <h3 className="error-message" style={{ color: "red" }}>
+                    {errors?.revenueEstate && errors?.revenueEstate?.message}
+                  </h3>
+                </div>
               </div>
-            </div>
-            <div>
-              Development Plan
-              {/* auto pull land schedule table from new licence here */}
-            </div>
-            <div className="row gy-3">
-              <div className="col col-3 ">
-                <FormControl>
-                  <h2>Tehsil</h2>
-                  <input type="text" className="form-control" placeholder="" {...register("tehsil")} />
-                </FormControl>
+              <div>
+                Development Plan
+                {/* auto pull land schedule table from new licence here */}
               </div>
-              <div className="col col-3 ">
-                <FormControl>
-                  <h2>District</h2>
-                  <input type="text" className="form-control" placeholder="" {...register("district")} />
-                </FormControl>
+              <div className="row gy-3 mt-3">
+                <div className="col col-3 ">
+                  <FormControl>
+                    <h2>Tehsil</h2>
+                    <input type="text" className="form-control" placeholder="" {...register("tehsil")} />
+                  </FormControl>
+                </div>
+                <div className="col col-3 ">
+                  <FormControl>
+                    <h2>District</h2>
+                    <input type="text" className="form-control" placeholder="" {...register("district")} />
+                  </FormControl>
+                </div>
+                <div className="col col-6 ">
+                  <FormControl>
+                    <h2>Whether renewal applied within the stipulated period.</h2>
+                    <label htmlFor=" Whether renewal applied within the stipulated period.">
+                      &nbsp;&nbsp;
+                      <input {...register("renewalApplied")} type="radio" value="yes" id="yes" /> &nbsp; Yes
+                    </label>
+                    <label htmlFor="Whether renewal applied within the stipulated period.">
+                      &nbsp;&nbsp;
+                      <input {...register("renewalApplied")} type="radio" value="no" id="no" />
+                      &nbsp; No
+                    </label>
+                    {watch("renewalApplied") === "yes" && (
+                      <div>
+                        <h2>
+                          Whether renewal applied under section 7(B) as special category project
+                          <span style={{ color: "red" }}>*</span>
+                        </h2>
+                        <label htmlFor=" Whether renewal applied under section 7(B) as special">
+                          &nbsp;&nbsp;
+                          <input {...register("renewalAppliedUnderSection")} type="radio" value="yes" id="yes" />
+                          &nbsp; Yes
+                        </label>
+                        <label htmlFor="Whether renewal applied under section 7(B) as special">
+                          &nbsp;&nbsp;
+                          <input {...register("renewalAppliedUnderSection")} type="radio" value="no" id="no" /> &nbsp; No
+                        </label>
+                      </div>
+                    )}
+                    {watch("renewalApplied") === "no" && (
+                      <div>
+                        <h2>Delay in days</h2>
+                        <input type="number" className="form-control" placeholder="" {...register("delayInDays")} disabled />
+                        {/* auto calculate days from valid upto to current date */}
+                      </div>
+                    )}
+                  </FormControl>
+                </div>
               </div>
-              <div className="col col-6 ">
-                <FormControl>
-                  <h2>Whether renewal applied within the stipulated period.</h2>
-                  <label htmlFor=" Whether renewal applied within the stipulated period.">
-                    &nbsp;&nbsp;
-                    <input {...register("renewalApplied")} type="radio" value="yes" id="yes" /> &nbsp; Yes
-                  </label>{" "}
-                  <label htmlFor="Whether renewal applied within the stipulated period.">
-                    &nbsp;&nbsp;
-                    <input {...register("renewalApplied")} type="radio" value="no" id="no" /> &nbsp; No
-                  </label>
-                  {watch("renewalApplied") === "yes" && (
-                    <div>
-                      <h2>
-                        Whether renewal applied under section 7(B) as special category project
-                        <span style={{ color: "red" }}>*</span>
-                      </h2>
-                      <label htmlFor=" Whether renewal applied under section 7(B) as special">
-                        {" "}
-                        &nbsp;&nbsp;
-                        <input {...register("renewalAppliedUnderSection")} type="radio" value="yes" id="yes" /> &nbsp; Yes
-                      </label>{" "}
-                      <label htmlFor="Whether renewal applied under section 7(B) as special">
-                        &nbsp;&nbsp;
-                        <input {...register("renewalAppliedUnderSection")} type="radio" value="no" id="no" /> &nbsp; No
-                      </label>
-                    </div>
-                  )}
-                  {watch("renewalApplied") === "no" && (
-                    <div>
-                      <h2>Delay in days</h2>
-                      <input type="number" className="form-control" placeholder="" {...register("delayInDays")} />
-                      {/* auto calculate days from valid upto to current date */}
-                    </div>
-                  )}
-                </FormControl>
+              <div className="mt-3">
+                <h2> Reason for not completing the project within the initial validity period of the license.</h2>
+                <textarea className="form-control" placeholder="" {...register("completingProject")} rows="3" />
               </div>
-            </div>
-            <div>
-              <h2> Reason for not completing the project within the initial validity period of the license.</h2>
-              <textarea className="form-control" placeholder="" {...register("completingProject")} rows="3" />
-            </div>
-            {/* <div className="row-12">
+              {/* <div className="row-12">
                   <h2>
                     {" "}
                     Reason for not completing the project within the initial validity period of the license.
@@ -223,7 +312,7 @@ function renewalClu() {
                     </label>
                   </h2>
                 </div> */}
-            {/* {watch("renewalAppliedFirstTime") === "2" && (
+              {/* {watch("renewalAppliedFirstTime") === "2" && (
                   <div className="card">
                     <div className="table table-bordered table-responsive">
                       <thead>
@@ -277,9 +366,9 @@ function renewalClu() {
                     </div>
                   </div>
                 )} */}
-            <div className="row-12">
-              <div className="col md={4} xxl lg-4">
-                {/* <h2>
+              <div className="row-12">
+                <div className="col md={4} xxl lg-4">
+                  {/* <h2>
                       {" "}
                       Whether the colonizer has obtained approval/NOC from the competent authority in pursuance of MOEF notified dated 14.09.2006
                       before stating the development works.
@@ -294,7 +383,7 @@ function renewalClu() {
                       &nbsp;&nbsp;
                       <input {...register("colonizer")} type="radio" value="2" id="no" /> &nbsp; No
                     </label> */}
-                {/* {watch("colonizer") === "1" && (
+                  {/* {watch("colonizer") === "1" && (
                       <div className="col md={4} xxl lg-4">
                         <FormControl>
                           <h2></h2>
@@ -304,7 +393,7 @@ function renewalClu() {
                       </div>
                     )}
                     &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; */}
-                {/* <h2>
+                  {/* <h2>
                       {" "}
                       Whether the colonizer has conveyed the ultimate power load requiremet of the project to the power utility within two months from
                       the date of grant of license.
@@ -319,7 +408,7 @@ function renewalClu() {
                       &nbsp;&nbsp;
                       <input {...register("colonizerUltimatePower")} type="radio" value="2" id="no" /> &nbsp; No
                     </label> */}
-                {/* {watch("colonizerUltimatePower") === "1" && (
+                  {/* {watch("colonizerUltimatePower") === "1" && (
                       <div className="col md={4} xxl lg-4">
                         <FormControl>
                           <h2></h2>
@@ -328,27 +417,30 @@ function renewalClu() {
                         </FormControl>
                       </div>
                     )} */}
-                &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
-                <h2>
-                  {" "}
-                  Whether colonizer has transferred portion of sector/master plans roads forming part of the licensed area free of cost to the Govt.
-                  of not in compilance of condition of license.
-                  <span style={{ color: "red" }}>*</span>
-                </h2>
-                <label htmlFor=" transferredPortion">
-                  {" "}
-                  &nbsp;&nbsp;
-                  <input {...register("transferredPortion")} type="radio" value="yes" id="yes" /> &nbsp; Yes
-                </label>{" "}
-                <label htmlFor="transferredPortion">
-                  &nbsp;&nbsp;
-                  <input {...register("transferredPortion")} type="radio" value="no" id="no" /> &nbsp; No
-                </label>
-                <label htmlFor="transferredPortion">
-                  &nbsp;&nbsp;
-                  <input {...register("transferredPortion")} type="radio" value="NA" id="no" /> &nbsp; NA
-                </label>
-                {/* {watch("transferredPortion") === "1" && (
+                  &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
+                  <h2>
+                    {" "}
+                    Whether colonizer has transferred portion of sector/master plans roads forming part of the licensed area free of cost to the Govt.
+                    of not in compilance of condition of license.
+                    <span style={{ color: "red" }}>*</span>
+                  </h2>
+                  <label htmlFor=" transferredPortion">
+                    {" "}
+                    &nbsp;&nbsp;
+                    <input {...register("transferredPortion")} type="radio" value="yes" id="yes" /> &nbsp; Yes
+                  </label>{" "}
+                  <label htmlFor="transferredPortion">
+                    &nbsp;&nbsp;
+                    <input {...register("transferredPortion")} type="radio" value="no" id="no" /> &nbsp; No
+                  </label>
+                  <label htmlFor="transferredPortion">
+                    &nbsp;&nbsp;
+                    <input {...register("transferredPortion")} type="radio" value="NA" id="no" /> &nbsp; NA
+                  </label>
+                  <h3 className="error-message" style={{ color: "red" }}>
+                    {errors?.transferredPortion && errors?.transferredPortion?.message}
+                  </h3>
+                  {/* {watch("transferredPortion") === "1" && (
                       <div className="row-12">
                         <div className="col md={4} xxl lg-4">
                           <FormControl>
@@ -377,54 +469,60 @@ function renewalClu() {
                         </div>
                       </div>
                     )} */}
-                {/* &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; */}
-                <h2>
-                  {" "}
-                  Whether any specific condition was imposed in the licence
-                  <span style={{ color: "red" }}>*</span>
-                </h2>
-                <label htmlFor="imposedSpecificCondition">
-                  {" "}
-                  &nbsp;&nbsp;
-                  <input {...register("imposedSpecificCondition")} type="radio" value="yes" id="yes" /> &nbsp; Yes
-                </label>{" "}
-                <label htmlFor="imposedSpecificCondition">
-                  &nbsp;&nbsp;
-                  <input {...register("imposedSpecificCondition")} type="radio" value="no" id="no" /> &nbsp; No
-                </label>
-                {watch("imposedSpecificCondition") === "yes" && (
-                  <div className="col md={4} xxl lg-4">
-                    <FormControl>
-                      <h2></h2>
-                      <input type="text" className="form-control" placeholder="" {...register("imposedSpecificConditionText")} />
-                    </FormControl>
-                  </div>
-                )}
-                &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
-                <h2>
-                  {" "}
-                  Complaints/court cases pending if any.
-                  <span style={{ color: "red" }}>*</span>{" "}
-                </h2>
-                <label htmlFor=" courtCases">
-                  {" "}
-                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                  <input {...register("courtCases")} type="radio" value="yes" id="yes" /> &nbsp; Yes
-                </label>{" "}
-                <label htmlFor="courtCases">
-                  &nbsp;&nbsp;
-                  <input {...register("courtCases")} type="radio" value="no" id="no" /> &nbsp; No
-                </label>
-                {watch("courtCases") === "yes" && (
-                  <div className="col md={4} xxl lg-4">
-                    <FormControl>
-                      <h2></h2>
+                  {/* &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; */}
+                  <h2>
+                    {" "}
+                    Whether any specific condition was imposed in the licence
+                    <span style={{ color: "red" }}>*</span>
+                  </h2>
+                  <label htmlFor="imposedSpecificCondition">
+                    {" "}
+                    &nbsp;&nbsp;
+                    <input {...register("imposedSpecificCondition")} type="radio" value="yes" id="yes" /> &nbsp; Yes
+                  </label>{" "}
+                  <label htmlFor="imposedSpecificCondition">
+                    &nbsp;&nbsp;
+                    <input {...register("imposedSpecificCondition")} type="radio" value="no" id="no" /> &nbsp; No
+                  </label>
+                  <h3 className="error-message" style={{ color: "red" }}>
+                    {errors?.imposedSpecificCondition && errors?.imposedSpecificCondition?.message}
+                  </h3>
+                  {watch("imposedSpecificCondition") === "yes" && (
+                    <div className="col md={4} xxl lg-4">
+                      <FormControl>
+                        <h2></h2>
+                        <input type="text" className="form-control" placeholder="" {...register("imposedSpecificConditionText")} />
+                      </FormControl>
+                    </div>
+                  )}
+                  &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
+                  <h2>
+                    {" "}
+                    Complaints/court cases pending if any.
+                    <span style={{ color: "red" }}>*</span>{" "}
+                  </h2>
+                  <label htmlFor=" courtCases">
+                    {" "}
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    <input {...register("courtCases")} type="radio" value="yes" id="yes" /> &nbsp; Yes
+                  </label>{" "}
+                  <label htmlFor="courtCases">
+                    &nbsp;&nbsp;
+                    <input {...register("courtCases")} type="radio" value="no" id="no" /> &nbsp; No
+                  </label>
+                  <h3 className="error-message" style={{ color: "red" }}>
+                    {errors?.courtCases && errors?.courtCases?.message}
+                  </h3>
+                  {watch("courtCases") === "yes" && (
+                    <div className="col md={4} xxl lg-4">
+                      <FormControl>
+                        <h2></h2>
 
-                      <input type="text" className="form-control" placeholder="" />
-                    </FormControl>
-                  </div>
-                )}
-                {/* <h2 style={{ marginleft: "20px" }}>
+                        <input type="text" className="form-control" placeholder="" />
+                      </FormControl>
+                    </div>
+                  )}
+                  {/* <h2 style={{ marginleft: "20px" }}>
                       {" "}
                       EDC
                       <span style={{ color: "red" }}>*</span>
@@ -438,7 +536,7 @@ function renewalClu() {
                         <input {...register("edc")} type="radio" value="2" id="no" /> &nbsp; Outstanding
                       </label>
                     </h2> */}
-                {/* {watch("edc") === "2" && (
+                  {/* {watch("edc") === "2" && (
                       <div className="card">
                         <div className="table table-bordered table-responsive">
                           <thead>
@@ -513,7 +611,7 @@ function renewalClu() {
                         </div>
                       </div>
                     )} */}
-                {/* <h2>
+                  {/* <h2>
                       {" "}
                       SIDC
                       <span style={{ color: "red" }}>*</span>{" "}
@@ -527,7 +625,7 @@ function renewalClu() {
                         <input {...register("sidc")} type="radio" value="2" id="no" /> &nbsp; Outstanding
                       </label>
                     </h2> */}
-                {/* {watch("sidc") === "2" && (
+                  {/* {watch("sidc") === "2" && (
                       <div className="card">
                         <div className="table table-bordered table-responsive">
                           <thead>
@@ -582,7 +680,7 @@ function renewalClu() {
                         </div>
                       </div>
                     )} */}
-                {/* <h2>
+                  {/* <h2>
                       {" "}
                       Enhance EDC
                       <span style={{ color: "red" }}>*</span>{" "}
@@ -596,7 +694,7 @@ function renewalClu() {
                         <input {...register("enhanceEdc")} type="radio" value="2" id="no" /> &nbsp; Outstanding
                       </label>
                     </h2> */}
-                {/* {watch("enhanceEdc") === "2" && (
+                  {/* {watch("enhanceEdc") === "2" && (
                       <div className="row-12">
                         <div className="col md={4} xxl lg-4">
                           <FormControl>
@@ -624,10 +722,10 @@ function renewalClu() {
                         </div>
                       </div>
                     )} */}
+                </div>
               </div>
-            </div>
 
-            {/* <div>
+              {/* <div>
                   <h2 style={{ marginleft: "20px" }}>
                     {" "}
                     Bank Guarantee
@@ -697,13 +795,13 @@ function renewalClu() {
                   </div>
                 </div> */}
 
-            {/* <h2>
+              {/* <h2>
                   {" "}
                   CA certificate regarding non collection of stamp duty and registration charges.
                   <span style={{ color: "red" }}>*</span>
                   <input type="file" className="form-control" placeholder="" {...register("cacertification")} />
                 </h2> */}
-            {/* <h2>
+              {/* <h2>
                   {" "}
                   Copies of advertisement for the sale of flat (Sec 24) along with register containing authenticated copies of Agreement entered
                   between colonizer.
@@ -718,7 +816,7 @@ function renewalClu() {
                   &nbsp;&nbsp;
                   <input {...register("advertisementCopy")} type="radio" value="2" id="no" /> &nbsp; No
                 </label> */}
-            {/* {watch("advertisementCopy") === "1" && (
+              {/* {watch("advertisementCopy") === "1" && (
                   <div className="row-12">
                     <div className="col md={4} xxl lg-4">
                       <FormControl>
@@ -729,7 +827,7 @@ function renewalClu() {
                     </div>
                   </div>
                 )} */}
-            {/* <h2>
+              {/* <h2>
                   {" "}
                   Annual Financial statements duly audited/certifie and signed by Chartened Accountant indicating the amount realized from each space
                   holders, the expenditure incured internal and on external development works separately of the colony /building etc. with detail
@@ -745,7 +843,7 @@ function renewalClu() {
                   &nbsp;&nbsp;
                   <input {...register("annualFinancial")} type="radio" value="2" id="no" /> &nbsp; No
                 </label> */}
-            {/* {watch("annualFinancial") === "1" && (
+              {/* {watch("annualFinancial") === "1" && (
                   <div className="row-12">
                     <div className="col md={4} xxl lg-4">
                       <FormControl>
@@ -756,7 +854,7 @@ function renewalClu() {
                     </div>
                   </div>
                 )} */}
-            {/* <h2>
+              {/* <h2>
                   {" "}
                   Detail of account number of schedule bank in which 30% of the amount released by him from the space holder deposited to meet out the
                   cost of internet developmant work of the colony.
@@ -771,7 +869,7 @@ function renewalClu() {
                   &nbsp;&nbsp;
                   <input {...register("detailAccountNumber")} type="radio" value="2" id="no" /> &nbsp; No
                 </label> */}
-            {/* {watch("detailAccountNumber") === "1" && (
+              {/* {watch("detailAccountNumber") === "1" && (
                   <div className="row-12">
                     <div className="col md={4} xxl lg-4">
                       <FormControl>
@@ -782,31 +880,31 @@ function renewalClu() {
                     </div>
                   </div>
                 )} */}
-            <div>
-              <h2> Compliance of Rule 24, 26(2), 27 & 28 of Rules 1976 has been made </h2>
-              <label htmlFor="complianceOfRule26">
-                {" "}
-                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                <input {...register("complianceOfRule26")} type="radio" value="yes" id="yes" /> &nbsp; Yes
-              </label>{" "}
-              <label htmlFor="complianceOfRule26">
-                &nbsp;&nbsp;
-                <input {...register("complianceOfRule26")} type="radio" value="no" id="no" /> &nbsp; No
-              </label>
-            </div>
-            <div>
-              <h2> Complied within time period </h2>
-              <label htmlFor="compliedInTimePeriod">
-                {" "}
-                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                <input {...register("compliedInTimePeriod")} type="radio" value="yes" id="yes" /> &nbsp; Yes
-              </label>{" "}
-              <label htmlFor="compliedInTimePeriod">
-                &nbsp;&nbsp;
-                <input {...register("compliedInTimePeriod")} type="radio" value="no" id="no" /> &nbsp; No
-              </label>
-            </div>
-            {/* <h2>
+              <div>
+                <h2> Compliance of Rule 24, 26(2), 27 & 28 of Rules 1976 has been made </h2>
+                <label htmlFor="complianceOfRule26">
+                  {" "}
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                  <input {...register("complianceOfRule26")} type="radio" value="yes" id="yes" /> &nbsp; Yes
+                </label>{" "}
+                <label htmlFor="complianceOfRule26">
+                  &nbsp;&nbsp;
+                  <input {...register("complianceOfRule26")} type="radio" value="no" id="no" /> &nbsp; No
+                </label>
+              </div>
+              <div>
+                <h2> Complied within time period </h2>
+                <label htmlFor="compliedInTimePeriod">
+                  {" "}
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                  <input {...register("compliedInTimePeriod")} type="radio" value="yes" id="yes" /> &nbsp; Yes
+                </label>{" "}
+                <label htmlFor="compliedInTimePeriod">
+                  &nbsp;&nbsp;
+                  <input {...register("compliedInTimePeriod")} type="radio" value="no" id="no" /> &nbsp; No
+                </label>
+              </div>
+              {/* <h2>
                   {" "}
                   Copies of form AC account indicating the amount released from each space holders and the amount deposited during the preceeding
                   month in the schedule Bank.
@@ -821,7 +919,7 @@ function renewalClu() {
                   &nbsp;&nbsp;
                   <input {...register("copiesOfCaAccount")} type="radio" value="2" id="no" /> &nbsp; No
                 </label> */}
-            {/* {watch("copiesOfCaAccount") === "1" && (
+              {/* {watch("copiesOfCaAccount") === "1" && (
                   <div className="row-12">
                     <div className="col md={4} xxl lg-4">
                       <FormControl>
@@ -832,94 +930,141 @@ function renewalClu() {
                     </div>
                   </div>
                 )} */}
-            <br></br>
-            <br></br>
-            <div className="row-12">
-              <div className="col md={4} xxl lg-4">
-                <h2 style={{ marginleft: "20px" }}>
-                  {" "}
-                  (1) Status of OC
-                  <span style={{ color: "red" }}>*</span>
-                </h2>
+              <br></br>
+              <div className="row-12">
+                <div className="col md={4} xxl lg-4">
+                  <h2 style={{ marginleft: "20px" }}>
+                    <b> Status of OC with A or B depending type of purpose</b>
+                  </h2>
 
-                <div className="table table-bordered table-responsive">
-                  <thead>
-                    <tr>
-                      <th className="fw-normal" style={{ textAlign: "center" }}>
-                        Sr.No.
-                      </th>
-                      <th className="fw-normal" style={{ textAlign: "center" }}>
-                        Date of grant of OC
-                      </th>
-                      <th className="fw-normal" style={{ textAlign: "center" }}>
-                        Tower
-                      </th>
-                      <th className="fw-normal" style={{ textAlign: "center" }}>
-                        Target date for filling DOD
-                      </th>
-                      <th className="fw-normal" style={{ textAlign: "center" }}>
-                        Whether DOD filled or not
-                      </th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <th className="fw-normal" style={{ textAlign: "center" }}>
-                        <label>
-                          <h2>1</h2>
-                        </label>
-                      </th>
-                      <td style={{ textAlign: "center" }}>
-                        <input type="date" className="form-control" placeholder="" {...register("date")} />
-                      </td>
-                      <td style={{ textAlign: "center" }}>
-                        <input type="text" className="form-control" readOnly placeholder="" {...register("tower")} />
-                      </td>
-                      <td style={{ textAlign: "center" }}>
-                        <input type="text" className="form-control" readOnly placeholder="" {...register("targetDate")} />
-                      </td>
-                      <td style={{ textAlign: "center" }}>
-                        <label htmlFor=" dodFilled">
-                          {" "}
-                          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                          <input {...register("dodFilled")} type="radio" value="1" id="yes" /> &nbsp; Yes
-                        </label>{" "}
-                        <label htmlFor="dodFilled">
-                          &nbsp;&nbsp;
-                          <input {...register("dodFilled")} type="radio" value="2" id="no" /> &nbsp; No
-                        </label>
-                        {watch("dodFilled") === "1" && (
-                          <div className="row-12">
-                            <div className="col md={4} xxl lg-12">
-                              <select className="form-control" {...register("dodFiledDrop")}>
-                                <option value=" ">----Select value-----</option>
-                                <option value="1">Within Time </option>
-                                <option value="2">Delayed</option>
-                                <option value="3">NA</option>
-                              </select>
-                            </div>
+                  <div className="row gy-3 mt-3">
+                    <div className="col col-6">
+                      <h2>
+                        Whether OC/Part OC has been obtained
+                        <span style={{ color: "red" }}>*</span>
+                      </h2>
+                      <label htmlFor="renewalAppliedUnderSectionyes">
+                        &nbsp;&nbsp;
+                        <input {...register("obtainedOCPart")} type="radio" value="yes" id="renewalAppliedUnderSectionyes" /> &nbsp; Yes
+                      </label>
+                      <label htmlFor="renewalAppliedUnderSectionno">
+                        &nbsp;&nbsp;
+                        <input {...register("obtainedOCPart")} type="radio" value="no" id="renewalAppliedUnderSectionno" /> &nbsp; No
+                      </label>
+                    </div>
+                    <h3 className="error-message" style={{ color: "red" }}>
+                      {errors?.obtainedOCPart && errors?.obtainedOCPart?.message}
+                    </h3>
+                    {watch("obtainedOCPart") == "yes" && (
+                      <div className="row gy-3">
+                        <div className="col col-5">
+                          <div>
+                            <h2>Covered Area (In sq meters)</h2>
+                            <input
+                              type="number"
+                              className="form-control"
+                              placeholder=""
+                              {...register("coveredArea")}
+                              required
+                              minLength={1}
+                              maxLength={8}
+                            />
                           </div>
-                        )}
-                        {watch("dodFiledDrop") === "2" && (
-                          <div className="row-12">
-                            <div className="col md={4} xxl lg-12">
-                              <h2>
-                                {" "}
-                                Composition
-                                <span style={{ color: "red" }}>*</span>
-                              </h2>
+                          <h3 className="error-message" style={{ color: "red" }}>
+                            {errors?.coveredArea && errors?.coveredArea?.message}
+                          </h3>
+                        </div>
+                        <div className="col col-4">
+                          <div>
+                            <h2>Proportionate Site Area in Sq meter</h2>
+                            <input
+                              type="number"
+                              className="form-control"
+                              placeholder=""
+                              required
+                              {...register("proportionateSiteArea")}
+                              minLength={1}
+                              maxLength={8}
+                            />
+                          </div>
+                          <h3 className="error-message" style={{ color: "red" }}>
+                            {errors?.proportionateSiteArea && errors?.proportionateSiteArea?.message}
+                          </h3>
+                        </div>
+                        <div className="col col-3">
+                          <h2>
+                            Upload OC Document <span style={{ color: "red" }}>*</span>
+                          </h2>
+                          <label>
+                            <FileUpload style={{ cursor: "pointer" }} color="primary" />
+                            <input
+                              type="file"
+                              style={{ display: "none" }}
+                              accept="application/pdf/jpeg/png"
+                              onChange={(e) => getDocumentData(e?.target?.files[0], "OCdocument")}
+                            />
+                          </label>
+                          {watch("OCdocument") && (
+                            <a onClick={() => getDocShareholding(watch("OCdocument"), setLoader)} className="btn btn-sm ">
+                              <VisibilityIcon color="info" className="icon" />
+                            </a>
+                          )}
+                        </div>
+                      </div>
+                    )}
+                  </div>
 
-                              <input type="text" placeholder="" className="form-control" readOnly {...register("composition")} />
-                            </div>
+                  <div className="row gy-3 mt-3">
+                    <div className="col col-6">
+                      <h2>
+                        Whether Part CC has been Obtained (Yes/No)
+                        <span style={{ color: "red" }}>*</span>
+                      </h2>
+                      <label htmlFor="obtainedCCPartyes">
+                        &nbsp;&nbsp;
+                        <input {...register("obtainedCCPart")} type="radio" value="yes" id="obtainedCCPartyes" /> &nbsp; Yes
+                      </label>
+                      <label htmlFor="obtainedCCPartno">
+                        &nbsp;&nbsp;
+                        <input {...register("obtainedCCPart")} type="radio" value="no" id="obtainedCCPartno" /> &nbsp; No
+                      </label>
+                    </div>
+                    <h3 className="error-message" style={{ color: "red" }}>
+                      {errors?.obtainedCCPart && errors?.obtainedCCPart?.message}
+                    </h3>
+                    {watch("obtainedCCPart") == "yes" && (
+                      <div className="row gy-3">
+                        <div className="col col-5">
+                          <div>
+                            <h2>Site Area(in Acres)</h2>
+                            <input type="number" className="form-control" placeholder="" {...register("siteArea")} minLength={1} maxLength={8} />
                           </div>
-                        )}
-                      </td>
-                    </tr>
-                  </tbody>
+                        </div>
+                        <div className="col col-3">
+                          <h2>
+                            Upload Part CC Document <span style={{ color: "red" }}>*</span>
+                          </h2>
+                          <label>
+                            <FileUpload style={{ cursor: "pointer" }} color="primary" />
+                            <input
+                              type="file"
+                              style={{ display: "none" }}
+                              accept="application/pdf/jpeg/png"
+                              onChange={(e) => getDocumentData(e?.target?.files[0], "CCdocument")}
+                            />
+                          </label>
+                          {watch("CCdocument") && (
+                            <a onClick={() => getDocShareholding(watch("CCdocument"), setLoader)} className="btn btn-sm ">
+                              <VisibilityIcon color="info" className="icon" />
+                            </a>
+                          )}
+                        </div>
+                      </div>
+                    )}
+                  </div>
                 </div>
               </div>
-            </div>
-            {/* <div className="row-12">
+              {/* <div className="row-12">
                   <div className="col md={4} xxl lg-4">
                     <h2 style={{ marginleft: "20px" }}>
                       {" "}
@@ -977,8 +1122,8 @@ function renewalClu() {
                     </div>
                   </div>
                 </div> */}
-            <br></br>
-            {/* <div className="row-12">
+              <br></br>
+              {/* <div className="row-12">
                   <div className="col md={4} xxl lg-4">
                     <h2 style={{ marginleft: "20px" }}>
                       {" "}
@@ -1105,9 +1250,9 @@ function renewalClu() {
                     </div>
                   </div>
                 </div> */}
-            <hr></hr>
-            <br></br>
-            {/* <div className="row-12">
+              <hr></hr>
+              <br></br>
+              {/* <div className="row-12">
                   <div className="col md={4} xxl lg-4">
                     <h2> Total number of EWS Plots/flats approved in the Layout Plan/Building Plan. </h2>
                     <br></br>
@@ -1130,7 +1275,7 @@ function renewalClu() {
                     </FormControl>
                   </div>
                 </div> */}
-            {/* {watch("allotmentStatus") === "1" && (
+              {/* {watch("allotmentStatus") === "1" && (
                   <div className="col md={4} xxl lg-12">
                     <FormControl>
                       <h2>Plot/Flats for which possession given. </h2>
@@ -1144,8 +1289,8 @@ function renewalClu() {
                     </FormControl>
                   </div>
                 )} */}
-            <br></br>
-            {/* {watch("flatPossession") === "2" && (
+              <br></br>
+              {/* {watch("flatPossession") === "2" && (
                   <div className="col md={4} xxl lg-12">
                     <h2>
                       Whether composition fee paid.
@@ -1161,54 +1306,55 @@ function renewalClu() {
                     </h2>
                   </div>
                 )} */}
-            {/* {watch("compositionPaid") === "1" && (
+              {/* {watch("compositionPaid") === "1" && (
                   <div className="col md={4} xxl lg-4">
                     <h2>Amount</h2>
 
                     <input type="text" placeholder="" className="form-control" {...register("compositionAmount")} />
                   </div>
                 )} */}
-            <div>
-              <h2> Status of allotment of EWS Plots/Flats </h2>
-              <label htmlFor="partiallyAllotted">
-                {" "}
-                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                <input {...register("plotAllotmentStatus")} type="radio" value="partiallyAllotted" id="partiallyAllotted" /> &nbsp; Partially Allotted
-              </label>{" "}
-              <label htmlFor="alloted/transferred">
-                &nbsp;&nbsp;
-                <input {...register("plotAllotmentStatus")} type="radio" value="alloted/transferred" id="alloted/transferred" /> &nbsp;
-                Alloted/Transferred
-              </label>
-              <label htmlFor="yetToBeTransferred">
-                &nbsp;&nbsp;
-                <input {...register("plotAllotmentStatus")} type="radio" value="yetToBeTransferred" id="yetToBeTransferred" /> &nbsp; Yet to be
-                transferred
-              </label>
-              <label htmlFor="notApplicable">
-                &nbsp;&nbsp;
-                <input {...register("plotAllotmentStatus")} type="radio" value="notApplicable" id="notApplicable" /> &nbsp; Not applicable
-              </label>
-            </div>
-            <br></br>
-            <div className="row-12">
-              <div className="col md={4} xxl lg-12">
-                <div className="table table-bordered table-responsive">
-                  <thead>
-                    <tr>
-                      <th className="fw-normal" style={{ textAlign: "center" }}>
-                        Sr.No.
-                      </th>
-                      <th className="fw-normal" style={{ textAlign: "center" }}>
-                        Field Name
-                      </th>
-                      <th className="fw-normal" style={{ textAlign: "center" }}>
-                        Upload Documents
-                      </th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {/* <tr>
+              <div>
+                <h2> Status of allotment of EWS Plots/Flats </h2>
+                <label htmlFor="partiallyAllotted">
+                  {" "}
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                  <input {...register("plotAllotmentStatus")} type="radio" value="partiallyAllotted" id="partiallyAllotted" /> &nbsp; Partially
+                  Allotted
+                </label>{" "}
+                <label htmlFor="alloted/transferred">
+                  &nbsp;&nbsp;
+                  <input {...register("plotAllotmentStatus")} type="radio" value="alloted/transferred" id="alloted/transferred" /> &nbsp;
+                  Alloted/Transferred
+                </label>
+                <label htmlFor="yetToBeTransferred">
+                  &nbsp;&nbsp;
+                  <input {...register("plotAllotmentStatus")} type="radio" value="yetToBeTransferred" id="yetToBeTransferred" /> &nbsp; Yet to be
+                  transferred
+                </label>
+                <label htmlFor="notApplicable">
+                  &nbsp;&nbsp;
+                  <input {...register("plotAllotmentStatus")} type="radio" value="notApplicable" id="notApplicable" /> &nbsp; Not applicable
+                </label>
+              </div>
+              <br></br>
+              <div className="row-12">
+                <div className="col md={4} xxl lg-12">
+                  <div className="table table-bordered table-responsive">
+                    <thead>
+                      <tr>
+                        <th className="fw-normal" style={{ textAlign: "center" }}>
+                          Sr.No.
+                        </th>
+                        <th className="fw-normal" style={{ textAlign: "center" }}>
+                          Field Name
+                        </th>
+                        <th className="fw-normal" style={{ textAlign: "center" }}>
+                          Upload Documents
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {/* <tr>
                           <th className="fw-normal" style={{ textAlign: "center" }}>
                             <label>
                               <h2>1.</h2>
@@ -1223,7 +1369,7 @@ function renewalClu() {
                             <input type="file" className="form-control" placeholder="" {...register("uploadIncomeTax")} />
                           </td>
                         </tr> */}
-                    {/* <tr>
+                      {/* <tr>
                           <th className="fw-normal" style={{ textAlign: "center" }}>
                             <label>
                               <h2>2.</h2>
@@ -1241,22 +1387,36 @@ function renewalClu() {
                             <input type="file" className="form-control" placeholder="" {...register("uploadExplanatoryNote")} />
                           </td>
                         </tr> */}
-                    <tr>
-                      <th className="fw-normal" style={{ textAlign: "center" }}>
-                        <label>
-                          <h2>1.</h2>
-                        </label>
-                      </th>
-                      <td>
-                        <label>
-                          <h2>Status of development works completed at Site.</h2>
-                        </label>
-                      </td>
-                      <td style={{ textAlign: "center" }}>
-                        <input type="file" className="form-control" placeholder="" {...register("uploadStatusDevelopment")} />
-                      </td>
-                    </tr>
-                    {/* <tr>
+                      <tr>
+                        <th className="fw-normal" style={{ textAlign: "center" }}>
+                          <label>
+                            <h2>1.</h2>
+                          </label>
+                        </th>
+                        <td>
+                          <label>
+                            <h2>Status of development works completed at Site.</h2>
+                          </label>
+                        </td>
+                        <td style={{ textAlign: "center" }}>
+                          <label>
+                            <FileUpload style={{ cursor: "pointer" }} color="primary" />
+                            <input
+                              type="file"
+                              style={{ display: "none" }}
+                              accept="application/pdf/jpeg/png"
+                              onChange={(e) => getDocumentData(e?.target?.files[0], "uploadStatusDevelopment")}
+                            />
+                          </label>
+                          {watch("uploadStatusDevelopment") && (
+                            <a onClick={() => getDocShareholding(watch("uploadStatusDevelopment"), setLoader)} className="btn btn-sm ">
+                              <VisibilityIcon color="info" className="icon" />
+                            </a>
+                          )}
+                          {/* <input type="file" className="form-control" placeholder="" {...register("uploadStatusDevelopment")} /> */}
+                        </td>
+                      </tr>
+                      {/* <tr>
                           <th className="fw-normal" style={{ textAlign: "center" }}>
                             <label>
                               <h2>4.</h2>
@@ -1271,45 +1431,56 @@ function renewalClu() {
                             <input type="file" className="form-control" placeholder="" {...register("uploadOldLicence")} />
                           </td>
                         </tr> */}
-                  </tbody>
+                    </tbody>
+                  </div>
                 </div>
               </div>
-            </div>
-            <br></br>
-            <div className="row-12">
-              <div className="col md={4} xxl lg-4">
-                <FormControl>
-                  <h2>
-                    {" "}
-                    Amount <span style={{ color: "red" }}>*</span>
-                  </h2>
+              <br></br>
+              <div className="row-12">
+                <div className="col md={4} xxl lg-4">
+                  <FormControl>
+                    <h2>
+                      {" "}
+                      Amount <span style={{ color: "red" }}>*</span>
+                    </h2>
 
-                  <input type="text" className="form-control" placeholder="" readOnly {...register("oldAmount")} />
-                </FormControl>
-                &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
-                <FormControl>
-                  <button type="submit" id="btnSearch" class="btn btn-success btn-md center-block" style={{ marginTop: "25px" }}>
-                    Pay
+                    <input type="text" className="form-control" placeholder="" readOnly {...register("oldAmount")} />
+                  </FormControl>
+                  &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
+                  <FormControl>
+                    <button type="submit" id="btnSearch" class="btn btn-success btn-md center-block" style={{ marginTop: "25px" }}>
+                      Pay
+                    </button>
+                  </FormControl>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-sm-12 text-right">
+                  <button type="submit" id="btnSearch" class="btn btn-primary btn-md center-block">
+                    Submit
                   </button>
-                </FormControl>
-              </div>
-            </div>
-            <div class="row">
-              <div class="col-sm-12 text-right">
-                <button type="submit" id="btnSearch" class="btn btn-primary btn-md center-block">
-                  Submit
-                </button>
-              </div>
-              <div class="col-sm-12 text-right">
-                <button id="btnSearch" class="btn btn-primary btn-md center-block" style={{ marginTop: "-58px", marginRight: "97px" }}>
-                  Save as Draft
-                </button>
+                </div>
+                <div class="col-sm-12 text-right">
+                  <button id="btnSearch" class="btn btn-primary btn-md center-block" style={{ marginTop: "-58px", marginRight: "97px" }}>
+                    Save as Draft
+                  </button>
+                </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
-    </form>
+      </form>
+      {showToastError && (
+        <CusToaster
+          label={showToastError?.label}
+          success={showToastError?.success}
+          error={showToastError?.error}
+          onClose={() => {
+            setShowToastError({ label: "", success: false, error: false });
+          }}
+        />
+      )}
+    </div>
   );
 }
 

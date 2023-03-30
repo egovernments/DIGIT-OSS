@@ -33,6 +33,7 @@ const NumberInput = (props) => {
             name={props?.name}
             inputProps={props.inputProps}
             allowLeadingZeros={true}
+            isAllowed={props?.isAllowed}
           />
         )}
         name={props?.name}

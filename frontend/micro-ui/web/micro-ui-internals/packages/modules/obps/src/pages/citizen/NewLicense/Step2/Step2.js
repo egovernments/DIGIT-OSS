@@ -361,12 +361,6 @@ const ApllicantPuropseForm = (props) => {
   }, [getNameRevenueState]);
 
   useEffect(() => {
-    const devPlanValue = devPlanOptons?.data?.filter((item) => item?.value === specificTableData?.developmentPlan);
-    setDevPlanVal(devPlanValue?.[0]?.value);
-    setValue("developmentPlan", { label: devPlanValue?.[0]?.label, value: devPlanValue?.[0]?.value });
-  }, [devPlanOptons, specificTableData]);
-
-  useEffect(() => {
     const potential = ZoneOptions?.data?.filter((item) => item?.label === specificTableData?.potential);
     setSectorVal(potential?.[0]?.value);
     setValue("potential", { label: potential?.[0]?.label, value: potential?.[0]?.value });

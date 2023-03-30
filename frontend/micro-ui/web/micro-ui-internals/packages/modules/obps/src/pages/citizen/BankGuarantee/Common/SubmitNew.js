@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Button } from "@material-ui/core";
 import FormControl, { useFormControl } from "@mui/material/FormControl";
 import OutlinedInput from "@mui/material/OutlinedInput";
-import { useForm } from "react-hook-form";
+import { useForm, useFieldArray } from "react-hook-form";
 import axios from "axios";
 import { styled } from "@mui/material/styles";
 import { Dialog } from "@mui/material";
@@ -39,7 +39,9 @@ function SubmitNew() {
   const handleClickOpen = () => {
     setOpen(true);
   };
-
+  const handleClickOpen1 = () => {
+    setOpen1(true);
+  };
   const handleClose = () => {
     setOpen(false);
   };
@@ -65,7 +67,6 @@ function SubmitNew() {
     getValues,
   } = useForm({});
   const tenantId = Digit.ULBService.getCurrentTenantId();
-  const [noOfRows, setNoOfRows] = useState(1);
 
   const bankSubmitNew = async (data) => {
     const token = window?.localStorage?.getItem("token");
@@ -264,7 +265,6 @@ function SubmitNew() {
     }
   };
   const [showhide, setShowhide] = useState("");
-
   const handleshowhide = (event) => {
     const getuser = event.target.value;
 
@@ -304,6 +304,8 @@ function SubmitNew() {
 
     console.log("loiloiloi");
   };
+
+  const [noofRows, setNoOfRows] = useState(1);
   var date = new Date("Wed, 04 May 2022");
   var year = date.toLocaleString("default", { year: "numeric" });
   var month = date.toLocaleString("default", { month: "2-digit" });
@@ -311,6 +313,7 @@ function SubmitNew() {
 
   // Generate yyyy-mm-dd date string
   var formattedDate = year + "-" + month + "-" + day;
+
   return (
     <React.Fragment>
       <form onSubmit={handleSubmit(bankSubmitNew)}>
@@ -807,29 +810,37 @@ function SubmitNew() {
                     </tr>
                   </thead>
                   <tbody>
-                    {[...Array(noOfRows)].map((elementInArray, index) => {
+                    <tr>
+                      <th className="fw-normal" style={{ textAlign: "center" }}>
+                        <input type="text" className="form-control" placeholder="" {...register("plotNumber")} />
+                      </th>
+                      <th className="fw-normal" style={{ textAlign: "center" }}>
+                        <input type="number" className="form-control" placeholder="" {...register("areaInSqMtrs")} />
+                      </th>
+                    </tr>
+                    {[...Array(noofRows)].map((elementInArray, input) => {
                       return (
                         <tr>
-                          <th className="fw-normal" style={{ textAlign: "center" }}>
-                            <input type="text" className="form-control" placeholder="" {...register("plotNumber")} />
-                          </th>
-                          <th className="fw-normal" style={{ textAlign: "center" }}>
-                            <input type="number" className="form-control" placeholder="" {...register("areaInSqMtrs")} />
-                          </th>
+                          <td>
+                            <input type="text" className="form-control" placeholder="" />
+                          </td>
+                          <td>
+                            <input type="text" className="form-control" placeholder="" />
+                          </td>
                         </tr>
                       );
                     })}
                   </tbody>
                 </div>
-                <th>
-                  <button type="button" class="btn btn-primary me-3" onClick={() => setNoOfRows(noOfRows + 1)}>
-                    Add
-                  </button>{" "}
-                  &nbsp;&nbsp;
-                  <button type="button" class="btn btn-danger" onClick={() => setNoOfRows(noOfRows - 1)}>
+                <div>
+                  <button type="button" style={{ float: "left" }} className="btn btn-primary" onClick={() => setNoOfRows(noofRows + 1)}>
+                    Add more
+                  </button>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                  <button type="button" style={{ float: "left" }} className="btn btn-danger" onClick={() => setNoOfRows(noofRows - 1)}>
                     Delete
                   </button>
-                </th>
+                </div>
 
                 <div class="row-12" className="align-right">
                   <div className="col col-3">
@@ -955,7 +966,7 @@ function SubmitNew() {
                   Cancel
                 </Button>
                 &nbsp;
-                <Button type="submit" class="btn btn-primary btn-md center-block">
+                <Button type="submit" onClick={handleClickOpen1} class="btn btn-primary btn-md center-block">
                   Submit
                 </Button>
                 &nbsp;
@@ -968,7 +979,7 @@ function SubmitNew() {
           </div>
         </div>
       </form>
-      <Dialog open1={open1} onClose={handleClose1} aria-labelledby="alert-dialog-title" aria-describedby="alert-dialog-description">
+      <Dialog open={open1} onClose={handleClose1} aria-labelledby="alert-dialog-title" aria-describedby="alert-dialog-description">
         <DialogTitle id="alert-dialog-title">Bank Guarantee Submission</DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
