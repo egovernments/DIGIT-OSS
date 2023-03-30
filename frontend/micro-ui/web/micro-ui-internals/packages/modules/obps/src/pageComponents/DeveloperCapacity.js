@@ -902,83 +902,6 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
                   <div className="form-group row mb-12">
                     {/* <label className="col-sm-3 col-form-label">Individual</label> */}
                     <div className="col-sm-12">
-                      {/* <textarea type="text" className="employee-card-input" id="details" placeholder="Enter Details" /> */}
-                      {/* <table className="table table-bordered" size="sm">
-                        <thead>
-                          <tr>
-                            <th>S.No.</th>
-                            <th>Particulars of document</th>
-                            <th>Annexure </th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          <tr>
-                            <td> 1 </td>
-                            <td>
-                              Net Worth in case of individual certified by CA/ Or Income tax return in case of an individual (for the last three
-                              years) <span className="text-danger font-weight-bold">*</span>
-                            </td>
-                            <td align="center" size="large">
-                              <div className="row">
-                                {Documents?.individualCertificateCA ? (
-                                  <a
-                                    onClick={() => getDocShareholding(Documents?.individualCertificateCA)}
-                                    title="View Document"
-                                    className="btn btn-sm col-md-6"
-                                  >
-                                    <VisibilityIcon color="info" className="icon" />
-                                  </a>
-                                ) : (
-                                  <p></p>
-                                )}
-                                <div className="btn btn-sm col-md-6">
-                                  <label for="individualCertificateCA" title="Upload Document">
-                                    {" "}
-                                    <FileUpload color="primary" />
-                                  </label>
-                                  <input
-                                    id="individualCertificateCA"
-                                    type="file"
-                                    style={{ display: "none" }}
-                                    onChange={(e) => getDocumentData(e?.target?.files[0], "individualCertificateCA", "devTypeDocument")}
-                                  />
-                                </div>
-                              </div>
-                            </td>
-                          </tr>
-                          <tr>
-                            <td> 2 </td>
-                            <td>
-                              Bank statement for the last 3 years <span className="text-danger font-weight-bold">*</span>
-                            </td>
-                            <td align="center" size="large">
-                              <div className="row">
-                                {Documents?.companyBalanceSheet ? (
-                                  <a onClick={() => getDocShareholding(Documents?.companyBalanceSheet)} className="btn btn-sm col-md-6">
-                                    <VisibilityIcon color="info" className="icon" />
-                                  </a>
-                                ) : (
-                                  <p></p>
-                                )}
-                                <div className="btn btn-sm col-md-6">
-                                  <label for="companyBalanceSheet">
-                                    {" "}
-                                    <FileUpload color="primary" />
-                                  </label>
-                                  <input
-                                    id="companyBalanceSheet"
-                                    type="file"
-                                    accept="addplication/pdf"
-                                    style={{ display: "none" }}
-                                    onChange={(e) => getDocumentData(e?.target?.files[0], "companyBalanceSheet", "devTypeDocument")}
-                                  />
-                                </div>
-                              </div>
-                            </td>
-                          </tr>
-                        </tbody>
-                      </table> */}
-
                       <Paper sx={{ width: "100%", overflow: "hidden" }}>
                         <TableContainer sx={{ maxHeight: 440 }}>
                           <Table stickyHeader aria-label="sticky table">
@@ -1082,183 +1005,6 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
                   <div className="form-group row">
                     {/* <label className="col-sm-3 col-form-label">Company</label> */}
                     <div className="col-sm-12">
-                      {/* <input type="text" className="employee-card-input" id="Email" placeholder="Enter Email" /> */}
-                      {/* <table className="table table-bordered" size="sm">
-                        <thead>
-                          <tr>
-                            <th>S.No.</th>
-                            <th>Particulars of document</th>
-                            <th>Annexure </th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          <tr>
-                            <td> 1 </td>
-                            <td>
-                              Balance sheet of last 3 years <span className="text-danger font-weight-bold">*</span>
-                            </td>
-                           
-                            <td align="center" size="large">
-                              <div className="row">
-                                {Documents?.companyBalanceSheet ? (
-                                  <a
-                                    onClick={() => getDocShareholding(Documents?.companyBalanceSheet)}
-                                    title="View Document"
-                                    className="btn btn-sm col-md-6"
-                                  >
-                                    <VisibilityIcon color="info" className="icon" />
-                                  </a>
-                                ) : (
-                                  <p></p>
-                                )}
-                                <div className="btn btn-sm col-md-6">
-                                  <label for="uploadBalanceDoc" title="Upload Document">
-                                    {" "}
-                                    <FileUpload color="primary" />
-                                  </label>
-                                  <input
-                                    id="uploadBalanceDoc"
-                                    type="file"
-                                    accept="application/pdf"
-                                    style={{ display: "none" }}
-                                    onChange={(e) => getDocumentData(e?.target?.files[0], "companyBalanceSheet", "devTypeDocument")}
-                                  />
-                                </div>
-                              </div>
-                            </td>
-                          </tr>
-                          <tr>
-                            <td> 2 </td>
-                            <td>
-                              Ps-3(Representing Paid-UP capital) <span className="text-danger font-weight-bold">*</span>
-                            </td>
-
-                            <td align="center" size="large">
-                              <div className="row">
-                                {Documents?.paidUpCapital ? (
-                                  <a
-                                    onClick={() => getDocShareholding(Documents?.paidUpCapital)}
-                                    title="View Document"
-                                    className="btn btn-sm col-md-6"
-                                  >
-                                    <VisibilityIcon color="info" className="icon" />
-                                  </a>
-                                ) : (
-                                  <p></p>
-                                )}
-                                <div className="btn btn-sm col-md-6">
-                                  <label for="uploadPaidUpDoc" title="Upload Document">
-                                    {" "}
-                                    <FileUpload color="primary" />
-                                  </label>
-                                  <input
-                                    id="uploadPaidUpDoc"
-                                    type="file"
-                                    accept="application/pdf"
-                                    style={{ display: "none" }}
-                                    onChange={(e) => getDocumentData(e?.target?.files[0], "paidUpCapital", "devTypeDocument")}
-                                  />
-                                </div>
-                              </div>
-                            </td>
-                          </tr>
-
-                          <tr>
-                            <td> 3 </td>
-                            <td>
-                              Reserves and surpluses <span className="text-danger font-weight-bold">*</span>
-                            </td>
-                            <td align="center" size="large">
-                              <div className="row">
-                                {Documents?.reservesAndSurplus ? (
-                                  <a
-                                    onClick={() => getDocShareholding(Documents?.reservesAndSurplus)}
-                                    title="View Document"
-                                    className="btn btn-sm col-md-6"
-                                  >
-                                    <VisibilityIcon color="info" className="icon" />
-                                  </a>
-                                ) : (
-                                  <p></p>
-                                )}
-                                <div className="btn btn-sm col-md-6">
-                                  <label for="reservesAndSurplus" title="Upload Document">
-                                    {" "}
-                                    <FileUpload color="primary" />
-                                  </label>
-                                  <input
-                                    id="reservesAndSurplus"
-                                    type="file"
-                                    accept="application/pdf"
-                                    style={{ display: "none" }}
-                                    onChange={(e) => getDocumentData(e?.target?.files[0], "reservesAndSurplus", "devTypeDocument")}
-                                  />
-                                </div>
-                              </div>
-                            </td>
-                          </tr>
-                          <tr>
-                            <td> 4 </td>
-                            <td>Fully Convertible Debenture </td>
-                            <td align="center" size="large">
-                              <div className="row">
-                                {Documents?.fullyConvertibleDebenture ? (
-                                  <a
-                                    onClick={() => getDocShareholding(Documents?.fullyConvertibleDebenture)}
-                                    title="View Document"
-                                    className="btn btn-sm col-md-6"
-                                  >
-                                    <VisibilityIcon color="info" className="icon" />
-                                  </a>
-                                ) : (
-                                  <p></p>
-                                )}
-                                <div className="btn btn-sm col-md-6">
-                                  <label for="fullyConvertibleDebentureId" title="Upload Document">
-                                    {" "}
-                                    <FileUpload color="primary" />
-                                  </label>
-                                  <input
-                                    id="fullyConvertibleDebentureId"
-                                    type="file"
-                                    accept="application/pdf"
-                                    style={{ display: "none" }}
-                                    onChange={(e) => getDocumentData(e?.target?.files[0], "fullyConvertibleDebenture", "devTypeDocument")}
-                                  />
-                                </div>
-                              </div>
-                            </td>
-                          </tr>
-                          <tr>
-                            <td> 5 </td>
-                            <td>Any other documents</td>
-                            <td align="center" size="large">
-                              <div className="row">
-                                {Documents?.anyOtherDoc ? (
-                                  <a onClick={() => getDocShareholding(Documents?.anyOtherDoc)} title="View Document" className="btn btn-sm col-md-6">
-                                    <VisibilityIcon color="info" className="icon" />
-                                  </a>
-                                ) : (
-                                  <p></p>
-                                )}
-                                <div className="btn btn-sm col-md-6">
-                                  <label for="anyOtherDoc" title="Upload Document">
-                                    {" "}
-                                    <FileUpload color="primary" />
-                                  </label>
-                                  <input
-                                    id="anyOtherDoc"
-                                    type="file"
-                                    accept="application/pdf"
-                                    style={{ display: "none" }}
-                                    onChange={(e) => getDocumentData(e?.target?.files[0], "anyOtherDoc", "devTypeDocument")}
-                                  />
-                                </div>
-                              </div>
-                            </td>
-                          </tr>
-                        </tbody>
-                      </table> */}
                       <Paper sx={{ width: "100%", overflow: "hidden" }}>
                         <TableContainer sx={{ maxHeight: 440 }}>
                           <Table stickyHeader aria-label="sticky table">
@@ -1734,12 +1480,14 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
                   <p className="d-none"></p>
                 )}
                 {data?.devDetail[0]?.addInfo?.showDevTypeFields === "Company" ||
-                  (data?.devDetail[0]?.addInfo?.showDevTypeFields === "Partnership Firm" && (
-                    <p className="ml-1">
-                      (i) Whether the Developer has earlier been granted permission to set up a colony under HDRU Act, 1975:{" "}
-                      <span className="text-danger font-weight-bold">*</span>
-                    </p>
-                  ))}
+                data?.devDetail[0]?.addInfo?.showDevTypeFields === "Partnership Firm" ? (
+                  <p className="ml-1">
+                    (i) Whether the Developer has earlier been granted permission to set up a colony under HDRU Act, 1975:{" "}
+                    <span className="text-danger font-weight-bold">*</span>
+                  </p>
+                ) : (
+                  <p className="d-none"></p>
+                )}
                 <div className="form-group ml-1">
                   <input
                     type="radio"
@@ -1766,70 +1514,6 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
                     <div className="card-body">
                       {/* <h5 className="card-h">Add/Remove Authorized Users</h5> */}
                       <div className="table-bd">
-                        {/* <Table className="table table-bordered">
-                          <thead>
-                            <tr>
-                              <th>S. no</th>
-                              <th> Licence No. </th>
-                              <th>Date of grant of license</th>
-                              <th>Purpose of colony</th>
-                              <th>Validity of Licence</th>
-                              <th>Actions</th>
-                            </tr>
-                          </thead>
-                          <tbody>
-                            {capacityDevelopColonyHdruAct.length > 0 ? (
-                              capacityDevelopColonyHdruAct?.map((elementInArray, input) => {
-                                return (
-                                  <tr>
-                                    <td>{input + 1}</td>
-                                    <td>
-                                      <input
-                                        type="text"
-                                        value={elementInArray?.licenceNumber}
-                                        placeholder={elementInArray?.licenceNumber}
-                                        class="form-control"
-                                      />
-                                    </td>
-                                    <td>
-                                      <input
-                                        type="text"
-                                        value={elementInArray?.dateOfGrantingLic}
-                                        placeholder={elementInArray?.dateOfGrantingLic}
-                                        class="form-control"
-                                      />
-                                    </td>
-                                    <td>
-                                      <input
-                                        type="text"
-                                        value={elementInArray?.purposeOfColony}
-                                        placeholder={elementInArray?.purposeOfColony}
-                                        class="form-control"
-                                      />
-                                    </td>
-                                    <td>
-                                      <input
-                                        type="text"
-                                        value={elementInArray?.licValidity}
-                                        placeholder={elementInArray?.licValidity}
-                                        class="form-control"
-                                      />
-                                    </td>
-                                  
-                                    <td>
-                                      <button type="button" onClick={() => deleteTableRows(-1)}>
-                                        <DeleteIcon />
-                                      </button>
-                                    </td>
-                                  </tr>
-                                );
-                              })
-                            ) : (
-                              <p className="d-none">Click on Add more</p>
-                            )}
-                          </tbody>
-                        </Table> */}
-
                         <Paper sx={{ width: "100%", overflow: "hidden" }}>
                           <TableContainer sx={{ maxHeight: 440 }}>
                             <Table stickyHeader aria-label="sticky table">
