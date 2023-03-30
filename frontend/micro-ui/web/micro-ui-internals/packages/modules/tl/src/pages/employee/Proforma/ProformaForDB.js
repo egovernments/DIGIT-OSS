@@ -1,234 +1,3 @@
-// import * as React from 'react';
-// import Box from '@mui/material/Box';
-// import { Card } from '@mui/material';
-// import Checkbox from '@mui/material/Checkbox';
-// import FormControlLabel from '@mui/material/FormControlLabel';
-
-// export default function IndeterminateCheckbox() {
-//   const [checked, setChecked] = React.useState([true, false]);
-
-//   const handleChange1 = (event) => {
-//     setChecked([event.target.checked, event.target.checked]);
-//   };
-
-//   const handleChange2 = (event) => {
-//     setChecked([event.target.checked, checked[1]]);
-//   };
-
-//   const handleChange3 = (event) => {
-//     setChecked([checked[0], event.target.checked[2]]);
-//   };
-//   const handleChange4 = (event) => {
-//     setChecked([checked[1], event.target.checked[3]]);
-//   };
-//   const handleChange5 = (event) => {
-//     setChecked([checked[2], event.target.checked[4]]);
-//   };
-//   const handleChange6 = (event) => {
-//     setChecked([checked[3], event.target.checked[5]]);
-//   };
-//   const handleChange7 = (event) => {
-//     setChecked([checked[4], event.target.checked]);
-//   };
-  
-
-//   const children = (
-//     <Box sx={{ display: 'flex', flexDirection: 'column', ml: 3 }}>
-//       <FormControlLabel
-//         label="Scrutiny fee deposited is in order or not."
-//         control={<Checkbox checked={checked[0]} onChange={handleChange2} />}
-//       />
-//       <FormControlLabel
-//         label="25% of the licence fee deposited is in order or not."
-//         control={<Checkbox checked={checked[1]} onChange={handleChange3} />}
-//       />
-//       <FormControlLabel
-//         label="Documents submitted regarding the Financial position of the applicant/developer is in order or not."
-//         control={<Checkbox checked={checked[2]} onChange={handleChange4} />}
-//       />
-//       <FormControlLabel
-//         label="If the license application is under part migration/ migration, the parent license renewed/requisite renewal fee + applicable interest deposited is in order or not."
-//         control={<Checkbox checked={checked[3]} onChange={handleChange5} />}
-//       />
-//       <FormControlLabel
-//         label="25% of the licence fee deposited is in order or not."
-//         control={<Checkbox checked={checked[4]} onChange={handleChange6} />}
-//       />
-//       <FormControlLabel
-//         label="25% of the licence fee deposited is in order or not."
-//         control={<Checkbox checked={checked[5]} onChange={handleChange7} />}
-//       />
-//     </Box>
-//   );
-
-//   return (
-//     <Card>
-//     <div>
-//       <FormControlLabel
-//         label="Parent"
-//         control={
-//           <Checkbox
-//             checked={checked[0] && checked[1] && checked[2] && checked[3] && checked[4] && checked[5]}
-//             indeterminate={checked[0] !== checked[1] !== checked[2] !== checked[3] !== checked[4]  !== checked[5]}
-//             onChange={handleChange1}
-//           />
-//         }
-//       />
-//       {children}
-//     </div>
-//     </Card>
-//   );
-// }
-
-// import * as React from 'react';
-// import Box from '@mui/material/Box';
-// import FormLabel from '@mui/material/FormLabel';
-// import FormControl from '@mui/material/FormControl';
-// import FormGroup from '@mui/material/FormGroup';
-// import FormControlLabel from '@mui/material/FormControlLabel';
-// import FormHelperText from '@mui/material/FormHelperText';
-// import Checkbox from '@mui/material/Checkbox';
-
-// export default function IndeterminateCheckbox() {
-//   const [state, setState] = React.useState({
-//     gilad: true,
-//     jason: false,
-//     antoine: false,
-//   });
-
-//   const handleChange = (event) => {
-//     setState({
-//       ...state,
-//       [event.target.name]: event.target.checked,
-//     });
-//   };
-
-//   const { gilad, jason, antoine } = state;
-//   const error = [gilad, jason, antoine].filter((v) => v).length !== 2;
-
-//   return (
-//     <Box sx={{ display: 'flex' }}>
-//       <FormControl sx={{ m: 3 }} component="fieldset" variant="standard">
-//         <FormLabel component="legend">Assign responsibility</FormLabel>
-//         <FormGroup>
-//           <FormControlLabel
-//             control={
-//               <Checkbox checked={gilad} onChange={handleChange} name="gilad" />
-//             }
-//             label="Scrutiny fee deposited is in order or not."
-//           />
-//           <FormControlLabel
-//             control={
-//               <Checkbox checked={jason} onChange={handleChange} name="jason" />
-//             }
-//             label="25% of the licence fee deposited is in order or not."
-//           />
-//           <FormControlLabel
-//             control={
-//               <Checkbox checked={antoine} onChange={handleChange} name="antoine" />
-//             }
-//             label="Documents submitted regarding the Financial position of the applicant/developer is in order or not."
-//           />
-//         </FormGroup>
-//         <FormHelperText>Be careful</FormHelperText>
-//       </FormControl>
-//       {/* <FormControl
-//         required
-//         error={error}
-//         component="fieldset"
-//         sx={{ m: 3 }}
-//         variant="standard"
-//       >
-//         <FormLabel component="legend">Pick two</FormLabel>
-//         <FormGroup>
-//           <FormControlLabel
-//             control={
-//               <Checkbox checked={gilad} onChange={handleChange} name="gilad" />
-//             }
-//             label="Gilad Gray"
-//           />
-//           <FormControlLabel
-//             control={
-//               <Checkbox checked={jason} onChange={handleChange} name="jason" />
-//             }
-//             label="Jason Killian"
-//           />
-//           <FormControlLabel
-//             control={
-//               <Checkbox checked={antoine} onChange={handleChange} name="antoine" />
-//             }
-//             label="Antoine Llorca"
-//           />
-//         </FormGroup>
-//         <FormHelperText>You can display an error</FormHelperText>
-//       </FormControl> */}
-//     </Box>
-//   );
-// }
-
-// import React, { useState } from "react";
-// import { Button } from "@material-ui/core";
-// import FormControl from "@mui/material/FormControl";
-// import { useForm } from "react-hook-form";
-// import OutlinedInput from "@mui/material/OutlinedInput";
-
-// function RadioButtonsGroup() {
-//   const [selects, setSelects] = useState();
-//   const [showhide, setShowhide] = useState("");
-//   const { register, handleSubmit } = useForm();
-//   const RadioButtonsGroup = (data) => console.log(data);
-
-//   const handleshowhide = (event) => {
-//     const getuser = event.target.value;
-
-//     setShowhide(getuser);
-//   };
-//   return (
-//     <form onSubmit={handleSubmit(RadioButtonsGroup)}>
-//       <div className="card" style={{ width: "126%", border: "5px solid #1266af" }}>
-//         <h4 style={{ fontSize: "25px", marginLeft: "21px" }}>APPROVAL OF REVISED LAYOUT PLAN OF LICENSE</h4>
-        
- 
-//         <div className="row">
-//     <FormControl>
-
-//   <div class="col-sm-8 text-left">
-// <h2 className="FormLable">
-//   Any other feature
-//   <span style={{ color: "red" }}>*</span>
-// </h2>
-// </div>
-// {/* <div class="col-md-4 text-right"> */}
-//     <input
-//       type="radio"
-//       value="true"
-//       label="Yes"
-//       name="anyOtherFeature"
-//       id="anyOtherFeature"
-//       {...register(" anyOtherFeature")}
-//       onChange={(e) => handleselects(e)}
-//     />
-
-//     <input
-//       type="radio"
-//       value="false"
-//       label="No"
-//       name="c"
-//       id="anyOtherFeature"
-//       {...register("anyOtherFeature")}
-//       onChange={(e) => handleselects(e)}
-//     />
-//   </div>
-
-// </FormControl>
-// </div>
-// </div>
-//     </form>
-//   );
-// }
-
-// export default RadioButtonsGroup;
-
 import React, { useState } from "react";
 import Button from "react-bootstrap/Button";
 import Col from "react-bootstrap/Col";
@@ -254,11 +23,11 @@ import FormControlLabel from '@mui/material/FormControlLabel';
 import FormControl from '@mui/material/FormControl';
 import FormLabel from '@mui/material/FormLabel';
 
-function IndeterminateCheckbox() {
+function DrawingBranch() {
   const [selects, setSelects] = useState();
   const [showhide, setShowhide] = useState("");
   const { register, handleSubmit } = useForm();
-  const IndeterminateCheckbox = (data) => console.log(data);
+  const layoutPlan = (data) => console.log(data);
 
   const handleshowhide = (event) => {
     const getuser = event.target.value;
@@ -268,7 +37,7 @@ function IndeterminateCheckbox() {
   const [open2, setOpen2] = useState(false);
 
   return (
-    <form onSubmit={handleSubmit(IndeterminateCheckbox)}>
+    <form onSubmit={handleSubmit(layoutPlan)}>
         <div
         className="collapse-header"
         onClick={() => setOpen2(!open2)}
@@ -287,14 +56,14 @@ function IndeterminateCheckbox() {
         }}
       >
         <span style={{ color: "#817f7f" }} className="">
-        PERFORMA FOR SCRUTINY (BY OFFICE JE)
+        PERFORMA FOR SCRUTINY (BY OFFICE DRAWING)
         </span>
         {open2 ? <RemoveIcon></RemoveIcon> : <AddIcon></AddIcon>}
       </div>
       <Collapse in={open2}>
         <div id="example-collapse-text">
       <Card style={{ width: "126%", marginLeft: "-2px", paddingRight: "10px", marginTop: "20px", marginBottom: "52px" }}>
-        <h4 style={{ fontSize: "20px", marginLeft: "5px" }}>PERFORMA FOR SCRUTINY (BY OFFICE JE)</h4>
+        <h4 style={{ fontSize: "20px", marginLeft: "5px" }}>PERFORMA FOR SCRUTINY (BY OFFICE DRAWING)</h4>
         <div className="card">
           <Form> 
             <TableContainer >
@@ -327,7 +96,7 @@ function IndeterminateCheckbox() {
 							</TableCell>
 							<TableCell  align="left">
                             <h2>
-                            LC-1 Form submitted is in order or not(If Not Details thereof).
+                            The Layout plan of the colony (in the case of the plotted colony) submitted showing the existing and proposed means of access to the colon	y, the width of streets, sizes and types of plots, sites reserved for open spaces, community buildings, schools etc. with the area under each is in order or not 
                     &nbsp;&nbsp;
                   </h2>
 							</TableCell>
@@ -338,12 +107,12 @@ function IndeterminateCheckbox() {
                             {/* <div class="col-md-4 text-right"> */}
                         <div className="d-flex flex-row align-items-center my-1">
                           
-                          <label htmlFor="submittedIsInOrder ">
-                          <input {...register("submittedIsInOrder")} type="radio" value="Y" id="submittedIsInOrder" />
+                          <label htmlFor="communitybuildings">
+                          <input {...register("communitybuildings")} type="radio" value="Y" id="communitybuildings" />
                           &nbsp;&nbsp; &nbsp; Yes &nbsp;&nbsp;
                         </label>
-                        <label htmlFor="submittedIsInOrder">
-                          <input {...register("submittedIsInOrder")} type="radio" value="N" id="submittedIsInOrder" />
+                        <label htmlFor="communitybuildings">
+                          <input {...register("communitybuildings")} type="radio" value="N" id="communitybuildings" />
                           &nbsp;&nbsp; &nbsp; No &nbsp;&nbsp;
                         </label>
                         </div>
@@ -366,7 +135,6 @@ function IndeterminateCheckbox() {
             //   value={RemarksDeveloper.data}
             />
                                         </TableCell>
-                            
 							
 						</TableRow>
                         <TableRow
@@ -379,7 +147,7 @@ function IndeterminateCheckbox() {
 							</TableCell>
 							<TableCell  align="left">
                             <h2>
-                            Scrutiny fee is in order or not.
+                            If the license application is under part migration, the layout plan of the balance of the land of parent license is submitted is in order or not.
                     &nbsp;&nbsp;
                   </h2>
 							</TableCell>
@@ -390,12 +158,12 @@ function IndeterminateCheckbox() {
                             {/* <div class="col-md-4 text-right"> */}
                         <div className="d-flex flex-row align-items-center my-1">
                          
-                          <label htmlFor="scrutinyFeeOrder">
-                          <input {...register("scrutinyFeeOrder")} type="radio" value="Y" id="scrutinyFeeOrder" />
+                          <label htmlFor="licenseapplication">
+                          <input {...register("licenseapplication")} type="radio" value="Y" id="licenseapplication" />
                           &nbsp;&nbsp;&nbsp; Yes &nbsp;&nbsp;
                         </label>
-                        <label htmlFor="scrutinyFeeOrder">
-                          <input {...register("scrutinyFeeOrder")} type="radio" value="N" id="scrutinyFeeOrder" />
+                        <label htmlFor="licenseapplication">
+                          <input {...register("licenseapplication")} type="radio" value="N" id="licenseapplication" />
                           &nbsp;&nbsp;&nbsp; No &nbsp;&nbsp;
                         </label>
                         </div></div>
@@ -433,7 +201,7 @@ function IndeterminateCheckbox() {
 							</TableCell>
 							<TableCell  align="left">
                             <h2>
-                            25% of the licence fee is deposited is in order or not. 
+                            The site situation is as per the submitted aks-shajra map. 
                     &nbsp;&nbsp;
                   </h2>
 							</TableCell>
@@ -444,12 +212,12 @@ function IndeterminateCheckbox() {
                             {/* <div class="col-md-4 text-right"> */}
                         <div className="d-flex flex-row align-items-center my-1">
                           &nbsp;&nbsp;
-                          <label htmlFor="depositedOrderNot.">
-                          <input {...register("depositedOrderNot")} type="radio" value="Y" id="depositedOrderNot" />
+                          <label htmlFor="sitesituation">
+                          <input {...register("sitesituation")} type="radio" value="Y" id="sitesituation" />
                           &nbsp; Yes &nbsp;&nbsp;
                         </label>
-                        <label htmlFor="depositedOrderNot">
-                          <input {...register("depositedOrderNot")} type="radio" value="N" id="depositedOrderNot" />
+                        <label htmlFor="sitesituation">
+                          <input {...register("sitesituation")} type="radio" value="N" id="sitesituation" />
                           &nbsp; No &nbsp;&nbsp;
                         </label>
                         </div></div>
@@ -485,7 +253,7 @@ function IndeterminateCheckbox() {
 							</TableCell>
 							<TableCell  align="left">
                             <h2>
-                            The Board resolution submitted is in order or not(If Not Details thereof).
+                            Whether in a compact block. 
                     &nbsp;&nbsp;
                   </h2>
 							</TableCell>
@@ -535,7 +303,7 @@ function IndeterminateCheckbox() {
 							</TableCell>
 							<TableCell  align="left">
                             <h2>
-                            Guide Map submitted is in order or no(If Not Details thereof)t
+                            Approach Norms as per policy.(Details thereof remarks in case of yes and no)
                     &nbsp;&nbsp;
                   </h2>
 							</TableCell>
@@ -585,12 +353,12 @@ function IndeterminateCheckbox() {
 							</TableCell>
 							<TableCell  align="left">
                             <h2>
-                            Survey Map of the proposed colony submitted is in order or not(If Not Details thereof). 
+                            Site Details(Vacant, HT Line, Gas pipe line, Nallah/ drain),(Details thereof remarks in case of yes and no) 
                     &nbsp;&nbsp;
                   </h2>
 							</TableCell>
-                            <TableCell>
-                                <FormControl>
+                            <TableCell align="left">
+                            <FormControl>
                             <div className="row">  
                             {/* <div class="col-md-4 text-right"> */}
                         <div className="d-flex flex-row align-items-center my-1">
@@ -606,7 +374,10 @@ function IndeterminateCheckbox() {
                         </div></div>
                 {/* </div> */}
     
-                </FormControl></TableCell>
+                </FormControl>
+                            </TableCell>
+                           
+                            
                 <TableCell align="left">
                                         <textarea
               class="form-control"
@@ -621,53 +392,16 @@ function IndeterminateCheckbox() {
             //   value={RemarksDeveloper.data}
             />
                                         </TableCell>
-                            
-							
 						</TableRow>
-                        <TableRow
-                        sx={{ '&:last-child td, &:last-child th':
-                        { border: 0 } }}>
+                        <TableRow>
                         <TableCell >
 							7
 							</TableCell>
                             <TableCell  align="left">
                             <h5>
-                            Documents submitted regarding experience/technical capacity  to develop the colony by the applicant/developer is in order or not(If Not Details thereof).
+                                <b>Conformity to Development Plan and Sectoral Plan: -</b>
                             </h5>
                             </TableCell>
-                            <TableCell align="left">
-                            <FormControl>
-                            <div className="row">  
-                            {/* <div class="col-md-4 text-right"> */}
-                        <div className="d-flex flex-row align-items-center my-1">
-                         
-                          <label htmlFor=" applicableFinalDevelopment">
-                          <input {...register("applicableFinalDevelopment")} type="radio" value="Y" id="applicableFinalDevelopment" />
-                          &nbsp; &nbsp; Yes &nbsp;&nbsp;
-                        </label>
-                        <label htmlFor="applicableFinalDevelopment">
-                          <input {...register("applicableFinalDevelopment")} type="radio" value="N" id="applicableFinalDevelopment" />
-                          &nbsp;&nbsp;  No &nbsp;&nbsp;
-                        </label>
-                        </div></div>
-                {/* </div> */}
-    
-                </FormControl>
-							</TableCell>
-                            <TableCell align="left">
-                                        <textarea
-              class="form-control"
-              id="exampleFormControlTextarea7"
-              placeholder="Enter your Remarks"
-              autoFocus
-            //   onChange={(e) => {
-            //     setDeveloperRemarks({ data: e.target.value });
-            //     setRemarksEntered(e.target.value);
-            //   }}
-              rows="3"
-            //   value={RemarksDeveloper.data}
-            />
-                                        </TableCell>
                         </TableRow>
                         
                         <TableRow
@@ -676,11 +410,11 @@ function IndeterminateCheckbox() {
 								{ border: 0 } }}
 						>
                             <TableCell >
-							8
+							a
 							</TableCell>
 							<TableCell  align="left">
                             <h2>
-                            Explanatory note submitted explaining the salient features of the proposed colony is in order or not(If Not Details thereof).
+                            Applicable Final Development Plan- 
                     &nbsp;&nbsp;
                   </h2>
 							</TableCell>
@@ -706,7 +440,7 @@ function IndeterminateCheckbox() {
                             <TableCell align="left">
                                         <textarea
               class="form-control"
-              id="exampleFormControlTextarea8"
+              id="exampleFormControlTextarea7a"
               placeholder="Enter your Remarks"
               autoFocus
             //   onChange={(e) => {
@@ -726,11 +460,11 @@ function IndeterminateCheckbox() {
 								{ border: 0 } }}
 						>
                             <TableCell >
-							9
+							b
 							</TableCell>
 							<TableCell  align="left">
                             <h2>
-                            Memorandum of Association of the developer company and land-owning companies have a clause regarding real estate development work submitted is in order or not(If Not Details thereof).
+                            Zone as per Development Plan – Residential/Commercial/Industrial, Institutional/Agricultural etc.
                     &nbsp;&nbsp;
                   </h2>
 							</TableCell>
@@ -756,7 +490,7 @@ function IndeterminateCheckbox() {
                             <TableCell align="left">
                                         <textarea
               class="form-control"
-              id="exampleFormControlTextarea9"
+              id="exampleFormControlTextarea7b"
               placeholder="Enter your Remarks"
               autoFocus
             //   onChange={(e) => {
@@ -776,11 +510,11 @@ function IndeterminateCheckbox() {
 								{ border: 0 } }}
 						>
                             <TableCell >
-							10
+							c
 							</TableCell>
 							<TableCell  align="left">
                             <h2>
-                            Articles of Association of the developer company and land-owning companies have a clause regarding real estate development work submitted is in order or not(If Not Details thereof).
+                            Applied colony in confirming use -.
                     &nbsp;&nbsp;
                   </h2>
 							</TableCell>
@@ -806,7 +540,7 @@ function IndeterminateCheckbox() {
                             <TableCell align="left">
                                         <textarea
               class="form-control"
-              id="exampleFormControlTextarea10"
+              id="exampleFormControlTextarea7c"
               placeholder="Enter your Remarks"
               autoFocus
             //   onChange={(e) => {
@@ -817,7 +551,6 @@ function IndeterminateCheckbox() {
             //   value={RemarksDeveloper.data}
             />
                                         </TableCell>
-                            
 							
 						</TableRow>
                         <TableRow
@@ -826,11 +559,11 @@ function IndeterminateCheckbox() {
 								{ border: 0 } }}
 						>
                             <TableCell >
-							11
+							d
 							</TableCell>
 							<TableCell  align="left">
                             <h2>
-                            Self-attested/ notarised degree/ certificate of membership of Architect/ Civil engineer signing the application submitted is in order or not(If Not Details thereof).
+                            Total Area of the sector in acres–
                     &nbsp;&nbsp;
                   </h2>
 							</TableCell>
@@ -856,7 +589,7 @@ function IndeterminateCheckbox() {
                             <TableCell align="left">
                                         <textarea
               class="form-control"
-              id="exampleFormControlTextarea11"
+              id="exampleFormControlTextarea7d"
               placeholder="Enter your Remarks"
               autoFocus
             //   onChange={(e) => {
@@ -876,11 +609,11 @@ function IndeterminateCheckbox() {
 								{ border: 0 } }}
 						>
                             <TableCell >
-							12
+							e
 							</TableCell>
 							<TableCell  align="left">
                             <h2>
-                            The Indemnity bond indemnifies DTCP from any loss if occurs due to any dispute on the applied land submitted is in order or not(If Not Details thereof).
+                            Net Planned Area of Sector in acres –
                     &nbsp;&nbsp;
                   </h2>
 							</TableCell>
@@ -906,7 +639,7 @@ function IndeterminateCheckbox() {
                             <TableCell align="left">
                                         <textarea
               class="form-control"
-              id="exampleFormControlTextarea12"
+              id="exampleFormControlTextarea7e"
               placeholder="Enter your Remarks"
               autoFocus
             //   onChange={(e) => {
@@ -926,11 +659,11 @@ function IndeterminateCheckbox() {
 								{ border: 0 } }}
 						>
                             <TableCell >
-							13
+							g
 							</TableCell>
 							<TableCell  align="left">
                             <h2>
-                            In the case of the colony where there is a cap on NPA, an application is received within the stipulated period of the online window invites applicationsor not(If Not Details thereof). 
+                            i. Area under Sector road - 
                     &nbsp;&nbsp;
                   </h2>
 							</TableCell>
@@ -956,7 +689,7 @@ function IndeterminateCheckbox() {
                             <TableCell align="left">
                                         <textarea
               class="form-control"
-              id="exampleFormControlTextarea13"
+              id="exampleFormControlTextarea7gi"
               placeholder="Enter your Remarks"
               autoFocus
             //   onChange={(e) => {
@@ -976,11 +709,11 @@ function IndeterminateCheckbox() {
 								{ border: 0 } }}
 						>
                             <TableCell >
-							14
+							
 							</TableCell>
 							<TableCell  align="left">
                             <h2>
-                            In the case of the colony where there is a cap on NPA, the application is received within the prescribed NPA as per the seniority list of the sector(If Not Details thereof).
+                            ii. Area under Service road -
                     &nbsp;&nbsp;
                   </h2>
 							</TableCell>
@@ -1006,7 +739,7 @@ function IndeterminateCheckbox() {
                             <TableCell align="left">
                                         <textarea
               class="form-control"
-              id="exampleFormControlTextarea14"
+              id="exampleFormControlTextarea7gii"
               placeholder="Enter your Remarks"
               autoFocus
             //   onChange={(e) => {
@@ -1026,11 +759,11 @@ function IndeterminateCheckbox() {
 								{ border: 0 } }}
 						>
                             <TableCell >
-							15
+							
 							</TableCell>
 							<TableCell  align="left">
                             <h2>
-                            If the license application is under part migration/ migration, whether the parent license renewed/requisite renewal fee + applicable interest deposited(If Not Details thereof).
+                            iii. Area under Green belt -
                     &nbsp;&nbsp;
                   </h2>
 							</TableCell>
@@ -1056,7 +789,7 @@ function IndeterminateCheckbox() {
                             <TableCell align="left">
                                         <textarea
               class="form-control"
-              id="exampleFormControlTextarea15"
+              id="exampleFormControlTextarea7giii"
               placeholder="Enter your Remarks"
               autoFocus
             //   onChange={(e) => {
@@ -1076,11 +809,11 @@ function IndeterminateCheckbox() {
 								{ border: 0 } }}
 						>
                             <TableCell >
-							16
+							
 							</TableCell>
 							<TableCell  align="left">
                             <h2>
-                            Area norms getting fulfilled as per applicable policy or not(If Not Details thereof).
+                            iv. Internal Circulation road -
                     &nbsp;&nbsp;
                   </h2>
 							</TableCell>
@@ -1106,7 +839,7 @@ function IndeterminateCheckbox() {
                             <TableCell align="left">
                                         <textarea
               class="form-control"
-              id="exampleFormControlTextarea16"
+              id="exampleFormControlTextarea7giv"
               placeholder="Enter your Remarks"
               autoFocus
             //   onChange={(e) => {
@@ -1126,11 +859,11 @@ function IndeterminateCheckbox() {
 								{ border: 0 } }}
 						>
                             <TableCell >
-							17
+							
 							</TableCell>
 							<TableCell  align="left">
                             <h2>
-                            Approach Norms as per policy(Yes/No), Details thereof
+                            vi. Any other -
                     &nbsp;&nbsp;
                   </h2>
 							</TableCell>
@@ -1156,7 +889,7 @@ function IndeterminateCheckbox() {
                             <TableCell align="left">
                                         <textarea
               class="form-control"
-              id="exampleFormControlTextarea17"
+              id="exampleFormControlTextarea7vi"
               placeholder="Enter your Remarks"
               autoFocus
             //   onChange={(e) => {
@@ -1176,11 +909,11 @@ function IndeterminateCheckbox() {
 								{ border: 0 } }}
 						>
                             <TableCell >
-							17A
+							8
 							</TableCell>
 							<TableCell  align="left">
                             <h2>
-                            Access permission from competent authority required or not(if required details thereof).
+                            In the case of the colony where there is a cap on NPA, the application is received within the prescribed NPA as per the seniority list of the sector. (Details thereof remarks in case of yes and no)
                     &nbsp;&nbsp;
                   </h2>
 							</TableCell>
@@ -1206,105 +939,7 @@ function IndeterminateCheckbox() {
                             <TableCell align="left">
                                         <textarea
               class="form-control"
-              id="exampleFormControlTextarea17a"
-              placeholder="Enter your Remarks"
-              autoFocus
-            //   onChange={(e) => {
-            //     setDeveloperRemarks({ data: e.target.value });
-            //     setRemarksEntered(e.target.value);
-            //   }}
-              rows="3"
-            //   value={RemarksDeveloper.data}
-            />
-                                        </TableCell>
-							
-						</TableRow>
-                        <TableRow
-						
-							sx={{ '&:last-child td, &:last-child th':
-								{ border: 0 } }}
-						>
-                            <TableCell >
-							18
-							</TableCell>
-							<TableCell  align="left">
-                            <h2>
-                            Site Details(Vacant, HT Line, Gas pipe line, Nallah/ drain), Details thereof.
-                    &nbsp;&nbsp;
-                  </h2>
-							</TableCell>
-							<TableCell align="left">
-                            <FormControl>
-                            <div className="row">  
-                            {/* <div class="col-md-4 text-right"> */}
-                        <div className="d-flex flex-row align-items-center my-1">
-                         
-                          <label htmlFor="receivedWithinThePrescribed">
-                          <input {...register("receivedWithinThePrescribed")} type="radio" value="Y" id="receivedWithinThePrescribed" />
-                          &nbsp; &nbsp; Yes &nbsp;&nbsp;
-                        </label>
-                        <label htmlFor="receivedWithinThePrescribed">
-                          <input {...register("receivedWithinThePrescribed")} type="radio" value="N" id="receivedWithinThePrescribed" />
-                          &nbsp;&nbsp;  No &nbsp;&nbsp;
-                        </label>
-                        </div></div>
-                {/* </div> */}
-    
-                </FormControl>
-							</TableCell>
-                            <TableCell align="left">
-                                        <textarea
-              class="form-control"
-              id="exampleFormControlTextarea18"
-              placeholder="Enter your Remarks"
-              autoFocus
-            //   onChange={(e) => {
-            //     setDeveloperRemarks({ data: e.target.value });
-            //     setRemarksEntered(e.target.value);
-            //   }}
-              rows="3"
-            //   value={RemarksDeveloper.data}
-            />
-                                        </TableCell>
-							
-						</TableRow>
-                        <TableRow
-						
-							sx={{ '&:last-child td, &:last-child th':
-								{ border: 0 } }}
-						>
-                            <TableCell >
-							19
-							</TableCell>
-							<TableCell  align="left">
-                            <h2>
-                            Conformity to Development Plan and Sectoral Plan(Yes/No).
-                    &nbsp;&nbsp;
-                  </h2>
-							</TableCell>
-							<TableCell align="left">
-                            <FormControl>
-                            <div className="row">  
-                            {/* <div class="col-md-4 text-right"> */}
-                        <div className="d-flex flex-row align-items-center my-1">
-                         
-                          <label htmlFor="receivedWithinThePrescribed">
-                          <input {...register("receivedWithinThePrescribed")} type="radio" value="Y" id="receivedWithinThePrescribed" />
-                          &nbsp; &nbsp; Yes &nbsp;&nbsp;
-                        </label>
-                        <label htmlFor="receivedWithinThePrescribed">
-                          <input {...register("receivedWithinThePrescribed")} type="radio" value="N" id="receivedWithinThePrescribed" />
-                          &nbsp;&nbsp;  No &nbsp;&nbsp;
-                        </label>
-                        </div></div>
-                {/* </div> */}
-    
-                </FormControl>
-							</TableCell>
-                            <TableCell align="left">
-                                        <textarea
-              class="form-control"
-              id="exampleFormControlTextarea19"
+              id="exampleFormControlTextarea8"
               placeholder="Enter your Remarks"
               autoFocus
             //   onChange={(e) => {
@@ -1318,206 +953,6 @@ function IndeterminateCheckbox() {
                             
 							
 						</TableRow>
-                        <TableRow
-						
-							sx={{ '&:last-child td, &:last-child th':
-								{ border: 0 } }}
-						>
-                            <TableCell >
-							20
-							</TableCell>
-							<TableCell  align="left">
-                            <h2>
-                            Conformity to the net planned area of sector (Yes/No):
-                    &nbsp;&nbsp;
-                  </h2>
-							</TableCell>
-							<TableCell align="left">
-                            <FormControl>
-                            <div className="row">  
-                            {/* <div class="col-md-4 text-right"> */}
-                        <div className="d-flex flex-row align-items-center my-1">
-                         
-                          <label htmlFor="receivedWithinThePrescribed">
-                          <input {...register("receivedWithinThePrescribed")} type="radio" value="Y" id="receivedWithinThePrescribed" />
-                          &nbsp; &nbsp; Yes &nbsp;&nbsp;
-                        </label>
-                        <label htmlFor="receivedWithinThePrescribed">
-                          <input {...register("receivedWithinThePrescribed")} type="radio" value="N" id="receivedWithinThePrescribed" />
-                          &nbsp;&nbsp;  No &nbsp;&nbsp;
-                        </label>
-                        </div></div>
-                {/* </div> */}
-    
-                </FormControl>
-							</TableCell>
-                            <TableCell align="left">
-                                        <textarea
-              class="form-control"
-              id="exampleFormControlTextarea20"
-              placeholder="Enter your Remarks"
-              autoFocus
-            //   onChange={(e) => {
-            //     setDeveloperRemarks({ data: e.target.value });
-            //     setRemarksEntered(e.target.value);
-            //   }}
-              rows="3"
-            //   value={RemarksDeveloper.data}
-            />
-                                        </TableCell>
-                            
-							
-						</TableRow>
-                        <TableRow
-						
-							sx={{ '&:last-child td, &:last-child th':
-								{ border: 0 } }}
-						>
-                            <TableCell >
-							21
-							</TableCell>
-							<TableCell  align="left">
-                            <h2>
-                            Conformity to the applied site vis-a-vis Natural Conservation Zone.
-                    &nbsp;&nbsp;
-                  </h2>
-							</TableCell>
-							<TableCell align="left">
-                            <FormControl>
-                            <div className="row">  
-                            {/* <div class="col-md-4 text-right"> */}
-                        <div className="d-flex flex-row align-items-center my-1">
-                         
-                          <label htmlFor="receivedWithinThePrescribed">
-                          <input {...register("receivedWithinThePrescribed")} type="radio" value="Y" id="receivedWithinThePrescribed" />
-                          &nbsp; &nbsp; Yes &nbsp;&nbsp;
-                        </label>
-                        <label htmlFor="receivedWithinThePrescribed">
-                          <input {...register("receivedWithinThePrescribed")} type="radio" value="N" id="receivedWithinThePrescribed" />
-                          &nbsp;&nbsp;  No &nbsp;&nbsp;
-                        </label>
-                        </div></div>
-                {/* </div> */}
-    
-                </FormControl>
-							</TableCell>
-                            <TableCell align="left">
-                                        <textarea
-              class="form-control"
-              id="exampleFormControlTextarea21"
-              placeholder="Enter your Remarks"
-              autoFocus
-            //   onChange={(e) => {
-            //     setDeveloperRemarks({ data: e.target.value });
-            //     setRemarksEntered(e.target.value);
-            //   }}
-              rows="3"
-            //   value={RemarksDeveloper.data}
-            />
-                                        </TableCell>
-                            
-							
-						</TableRow>
-                       
-                        <TableRow
-						
-							sx={{ '&:last-child td, &:last-child th':
-								{ border: 0 } }}
-						>
-                            <TableCell >
-							22
-							</TableCell>
-							<TableCell  align="left">
-                            <h2>
-                            Conformity to the applied site vis-à-vis the PLPA Act-Yes/No.
-                    &nbsp;&nbsp;
-                  </h2>
-							</TableCell>
-							<TableCell align="left">
-                            <FormControl>
-                            <div className="row">  
-                            {/* <div class="col-md-4 text-right"> */}
-                        <div className="d-flex flex-row align-items-center my-1">
-                         
-                          <label htmlFor="receivedWithinThePrescribed">
-                          <input {...register("receivedWithinThePrescribed")} type="radio" value="Y" id="receivedWithinThePrescribed" />
-                          &nbsp; &nbsp; Yes &nbsp;&nbsp;
-                        </label>
-                        <label htmlFor="receivedWithinThePrescribed">
-                          <input {...register("receivedWithinThePrescribed")} type="radio" value="N" id="receivedWithinThePrescribed" />
-                          &nbsp;&nbsp;  No &nbsp;&nbsp;
-                        </label>
-                        </div></div>
-                {/* </div> */}
-    
-                </FormControl>
-							</TableCell>
-                            <TableCell align="left">
-                                        <textarea
-              class="form-control"
-              id="exampleFormControlTextarea22"
-              placeholder="Enter your Remarks"
-              autoFocus
-            //   onChange={(e) => {
-            //     setDeveloperRemarks({ data: e.target.value });
-            //     setRemarksEntered(e.target.value);
-            //   }}
-              rows="3"
-            //   value={RemarksDeveloper.data}
-            />
-                                        </TableCell>
-							
-						</TableRow>
-                        <TableRow
-						
-                        sx={{ '&:last-child td, &:last-child th':
-                            { border: 0 } }}
-                    >
-                        <TableCell >
-                        23
-                        </TableCell>
-                        <TableCell  align="left">
-                        <h2>
-                        Fee & Charges for LOI generation is in order or not(if not details thereof).
-                &nbsp;&nbsp;
-              </h2>
-                        </TableCell>
-                        <TableCell align="left">
-                        <FormControl>
-                        <div className="row">  
-                        {/* <div class="col-md-4 text-right"> */}
-                    <div className="d-flex flex-row align-items-center my-1">
-                     
-                      <label htmlFor="receivedWithinThePrescribed">
-                      <input {...register("receivedWithinThePrescribed")} type="radio" value="Y" id="receivedWithinThePrescribed" />
-                      &nbsp; &nbsp; Yes &nbsp;&nbsp;
-                    </label>
-                    <label htmlFor="receivedWithinThePrescribed">
-                      <input {...register("receivedWithinThePrescribed")} type="radio" value="N" id="receivedWithinThePrescribed" />
-                      &nbsp;&nbsp;  No &nbsp;&nbsp;
-                    </label>
-                    </div></div>
-            {/* </div> */}
-
-            </FormControl>
-                        </TableCell>
-                        <TableCell align="left">
-                                    <textarea
-          class="form-control"
-          id="exampleFormControlTextarea23"
-          placeholder="Enter your Remarks"
-          autoFocus
-        //   onChange={(e) => {
-        //     setDeveloperRemarks({ data: e.target.value });
-        //     setRemarksEntered(e.target.value);
-        //   }}
-          rows="3"
-        //   value={RemarksDeveloper.data}
-        />
-                                    </TableCell>
-                        
-                        
-                    </TableRow>
                         
 				</TableBody>
 			</Table>
@@ -1534,4 +969,4 @@ function IndeterminateCheckbox() {
   );
 }
 
-export default IndeterminateCheckbox;
+export default DrawingBranch;

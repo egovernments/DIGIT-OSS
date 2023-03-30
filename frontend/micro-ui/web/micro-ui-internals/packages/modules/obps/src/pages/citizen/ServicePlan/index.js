@@ -17,6 +17,8 @@ import ScrollToTop from "@egovernments/digit-ui-react-components/src/atoms/Scrol
 import Spinner from "../../../components/Loader";
 import { Toast } from "@egovernments/digit-ui-react-components";
 import ErrorIcon from '@mui/icons-material/Error';
+import InfoIcon from "@mui/icons-material/Info";
+import Tooltip from "@mui/material/Tooltip";
 //import { getDocShareholding } from 'packages/modules/tl/src/pages/employee/ScrutinyBasic/ScrutinyDevelopment/docview.helper.js'
 
 
@@ -141,10 +143,10 @@ const ServicePlanService = () => {
         data.purpose = purpose
         data.totalArea = totalArea
         const isValid = checkValid(data)
-        if(!isValid){
-          console.log("Dont call create")
-          return null
-        }
+        // if(!isValid){
+        //   console.log("Dont call create")
+        //   return null
+        // }
         const postDistrict = {
           requestInfo: {
             api_id: "Rainmaker",
@@ -520,6 +522,28 @@ const ServicePlanService = () => {
             </Col>
           </Row>
           <br></br>
+          <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
+          <Col xs={6} md={6}>
+            <Form.Label style={{ margin: 2 }}>Proposed Source of Water Supply</Form.Label>
+            <textarea
+              class="form-control"
+              id="exampleFormControlTextarea1"
+              // placeholder="Enter your Remarks"
+              autoFocus
+              // onChange={(e) => {
+              //   setDeveloperRemarks({ data: e.target.value });
+                
+              // }}
+            
+              {...register("environmentalClearance")}
+              onChange={(e) => setEnviromental(e.target.value)}
+              value={environmental}
+                rows="3"
+              
+            />
+            {/* <Form.Control type="text" /> */}
+          </Col>
+        </Form.Group>
           <br></br>
           <div className="table table-bordered table-responsive">
             <thead>
@@ -571,7 +595,7 @@ const ServicePlanService = () => {
                   }
                 </td>
               </tr>
-              <tr>
+              {/* <tr>
                 <td>
                   <div className="px-2">
                     <p className="mb-2">2.</p>
@@ -591,7 +615,7 @@ const ServicePlanService = () => {
                     type="file"
                     className="form-control"
                     id="file-input-2"
-                    // {...register("environmentalClearance")}
+                   
                     onChange={(e) => getDocumentData(e?.target?.files[0], "environmentalClearance")}
                     style={{display: "none"}}
                   />
@@ -611,11 +635,11 @@ const ServicePlanService = () => {
                   </div> 
                   }
                 </td>
-              </tr>
+              </tr> */}
               <tr>
                 <td>
                   <div className="px-2">
-                    <p className="mb-2">3.</p>
+                    <p className="mb-2">2.</p>
                   </div>
                 </td>
                 <td component="th" scope="row">
@@ -657,11 +681,17 @@ const ServicePlanService = () => {
               <tr>
                 <td>
                   <div className="px-2">
-                    <p className="mb-2">4.</p>
+                    <p className="mb-2">3.</p>
                   </div>
                 </td>
                 <td component="th" scope="row">
-                  <h2>Service plan in AutoCAD (DXF) file.</h2>
+                  {/* <h2>Service plan in AutoCAD (DXF) file.</h2> */}
+                  <h6 >
+                  Service plan in AutoCAD (DXF) file.
+                  <Tooltip title="Any amendment suggested by HSVP may be incorporated in the drawing accordingly">
+                    <InfoIcon style={{ cursor: "pointer" }} color="primary"></InfoIcon>
+                  </Tooltip>
+                </h6>
                   {drawingErr.autoCadFile ? <p style={{color: 'red'}}>Please upload autocad file*</p> : " "}
                 </td>
                 <td component="th" scope="row">
@@ -674,7 +704,7 @@ const ServicePlanService = () => {
                     type="file"
                     className="form-control"
                     id="file-input-4"
-                    // {...register("autoCadFile")}
+                    
                     onChange={(e) => getDocumentData(e?.target?.files[0], "autoCadFile")}
                     style={{display: "none"}}
                   />
@@ -695,10 +725,10 @@ const ServicePlanService = () => {
                   }
                 </td>
               </tr>
-              <tr>
+              {/* <tr>
                 <td>
                   <div className="px-2">
-                    <p className="mb-2">5.</p>
+                    <p className="mb-2">4.</p>
                   </div>
                 </td>
                 <td component="th" scope="row">
@@ -715,7 +745,6 @@ const ServicePlanService = () => {
                   <input
                     type="file"
                     className="form-control"
-                    // {...register("certifieadCopyOfThePlan")}
                     id="file-input-5"
                     onChange={(e) => getDocumentData(e?.target?.files[0], "certifieadCopyOfThePlan")}
                     style={{display: "none"}}
@@ -736,7 +765,7 @@ const ServicePlanService = () => {
                   </div> 
                   }
                 </td>
-              </tr>
+              </tr> */}
               </tbody>
               { (purpose === "DDJAY_APHP" || purpose === "RPL" || purpose === "NILP"|| purpose === "NILPC"|| purpose === "IPA" || purpose === "CPRS" || purpose === "CICS") && (
               <tbody>
