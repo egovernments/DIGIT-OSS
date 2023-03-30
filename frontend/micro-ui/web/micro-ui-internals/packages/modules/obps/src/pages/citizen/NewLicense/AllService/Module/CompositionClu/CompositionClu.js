@@ -84,7 +84,6 @@ function CompositionClu() {
                   {[...Array(noofRows)].map((elementInArray, input) => {
                     return (
                       <tr>
-                        <th className="fw-normal">{input + 1}</th>
                         <td>
                           <input type="text" placeholder="" />
                         </td>
