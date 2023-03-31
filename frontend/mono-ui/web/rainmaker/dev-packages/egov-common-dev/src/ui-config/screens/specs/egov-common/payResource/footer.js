@@ -563,7 +563,7 @@ export const footer = getCommonApplyFooter({
     },
     onClickDefination: {
       action: "condition",
-      callBack: callBackForPay
+      callBack: ""
     },
     // roleDefination: {
     //   rolePath: "user-info.roles",
@@ -602,7 +602,7 @@ export const footer = getCommonApplyFooter({
     },
     onClickDefination: {
       action: "condition",
-      callBack: callPGService
+      callBack: ""
     },
     // roleDefination: {
     //   rolePath: "user-info.roles",

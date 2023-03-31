@@ -82,7 +82,7 @@ class DemandCollection extends React.Component {
                           fontSize="16px"
                         />
                         </div>
-                        {data.taxHead.map((taxData, index1) => {                        
+                        {data && data.taxHead && data.taxHead.map((taxData, index1) => {                        
                            return (
                             <div className={`col-xs-12`}>
                               <TextField
@@ -158,7 +158,7 @@ class DemandCollection extends React.Component {
                           fontSize="16px"
                         />
                         </div>
-                        {data.taxHead.map((taxData, index1) => {
+                        {data && data.taxHead && data.taxHead.map((taxData, index1) => {
                           return (
                             <div className={`col-xs-12`} key={index1}>
                               <TextField
