@@ -18,7 +18,7 @@ import { IconButton } from "@mui/material";
 import { getDocShareholding } from "../ScrutinyDevelopment/docview.helper";
 // const windowHeight = window !== undefined ? window.innerHeight : null;
 // const [open, setOpen] = useState(false);
-const DocumentScrutiny = ({developerType , iconColorState , getRemarkData, addInfo, applicationStatus}) => {
+const DocumentScrutiny = ({developerType , iconColorState , getRemarkData, addInfo, devDetail, applicationStatus}) => {
   const [open, setOpen] = useState(false);
   const classes = useStyles();
 
@@ -118,6 +118,7 @@ const DocumentScrutiny = ({developerType , iconColorState , getRemarkData, addIn
   };
 
   console.log("developerType", addInfo);
+  console.log("developerType24354456", devDetail);
   return (
     <div>
       <div
@@ -150,7 +151,7 @@ const DocumentScrutiny = ({developerType , iconColorState , getRemarkData, addIn
               <Card >
                 <Row>
                   <FormControl>
-                  {addInfo?.showDevTypeFields === "Individual" && (
+                  {devDetail?.addInfo?.showDevTypeFields === "Individual" && (
                     <div className="row ">
                       <div className="form-group row">
                         <div className="col-sm-12">
@@ -175,12 +176,12 @@ const DocumentScrutiny = ({developerType , iconColorState , getRemarkData, addIn
                                   <td>
                                     <div className="row">
                                       <div className="btn btn-sm col-md-6">
-                                        <IconButton onClick={() => getDocShareholding(item?.boardDoc)}>
+                                        <IconButton onClick={() => getDocShareholding(devDetail?.licensesDoc?.[0]?.anyOtherDoc)}>
                                           <VisibilityIcon color="info" className="icon" />
                                         </IconButton>
                                       </div>
                                       <div className="btn btn-sm col-md-6">
-                                        <IconButton onClick={() => getDocShareholding(item?.boardDoc)}>
+                                        <IconButton onClick={() => getDocShareholding(devDetail?.licensesDoc?.[0]?.anyOtherDoc)}>
                                           <FileDownloadIcon color="info" className="icon" />
                                         </IconButton>
                                       </div>
@@ -195,7 +196,7 @@ const DocumentScrutiny = ({developerType , iconColorState , getRemarkData, addIn
                       </div>
                     </div>
                   )}
-                  {addInfo?.showDevTypeFields === "Proprietorship Firm" && (
+                  {devDetail?.addInfo?.showDevTypeFields === "Proprietorship Firm" && (
                     <div className="row ">
                       <div className="form-group row">
                         <div className="col-sm-12">
@@ -220,12 +221,12 @@ const DocumentScrutiny = ({developerType , iconColorState , getRemarkData, addIn
                                   <td>
                                     <div className="row">
                                       <div className="btn btn-sm col-md-6">
-                                        <IconButton onClick={() => getDocShareholding(item?.boardDoc)}>
+                                        <IconButton onClick={() => getDocShareholding(devDetail?.licensesDoc?.[0]?.anyOtherDoc)}>
                                           <VisibilityIcon color="info" className="icon" />
                                         </IconButton>
                                       </div>
                                       <div className="btn btn-sm col-md-6">
-                                        <IconButton onClick={() => getDocShareholding(item?.boardDoc)}>
+                                        <IconButton onClick={() => getDocShareholding(devDetail?.licensesDoc?.[0]?.anyOtherDoc)}>
                                           <FileDownloadIcon color="info" className="icon" />
                                         </IconButton>
                                       </div>
@@ -240,7 +241,7 @@ const DocumentScrutiny = ({developerType , iconColorState , getRemarkData, addIn
                       </div>
                     </div>
                   )}
-                   {addInfo?.showDevTypeFields === "Partnership Firm" && (
+                   {devDetail?.addInfo?.showDevTypeFields === "Partnership Firm" && (
                     <div className="row ">
                       <div className="form-group row">
                         <div className="col-sm-12">
@@ -265,12 +266,12 @@ const DocumentScrutiny = ({developerType , iconColorState , getRemarkData, addIn
                                   <td>
                                     <div className="row">
                                       <div className="btn btn-sm col-md-6">
-                                        <IconButton onClick={() => getDocShareholding(item?.boardDoc)}>
+                                        <IconButton onClick={() => getDocShareholding(devDetail?.licensesDoc?.[0]?.anyOtherDoc)}>
                                           <VisibilityIcon color="info" className="icon" />
                                         </IconButton>
                                       </div>
                                       <div className="btn btn-sm col-md-6">
-                                        <IconButton onClick={() => getDocShareholding(item?.boardDoc)}>
+                                        <IconButton onClick={() => getDocShareholding(devDetail?.licensesDoc?.[0]?.anyOtherDoc)}>
                                           <FileDownloadIcon color="info" className="icon" />
                                         </IconButton>
                                       </div>
@@ -286,7 +287,7 @@ const DocumentScrutiny = ({developerType , iconColorState , getRemarkData, addIn
                     </div>
                   )}
                    {/* || "Trust" || "Hindu Undivided Family" || "Limited Liability Partnership"  Partnership Firm */}
-                  {addInfo?.showDevTypeFields === "Company"  && (
+                  {devDetail?.addInfo?.showDevTypeFields === "Company"  && (
                      <div className="row ">
                      <div className="form-group row">
                        <div className="col-sm-12">
@@ -304,19 +305,19 @@ const DocumentScrutiny = ({developerType , iconColorState , getRemarkData, addIn
                                  <td> 1 </td>
                                  <td>
                                 <p>
-                                   Copy of memorandum/Articles of Association/ any other document of developer
+                                   Articles Of Association 
                                    </p>
                                 
                                  </td>
                                  <td>
                                    <div className="row">
                                      <div className="btn btn-sm col-md-6">
-                                       <IconButton onClick={() => getDocShareholding(item?.boardDoc)}>
+                                       <IconButton onClick={() => getDocShareholding(devDetail?.licensesDoc?.[0]?.articlesOfAssociation)}>
                                          <VisibilityIcon color="info" className="icon" />
                                        </IconButton>
                                      </div>
                                      <div className="btn btn-sm col-md-6">
-                                       <IconButton onClick={() => getDocShareholding(item?.boardDoc)}>
+                                       <IconButton onClick={() => getDocShareholding(devDetail?.licensesDoc?.[0]?.articlesOfAssociation)}>
                                          <FileDownloadIcon color="info" className="icon" />
                                        </IconButton>
                                      </div>
@@ -334,12 +335,12 @@ const DocumentScrutiny = ({developerType , iconColorState , getRemarkData, addIn
                                  <td>
                                    <div className="row">
                                      <div className="btn btn-sm col-md-6">
-                                       <IconButton onClick={() => getDocShareholding(item?.boardDoc)}>
+                                       <IconButton onClick={() => getDocShareholding(devDetail?.licensesDoc?.[0]?.memorandumOfArticles)}>
                                          <VisibilityIcon color="info" className="icon" />
                                        </IconButton>
                                      </div>
                                      <div className="btn btn-sm col-md-6">
-                                       <IconButton onClick={() => getDocShareholding(item?.boardDoc)}>
+                                       <IconButton onClick={() => getDocShareholding(devDetail?.licensesDoc?.[0]?.memorandumOfArticles)}>
                                          <FileDownloadIcon color="info" className="icon" />
                                        </IconButton>
                                      </div>
@@ -355,14 +356,15 @@ const DocumentScrutiny = ({developerType , iconColorState , getRemarkData, addIn
                                 
                                  </td>
                                  <td>
+                                  
                                    <div className="row">
                                      <div className="btn btn-sm col-md-6">
-                                       <IconButton onClick={() => getDocShareholding(item?.boardDoc)}>
+                                       <IconButton onClick={() => getDocShareholding(devDetail?.licensesDoc?.[0]?.anyOtherDoc)}>
                                          <VisibilityIcon color="info" className="icon" />
                                        </IconButton>
                                      </div>
                                      <div className="btn btn-sm col-md-6">
-                                       <IconButton onClick={() => getDocShareholding(item?.boardDoc)}>
+                                       <IconButton onClick={() => getDocShareholding(devDetail?.licensesDoc?.[0]?.anyOtherDoc)}>
                                          <FileDownloadIcon color="info" className="icon" />
                                        </IconButton>
                                      </div>
@@ -376,7 +378,7 @@ const DocumentScrutiny = ({developerType , iconColorState , getRemarkData, addIn
                      </div>
                    </div>
                   )}
-                  {addInfo?.showDevTypeFields === "Trust"  && (
+                  {devDetail?.addInfo?.showDevTypeFields === "Trust"  && (
                      <div className="row ">
                      <div className="form-group row">
                        <div className="col-sm-12">
@@ -394,19 +396,19 @@ const DocumentScrutiny = ({developerType , iconColorState , getRemarkData, addIn
                                  <td> 1 </td>
                                  <td>
                                 <p>
-                                   Copy of memorandum/Articles of Association/ any other document of developer
+                                   Articles Of Association 
                                    </p>
                                 
                                  </td>
                                  <td>
                                    <div className="row">
                                      <div className="btn btn-sm col-md-6">
-                                       <IconButton onClick={() => getDocShareholding(item?.boardDoc)}>
+                                       <IconButton onClick={() => getDocShareholding(devDetail?.licensesDoc?.[0]?.articlesOfAssociation)}>
                                          <VisibilityIcon color="info" className="icon" />
                                        </IconButton>
                                      </div>
                                      <div className="btn btn-sm col-md-6">
-                                       <IconButton onClick={() => getDocShareholding(item?.boardDoc)}>
+                                       <IconButton onClick={() => getDocShareholding(devDetail?.licensesDoc?.[0]?.articlesOfAssociation)}>
                                          <FileDownloadIcon color="info" className="icon" />
                                        </IconButton>
                                      </div>
@@ -424,12 +426,12 @@ const DocumentScrutiny = ({developerType , iconColorState , getRemarkData, addIn
                                  <td>
                                    <div className="row">
                                      <div className="btn btn-sm col-md-6">
-                                       <IconButton onClick={() => getDocShareholding(item?.boardDoc)}>
+                                       <IconButton onClick={() => getDocShareholding(devDetail?.licensesDoc?.[0]?.memorandumOfArticles)}>
                                          <VisibilityIcon color="info" className="icon" />
                                        </IconButton>
                                      </div>
                                      <div className="btn btn-sm col-md-6">
-                                       <IconButton onClick={() => getDocShareholding(item?.boardDoc)}>
+                                       <IconButton onClick={() => getDocShareholding(devDetail?.licensesDoc?.[0]?.memorandumOfArticles)}>
                                          <FileDownloadIcon color="info" className="icon" />
                                        </IconButton>
                                      </div>
@@ -447,12 +449,12 @@ const DocumentScrutiny = ({developerType , iconColorState , getRemarkData, addIn
                                  <td>
                                    <div className="row">
                                      <div className="btn btn-sm col-md-6">
-                                       <IconButton onClick={() => getDocShareholding(item?.boardDoc)}>
+                                       <IconButton onClick={() => getDocShareholding(devDetail?.licensesDoc?.[0]?.anyOtherDoc)}>
                                          <VisibilityIcon color="info" className="icon" />
                                        </IconButton>
                                      </div>
                                      <div className="btn btn-sm col-md-6">
-                                       <IconButton onClick={() => getDocShareholding(item?.boardDoc)}>
+                                       <IconButton onClick={() => getDocShareholding(devDetail?.licensesDoc?.[0]?.anyOtherDoc)}>
                                          <FileDownloadIcon color="info" className="icon" />
                                        </IconButton>
                                      </div>
@@ -466,7 +468,7 @@ const DocumentScrutiny = ({developerType , iconColorState , getRemarkData, addIn
                      </div>
                    </div>
                   )}
-                  {addInfo?.showDevTypeFields === "Institution"  && (
+                  {devDetail?.addInfo?.showDevTypeFields === "Institution"  && (
                      <div className="row ">
                      <div className="form-group row">
                        <div className="col-sm-12">
@@ -484,19 +486,19 @@ const DocumentScrutiny = ({developerType , iconColorState , getRemarkData, addIn
                                  <td> 1 </td>
                                  <td>
                                 <p>
-                                   Copy of memorandum/Articles of Association/ any other document of developer
+                                   Articles Of Association 
                                    </p>
                                 
                                  </td>
                                  <td>
                                    <div className="row">
                                      <div className="btn btn-sm col-md-6">
-                                       <IconButton onClick={() => getDocShareholding(item?.boardDoc)}>
+                                       <IconButton onClick={() => getDocShareholding(devDetail?.licensesDoc?.[0]?.articlesOfAssociation)}>
                                          <VisibilityIcon color="info" className="icon" />
                                        </IconButton>
                                      </div>
                                      <div className="btn btn-sm col-md-6">
-                                       <IconButton onClick={() => getDocShareholding(item?.boardDoc)}>
+                                       <IconButton onClick={() => getDocShareholding(devDetail?.licensesDoc?.[0]?.articlesOfAssociation)}>
                                          <FileDownloadIcon color="info" className="icon" />
                                        </IconButton>
                                      </div>
@@ -514,12 +516,12 @@ const DocumentScrutiny = ({developerType , iconColorState , getRemarkData, addIn
                                  <td>
                                    <div className="row">
                                      <div className="btn btn-sm col-md-6">
-                                       <IconButton onClick={() => getDocShareholding(item?.boardDoc)}>
+                                       <IconButton onClick={() => getDocShareholding(devDetail?.licensesDoc?.[0]?.memorandumOfArticles)}>
                                          <VisibilityIcon color="info" className="icon" />
                                        </IconButton>
                                      </div>
                                      <div className="btn btn-sm col-md-6">
-                                       <IconButton onClick={() => getDocShareholding(item?.boardDoc)}>
+                                       <IconButton onClick={() => getDocShareholding(devDetail?.licensesDoc?.[0]?.memorandumOfArticles)}>
                                          <FileDownloadIcon color="info" className="icon" />
                                        </IconButton>
                                      </div>
@@ -537,12 +539,12 @@ const DocumentScrutiny = ({developerType , iconColorState , getRemarkData, addIn
                                  <td>
                                    <div className="row">
                                      <div className="btn btn-sm col-md-6">
-                                       <IconButton onClick={() => getDocShareholding(item?.boardDoc)}>
+                                       <IconButton onClick={() => getDocShareholding(devDetail?.licensesDoc?.[0]?.anyOtherDoc)}>
                                          <VisibilityIcon color="info" className="icon" />
                                        </IconButton>
                                      </div>
                                      <div className="btn btn-sm col-md-6">
-                                       <IconButton onClick={() => getDocShareholding(item?.boardDoc)}>
+                                       <IconButton onClick={() => getDocShareholding(devDetail?.licensesDoc?.[0]?.anyOtherDoc)}>
                                          <FileDownloadIcon color="info" className="icon" />
                                        </IconButton>
                                      </div>
@@ -556,7 +558,7 @@ const DocumentScrutiny = ({developerType , iconColorState , getRemarkData, addIn
                      </div>
                    </div>
                   )}
-                 {addInfo?.showDevTypeFields === "Hindu Undivided Family"  && (
+                 {devDetail?.addInfo?.showDevTypeFields === "Hindu Undivided Family"  && (
                      <div className="row ">
                      <div className="form-group row">
                        <div className="col-sm-12">
@@ -581,12 +583,12 @@ const DocumentScrutiny = ({developerType , iconColorState , getRemarkData, addIn
                                  <td>
                                    <div className="row">
                                      <div className="btn btn-sm col-md-6">
-                                       <IconButton onClick={() => getDocShareholding(item?.boardDoc)}>
+                                       <IconButton onClick={() => getDocShareholding(devDetail?.licensesDoc?.[0]?.affidavitAndPancard)}>
                                          <VisibilityIcon color="info" className="icon" />
                                        </IconButton>
                                      </div>
                                      <div className="btn btn-sm col-md-6">
-                                       <IconButton onClick={() => getDocShareholding(item?.boardDoc)}>
+                                       <IconButton onClick={() => getDocShareholding(devDetail?.licensesDoc?.[0]?.affidavitAndPancard)}>
                                          <FileDownloadIcon color="info" className="icon" />
                                        </IconButton>
                                      </div>
@@ -605,12 +607,12 @@ const DocumentScrutiny = ({developerType , iconColorState , getRemarkData, addIn
                                  <td>
                                    <div className="row">
                                      <div className="btn btn-sm col-md-6">
-                                       <IconButton onClick={() => getDocShareholding(item?.boardDoc)}>
+                                       <IconButton onClick={() => getDocShareholding(devDetail?.licensesDoc?.[0]?.anyOtherDoc)}>
                                          <VisibilityIcon color="info" className="icon" />
                                        </IconButton>
                                      </div>
                                      <div className="btn btn-sm col-md-6">
-                                       <IconButton onClick={() => getDocShareholding(item?.boardDoc)}>
+                                       <IconButton onClick={() => getDocShareholding(devDetail?.licensesDoc?.[0]?.anyOtherDoc)}>
                                          <FileDownloadIcon color="info" className="icon" />
                                        </IconButton>
                                      </div>
@@ -624,7 +626,7 @@ const DocumentScrutiny = ({developerType , iconColorState , getRemarkData, addIn
                      </div>
                    </div>
                   )}
-                   {addInfo?.showDevTypeFields === "Limited Liability Partnership"  && (
+                   {devDetail?.addInfo?.showDevTypeFields === "Limited Liability Partnership"  && (
                      <div className="row ">
                      <div className="form-group row">
                        <div className="col-sm-12">
@@ -642,19 +644,19 @@ const DocumentScrutiny = ({developerType , iconColorState , getRemarkData, addIn
                                  <td> 1 </td>
                                  <td>
                                 <p>
-                                   Copy of memorandum/Articles of Association/ any other document of developer
+                                   Articles Of Association 
                                    </p>
                                 
                                  </td>
                                  <td>
                                    <div className="row">
                                      <div className="btn btn-sm col-md-6">
-                                       <IconButton onClick={() => getDocShareholding(item?.boardDoc)}>
+                                       <IconButton onClick={() => getDocShareholding(devDetail?.licensesDoc?.[0]?.articlesOfAssociation)}>
                                          <VisibilityIcon color="info" className="icon" />
                                        </IconButton>
                                      </div>
                                      <div className="btn btn-sm col-md-6">
-                                       <IconButton onClick={() => getDocShareholding(item?.boardDoc)}>
+                                       <IconButton onClick={() => getDocShareholding(devDetail?.licensesDoc?.[0]?.articlesOfAssociation)}>
                                          <FileDownloadIcon color="info" className="icon" />
                                        </IconButton>
                                      </div>
@@ -672,12 +674,12 @@ const DocumentScrutiny = ({developerType , iconColorState , getRemarkData, addIn
                                  <td>
                                    <div className="row">
                                      <div className="btn btn-sm col-md-6">
-                                       <IconButton onClick={() => getDocShareholding(item?.boardDoc)}>
+                                       <IconButton onClick={() => getDocShareholding(devDetail?.licensesDoc?.[0]?.memorandumOfArticles)}>
                                          <VisibilityIcon color="info" className="icon" />
                                        </IconButton>
                                      </div>
                                      <div className="btn btn-sm col-md-6">
-                                       <IconButton onClick={() => getDocShareholding(item?.boardDoc)}>
+                                       <IconButton onClick={() => getDocShareholding(devDetail?.licensesDoc?.[0]?.memorandumOfArticles)}>
                                          <FileDownloadIcon color="info" className="icon" />
                                        </IconButton>
                                      </div>
@@ -695,12 +697,12 @@ const DocumentScrutiny = ({developerType , iconColorState , getRemarkData, addIn
                                  <td>
                                    <div className="row">
                                      <div className="btn btn-sm col-md-6">
-                                       <IconButton onClick={() => getDocShareholding(item?.boardDoc)}>
+                                       <IconButton onClick={() => getDocShareholding(devDetail?.licensesDoc?.[0]?.registeredIrrevocablePaternshipDeed)}>
                                          <VisibilityIcon color="info" className="icon" />
                                        </IconButton>
                                      </div>
                                      <div className="btn btn-sm col-md-6">
-                                       <IconButton onClick={() => getDocShareholding(item?.boardDoc)}>
+                                       <IconButton onClick={() => getDocShareholding(devDetail?.licensesDoc?.[0]?.registeredIrrevocablePaternshipDeed)}>
                                          <FileDownloadIcon color="info" className="icon" />
                                        </IconButton>
                                      </div>
@@ -718,12 +720,12 @@ const DocumentScrutiny = ({developerType , iconColorState , getRemarkData, addIn
                                  <td>
                                    <div className="row">
                                      <div className="btn btn-sm col-md-6">
-                                       <IconButton onClick={() => getDocShareholding(item?.boardDoc)}>
+                                       <IconButton onClick={() => getDocShareholding(devDetail?.licensesDoc?.[0]?.anyOtherDoc)}>
                                          <VisibilityIcon color="info" className="icon" />
                                        </IconButton>
                                      </div>
                                      <div className="btn btn-sm col-md-6">
-                                       <IconButton onClick={() => getDocShareholding(item?.boardDoc)}>
+                                       <IconButton onClick={() => getDocShareholding(devDetail?.licensesDoc?.[0]?.anyOtherDoc)}>
                                          <FileDownloadIcon color="info" className="icon" />
                                        </IconButton>
                                      </div>
@@ -738,7 +740,7 @@ const DocumentScrutiny = ({developerType , iconColorState , getRemarkData, addIn
                      </div>
                    </div>
                   )}
-                   {addInfo?.showDevTypeFields === "Firm"  && (
+                   {devDetail?.addInfo?.showDevTypeFields === "Firm"  && (
                      <div className="row ">
                      <div className="form-group row">
                        <div className="col-sm-12">
@@ -756,19 +758,19 @@ const DocumentScrutiny = ({developerType , iconColorState , getRemarkData, addIn
                                  <td> 1 </td>
                                  <td>
                                 <p>
-                                   Copy of memorandum/Articles of Association/ any other document of developer
+                                   Articles Of Association 
                                    </p>
                                 
                                  </td>
                                  <td>
                                    <div className="row">
                                      <div className="btn btn-sm col-md-6">
-                                       <IconButton onClick={() => getDocShareholding(item?.boardDoc)}>
+                                       <IconButton onClick={() => getDocShareholding(devDetail?.licensesDoc?.[0]?.articlesOfAssociation)}>
                                          <VisibilityIcon color="info" className="icon" />
                                        </IconButton>
                                      </div>
                                      <div className="btn btn-sm col-md-6">
-                                       <IconButton onClick={() => getDocShareholding(item?.boardDoc)}>
+                                       <IconButton onClick={() => getDocShareholding(devDetail?.licensesDoc?.[0]?.articlesOfAssociation)}>
                                          <FileDownloadIcon color="info" className="icon" />
                                        </IconButton>
                                      </div>
@@ -786,12 +788,12 @@ const DocumentScrutiny = ({developerType , iconColorState , getRemarkData, addIn
                                  <td>
                                    <div className="row">
                                      <div className="btn btn-sm col-md-6">
-                                       <IconButton onClick={() => getDocShareholding(item?.boardDoc)}>
+                                       <IconButton onClick={() => getDocShareholding(devDetail?.licensesDoc?.[0]?.memorandumOfArticles)}>
                                          <VisibilityIcon color="info" className="icon" />
                                        </IconButton>
                                      </div>
                                      <div className="btn btn-sm col-md-6">
-                                       <IconButton onClick={() => getDocShareholding(item?.boardDoc)}>
+                                       <IconButton onClick={() => getDocShareholding(devDetail?.licensesDoc?.[0]?.memorandumOfArticles)}>
                                          <FileDownloadIcon color="info" className="icon" />
                                        </IconButton>
                                      </div>
@@ -809,12 +811,12 @@ const DocumentScrutiny = ({developerType , iconColorState , getRemarkData, addIn
                                  <td>
                                    <div className="row">
                                      <div className="btn btn-sm col-md-6">
-                                       <IconButton onClick={() => getDocShareholding(item?.boardDoc)}>
+                                       <IconButton onClick={() => getDocShareholding(devDetail?.licensesDoc?.[0]?.boardDoc)}>
                                          <VisibilityIcon color="info" className="icon" />
                                        </IconButton>
                                      </div>
                                      <div className="btn btn-sm col-md-6">
-                                       <IconButton onClick={() => getDocShareholding(item?.boardDoc)}>
+                                       <IconButton onClick={() => getDocShareholding(devDetail?.licensesDoc?.[0]?.boardDoc)}>
                                          <FileDownloadIcon color="info" className="icon" />
                                        </IconButton>
                                      </div>
@@ -832,12 +834,12 @@ const DocumentScrutiny = ({developerType , iconColorState , getRemarkData, addIn
                                  <td>
                                    <div className="row">
                                      <div className="btn btn-sm col-md-6">
-                                       <IconButton onClick={() => getDocShareholding(item?.boardDoc)}>
+                                       <IconButton onClick={() => getDocShareholding(devDetail?.licensesDoc?.[0]?.anyOtherDoc)}>
                                          <VisibilityIcon color="info" className="icon" />
                                        </IconButton>
                                      </div>
                                      <div className="btn btn-sm col-md-6">
-                                       <IconButton onClick={() => getDocShareholding(item?.boardDoc)}>
+                                       <IconButton onClick={() => getDocShareholding(devDetail?.licensesDoc?.[0]?.anyOtherDoc)}>
                                          <FileDownloadIcon color="info" className="icon" />
                                        </IconButton>
                                      </div>

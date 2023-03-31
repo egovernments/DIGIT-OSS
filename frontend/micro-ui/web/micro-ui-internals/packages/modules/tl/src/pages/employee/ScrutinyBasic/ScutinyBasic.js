@@ -16,6 +16,11 @@ import { ScrutinyRemarksContext } from "../../../../context/remarks-data-context
 import DataGridDemo from "./PatwariHQ";
 // import AddIcon from "@mui/icons-material/Add";
 // import TemplatesPatwar from "./TemplatePatwari";
+import RadioButtonsGroup from "../Proforma/ProformaForAccount";
+import IndeterminateCheckbox from "../Proforma/ProformaForJE";
+import DrawingBranch from "../Proforma/ProformaForDB";
+import ProformaForlegalBranch from "../Proforma/ProformaForlegalBranch";
+import ProformaPatwari from "../Proforma/ProformaForPatwari";
 
 const ScrutitnyForms = ({ apiResponse, applicationNumber, refreshScrutinyData , histeroyData, feeandcharges , applicationStatus }) => {
   const personalInfoRef = useRef();
@@ -389,7 +394,26 @@ console.log("roleData",rolesDate )
            ApiResponseData={apiResponse !== undefined ? apiResponse?.ApplicantPurpose : null}
         ></TemplatesPatwar>
       </div> */}
-
+      <div style={{ position: "relative", width: "100%", height: "100%", display: "flex" }}>
+      <RadioButtonsGroup>
+      </RadioButtonsGroup>
+      </div>
+      <div style={{ position: "relative", width: "100%", height: "100%", display: "flex" }}>
+      <IndeterminateCheckbox>
+      </IndeterminateCheckbox>
+      </div>
+      <div style={{ position: "relative", width: "100%", height: "100%", display: "flex" }}>
+      <DrawingBranch>
+      </DrawingBranch>
+      </div>
+      <div style={{ position: "relative", width: "100%", height: "100%", display: "flex" }}>
+      <ProformaPatwari>
+      </ProformaPatwari>
+      </div>
+      <div style={{ position: "relative", width: "100%", height: "100%", display: "flex" }}>
+      <ProformaForlegalBranch>
+      </ProformaForlegalBranch>
+      </div>
       
 
       <div style={{ position: "relative", width: "100%", height: "100%", display: "flex" }}>

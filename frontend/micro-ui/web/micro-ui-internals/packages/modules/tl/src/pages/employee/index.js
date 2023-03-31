@@ -23,7 +23,7 @@ import CompositionClu from "../employee/ScrutinyBasic/AllServiceScrutiny/Composi
 import CompletionLic from "../employee/ScrutinyBasic/AllServiceScrutiny/CompletionLic/CompletionLic";
 import ServiceScrutiny from "./ScrutinyBasic/ServicePlanScrutniy/ServiceCard";
 import ElectricalScrutiny from "./ScrutinyBasic/ElectriPlanScrutiny/ElectricalCard";
-import TransferLicense from "../employee/ScrutinyBasic/AllServiceScrutiny/TransferLic/TransferLicense";
+import TransferScrutiny from "../employee/ScrutinyBasic/AllServiceScrutiny/TransferLic/TransferCard";
 // import SubmitNew from "../employee/ScrutinyBasic/AllServiceScrutiny/BankGuarantee/SubmitNew";
 // import basicScrutiny from "../employee/ScrutinyBasic/AllServiceScrutiny/BankScrutiny/basicScrutiny";
 // import FormBank from "../employee/ScrutinyBasic/AllServiceScrutiny/BankGuarantee/FormBankScrutniy/FormBank";
@@ -230,7 +230,7 @@ const EmployeeApp = ({ path, url, userType }) => {
             <PrivateRoute path={`${path}/Records`} component={Records} />
             <PrivateRoute path={`${path}/renewalClu`} component={renewalClu} />
             <PrivateRoute path={`${path}/Beneficial`} component={Beneficial} />
-            <PrivateRoute path={`${path}/TransferLic`} component={TransferLic} />
+            <PrivateRoute path={`${path}/TransferScrutiny/:id`} component={TransferScrutiny} />
             <PrivateRoute path={`${path}/SurrenderLic`} component={SurrenderLic} />
             <PrivateRoute path={`${path}/ExtensionClu`} component={ExtensionClu} />
             <PrivateRoute path={`${path}/ExtensionCom`} component={ExtensionCom} />

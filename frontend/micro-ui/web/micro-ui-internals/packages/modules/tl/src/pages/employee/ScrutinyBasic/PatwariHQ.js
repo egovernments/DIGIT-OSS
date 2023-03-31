@@ -205,6 +205,14 @@ import { Card, Row, Col } from "react-bootstrap";
 import ReportProblemIcon from "@mui/icons-material/ReportProblem";
 import { useStyles } from "./css/personalInfoChild.style";
 import BackspaceIcon from '@mui/icons-material/Backspace';
+import { IconButton } from "@mui/material";
+import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
+import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
+
+import {  Box,
+  Collapse,
+  } from "@mui/material";
+
 
 const DataGridDemo = (props) => {
     const applicant = props.dataForIcons;
@@ -223,6 +231,20 @@ const DataGridDemo = (props) => {
         setChatSheet(props.dataForIcons?.egScrutiny)
 
     }, [props.dataForIcons])
+
+    const [data,setData] = useState([]);
+    const toggleshown1 = name => {
+      const  showState = data.slice();
+      const index = showState.indexOf(name);
+      if(index >= 0 ){
+        showState.splice(index, 1);
+        setData(showState);
+      }
+      else{
+        showState.push(name);
+        setData(showState);
+      }
+    }
 
 
     // let user = Digit.UserService.getUser();
@@ -415,6 +437,9 @@ const DataGridDemo = (props) => {
                                                    
 
                                             ))} */}
+
+
+                                      
                                         <td>
                                             {item.employees?.find((item, index) => (item.role === "Patwari_HQ"))?.isApproved || ""}
                                             
@@ -468,6 +493,35 @@ const DataGridDemo = (props) => {
                                             {item.employees?.find((item, index) => (item.role === "ATP_Filed"))?.isApproved || ""}
 
                                         </td>
+                                        <td> <p> 
+                 <IconButton
+                    onClick={() => toggleshown1(item.name)}
+                  >
+                    {data.includes(index)?(
+                      <KeyboardArrowUpIcon />  
+                    ) : (
+                     <p><KeyboardArrowUpIcon /><b>{item.employees.role}</b></p>   
+                      
+                    )}
+                   
+                  </IconButton>
+                 
+                  </p>
+                  <div className="additional-info">
+                   {data.includes(item.name) && (
+                    <Box >
+                      <Card style={{border: "black" , backgroundColor: "lightblue"}}>
+                                                    <div>
+                                                   {item?.remarks}
+                                                    </div>
+                                                    <button style={{textAlign:"left"}}onClick={() => setIsOpen(false)}>
+                                                        <BackspaceIcon></BackspaceIcon>
+                                                    </button>
+                                                </Card>
+                     </Box>
+                     )}
+                     </div>
+                 </td>
                                         {/* <td>
                                             {item.employees?.find((item, index) => (item.role === "Patwari_HQ"))?.isApproved || ""}
 

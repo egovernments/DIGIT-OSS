@@ -203,7 +203,7 @@ import RemoveIcon from "@mui/icons-material/Remove";
               <div>
                 <Form.Label className={classes.formLabel}>
                   <h2>
-                  As per the approved layout plan/building plans 
+                  1. Showing the location of the potable water, sewer line, treated water line and storm water line to connect the trunk water supply network.
                     &nbsp;&nbsp;
                   </h2>
                   {/* <Tooltip title="As per the approved layout plan/building plans">
@@ -242,7 +242,7 @@ import RemoveIcon from "@mui/icons-material/Remove";
             <Col  md={6} xxl lg="6">
               <div>
                 <Form.Label className={classes.formLabel}>
-                Level of stormwater and sewer line in conformity with approved EDC infrastructure works{" "}
+                2. Proposed source of water supply as informed by the applicant 
                   <span style={{ color: "red" }}>*</span>
                   {/* <Tooltip title="Level of stormwater and sewer line in conformity with approved EDC infrastructure works">
                      <h2>approved EDC infrastructure works</h2> </Tooltip> */}
@@ -272,7 +272,7 @@ import RemoveIcon from "@mui/icons-material/Remove";
               ></Form.Check>
             </Col>
             <br></br>
-            <Col  md={6} xxl lg="6">
+            {/* <Col  md={6} xxl lg="6">
               <div>
                 <Form.Label className={classes.formLabel}>
                 Showing the location of the sewer line, and stormwater line to connect the trunk water supply network <span style={{ color: "red" }}>*</span> &nbsp;&nbsp;
@@ -301,12 +301,12 @@ import RemoveIcon from "@mui/icons-material/Remove";
                 {...register("sewerLine")}
                 inline
               ></Form.Check>
-            </Col>
+            </Col> */}
             
             <Col  md={6} xxl lg="6">
               <div>
                 <Form.Label className={classes.formLabel}>
-                Water supply, sewer, and stormwater network connected with proposed/existing master services
+                3. The capacity of STP as per population norms.
                   <span style={{ color: "red" }}>*</span>
                 </Form.Label>
               </div>
@@ -337,7 +337,7 @@ import RemoveIcon from "@mui/icons-material/Remove";
             <Col  md={6} xxl lg="6">
               <div>
                 <Form.Label className={classes.formLabel}>
-                Proposed source of water supply <span style={{ color: "red" }}>*</span> 
+                4. Level of storm water and sewer line in conformity with approved EDC infrastructure works. yes 110 <span style={{ color: "red" }}>*</span> 
                 </Form.Label>
               </div>
               <Form.Check
@@ -366,7 +366,7 @@ import RemoveIcon from "@mui/icons-material/Remove";
             <Col  md={6} xxl lg="6" >
               <div>
                 <Form.Label className={classes.formLabel}>
-                The capacity of UGT as per population norms <span style={{ color: "red" }}>*</span> 
+                5. The capacity of UGT as per population health norms. <span style={{ color: "red" }}>*</span> 
                 </Form.Label>
               </div>
               <Form.Check
@@ -396,7 +396,7 @@ import RemoveIcon from "@mui/icons-material/Remove";
             <Col  md={6} xxl lg="6" className={classes.formLabel}>
               <div>
                 <Form.Label>
-                The capacity of STP as per population norms <span style={{ color: "red" }}>*</span> &nbsp;&nbsp;
+                6. Specifications of the Public Health Department. yes <span style={{ color: "red" }}>*</span> &nbsp;&nbsp;
                 </Form.Label>
               </div>
               <Form.Check
@@ -426,7 +426,7 @@ import RemoveIcon from "@mui/icons-material/Remove";
               <div>
                 <Form.Label className={classes.formLabel}>
                   <h2>
-                  Specifications of the public health department <span style={{ color: "red" }}>*</span>
+                  7. Sewer network. <span style={{ color: "red" }}>*</span>
                   </h2>
                 </Form.Label>
               </div>
@@ -442,7 +442,7 @@ import RemoveIcon from "@mui/icons-material/Remove";
             <Col  md={6} xxl lg="6">
               <div>
                 <Form.Label className={classes.formLabel}>
-                Water supply network <span style={{ color: "red" }}>*</span> 
+                8. Road network.<span style={{ color: "red" }}>*</span> 
                 </Form.Label>
               </div>
               <Form.Check
@@ -472,7 +472,7 @@ import RemoveIcon from "@mui/icons-material/Remove";
             <Col  md={6} xxl lg="6">
               <div>
                 <Form.Label className={classes.formLabel}>
-                Sewer network <span style={{ color: "red" }}>*</span> 
+                9. Street lightening. <span style={{ color: "red" }}>*</span> 
                 </Form.Label>
               </div>
               <Form.Check
@@ -502,7 +502,7 @@ import RemoveIcon from "@mui/icons-material/Remove";
             <Col  md={6} xxl lg="6">
               <div>
                 <Form.Label className={classes.formLabel}>
-                Stormwater drainage <span style={{ color: "red" }}>*</span> 
+                10. Horticulture.<span style={{ color: "red" }}>*</span> 
                 </Form.Label>
               </div>
               <Form.Check
@@ -528,8 +528,8 @@ import RemoveIcon from "@mui/icons-material/Remove";
                 inline
               ></Form.Check>
             </Col>
-           
-            <Col  md={6} xxl lg="6">
+           {/* ///////////////////////////////////////////////// */}
+            {/* <Col  md={6} xxl lg="6">
               <div>
                 <Form.Label className={classes.formLabel}>
                 Roads network <span style={{ color: "red" }}>*</span> 
@@ -618,7 +618,8 @@ import RemoveIcon from "@mui/icons-material/Remove";
                 {...register("streetLightening")}
                 inline
               ></Form.Check>
-            </Col>
+            </Col> */}
+            {/* ////////////////////////////////////////////////////////////// */}
             {/* <Col  md={6} xxl lg="6">
               <div>
                 <Form.Label>
@@ -646,7 +647,8 @@ import RemoveIcon from "@mui/icons-material/Remove";
                 inline
               ></Form.Check>
             </Col> */}
-             <br></br>
+            {/* //////////////////////////////////////////////////////////////////////// */}
+             {/* <br></br>
             <Col md={6} xxl lg="6" >
               <div>
                 <Form.Label className={classes.formLabel}>
@@ -691,7 +693,8 @@ import RemoveIcon from "@mui/icons-material/Remove";
               ></Form.Check>
             </Col>
            
-            <br></br>
+            <br></br> */}
+            {/* ////////////////////////////////////////////////////////////////// */}
             
            
           </Row>

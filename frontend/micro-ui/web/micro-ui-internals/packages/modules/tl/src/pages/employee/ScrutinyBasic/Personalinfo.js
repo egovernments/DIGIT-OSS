@@ -187,7 +187,7 @@ const Personalinfo = (props) => {
           <DocumentScrutiny
             iconColorState={iconStates}
             showTable={currentRemarklifo}
-            addInfo={applicantInfoPersonal?.devDetail?.addInfo ? applicantInfoPersonal?.devDetail?.addInfo : null}
+            devDetail={applicantInfoPersonal?.devDetail ?  applicantInfoPersonal?.devDetail : null}
             displayPersonal={open2 ? "block" : "none"}
             applicationStatus={applicationStatus}
           />

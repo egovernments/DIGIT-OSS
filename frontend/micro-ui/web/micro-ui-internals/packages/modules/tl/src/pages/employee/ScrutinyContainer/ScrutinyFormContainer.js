@@ -119,6 +119,52 @@ const ScrutinyFormcontainer = (props) => {
     } catch (error) {
       console.log(error);
     }
+    let requestFiled = {
+
+      RequestInfo: {
+        apiId: "Rainmaker",
+        ver: "v1",
+        ts: 0,
+        action: "_search",
+        did: "",
+        key: "",
+        msgId: "090909",
+        requesterId: "",
+        authToken: authToken,
+        // userInfo: userInfo
+
+      },
+      MdmsCriteria : {
+        tenantId: "hr",
+        moduleDetails: [
+            {
+                moduleName : "ACCESSCONTROL_ROLESACCESS",
+                tenantId: "hr",
+                masterDetails: [
+                    {
+                        "name": "rolesaccess",
+                        "filter": "[?(@.role=='Patwari')]"
+                    }
+                ]
+            }
+        ]
+    }
+    }
+    console.log("TCPaccess123", requestFiled)
+    // return;
+
+    try {
+      const Resp = await axios.post(`/egov-mdms-service/v1/_search`, requestFiled).then((response) => {
+        return response?.data;
+      });
+      // setApplicationData(Resp?.Licenses[0]);
+      // SetLastUpdate(Resp?.Licenses[0]);
+  console.log("FileddataName" , Resp);
+
+    } catch (error) {
+      console.log(error);
+  
+    }
     const applicationNo = id
     console.log("applicationNo", applicationNo);
     const feeAndChargesData = {
