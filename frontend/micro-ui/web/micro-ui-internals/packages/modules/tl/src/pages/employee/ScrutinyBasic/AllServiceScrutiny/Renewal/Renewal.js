@@ -17,7 +17,7 @@ const Colors = {
   info: "#FFB602",
 };
 
-function renewalClu() {
+function RenewalClu() {
   const {
     register,
     handleSubmit,
@@ -2658,4 +2658,4 @@ function renewalClu() {
   );
 }
 
-export default renewalClu;
+export default RenewalClu;
