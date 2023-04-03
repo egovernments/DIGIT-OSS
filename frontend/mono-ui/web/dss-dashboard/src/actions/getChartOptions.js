@@ -7,6 +7,9 @@ export default function getChartOptions(code, filters) {
     let moduleLevel = newFilter.modulelevel ? newFilter.modulelevel : "";
     delete newFilter.duration;
     delete newFilter.modulelevel;
+    if (newFilter && newFilter.tenantId){
+        newFilter.tenantId = `pb.${newFilter.tenantId.toLowerCase()}` ;
+    }
     if (url) {
         const options = {
             headers: {
@@ -33,6 +36,7 @@ export default function getChartOptions(code, filters) {
                 "requestDate": duration
             }
         }
+        console.log(newFilter,"newFilter");
         return {
             url: url,
             options: options,

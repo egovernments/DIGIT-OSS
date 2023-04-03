@@ -46,7 +46,7 @@ let MODULE_LEVEL=JSON.parse(sessionStorage.getItem('MODULE_LEVEL'))
     if(page){
         let dashKey ='';
 
-        for(var i=0; i<MODULE_LEVEL.length;i++){
+        for(var i=0; i< MODULE_LEVEL && MODULE_LEVEL.length;i++){
             dashKey = Object.keys(MODULE_LEVEL[i])[0];
             if(dashKey.toLowerCase() == page.toLowerCase() || 'ulb-'+dashKey == page.toLowerCase()){
                 filters['modulelevel'] = MODULE_LEVEL[i][dashKey]['filterKey'];
