@@ -47,11 +47,15 @@ const ScrutinyFormcontainer = (props) => {
   const [lastUpdate, SetLastUpdate] = useState();
   const [workflowDetails, setWorkflowDetails] = useState();
   const [applicationData, setApplicationData] = useState();
+  const [mDMSData, setMDMSData] = useState();
+  const [mDmsUpdate, SetMDmsUpdate] = useState();
   const { setBusinessService } = useContext(ScrutinyRemarksContext)
 
   const authToken = Digit.UserService.getUser()?.access_token || null;
   const userInfo = Digit.UserService.getUser()?.info || {};
-
+  const userRolesArray = userInfo?.roles.filter((user) => user.code !=="EMPLOYEE" );
+  const filterDataRole = userRolesArray?.[0]?.code;
+  // console.log("filterDataRole" , filterDataRole );
 
   const handleshow19 = async (e) => {
     const payload = {
@@ -143,7 +147,11 @@ const ScrutinyFormcontainer = (props) => {
                 masterDetails: [
                     {
                         "name": "rolesaccess",
-                        "filter": "[?(@.role=='Patwari')]"
+                        "filter": `[?(@.role=='${filterDataRole}')]`
+                    },
+                     {
+                        "name": "rolesaccess",
+                        "filter": `[?(@.applicationStatus=='${status}')]`
                     }
                 ]
             }
@@ -151,15 +159,14 @@ const ScrutinyFormcontainer = (props) => {
     }
     }
     console.log("TCPaccess123", requestFiled)
-    // return;
+    // return; MdmsCriteria
 
     try {
       const Resp = await axios.post(`/egov-mdms-service/v1/_search`, requestFiled).then((response) => {
         return response?.data;
       });
-      // setApplicationData(Resp?.Licenses[0]);
-      // SetLastUpdate(Resp?.Licenses[0]);
-  console.log("FileddataName" , Resp);
+      setMDMSData(Resp?.MdmsRes?.ACCESSCONTROL_ROLESACCESS?.rolesaccess);
+  console.log("FileddataName" , mDMSData);
 
     } catch (error) {
       console.log(error);
@@ -486,6 +493,7 @@ const ScrutinyFormcontainer = (props) => {
             applicationNumber={id}
             applicationStatus={status}
             refreshScrutinyData={getScrutinyData}
+            mDMSData={mDMSData}
           ></ScrutitnyForms>
         </div>
 

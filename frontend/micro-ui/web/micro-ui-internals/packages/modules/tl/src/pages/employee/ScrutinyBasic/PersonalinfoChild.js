@@ -30,11 +30,23 @@ const PersonalinfoChild = (props) => {
 
 
   const classes = useStyles();
+  const applicationStatus = props.applicationStatus ;
   let user = Digit.UserService.getUser();
   const userRoles = user?.info?.roles?.map((e) => e.code) || [];
-  const hideRemarks = userRoles.some((item) => item === "CTP_HR" || item === "CTP_HQ" || item === "DTP_HR" || item === "DTP_HQ")
-  const hideRemarksPatwari = userRoles.some((item) => item === "Patwari_HQ")
-  
+  // const hideRemarks = userRoles.some((item) => item === "CTP_HR" || item === "CTP_HQ" || item === "DTP_HR" || item === "DTP_HQ")
+  // const hideRemarksPatwari = userRoles.some((item) => item === "CTP_HR");
+  const mDMSData = props.mDMSData;
+  const mDMSDataRole = mDMSData?.map((e) => e.role) || [];
+  const applicationStatusMdms = mDMSData?.map((e) => e.applicationStatus) || [] ;
+  const hideRemarks = userRoles.some((item) => item === mDMSDataRole);
+  const hideRemarksPatwari = applicationStatusMdms.some((item) => item === applicationStatus) || [];
+
+  // mDMSData?.map((e) => e.role)||[]
+  console.log("happyRole" , userRoles);
+  console.log("happyDate" , mDMSData);
+  console.log("happyROLE" , mDMSDataRole);
+  console.log("happyapplicationStatusMdms" , applicationStatusMdms);
+  console.log("happyDateHIDE" , hideRemarksPatwari);
   const personalinfo = props.personalinfo;
   const iconStates = props.iconColorState;
 
@@ -44,7 +56,7 @@ const PersonalinfoChild = (props) => {
   //   const [handleChange,setHandleChange] =useState("");
   //   const handleClose = () => setShow(false);
   // const [handleshow ,setHandleShow] = () => setShow(true);
-  const applicationStatus = props.applicationStatus ;
+ 
   const [smShow, setSmShow] = useState(false);
   const [labelValue, setLabelValue] = useState("");
   const Colors = {
@@ -242,7 +254,7 @@ const PersonalinfoChild = (props) => {
                   &nbsp;&nbsp;
                   <ReportProblemIcon
                     style={{
-                      display: hideRemarks || hideRemarksPatwari ? "none" : "block",
+                      display: hideRemarks || hideRemarksPatwari ? "block" : "none",
                       color: fieldIconColors.developerName
                     }}
                     onClick={() => {

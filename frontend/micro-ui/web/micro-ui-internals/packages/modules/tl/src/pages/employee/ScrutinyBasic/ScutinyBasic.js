@@ -21,8 +21,9 @@ import IndeterminateCheckbox from "../Proforma/ProformaForJE";
 import DrawingBranch from "../Proforma/ProformaForDB";
 import ProformaForlegalBranch from "../Proforma/ProformaForlegalBranch";
 import ProformaPatwari from "../Proforma/ProformaForPatwari";
+// import AddPost from "../Material/TextEditor";
 
-const ScrutitnyForms = ({ apiResponse, applicationNumber, refreshScrutinyData , histeroyData, feeandcharges , applicationStatus }) => {
+const ScrutitnyForms = ({ apiResponse, applicationNumber, refreshScrutinyData , histeroyData, feeandcharges , applicationStatus ,mDMSData }) => {
   const personalInfoRef = useRef();
   const generalInfoRef = useRef();
   const developerInfoRef = useRef();
@@ -322,6 +323,7 @@ console.log("roleData",rolesDate )
               showTable={curentDataPersonal}
               dataForIcons={iconStates}
               applicationStatus={applicationStatus}
+              mDMSData={mDMSData}
             ></Personalinfo>
           </div>
           <div>
@@ -378,9 +380,9 @@ console.log("roleData",rolesDate )
 
         </div>
       </div>
-      <div style={{ position: "relative", width: "100%", display: "flex", marginBottom: 2 }}>
-       
-      </div>
+      {/* <div style={{ position: "relative", width: "100%", display: "flex", marginBottom: 2 }}>
+       <AddPost></AddPost>
+      </div> */}
 
       <div style={{ position: "relative", width: "100%", height: "100%", display: "flex" }}>
         <ScrutinyDevelopment

@@ -42,6 +42,7 @@ const Personalinfo = (props) => {
   const iconStates = props.dataForIcons
   const applicantInfoPersonal = props.ApiResponseData;
   const applicationStatus = props.applicationStatus ;
+  const mDMSData = props.mDMSData;
   console.log("personal info applicant data", applicantInfoPersonal);
 
   const handlemodaldData = (data) => {
@@ -165,6 +166,7 @@ const Personalinfo = (props) => {
                 personalinfo={applicantInfoPersonal !== null ? applicantInfoPersonal : null}
                 displayPersonal={open2 ? "block" : "none"}
                 applicationStatus={applicationStatus}
+                mDMSData={mDMSData}
               />
             </div>
           </Collapse>

@@ -1,7 +1,7 @@
 
 import axios from "axios";
 import { size } from "lodash";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { Container } from "react-bootstrap";
 import { Card, Row, Col } from "react-bootstrap";
 import { Button, Form } from "react-bootstrap";
@@ -10,7 +10,8 @@ import { useQueryClient } from "react-query";
 import { useHistory, useParams } from "react-router-dom";
 import ApplicationDetailsActionBar from "../../../../../../templates/ApplicationDetails/components/ApplicationDetailsActionBar";
 import ActionModal from "../../../../../../templates/ApplicationDetails/Modal";
-// import ScrutitnyForms from "../ScrutinyBasic/ScutinyBasic";
+import { ScrutinyRemarksContext } from "../../../../../context/remarks-data-context/index";
+
 import ServiceBase from "./ServiceBase";
 
 const ServiceScrutiny = (props) => {
@@ -33,7 +34,7 @@ const ServiceScrutiny = (props) => {
   const [isEnableLoader, setIsEnableLoader] = useState(false);
   const [isWarningPop, setWarningPopUp] = useState(false);
   const [showhide19, setShowhide19] = useState("true");
-  const [businessService, setBusinessService] = useState("SERVICE_PLAN");
+  const [businessService, setBusinessServices] = useState("SERVICE_PLAN");
   const [moduleCode, setModuleCode] = useState("TL")
   const [scrutinyDetails, setScrutinyDetails] = useState();
   // const [applicationNumber,setApplicationNumber] = useState("");
@@ -45,6 +46,8 @@ const ServiceScrutiny = (props) => {
   const [loiNumberSet, setLOINumberSet] = useState("");
   const [edcDataTreade ,setEdcDataTreade] = useState("");
   const [idwDataTreade ,setIdwDataTreade] = useState("");
+  const [status , setStatus] = useState();
+  const { setBusinessService } = useContext(ScrutinyRemarksContext)
 
   //   const authToken = Digit.UserService.getUser()?.access_token || null;
 
@@ -80,7 +83,7 @@ const ServiceScrutiny = (props) => {
       });
       //   console.log("Response From API1", Resp, Resp?.Licenses[0]?.applicationNumber,Resp);
       setScrutinyDetails(Resp?.servicePlanResponse?.[0]);
-      
+      setStatus(Resp?.servicePlanResponse?.[0]?.status);
       
       console.log("devDel1234", Resp?.servicePlanResponse?.[0]?.loiNumber);
       const loiNumber =  Resp?.servicePlanResponse?.[0]?.loiNumber
@@ -88,8 +91,10 @@ const ServiceScrutiny = (props) => {
       setApplicationDetails({
         applicationData: Resp?.servicePlanResponse?.[0],
         workflowCode: Resp?.servicePlanResponse?.[0].businessService
+        
       })
-      // console.log("Loi1234787", userInfo );
+      
+      console.log("Loi12347874545", Resp?.servicePlanResponse?.[0]?.status);
       // console.log("Loi1234", loiNumber );
       const loiRequest = {
         requestInfo: {
@@ -242,7 +247,7 @@ const ServiceScrutiny = (props) => {
     // console.log("logService...wrkflw12",id,workflowDetailsTemp,scrutinyDetails,applicationDetails,processInstances)
     if (workflowDetailsTemp?.data?.applicationBusinessService) {
       setWorkflowDetails(workflowDetailsTemp);
-      setBusinessService(workflowDetailsTemp?.data?.applicationBusinessService);
+      setBusinessServices(workflowDetailsTemp?.data?.applicationBusinessService);
       console.log("Datapoint1", workflowDetailsTemp?.data?.processInstances)
       // setDataHistory("Datapoint" , workflowDetailsTemp?.data?.processInstances.map((array) => array.map((object))))
       //  = (e) => {
@@ -308,6 +313,7 @@ const ServiceScrutiny = (props) => {
           setExternalAgencies={setExternalAgencies}
           edcDataTreade={idwDataTreade}
           idwDataTreade={edcDataTreade}
+          applicationStatus={status}
         ></ServiceBase>
       </Row>
       {/* <Row style={{ top: 10, padding: "10px 22px" }}> */}

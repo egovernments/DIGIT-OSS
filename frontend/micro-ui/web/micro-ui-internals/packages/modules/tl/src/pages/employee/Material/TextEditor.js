@@ -4,7 +4,7 @@ import { Editor } from "react-draft-wysiwyg";
 import { convertToHTML } from "draft-convert";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 
-function Edit() {
+function AddPost() {
   const [editorState, setEditorState] = useState(() =>
     EditorState.createEmpty()
   );
@@ -16,7 +16,7 @@ function Edit() {
   }, [editorState]);
 
   return (
-    <div className="App">
+    <div className="text-editorEmp">
       <header className="App-header">Rich Text Editor Example</header>
       <Editor
         editorState={editorState}
@@ -25,9 +25,9 @@ function Edit() {
         editorClassName="editor-class"
         toolbarClassName="toolbar-class"
       />
-      <button onClick={() => console.log(convertedContent)}>Hit me</button>
+      <button onClick={() => console.log(convertedContent)}>Submit</button>
     </div>
   );
 }
 
-export default Edit;
+export default AddPost;
