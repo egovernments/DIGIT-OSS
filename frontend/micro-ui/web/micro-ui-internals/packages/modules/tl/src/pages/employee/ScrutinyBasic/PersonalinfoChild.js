@@ -32,23 +32,61 @@ const PersonalinfoChild = (props) => {
   const classes = useStyles();
   const applicationStatus = props.applicationStatus ;
   let user = Digit.UserService.getUser();
+  const userInfo = Digit.UserService.getUser()?.info || {};
+  const userRolesArray = userInfo?.roles.filter((user) => user.code !== "EMPLOYEE");
+  const filterDataRole = userRolesArray?.[0]?.code;
   const userRoles = user?.info?.roles?.map((e) => e.code) || [];
-  // const hideRemarks = userRoles.some((item) => item === "CTP_HR" || item === "CTP_HQ" || item === "DTP_HR" || item === "DTP_HQ")
-  // const hideRemarksPatwari = userRoles.some((item) => item === "CTP_HR");
+  
+  console.log("rolelogintime" , userRoles );
+  console.log("afterfilter12" , filterDataRole)
+
   const mDMSData = props.mDMSData;
   const mDMSDataRole = mDMSData?.map((e) => e.role) || [];
+  const hideRemarks = mDMSDataRole.includes(filterDataRole);
   const applicationStatusMdms = mDMSData?.map((e) => e.applicationStatus) || [] ;
-  const hideRemarks = userRoles.some((item) => item === mDMSDataRole);
   const hideRemarksPatwari = applicationStatusMdms.some((item) => item === applicationStatus) || [];
+  const [fileddataName, setFiledDataName] = useState ();
 
+ useEffect(() =>{
+    if(mDMSData&&mDMSData?.length){
+      console.log("filedDataMdms" , mDMSData,mDMSData?.[0]?.field , mDMSData?.[0]?.field.map((item , index) => item.fields ));
+      setFiledDataName(mDMSData?.[0]?.field.map((item , index) => item.fields ))
+       
+    }
+    
+ },[mDMSData]
+ )
+ const showReportProblemIcon=(filedName)=>{
+   if (fileddataName&&fileddataName.length) {
+      let show = fileddataName.includes(filedName)
+      return show ;
+    } else {
+      return false ;
+    }
+ }
+ 
   // mDMSData?.map((e) => e.role)||[]
   console.log("happyRole" , userRoles);
   console.log("happyDate" , mDMSData);
   console.log("happyROLE" , mDMSDataRole);
   console.log("happyapplicationStatusMdms" , applicationStatusMdms);
-  console.log("happyDateHIDE" , hideRemarksPatwari);
+  console.log("happyDateHIDE" , hideRemarksPatwari,showReportProblemIcon("Purpose of colony"),hideRemarks);
   const personalinfo = props.personalinfo;
   const iconStates = props.iconColorState;
+
+//   const [datailsShown , setDatailsShown] = useState([]);
+// const toggleshown = userID => {
+//   const  showState = datailsShown.slice();
+//   const index = showState.indexOf(userID);
+//   if(index >= 0 ){
+//     showState.splice(index, 1);
+//     setDatailsShown(showState);
+//   }
+//   else{
+//     showState.push(userID);
+//     setDatailsShown(showState);
+//   }
+// }
 
   // let users = Digit.UserService.getUser();
   // const userRole = users?.info?.roles?.map((e) => e.code) || [];
@@ -254,7 +292,7 @@ const PersonalinfoChild = (props) => {
                   &nbsp;&nbsp;
                   <ReportProblemIcon
                     style={{
-                      display: hideRemarks || hideRemarksPatwari ? "block" : "none",
+                      display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("Name of Developer") ? "block" : "none",
                       color: fieldIconColors.developerName
                     }}
                     onClick={() => {
@@ -285,9 +323,12 @@ const PersonalinfoChild = (props) => {
                     placeholder={personalinfo !== null ? personalinfo?.devDetail?.addInfo?.registeredAddress : null}
                     disabled></Form.Control>
                   &nbsp;&nbsp;
+                  {/* {showReportProblemIcon("Purpose of colony")}
+                  {hideRemarksPatwari}
+                  {hideRemarks} */}
                   <ReportProblemIcon
                     style={{
-                      display: hideRemarks || hideRemarksPatwari ? "none" : "block",
+                      display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("Address") ? "block" : "none",
                       color: fieldIconColors.registeredAddress2
                     }}
                     onClick={() => {
@@ -319,7 +360,7 @@ const PersonalinfoChild = (props) => {
                   &nbsp;&nbsp;
                   <ReportProblemIcon
                     style={{
-                      display: hideRemarks || hideRemarksPatwari ? "none" : "block",
+                     display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("Email Id") ? "block" : "none",
                       color: fieldIconColors.developerEmail
                     }}
                     onClick={() => {
@@ -350,7 +391,7 @@ const PersonalinfoChild = (props) => {
     {/* {JSON.stringify(hideRemarksPatwari)}  */}
     <ReportProblemIcon
       style={{
-        display: hideRemarks || hideRemarksPatwari ? "none" : "block",
+       display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("Developer Type") ? "block" : "none",
 
         color: fieldIconColors.developerType
       }}
@@ -386,7 +427,7 @@ personalinfo?.devDetail?.addInfo?.showDevTypeFields != "Partnership Firm" &&
 
       <ReportProblemIcon
         style={{
-          display: hideRemarks || hideRemarksPatwari ? "none" : "block",
+         display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("CIN Number") ? "block" : "none",
 
           color: fieldIconColors.cin_Number
         }}
@@ -421,7 +462,7 @@ personalinfo?.devDetail?.addInfo?.showDevTypeFields != "Partnership Firm" &&
                   &nbsp;&nbsp;
                   <ReportProblemIcon
                     style={{
-                      display: hideRemarks || hideRemarksPatwari ? "none" : "block",
+                     display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("Address") ? "block" : "none",
                       color: fieldIconColors.developerPan
                     }}
                     onClick={() => {
@@ -455,7 +496,7 @@ personalinfo?.devDetail?.addInfo?.showDevTypeFields != "Partnership Firm" &&
                 &nbsp;&nbsp;
                 <ReportProblemIcon
                   style={{
-                    display: hideRemarks || hideRemarksPatwari ? "none" : "block",
+                   display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("Address") ? "block" : "none",
                     color: fieldIconColors.gst_Number
                   }}
                   onClick={() => {
@@ -493,7 +534,7 @@ personalinfo?.devDetail?.addInfo?.showDevTypeFields != "Partnership Firm" &&
                   &nbsp;&nbsp;
                   <ReportProblemIcon
                     style={{
-                      display: hideRemarks || hideRemarksPatwari ? "none" : "block",
+                     display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("Address") ? "block" : "none",
                       color: fieldIconColors.developerMobileNo
                     }}
                     onClick={() => {
@@ -527,7 +568,7 @@ personalinfo?.devDetail?.addInfo?.showDevTypeFields != "Partnership Firm" &&
                   &nbsp;&nbsp;
                   <ReportProblemIcon
                     style={{
-                      display: hideRemarks || hideRemarksPatwari ? "none" : "block",
+                     display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("Address") ? "block" : "none",
                       color: fieldIconColors.developerMobileNo
                     }}
                     onClick={() => {
@@ -556,7 +597,7 @@ personalinfo?.devDetail?.addInfo?.showDevTypeFields != "Partnership Firm" &&
                   &nbsp;&nbsp;
                   <ReportProblemIcon
                     style={{
-                      display: hideRemarks || hideRemarksPatwari ? "none" : "block",
+                     display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("Address") ? "block" : "none",
                       color: fieldIconColors.developerdob
                     }}
                     onClick={() => {
@@ -594,7 +635,7 @@ personalinfo?.devDetail?.addInfo?.showDevTypeFields != "Partnership Firm" &&
             {/* <div className="btn btn-sm col-md-4"> */}
             <ReportProblemIcon
               style={{
-                display: hideRemarks || hideRemarksPatwari ? "none" : "block",
+               display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("Address") ? "block" : "none",
 
                 color: fieldIconColors.DirectorsInformation
               }}
@@ -667,7 +708,7 @@ personalinfo?.devDetail?.addInfo?.showDevTypeFields != "Partnership Firm" &&
             {/* <div className="btn btn-sm col-md-4"> */}
             <ReportProblemIcon
               style={{
-                display: hideRemarks || hideRemarksPatwari ? "none" : "block",
+               display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("Address") ? "block" : "none",
 
                 color: fieldIconColors.directorsInformation
               }}
@@ -743,7 +784,7 @@ personalinfo?.devDetail?.addInfo?.showDevTypeFields != "Partnership Firm" &&
             {/* <div className="btn btn-sm col-md-4"> */}
             <ReportProblemIcon
               style={{
-                display: hideRemarks || hideRemarksPatwari ? "none" : "block",
+               display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("Address") ? "block" : "none",
 
                 color: fieldIconColors.shareholdingPatterns
               }}
@@ -830,7 +871,7 @@ personalinfo?.devDetail?.addInfo?.showDevTypeFields != "Partnership Firm" &&
             &nbsp;&nbsp;
             <ReportProblemIcon
               style={{
-                display: hideRemarks || hideRemarksPatwari ? "none" : "block",
+               display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("Address") ? "block" : "none",
 
                 color: fieldIconColors.authPersonName
               }}
@@ -885,7 +926,7 @@ personalinfo?.devDetail?.addInfo?.showDevTypeFields != "Partnership Firm" &&
                        &nbsp;&nbsp;
             <ReportProblemIcon
               style={{
-                display: hideRemarks || hideRemarksPatwari ? "none" : "block",
+               display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("Address") ? "block" : "none",
 
                 color: fieldIconColors.authMobileNo1
               }}
@@ -916,7 +957,7 @@ personalinfo?.devDetail?.addInfo?.showDevTypeFields != "Partnership Firm" &&
             &nbsp;&nbsp;
             <ReportProblemIcon
               style={{
-                display: hideRemarks || hideRemarksPatwari ? "none" : "block",
+               display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("Address") ? "block" : "none",
 
                 color: fieldIconColors.emailForCommunication
               }}
@@ -950,7 +991,7 @@ personalinfo?.devDetail?.addInfo?.showDevTypeFields != "Partnership Firm" &&
             &nbsp;&nbsp;
             <ReportProblemIcon
               style={{
-                display: hideRemarks || hideRemarksPatwari ? "none" : "block",
+               display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("Address") ? "block" : "none",
 
                 color: fieldIconColors.authPan
               }}
@@ -994,7 +1035,7 @@ personalinfo?.devDetail?.addInfo?.showDevTypeFields != "Partnership Firm" &&
             <div className="btn btn-sm col-md-5" >
               <ReportProblemIcon
                 style={{
-                  display: hideRemarks || hideRemarksPatwari ? "none" : "block",
+                 display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("Address") ? "block" : "none",
 
                   color: fieldIconColors.uploadDigitalSignaturePdf
                 }}
@@ -1042,7 +1083,7 @@ personalinfo?.devDetail?.addInfo?.showDevTypeFields != "Partnership Firm" &&
             <div className="btn btn-sm col-md-5">
               <ReportProblemIcon
                 style={{
-                  display: hideRemarks || hideRemarksPatwari ? "none" : "block",
+                 display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("Address") ? "block" : "none",
 
                   color: fieldIconColors.pin
                 }}

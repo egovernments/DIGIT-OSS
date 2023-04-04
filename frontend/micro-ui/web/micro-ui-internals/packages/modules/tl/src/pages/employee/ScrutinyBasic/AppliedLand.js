@@ -37,11 +37,54 @@ const AppliedLandinfo = (props) => {
   const dataIcons = props.dataForIcons;
   const DetailsofAppliedLand = props.ApiResponseData;
   const applicationStatus = props.applicationStatus;
-  console.log("personal info applicant data4", DetailsofAppliedLand);
+  // console.log("personal info applicant data4", DetailsofAppliedLand);
+  // let user = Digit.UserService.getUser();
+  // const userRoles = user?.info?.roles?.map((e) => e.code) || [];
+  // const hideRemarks = userRoles.some((item) => item === "CTP_HR" || item === "CTP_HQ" || item === "DTP_HR" || item === "DTP_HQ")
+  // const hideRemarksPatwari = userRoles.some((item) => item === "Patwari_HQ")
+
+  // const applicationStatus = props.applicationStatus ;
   let user = Digit.UserService.getUser();
+  const userInfo = Digit.UserService.getUser()?.info || {};
+  const userRolesArray = userInfo?.roles.filter((user) => user.code !== "EMPLOYEE");
+  const filterDataRole = userRolesArray?.[0]?.code;
   const userRoles = user?.info?.roles?.map((e) => e.code) || [];
-  const hideRemarks = userRoles.some((item) => item === "CTP_HR" || item === "CTP_HQ" || item === "DTP_HR" || item === "DTP_HQ")
-  const hideRemarksPatwari = userRoles.some((item) => item === "Patwari_HQ")
+  
+  console.log("rolelogintime" , userRoles );
+  console.log("afterfilter12" , filterDataRole)
+
+  const mDMSData = props.mDMSData;
+  const mDMSDataRole = mDMSData?.map((e) => e.role) || [];
+  const hideRemarks = mDMSDataRole.includes(filterDataRole);
+  const applicationStatusMdms = mDMSData?.map((e) => e.applicationStatus) || [] ;
+  const hideRemarksPatwari = applicationStatusMdms.some((item) => item === applicationStatus) || [];
+  const [fileddataName, setFiledDataName] = useState ();
+
+ useEffect(() =>{
+    if(mDMSData&&mDMSData?.length){
+      console.log("filedDataMdms" , mDMSData,mDMSData?.[0]?.field , mDMSData?.[0]?.field.map((item , index) => item.fields ));
+      setFiledDataName(mDMSData?.[0]?.field.map((item , index) => item.fields ))
+       
+    }
+    
+ },[mDMSData]
+ )
+ const showReportProblemIcon=(filedName)=>{
+   if (fileddataName&&fileddataName.length) {
+      let show = fileddataName.includes(filedName)
+      return show ;
+    } else {
+      return false ;
+    }
+ }
+ 
+  // mDMSData?.map((e) => e.role)||[]
+  console.log("happyRole" , userRoles);
+  console.log("happyDate" , mDMSData);
+  console.log("happyROLE" , mDMSDataRole);
+  console.log("happyapplicationStatusMdms" , applicationStatusMdms);
+  console.log("happyDateHIDE" , hideRemarksPatwari,showReportProblemIcon("Purpose of colony"),hideRemarks);
+
 
   const [uncheckedValue, setUncheckedVlue] = useState([]);
   console.log("abcd1", uncheckedValue);
@@ -524,7 +567,7 @@ let Tree = ({ data }) => {
 
                   <ReportProblemIcon
                     style={{
-                      display: hideRemarks || hideRemarksPatwari ? "none" : "block",
+                     display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("Address") ? "block" : "none",
                       color: fieldIconColors.detailsOfPlots
                     }}
                     onClick={() => {

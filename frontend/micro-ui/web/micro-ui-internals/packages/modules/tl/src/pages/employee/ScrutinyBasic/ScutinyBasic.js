@@ -335,6 +335,7 @@ console.log("roleData",rolesDate )
               ApiResponseData={apiResponse !== undefined ? apiResponse?.ApplicantPurpose : null}
               dataForIcons={iconStates}
               applicationStatus={applicationStatus}
+              mDMSData={mDMSData}
             ></Genarelinfo>
             {/* </Col> */}
           </div>
@@ -349,6 +350,7 @@ console.log("roleData",rolesDate )
               ApiResponseData={apiResponse !== undefined ? apiResponse?.LandSchedule : null}
               dataForIcons={iconStates}
               applicationStatus={applicationStatus}
+              mDMSData={mDMSData}
             ></Developerinfo>
             {/* </Col> */}
           </div>
@@ -363,6 +365,7 @@ console.log("roleData",rolesDate )
               heightApplied={defaultheightApplied}
               dataForIcons={iconStates}
               applicationStatus={applicationStatus}
+              mDMSData={mDMSData}
             ></AppliedLandinfo>
             {/* </Col> */}
           </div>
@@ -374,6 +377,7 @@ console.log("roleData",rolesDate )
               ApiResponseData={apiResponse !== undefined ? apiResponse?.FeesAndCharges : null}
               feeandchargesData={feeandcharges}
               applicationStatus={applicationStatus}
+              mDMSData={mDMSData}
             ></Feeandcharges>
             {/* </Col> */}
           </div>

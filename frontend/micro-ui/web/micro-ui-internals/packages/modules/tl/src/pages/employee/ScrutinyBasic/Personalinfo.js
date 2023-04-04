@@ -183,6 +183,7 @@ const Personalinfo = (props) => {
             addInfo={applicantInfoPersonal?.devDetail?.addInfo ? applicantInfoPersonal?.devDetail?.addInfo : null}
             displayPersonal={open2 ? "block" : "none"}
             applicationStatus={applicationStatus}
+            mDMSData={mDMSData}
           />
           {/* <DocumentScrutiny 
           /> */}
@@ -192,6 +193,7 @@ const Personalinfo = (props) => {
             devDetail={applicantInfoPersonal?.devDetail ?  applicantInfoPersonal?.devDetail : null}
             displayPersonal={open2 ? "block" : "none"}
             applicationStatus={applicationStatus}
+            mDMSData={mDMSData}
           />
         </div>
       </Collapse>

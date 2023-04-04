@@ -22,14 +22,48 @@ const Genarelinfo = (props) => {
   const [uncheckedValue, setUncheckedVlue] = useState([]);
   const [checkValue, setCheckedVAlue] = useState([]);
   // const [fieldValue, setFieldValue] = useState("");
+  // let user = Digit.UserService.getUser();
+  // const userRoles = user?.info?.roles?.map((e) => e.code) || [];
+  // const hideRemarks = userRoles.some((item)=>item === "CTP_HR" || item === "CTP_HQ" || item === "DTP_HR" || item === "DTP_HQ")
+  // const hideRemarksPatwari = userRoles.some((item)=>item ==="Patwari_HQ")
+  // const hideRemarksJE = userRoles.some((item)=>item ==="JE_HQ" || item === "JE_HR")
+  const applicationStatus = props.applicationStatus ;
   let user = Digit.UserService.getUser();
+  const userInfo = Digit.UserService.getUser()?.info || {};
+  const userRolesArray = userInfo?.roles.filter((user) => user.code !== "EMPLOYEE");
+  const filterDataRole = userRolesArray?.[0]?.code;
   const userRoles = user?.info?.roles?.map((e) => e.code) || [];
-  const hideRemarks = userRoles.some((item)=>item === "CTP_HR" || item === "CTP_HQ" || item === "DTP_HR" || item === "DTP_HQ")
-  const hideRemarksPatwari = userRoles.some((item)=>item ==="Patwari_HQ")
-  const hideRemarksJE = userRoles.some((item)=>item ==="JE_HQ" || item === "JE_HR")
+  
+  console.log("rolelogintime" , userRoles );
+  console.log("afterfilter12" , filterDataRole)
 
+  const mDMSData = props.mDMSData;
+  const mDMSDataRole = mDMSData?.map((e) => e.role) || [];
+  const hideRemarks = mDMSDataRole.includes(filterDataRole);
+  const applicationStatusMdms = mDMSData?.map((e) => e.applicationStatus) || [] ;
+  const hideRemarksPatwari = applicationStatusMdms.some((item) => item === applicationStatus) || [];
+  const [fileddataName, setFiledDataName] = useState ();
+
+ useEffect(() =>{
+    if(mDMSData&&mDMSData?.length){
+      console.log("filedDataMdms" , mDMSData,mDMSData?.[0]?.field , mDMSData?.[0]?.field.map((item , index) => item.fields ));
+      setFiledDataName(mDMSData?.[0]?.field.map((item , index) => item.fields ))
+       
+    }
+    
+ },[mDMSData]
+ )
+ const showReportProblemIcon=(filedName)=>{
+   if (fileddataName&&fileddataName.length) {
+      let show = fileddataName.includes(filedName)
+      return show ;
+    } else {
+      return false ;
+    }
+ }
+ console.log("happyDateHIDE2" , hideRemarksPatwari,showReportProblemIcon("Purpose of colony"),hideRemarks);
   const genarelinfo = props.genarelinfo;
-  const applicationStatus = props.applicationStatus;
+  // const applicationStatus = props.applicationStatus;
   const dataIcons = props.dataForIcons;
   
 
@@ -408,7 +442,7 @@ const Genarelinfo = (props) => {
                     {/* display: hideRemarks?"none":"block", */}
                   <ReportProblemIcon
                     style={{
-                      display: hideRemarks || hideRemarksPatwari ?"none":"block",
+                      display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("Purpose of colony") ? "block" : "none",
                   
                       color: fieldIconColors.purpose
                     }}
@@ -1292,7 +1326,7 @@ Note: The term “Collaboration agreement" shall include all Development agreeme
                      {/* <th class="fw-normal py-0 border-top-0"> */}
                        <ReportProblemIcon
                       style={{
-                        display: hideRemarks ?"none":"block",
+                        display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("Purpose of colony") ? "block" : "none",
 
                         color: fieldIconColors.district
                       }}
