@@ -1326,7 +1326,7 @@ Note: The term “Collaboration agreement" shall include all Development agreeme
                      {/* <th class="fw-normal py-0 border-top-0"> */}
                        <ReportProblemIcon
                       style={{
-                        display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("Purpose of colony") ? "block" : "none",
+                        display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("Total Area (in acres)") ? "block" : "none",
 
                         color: fieldIconColors.district
                       }}

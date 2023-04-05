@@ -635,8 +635,7 @@ personalinfo?.devDetail?.addInfo?.showDevTypeFields != "Partnership Firm" &&
             {/* <div className="btn btn-sm col-md-4"> */}
             <ReportProblemIcon
               style={{
-               display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("Address") ? "block" : "none",
-
+               display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("Director Information as per MCA Portal (Auto-fetch from Developer Registration)") ? "block" : "none",
                 color: fieldIconColors.DirectorsInformation
               }}
               onClick={() => {
@@ -708,7 +707,7 @@ personalinfo?.devDetail?.addInfo?.showDevTypeFields != "Partnership Firm" &&
             {/* <div className="btn btn-sm col-md-4"> */}
             <ReportProblemIcon
               style={{
-               display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("Address") ? "block" : "none",
+               display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("Directors Information as per Developer") ? "block" : "none",
 
                 color: fieldIconColors.directorsInformation
               }}
@@ -784,7 +783,7 @@ personalinfo?.devDetail?.addInfo?.showDevTypeFields != "Partnership Firm" &&
             {/* <div className="btn btn-sm col-md-4"> */}
             <ReportProblemIcon
               style={{
-               display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("Address") ? "block" : "none",
+               display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("Shareholding Pattern") ? "block" : "none",
 
                 color: fieldIconColors.shareholdingPatterns
               }}
@@ -853,7 +852,21 @@ personalinfo?.devDetail?.addInfo?.showDevTypeFields != "Partnership Firm" &&
       }
     
 
-      <h5 className="card-title fw-bold" > &nbsp; &nbsp;&nbsp; Authorized Person Information</h5>
+      <h5 className="card-title fw-bold" > &nbsp; &nbsp;&nbsp; Authorized Person Information  &nbsp;&nbsp; 
+      <ReportProblemIcon
+              style={{
+               display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("Authorized Person Information") ? "block" : "none",
+
+                color: fieldIconColors.authPersonName
+              }}
+              onClick={() => {
+                setOpennedModal("authPersonName")
+                setLabelValue("Authorized Person Name"),
+                  setSmShow(true),
+                  console.log("modal open"),
+                  setFieldValue(personalinfo !== null ? personalinfo?.devDetail?.aurthorizedUserInfoArray?.[0]?.name : null);
+              }}
+            ></ReportProblemIcon></h5>
       <Row className={[classes.row, "ms-auto"]}>
         <Col className="ms-auto" md={4} xxl lg="4">
           <Form.Label>
@@ -869,9 +882,9 @@ personalinfo?.devDetail?.addInfo?.showDevTypeFields != "Partnership Firm" &&
               disabled
             ></Form.Control>
             &nbsp;&nbsp;
-            <ReportProblemIcon
+            {/* <ReportProblemIcon
               style={{
-               display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("Address") ? "block" : "none",
+               display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("Name of authorized signatory on behalf of developer") ? "block" : "none",
 
                 color: fieldIconColors.authPersonName
               }}
@@ -882,7 +895,7 @@ personalinfo?.devDetail?.addInfo?.showDevTypeFields != "Partnership Firm" &&
                   console.log("modal open"),
                   setFieldValue(personalinfo !== null ? personalinfo?.devDetail?.aurthorizedUserInfoArray?.[0]?.name : null);
               }}
-            ></ReportProblemIcon>
+            ></ReportProblemIcon> */}
           </div>
 
         </Col>
@@ -924,7 +937,7 @@ personalinfo?.devDetail?.addInfo?.showDevTypeFields != "Partnership Firm" &&
                         inline
                       ></Form.Check>  */}
                        &nbsp;&nbsp;
-            <ReportProblemIcon
+            {/* <ReportProblemIcon
               style={{
                display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("Address") ? "block" : "none",
 
@@ -937,7 +950,7 @@ personalinfo?.devDetail?.addInfo?.showDevTypeFields != "Partnership Firm" &&
                   console.log("modal open"),
                   setFieldValue(personalinfo !== null ? personalinfo?.devDetail?.aurthorizedUserInfoArray?.[0]?.mobileNumber : null);
               }}
-            ></ReportProblemIcon>
+            ></ReportProblemIcon> */}
           </div>
         </Col>
         <Col md={4} xxl lg="4">
@@ -955,7 +968,7 @@ personalinfo?.devDetail?.addInfo?.showDevTypeFields != "Partnership Firm" &&
               disabled
             ></Form.Control>
             &nbsp;&nbsp;
-            <ReportProblemIcon
+            {/* <ReportProblemIcon
               style={{
                display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("Address") ? "block" : "none",
 
@@ -968,7 +981,7 @@ personalinfo?.devDetail?.addInfo?.showDevTypeFields != "Partnership Firm" &&
                   console.log("modal open"),
                   setFieldValue(personalinfo !== null ? personalinfo?.devDetail?.aurthorizedUserInfoArray?.[0]?.emailId : null);
               }}
-            ></ReportProblemIcon>
+            ></ReportProblemIcon> */}
           </div>
         </Col>
       </Row>
@@ -989,7 +1002,7 @@ personalinfo?.devDetail?.addInfo?.showDevTypeFields != "Partnership Firm" &&
               disabled
             ></Form.Control>
             &nbsp;&nbsp;
-            <ReportProblemIcon
+            {/* <ReportProblemIcon
               style={{
                display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("Address") ? "block" : "none",
 
@@ -1002,7 +1015,7 @@ personalinfo?.devDetail?.addInfo?.showDevTypeFields != "Partnership Firm" &&
                   console.log("modal open"),
                   setFieldValue(personalinfo !== null ? personalinfo?.devDetail?.aurthorizedUserInfoArray?.[0]?.pan : null);
               }}
-            ></ReportProblemIcon>
+            ></ReportProblemIcon> */}
           </div>
         </Col>
         <Col md={4} xxl lg="4">
@@ -1032,7 +1045,7 @@ personalinfo?.devDetail?.addInfo?.showDevTypeFields != "Partnership Firm" &&
                 <FileDownload color="primary" className="mx-1" />
               </IconButton>
             </div>
-            <div className="btn btn-sm col-md-5" >
+            {/* <div className="btn btn-sm col-md-5" >
               <ReportProblemIcon
                 style={{
                  display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("Address") ? "block" : "none",
@@ -1047,7 +1060,7 @@ personalinfo?.devDetail?.addInfo?.showDevTypeFields != "Partnership Firm" &&
                     setFieldValue(personalinfo !== null ? personalinfo?.devDetail?.aurthorizedUserInfoArray?.[0]?.uploadDigitalSignaturePdf : null);
                 }}
               ></ReportProblemIcon>
-            </div>
+            </div> */}
           </div>
 
 
@@ -1083,7 +1096,7 @@ personalinfo?.devDetail?.addInfo?.showDevTypeFields != "Partnership Firm" &&
             <div className="btn btn-sm col-md-5">
               <ReportProblemIcon
                 style={{
-                 display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("Address") ? "block" : "none",
+                 display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("Board resolution of authorised signatory (Upload copy)") ? "block" : "none",
 
                   color: fieldIconColors.pin
                 }}

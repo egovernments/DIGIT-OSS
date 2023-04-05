@@ -353,6 +353,7 @@ const feeandcharges = props.feeandchargesData
                         
                       
                       ))} */}
+                     
                      <Row>
 
                      {/* {feeandcharges?.data?.totalFee}  */}
@@ -454,8 +455,35 @@ const feeandcharges = props.feeandchargesData
                       <Tree data={feeandcharges?.feesTypeCalculationDto} />
                     </div>
                   )}
-
+                 
+                  {/* <div>
+                        {feeandcharges?.totalScruitnyFee}
+                      </div> */}
 </Row>
+<Row>
+                  
+                            <Col className="col col-4" >
+                            <h4 >
+                            Total Fee</h4>
+                              <input type="text" className="form-control" placeholder={feeandcharges?.totalFee} disabled />
+                            </Col>
+                          
+                          
+
+                            <Col className="col col-4" >
+                            <h4 >
+                            Total Licence Fee</h4>
+                              <input type="text" className="form-control" placeholder={feeandcharges?.totalLicenceFee} disabled />
+                            </Col>
+                         
+                          
+                            <Col className="col col-4" >
+                            <h4 >
+                          Total Scruitny Fee</h4>
+                              <input type="text" className="form-control" placeholder={feeandcharges?.totalScruitnyFee} disabled />
+                            </Col>
+                          
+                          </Row>
 
               </Form.Group>
             </Card>

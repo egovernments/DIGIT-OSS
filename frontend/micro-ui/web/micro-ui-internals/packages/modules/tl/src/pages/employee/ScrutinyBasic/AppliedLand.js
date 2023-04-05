@@ -567,7 +567,7 @@ let Tree = ({ data }) => {
 
                   <ReportProblemIcon
                     style={{
-                     display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("Address") ? "block" : "none",
+                     display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("X:Longitude") ? "block" : "none",
                       color: fieldIconColors.detailsOfPlots
                     }}
                     onClick={() => {
