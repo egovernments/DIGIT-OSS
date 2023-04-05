@@ -534,7 +534,8 @@ public class FSMService {
 
 			dsoService.getVendor(vendorSearchCriteria, requestInfo);
 
-		} else if (criteria.tenantIdOnly()) {
+		}
+		if (criteria.tenantIdOnly()) {
 			criteria.setMobileNumber(requestInfo.getUserInfo().getMobileNumber());
 		}
 	}
