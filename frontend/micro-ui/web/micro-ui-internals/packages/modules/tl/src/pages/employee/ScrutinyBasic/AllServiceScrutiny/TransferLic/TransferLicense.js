@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Button from "react-bootstrap/Button";
 import Col from "react-bootstrap/Col";
 import Form from "react-bootstrap/Form";
@@ -16,10 +16,11 @@ import { IconButton } from "@mui/material";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import FileDownloadIcon from "@mui/icons-material/FileDownload";
 
-function TransferLicense() {
+function TransferLicense(props) {
   const [selects, setSelects] = useState();
   const [showhide, setShowhide] = useState("");
   const [open2, setOpen2] = useState(false);
+  const apiData = props.apiResponse;
 
   const handleshowhide = (event) => {
     const getuser = event.target.value;
@@ -48,6 +49,11 @@ function TransferLicense() {
     disapproved: "#ff0000",
     info: "#FFB602",
   };
+  useEffect(() => {
+    if (apiData) {
+      setValue("licenseNo", apiData?.licenseNo);
+    }
+  }, [apiData]);
 
   const handlemodaldData = (data) => {
     // setmodaldData(data.data);
@@ -113,6 +119,7 @@ function TransferLicense() {
 
     setSelects(getu);
   };
+  console.log("apiResponse", apiData);
 
   return (
     <form onSubmit={handleSubmit(TransferLicense)}>
@@ -147,14 +154,14 @@ function TransferLicense() {
             <div className="card">
               {/* <h4 className="text-center">Transfer of License</h4> */}
               <Row className="col-12">
-                <Form.Group as={Col} controlId="formGridLicence">
+                <Col className="col-3">
                   <Form.Label>
                     Licence No . <span style={{ color: "red" }}>*</span>
                   </Form.Label>
-                  {/* <input type="number" placeholder="" className="form-control" {...register("LicenseNo")} /> */}
-                  <div className={classes.fieldContainer}>
-                    <Form.Control className={classes.formControl} placeholder="" disabled></Form.Control>
 
+                  <div className={classes.fieldContainer}>
+                    {/* <Form.Control className={classes.formControl} placeholder={apiData?.licenseNo} disabled></Form.Control> */}
+                    <input type="number" placeholder="" className="form-control" disabled {...register("licenseNo")} />
                     <ReportProblemIcon
                       style={{
                         color: fieldIconColors.developer,
@@ -177,7 +184,7 @@ function TransferLicense() {
                       remarksUpdate={currentRemarks}
                     ></ModalChild>
                   </div>
-                </Form.Group>
+                </Col>
 
                 <Form.Group as={Col} controlId="formGridState">
                   <Form.Label>
