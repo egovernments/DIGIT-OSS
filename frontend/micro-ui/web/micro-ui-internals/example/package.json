@@ -9,10 +9,10 @@
     "start": "react-scripts start"
   },
   "devDependencies": {
-    "@egovernments/digit-ui-libraries": "^1.6.1",
-    "@egovernments/digit-ui-module-common": "^1.6.1",
+    "@egovernments/digit-ui-libraries": "^1.6.2",
+    "@egovernments/digit-ui-module-common": "^1.6.2",
     "@egovernments/digit-ui-module-engagement": "^1.6.0",
-    "@egovernments/digit-ui-module-fsm": "^1.6.1",
+    "@egovernments/digit-ui-module-fsm": "^1.6.2",
     "@egovernments/digit-ui-module-mcollect": "^1.6.0",
     "@egovernments/digit-ui-module-noc": "^1.6.0",
     "@egovernments/digit-ui-module-obps": "^1.6.0",
