@@ -128,6 +128,7 @@ const App = ({ path }) => {
         <PrivateRoute path={`${path}/Standard`} component={Standard} />
         <PrivateRoute path={`${path}/ExtensionCom`} component={ExtensionCom} />
         <PrivateRoute path={`${path}/BPALowMedium`} component={LowMedium} />
+        <PrivateRoute path={`${path}/LayoutPlanClu`} component={LayoutPlanClu} />
         {/* .............................................................................. */}
 
         {/* <PrivateRoute path={`${path}/Beneficialscrutiny`} component={Beneficialscrutiny} />

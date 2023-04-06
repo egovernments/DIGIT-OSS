@@ -41,6 +41,7 @@ import TableHead from "@mui/material/TableHead";
 import TablePagination from "@mui/material/TablePagination";
 import TableRow from "@mui/material/TableRow";
 import CusToaster from "../components/Toaster";
+import Checkbox from "@mui/material/Checkbox";
 
 const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) => {
   const { pathname: url } = useLocation();
@@ -84,6 +85,7 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
   //-------------------//
 
   const [rowsPerPageMca, setRowsPerPageMca] = React.useState(10);
+  const [isUndertakenDR, setIsUndertaken] = useState(formData?.isUndertakenDR || formData?.formData?.isUndertakenDR || false);
   const handleChangePageMca = (event, newPageMca) => {
     setPageMca(newPageMca);
   };
@@ -199,6 +201,7 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
       });
       setDocumentsData(developerDataGet?.devDetail[0]?.capacityDevelopAColony?.documents);
       setTradeType(developerDataGet?.devDetail[0]?.applicantType?.licenceType);
+      setIsUndertaken(developerDataGet?.devDetail[0]?.capacityDevelopAColony?.isUndertakenDR);
       // console.log("TRADETYPE", developerDataGet?.devDetail[0]?.applicantType?.licenceType);
     } catch (error) {
       console.log(error);
@@ -311,22 +314,7 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
   const [showhide6, setShowhide6] = useState("no");
   let isopenlink = window.location.href.includes("/openlink/");
   const isCitizenUrl = Digit.Utils.browser.isMobile() ? true : false;
-  const [uploadedFile, setUploadedFile] = useState(null);
-  const [urlGetForFile, setFIleUrl] = useState("");
-  const [urlGetValidateLicFile, setValidateLicUrl] = useState("");
-  const [urlGetStatusDevFile, setStatusDevUrl] = useState("");
-  const [urlGetOutstandingFile, setOutStandingUrl] = useState("");
-  const [urlGetCompanyBalanceSheet, setCompanyBalanceSheetUrl] = useState("");
-  const [urlGetPaidUpCapital, setPaidUpCapitalUrl] = useState("");
-  const [urlGetIndividualCertificateCA, setIndividualCertificatCAUrl] = useState("");
-  const [urlGetEngineerSignUrl, setEngineerSignUrl] = useState("");
-  const [urlGetArchitectSignUrl, setArchitectSignUrl] = useState("");
-  const [urlGetTownPlannerSignUrl, setTownPlannerSignUrl] = useState("");
-  const [urlGetAgreementDocUrl, setAgreementDocUrl] = useState("");
-  const [urlGetBoardDocUrl, setBoardDocUrl] = useState("");
-  const [urlGetRegisteredDocUrl, setRegisteredDocUrl] = useState("");
-  const [urlGetBoardDocYUrl, setBoardDocYUrl] = useState("");
-  const [urlGetEarlierDocYUrl, setEarlierDocYUrl] = useState("");
+
   const [hrduModalData, setHrduModalData] = useState({
     licNo: "",
     dateOfGrantingLic: "",
@@ -458,6 +446,14 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
     const getshow = e.target.value;
     setShowhide6(getshow);
   };
+
+  function selectChecked(e) {
+    if (isUndertakenDR == false) {
+      setIsUndertaken(true);
+    } else {
+      setIsUndertaken(false);
+    }
+  }
 
   const handleChange = (e) => {
     this.setState({ isRadioSelected: true });
@@ -652,6 +648,7 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
     rows.splice(i, 1);
     setCapacityDevelopColonyLawAct(rows);
   };
+  const label = { inputProps: { "aria-label": "Checkbox demo" } };
 
   const goNext = async (e) => {
     // if (!(formData?.result && formData?.result?.Licenses[0]?.id)) {
@@ -782,6 +779,7 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
           technicalCapacityOutsideHaryana: technicalCapacityOutsideHaryana,
           technicalCapacityOutsideHaryanaDetails: technicalCapacityOutsideHaryanaDetails,
           documents: Documents,
+          isUndertakenDR: isUndertakenDR,
         },
       },
     };
@@ -871,6 +869,8 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
                 technicalCapacityOutsideHaryanaDetails.statusOfDevelopment &&
                 technicalCapacityOutsideHaryanaDetails.location &&
                 technicalCapacityOutsideHaryanaDetails.projectArea
+              ? false
+              : !isUndertakenDR
               ? false
               : true)
           }
@@ -1467,7 +1467,7 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
                     </h5>
                 </div> */}
               <div className="card-body">
-                <p>1. I/ We hereby submit the following information/ enclose the relevant documents:-</p>
+                {/* <p>1. I/ We hereby submit the following information/ enclose the relevant documents:-</p> */}
                 {data?.devDetail[0]?.addInfo?.showDevTypeFields === "Individual" ||
                 data?.devDetail[0]?.addInfo?.showDevTypeFields === "Limited Liability Partnership" ||
                 data?.devDetail[0]?.addInfo?.showDevTypeFields === "Proprietorship Firm" ||
@@ -2527,6 +2527,13 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
                   )}
                 </div>
               </div>
+              <Col md={12}>
+                <Checkbox {...label} onChange={(e) => selectChecked(e)} value={isUndertakenDR} checked={isUndertakenDR} name={isUndertakenDR} />
+                <label>
+                  It is undertaken that the above information is true and correct for all facts and purposes.{" "}
+                  <span className="text-danger font-weight-bold">*</span>
+                </label>
+              </Col>
             </div>
           </div>
         </FormStep>

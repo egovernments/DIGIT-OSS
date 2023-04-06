@@ -2615,7 +2615,7 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
                               <div className="col col-4">
                                 <div className="form-group">
                                   <label htmlFor="licNo">
-                                    License No. <span className="text-danger font-weight-bold">*</span>
+                                    License Details <span className="text-danger font-weight-bold">*</span>
                                   </label>
                                   <input
                                     type="text"

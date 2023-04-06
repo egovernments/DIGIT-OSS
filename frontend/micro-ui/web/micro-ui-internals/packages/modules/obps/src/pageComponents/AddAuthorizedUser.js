@@ -851,6 +851,7 @@ const AddAuthorizeduser = ({ t, config, onSelect, formData, isUserRegistered = t
                     backgroundColor: "#0b3629",
                     color: "white",
                   }}
+                  disabled={aurthorizedUserInfoArray?.length == 3}
                   className="btn mt-3"
                   // onClick={() => setNoOfRows(noofRows + 1)}
                   onClick={handleShowAuthuser}
