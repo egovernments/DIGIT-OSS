@@ -36,7 +36,7 @@
     "@egovernments/digit-ui-module-pgr": "1.6.0",
     "@egovernments/digit-ui-module-pt": "1.6.0",
     "@egovernments/digit-ui-module-receipts": "1.6.0",
-    "@egovernments/digit-ui-module-tl": "1.6.0",
+    "@egovernments/digit-ui-module-tl": "1.6.1",
     "@egovernments/digit-ui-module-ws": "1.6.0",
     "@egovernments/digit-ui-react-components": "1.6.1",
     "babel-loader": "8.1.0",
