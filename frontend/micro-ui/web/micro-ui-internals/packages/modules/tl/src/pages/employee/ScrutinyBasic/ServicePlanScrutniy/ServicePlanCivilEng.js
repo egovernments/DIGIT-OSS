@@ -87,6 +87,18 @@ import { useStyles } from "../css/personalInfoChild.style.js";
 import Collapse from "react-bootstrap/Collapse";
 import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import TableCell from '@mui/material/TableCell';
+import TableContainer from '@mui/material/TableContainer';
+import TableHead from '@mui/material/TableHead';
+import TableRow from '@mui/material/TableRow';
+import Paper from '@mui/material/Paper';
+import Radio from '@mui/material/Radio';
+import RadioGroup from '@mui/material/RadioGroup';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import FormControl from '@mui/material/FormControl';
+import FormLabel from '@mui/material/FormLabel';
 
 // const ServicePlanCivil = () => {
     function ServicePlanCivil(props) {
@@ -195,25 +207,54 @@ import RemoveIcon from "@mui/icons-material/Remove";
         {/* <h4 style={{ fontSize: "25px", marginLeft: "21px" }}>Electrical Plan </h4> */}
         <Card style={{ width: "126%", marginLeft: "-2px", paddingRight: "10px", marginTop: "20px", marginBottom: "52px" }}>
        
-          <Row  style={{ marginTop: 4 , marginBottom: 4 }}>
+
           {/* {JSON.stringify(apiResponse?.additionalDetails?.electricDistribution)} */}
           {/* <h4 className="text-center">Evaluation by Civil Engineer</h4> */}
           
-            <Col md={6} xxl lg="6">
-              <div>
-                <Form.Label className={classes.formLabel}>
+            
+          <div className="card">
+          <Form> 
+            <TableContainer  >
+			<Table aria-label="simple table">
+				<TableHead>
+					<TableRow>
+						<TableCell>
+							Sr.No
+						</TableCell>
+						<TableCell align="left">
+               Description
+						</TableCell>
+						<TableCell align="left">
+						Amount in lacs.
+						</TableCell>
+						<TableCell align="Left">
+						Remarks
+						</TableCell>
+						
+					</TableRow>
+				</TableHead>
+				<TableBody className={classes.formLabel}>
+<TableRow
+						
+							sx={{ '&:last-child td, &:last-child th':
+								{ border: 0 } }}
+						>
+              <TableCell >
+							1
+							</TableCell>
+							<TableCell  align="left">
+                            <div>
+                 <Form.Label className={classes.formLabel}>
                   <h2>
-                  1. Showing the location of the potable water, sewer line, treated water line and storm water line to connect the trunk water supply network.
-                    &nbsp;&nbsp;
+                  Showing the location of the potable water, sewer line, treated water line and storm water line to connect the trunk water supply network.
+                   
                   </h2>
-                  {/* <Tooltip title="As per the approved layout plan/building plans">
-                  
-                     <h2> plan/building plans 
-                         </h2> 
-                         
-                         </Tooltip> */}
+                 
                 </Form.Label>
-                <br></br>
+              </div>
+            	</TableCell>
+							<TableCell align="left">
+              <div className="row">
                 <Form.Check
                   onChange={(e) => console.log(e)}
                   value="Y"
@@ -237,469 +278,538 @@ import RemoveIcon from "@mui/icons-material/Remove";
                   {...register("electricInfra")}
                   inline
                 ></Form.Check>
-              </div>
-            </Col>
-            <Col  md={6} xxl lg="6">
-              <div>
-                <Form.Label className={classes.formLabel}>
-                2. Proposed source of water supply as informed by the applicant 
-                  <span style={{ color: "red" }}>*</span>
-                  {/* <Tooltip title="Level of stormwater and sewer line in conformity with approved EDC infrastructure works">
-                     <h2>approved EDC infrastructure works</h2> </Tooltip> */}
-                </Form.Label>
-              </div>
-              <Form.Check
-                onChange={(e) => console.log(e)}
-                value="Y"
-                type="radio"
-                id="default-radio"
-                label="Yes"
-                name="true"
-                disabled={!showActionButton}
-                {...register("electricDistribution")}
-                inline
-              ></Form.Check>
-              <Form.Check
-                onChange={(e) => console.log(e)}
-                value="N"
-                type="radio"
-                id="default-radio"
-                label="No"
-                name="false"
-                disabled={!showActionButton}
-                {...register("electricDistribution")}
-                inline
-              ></Form.Check>
-            </Col>
-            <br></br>
-            {/* <Col  md={6} xxl lg="6">
-              <div>
-                <Form.Label className={classes.formLabel}>
-                Showing the location of the sewer line, and stormwater line to connect the trunk water supply network <span style={{ color: "red" }}>*</span> &nbsp;&nbsp;
-
-                </Form.Label>
-              </div>
-              <Form.Check
-                onChange={(e) => console.log(e)}
-                value="Y"
-                type="radio"
-                id="default-radio"
-                label="Yes"
-                name="true"
-                disabled={!showActionButton}
-                {...register("sewerLine")}
-                inline
-              ></Form.Check>
-              <Form.Check
-                onChange={(e) => console.log(e)}
-                value="N"
-                type="radio"
-                id="default-radio"
-                label="No"
-                name="false"
-                disabled={!showActionButton}
-                {...register("sewerLine")}
-                inline
-              ></Form.Check>
-            </Col> */}
-            
-            <Col  md={6} xxl lg="6">
-              <div>
-                <Form.Label className={classes.formLabel}>
-                3. The capacity of STP as per population norms.
-                  <span style={{ color: "red" }}>*</span>
-                </Form.Label>
-              </div>
-              <Form.Check
-                onChange={(e) => console.log(e)}
-                value="Y"
-                type="radio"
-                id="default-radio"
-                label="Yes"
-                name="true"
-                disabled={!showActionButton}
-                {...register("stormwater")}
-                inline
-              ></Form.Check>
-              <Form.Check
-                onChange={(e) => console.log(e)}
-                value="N"
-                type="radio"
-                id="default-radio"
-                label="No"
-                name="false"
-                disabled={!showActionButton}
-                {...register("stormwater")}
-                inline
-              ></Form.Check>
-            </Col>
-            <br></br>
-            <Col  md={6} xxl lg="6">
-              <div>
-                <Form.Label className={classes.formLabel}>
-                4. Level of storm water and sewer line in conformity with approved EDC infrastructure works. yes 110 <span style={{ color: "red" }}>*</span> 
-                </Form.Label>
-              </div>
-              <Form.Check
-                onChange={(e) => console.log(e)}
-                value="Y"
-                type="radio"
-                id="default-radio"
-                label="Yes"
-                name="true"
-                disabled={!showActionButton}
-                {...register("sourceWater")}
-                inline
-              ></Form.Check>
-              <Form.Check
-                onChange={(e) => console.log(e)}
-                value="N"
-                type="radio"
-                id="default-radio"
-                label="No"
-                name="false"
-                disabled={!showActionButton}
-                {...register("sourceWater")}
-                inline
-              ></Form.Check>
-            </Col>
-            <Col  md={6} xxl lg="6" >
-              <div>
-                <Form.Label className={classes.formLabel}>
-                5. The capacity of UGT as per population health norms. <span style={{ color: "red" }}>*</span> 
-                </Form.Label>
-              </div>
-              <Form.Check
-                onChange={(e) => console.log(e)}
-                value="Y"
-                type="radio"
-                id="default-radio"
-                label="Yes"
-                name="true"
-                disabled={!showActionButton}
-                {...register("capacityUgt")}
-                inline
-              ></Form.Check>
-              <Form.Check
-                onChange={(e) => console.log(e)}
-                value="N"
-                type="radio"
-                id="default-radio"
-                label="No"
-                name="false"
-                disabled={!showActionButton}
-                {...register("capacityUgt")}
-                inline
-              ></Form.Check>
-            </Col>
-            <br></br>
-            <Col  md={6} xxl lg="6" className={classes.formLabel}>
-              <div>
-                <Form.Label>
-                6. Specifications of the Public Health Department. yes <span style={{ color: "red" }}>*</span> &nbsp;&nbsp;
-                </Form.Label>
-              </div>
-              <Form.Check
-                onChange={(e) => console.log(e)}
-                value="Y"
-                type="radio"
-                id="default-radio"
-                label="Yes"
-                name="true"
-                disabled={!showActionButton}
-                {...register("capacityStp")}
-                inline
-              ></Form.Check>
-              <Form.Check
-                onChange={(e) => console.log(e)}
-                value="N"
-                type="radio"
-                id="default-radio"
-                label="No"
-                name="false"
-                disabled={!showActionButton}
-                {...register("capacityStp")}
-                inline
-              ></Form.Check>
-            </Col>
-            <Col md={6} xxl lg="6">
-              <div>
-                <Form.Label className={classes.formLabel}>
-                  <h2>
-                  7. Sewer network. <span style={{ color: "red" }}>*</span>
-                  </h2>
-                </Form.Label>
-              </div>
-              {/* <Col md={8} xxl lg="8"> */}
-              <div height={30}
-                          style={{ maxWidth: 320, marginRight: 5 }}>
-              <textarea type="text" className="form-control"  disabled={!showActionButton} placeholder="" {...register("specifications")} />
-              </div>
-              {/* </Col> */}
-              
-            </Col>
-            <br></br>
-            <Col  md={6} xxl lg="6">
-              <div>
-                <Form.Label className={classes.formLabel}>
-                8. Road network.<span style={{ color: "red" }}>*</span> 
-                </Form.Label>
-              </div>
-              <Form.Check
-                onChange={(e) => console.log(e)}
-                value="Y"
-                type="radio"
-                id="default-radio"
-                label="Yes"
-                name="true"
-                disabled={!showActionButton}
-                {...register("waterSupply")}
-                inline
-              ></Form.Check>
-              <Form.Check
-                onChange={(e) => console.log(e)}
-                value="N"
-                type="radio"
-                id="default-radio"
-                label="No"
-                name="false"
-                disabled={!showActionButton}
-                {...register("waterSupply")}
-                inline
-              ></Form.Check>
-            </Col>
-            
-            <Col  md={6} xxl lg="6">
-              <div>
-                <Form.Label className={classes.formLabel}>
-                9. Street lightening. <span style={{ color: "red" }}>*</span> 
-                </Form.Label>
-              </div>
-              <Form.Check
-                onChange={(e) => console.log(e)}
-                value="Y"
-                type="radio"
-                id="default-radio"
-                label="Yes"
-                name="true"
-                disabled={!showActionButton}
-                {...register("sewerNetwork")}
-                inline
-              ></Form.Check>
-              <Form.Check
-                onChange={(e) => console.log(e)}
-                value="N"
-                type="radio"
-                id="default-radio"
-                label="No"
-                name="false"
-                disabled={!showActionButton}
-                {...register("sewerNetwork")}
-                inline
-              ></Form.Check>
-            </Col>
-            <br></br>
-            <Col  md={6} xxl lg="6">
-              <div>
-                <Form.Label className={classes.formLabel}>
-                10. Horticulture.<span style={{ color: "red" }}>*</span> 
-                </Form.Label>
-              </div>
-              <Form.Check
-                onChange={(e) => console.log(e)}
-                value="Y"
-                type="radio"
-                id="default-radio"
-                label="Yes"
-                name="true"
-                disabled={!showActionButton}
-                {...register("stormwaterDrainage")}
-                inline
-              ></Form.Check>
-              <Form.Check
-                onChange={(e) => console.log(e)}
-                value="N"
-                type="radio"
-                id="default-radio"
-                label="No"
-                name="false"
-                disabled={!showActionButton}
-                {...register("stormwaterDrainage")}
-                inline
-              ></Form.Check>
-            </Col>
-           {/* ///////////////////////////////////////////////// */}
-            {/* <Col  md={6} xxl lg="6">
-              <div>
-                <Form.Label className={classes.formLabel}>
-                Roads network <span style={{ color: "red" }}>*</span> 
-                </Form.Label>
-              </div>
-              <Form.Check
-                onChange={(e) => console.log(e)}
-                value="Y"
-                type="radio"
-                id="default-radio"
-                label="Yes"
-                name="true"
-                disabled={!showActionButton}
-                {...register("roadNetwork")}
-                inline
-              ></Form.Check>
-              <Form.Check
-                onChange={(e) => console.log(e)}
-                value="N"
-                type="radio"
-                id="default-radio"
-                label="No"
-                name="false"
-                disabled={!showActionButton}
-                {...register("roadNetwork")}
-                inline
-              ></Form.Check>
-            </Col>
-            <br></br>
-            <Col  md={6} xxl lg="6">
-              <div>
-                <Form.Label className={classes.formLabel}>
-                Horticulture <span style={{ color: "red" }}>*</span> 
-                </Form.Label>
-              </div>
-              <Form.Check
-                onChange={(e) => console.log(e)}
-                value="Y"
-                type="radio"
-                id="default-radio"
-                label="Yes"
-                name="true"
-                disabled={!showActionButton}
-                {...register("horticlture")}
-                inline
-              ></Form.Check>
-              <Form.Check
-                onCh
-                ange={(e) => console.log(e)}
-                value="N"
-                type="radio"
-                id="default-radio"
-                label="No"
-                name="false"
-                disabled={!showActionButton}
-                {...register("horticlture")}
-                inline
-              ></Form.Check>
-            </Col>
-           
-            <Col  md={6} xxl lg="6">
-              <div>
-                <Form.Label className={classes.formLabel}>
-                Street Lightening <span style={{ color: "red" }}>*</span> 
-                </Form.Label>
-              </div>
-              <Form.Check
-                onChange={(e) => console.log(e)}
-                value="Y"
-                type="radio"
-                id="default-radio"
-                label="Yes"
-                name="true"
-                disabled={!showActionButton}
-                {...register("streetLightening")}
-                inline
-              ></Form.Check>
-              <Form.Check
-                onChange={(e) => console.log(e)}
-                value="N"
-                type="radio"
-                id="default-radio"
-                label="No"
-                name="false"
-                disabled={!showActionButton}
-                {...register("streetLightening")}
-                inline
-              ></Form.Check>
-            </Col> */}
-            {/* ////////////////////////////////////////////////////////////// */}
-            {/* <Col  md={6} xxl lg="6">
-              <div>
-                <Form.Label>
-                Per acre cost of internal development works <span style={{ color: "red" }}>*</span> &nbsp;&nbsp;
-                </Form.Label>
-              </div>
-              <Form.Check
-                onChange={(e) => console.log(e)}
-                value="Y"
-                type="radio"
-                id="default-radio"
-                label="Yes"
-                name="true"
-                {...register("ugt")}
-                inline
-              ></Form.Check>
-              <Form.Check
-                onChange={(e) => console.log(e)}
-                value="N"
-                type="radio"
-                id="default-radio"
-                label="No"
-                name="false"
-                {...register("ugt")}
-                inline
-              ></Form.Check>
-            </Col> */}
-            {/* //////////////////////////////////////////////////////////////////////// */}
-             {/* <br></br>
-            <Col md={6} xxl lg="6" >
-              <div>
-                <Form.Label className={classes.formLabel}>
-                  <h2>
-                  Per acre cost of internal development works <span style={{ color: "red" }}>*</span>
-                  </h2>
-                </Form.Label>
-              </div>
-              <div height={30}
-                          style={{ maxWidth: 320, marginRight: 5 }}>
-              <input type="number" className="form-control"  disabled={!showActionButton} placeholder="" {...register("acreCost")} />
-              </div>
-              
-            </Col>
-            <Col  md={6} xxl lg="6">
-              <div>
-                <Form.Label className={classes.formLabel}>
-                Self-certified drawings from chartered engineers that it is by the standard approved template <span style={{ color: "red" }}>*</span> 
-                </Form.Label>
-              </div>
-              <Form.Check
-                onChange={(e) => console.log(e)}
-                value="Y"
-                type="radio"
-                id="default-radio"
-                label="Yes"
-                name="true"
-                disabled={!showActionButton}
-                {...register("selfCertified")}
-                inline
-              ></Form.Check>
-              <Form.Check
-                onChange={(e) => console.log(e)}
-                value="N"
-                type="radio"
-                id="default-radio"
-                label="No"
-                name="false"
-                disabled={!showActionButton}
-                {...register("selfCertified")}
-                inline
-              ></Form.Check>
-            </Col>
-           
-            <br></br> */}
-            {/* ////////////////////////////////////////////////////////////////// */}
-            
-           
-          </Row>
-          <br></br>
+                </div>
+                </TableCell>
+                            <TableCell align="left">
+                                        <textarea
+              class="form-control"
+              id="exampleFormControlTextarea1"
+              placeholder="Enter your Remarks"
+              autoFocus
           
+              rows="3"
+           
+            />
+                                        </TableCell>
+					
+						</TableRow>
+                        <TableRow
+						
+							sx={{ '&:last-child td, &:last-child th':
+								{ border: 0 } }}
+						>
+                            <TableCell >
+							2
+							</TableCell>
+							<TableCell  align="left">
+              <div>
+                <Form.Label className={classes.formLabel}>
+                 Proposed source of water supply as informed by the applicant 
+                  <span style={{ color: "red" }}>*</span>
+                  
+                </Form.Label>
+              </div>
+              
+							</TableCell>
+							<TableCell align="left">
+                           
+                            <div className="row">
+                            <Form.Check
+                onChange={(e) => console.log(e)}
+                value="Y"
+                type="radio"
+                id="default-radio"
+                label="Yes"
+                name="true"
+                disabled={!showActionButton}
+                {...register("electricDistribution")}
+                inline
+              ></Form.Check>
+              <Form.Check
+                onChange={(e) => console.log(e)}
+                value="N"
+                type="radio"
+                id="default-radio"
+                label="No"
+                name="false"
+                disabled={!showActionButton}
+                {...register("electricDistribution")}
+                inline
+              ></Form.Check>
+                            </div>
+                
+							</TableCell>
+                            <TableCell align="left">
+                                        <textarea
+              class="form-control"
+              id="exampleFormControlTextarea2"
+              placeholder="Enter your Remarks"
+              autoFocus
+           
+              rows="3"
+           
+            />
+                                        </TableCell>
+                            
+							
+						</TableRow>
+			
+                        <TableRow
+						
+							sx={{ '&:last-child td, &:last-child th':
+								{ border: 0 } }}
+						>
+                            <TableCell >
+							3
+							</TableCell>
+							<TableCell  align="left">
+              <div>
+                <Form.Label className={classes.formLabel}>
+               The capacity of STP as per population norms.
+                  <span style={{ color: "red" }}>*</span>
+                </Form.Label>
+              </div>
+              
+							</TableCell>
+							<TableCell align="left">
+                 <div>
+                 <Form.Check
+                onChange={(e) => console.log(e)}
+                value="Y"
+                type="radio"
+                id="default-radio"
+                label="Yes"
+                name="true"
+                disabled={!showActionButton}
+                {...register("stormwater")}
+                inline
+              ></Form.Check>
+              <Form.Check
+                onChange={(e) => console.log(e)}
+                value="N"
+                type="radio"
+                id="default-radio"
+                label="No"
+                name="false"
+                disabled={!showActionButton}
+                {...register("stormwater")}
+                inline
+              ></Form.Check>
+                 </div>
+							</TableCell>
+                            <TableCell align="left">
+                                        <textarea
+              class="form-control"
+              id="exampleFormControlTextarea3"
+              placeholder="Enter your Remarks"
+              autoFocus
+          
+              rows="3"
+  
+            />
+                                        </TableCell>
+                            
+							
+						</TableRow>
+                        <TableRow
+						
+							sx={{ '&:last-child td, &:last-child th':
+								{ border: 0 } }}
+						>
+                            <TableCell >
+							4
+							</TableCell>
+							<TableCell  align="left">
+                    
+                <div>
+                <Form.Label className={classes.formLabel}>
+                Level of storm water and sewer line in conformity with approved EDC infrastructure works. yes 110 <span style={{ color: "red" }}>*</span> 
+                </Form.Label>
+              </div>
+         
+							</TableCell>
+							<TableCell align="left">
+                            <div>
+                            <Form.Check
+                onChange={(e) => console.log(e)}
+                value="Y"
+                type="radio"
+                id="default-radio"
+                label="Yes"
+                name="true"
+                disabled={!showActionButton}
+                {...register("sourceWater")}
+                inline
+              ></Form.Check>
+              <Form.Check
+                onChange={(e) => console.log(e)}
+                value="N"
+                type="radio"
+                id="default-radio"
+                label="No"
+                name="false"
+                disabled={!showActionButton}
+                {...register("sourceWater")}
+                inline
+              ></Form.Check>
+                            </div>
+							</TableCell>
+                            <TableCell align="left">
+                                        <textarea
+              class="form-control"
+              id="exampleFormControlTextarea4"
+              placeholder="Enter your Remarks"
+              autoFocus
+           
+              rows="3"
+           
+            />
+                                        </TableCell>
+                            
+							
+						</TableRow>
+                        <TableRow
+						
+							sx={{ '&:last-child td, &:last-child th':
+								{ border: 0 } }}
+						>
+                            <TableCell >
+							5
+							</TableCell>
+							<TableCell  align="left">
+              <div>
+                <Form.Label className={classes.formLabel}>
+                 The capacity of UGT as per population health norms. <span style={{ color: "red" }}>*</span> 
+                </Form.Label>
+              </div>
+              
+							</TableCell>
+							<TableCell align="left">
+                            <div>
+                            <Form.Check
+                onChange={(e) => console.log(e)}
+                value="Y"
+                type="radio"
+                id="default-radio"
+                label="Yes"
+                name="true"
+                disabled={!showActionButton}
+                {...register("capacityUgt")}
+                inline
+              ></Form.Check>
+              <Form.Check
+                onChange={(e) => console.log(e)}
+                value="N"
+                type="radio"
+                id="default-radio"
+                label="No"
+                name="false"
+                disabled={!showActionButton}
+                {...register("capacityUgt")}
+                inline
+              ></Form.Check>
+             
+                            </div>
+							</TableCell>
+                            <TableCell align="left">
+                                        <textarea
+              class="form-control"
+              id="exampleFormControlTextarea5"
+              placeholder="Enter your Remarks"
+              autoFocus
+            rows="3"
+            />
+                                        </TableCell>
+                            
+							
+						</TableRow>
+                        <TableRow
+						
+							sx={{ '&:last-child td, &:last-child th':
+								{ border: 0 } }}
+						>
+                            <TableCell >
+							6
+							</TableCell>
+							<TableCell  align="left">
+              <div>
+                <Form.Label>
+               Specifications of the Public Health Department. yes <span style={{ color: "red" }}>*</span> &nbsp;&nbsp;
+                </Form.Label>
+              </div>
+            
+              
+							</TableCell>
+                            <TableCell align="left">
+                           <div>
+                           <Form.Check
+                onChange={(e) => console.log(e)}
+                value="Y"
+                type="radio"
+                id="default-radio"
+                label="Yes"
+                name="true"
+                disabled={!showActionButton}
+                {...register("capacityStp")}
+                inline
+              ></Form.Check>
+              <Form.Check
+                onChange={(e) => console.log(e)}
+                value="N"
+                type="radio"
+                id="default-radio"
+                label="No"
+                name="false"
+                disabled={!showActionButton}
+                {...register("capacityStp")}
+                inline
+              ></Form.Check>
+                           </div>
+                            </TableCell>
+                           
+                            
+                <TableCell align="left">
+                                        <textarea
+              class="form-control"
+              id="exampleFormControlTextarea6"
+              placeholder="Enter your Remarks"
+              autoFocus
+            
+              rows="3"
+           
+            />
+                                        </TableCell>
+						</TableRow>
+                        <TableRow
+						
+							sx={{ '&:last-child td, &:last-child th':
+								{ border: 0 } }}
+						>
+                            <TableCell >
+							7
+							</TableCell>
+							<TableCell  align="left">
+              <div>
+                <Form.Label className={classes.formLabel}>
+                  <h2>
+                 Sewer network. <span style={{ color: "red" }}>*</span>
+                  </h2>
+                </Form.Label>
+              </div>
+             
+							</TableCell>
+							<TableCell align="left">
+                          <div>
+                          <Form.Check
+                onChange={(e) => console.log(e)}
+                value="Y"
+                type="radio"
+                id="default-radio"
+                label="Yes"
+                name="true"
+                {...register("ugt")}
+                inline
+              ></Form.Check>
+              <Form.Check
+                onChange={(e) => console.log(e)}
+                value="N"
+                type="radio"
+                id="default-radio"
+                label="No"
+                name="false"
+                {...register("ugt")}
+                inline
+              ></Form.Check>
+                          </div>
+							</TableCell>
+                            <TableCell align="left">
+                                        <textarea
+              class="form-control"
+              id="exampleFormControlTextarea7a"
+              placeholder="Enter your Remarks"
+              autoFocus
+            
+              rows="3"
+      
+            />
+                                        </TableCell>
+                            
+							
+						</TableRow>
+                        <TableRow
+						
+							sx={{ '&:last-child td, &:last-child th':
+								{ border: 0 } }}
+						>
+                            <TableCell >
+							8
+							</TableCell>
+							<TableCell  align="left">
+              <div>
+                <Form.Label className={classes.formLabel}>
+              Road network.<span style={{ color: "red" }}>*</span> 
+                </Form.Label>
+              </div>
+             </TableCell>
+							<TableCell align="left">
+                           <div>
+                           <Form.Check
+                onChange={(e) => console.log(e)}
+                value="Y"
+                type="radio"
+                id="default-radio"
+                label="Yes"
+                name="true"
+                disabled={!showActionButton}
+                {...register("waterSupply")}
+                inline
+              ></Form.Check>
+              <Form.Check
+                onChange={(e) => console.log(e)}
+                value="N"
+                type="radio"
+                id="default-radio"
+                label="No"
+                name="false"
+                disabled={!showActionButton}
+                {...register("waterSupply")}
+                inline
+              ></Form.Check>
+                           </div>
+							</TableCell>
+              <TableCell align="left">
+                                        <textarea
+              class="form-control"
+              id="exampleFormControlTextarea8"
+              placeholder="Enter your Remarks"
+              autoFocus
+            
+              rows="3"
+      
+            />
+                                        </TableCell>
+                            
+							
+						</TableRow>
+                        <TableRow
+						
+							sx={{ '&:last-child td, &:last-child th':
+								{ border: 0 } }}
+						>
+                            <TableCell >
+							9
+							</TableCell>
+							<TableCell  align="left">
+              <div>
+                <Form.Label className={classes.formLabel}>
+              Street lightening. <span style={{ color: "red" }}>*</span> 
+                </Form.Label>
+              </div>
+             </TableCell>
+							<TableCell align="left" >
+                           <div>
+                           <Form.Check
+                onChange={(e) => console.log(e)}
+                value="Y"
+                type="radio"
+                id="default-radio"
+                label="Yes"
+                name="true"
+                disabled={!showActionButton}
+                {...register("sewerNetwork")}
+                inline
+              ></Form.Check>
+              <Form.Check
+                onChange={(e) => console.log(e)}
+                value="N"
+                type="radio"
+                id="default-radio"
+                label="No"
+                name="false"
+                disabled={!showActionButton}
+                {...register("sewerNetwork")}
+                inline
+              ></Form.Check>
+                           </div>
+							</TableCell>
+                            <TableCell align="left">
+                                        <textarea
+              class="form-control"
+              id="exampleFormControlTextarea7c"
+              placeholder="Enter your Remarks"
+              autoFocus
+            
+              rows="3"
+          
+            />
+                                        </TableCell>
+							
+						</TableRow>
+                        <TableRow
+						
+							sx={{ '&:last-child td, &:last-child th':
+								{ border: 0 } }}
+						>
+                            <TableCell >
+							10
+							</TableCell>
+							<TableCell  align="left">
+              <div>
+                <Form.Label className={classes.formLabel}>
+              Horticulture.<span style={{ color: "red" }}>*</span> 
+                </Form.Label>
+              </div>
+              
+              
+							</TableCell>
+							<TableCell align="left">
+                         <div>
+                         <Form.Check
+                onChange={(e) => console.log(e)}
+                value="Y"
+                type="radio"
+                id="default-radio"
+                label="Yes"
+                name="true"
+                disabled={!showActionButton}
+                {...register("stormwaterDrainage")}
+                inline
+              ></Form.Check>
+              <Form.Check
+                onChange={(e) => console.log(e)}
+                value="N"
+                type="radio"
+                id="default-radio"
+                label="No"
+                name="false"
+                disabled={!showActionButton}
+                {...register("stormwaterDrainage")}
+                inline
+              ></Form.Check>
+                         </div>
+							</TableCell>
+                            <TableCell align="left">
+                                        <textarea
+              class="form-control"
+              id="exampleFormControlTextarea7d"
+              placeholder="Enter your Remarks"
+              autoFocus
+            
+              rows="3"
+            
+            />
+                                        </TableCell>
+                            
+							
+						</TableRow>
+                  
+         </TableBody>
+			</Table>
+		</TableContainer>
+          
+          </Form>
+          
+          </div>
 
          
 

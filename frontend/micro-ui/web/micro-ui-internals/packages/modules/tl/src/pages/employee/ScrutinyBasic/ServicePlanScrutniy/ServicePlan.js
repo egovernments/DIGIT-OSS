@@ -28,6 +28,7 @@ const ServicePlanService = (props) => {
  const apiResponse = props.apiResponse;
  const idwDataTreade = props. idwDataTreade;
  const edcDataTreade = props. edcDataTreade;
+ const applicationStatus = props.applicationStatus ;
 //  apiResponse,refreshScrutinyData, applicationNumber,iconStates
   const handleshowhide = (event) => {
     const getuser = event.target.value;
@@ -52,12 +53,11 @@ const ServicePlanService = (props) => {
   const [smShow, setSmShow] = useState(false);
   const [labelValue, setLabelValue] = useState("");
   const Colors = {
-    conditional:"#2874A6",
-    approved:"#09cb3d",
-    disapproved:"#ff0000",
-   
-    info:"#FFB602"
-  };
+    Conditional: "#2874A6",
+    approved: "#09cb3d",
+    disapproved: "#ff0000",
+      info: "#FFB602"
+  }
 
   const handlemodaldData = (data) => {
     // setmodaldData(data.data);
@@ -130,7 +130,7 @@ const ServicePlanService = (props) => {
         console.log("filteration value111", fieldPresent, fieldPresent[0]?.isApproved);
         if (fieldPresent && fieldPresent.length) {
           console.log("filteration value111", fieldPresent, fieldPresent[0]?.isApproved);
-          tempFieldColorState = { ...tempFieldColorState, [item.key]: fieldPresent[0].isApproved === "approved" ? Colors.approved : fieldPresent[0].isApproved === "disapproved" ? Colors.disapproved : fieldPresent[0].isApproved === "conditional" ? Colors.conditional : Colors.info }
+          tempFieldColorState = {...tempFieldColorState,[item.key]:fieldPresent[0].isApproved === "In Order" ?Colors.approved: fieldPresent[0].isApproved === "Not In Order" ? Colors.disapproved:fieldPresent[0].isApproved === "Conditional" ? Colors.Conditional:Colors.info}
 
         }
       }
@@ -154,7 +154,8 @@ const ServicePlanService = (props) => {
       setSelectedFieldData(null);
     }
   }, [labelValue])
-
+  
+const businessService = apiResponse.businessService;
 
 console.log("dataEDC",idwDataTreade);
 
@@ -223,6 +224,7 @@ console.log("dataEDC",idwDataTreade);
                       selectedFieldData={selectedFieldData}
                       fieldValue={fieldValue}
                       remarksUpdate={currentRemarks}
+                    applicationStatus = {applicationStatus}
                     ></ModalChild>
                   </div>
                   {/* </Form.Group> */}

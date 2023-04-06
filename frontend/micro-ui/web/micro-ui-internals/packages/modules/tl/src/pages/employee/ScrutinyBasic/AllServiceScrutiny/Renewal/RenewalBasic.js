@@ -1,14 +1,14 @@
 import React, { useState, useRef, useEffect, useContext } from "react";
 
-import ServicePlanCivil from "./ServicePlanCivilEng";
-import ServicePlanExternal from "./ServicePlanExternal";
-import ServicePlanService from "./ServicePlan";
+// import ServicePlanCivil from "./ServicePlanCivilEng";
+// import ServicePlanExternal from "./ServicePlanExternal";
+// import ServicePlanService from "./ServicePlan";
 // import JeLandinfo from "./Scrutiny LOI/JE/JE";
 // import DisApprovalList from "./DisApprovalList";
 // import HistoryList from "./History";
-import ScrutinyDevelopment from "../ScrutinyDevelopment/ScrutinyDevelopment";
-import { ScrutinyRemarksContext } from "../../../../../context/remarks-data-context";
-
+import ScrutinyDevelopment from "../../ScrutinyDevelopment/ScrutinyDevelopment";
+import { ScrutinyRemarksContext } from "../../../../../../context/remarks-data-context/index";
+import RenewalClu from "./Renewal"
 
 import { Button, Row, Col } from "react-bootstrap";
 // import LicenseDetailsScrutiny from "../ScrutinyBasic/Developer/LicenseDetailsScrutiny";
@@ -17,7 +17,7 @@ import axios from "axios";
 
 // import AddIcon from "@mui/icons-material/Add";
 
-const ServiceBase = ({apiResponse,applicationNumber,refreshScrutinyData,setAdditionalDetails,histeroyData,idwDataTreade,edcDataTreade,setExternalAgencies,applicationStatus}) => {
+const RenewalBasic = ({apiResponse,applicationNumber,refreshScrutinyData,setAdditionalDetails,histeroyData,idwDataTreade,edcDataTreade }) => {
   const [purpose, setPurpose] = useState("");
   const jeLandInfoRef = useRef();
 
@@ -31,7 +31,7 @@ const ServiceBase = ({apiResponse,applicationNumber,refreshScrutinyData,setAddit
   const [displayAppliedLand, setDisplayAppliedLandInfo] = useState([]);
   const [displayFeeandCharges, setDisplayFeeandChargesInfo] = useState([]);
 
-const { remarksData,iconStates,rolesDate,handleRoles,handleGetFiledsStatesById,handleGetRemarkssValues } = useContext(ScrutinyRemarksContext);
+const { remarksData,iconStates,handleGetFiledsStatesById,handleGetRemarkssValues } = useContext(ScrutinyRemarksContext);
   const [displayJeLand, setDisplayJeLand] = useState([]);
   const [ActiveKey, setActiveKey] = useState(1);
   const [defaultHeightPersonal, setDefaultHeightPersonal] = useState(0);
@@ -237,22 +237,20 @@ const { remarksData,iconStates,rolesDate,handleRoles,handleGetFiledsStatesById,h
       <div style={{ position: "relative", maxWidth: "100%", padding: 2 }}>
         <div>
          <div>
-         <ServicePlanService
-          edcDataTreade={edcDataTreade}
-             idwDataTreade={idwDataTreade}
+         <RenewalClu
+         edcDataTreade={edcDataTreade}
+         idwDataTreade={idwDataTreade}
            apiResponse={apiResponse}
            refreshScrutinyData={refreshScrutinyData}
            applicationNumber={applicationNumber}
-           showTable={curentDataPersonal}
            passUncheckedList={getUncheckedGeneralinfos}
            passCheckedList={getCheckedGeneralInfoValue}
            onClick={() => setOpen(!open)}
            dataForIcons={iconStates}
-          applicationStatus={applicationStatus} 
-           ></ServicePlanService>
+           ></RenewalClu>
          </div>
          
-         <div 
+         {/* <div 
        
          >
       <ServicePlanCivil
@@ -261,19 +259,19 @@ const { remarksData,iconStates,rolesDate,handleRoles,handleGetFiledsStatesById,h
            refreshScrutinyData={refreshScrutinyData}
            applicationNumber={applicationNumber}
       ></ServicePlanCivil>
-      </div>
-         <div 
+      </div> */}
+         {/* <div 
        
          >
       <ServicePlanExternal
         edcDataTreade={edcDataTreade}
         idwDataTreade={idwDataTreade}
-        setExternalAgencies = {setExternalAgencies}
+      setAdditionalDetails = {setAdditionalDetails}
       apiResponse={apiResponse}
            refreshScrutinyData={refreshScrutinyData}
            applicationNumber={applicationNumber}
       ></ServicePlanExternal>
-      </div>
+      </div> */}
           {/* <JeLandinfo jeLandInfoRef={jeLandInfoRef} passUncheckedList={getUncheckedJeLandInfo}></JeLandinfo> */}
         </div>
       </div>
@@ -291,7 +289,6 @@ const { remarksData,iconStates,rolesDate,handleRoles,handleGetFiledsStatesById,h
           dataList={disapprovalData}
         ></DisApprovalList> */}
         {/* <HistoryList></HistoryList> */}
-        
       </div>
 
       <div style={{ position: "relative", width: "100%", height: "100%", display: "flex" }}>
@@ -306,4 +303,4 @@ const { remarksData,iconStates,rolesDate,handleRoles,handleGetFiledsStatesById,h
   );
 };
 
-export default ServiceBase;
+export default RenewalBasic;

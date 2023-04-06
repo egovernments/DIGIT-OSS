@@ -186,7 +186,7 @@ console.log("log123Disrenu" ,id);
     >
       <Row class="remarkshelp">
         <div 
-        // class="currentremarks"
+        class="currentremarks"
          >
           <div class="WhatsNewCard" style={{ backgroundColor: "#ddf2cf" }}>
             <p class="text-center" ><h4>Current Remarks</h4></p>
@@ -494,7 +494,7 @@ console.log("log123Disrenu" ,id);
 
         </div>
 
-        {/* <div class="histroryremarks">
+        <div class="histroryremarks">
           <div class="WhatsNewCard" style={{ backgroundColor: "#ddf2cf" }}>
 
 
@@ -539,7 +539,7 @@ console.log("log123Disrenu" ,id);
             </div>
 
           </div>
-        </div> */}
+        </div>
       </Row>
 
 

@@ -1,28 +1,25 @@
 
 import axios from "axios";
 import { size } from "lodash";
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect } from "react";
 import { Container } from "react-bootstrap";
 import { Card, Row, Col } from "react-bootstrap";
 import { Button, Form } from "react-bootstrap";
 import { useTranslation } from "react-i18next";
 import { useQueryClient } from "react-query";
 import { useHistory, useParams } from "react-router-dom";
-import ApplicationDetailsActionBar from "../../../../../../templates/ApplicationDetails/components/ApplicationDetailsActionBar";
-import ActionModal from "../../../../../../templates/ApplicationDetails/Modal";
-import { ScrutinyRemarksContext } from "../../../../../context/remarks-data-context/index";
+import ApplicationDetailsActionBar from "../../../../../../../templates/ApplicationDetails/components/ApplicationDetailsActionBar";
 
-import ServiceBase from "./ServiceBase";
+import ActionModal from "../../../../../../../templates/ApplicationDetails";
 
-const ServiceScrutiny = (props) => {
+import RenewalBasic from "./RenewalBasic";
+
+const RenewalScrutiny = (props) => {
 
   const { id } = useParams();
 
   const userInfo = Digit.UserService.getUser()?.info || {};
   const authToken = Digit.UserService.getUser()?.access_token || null;
-  // const applicationNumber = "HR-TL-2022-12-07-000498"
-
-  // let applicationNumber = "";
   const tenantId = Digit.ULBService.getCurrentTenantId();
   const state = Digit.ULBService.getStateId();
   const { t } = useTranslation();
@@ -34,20 +31,17 @@ const ServiceScrutiny = (props) => {
   const [isEnableLoader, setIsEnableLoader] = useState(false);
   const [isWarningPop, setWarningPopUp] = useState(false);
   const [showhide19, setShowhide19] = useState("true");
-  const [businessService, setBusinessServices] = useState("SERVICE_PLAN");
+  const [businessService, setBusinessService] = useState("SERVICE_PLAN");
   const [moduleCode, setModuleCode] = useState("TL")
   const [scrutinyDetails, setScrutinyDetails] = useState();
-  // const [applicationNumber,setApplicationNumber] = useState("");
+
   const [applicationDetails, setApplicationDetails] = useState();
   const [workflowDetails, setWorkflowDetails] = useState();
   const [applicationData, setApplicationData] = useState();
   const [additionalDetails, setAdditionalDetails] = useState({});
-  const [externalAgency, setExternalAgencies] = useState({});
   const [loiNumberSet, setLOINumberSet] = useState("");
   const [edcDataTreade ,setEdcDataTreade] = useState("");
   const [idwDataTreade ,setIdwDataTreade] = useState("");
-  const [status , setStatus] = useState();
-  const { setBusinessService } = useContext(ScrutinyRemarksContext)
 
   //   const authToken = Digit.UserService.getUser()?.access_token || null;
 
@@ -78,12 +72,12 @@ const ServiceScrutiny = (props) => {
       }
     }
     try {
-      const Resp = await axios.post(`/tl-services/serviceplan/_get?applicationNumber=${id}`, requestInfo).then((response) => {
+      const Resp = await axios.post(`/tl-services/renewal/_get?applicationNumber=${id}`, requestInfo).then((response) => {
         return response?.data;
       });
       //   console.log("Response From API1", Resp, Resp?.Licenses[0]?.applicationNumber,Resp);
       setScrutinyDetails(Resp?.servicePlanResponse?.[0]);
-      setStatus(Resp?.servicePlanResponse?.[0]?.status);
+      
       
       console.log("devDel1234", Resp?.servicePlanResponse?.[0]?.loiNumber);
       const loiNumber =  Resp?.servicePlanResponse?.[0]?.loiNumber
@@ -91,10 +85,8 @@ const ServiceScrutiny = (props) => {
       setApplicationDetails({
         applicationData: Resp?.servicePlanResponse?.[0],
         workflowCode: Resp?.servicePlanResponse?.[0].businessService
-        
       })
-      
-      console.log("Loi12347874545", Resp?.servicePlanResponse?.[0]?.status);
+      // console.log("Loi1234787", userInfo );
       // console.log("Loi1234", loiNumber );
       const loiRequest = {
         requestInfo: {
@@ -181,13 +173,12 @@ const ServiceScrutiny = (props) => {
   // };
 
   const closeModal = () => {
-    setSelectedAction(null);
-    setShowModal(false);
-
-    // setTimeout(() => {
-     
-    //   window.location.href = `/digit-ui/employee/tl/servicePlanInbox`
-    //   }, 3000);
+    
+    setTimeout(() => {
+      setSelectedAction(null);
+      setShowModal(false);
+      window.location.href = `/digit-ui/employee/tl/servicePlanInbox`
+      }, 3000);
   };
 
   const closeWarningPopup = () => {
@@ -197,15 +188,12 @@ const ServiceScrutiny = (props) => {
   const submitAction = async (data = {}, nocData = false, isOBPS = {}) => {
     let tempdata = data || {}
     tempdata.ServicePlanRequest[0].additionalDetails = additionalDetails;
-    let agencydata = data || {}
-    agencydata.ServicePlanRequest[0].externalAgency = externalAgency;
-    console.log("logger log1223", agencydata)
+    console.log("logger log1223", tempdata)
 
 
     try {
       let body = { 
         ...tempdata,
-        ...agencydata,
 
         RequestInfo: {
           api_id: "Rainmaker",
@@ -231,12 +219,6 @@ const ServiceScrutiny = (props) => {
     //   window.location.href = `/digit-ui/employee/tl/servicePlanInbox`
     // }, 3000);
     closeModal();
-    // setShowToast({ key: "error", error: { message: errorValue } });
-    // setTimeout(closeToast, 5000);
-    setTimeout(() => {
-     
-        window.location.href = `/digit-ui/employee/tl/servicePlanInbox`
-        }, 3000);
     
   };
 
@@ -247,7 +229,7 @@ const ServiceScrutiny = (props) => {
     // console.log("logService...wrkflw12",id,workflowDetailsTemp,scrutinyDetails,applicationDetails,processInstances)
     if (workflowDetailsTemp?.data?.applicationBusinessService) {
       setWorkflowDetails(workflowDetailsTemp);
-      setBusinessServices(workflowDetailsTemp?.data?.applicationBusinessService);
+      setBusinessService(workflowDetailsTemp?.data?.applicationBusinessService);
       console.log("Datapoint1", workflowDetailsTemp?.data?.processInstances)
       // setDataHistory("Datapoint" , workflowDetailsTemp?.data?.processInstances.map((array) => array.map((object))))
       //  = (e) => {
@@ -269,7 +251,7 @@ const ServiceScrutiny = (props) => {
     getScrutinyData();
   }, [])
 
-  console.log("loggerexternalAgency", externalAgency)
+
   return (
     <Card>
       <Card.Header class="fw-normal" style={{ top: 5, padding: 5, fontSize: 14, height: 90, lineHeight: 2 }}>
@@ -304,17 +286,15 @@ const ServiceScrutiny = (props) => {
           refreshScrutinyData={getScrutinyData}
         ></ScrutitnyForms> */}
         {/* <ElecticalBase/> */}
-        <ServiceBase
+        <RenewalBasic
           apiResponse={scrutinyDetails}
           histeroyData={workflowDetailsTemp}
           applicationNumber={id}
           refreshScrutinyData={getScrutinyData}
           setAdditionalDetails={setAdditionalDetails}
-          setExternalAgencies={setExternalAgencies}
           edcDataTreade={idwDataTreade}
           idwDataTreade={edcDataTreade}
-          applicationStatus={status}
-        ></ServiceBase>
+        ></RenewalBasic>
       </Row>
       {/* <Row style={{ top: 10, padding: "10px 22px" }}> */}
       <Row style={{ top: 10, padding: "10px 22px" }}>
@@ -457,4 +437,4 @@ const ServiceScrutiny = (props) => {
   );
 };
 
-export default ServiceScrutiny;
+export default RenewalScrutiny;

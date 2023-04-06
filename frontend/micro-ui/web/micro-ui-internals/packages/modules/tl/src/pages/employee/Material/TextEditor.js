@@ -4,20 +4,28 @@ import { Editor } from "react-draft-wysiwyg";
 import { convertToHTML } from "draft-convert";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 
-function Edit() {
+function AddPost({modal=false,state , setState}) {
   const [editorState, setEditorState] = useState(() =>
     EditorState.createEmpty()
   );
   const [convertedContent, setConvertedContent] = useState(null);
-
+  
   useEffect(() => {
     let html = convertToHTML(editorState.getCurrentContent());
-    setConvertedContent(html);
+    if (modal) {
+      setState(html);
+      
+    }
+    else{
+      setConvertedContent(html); 
+    }
+  
   }, [editorState]);
+ 
 
   return (
-    <div className="App">
-      <header className="App-header">Rich Text Editor Example</header>
+    <div className="text-editorEmp">
+      {/* <header className="App-header">Rich Text Editor Example</header> */}
       <Editor
         editorState={editorState}
         onEditorStateChange={setEditorState}
@@ -25,9 +33,12 @@ function Edit() {
         editorClassName="editor-class"
         toolbarClassName="toolbar-class"
       />
-      <button onClick={() => console.log(convertedContent)}>Hit me</button>
+      {
+        !modal && 
+        <button onClick={() => console.log(convertedContent)}>Submit</button>
+      }
     </div>
   );
 }
 
-export default Edit;
+export default AddPost;

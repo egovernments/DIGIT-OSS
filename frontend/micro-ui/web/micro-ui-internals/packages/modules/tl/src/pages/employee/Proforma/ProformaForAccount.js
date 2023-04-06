@@ -85,6 +85,7 @@ import RadioGroup from '@mui/material/RadioGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import FormControl from '@mui/material/FormControl';
 import FormLabel from '@mui/material/FormLabel';
+import AddPost from "../Material/TextEditor";
 
 function RadioButtonsGroup() {
     const [selects, setSelects] = useState();
@@ -161,7 +162,7 @@ function RadioButtonsGroup() {
                                         </TableCell>
                                         <TableCell align="left">
                                             <h2>
-                                                Scrutiny fee deposited is in order or not.
+                                            Whether Scrutiny fee @ Rs. 10 per sq.mtr of the applied land in case of plotted colony and @ Rs. 10 per sq.mtr X FAR in case of other than plotted colony deposited.
                                                 &nbsp;&nbsp;
                                             </h2>
                                         </TableCell>
@@ -187,24 +188,7 @@ function RadioButtonsGroup() {
 
                                         </TableCell>
                                         <TableCell align="left">
-                                        {/* <Form.Group className="mb-3" controlId="exampleForm.ControlInput1"> */}
-          {/* <Col xs={12} md={12}> */}
-            {/* <Form.Label style={{ margin: 5 }}>Remarks</Form.Label> */}
-            <textarea
-              class="form-control"
-              id="exampleFormControlTextarea1"
-              placeholder="Enter your Remarks"
-              autoFocus
-            //   onChange={(e) => {
-            //     setDeveloperRemarks({ data: e.target.value });
-            //     setRemarksEntered(e.target.value);
-            //   }}
-              rows="3"
-            //   value={RemarksDeveloper.data}
-            />
-            {/* <Form.Control type="text" /> */}
-          {/* </Col> */}
-        {/* </Form.Group> */}
+                                       < AddPost></AddPost>
                                         </TableCell>
 
                                     </TableRow>
@@ -221,7 +205,7 @@ function RadioButtonsGroup() {
                                         </TableCell>
                                         <TableCell align="left">
                                             <h2>
-                                                25% of the licence fee deposited is in order or not.
+                                            Whether 25% of the licence fee deposited.
                                                 &nbsp;&nbsp;
                                             </h2>
                                         </TableCell>
