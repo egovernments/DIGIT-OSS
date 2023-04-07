@@ -47,7 +47,18 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
   const { pathname: url } = useLocation();
   let validation = {};
   const userInfo = Digit.UserService.getUser();
-  console.log("USERNAME", userInfo?.info?.name);
+  const labels = { inputProps: { "aria-label": "Checkbox demo" } };
+
+  const [isUndertakenDR, setIsUndertaken] = useState(formData?.isUndertakenDR || formData?.formData?.isUndertakenDR || false);
+
+  const selectCheckedDR = (e) => {
+    if (isUndertakenDR == false) {
+      setIsUndertaken(true);
+    } else {
+      setIsUndertaken(false);
+    }
+  };
+  // console.log("USERNAME", userInfo?.info?.name);
   const devRegId = localStorage.getItem("devRegId");
   let isOpenLinkFlow = window.location.href.includes("openlink");
   const tenantId = Digit.ULBService.getCurrentTenantId();
@@ -71,7 +82,6 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
     });
 
   const { setValue, getValues, watch } = useForm();
-
   // -----Shareholding Pageination
   const [rowsPerPageStack, setRowsPerPageStack] = React.useState(10);
   const handleChangePageStack = (event, newPageStack) => {
@@ -85,7 +95,7 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
   //-------------------//
 
   const [rowsPerPageMca, setRowsPerPageMca] = React.useState(10);
-  const [isUndertakenDR, setIsUndertaken] = useState(formData?.isUndertakenDR || formData?.formData?.isUndertakenDR || false);
+
   const handleChangePageMca = (event, newPageMca) => {
     setPageMca(newPageMca);
   };
@@ -117,7 +127,7 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
   }));
 
   const DevelopersAllData = getValues();
-  console.log("DEVEDATAGEGT", DevelopersAllData);
+  // console.log("DEVEDATAGEGT", DevelopersAllData);
   // const [Documents,getValues] = useState([]);
 
   const onSkip = () => onSelect();
@@ -447,14 +457,6 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
     setShowhide6(getshow);
   };
 
-  function selectChecked(e) {
-    if (isUndertakenDR == false) {
-      setIsUndertaken(true);
-    } else {
-      setIsUndertaken(false);
-    }
-  }
-
   const handleChange = (e) => {
     this.setState({ isRadioSelected: true });
   };
@@ -648,7 +650,6 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
     rows.splice(i, 1);
     setCapacityDevelopColonyLawAct(rows);
   };
-  const label = { inputProps: { "aria-label": "Checkbox demo" } };
 
   const goNext = async (e) => {
     // if (!(formData?.result && formData?.result?.Licenses[0]?.id)) {
@@ -860,6 +861,7 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
                 data?.devDetail[0]?.addInfo?.showDevTypeFields === "Partnership Firm"
               ? !Documents?.networthPartners || !Documents?.networthFirm || !Documents?.fullyConvertibleDebenture
               : false) ||
+            !isUndertakenDR ||
             ((permissionGrantedHRDU === "Y" && capacityDevelopColonyHdruAct?.length) ||
             (permissionGrantedHRDU === "N" && technicalCapacityOutsideHaryana === "N")
               ? false
@@ -869,8 +871,6 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
                 technicalCapacityOutsideHaryanaDetails.statusOfDevelopment &&
                 technicalCapacityOutsideHaryanaDetails.location &&
                 technicalCapacityOutsideHaryanaDetails.projectArea
-              ? false
-              : !isUndertakenDR
               ? false
               : true)
           }
@@ -2528,7 +2528,21 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
                 </div>
               </div>
               <Col md={12}>
-                <Checkbox {...label} onChange={(e) => selectChecked(e)} value={isUndertakenDR} checked={isUndertakenDR} name={isUndertakenDR} />
+                <Checkbox
+                  {...labels}
+                  onClick={(e) => setIsUndertaken(e.target.checked)}
+                  value={isUndertakenDR}
+                  checked={isUndertakenDR}
+                  name={isUndertakenDR}
+                />
+                {/* <input
+                  type="checkbox"
+                  {...labels}
+                  onChange={(e) => selectCheckedDR(e.target.checked)}
+                  value={isUndertakenDR}
+                  checked={isUndertakenDR}
+                  name={isUndertakenDR}
+                /> */}
                 <label>
                   It is undertaken that the above information is true and correct for all facts and purposes.{" "}
                   <span className="text-danger font-weight-bold">*</span>
