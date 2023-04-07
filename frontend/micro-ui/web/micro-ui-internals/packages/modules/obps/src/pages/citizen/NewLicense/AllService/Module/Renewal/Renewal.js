@@ -21,6 +21,7 @@ import Spinner from "../../../../../../components/Loader";
 import CusToaster from "../../../../../../components/Toaster";
 import { VALIDATION_SCHEMA } from "../../../../../../utils/schema/renewal";
 import { yupResolver } from "@hookform/resolvers/yup";
+import { Autocomplete, TextField } from "@mui/material";
 
 const RenewalFor = [
   { label: "Year", value: "year" },
@@ -66,6 +67,8 @@ function renewalClu() {
   const [selectedFiles, setSelectedFiles] = useState([]);
   const [showToastError, setShowToastError] = useState({ label: "", error: false, success: false });
   const [fileStoreId, setFileStoreId] = useState({});
+  const [licenceData, setLicenceData] = useState([]);
+  const [showField, setShowField] = useState({ select: false, other: false });
 
   const getDocumentData = async (file, fieldName) => {
     if (selectedFiles.includes(file.name)) {
@@ -84,6 +87,7 @@ function renewalClu() {
       setFileStoreId({ ...fileStoreId, [fieldName]: Resp?.data?.files?.[0]?.fileStoreId });
 
       setSelectedFiles([...selectedFiles, file.name]);
+
       setLoader(false);
       setShowToastError({ label: "File Uploaded Successfully", error: false, success: true });
     } catch (error) {
@@ -100,6 +104,45 @@ function renewalClu() {
     setValue("delayInDays", TotalDays);
   }, [watch("renewalApplied")]);
 
+  const getLicenceDetails = async () => {
+    setLoader(true);
+    const data = {
+      Flag: 1,
+      SearchParam: watch("licenceNo"),
+    };
+    try {
+      const Resp = await axios.post("/api/cis/GetLicenceDetails", data);
+      const filteredData = Resp?.data
+        .filter((item) => item.Text.includes(" of "))
+        .map((item) => {
+          return { label: item.Text.split(" |")[0], value: item };
+        });
+      console.log("lllll====", filteredData);
+      setShowField({ select: true, other: false });
+      const setLicData = filteredData?.map(function (data) {
+        return { value: data?.value?.Text, label: data?.label };
+      });
+      setLicenceData(setLicData);
+      setLoader(false);
+    } catch (error) {
+      setLoader(false);
+      return error.message;
+    }
+  };
+
+  const setTextValues = (val) => {
+    setShowField({ select: true, other: true });
+    setValue("district", val.value?.split("|")?.[3]);
+    setValue("colonyType", val.value?.split("|")?.[4]);
+    setValue("colonizerName", val.value?.split("|")?.[5]);
+    setValue("developmentPlan", val.value?.split("|")?.[6]);
+    setValue("sectorNo", val.value?.split("|")?.[7]);
+    setValue("areaAcres", val.value?.split("|")?.[9]);
+  };
+
+  // http://103.166.62.118:3001/digit-ui/citizen/obps/edcrscrutiny/apply/home
+  // 66666666666
+
   return (
     <div>
       {loader && <Spinner />}
@@ -109,137 +152,193 @@ function renewalClu() {
           <div className="card">
             <div className="row-12">
               <div className="row gy-3">
-                <div className="col col-3 ">
-                  <FormControl>
-                    <h2>
-                      License No.<span style={{ color: "red" }}>*</span>
-                    </h2>
-
-                    <input type="number" className="form-control" placeholder="" {...register("licenseNo")} />
-                  </FormControl>
-                  <h3 className="error-message" style={{ color: "red" }}>
-                    {errors?.licenseNo && errors?.licenseNo?.message}
-                  </h3>
-                </div>
-                <div className="col col-3 ">
-                  <FormControl>
-                    <h2>
-                      {" "}
-                      Valid Upto <span style={{ color: "red" }}>*</span>
-                    </h2>
-
-                    <input type="date" className="form-control" placeholder="" {...register("validUpto")} />
-                  </FormControl>
-                  <h3 className="error-message" style={{ color: "red" }}>
-                    {errors?.validUpto && errors?.validUpto?.message}
-                  </h3>
-                </div>
-                <div className="col col-3 ">
-                  <FormControl>
-                    <h2>
-                      Renewal required upto <span style={{ color: "red" }}>*</span>
-                    </h2>
-                    <input
-                      type="date"
-                      {...register("renewalRequiredUpto")}
-                      className="form-control"
-                      onChange={(e) => {
-                        const dateA = new Date(e?.target?.value);
-                        const dateB = new Date(watch("validUpto"));
-
-                        const monthDiff = dateA.getMonth() - dateB.getMonth();
-                        const yearDiff = dateA.getYear() - dateB.getYear();
-
-                        const diff = monthDiff + yearDiff * 12;
-                        setValue("renewalRequiredUpto", diff);
-                        console.log("value", e?.target?.value, diff);
+                <div className="col col-3">
+                  <h2>
+                    Licence No.<span style={{ color: "red" }}>*</span>
+                  </h2>
+                  {/* <Autocomplete
+                    disablePortal
+                    id="combo-box-demo"
+                    options={licenceData}
+                    {...register("licenceNo")}
+                    renderInput={(params) => (
+                      <TextField
+                        {...params}
+                        label=""
+                        placeholder="LC_XXXXX"
+                        onChange={(e) => {
+                          let delay;
+                          delay = setTimeout(() => {
+                            getLicenceDetails(e?.target?.value);
+                          }, 700);
+                          return () => clearTimeout(delay);
+                          // getLicenceDetails(e?.target?.value)
+                        }}
+                      />
+                    )}
+                  /> */}
+                  <div style={{ display: "flex", placeItems: "center" }}>
+                    <input type="text" className="form-control" placeholder="LC_XXXXX" {...register("licenceNo")} />
+                    <div
+                      style={{
+                        background: "#024f9d",
+                        color: "white",
+                        borderRadius: "5px",
+                        padding: " 5px 15px",
+                        marginLeft: "10px",
+                        cursor: "pointer",
                       }}
+                      onClick={getLicenceDetails}
+                    >
+                      Go
+                    </div>
+                  </div>
+                  <h3 className="error-message" style={{ color: "red" }}>
+                    {errors?.licenceNo && errors?.licenceNo?.message}
+                  </h3>
+                </div>
+
+                {showField?.select && (
+                  <div className="col col-3 ">
+                    <h2>
+                      Select Licence<span style={{ color: "red" }}>*</span>
+                    </h2>
+                    <ReactMultiSelect
+                      control={control}
+                      name="selectLicence"
+                      placeholder="Select Licence"
+                      data={licenceData}
+                      onChange={(e) => setTextValues(e)}
+                      labels=""
                     />
-                  </FormControl>
-                  <h3 className="error-message" style={{ color: "red" }}>
-                    {errors?.renewalRequiredUpto && errors?.renewalRequiredUpto?.message}
-                  </h3>
-                </div>
-                <div className="col col-3 ">
-                  <FormControl>
-                    <h2>Period of renewal(In months)</h2>
-                    <input type="text" {...register("renewalRequiredUpto")} className="form-control" disabled />
-                  </FormControl>
-                </div>
-                <div className="col col-3 ">
-                  <FormControl>
-                    <h2>
-                      {" "}
-                      Name of Colonizer <span style={{ color: "red" }}>*</span>
-                    </h2>
-
-                    <input type="text" className="form-control" placeholder="" {...register("colonizerName")} />
-                  </FormControl>
-                  <h3 className="error-message" style={{ color: "red" }}>
-                    {errors?.colonizerName && errors?.colonizerName?.message}
-                  </h3>
-                </div>
+                  </div>
+                )}
               </div>
-              <div className="row gy-3 mt-3">
-                <div className="col col-3 ">
-                  <FormControl>
-                    <h2>
-                      {" "}
-                      Type of Colony
-                      <span style={{ color: "red" }}>*</span>
-                    </h2>
 
-                    <input type="text" className="form-control" placeholder="" {...register("colonyType")} />
-                  </FormControl>
-                  <h3 className="error-message" style={{ color: "red" }}>
-                    {errors?.colonyType && errors?.colonyType?.message}
-                  </h3>
+              {showField.other && (
+                <div className="row gy-3 mt-3">
+                  <div className="col col-3 ">
+                    <FormControl>
+                      <h2>
+                        Valid Upto <span style={{ color: "red" }}>*</span>
+                      </h2>
+
+                      <input type="date" className="form-control" placeholder="" {...register("validUpto")} />
+                    </FormControl>
+                    <h3 className="error-message" style={{ color: "red" }}>
+                      {errors?.validUpto && errors?.validUpto?.message}
+                    </h3>
+                  </div>
+                  <div className="col col-3 ">
+                    <FormControl>
+                      <h2>
+                        Renewal required upto <span style={{ color: "red" }}>*</span>
+                      </h2>
+                      <input
+                        type="date"
+                        {...register("renewalRequiredUpto")}
+                        className="form-control"
+                        onChange={(e) => {
+                          const dateA = new Date(e?.target?.value);
+                          const dateB = new Date(watch("validUpto"));
+
+                          const monthDiff = dateA.getMonth() - dateB.getMonth();
+                          const yearDiff = dateA.getYear() - dateB.getYear();
+
+                          const diff = monthDiff + yearDiff * 12;
+                          setValue("renewalRequiredUpto", diff);
+                          console.log("value", e?.target?.value, diff);
+                        }}
+                      />
+                    </FormControl>
+                    <h3 className="error-message" style={{ color: "red" }}>
+                      {errors?.renewalRequiredUpto && errors?.renewalRequiredUpto?.message}
+                    </h3>
+                  </div>
+                  <div className="col col-3 ">
+                    <FormControl>
+                      <h2>Period of renewal(In Years)</h2>
+                      <input type="text" {...register("renewalRequiredUpto")} className="form-control" disabled />
+                    </FormControl>
+                  </div>
+                  <div className="col col-3 ">
+                    <FormControl>
+                      <h2>
+                        Name of Colonizer <span style={{ color: "red" }}>*</span>
+                      </h2>
+
+                      <input type="text" className="form-control" placeholder="" {...register("colonizerName")} />
+                    </FormControl>
+                    <h3 className="error-message" style={{ color: "red" }}>
+                      {errors?.colonizerName && errors?.colonizerName?.message}
+                    </h3>
+                  </div>
                 </div>
+              )}
 
-                <div className="col col-3 ">
-                  <FormControl>
-                    <h2>
-                      Area in Acres
-                      <span style={{ color: "red" }}>*</span>
-                    </h2>
+              {showField.other && (
+                <div className="row gy-3 mt-3">
+                  <div className="col col-3 ">
+                    <FormControl>
+                      <h2>
+                        Type of Colony
+                        <span style={{ color: "red" }}>*</span>
+                      </h2>
 
-                    <input type="text" className="form-control" placeholder="" {...register("areaAcres")} />
-                  </FormControl>
-                  <h3 className="error-message" style={{ color: "red" }}>
-                    {errors?.areaAcres && errors?.areaAcres?.message}
-                  </h3>
+                      <input type="text" className="form-control" placeholder="" {...register("colonyType")} />
+                    </FormControl>
+                    <h3 className="error-message" style={{ color: "red" }}>
+                      {errors?.colonyType && errors?.colonyType?.message}
+                    </h3>
+                  </div>
+
+                  <div className="col col-3 ">
+                    <FormControl>
+                      <h2>
+                        Area in Acres
+                        <span style={{ color: "red" }}>*</span>
+                      </h2>
+
+                      <input type="text" className="form-control" placeholder="" {...register("areaAcres")} />
+                    </FormControl>
+                    <h3 className="error-message" style={{ color: "red" }}>
+                      {errors?.areaAcres && errors?.areaAcres?.message}
+                    </h3>
+                  </div>
+
+                  <div className="col col-3 ">
+                    <FormControl>
+                      <h2>
+                        Sector No. <span style={{ color: "red" }}>*</span>
+                      </h2>
+
+                      <input type="text" className="form-control" placeholder="" {...register("sectorNo")} />
+                    </FormControl>
+                    <h3 className="error-message" style={{ color: "red" }}>
+                      {errors?.sectorNo && errors?.sectorNo?.message}
+                    </h3>
+                  </div>
+                  <div className="col col-3 ">
+                    <FormControl>
+                      <h2>
+                        Revenue estate
+                        <span style={{ color: "red" }}>*</span>
+                      </h2>
+
+                      <input type="text" className="form-control" placeholder="" {...register("revenueEstate")} />
+                    </FormControl>
+                    <h3 className="error-message" style={{ color: "red" }}>
+                      {errors?.revenueEstate && errors?.revenueEstate?.message}
+                    </h3>
+                  </div>
+                  <div className="col col-3 ">
+                    Development Plan
+                    <input type="text" className="form-control" placeholder="" {...register("developmentPlan")} />
+                    {/* auto pull land schedule table from new licence here */}
+                  </div>
                 </div>
+              )}
 
-                <div className="col col-3 ">
-                  <FormControl>
-                    <h2>
-                      Sector No. <span style={{ color: "red" }}>*</span>
-                    </h2>
-
-                    <input type="text" className="form-control" placeholder="" {...register("sectorNo")} />
-                  </FormControl>
-                  <h3 className="error-message" style={{ color: "red" }}>
-                    {errors?.sectorNo && errors?.sectorNo?.message}
-                  </h3>
-                </div>
-                <div className="col col-3 ">
-                  <FormControl>
-                    <h2>
-                      Revenue estate
-                      <span style={{ color: "red" }}>*</span>{" "}
-                    </h2>
-
-                    <input type="text" className="form-control" placeholder="" {...register("revenueEstate")} />
-                  </FormControl>
-                  <h3 className="error-message" style={{ color: "red" }}>
-                    {errors?.revenueEstate && errors?.revenueEstate?.message}
-                  </h3>
-                </div>
-              </div>
-              <div>
-                Development Plan
-                {/* auto pull land schedule table from new licence here */}
-              </div>
               <div className="row gy-3 mt-3">
                 <div className="col col-3 ">
                   <FormControl>
@@ -293,19 +392,19 @@ function renewalClu() {
                 </div>
               </div>
               <div className="mt-3">
-                <h2> Reason for not completing the project within the initial validity period of the license.</h2>
+                <h2> Reason for not completing the project within the initial validity period of the licence.</h2>
                 <textarea className="form-control" placeholder="" {...register("completingProject")} rows="3" />
               </div>
               {/* <div className="row-12">
                   <h2>
-                    {" "}
-                    Reason for not completing the project within the initial validity period of the license.
+                    
+                    Reason for not completing the project within the initial validity period of the licence.
                     <span style={{ color: "red" }}>*</span> &nbsp;&nbsp;
                     <label htmlFor=" Whether the renewal applied is the first time ? (Yes/No)">
-                      {" "}
+                      
                       &nbsp;&nbsp;
                       <input {...register("renewalAppliedFirstTime")} type="radio" value="1" id="yes" /> &nbsp; Yes
-                    </label>{" "}
+                    </label>
                     <label htmlFor="Whether the renewal applied is the first time ? (Yes/No)">
                       &nbsp;&nbsp;
                       <input {...register("renewalAppliedFirstTime")} type="radio" value="2" id="no" /> &nbsp; No
@@ -341,10 +440,10 @@ function renewalClu() {
                           </td>
                           <td style={{ textAlign: "center" }}>
                             <label htmlFor=" complianceDone">
-                              {" "}
+                              
                               &nbsp;&nbsp;
                               <input {...register("complianceDone")} type="radio" value="1" id="yes" /> &nbsp; Yes
-                            </label>{" "}
+                            </label>
                             <label htmlFor="complianceDone">
                               &nbsp;&nbsp;
                               <input {...register("complianceDone")} type="radio" value="2" id="no" /> &nbsp; No
@@ -369,16 +468,16 @@ function renewalClu() {
               <div className="row-12">
                 <div className="col md={4} xxl lg-4">
                   {/* <h2>
-                      {" "}
+                      
                       Whether the colonizer has obtained approval/NOC from the competent authority in pursuance of MOEF notified dated 14.09.2006
                       before stating the development works.
                       <span style={{ color: "red" }}>*</span>
                     </h2>
                     <label htmlFor=" colonizer">
-                      {" "}
+                      
                       &nbsp;&nbsp;
                       <input {...register("colonizer")} type="radio" value="1" id="yes" /> &nbsp; Yes
-                    </label>{" "}
+                    </label>
                     <label htmlFor="colonizer">
                       &nbsp;&nbsp;
                       <input {...register("colonizer")} type="radio" value="2" id="no" /> &nbsp; No
@@ -394,16 +493,16 @@ function renewalClu() {
                     )}
                     &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; */}
                   {/* <h2>
-                      {" "}
+                      
                       Whether the colonizer has conveyed the ultimate power load requiremet of the project to the power utility within two months from
-                      the date of grant of license.
-                      <span style={{ color: "red" }}>*</span>{" "}
+                      the date of grant of licence.
+                      <span style={{ color: "red" }}>*</span>
                     </h2>
                     <label htmlFor=" colonizerUltimatePower">
-                      {" "}
+                      
                       &nbsp;&nbsp;
                       <input {...register("colonizerUltimatePower")} type="radio" value="1" id="yes" /> &nbsp; Yes
-                    </label>{" "}
+                    </label>
                     <label htmlFor="colonizerUltimatePower">
                       &nbsp;&nbsp;
                       <input {...register("colonizerUltimatePower")} type="radio" value="2" id="no" /> &nbsp; No
@@ -419,16 +518,14 @@ function renewalClu() {
                     )} */}
                   &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
                   <h2>
-                    {" "}
-                    Whether colonizer has transferred portion of sector/master plans roads forming part of the licensed area free of cost to the Govt.
-                    of not in compilance of condition of license.
+                    Whether colonizer has transferred portion of sector/master plans roads forming part of the licenced area free of cost to the Govt.
+                    of not in compilance of condition of licence.
                     <span style={{ color: "red" }}>*</span>
                   </h2>
                   <label htmlFor=" transferredPortion">
-                    {" "}
                     &nbsp;&nbsp;
                     <input {...register("transferredPortion")} type="radio" value="yes" id="yes" /> &nbsp; Yes
-                  </label>{" "}
+                  </label>
                   <label htmlFor="transferredPortion">
                     &nbsp;&nbsp;
                     <input {...register("transferredPortion")} type="radio" value="no" id="no" /> &nbsp; No
@@ -471,15 +568,13 @@ function renewalClu() {
                     )} */}
                   {/* &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; */}
                   <h2>
-                    {" "}
                     Whether any specific condition was imposed in the licence
                     <span style={{ color: "red" }}>*</span>
                   </h2>
                   <label htmlFor="imposedSpecificCondition">
-                    {" "}
                     &nbsp;&nbsp;
                     <input {...register("imposedSpecificCondition")} type="radio" value="yes" id="yes" /> &nbsp; Yes
-                  </label>{" "}
+                  </label>
                   <label htmlFor="imposedSpecificCondition">
                     &nbsp;&nbsp;
                     <input {...register("imposedSpecificCondition")} type="radio" value="no" id="no" /> &nbsp; No
@@ -488,24 +583,41 @@ function renewalClu() {
                     {errors?.imposedSpecificCondition && errors?.imposedSpecificCondition?.message}
                   </h3>
                   {watch("imposedSpecificCondition") === "yes" && (
-                    <div className="col md={4} xxl lg-4">
-                      <FormControl>
-                        <h2></h2>
-                        <input type="text" className="form-control" placeholder="" {...register("imposedSpecificConditionText")} />
-                      </FormControl>
+                    <div className="row gy-3">
+                      <div className="col col-3 ">
+                        <FormControl>
+                          <h2>Condition</h2>
+                          <input type="text" className="form-control" placeholder="" {...register("imposedCondition")} />
+                        </FormControl>
+                      </div>
+                      <div className="col col-3 ">
+                        <FormControl>
+                          <h2>Compliance</h2>
+                          <input type="text" className="form-control" placeholder="" {...register("imposedCompliance")} />
+                        </FormControl>
+                      </div>
+                      <div className="col col-3 ">
+                        <h2>Completed</h2>
+                        <label htmlFor="imposedCompletedYes">
+                          &nbsp;&nbsp;
+                          <input {...register("imposedCompleted")} type="radio" value="yes" id="imposedCompletedYes" /> &nbsp; Yes
+                        </label>
+                        <label htmlFor="imposedCompletedNo">
+                          &nbsp;&nbsp;
+                          <input {...register("imposedCompleted")} type="radio" value="no" id="imposedCompletedNo" /> &nbsp; No
+                        </label>
+                      </div>
                     </div>
                   )}
                   &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
                   <h2>
-                    {" "}
                     Complaints/court cases pending if any.
-                    <span style={{ color: "red" }}>*</span>{" "}
+                    <span style={{ color: "red" }}>*</span>
                   </h2>
                   <label htmlFor=" courtCases">
-                    {" "}
                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                     <input {...register("courtCases")} type="radio" value="yes" id="yes" /> &nbsp; Yes
-                  </label>{" "}
+                  </label>
                   <label htmlFor="courtCases">
                     &nbsp;&nbsp;
                     <input {...register("courtCases")} type="radio" value="no" id="no" /> &nbsp; No
@@ -523,14 +635,14 @@ function renewalClu() {
                     </div>
                   )}
                   {/* <h2 style={{ marginleft: "20px" }}>
-                      {" "}
+                      
                       EDC
                       <span style={{ color: "red" }}>*</span>
                       <label htmlFor=" edc">
-                        {" "}
+                        
                         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                         <input {...register("edc")} type="radio" value="1" id="yes" /> &nbsp; Fully Paid
-                      </label>{" "}
+                      </label>
                       <label htmlFor="edc">
                         &nbsp;&nbsp;
                         <input {...register("edc")} type="radio" value="2" id="no" /> &nbsp; Outstanding
@@ -612,14 +724,14 @@ function renewalClu() {
                       </div>
                     )} */}
                   {/* <h2>
-                      {" "}
+                      
                       SIDC
-                      <span style={{ color: "red" }}>*</span>{" "}
+                      <span style={{ color: "red" }}>*</span>
                       <label htmlFor=" sidc">
-                        {" "}
+                        
                         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                         <input {...register("sidc")} type="radio" value="1" id="yes" /> &nbsp; Fully Paid
-                      </label>{" "}
+                      </label>
                       <label htmlFor="sidc">
                         &nbsp;&nbsp;
                         <input {...register("sidc")} type="radio" value="2" id="no" /> &nbsp; Outstanding
@@ -681,14 +793,14 @@ function renewalClu() {
                       </div>
                     )} */}
                   {/* <h2>
-                      {" "}
+                      
                       Enhance EDC
-                      <span style={{ color: "red" }}>*</span>{" "}
+                      <span style={{ color: "red" }}>*</span>
                       <label htmlFor=" enhanceEdc">
-                        {" "}
+                        
                         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                         <input {...register("enhanceEdc")} type="radio" value="1" id="yes" /> &nbsp; Fully Paid
-                      </label>{" "}
+                      </label>
                       <label htmlFor="enhanceEdc">
                         &nbsp;&nbsp;
                         <input {...register("enhanceEdc")} type="radio" value="2" id="no" /> &nbsp; Outstanding
@@ -699,7 +811,7 @@ function renewalClu() {
                         <div className="col md={4} xxl lg-4">
                           <FormControl>
                             <h2>
-                              {" "}
+                              
                               Amount
                               <span style={{ color: "red" }}>*</span>
                             </h2>
@@ -709,7 +821,7 @@ function renewalClu() {
                           &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
                           <FormControl>
                             <h2>
-                              {" "}
+                              
                               <span style={{ color: "red" }}>*</span>
                             </h2>
 
@@ -727,7 +839,7 @@ function renewalClu() {
 
               {/* <div>
                   <h2 style={{ marginleft: "20px" }}>
-                    {" "}
+                    
                     Bank Guarantee
                     <span style={{ color: "red" }}>*</span>
                   </h2>
@@ -796,22 +908,22 @@ function renewalClu() {
                 </div> */}
 
               {/* <h2>
-                  {" "}
+                  
                   CA certificate regarding non collection of stamp duty and registration charges.
                   <span style={{ color: "red" }}>*</span>
                   <input type="file" className="form-control" placeholder="" {...register("cacertification")} />
                 </h2> */}
               {/* <h2>
-                  {" "}
+                  
                   Copies of advertisement for the sale of flat (Sec 24) along with register containing authenticated copies of Agreement entered
                   between colonizer.
                   <span style={{ color: "red" }}>*</span>
                 </h2>
                 <label htmlFor=" advertisementCopy">
-                  {" "}
+                  
                   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                   <input {...register("advertisementCopy")} type="radio" value="1" id="yes" /> &nbsp; Yes
-                </label>{" "}
+                </label>
                 <label htmlFor="advertisementCopy">
                   &nbsp;&nbsp;
                   <input {...register("advertisementCopy")} type="radio" value="2" id="no" /> &nbsp; No
@@ -828,17 +940,17 @@ function renewalClu() {
                   </div>
                 )} */}
               {/* <h2>
-                  {" "}
+                  
                   Annual Financial statements duly audited/certifie and signed by Chartened Accountant indicating the amount realized from each space
                   holders, the expenditure incured internal and on external development works separately of the colony /building etc. with detail
                   thereof whether with the amount due from each space holders indicating their postal addresses.
                   <span style={{ color: "red" }}>*</span>
                 </h2>
                 <label htmlFor=" annualFinancial">
-                  {" "}
+                  
                   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                   <input {...register("annualFinancial")} type="radio" value="1" id="yes" /> &nbsp; Yes
-                </label>{" "}
+                </label>
                 <label htmlFor="annualFinancial">
                   &nbsp;&nbsp;
                   <input {...register("annualFinancial")} type="radio" value="2" id="no" /> &nbsp; No
@@ -855,16 +967,16 @@ function renewalClu() {
                   </div>
                 )} */}
               {/* <h2>
-                  {" "}
+                  
                   Detail of account number of schedule bank in which 30% of the amount released by him from the space holder deposited to meet out the
                   cost of internet developmant work of the colony.
                   <span style={{ color: "red" }}>*</span>
                 </h2>
                 <label htmlFor=" detailAccountNumber">
-                  {" "}
+                  
                   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                   <input {...register("detailAccountNumber")} type="radio" value="1" id="yes" /> &nbsp; Yes
-                </label>{" "}
+                </label>
                 <label htmlFor="detailAccountNumber">
                   &nbsp;&nbsp;
                   <input {...register("detailAccountNumber")} type="radio" value="2" id="no" /> &nbsp; No
@@ -883,10 +995,9 @@ function renewalClu() {
               <div>
                 <h2> Compliance of Rule 24, 26(2), 27 & 28 of Rules 1976 has been made </h2>
                 <label htmlFor="complianceOfRule26">
-                  {" "}
                   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                   <input {...register("complianceOfRule26")} type="radio" value="yes" id="yes" /> &nbsp; Yes
-                </label>{" "}
+                </label>
                 <label htmlFor="complianceOfRule26">
                   &nbsp;&nbsp;
                   <input {...register("complianceOfRule26")} type="radio" value="no" id="no" /> &nbsp; No
@@ -895,26 +1006,25 @@ function renewalClu() {
               <div>
                 <h2> Complied within time period </h2>
                 <label htmlFor="compliedInTimePeriod">
-                  {" "}
                   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                   <input {...register("compliedInTimePeriod")} type="radio" value="yes" id="yes" /> &nbsp; Yes
-                </label>{" "}
+                </label>
                 <label htmlFor="compliedInTimePeriod">
                   &nbsp;&nbsp;
                   <input {...register("compliedInTimePeriod")} type="radio" value="no" id="no" /> &nbsp; No
                 </label>
               </div>
               {/* <h2>
-                  {" "}
+                  
                   Copies of form AC account indicating the amount released from each space holders and the amount deposited during the preceeding
                   month in the schedule Bank.
                   <span style={{ color: "red" }}>*</span>
                 </h2>
                 <label htmlFor=" copiesOfCaAccount">
-                  {" "}
+                  
                   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                   <input {...register("copiesOfCaAccount")} type="radio" value="1" id="yes" /> &nbsp; Yes
-                </label>{" "}
+                </label>
                 <label htmlFor="copiesOfCaAccount">
                   &nbsp;&nbsp;
                   <input {...register("copiesOfCaAccount")} type="radio" value="2" id="no" /> &nbsp; No
@@ -930,8 +1040,71 @@ function renewalClu() {
                     </div>
                   </div>
                 )} */}
-              <br></br>
-              <div className="row-12">
+
+              <div className="row mt-3">
+                <div className="col col-6">
+                  <h2>Whether DOD for OC Granted Area Filed</h2>
+                  <label htmlFor="DODforOCAreayes">
+                    &nbsp;&nbsp;
+                    <input {...register("DODforOCArea")} type="radio" value="yes" id="DODforOCAreayes" /> &nbsp; Yes
+                  </label>
+                  <label htmlFor="DODforOCAreano">
+                    &nbsp;&nbsp;
+                    <input {...register("DODforOCArea")} type="radio" value="no" id="DODforOCAreano" /> &nbsp; No
+                  </label>
+                </div>
+                {watch("DODforOCArea") == "yes" && (
+                  <div className="row mt-2">
+                    <div className="col col-5">
+                      <h2>Within the prescribed time limit</h2>
+                      <label htmlFor="withinTimeLimityes">
+                        &nbsp;&nbsp;
+                        <input {...register("withinTimeLimit")} type="radio" value="yes" id="withinTimeLimityes" /> &nbsp; Yes
+                      </label>
+                      <label htmlFor="withinTimeLimitno">
+                        &nbsp;&nbsp;
+                        <input {...register("withinTimeLimit")} type="radio" value="no" id="withinTimeLimitno" /> &nbsp; No
+                      </label>
+                    </div>
+                    {watch("withinTimeLimit") == "yes" && (
+                      <div className="col col-3">
+                        <h2>
+                          Upload Document <span style={{ color: "red" }}>*</span>
+                        </h2>
+                        <label>
+                          <FileUpload style={{ cursor: "pointer" }} color="primary" />
+                          <input
+                            type="file"
+                            style={{ display: "none" }}
+                            accept="application/pdf/jpeg/png"
+                            onChange={(e) => getDocumentData(e?.target?.files[0], "prescribedTimeLimitDocument")}
+                          />
+                        </label>
+                        {watch("prescribedTimeLimitDocument") && (
+                          <a onClick={() => getDocShareholding(watch("prescribedTimeLimitDocument"), setLoader)} className="btn btn-sm ">
+                            <VisibilityIcon color="info" className="icon" />
+                          </a>
+                        )}
+                      </div>
+                    )}
+                    {watch("withinTimeLimit") == "no" && (
+                      <div className="col col-4">
+                        <h2>Composition fee paid or not</h2>
+                        <label htmlFor="compositionFeeyes">
+                          &nbsp;&nbsp;
+                          <input {...register("compositionFee")} type="radio" value="yes" id="compositionFeeyes" /> &nbsp; Yes
+                        </label>
+                        <label htmlFor="compositionFeeno">
+                          &nbsp;&nbsp;
+                          <input {...register("compositionFee")} type="radio" value="no" id="compositionFeeno" /> &nbsp; No
+                        </label>
+                      </div>
+                    )}
+                  </div>
+                )}
+              </div>
+
+              <div className="row mt-4">
                 <div className="col md={4} xxl lg-4">
                   <h2 style={{ marginleft: "20px" }}>
                     <b> Status of OC with A or B depending type of purpose</b>
@@ -976,13 +1149,17 @@ function renewalClu() {
                         </div>
                         <div className="col col-4">
                           <div>
-                            <h2>Proportionate Site Area in Sq meter</h2>
+                            <h2>Proportionate Site Area in Acres</h2>
                             <input
                               type="number"
                               className="form-control"
                               placeholder=""
                               required
                               {...register("proportionateSiteArea")}
+                              onChange={(e) => {
+                                const val = watch("areaAcres") - e?.target?.value;
+                                setValue("balanceSiteArea", val);
+                              }}
                               minLength={1}
                               maxLength={8}
                             />
@@ -990,6 +1167,12 @@ function renewalClu() {
                           <h3 className="error-message" style={{ color: "red" }}>
                             {errors?.proportionateSiteArea && errors?.proportionateSiteArea?.message}
                           </h3>
+                        </div>
+                        <div className="col col-4">
+                          <div>
+                            <h2>Balance Site Area(in acres)</h2>
+                            <input type="number" className="form-control" placeholder="" required {...register("balanceSiteArea")} disabled />
+                          </div>
                         </div>
                         <div className="col col-3">
                           <h2>
@@ -1037,7 +1220,24 @@ function renewalClu() {
                         <div className="col col-5">
                           <div>
                             <h2>Site Area(in Acres)</h2>
-                            <input type="number" className="form-control" placeholder="" {...register("siteArea")} minLength={1} maxLength={8} />
+                            <input
+                              type="number"
+                              className="form-control"
+                              placeholder=""
+                              {...register("siteArea")}
+                              minLength={1}
+                              maxLength={8}
+                              onChange={(e) => {
+                                const val = watch("areaAcres") - e?.target?.value;
+                                setValue("balanceSiteArea", val);
+                              }}
+                            />
+                          </div>
+                        </div>
+                        <div className="col col-4">
+                          <div>
+                            <h2>Balance Site Area(in acres)</h2>
+                            <input type="number" className="form-control" placeholder="" required {...register("balanceSiteArea")} disabled />
                           </div>
                         </div>
                         <div className="col col-3">
@@ -1067,7 +1267,7 @@ function renewalClu() {
               {/* <div className="row-12">
                   <div className="col md={4} xxl lg-4">
                     <h2 style={{ marginleft: "20px" }}>
-                      {" "}
+                      
                       (2) Status of Part Completion
                       <span style={{ color: "red" }}>*</span>
                     </h2>
@@ -1126,7 +1326,7 @@ function renewalClu() {
               {/* <div className="row-12">
                   <div className="col md={4} xxl lg-4">
                     <h2 style={{ marginleft: "20px" }}>
-                      {" "}
+                      
                       (3) Status of Community Sites
                       <span style={{ color: "red" }}>*</span>
                     </h2>
@@ -1166,10 +1366,10 @@ function renewalClu() {
                           </td>
                           <td style={{ textAlign: "center" }}>
                             <label htmlFor=" buildingPlan">
-                              {" "}
+                              
                               &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                               <input {...register("buildingPlan")} type="radio" value="1" id="yes" /> &nbsp; Yes
-                            </label>{" "}
+                            </label>
                             <label htmlFor="buildingPlan">
                               &nbsp;&nbsp;
                               <input {...register("buildingPlan")} type="radio" value="2" id="no" /> &nbsp; No
@@ -1195,10 +1395,10 @@ function renewalClu() {
                           </td>
                           <td>
                             <label htmlFor=" ocGranized">
-                              {" "}
+                              
                               &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                               <input {...register("ocGranized")} type="radio" value="1" id="yes" /> &nbsp; Yes
-                            </label>{" "}
+                            </label>
                             <label htmlFor="ocGranized">
                               &nbsp;&nbsp;
                               <input {...register("ocGranized")} type="radio" value="2" id="no" onClick={handleClickOpen} /> &nbsp; No
@@ -1264,10 +1464,10 @@ function renewalClu() {
                     <FormControl>
                       <h2> Status of allotment and possession of Plot/Flats of EWS category. </h2>
                       <label htmlFor=" allotmentStatus">
-                        {" "}
+                        
                         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                         <input {...register("allotmentStatus")} type="radio" value="1" id="yes" /> &nbsp; Yes
-                      </label>{" "}
+                      </label>
                       <label htmlFor="allotmentStatus">
                         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                         <input {...register("allotmentStatus")} type="radio" value="2" id="no" /> &nbsp; No
@@ -1295,10 +1495,10 @@ function renewalClu() {
                     <h2>
                       Whether composition fee paid.
                       <label htmlFor=" compositionPaid">
-                        {" "}
+                        
                         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                         <input {...register("compositionPaid")} type="radio" value="1" id="yes" /> &nbsp; Yes
-                      </label>{" "}
+                      </label>
                       <label htmlFor="compositionPaid">
                         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                         <input {...register("compositionPaid")} type="radio" value="2" id="no" /> &nbsp; No
@@ -1316,11 +1516,10 @@ function renewalClu() {
               <div>
                 <h2> Status of allotment of EWS Plots/Flats </h2>
                 <label htmlFor="partiallyAllotted">
-                  {" "}
                   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                   <input {...register("plotAllotmentStatus")} type="radio" value="partiallyAllotted" id="partiallyAllotted" /> &nbsp; Partially
                   Allotted
-                </label>{" "}
+                </label>
                 <label htmlFor="alloted/transferred">
                   &nbsp;&nbsp;
                   <input {...register("plotAllotmentStatus")} type="radio" value="alloted/transferred" id="alloted/transferred" /> &nbsp;
@@ -1424,7 +1623,7 @@ function renewalClu() {
                           </th>
                           <td>
                             <label>
-                              <h2>Old License for verification.</h2>
+                              <h2>Old Licence for verification.</h2>
                             </label>
                           </td>
                           <td style={{ textAlign: "center" }}>
@@ -1440,7 +1639,6 @@ function renewalClu() {
                 <div className="col md={4} xxl lg-4">
                   <FormControl>
                     <h2>
-                      {" "}
                       Amount <span style={{ color: "red" }}>*</span>
                     </h2>
 
