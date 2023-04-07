@@ -14,6 +14,7 @@ import { VALIDATION_SCHEMA } from "../../../../utils/schema/step5";
 import ScrollToTop from "@egovernments/digit-ui-react-components/src/atoms/ScrollToTop";
 import FileUpload from "@mui/icons-material/FileUpload";
 import { Toast } from "@egovernments/digit-ui-react-components";
+import AddBoxSharp from "@mui/icons-material/AddBoxSharp";
 
 const FeesChargesForm = (props) => {
   const location = useLocation();
@@ -57,6 +58,7 @@ const FeesChargesForm = (props) => {
       updatedBy: userInfo?.id,
       LicenseDetails: {
         FeesAndCharges: {
+          feesTypeCalculationDto: getCalculatedData?.feesTypeCalculationDto,
           ...data,
         },
       },
@@ -73,6 +75,8 @@ const FeesChargesForm = (props) => {
         userInfo: userInfo,
       },
     };
+    console.log("postDistrict", postDistrict);
+    return;
     try {
       const Resp = await axios.post("/tl-services/new/_create", postDistrict);
       setLoader(false);
@@ -123,6 +127,7 @@ const FeesChargesForm = (props) => {
       return error;
     }
   };
+
   useEffect(() => {
     CalculateApiCall();
   }, [applicantId, stepData]);
@@ -155,16 +160,6 @@ const FeesChargesForm = (props) => {
     }
   };
 
-  // const getSubmitDataLabel = async () => {
-  //   try {
-  //     const Resp = await axios.get(`http://103.166.62.118:80/land-services/new/licenses/_get?id=${props.getId}`).then((response) => {
-  //       return response;
-  //     });
-  //   } catch (error) {
-  //     return error;
-  //   }
-  // };
-
   const getWholeData = async () => {
     try {
       const Resp = await axios.get(`http://103.166.62.118:80/tl-services/new/licenses/object/_get?id=${props.getId}`);
@@ -176,10 +171,6 @@ const FeesChargesForm = (props) => {
   useEffect(() => {
     getWholeData();
   }, []);
-
-  // useEffect(() => {
-  //   getSubmitDataLabel();
-  // }, []);
 
   const [fileStoreId, setFileStoreId] = useState({});
   const [selectedFiles, setSelectedFiles] = useState([]);

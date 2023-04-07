@@ -95,8 +95,13 @@ module.exports = function (app) {
     "/user/developer",
     "/land-services/egscrutiny",
     "/land-services/new/licenses",
+    "/pb-egov-assets",
+    "/user/developer",
+    "/land-services/egscrutiny",
+    "/land-services/new/licenses",
   ].forEach((location) => app.use(location, createProxy));
   ["/mca/v1/companies", "/mca-directors/v1/companies", "/certificate/v3/pan/pancr"].forEach((location) => app.use(location, apiSetuProxy));
   // ["/egov-mdms-service/v1"].forEach((location) => app.use(location, LicProxy));
+  ["/api/cis/GetCluDetails", "/api/cis/GetLicenceDetails"].forEach((location) => app.use(location, GetCluDetails));
   ["/api/cis/GetCluDetails", "/api/cis/GetLicenceDetails"].forEach((location) => app.use(location, GetCluDetails));
 };
