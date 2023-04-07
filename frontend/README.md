@@ -48,7 +48,7 @@ Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 
 
 # Dashboard App
-    Contains Dashboard for all modules: 
+    Contains Dashboard for all modules
 
 # MONO UI App
     Contains Citizen & Employee App for the modules like
