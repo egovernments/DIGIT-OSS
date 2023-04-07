@@ -85,7 +85,7 @@ import RadioGroup from '@mui/material/RadioGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import FormControl from '@mui/material/FormControl';
 import FormLabel from '@mui/material/FormLabel';
-import AddPost from "../Material/TextEditor";
+// import AddPost from "../Material/TextEditor";
 
 function RadioButtonsGroup() {
     const [selects, setSelects] = useState();
@@ -188,7 +188,7 @@ function RadioButtonsGroup() {
 
                                         </TableCell>
                                         <TableCell align="left">
-                                       < AddPost></AddPost>
+                                       {/* < AddPost></AddPost> */}
                                         </TableCell>
 
                                     </TableRow>
