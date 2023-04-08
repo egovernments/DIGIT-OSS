@@ -341,64 +341,6 @@ const LandScheduleForm = (props) => {
       const Resp = await axios.post("/filestore/v1/files", formData, {});
       setValue(fieldName, Resp?.data?.files?.[0]?.fileStoreId);
       setFileStoreId({ ...fileStoreId, [fieldName]: Resp?.data?.files?.[0]?.fileStoreId });
-      // setDocId(Resp?.data?.files?.[0]?.fileStoreId);
-      // if (fieldName === "thirdPartyDoc") {
-      //   setValue("thirdPartyDocFileName", file.name);
-      // }
-      // if (fieldName === "reraDocUpload") {
-      //   setValue("reraDocUploadFileName", file.name);
-      // }
-      // if (fieldName === "reraNonRegistrationDoc") {
-      //   setValue("reraNonRegistrationDocFileName", file.name);
-      // }
-      // if (fieldName === "approvedLayoutPlan") {
-      //   setValue("approvedLayoutPlanFileName", file.name);
-      // }
-      // if (fieldName === "approvedLayoutPlan") {
-      //   setValue("approvedLayoutPlanFileName", file.name);
-      // }
-      // if (fieldName === "proposedLayoutPlan") {
-      //   setValue("proposedLayoutPlanFileName", file.name);
-      // }
-      // if (fieldName === "uploadPreviouslyLayoutPlan") {
-      //   setValue("uploadPreviouslyLayoutPlanFileName", file.name);
-      // }
-      // if (fieldName === "litigationDoc") {
-      //   setValue("litigationDocFileName", file.name);
-      // }
-      // if (fieldName === "courtDoc") {
-      //   setValue("courtDocFileName", file.name);
-      // }
-      // if (fieldName === "insolvencyDoc") {
-      //   setValue("insolvencyDocFileName", file.name);
-      // }
-      // if (fieldName === "docUpload") {
-      //   setValue("docUploadFileName", file.name);
-      // }
-      // if (fieldName === "landSchedule") {
-      //   setValue("landScheduleFileName", file.name);
-      // }
-      // if (fieldName === "mutation") {
-      //   setValue("mutationFileName", file.name);
-      // }
-      // if (fieldName === "jambandhi") {
-      //   setValue("jambandhiFileName", file.name);
-      // }
-      // if (fieldName === "detailsOfLease") {
-      //   setValue("detailsOfLeaseFileName", file.name);
-      // }
-      // if (fieldName === "addSalesDeed") {
-      //   setValue("addSalesDeedFileName", file.name);
-      // }
-      // if (fieldName === "copyofSpaBoard") {
-      //   setValue("copyofSpaBoardFileName", file.name);
-      // }
-      // if (fieldName === "revisedLanSchedule") {
-      //   setValue("revisedLanScheduleFileName", file.name);
-      // }
-      // if (fieldName === "copyOfShajraPlan") {
-      //   setValue("copyOfShajraPlanFileName", file.name);
-      // }
       setSelectedFiles([...selectedFiles, file.name]);
       setLoader(false);
       setShowToastError({ label: "File Uploaded Successfully", error: false, success: true });
