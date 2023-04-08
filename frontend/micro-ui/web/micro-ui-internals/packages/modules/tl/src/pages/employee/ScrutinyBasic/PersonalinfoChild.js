@@ -12,6 +12,7 @@ import Visibility from "@mui/icons-material/Visibility";
 import FileDownload from "@mui/icons-material/FileDownload";
 import { IconButton } from "@mui/material";
 import { getDocShareholding } from "./ScrutinyDevelopment/docview.helper";
+import { useLocation } from "react-router-dom";
 
 
 // import {AiFillCheckCircle, AiFillCloseCircle} from "react-icons/ai";
@@ -24,10 +25,14 @@ import { getDocShareholding } from "./ScrutinyDevelopment/docview.helper";
 // import { ArrowDownCircleFill } from "react-bootstrap-icons";
 import CancelIcon from "@mui/icons-material/Cancel";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
+import { useTranslation } from "react-i18next";
 
 
 const PersonalinfoChild = (props) => {
+  useTranslation
 
+  const {t} = useTranslation();
+  const { pathname: url } = useLocation();
 
   const classes = useStyles();
   const applicationStatus = props.applicationStatus ;
@@ -252,7 +257,7 @@ const PersonalinfoChild = (props) => {
   
 
   return (
-    <Form.Group style={{ display: props.displayPersonal }} className={classes.formGroup}>
+    <Form.Group style={{ display: props.displayPersonal }} t={t} className={classes.formGroup}>
        <ModalChild
            
            labelmodal={labelValue}
@@ -264,25 +269,41 @@ const PersonalinfoChild = (props) => {
            remarksUpdate={currentRemarks}
            applicationStatus = {applicationStatus} 
          ></ModalChild>
-      <h5 className="card-title fw-bold" style={{ margin: 10 }}> &nbsp; Developer Information</h5>
+         <label  className="card-title fw-bold" style={{ margin: 10 }} htmlFor="Developer Details">
+                            {`${t("NWL_APPLICANT_DEVELOPER_INFORMATION")}`}
+                            {/* <span class="text-danger font-weight-bold mx-2">*</span> */}
+                          </label>
+      {/* <h5 className="card-title fw-bold" style={{ margin: 10 }}> &nbsp; Developer Information</h5> */}
       {/* "Limited Liability Partnership"  && "Hindu Undivided Family" && "Partnership Firm" &&  "Proprietorship Firm" && */}
       {/* {personalinfo?.devDetail?.addInfo?.showDevTypeFields === "Individual" && */}
         
         <div>
           {/* <Card style={{ margin: 5 , padding: 4 }}> */}
+          {/* <label htmlFor="PanNumber">
+                            {`${t("NWL_APPLICANT_PAN_NO")}`}
+                            <span class="text-danger font-weight-bold mx-2">*</span>
+                          </label> */}
             
             
             <Row className={[classes.row, "ms-auto"]}>
-            <h5>Developer Details</h5>
+            
+                          {/* <label htmlFor="Developer Details">
+                            {`${t("NWL_APPLICANT_DEVELOPER_INFORMATION")}`}
+                           
+                          </label> */}
             {personalinfo?.devDetail?.addInfo?.showDevTypeFields != "Individual" &&
             personalinfo?.devDetail?.addInfo?.showDevTypeFields != "Proprietorship Firm" &&
               <Col md={4} xxl lg="4">
                 <div>
-                  <Form.Label>
+                <label htmlFor="Developer Details">
+                            {`${t("NWL_APPLICANT_DEVELOPER_NAME")}`}
+                            <span class="text-danger font-weight-bold mx-2">*</span>
+                          </label>
+                  {/* <Form.Label>
 
                     <h5 className={classes.formLabel}>Name &nbsp;</h5>
                   </Form.Label>
-                  <span style={{ color: "red" }}>*</span>
+                  <span style={{ color: "red" }}>*</span> */}
                 </div>
 
                 <div style={{ display: "flex" }}>
@@ -311,11 +332,15 @@ const PersonalinfoChild = (props) => {
             }
             <Col md={4} xxl lg="4">
                 <div>
-                  <Form.Label>
+                <label htmlFor="Address">
+                            {`${t("NWL_APPLICANT_DEVELOPER_ADDRESS")}`}
+                            <span class="text-danger font-weight-bold mx-2">*</span>
+                          </label>
+                  {/* <Form.Label>
 
                     <h5 className={classes.formLabel}>Address &nbsp;</h5>
                   </Form.Label>
-                  <span style={{ color: "red" }}>*</span>
+                  <span style={{ color: "red" }}>*</span> */}
                 </div>
 
                 <div style={{ display: "flex" }}>
@@ -346,11 +371,15 @@ const PersonalinfoChild = (props) => {
               </Col>
               <Col md={4} xxl lg="4">
                 <div>
-                  <Form.Label>
+                <label htmlFor="EmailId">
+                            {`${t("NWL_APPLICANT_DEVELOPER_EMAILID")}`}
+                            <span class="text-danger font-weight-bold mx-2">*</span>
+                          </label>
+                  {/* <Form.Label>
 
                     <h5 className={classes.formLabel}>EmailId &nbsp;</h5>
-                  </Form.Label>
-                  <span style={{ color: "red" }}>*</span>
+                  </Form.Label> */}
+                  {/* <span style={{ color: "red" }}>*</span> */}
                 </div>
 
                 <div style={{ display: "flex" }}>
@@ -375,10 +404,14 @@ const PersonalinfoChild = (props) => {
               </Col>
               <Col md={4} xxl lg="4">
   <div>
-    <Form.Label>
+  <label htmlFor="DeveloperType">
+                            {`${t("NWL_APPLICANT_DEVELOPER_TYPE")}`}
+                            <span class="text-danger font-weight-bold mx-2">*</span>
+                          </label>
+    {/* <Form.Label>
       <h5 className={classes.formLabel}>Developer Type &nbsp;</h5>
     </Form.Label>
-    <span className={classes.required}>*</span> &nbsp;&nbsp;
+    <span className={classes.required}>*</span> &nbsp;&nbsp; */}
   </div>
   <div className={classes.fieldContainer}>
     <Form.Control
@@ -412,10 +445,14 @@ personalinfo?.devDetail?.addInfo?.showDevTypeFields != "Partnership Firm" &&
             personalinfo?.devDetail?.addInfo?.showDevTypeFields != "Limited Liability Partnership" &&
 <Col md={4} xxl lg="4">
     <div>
-      <Form.Label>
+    <label htmlFor="CIN Number">
+                            {`${t("NWL_APPLICANT_CIN_NUMBER")}`}
+                            <span class="text-danger font-weight-bold mx-2">*</span>
+                          </label>
+      {/* <Form.Label>
         <h5 className={classes.formLabel}>CIN Number &nbsp;</h5>
       </Form.Label>
-      <span className={classes.required}>*</span> &nbsp;&nbsp;
+      <span className={classes.required}>*</span> &nbsp;&nbsp; */}
     </div>
     <div className={classes.fieldContainer}>
       <Form.Control
@@ -448,10 +485,16 @@ personalinfo?.devDetail?.addInfo?.showDevTypeFields != "Partnership Firm" &&
             personalinfo?.devDetail?.addInfo?.showDevTypeFields !=  "Limited Liability Partnership" &&
 <Col md={4} xxl lg="4">
                 <div>
+                <label htmlFor="PanNumber">
+                            {`${t("NWL_APPLICANT_PAN_NUMBER")}`}
+                            <span class="text-danger font-weight-bold mx-2">*</span>
+                          </label> 
+
+{/*                   
                   <Form.Label>
 
                     <h5 className={classes.formLabel}>PAN Number &nbsp;</h5>
-                  </Form.Label>
+                  </Form.Label> */}
                   <span style={{ color: "red" }}>*</span>
                 </div>
 
@@ -482,11 +525,17 @@ personalinfo?.devDetail?.addInfo?.showDevTypeFields != "Partnership Firm" &&
               { personalinfo?.devDetail?.addInfo?.showDevTypeFields != "Company" &&
               <Col md={4} xxl lg="4">
               <div>
-                <Form.Label>
+
+              <label htmlFor="PanNumber">
+                            {`${t("NWL_APPLICANT_GST_NUMBER")}`}
+                            <span class="text-danger font-weight-bold mx-2">*</span>
+                          </label> 
+
+                {/* <Form.Label>
 
                   <h5 className={classes.formLabel}>GST Number &nbsp;</h5>
                 </Form.Label>
-                <span style={{ color: "red" }}>*</span>
+                <span style={{ color: "red" }}>*</span> */}
               </div>
 
               <div style={{ display: "flex" }}>
@@ -520,10 +569,15 @@ personalinfo?.devDetail?.addInfo?.showDevTypeFields != "Partnership Firm" &&
             personalinfo?.devDetail?.addInfo?.showDevTypeFields != "Proprietorship Firm" &&
 <Col md={4} xxl lg="4">
                 <div>
-                  <Form.Label>
+                <label htmlFor="LLP NUMBER">
+                            {`${t("NWL_APPLICANT_LLP_NUMBER")}`}
+                            <span class="text-danger font-weight-bold mx-2">*</span>
+                          </label> 
+
+                  {/* <Form.Label>
 
                     <h5 className={classes.formLabel}>LLP &nbsp;</h5>
-                  </Form.Label>
+                  </Form.Label> */}
                   <span style={{ color: "red" }}>*</span>
                 </div>
 
@@ -630,7 +684,11 @@ personalinfo?.devDetail?.addInfo?.showDevTypeFields != "Partnership Firm" &&
         <div>
        
         <div style={{ display: "flex" }}>
-            <h5 className="card-title fw-bold" > &nbsp;&nbsp; 1. Director Information as per MCA &nbsp;&nbsp;</h5>
+            {/* <h5 className="card-title fw-bold" > &nbsp;&nbsp; 1. Director Information as per MCA &nbsp;&nbsp;</h5> */}
+            <label htmlFor="LLP NUMBER" className="card-title fw-bold">
+                            {`${t("NWL_APPLICANT_1_DIRECTOR_INFOMATION_AS_PER_MCA")}`}
+                            <span class="text-danger font-weight-bold mx-2">*</span>
+                          </label>
 
             {/* <div className="btn btn-sm col-md-4"> */}
             <ReportProblemIcon
@@ -654,10 +712,21 @@ personalinfo?.devDetail?.addInfo?.showDevTypeFields != "Partnership Firm" &&
               <table className="table table-bordered">
                 <thead>
                   <tr>
-                    <th>Sr. No</th>
-                    <th>DIN Number</th>
-                    <th>Name</th>
-                    <th>Contact Number</th>
+                    <th>
+                      {/* Sr. No     */}
+                            {`${t("NWL_APPLICANT_SR_NO")}`}
+                            </th>
+                    <th>
+                       {/* DIN Number  */}
+                       {`${t("NWL_APPLICANT_DIN_NUMBER")}`}</th>
+                    <th>
+                      {/* Name */}
+                      {`${t("NWL_APPLICANT_NAME")}`}
+                      </th>
+                    <th>
+                      {/* Contact Number */}
+                    {`${t("NWL_APPLICANT_CONTACT_NUMBER")}`}
+                    </th>
                     {/* <th>View PDF</th> */}
                   </tr>
                 </thead>
@@ -702,7 +771,13 @@ personalinfo?.devDetail?.addInfo?.showDevTypeFields != "Partnership Firm" &&
           </div>
                   <br></br>
           <div div style={{ display: "flex" }}>
-            <h5 className="card-title fw-bold" > &nbsp; &nbsp;&nbsp; Directors Information &nbsp;&nbsp;</h5>
+            <h5 className="card-title fw-bold" > &nbsp; &nbsp;&nbsp; {`${t("NWL_APPLICANT_1_DIRECTOR_INFOMATION_AS_PER_DEVELOPER")}`} 
+            {/* Directors Information &nbsp;&nbsp; */}
+            </h5>
+            {/* <label htmlFor="LLP NUMBER" className="card-title fw-bold">
+                            {`${t("NWL_APPLICANT_1_DIRECTOR_INFOMATION_AS_PER_MCA")}`}
+                            <span class="text-danger font-weight-bold mx-2">*</span>
+                          </label> */}
 
             {/* <div className="btn btn-sm col-md-4"> */}
             <ReportProblemIcon
@@ -727,11 +802,13 @@ personalinfo?.devDetail?.addInfo?.showDevTypeFields != "Partnership Firm" &&
               <table className="table table-bordered">
                 <thead>
                   <tr>
-                    <th>Sr. No</th>
-                    <th>DIN Number</th>
-                    <th>Name</th>
-                    <th>Contact Number</th>
-                    <th>View PDF</th>
+                    <th> {`${t("NWL_APPLICANT_SR_NO")}`}</th>
+                    <th> {`${t("NWL_APPLICANT_DIN_NUMBER")}`}</th>
+                    <th>{`${t("NWL_APPLICANT_NAME")}`}</th>
+                    <th> {`${t("NWL_APPLICANT_CONTACT_NUMBER")}`}</th>
+                    <th> 
+                      {/* View PDF  */}
+                       {`${t("NWL_APPLICANT_VIEW_PDF")}`}</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -778,7 +855,11 @@ personalinfo?.devDetail?.addInfo?.showDevTypeFields != "Partnership Firm" &&
 
 
           <div div style={{ display: "flex" }}>
-            <h5 className="card-title fw-bold"> &nbsp;&nbsp;&nbsp; Shareholding Patterns &nbsp;&nbsp; </h5>
+            <h5 className="card-title fw-bold"> 
+            {`${t("NWL_APPLICANT_SHAREHOLDING_PATTERNS")}`}
+            {/* &nbsp;&nbsp;&nbsp; Shareholding Patterns &nbsp;&nbsp; */}
+             </h5>
+            
 
             {/* <div className="btn btn-sm col-md-4"> */}
             <ReportProblemIcon
@@ -802,12 +883,21 @@ personalinfo?.devDetail?.addInfo?.showDevTypeFields != "Partnership Firm" &&
               <table className="table table-bordered">
                 <thead>
                   <tr>
-                    <th>Sr. No</th>
+                  <th> {`${t("NWL_APPLICANT_SR_NO")}`}</th>
+                  
+                    <th>{`${t("NWL_APPLICANT_NAME")}`}</th>
+                    <th> {`${t("NWL_APPLICANT_DESIGNITION")}`}</th>
+                    <th> {`${t("NWL_APPLICANT_PRECENTAGE")}`}</th>
+                    <th> 
+                    
+                       {`${t("NWL_APPLICANT_VIEW_PDF")}`}</th>
+                  </tr>
+                    {/* <th>Sr. No</th>
                     <th>Name</th>
                     <th>Designition</th>
                     <th>Percentage</th>
                     <th>View PDF</th>
-                  </tr>
+                  </tr> */}
                 </thead>
                 <tbody>
                   {personalinfo?.devDetail?.addInfo?.shareHoldingPatterens?.map((item, index) => (
@@ -850,9 +940,12 @@ personalinfo?.devDetail?.addInfo?.showDevTypeFields != "Partnership Firm" &&
           </div>
         </div>
       }
-    
+     
 
-      <h5 className="card-title fw-bold" > &nbsp; &nbsp;&nbsp; Authorized Person Information  &nbsp;&nbsp; 
+      <h5 className="card-title fw-bold" > 
+      {/* &nbsp; &nbsp;&nbsp; Authorized Person Information  &nbsp;&nbsp; */}
+      {`${t("NWL_APPLICANT_AUTHORIZED_PERSON_INFORMATION")}`} 
+      </h5>
       <ReportProblemIcon
               style={{
                display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("Authorized Person Information") ? "block" : "none",
@@ -866,14 +959,19 @@ personalinfo?.devDetail?.addInfo?.showDevTypeFields != "Partnership Firm" &&
                   console.log("modal open"),
                   setFieldValue(personalinfo !== null ? personalinfo?.devDetail?.aurthorizedUserInfoArray?.[0]?.name : null);
               }}
-            ></ReportProblemIcon></h5>
+            ></ReportProblemIcon>
+            {/* </h5> */}
       <Row className={[classes.row, "ms-auto"]}>
         <Col className="ms-auto" md={4} xxl lg="4">
-          <Form.Label>
-            {/* <b>Authorized Person Name</b> */}
+          {/* <Form.Label>
+            
             <h5 className={classes.formLabel} >Name &nbsp;</h5>
           </Form.Label>
-          <span className={classes.required}>*</span> &nbsp;&nbsp;
+          <span className={classes.required}>*</span> &nbsp;&nbsp; */}
+          <label htmlFor="NAME" className="card-title fw-bold">
+                            {`${t("NWL_APPLICANT_AUTHORIZED_NAME")}`}
+                            <span class="text-danger font-weight-bold mx-2">*</span>
+                          </label>
           <div className={classes.fieldContainer}>
             <Form.Control
               className={classes.formControl}
@@ -901,12 +999,17 @@ personalinfo?.devDetail?.addInfo?.showDevTypeFields != "Partnership Firm" &&
         </Col>
         <Col className="ms-auto" md={4} xxl lg="4">
           <div>
-            <Form.Label>
-              {/* <b>Authorized Mobile No</b> */}
+            {/* <Form.Label>
+              
               <h5 className={classes.formLabel} >Mobile No.&nbsp;</h5>
             </Form.Label>
-            <span className={classes.required}>*</span> &nbsp;&nbsp;
+            <span className={classes.required}>*</span> &nbsp;&nbsp; */}
             {/* <ReportProblemIcon style={{ color: warningOrred }} onClick={() => setSmShow(true)}></ReportProblemIcon> */}
+
+            <label htmlFor="NAME" className="card-title fw-bold">
+                            {`${t("NWL_APPLICANT_AUTHORIZED_MOBILE_NO")}`}
+                            <span class="text-danger font-weight-bold mx-2">*</span>
+                          </label>
           </div>
           <div className={classes.fieldContainer}>
             <Form.Control
@@ -955,10 +1058,14 @@ personalinfo?.devDetail?.addInfo?.showDevTypeFields != "Partnership Firm" &&
         </Col>
         <Col md={4} xxl lg="4">
           <div>
-            <Form.Label>
-              {/* <b>Email ID for communication</b> */}
+            {/* <Form.Label>
+            
               <h5 className={classes.formLabel} >Emailid for Authorized signatory &nbsp;</h5>
-            </Form.Label>
+            </Form.Label> */}
+            <label htmlFor="EMAIL" className="card-title fw-bold">
+                            {`${t("NWL_APPLICANT_EMAILID_FOR_AUTHORIZED_SINGNATORY")}`}
+                            <span class="text-danger font-weight-bold mx-2">*</span>
+                          </label>
           </div>
 
           <div className={classes.fieldContainer}>
@@ -988,11 +1095,16 @@ personalinfo?.devDetail?.addInfo?.showDevTypeFields != "Partnership Firm" &&
       <Row className={[classes.row, "ms-auto"]}>
         <Col md={4} xxl lg="4">
           <div>
-            <Form.Label>
+            {/* <Form.Label>
 
               <h5 className={classes.formLabel} >Pan No. &nbsp;</h5>
             </Form.Label>
-            <span className={classes.required}>*</span>
+            <span className={classes.required}>*</span> */}
+
+            <label htmlFor="PAN" className="card-title fw-bold">
+                            {`${t("NWL_APPLICANT_AUTHORIZED_PAN_NUMBER")}`}
+                            <span class="text-danger font-weight-bold mx-2">*</span>
+                          </label>
           </div>
 
           <div className={classes.fieldContainer}>
@@ -1020,11 +1132,16 @@ personalinfo?.devDetail?.addInfo?.showDevTypeFields != "Partnership Firm" &&
         </Col>
         <Col md={4} xxl lg="4">
           <div>
-            <Form.Label>
+            {/* <Form.Label>
 
               <h5 className={classes.formLabel} >Digital Signature &nbsp;</h5>
-            </Form.Label>
-            <span className={classes.required}>*</span>
+            </Form.Label> */}
+            
+            <label htmlFor="PAN" className="card-title fw-bold">
+                            {`${t("NWL_APPLICANT_DIGITAL_SIGNATURE")}`}
+                            <span class="text-danger font-weight-bold mx-2">*</span>
+                          </label>
+            
           </div>
 
           <div className={classes.fieldContainer}>
@@ -1068,11 +1185,16 @@ personalinfo?.devDetail?.addInfo?.showDevTypeFields != "Partnership Firm" &&
         </Col>
         <Col md={4} xxl lg="4">
           <div>
-            <Form.Label>
+            {/* <Form.Label>
 
               <h5 className={classes.formLabel} >Board Resolution &nbsp;</h5>
             </Form.Label>
-            <span className={classes.required}>*</span>
+            <span className={classes.required}>*</span> */}
+            
+            <label htmlFor="PAN" className="card-title fw-bold">
+                            {`${t("NWL_APPLICANT_BOARD_RESOLUTION")}`}
+                            <span class="text-danger font-weight-bold mx-2">*</span>
+                          </label>
           </div>
 
           <div className={classes.fieldContainer}>
@@ -1145,6 +1267,48 @@ personalinfo?.devDetail?.addInfo?.showDevTypeFields != "Partnership Firm" &&
           </div>
         </Col> */}
       </Row>
+      {/* <Row>
+      <Col md={4} xxl lg="4">
+          <div>
+          
+            
+            <label htmlFor="PAN" className="card-title fw-bold">
+                            {`${t("NWL_APPLICANT_BOARD_RESOLUTION")}`}
+                            <span class="text-danger font-weight-bold mx-2">*</span>
+                          </label>
+          </div>
+
+          <div className={classes.fieldContainer}>
+           <div className="btn btn-sm col-md-2">
+              <IconButton onClick={() => getDocShareholding(personalinfo?.devDetail?.aurthorizedUserInfoArray?.[0]?.uploadBoardResolution)}>
+                <Visibility color="info" className="icon" /></IconButton>
+
+            </div>
+            <div className="btn btn-sm col-md-5">
+              <IconButton onClick={() => getDocShareholding(personalinfo?.devDetail?.aurthorizedUserInfoArray?.[0]?.uploadBoardResolution)}>
+                <FileDownload color="primary" className="mx-1" />
+              </IconButton>
+            </div>
+            <div className="btn btn-sm col-md-5">
+              <ReportProblemIcon
+                style={{
+                 display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("Board resolution of authorised signatory (Upload copy)") ? "block" : "none",
+
+                  color: fieldIconColors.pin
+                }}
+                onClick={() => {
+                  setOpennedModal("uploadBoardResolution")
+                  setLabelValue("Board Resolution"),
+                    setSmShow(true),
+                    console.log("modal open"),
+                    setFieldValue(personalinfo !== null ? personalinfo?.devDetail?.aurthorizedUserInfoArray?.[0]?.uploadBoardResolution : null);
+                }}
+              ></ReportProblemIcon>
+            </div>
+
+          </div>
+        </Col>
+      </Row> */}
       {/* <Row className={[classes.row,"ms-auto"]}>
         <Col md={4} xxl lg="4">
           <div>

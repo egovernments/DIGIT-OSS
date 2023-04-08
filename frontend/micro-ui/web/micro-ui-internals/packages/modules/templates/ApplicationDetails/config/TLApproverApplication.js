@@ -1,5 +1,7 @@
 import { Dropdown, MultiSelectDropdown, UploadFile } from "@egovernments/digit-ui-react-components";
 import React from "react";
+import AddPost from "./TextEditor";
+
 
 export const configTLApproverApplication = ({
   t,
@@ -12,6 +14,8 @@ export const configTLApproverApplication = ({
   setUploadedFile,
   assigneeLabel,
   businessService,
+  setComment,
+  comment,
 }) => {
   let checkCondtions = true;
   if (action?.action == "SENDBACKTOCITIZEN" || action?.action == "APPROVE") checkCondtions = false;
@@ -59,10 +63,16 @@ export const configTLApproverApplication = ({
           },
           {
             label: t("WF_COMMON_COMMENTS"),
-            type: "textarea",
-            populators: {
-              name: "comments",
-            },
+            // type: "textarea",
+            populators: (  
+              <AddPost
+              modal={true}
+              setState={setComment}
+              ></AddPost>
+            )
+            // populators: {
+            //   name: "comments",
+            // },
           },
           {
             label: t("TL_APPROVAL_CHECKLIST_BUTTON_UP_FILE"),
