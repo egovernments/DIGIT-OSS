@@ -41,7 +41,7 @@ const AddDriver = ({ parentUrl, heading }) => {
   };
 
   const onFormValueChange = (setValue, formData) => {
-    if (formData?.driverName && formData?.phone && formData?.selectGender) {
+    if (formData?.driverName && formData?.selectGender) {
       setSubmitValve(true);
     } else {
       setSubmitValve(false);
