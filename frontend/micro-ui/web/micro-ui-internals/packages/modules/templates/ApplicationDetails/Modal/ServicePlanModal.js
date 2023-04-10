@@ -53,6 +53,7 @@ const ServicePlanModal = ({ t, action, tenantId, state, id, closeModal, submitAc
   const [uploadedFile, setUploadedFile] = useState(null);
   const [error, setError] = useState(null);
   const [financialYears, setFinancialYears] = useState([]);
+  const [comment, setComment] = useState(null) ;
   const [selectedFinancialYear, setSelectedFinancialYear] = useState(null);
 
   useEffect(() => {
@@ -92,11 +93,11 @@ const ServicePlanModal = ({ t, action, tenantId, state, id, closeModal, submitAc
   }, [file]);
 
   function submit(data) {
-    let workflow = { action: action?.action, comments: data?.comments, businessService, moduleName: moduleCode };
+    let workflow = { action: action?.action, comments: comment,businessService, moduleName: moduleCode };
     applicationData = {
       ...applicationData,
       action: action?.action,
-      comment: data?.comments,
+      comments: comment,
       // assignee: !selectedApprover?.uuid ? null : [selectedApprover?.uuid],
       assignee: selectedApprover?.length ? selectedApprover.map((ele)=>ele[1]?.uuid):[],
       // assignee: action?.isTerminateState ? [] : [selectedApprover?.uuid],
@@ -130,6 +131,8 @@ const ServicePlanModal = ({ t, action, tenantId, state, id, closeModal, submitAc
           uploadedFile,
           setUploadedFile,
           businessService,
+          setComment,
+          comment,
         })
       );
     }
