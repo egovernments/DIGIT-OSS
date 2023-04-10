@@ -233,6 +233,10 @@ const Home = () => {
             link: `/digit-ui/citizen/obps/LayoutPlanClu`,
             i18nKey: t("Revised Layout Plan"),
           },
+          {
+            link: `/digit-ui/citizen/obps/layoutPlan/my-application`,
+            i18nKey: t("TL_MY_APPLICATIONS_HEADER"),
+          },
         ],
       },
       {

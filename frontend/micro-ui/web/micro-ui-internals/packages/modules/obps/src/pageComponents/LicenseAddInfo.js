@@ -1030,7 +1030,7 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
                       <div className="form-group row">
                         <div className="col-sm-4">
                           <label htmlFor="name">
-                            {`${t("Select Developer's Type")}`} <span className="text-danger font-weight-bold">*</span>
+                            {`${t("BPA_LICENSE_TYPE_TEXT")}`} <span className="text-danger font-weight-bold">*</span>
                           </label>
                           {/* <Dropdown
                             labels="Select Type"
@@ -1099,7 +1099,7 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
                           />
                           {emailId && emailId.length > 0 && !emailId.match(Digit.Utils.getPattern("Email")) && (
                             <CardLabelError style={{ width: "100%", marginTop: "5px", fontSize: "16px", marginBottom: "12px", color: "red" }}>
-                              {"Invalid Email Address"}
+                              {t("CORE_COMMON_APPLICANT_EMAIL_INVALID")}
                             </CardLabelError>
                           )}
                         </div>

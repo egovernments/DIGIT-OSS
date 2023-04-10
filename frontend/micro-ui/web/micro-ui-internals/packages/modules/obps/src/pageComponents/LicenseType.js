@@ -208,7 +208,7 @@ const LicenseType = ({ t, config, onSelect, userType, formData }) => {
               <Row className="justify-content-between">
                 <Form.Group className="col-md-7">
                   <CardLabel>
-                    {t("Select applicant type")} <span className="font-weight-bold text-danger">*</span>
+                    {t("BPA_LICENSE_TYPE_TEXT")} <span className="font-weight-bold text-danger">*</span>
                   </CardLabel>
                   {/* <CardLabel>{t("BPA_LICENSE_TYPE_TEXT")} <span className="font-weight-bold text-danger">*</span></CardLabel> */}
                   <div className={"form-pt-dropdown-only"}>
