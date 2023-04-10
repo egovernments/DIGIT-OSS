@@ -22,13 +22,13 @@
     "node": ">=14"
   },
   "dependencies": {
-    "@egovernments/digit-ui-libraries": "1.6.1",
+    "@egovernments/digit-ui-libraries": "1.6.2",
     "@egovernments/digit-ui-module-bills": "1.6.0",
-    "@egovernments/digit-ui-module-common": "1.6.1",
+    "@egovernments/digit-ui-module-common": "1.6.2",
     "@egovernments/digit-ui-module-core": "1.6.0",
     "@egovernments/digit-ui-module-engagement": "1.6.0",
     "@egovernments/digit-ui-module-dss": "1.6.0",
-    "@egovernments/digit-ui-module-fsm": "1.6.1",
+    "@egovernments/digit-ui-module-fsm": "1.6.2",
     "@egovernments/digit-ui-module-hrms": "1.6.0",
     "@egovernments/digit-ui-module-mcollect": "1.6.0",
     "@egovernments/digit-ui-module-obps": "1.6.0",
