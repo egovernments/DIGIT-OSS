@@ -61,6 +61,10 @@ public class FSMValidator {
 	public void validateCreate(FSMRequest fsmRequest, Object mdmsData) {
 		mdmsValidator.validateMdmsData(mdmsData);
 		FSM fsm = fsmRequest.getFsm();
+		
+		if (!StringUtils.isEmpty(fsm.getPaymentPreference())) {
+			validatePaymentPreference(fsm.getPaymentPreference());
+		}
 		if (fsmRequest.getRequestInfo().getUserInfo().getType().equalsIgnoreCase(FSMConstants.CITIZEN)) {
 			validateCitizenDetails(fsm, fsmRequest);
 
@@ -85,6 +89,18 @@ public class FSMValidator {
 		}
 		mdmsValidator.validatePropertyType(fsmRequest.getFsm().getPropertyUsage());
 		validateNoOfTrips(fsmRequest, mdmsData);
+	}
+
+	private void validatePaymentPreference(String paymentPreference) {
+		Map<String, String> errorMap = new HashMap<>();
+
+		if (!paymentPreference.isEmpty()) {
+			errorMap.put(FSMErrorConstants.INVALID_PAYMENT_PREFERENCE, "Payment Preference is invalid");
+		}
+
+		if (!errorMap.isEmpty())
+			throw new CustomException(errorMap);
+
 	}
 
 	private void validateEmployeeData(FSM fsm, FSMRequest fsmRequest, Object mdmsData) {

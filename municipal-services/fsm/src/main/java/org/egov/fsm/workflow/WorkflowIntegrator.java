@@ -87,18 +87,19 @@ public class WorkflowIntegrator {
 		JSONObject obj = new JSONObject();
 		obj.put(BUSINESSIDKEY, fsm.getApplicationNo());
 		obj.put(TENANTIDKEY, wfTenantId);
-		
+
 		if (FSMConstants.FSM_PAYMENT_PREFERENCE_POST_PAY.equalsIgnoreCase(fsmRequest.getFsm().getPaymentPreference())) {
 			obj.put(BUSINESSSERVICEKEY, FSMConstants.FSM_POST_PAY_BUSINESSSERVICE);
-		} else if (fsm.getAdvanceAmount() == null && fsm.getPaymentPreference()==null) {
+		} else if (FSMConstants.FSM_PAYMENT_PREFERENCE_PRE_PAY
+				.equalsIgnoreCase(fsmRequest.getFsm().getPaymentPreference())) {
+			obj.put(BUSINESSSERVICEKEY, FSMConstants.FSM_BUSINESSSERVICE);
+		} else if (fsm.getAdvanceAmount() == null && fsm.getPaymentPreference() == null) {
 			obj.put(BUSINESSSERVICEKEY, FSMConstants.FSM_ZERO_PRICE_SERVICE);
 		} else if (fsm.getAdvanceAmount().intValue() == 0) {
 			obj.put(BUSINESSSERVICEKEY, FSMConstants.FSM_LATER_PAY_SERVICE);
 		} else if (fsm.getAdvanceAmount().intValue() > 0) {
 			obj.put(BUSINESSSERVICEKEY, FSMConstants.FSM_ADVANCE_PAY_BUSINESSSERVICE);
-		} else
-			obj.put(BUSINESSSERVICEKEY, FSMConstants.FSM_BUSINESSSERVICE);
-
+		}
 		obj.put(MODULENAMEKEY, MODULENAMEVALUE);
 		obj.put(ACTIONKEY, fsmRequest.getWorkflow().getAction());
 		obj.put(COMMENTKEY, fsmRequest.getWorkflow().getComments());
