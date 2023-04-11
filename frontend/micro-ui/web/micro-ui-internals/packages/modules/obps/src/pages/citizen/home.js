@@ -69,12 +69,12 @@ const BPACitizenHomeScreen = ({ parentRoute }) => {
     filters: { filterForm: {}, searchForm: {}, tableForm: { limit: 10, offset: 0 } },
   });
 
-  useEffect(()=>{
-    if (location.pathname === "/digit-ui/citizen/obps/home"){
-      Digit.SessionStorage.del("OBPS.INBOX")
-      Digit.SessionStorage.del("STAKEHOLDER.INBOX")
+  useEffect(() => {
+    if (location.pathname === "/digit-ui/citizen/obps/home") {
+      Digit.SessionStorage.del("OBPS.INBOX");
+      Digit.SessionStorage.del("STAKEHOLDER.INBOX");
     }
-  },[location.pathname])
+  }, [location.pathname]);
 
   useEffect(() => {
     if (!bpaLoading) {
@@ -160,7 +160,7 @@ const BPACitizenHomeScreen = ({ parentRoute }) => {
         },
       ],
       className: "CitizenHomeCard",
-      styles: {padding: "0px", minWidth: "90%", minHeight: "90%"}
+      styles: { padding: "0px", minWidth: "90%", minHeight: "90%" },
     },
     {
       title: t("ACTION_TEST_EDCR_SCRUTINY"),
@@ -175,13 +175,13 @@ const BPACitizenHomeScreen = ({ parentRoute }) => {
           i18nKey: t("BPA_OC_PLAN_SCRUTINY_FOR_NEW_CONSTRUCTION_LABEL"),
         },
       ],
-      styles: {minWidth: "90%", minHeight: "90%"}
+      styles: { minWidth: "90%", minHeight: "90%" },
     },
     {
       title: t("ACTION_TEST_BPA_STAKE_HOLDER_HOME"),
       Icon: <BPAIcon className="fill-path-primary-main" />,
       links: bpaLinks,
-      styles: {minWidth: "90%", minHeight: "90%"}
+      styles: { minWidth: "90%", minHeight: "90%" },
     },
   ];
 
@@ -190,13 +190,16 @@ const BPACitizenHomeScreen = ({ parentRoute }) => {
       {homeDetails.map((data) => {
         return (
           <div>
-            {data.name === "employeeCard" ? <EmployeeModuleCard {...data} /> :
-              <CitizenHomeCard header={data.title} links={data.links} Icon={() => data.Icon} styles={data?.styles} />}
+            {data.name === "employeeCard" ? (
+              <EmployeeModuleCard {...data} />
+            ) : (
+              <CitizenHomeCard header={data.title} links={data.links} Icon={() => data.Icon} styles={data?.styles} />
+            )}
           </div>
-        )
+        );
       })}
     </div>
-  )
+  );
   sessionStorage.setItem("isPermitApplication", true);
   sessionStorage.setItem("isEDCRDisable", JSON.stringify(false));
   return homeScreen;
