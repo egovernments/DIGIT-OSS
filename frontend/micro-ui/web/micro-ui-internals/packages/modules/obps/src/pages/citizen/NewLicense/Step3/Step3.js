@@ -160,7 +160,6 @@ const LandScheduleForm = (props) => {
       title: "Area applied under migration in acres",
       dataIndex: "areaAppliedmigration",
     },
-
     {
       key: "khasraNumber",
       title: "Applied Khasra number ",
