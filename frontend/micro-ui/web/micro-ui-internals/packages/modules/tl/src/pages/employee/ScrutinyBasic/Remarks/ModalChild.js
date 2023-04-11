@@ -6,6 +6,7 @@ import axios from "axios";
 import { useStyles } from "./styles/modalChild.style";
 import { useParams } from "react-router-dom";
 import { ScrutinyRemarksContext } from "../../../../../context/remarks-data-context";
+import AddPost from "../../Material/TextEditor";
 
 
 function ModalChild(props) {
@@ -26,6 +27,7 @@ function ModalChild(props) {
   const userRolesArray = userInfo?.roles.filter((user) => user.code !=="EMPLOYEE" );
   const filterDataRole = userRolesArray?.[0]?.code;
   const designation = userRolesArray?.[0]?.name;
+  
 
   console.log("usern23233" , userRolesArray );
   console.log("usern23" , filterDataRole );
@@ -175,18 +177,27 @@ function ModalChild(props) {
         <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
           <Col xs={12} md={12}>
             <Form.Label style={{ margin: 5 }}>Remarks</Form.Label>
-            <textarea
+            {/* <textarea
               class="form-control"
               id="exampleFormControlTextarea1"
               placeholder="Enter your Remarks"
               autoFocus
               onChange={(e) => {
                 setDeveloperRemarks({ data: e.target.value });
-                // setRemarksEntered(e.target.value);
+              
               }}
               rows="3"
               value={RemarksDeveloper.data}
-            />
+            /> */}
+             <AddPost
+              modal={true}
+              
+              setState={(e) => {
+                setDeveloperRemarks({ data: e });
+                // setRemarksEntered(e.target.value);
+              }}
+              state={RemarksDeveloper.data}
+              ></AddPost>
             {/* <Form.Control type="text" /> */}
           </Col>
         </Form.Group>
