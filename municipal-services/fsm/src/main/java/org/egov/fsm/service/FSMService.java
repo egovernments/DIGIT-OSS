@@ -403,14 +403,19 @@ public class FSMService {
 		});
 
 		fsmRequest.getWorkflow().setAssignes(uuidList);
-		if (fsmRequest.getFsm().getPaymentPreference() != null
-				&& !(FSMConstants.FSM_PAYMENT_PREFERENCE_POST_PAY
-						.equalsIgnoreCase(fsmRequest.getFsm().getPaymentPreference()))
-				&& fsmRequest.getFsm().getAdvanceAmount() == null) {
-			vehicleTripService.vehicleTripReadyForDisposal(fsmRequest);
+		
+		/** SM-2181 
+		 * 
+		 * if (fsmRequest.getFsm().getPaymentPreference() != null &&
+		 * !(FSMConstants.FSM_PAYMENT_PREFERENCE_POST_PAY
+		 * .equalsIgnoreCase(fsmRequest.getFsm().getPaymentPreference())) &&
+		 * fsmRequest.getFsm().getAdvanceAmount() == null) {
+		 * vehicleTripService.vehicleTripReadyForDisposal(fsmRequest);
+		 * 
+		 * } else
+		 */
 
-		} else 
-			vehicleTripService.updateVehicleTrip(fsmRequest);
+		vehicleTripService.updateVehicleTrip(fsmRequest);
 		
 		RequestInfo requestInfo = fsmRequest.getRequestInfo();
 		BillResponse billResponse = billingService.fetchBill(fsm, requestInfo);

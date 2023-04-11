@@ -163,15 +163,11 @@ public class VehicleTripService {
 			List<VehicleTrip> vehicleTripsList, StringBuilder createUri) {
 		log.debug("WORKFLOW ACTION==> " + fsmRequest.getWorkflow().getAction());
 
-		if (fsmRequest.getWorkflow().getAction().equalsIgnoreCase(FSMConstants.WF_ACTION_UPDATE)
-				|| fsmRequest.getWorkflow().getAction().equalsIgnoreCase(FSMConstants.WF_ACTION_SCHEDULE)) {
-			log.debug("Vehicle Trip Request call ::" + vehicleTripResponse);
-			VehicleTripRequest tripRequest = VehicleTripRequest.builder().vehicleTrip(vehicleTripsList)
-					.requestInfo(fsmRequest.getRequestInfo())
-					.workflow(Workflow.builder().action(FSMConstants.TRIP_READY_FOR_DISPOSAL).build()).build();
-			serviceRequestRepository.fetchResult(createUri, tripRequest);
-
-		}
+		log.debug("Vehicle Trip Request call ::" + vehicleTripResponse);
+		VehicleTripRequest tripRequest = VehicleTripRequest.builder().vehicleTrip(vehicleTripsList)
+				.requestInfo(fsmRequest.getRequestInfo())
+				.workflow(Workflow.builder().action(FSMConstants.TRIP_READY_FOR_DISPOSAL).build()).build();
+		serviceRequestRepository.fetchResult(createUri, tripRequest);
 
 	}
 
