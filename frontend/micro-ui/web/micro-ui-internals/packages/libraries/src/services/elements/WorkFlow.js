@@ -261,8 +261,9 @@ export const WorkflowService = {
           } catch (err) { }
         }
 
-      // HANDLING ACTION FOR NEW VEHICLE LOG FROM UI SIDE
-        const nextActions = location.pathname.includes("new-vehicle-entry") ? action_newVehicle : actionRolePair;
+        // HANDLING ACTION FOR NEW VEHICLE LOG FROM UI SIDE
+        // HIDING PAY ACTION FOR DSO FROM UI SIDE
+        const nextActions = location.pathname.includes("new-vehicle-entry") ? action_newVehicle : location.pathname.includes("dso") ? actionRolePair.filter((i)=> i.action !== "PAY") : actionRolePair;
 
         if (role !== "CITIZEN" && moduleCode === "PGR") {
           const onlyPendingForAssignmentStatusArray = timeline?.filter(e => e?.status === "PENDINGFORASSIGNMENT")
