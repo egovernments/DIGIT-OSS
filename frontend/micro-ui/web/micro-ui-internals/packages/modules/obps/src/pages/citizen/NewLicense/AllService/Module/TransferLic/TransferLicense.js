@@ -7,6 +7,8 @@ import FileUpload from "@mui/icons-material/FileUpload";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import CusToaster from "../../../../../../components/Toaster";
 import Spinner from "../../../../../../components/Loader";
+import { useHistory } from "react-router-dom";
+import SearchLicenceComp from "../../../../../../components/SearchLicence";
 
 const selectTypeData = [
   { label: "Complete", value: "complete" },
@@ -14,6 +16,7 @@ const selectTypeData = [
 ];
 
 const Transferlicence = () => {
+  const history = useHistory();
   const [fileStoreId, setFileStoreId] = useState({});
   const [selectedFiles, setSelectedFiles] = useState([]);
   const [loader, setLoader] = useState(false);
@@ -66,6 +69,7 @@ const Transferlicence = () => {
     try {
       const Resp = await axios.post("/tl-services/_TransferOfLicenseRequest/_create", postDistrict);
       setLoader(false);
+      history.push("/digit-ui/citizen");
       // setApplicationNumber(Resp.data.changeBeneficial.applicationNumber);
     } catch (error) {
       setError(error?.response?.data?.Errors[0]?.message);
@@ -138,7 +142,8 @@ const Transferlicence = () => {
           </h4>
           <div className="card">
             <div className="row gy-3">
-              <div className="col col-3">
+              <SearchLicenceComp watch={watch} register={register} control={control} setLoader={setLoader} errors={errors} setValue={setValue} />
+              {/* <div className="col col-3">
                 <h2 className="FormLable">
                   Licence No. <span style={{ color: "red" }}>*</span>
                 </h2>
@@ -158,7 +163,7 @@ const Transferlicence = () => {
                     Go
                   </div>
                 </div>
-              </div>
+              </div> */}
               <div className="col col-4">
                 <h2 className="FormLable">
                   Select Type (Complete or Partial) <span style={{ color: "red" }}>*</span>
@@ -613,21 +618,6 @@ const Transferlicence = () => {
             )}
 
             <div style={{ display: "flex", justifyContent: "right", marginTop: "20px" }}>
-              <button
-                style={{
-                  background: "#024f9d",
-                  color: "white",
-                  borderRadius: "5px",
-                  padding: " 5px 15px",
-                  marginLeft: "10px",
-                  cursor: "pointer",
-                  width: "200px",
-                }}
-                id="btnSearch"
-                class=""
-              >
-                Save as Draft
-              </button>
               <button
                 style={{
                   background: "#024f9d",
