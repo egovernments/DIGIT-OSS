@@ -233,10 +233,6 @@ const Home = () => {
             link: `/digit-ui/citizen/obps/LayoutPlanClu`,
             i18nKey: t("Revised Layout Plan"),
           },
-          {
-            link: `/digit-ui/citizen/obps/layoutPlan/my-application`,
-            i18nKey: t("TL_MY_APPLICATIONS_HEADER"),
-          },
         ],
       },
       {
@@ -256,7 +252,7 @@ const Home = () => {
         value: "twelve",
         links: [
           {
-            link: ``,
+            link: `/digit-ui/citizen/obps/ExtensionClu`,
             i18nKey: t("Extension of CLU permission"),
           },
         ],
