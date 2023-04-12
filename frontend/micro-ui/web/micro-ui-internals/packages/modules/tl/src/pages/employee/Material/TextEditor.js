@@ -21,7 +21,10 @@ function AddPost({modal=false,state , setState}) {
     }
   
   }, [editorState]);
- 
+ console.log("DATAEDITOR",editorState);
+ console.log("DATAEDITOR",setState);
+//  console.log();
+//  console.log();
 
   return (
     <div className="text-editorEmp">
@@ -38,7 +41,9 @@ function AddPost({modal=false,state , setState}) {
         <button onClick={() => console.log(convertedContent)}>Submit</button>
       }
     </div>
+    
   );
+  
 }
 
 export default AddPost;

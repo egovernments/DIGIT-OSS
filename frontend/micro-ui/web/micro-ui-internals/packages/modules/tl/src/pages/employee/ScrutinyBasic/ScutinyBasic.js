@@ -21,6 +21,7 @@ import IndeterminateCheckbox from "../Proforma/ProformaForJE";
 import DrawingBranch from "../Proforma/ProformaForDB";
 import ProformaForlegalBranch from "../Proforma/ProformaForlegalBranch";
 import ProformaPatwari from "../Proforma/ProformaForPatwari";
+import Addmoreinput from "../Complaince/Compliances";
 // import AddPost from "../Material/TextEditor";
 
 const ScrutitnyForms = ({ apiResponse, applicationNumber, refreshScrutinyData , histeroyData, feeandcharges , applicationStatus ,mDMSData }) => {
@@ -419,6 +420,10 @@ console.log("roleData",rolesDate )
       <div style={{ position: "relative", width: "100%", height: "100%", display: "flex" }}>
       <ProformaForlegalBranch>
       </ProformaForlegalBranch>
+      </div>
+      <div style={{ position: "relative", width: "100%", height: "100%", display: "flex" }}>
+      <Addmoreinput>
+      </Addmoreinput>
       </div>
       
 

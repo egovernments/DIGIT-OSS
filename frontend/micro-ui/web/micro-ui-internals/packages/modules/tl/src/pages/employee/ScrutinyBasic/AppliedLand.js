@@ -37,7 +37,7 @@ import { useLocation } from "react-router-dom";
 const AppliedLandinfo = (props) => {
 
 
-  useTranslation
+  // useTranslation
 
   const {t} = useTranslation();
   const { pathname: url } = useLocation();

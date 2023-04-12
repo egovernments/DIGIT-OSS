@@ -29,7 +29,7 @@ import { useTranslation } from "react-i18next";
 
 
 const PersonalinfoChild = (props) => {
-  useTranslation
+  // useTranslation
 
   const {t} = useTranslation();
   const { pathname: url } = useLocation();
@@ -271,6 +271,8 @@ const PersonalinfoChild = (props) => {
          ></ModalChild>
          <label  className="card-title fw-bold" style={{ margin: 10 }} htmlFor="Developer Details">
                             {`${t("NWL_APPLICANT_DEVELOPER_INFORMATION")}`}
+                           
+                            
                             {/* <span class="text-danger font-weight-bold mx-2">*</span> */}
                           </label>
       {/* <h5 className="card-title fw-bold" style={{ margin: 10 }}> &nbsp; Developer Information</h5> */}
@@ -313,7 +315,7 @@ const PersonalinfoChild = (props) => {
                   &nbsp;&nbsp;
                   <ReportProblemIcon
                     style={{
-                      display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("Name of Developer") ? "block" : "none",
+                      display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_DEVELOPER_NAME") ? "block" : "none",
                       color: fieldIconColors.developerName
                     }}
                     onClick={() => {
@@ -353,7 +355,7 @@ const PersonalinfoChild = (props) => {
                   {hideRemarks} */}
                   <ReportProblemIcon
                     style={{
-                      display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("Address") ? "block" : "none",
+                      display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_DEVELOPER_ADDRESS") ? "block" : "none",
                       color: fieldIconColors.registeredAddress2
                     }}
                     onClick={() => {
@@ -389,7 +391,7 @@ const PersonalinfoChild = (props) => {
                   &nbsp;&nbsp;
                   <ReportProblemIcon
                     style={{
-                     display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("Email Id") ? "block" : "none",
+                     display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_DEVELOPER_EMAILID") ? "block" : "none",
                       color: fieldIconColors.developerEmail
                     }}
                     onClick={() => {
@@ -424,7 +426,7 @@ const PersonalinfoChild = (props) => {
     {/* {JSON.stringify(hideRemarksPatwari)}  */}
     <ReportProblemIcon
       style={{
-       display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("Developer Type") ? "block" : "none",
+       display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_DEVELOPER_TYPE") ? "block" : "none",
 
         color: fieldIconColors.developerType
       }}
@@ -464,7 +466,7 @@ personalinfo?.devDetail?.addInfo?.showDevTypeFields != "Partnership Firm" &&
 
       <ReportProblemIcon
         style={{
-         display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("CIN Number") ? "block" : "none",
+         display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_CIN_NUMBER") ? "block" : "none",
 
           color: fieldIconColors.cin_Number
         }}
@@ -505,7 +507,7 @@ personalinfo?.devDetail?.addInfo?.showDevTypeFields != "Partnership Firm" &&
                   &nbsp;&nbsp;
                   <ReportProblemIcon
                     style={{
-                     display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("Address") ? "block" : "none",
+                     display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_PAN_NUMBER") ? "block" : "none",
                       color: fieldIconColors.developerPan
                     }}
                     onClick={() => {
@@ -545,7 +547,7 @@ personalinfo?.devDetail?.addInfo?.showDevTypeFields != "Partnership Firm" &&
                 &nbsp;&nbsp;
                 <ReportProblemIcon
                   style={{
-                   display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("Address") ? "block" : "none",
+                   display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_GST_NUMBER") ? "block" : "none",
                     color: fieldIconColors.gst_Number
                   }}
                   onClick={() => {
@@ -588,7 +590,7 @@ personalinfo?.devDetail?.addInfo?.showDevTypeFields != "Partnership Firm" &&
                   &nbsp;&nbsp;
                   <ReportProblemIcon
                     style={{
-                     display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("Address") ? "block" : "none",
+                     display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_LLP_NUMBER") ? "block" : "none",
                       color: fieldIconColors.developerMobileNo
                     }}
                     onClick={() => {
@@ -693,7 +695,7 @@ personalinfo?.devDetail?.addInfo?.showDevTypeFields != "Partnership Firm" &&
             {/* <div className="btn btn-sm col-md-4"> */}
             <ReportProblemIcon
               style={{
-               display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("Director Information as per MCA Portal (Auto-fetch from Developer Registration)") ? "block" : "none",
+               display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_1_DIRECTOR_INFOMATION_AS_PER_MCA") ? "block" : "none",
                 color: fieldIconColors.DirectorsInformation
               }}
               onClick={() => {
@@ -782,7 +784,7 @@ personalinfo?.devDetail?.addInfo?.showDevTypeFields != "Partnership Firm" &&
             {/* <div className="btn btn-sm col-md-4"> */}
             <ReportProblemIcon
               style={{
-               display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("Directors Information as per Developer") ? "block" : "none",
+               display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_1_DIRECTOR_INFOMATION_AS_PER_DEVELOPER") ? "block" : "none",
 
                 color: fieldIconColors.directorsInformation
               }}
@@ -864,7 +866,7 @@ personalinfo?.devDetail?.addInfo?.showDevTypeFields != "Partnership Firm" &&
             {/* <div className="btn btn-sm col-md-4"> */}
             <ReportProblemIcon
               style={{
-               display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("Shareholding Pattern") ? "block" : "none",
+               display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_SHAREHOLDING_PATTERNS") ? "block" : "none",
 
                 color: fieldIconColors.shareholdingPatterns
               }}
@@ -946,7 +948,7 @@ personalinfo?.devDetail?.addInfo?.showDevTypeFields != "Partnership Firm" &&
       {/* &nbsp; &nbsp;&nbsp; Authorized Person Information  &nbsp;&nbsp; */}
       {`${t("NWL_APPLICANT_AUTHORIZED_PERSON_INFORMATION")}`} 
       </h5>
-      <ReportProblemIcon
+      {/* <ReportProblemIcon
               style={{
                display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("Authorized Person Information") ? "block" : "none",
 
@@ -959,7 +961,7 @@ personalinfo?.devDetail?.addInfo?.showDevTypeFields != "Partnership Firm" &&
                   console.log("modal open"),
                   setFieldValue(personalinfo !== null ? personalinfo?.devDetail?.aurthorizedUserInfoArray?.[0]?.name : null);
               }}
-            ></ReportProblemIcon>
+            ></ReportProblemIcon> */}
             {/* </h5> */}
       <Row className={[classes.row, "ms-auto"]}>
         <Col className="ms-auto" md={4} xxl lg="4">
@@ -980,9 +982,9 @@ personalinfo?.devDetail?.addInfo?.showDevTypeFields != "Partnership Firm" &&
               disabled
             ></Form.Control>
             &nbsp;&nbsp;
-            {/* <ReportProblemIcon
+            <ReportProblemIcon
               style={{
-               display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("Name of authorized signatory on behalf of developer") ? "block" : "none",
+               display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_AUTHORIZED_NAME") ? "block" : "none",
 
                 color: fieldIconColors.authPersonName
               }}
@@ -993,7 +995,7 @@ personalinfo?.devDetail?.addInfo?.showDevTypeFields != "Partnership Firm" &&
                   console.log("modal open"),
                   setFieldValue(personalinfo !== null ? personalinfo?.devDetail?.aurthorizedUserInfoArray?.[0]?.name : null);
               }}
-            ></ReportProblemIcon> */}
+            ></ReportProblemIcon>
           </div>
 
         </Col>
@@ -1040,9 +1042,9 @@ personalinfo?.devDetail?.addInfo?.showDevTypeFields != "Partnership Firm" &&
                         inline
                       ></Form.Check>  */}
                        &nbsp;&nbsp;
-            {/* <ReportProblemIcon
+            <ReportProblemIcon
               style={{
-               display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("Address") ? "block" : "none",
+               display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_AUTHORIZED_MOBILE_NO") ? "block" : "none",
 
                 color: fieldIconColors.authMobileNo1
               }}
@@ -1053,7 +1055,7 @@ personalinfo?.devDetail?.addInfo?.showDevTypeFields != "Partnership Firm" &&
                   console.log("modal open"),
                   setFieldValue(personalinfo !== null ? personalinfo?.devDetail?.aurthorizedUserInfoArray?.[0]?.mobileNumber : null);
               }}
-            ></ReportProblemIcon> */}
+            ></ReportProblemIcon>
           </div>
         </Col>
         <Col md={4} xxl lg="4">
@@ -1075,9 +1077,9 @@ personalinfo?.devDetail?.addInfo?.showDevTypeFields != "Partnership Firm" &&
               disabled
             ></Form.Control>
             &nbsp;&nbsp;
-            {/* <ReportProblemIcon
+            <ReportProblemIcon
               style={{
-               display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("Address") ? "block" : "none",
+               display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_EMAILID_FOR_AUTHORIZED_SINGNATORY") ? "block" : "none",
 
                 color: fieldIconColors.emailForCommunication
               }}
@@ -1088,7 +1090,7 @@ personalinfo?.devDetail?.addInfo?.showDevTypeFields != "Partnership Firm" &&
                   console.log("modal open"),
                   setFieldValue(personalinfo !== null ? personalinfo?.devDetail?.aurthorizedUserInfoArray?.[0]?.emailId : null);
               }}
-            ></ReportProblemIcon> */}
+            ></ReportProblemIcon>
           </div>
         </Col>
       </Row>
@@ -1114,9 +1116,9 @@ personalinfo?.devDetail?.addInfo?.showDevTypeFields != "Partnership Firm" &&
               disabled
             ></Form.Control>
             &nbsp;&nbsp;
-            {/* <ReportProblemIcon
+            <ReportProblemIcon
               style={{
-               display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("Address") ? "block" : "none",
+               display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_AUTHORIZED_PAN_NUMBER") ? "block" : "none",
 
                 color: fieldIconColors.authPan
               }}
@@ -1127,7 +1129,7 @@ personalinfo?.devDetail?.addInfo?.showDevTypeFields != "Partnership Firm" &&
                   console.log("modal open"),
                   setFieldValue(personalinfo !== null ? personalinfo?.devDetail?.aurthorizedUserInfoArray?.[0]?.pan : null);
               }}
-            ></ReportProblemIcon> */}
+            ></ReportProblemIcon>
           </div>
         </Col>
         <Col md={4} xxl lg="4">
@@ -1162,10 +1164,10 @@ personalinfo?.devDetail?.addInfo?.showDevTypeFields != "Partnership Firm" &&
                 <FileDownload color="primary" className="mx-1" />
               </IconButton>
             </div>
-            {/* <div className="btn btn-sm col-md-5" >
+            <div className="btn btn-sm col-md-5" >
               <ReportProblemIcon
                 style={{
-                 display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("Address") ? "block" : "none",
+                 display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_DIGITAL_SIGNATURE") ? "block" : "none",
 
                   color: fieldIconColors.uploadDigitalSignaturePdf
                 }}
@@ -1177,7 +1179,7 @@ personalinfo?.devDetail?.addInfo?.showDevTypeFields != "Partnership Firm" &&
                     setFieldValue(personalinfo !== null ? personalinfo?.devDetail?.aurthorizedUserInfoArray?.[0]?.uploadDigitalSignaturePdf : null);
                 }}
               ></ReportProblemIcon>
-            </div> */}
+            </div>
           </div>
 
 
@@ -1218,7 +1220,7 @@ personalinfo?.devDetail?.addInfo?.showDevTypeFields != "Partnership Firm" &&
             <div className="btn btn-sm col-md-5">
               <ReportProblemIcon
                 style={{
-                 display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("Board resolution of authorised signatory (Upload copy)") ? "block" : "none",
+                 display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_BOARD_RESOLUTION") ? "block" : "none",
 
                   color: fieldIconColors.pin
                 }}

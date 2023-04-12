@@ -31,7 +31,7 @@ const style = {
 
 const Feeandcharges = (props) => {
 
-  useTranslation
+  // useTranslation
 
   const {t} = useTranslation();
   const { pathname: url } = useLocation();
