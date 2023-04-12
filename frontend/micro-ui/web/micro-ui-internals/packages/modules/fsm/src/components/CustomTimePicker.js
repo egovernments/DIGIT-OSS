@@ -14,7 +14,7 @@ const CustomTimePicker = ({ name, value, onChange }) => {
     }
   }
 
-  return <TimePicker name={name} onChange={onChange} onBlur={onBlurHandle} value={value} locale="en-US" disableClock={false} clearIcon={null} format="h:mm a" />;
+  return <TimePicker name={name} onChange={onChange} onBlur={onBlurHandle} value={value} locale="en-US" disableClock={true} clearIcon={null} format="h:mm a" />;
 };
 
 export default CustomTimePicker;
