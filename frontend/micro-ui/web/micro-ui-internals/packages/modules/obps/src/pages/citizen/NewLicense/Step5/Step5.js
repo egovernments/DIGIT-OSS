@@ -75,8 +75,8 @@ const FeesChargesForm = (props) => {
         userInfo: userInfo,
       },
     };
-    console.log("postDistrict", postDistrict);
-    return;
+    // console.log("postDistrict", postDistrict);
+    // return;
     try {
       const Resp = await axios.post("/tl-services/new/_create", postDistrict);
       setLoader(false);
@@ -145,6 +145,7 @@ const FeesChargesForm = (props) => {
         key: "",
         msgId: "20170310130900|en_IN",
         authToken: token,
+        userInfo: userInfo,
       },
     };
     try {
@@ -283,9 +284,11 @@ const FeesChargesForm = (props) => {
   const getApplicantUserData = async (id) => {
     const token = window?.localStorage?.getItem("token");
     const payload = {
-      apiId: "Rainmaker",
-      msgId: "1669293303096|en_IN",
-      authToken: token,
+      RequestInfo: {
+        apiId: "Rainmaker",
+        msgId: "1669293303096|en_IN",
+        authToken: token,
+      },
     };
     try {
       const Resp = await axios.post(`/tl-services/new/licenses/object/_getByApplicationNumber?applicationNumber=${id}`, payload);
@@ -602,6 +605,7 @@ const FeesChargesForm = (props) => {
                       </div>
                     </div>
                   )}
+
                   <div class="row">
                     <div class="col-sm-12 text-right">
                       {getShow?.submit && getData?.status !== "FEESANDCHARGES" && (
