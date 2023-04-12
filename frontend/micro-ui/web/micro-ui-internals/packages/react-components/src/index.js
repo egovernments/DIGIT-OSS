@@ -200,7 +200,9 @@ import MultiUploadWrapper from "./molecules/MultiUploadWrapper";
 import { FilterForm, FilterFormField } from "./molecules/FilterForm";
 import OpenLinkContainer from "./atoms/OpenLinkContainer";
 import UploadPitPhoto from "./molecules/UploadPitPhoto";
+import AdvanceTextArea from "./atoms/AdvanceTextArea";
 export {
+  AdvanceTextArea,
   Phone,
   Body,
   Loader,

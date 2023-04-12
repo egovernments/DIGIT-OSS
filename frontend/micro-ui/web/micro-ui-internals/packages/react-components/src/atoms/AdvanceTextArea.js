@@ -4,7 +4,7 @@ import { Editor } from "react-draft-wysiwyg";
 import { convertToHTML } from "draft-convert";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 
-function AddPost({modal=false,state , setState}) {
+const AdvanceTextArea = ({modal=false,state , setState}) => {
   const [editorState, setEditorState] = useState(() =>
     EditorState.createEmpty()
   );
@@ -41,4 +41,4 @@ function AddPost({modal=false,state , setState}) {
   );
 }
 
-export default AddPost;
+export default AdvanceTextArea;
