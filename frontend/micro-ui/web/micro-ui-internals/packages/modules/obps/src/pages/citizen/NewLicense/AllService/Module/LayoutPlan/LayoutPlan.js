@@ -116,8 +116,8 @@ function LayoutPlanClu() {
   useEffect(() => {
     const search = location?.search;
     const params = new URLSearchParams(search);
-    // const id = params.get("id");
-    const id = "TCP_RLP_20230408_000282";
+    const id = params.get("id");
+    // const id = "TCP_RLP_20230408_000282";
     setApplicantId(id);
     if (id) getApplicantUserData(id);
   }, []);
@@ -160,6 +160,26 @@ function LayoutPlanClu() {
       } else {
         layOutPlanData.licenseNo = data?.licenseNo ? data?.licenseNo : layOutPlanData.licenseNo;
         layOutPlanData.existingArea = data?.existingArea ? data?.existingArea : layOutPlanData.existingArea;
+        layOutPlanData.existingAreaDetails = data?.existingAreaDetails ? data?.existingAreaDetails : layOutPlanData.existingAreaDetails;
+        layOutPlanData.areaProposedRevision = data?.areaProposedRevision ? data?.areaProposedRevision : layOutPlanData.areaProposedRevision;
+        layOutPlanData.areaCommercial = data?.areaCommercial ? data?.areaCommercial : layOutPlanData.areaCommercial;
+        layOutPlanData.areaResidential = data?.areaResidential ? data?.areaResidential : layOutPlanData.areaResidential;
+        layOutPlanData.anyOtherFeature = data?.anyOtherFeature ? data?.anyOtherFeature : layOutPlanData.anyOtherFeature;
+        layOutPlanData.anyOtherRemarks = data?.anyOtherRemarks ? data?.anyOtherRemarks : layOutPlanData.anyOtherRemarks;
+        layOutPlanData.reasonRevisionLayoutPlanDoc = data?.reasonRevisionLayoutPlanDoc
+          ? data?.reasonRevisionLayoutPlanDoc
+          : layOutPlanData.reasonRevisionLayoutPlanDoc;
+        layOutPlanData.earlierApprovedlayoutPlan = data?.earlierApprovedlayoutPlan
+          ? data?.earlierApprovedlayoutPlan
+          : layOutPlanData.earlierApprovedlayoutPlan;
+        layOutPlanData.copyProposedlayoutPlan = data?.copyProposedlayoutPlan ? data?.copyProposedlayoutPlan : layOutPlanData.copyProposedlayoutPlan;
+        layOutPlanData.statusCreationAffidavitDoc = data?.statusCreationAffidavitDoc
+          ? data?.statusCreationAffidavitDoc
+          : layOutPlanData.statusCreationAffidavitDoc;
+        layOutPlanData.boardResolutionAuthSignatoryDoc = data?.boardResolutionAuthSignatoryDoc
+          ? data?.boardResolutionAuthSignatoryDoc
+          : layOutPlanData.boardResolutionAuthSignatoryDoc;
+        layOutPlanData.anyOther = data?.anyOther ? data?.anyOther : layOutPlanData.anyOther;
 
         const updateRequest = {
           requestInfo: {
@@ -209,7 +229,7 @@ function LayoutPlanClu() {
 
   const handleSubmitExistingArea = () => {
     if (licenseNoModal !== "" && areaModal !== "") {
-      let values = {
+      const values = {
         licenseNoPop: licenseNoModal,
         areaModalPop: areaModal,
       };

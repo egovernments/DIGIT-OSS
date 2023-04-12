@@ -274,7 +274,7 @@ const LicenseType = ({ t, config, onSelect, userType, formData }) => {
                   {licenceTypeSelected && licenceTypeSelected.includes("DEVELOPER") && (
                     <div>
                       <CardLabel>
-                        {`${t("Select Developer Type")}`} <span className="font-weight-bold text-danger">*</span>
+                        {`${t("BPA_DEVELOPER_TYPE_TEXT")}`} <span className="font-weight-bold text-danger">*</span>
                       </CardLabel>
                       <Select value={showDevTypeFields || ""} onChange={setDevType} className="w-100 form-control" variant="standard">
                         {arrayDevList?.map((item, index) => (

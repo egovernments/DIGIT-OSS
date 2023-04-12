@@ -598,120 +598,7 @@ const AddAuthorizeduser = ({ t, config, onSelect, formData, isUserRegistered = t
       >
         <div className="happy">
           <div className="card">
-            {/* <h5 className="card-h">Add/Remove Authorized Users</h5> */}
             <div className="table-bd">
-              {/* <Table className="table table-bordered table-striped table-responsive">
-                <thead>
-                  <tr>
-                    <th>Sr. No</th>
-                    <th>Name</th>
-                    <th>Mobile Number</th>
-                    <th>Email</th>
-                    <th>Gender</th>
-                    <th>PAN No.</th>
-                    <th>
-                      {data?.devDetail[0]?.addInfo?.showDevTypeFields === "Individual" ||
-                      data?.devDetail[0]?.addInfo?.showDevTypeFields === "Proprietorship Firm" ||
-                      data?.devDetail[0]?.addInfo?.showDevTypeFields === "Hindu Undivided Family" ? (
-                        <label htmlFor="name" className="text">
-                          Upload Power of Attorney{" "}
-                        </label>
-                      ) : (
-                        <label htmlFor="name" className="text">
-                          {" "}
-                          Upload Board Resolution
-                        </label>
-                      )}
-                    </th>
-                    <th>View Digital Signature PDF</th>
-                    <th>Action</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {aurthorizedUserInfoArray?.length > 0 ? (
-                    aurthorizedUserInfoArray.map((elementInArray, input) => {
-                      return (
-                        <tr key={elementInArray.id}>
-                          <td>{input + 1}</td>
-                          <td>{elementInArray.name}</td>
-                          <td>{elementInArray.mobileNumber}</td>
-                          <td>{elementInArray.emailId}</td>
-                          <td>{elementInArray.gender}</td>
-                          <td>{elementInArray.pan}</td>
-                          <td>
-                            <div className="row">
-                              {elementInArray.uploadBoardResolution !== "" ? (
-                                <button
-                                  type="button"
-                                  title="View Document"
-                                  onClick={() => getDocShareholding(elementInArray?.uploadBoardResolution)}
-                                  className="btn btn-sm col-md-6"
-                                >
-                                  <VisibilityIcon color="info" className="icon" />
-                                </button>
-                              ) : (
-                                <p></p>
-                              )}
-                              <div className="btn btn-sm col-md-6">
-                                <label for={"uploadAdhaarDoc" + input} title="Upload Document">
-                                  {" "}
-                                  <FileUpload color="primary" />
-                                </label>
-                                <input
-                                  id={"uploadAdhaarDoc" + input}
-                                  type="file"
-                                  accept="application/pdf"
-                                  style={{ display: "none" }}
-                                  onChange={(e) => getDocumentData(e?.target?.files[0], "uploadBoardResolution", true, input)}
-                                />
-                              </div>
-                            </div>
-                          </td>
-                          <td>
-                            <div className="row">
-                              {elementInArray.uploadDigitalSignaturePdf ? (
-                                <button
-                                  type="button"
-                                  title="View Document"
-                                  onClick={() => getDocShareholding(elementInArray?.uploadDigitalSignaturePdf)}
-                                  className="btn btn-sm col-md-6"
-                                >
-                                  <VisibilityIcon color="info" className="icon" />
-                                </button>
-                              ) : (
-                                <p></p>
-                              )}
-                              <div className="btn btn-sm col-md-6">
-                                <label for={"uploadSignDoc" + input}>
-                                  {" "}
-                                  <FileUpload color="primary" />
-                                </label>
-                                <input
-                                  id={"uploadSignDoc" + input}
-                                  type="file"
-                                  accept="application/pdf"
-                                  style={{ display: "none" }}
-                                  onChange={(e) => getDocumentData(e?.target?.files[0], "uploadDigitalSignaturePdf", true, input)}
-                                />
-                              </div>
-                            </div>
-                          </td>
-                          <td style={{ textAlign: "center" }}>
-                            <a
-                              title="Delete record"
-                              onClick={() => viewRecord(elementInArray, input)}
-                            >
-                              <DeleteIcon style={{ fill: "#ff1a1a" }} />
-                            </a>
-                          </td>
-                        </tr>
-                      );
-                    })
-                  ) : (
-                    <div className="d-none">Click on Add to add a aurthorized user</div>
-                  )}
-                </tbody>
-              </Table> */}
               <Paper sx={{ width: "100%", overflow: "hidden" }}>
                 <TableContainer sx={{ maxHeight: 440 }}>
                   <Table stickyHeader aria-label="sticky table">
@@ -868,18 +755,18 @@ const AddAuthorizeduser = ({ t, config, onSelect, formData, isUserRegistered = t
                       <Row>
                         <Col md={3} xxl lg="3">
                           <label htmlFor="name" className="text">
-                            Enter Full Name <span className="text-danger font-weight-bold">*</span>
+                          {t("BPA_AUTH_FULL_NAME_TEXT")} <span className="text-danger font-weight-bold">*</span>
                           </label>
                           <input type="text" value={aurthorizedUserName} class="form-control" onChange={handleUserNameChange} />
                           {aurthorizedUserName && aurthorizedUserName.length > 0 && !aurthorizedUserName.match(Digit.Utils.getPattern("Name")) && (
                             <CardLabelError style={{ width: "100%", marginTop: "-15px", fontSize: "16px", marginBottom: "12px", color: "red" }}>
-                              {t("Please enter valid Name")}
+                              {t("BPA_AUTH_FULL_NAME_INVALID")}
                             </CardLabelError>
                           )}
                         </Col>
                         <Col md={3} xxl lg="3">
                           <label htmlFor="name" className="text">
-                            Mobile Number <span className="text-danger font-weight-bold">*</span>
+                          {t("BPA_MOBILE_NO_TEXT")} <span className="text-danger font-weight-bold">*</span>
                           </label>
                           <MobileNumber
                             value={aurthorizedMobileNumber}
@@ -900,7 +787,7 @@ const AddAuthorizeduser = ({ t, config, onSelect, formData, isUserRegistered = t
                         </Col>
                         <Col md={3} xxl lg="3">
                           <label htmlFor="name" className="text">
-                            Email <span className="text-danger font-weight-bold">*</span>
+                          {t("BPA_EMAIL_TEXT")} <span className="text-danger font-weight-bold">*</span>
                           </label>
                           {/* <input
                                   type="email"
@@ -930,7 +817,7 @@ const AddAuthorizeduser = ({ t, config, onSelect, formData, isUserRegistered = t
                           />
                           {aurthorizedEmail && aurthorizedEmail.length > 0 && !aurthorizedEmail.match(Digit.Utils.getPattern("Email")) && (
                             <CardLabelError style={{ width: "100%", marginTop: "-15px", fontSize: "16px", marginBottom: "12px", color: "red" }}>
-                              {"Invalid Email Address"}
+                               {t("CORE_COMMON_APPLICANT_EMAIL_INVALID")}
                             </CardLabelError>
                           )}
                         </Col>
@@ -954,7 +841,7 @@ const AddAuthorizeduser = ({ t, config, onSelect, formData, isUserRegistered = t
                         </Col>
                         <Col md={3} xxl lg="3">
                           <label htmlFor="name" className="text">
-                            Date of Birth <span className="text-danger font-weight-bold">*</span>
+                          {t("BPA_DOB_DATE")} <span className="text-danger font-weight-bold">*</span>
                           </label>
                           <input
                             type="date"
@@ -970,7 +857,7 @@ const AddAuthorizeduser = ({ t, config, onSelect, formData, isUserRegistered = t
                         </Col>
                         <Col md={3} xxl lg="3">
                           <label htmlFor="name" className="text">
-                            PAN No <span className="text-danger font-weight-bold">*</span>
+                          {`${t("BPA_APPLICANT_PAN_NO")}`} <span className="text-danger font-weight-bold">*</span>
                           </label>
                           {/* <input
                                   type="text"
@@ -1010,12 +897,11 @@ const AddAuthorizeduser = ({ t, config, onSelect, formData, isUserRegistered = t
                           data?.devDetail[0]?.addInfo?.showDevTypeFields === "Proprietorship Firm" ||
                           data?.devDetail[0]?.addInfo?.showDevTypeFields === "Hindu Undivided Family" ? (
                             <label htmlFor="name" className="text">
-                              Upload Power of Attorney <span className="text-danger font-weight-bold">*</span>
+                              {`${t("BPA_AUTH_UPLOAD_POWER_OF_ATTORNEY")}`} <span className="text-danger font-weight-bold">*</span>
                             </label>
                           ) : (
                             <label htmlFor="name" className="text">
-                              {" "}
-                              Upload Board Resolution<span className="text-danger font-weight-bold">*</span>
+                              {`${t("BPA_AUTH_UPLOAD_BOARD_RESOLUTION")}`} <span className="text-danger font-weight-bold">*</span>
                             </label>
                           )}
                           <input
@@ -1029,7 +915,7 @@ const AddAuthorizeduser = ({ t, config, onSelect, formData, isUserRegistered = t
                         </Col>
                         <Col md={3} xxl lg="3">
                           <label htmlFor="name" className="text">
-                            Upload Digital Signature PDF <span className="text-danger font-weight-bold">*</span>
+                          {`${t("BPA_AUTH_UPLOAD_DIGITAL_SIGN")}`} <span className="text-danger font-weight-bold">*</span>
                           </label>
                           <input
                             type="file"

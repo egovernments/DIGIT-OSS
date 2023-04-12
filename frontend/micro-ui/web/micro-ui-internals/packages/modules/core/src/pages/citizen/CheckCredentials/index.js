@@ -4,8 +4,8 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useHistory, useLocation } from "react-router-dom";
 
-
 const DEFAULT_REDIRECT_URL = "/digit-ui/citizen";
+const PROFILE_REDIRECT_URL = "/digit-ui/citizen/user/profile";
 
 const setCitizenDetail = (userObject, token, tenantId) => {
   let locale = JSON.parse(sessionStorage.getItem("Digit.initData"))?.value?.selectedLanguage;
@@ -18,9 +18,9 @@ const setCitizenDetail = (userObject, token, tenantId) => {
   localStorage.setItem("Citizen.token", token);
   localStorage.setItem("user-info", JSON.stringify(userObject));
   localStorage.setItem("Citizen.user-info", JSON.stringify(userObject));
-}
+};
 
-export default function CheckCredentials({stateCode}) {
+export default function CheckCredentials({ stateCode }) {
   const location = useLocation();
   const history = useHistory();
   const [user, setUser] = useState(null);
@@ -31,40 +31,40 @@ export default function CheckCredentials({stateCode}) {
     if (!user) {
       return;
     }
-    // console.log("GETUSERDATA",user);
+    console.log("GETUSERDATA", user);
     Digit.SessionStorage.set("citizen.userRequestObject", user);
     Digit.UserService.setUser(user);
-    setCitizenDetail(user?.UserRequest, user?.access_token, stateCode)
-    const redirectPath = location.state?.from || DEFAULT_REDIRECT_URL;
-    history.replace(redirectPath);
+    setCitizenDetail(user?.UserRequest, user?.access_token, stateCode);
+    if (user?.name !== "") {
+      const redirectPath = location.state?.from || DEFAULT_REDIRECT_URL;
+      history.replace(redirectPath);
+    } else {
+      const profileRedirectPath = PROFILE_REDIRECT_URL;
+      history.replace(profileRedirectPath);
+    }
   }, [user]);
 
   const checkCrednetials = async () => {
     const body = {
-      "SsoCitizen": {
-        "userId": queryParameters.get("UserId"),
-        "emailId": queryParameters.get("EmailId"),
-        "mobileNumber": queryParameters.get("MobNo"),
-        "returnUrl": queryParameters.get("RedirectUrl"),
-        "redirectUrl": queryParameters.get("ReturnUrl"),
-        "tokenId": queryParameters.get("TokenId")
-      }
-    }
+      SsoCitizen: {
+        userId: queryParameters.get("UserId"),
+        emailId: queryParameters.get("EmailId"),
+        mobileNumber: queryParameters.get("MobNo"),
+        returnUrl: queryParameters.get("RedirectUrl"),
+        redirectUrl: queryParameters.get("ReturnUrl"),
+        tokenId: queryParameters.get("TokenId"),
+      },
+    };
     const resp = await axios.post("http://103.166.62.118:80/user/users/_ssoCitizen", body);
-    
+
     const info = resp?.data?.Token?.UserRequest;
     // const { ResponseInfo, UserRequest: info, ...tokens } = await Digit.UserService.ssoUser(body);
-    console.log("REINfo",info, resp);
+    console.log("REINfo", info, resp);
     setUser({ info, ...resp?.data?.Token });
-   
- 
-  }
+  };
   useEffect(() => {
     checkCrednetials();
-  }, []); 
-
-  
-  
+  }, []);
 
   // useEffect(() => {
   //   if (!user) {

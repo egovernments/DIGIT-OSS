@@ -56,125 +56,130 @@ const LayoutPlanInbox = ({ view }) => {
   return (
     <div>
       {loader && <Spinner></Spinner>}
+      {/* {JSON.stringify(data)} */}
       <Header>{`${t("TL_MY_APPLICATIONS_HEADER")}`}</Header>
       <table className="customers" id="customers" style={{ borderCollapse: "collapse", width: "100%" }}>
-        <tr>
-          <th
-            style={{
-              border: "1px solid #ddd",
-              padding: "8px",
-              paddingTop: "12px",
-              paddingBottom: "12px",
-              textAlign: "left",
-              backgroundColor: "#4169E1",
-              color: "white",
-            }}
-          >
-            LOI Number
-          </th>
-          <th
-            style={{
-              border: "1px solid #ddd",
-              padding: "8px",
-              paddingTop: "12px",
-              paddingBottom: "12px",
-              textAlign: "left",
-              backgroundColor: "#4169E1",
-              color: "white",
-            }}
-          >
-            Tenant Id
-          </th>
-          <th
-            style={{
-              border: "1px solid #ddd",
-              padding: "8px",
-              paddingTop: "12px",
-              paddingBottom: "12px",
-              textAlign: "left",
-              backgroundColor: "#4169E1",
-              color: "white",
-            }}
-          >
-            Business Service
-          </th>
-          <th
-            style={{
-              border: "1px solid #ddd",
-              padding: "8px",
-              paddingTop: "12px",
-              paddingBottom: "12px",
-              textAlign: "left",
-              backgroundColor: "#4169E1",
-              color: "white",
-            }}
-          >
-            Application Number
-          </th>
-          <th
-            style={{
-              border: "1px solid #ddd",
-              padding: "8px",
-              paddingTop: "12px",
-              paddingBottom: "12px",
-              textAlign: "left",
-              backgroundColor: "#4169E1",
-              color: "white",
-            }}
-          >
-            Application Date
-          </th>
-          <th
-            style={{
-              border: "1px solid #ddd",
-              padding: "8px",
-              paddingTop: "12px",
-              paddingBottom: "12px",
-              textAlign: "left",
-              backgroundColor: "#4169E1",
-              color: "white",
-            }}
-          >
-            Action
-          </th>
-          <th
-            style={{
-              border: "1px solid #ddd",
-              padding: "8px",
-              paddingTop: "12px",
-              paddingBottom: "12px",
-              textAlign: "left",
-              backgroundColor: "#4169E1",
-              color: "white",
-            }}
-          >
-            Status
-          </th>
-        </tr>
-        {data?.servicePlanResponse?.map((item, index) => {
-          return (
-            <tr key={`table${index}`}>
-              <td style={{ border: "1px solid #ddd", padding: " 8px" }}>{item?.loiNumber}</td>
-              <td style={{ border: "1px solid #ddd", padding: " 8px" }}>{item?.tenantId}</td>
-              <td style={{ border: "1px solid #ddd", padding: " 8px" }}>{item?.businessService}</td>
-              <td
-                style={{ textDecoration: "underline blue 1px", cursor: "pointer", border: "1px solid #ddd", padding: " 8px" }}
-                onClick={() => {
-                  window.localStorage.setItem("ApplicationStatus", item?.status);
-                  history.push({
-                    pathname: "/digit-ui/citizen/obps/layoutPlan",
-                    search: `?id=${item?.applicationNumber}`,
-                  });
-                }}
-              >
-                {item?.applicationNumber}
-              </td>
-              <td style={{ border: "1px solid #ddd", padding: " 8px" }}>{convertEpochToDateDMY(item?.auditDetails?.createdTime)}</td>
-              <td style={{ border: "1px solid #ddd", padding: " 8px" }}>{item?.action}</td>
-              <td style={{ border: "1px solid #ddd", padding: " 8px" }}>{item?.status}</td>
-            </tr>
-          );
-        })}
+        <thead>
+          <tr>
+            <th
+              style={{
+                border: "1px solid #ddd",
+                padding: "8px",
+                paddingTop: "12px",
+                paddingBottom: "12px",
+                textAlign: "left",
+                backgroundColor: "#4169E1",
+                color: "white",
+              }}
+            >
+              LOI Number
+            </th>
+            <th
+              style={{
+                border: "1px solid #ddd",
+                padding: "8px",
+                paddingTop: "12px",
+                paddingBottom: "12px",
+                textAlign: "left",
+                backgroundColor: "#4169E1",
+                color: "white",
+              }}
+            >
+              Tenant Id
+            </th>
+            <th
+              style={{
+                border: "1px solid #ddd",
+                padding: "8px",
+                paddingTop: "12px",
+                paddingBottom: "12px",
+                textAlign: "left",
+                backgroundColor: "#4169E1",
+                color: "white",
+              }}
+            >
+              Business Service
+            </th>
+            <th
+              style={{
+                border: "1px solid #ddd",
+                padding: "8px",
+                paddingTop: "12px",
+                paddingBottom: "12px",
+                textAlign: "left",
+                backgroundColor: "#4169E1",
+                color: "white",
+              }}
+            >
+              Application Number
+            </th>
+            <th
+              style={{
+                border: "1px solid #ddd",
+                padding: "8px",
+                paddingTop: "12px",
+                paddingBottom: "12px",
+                textAlign: "left",
+                backgroundColor: "#4169E1",
+                color: "white",
+              }}
+            >
+              Application Date
+            </th>
+            <th
+              style={{
+                border: "1px solid #ddd",
+                padding: "8px",
+                paddingTop: "12px",
+                paddingBottom: "12px",
+                textAlign: "left",
+                backgroundColor: "#4169E1",
+                color: "white",
+              }}
+            >
+              Action
+            </th>
+            <th
+              style={{
+                border: "1px solid #ddd",
+                padding: "8px",
+                paddingTop: "12px",
+                paddingBottom: "12px",
+                textAlign: "left",
+                backgroundColor: "#4169E1",
+                color: "white",
+              }}
+            >
+              Status
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          {data?.revisedPlan?.map((item, index) => {
+            return (
+              <tr key={`table${index}`}>
+                <td style={{ border: "1px solid #ddd", padding: " 8px" }}>{item?.loiNumber}</td>
+                <td style={{ border: "1px solid #ddd", padding: " 8px" }}>{item?.tenantId}</td>
+                <td style={{ border: "1px solid #ddd", padding: " 8px" }}>{item?.businessService}</td>
+                <td
+                  style={{ textDecoration: "underline blue 1px", cursor: "pointer", border: "1px solid #ddd", padding: " 8px" }}
+                  onClick={() => {
+                    window.localStorage.setItem("ApplicationStatus", item?.status);
+                    history.push({
+                      pathname: "/digit-ui/citizen/obps/layoutPlanClu",
+                      search: `?id=${item?.applicationNumber}`,
+                    });
+                  }}
+                >
+                  {item?.applicationNumber}
+                </td>
+                <td style={{ border: "1px solid #ddd", padding: " 8px" }}>{convertEpochToDateDMY(item?.auditDetails?.createdTime)}</td>
+                <td style={{ border: "1px solid #ddd", padding: " 8px" }}>{item?.action}</td>
+                <td style={{ border: "1px solid #ddd", padding: " 8px" }}>{item?.status}</td>
+              </tr>
+            );
+          })}
+        </tbody>
       </table>
     </div>
 
