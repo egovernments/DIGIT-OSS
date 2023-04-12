@@ -21,7 +21,7 @@
 //                     <div className="d-flex flex-row">
 //                       <input
 //                         type="radio"
-//                         disabled={!showActionButton}
+//                         disabled={!showActionButton && !showActionButton1 && !showActionButton2 && !showActionButton3}
 //                         value="Yes"
 //                         //  checked={apiResponse?.selfCertifiedDrawingsFromCharetedEng === "Y" ? true : false}
 //                       />
@@ -30,7 +30,7 @@
 //                       </label>
 //                       <input
 //                         type="radio"
-//                         disabled={!showActionButton}
+//                         disabled={!showActionButton && !showActionButton1 && !showActionButton2 && !showActionButton3}
 //                         value="No"
 //                         //  checked={apiResponse?.selfCertifiedDrawingsFromCharetedEng === "N" ? true : false}
 //                       />
@@ -105,6 +105,9 @@ import FormLabel from '@mui/material/FormLabel';
 
     const userRoles = Digit.UserService.getUser()?.info?.roles.map((item) => item.code)  || [];
     const showActionButton = userRoles.includes("FMDA")
+    const showActionButton1 = userRoles.includes("PMDA")
+    const showActionButton2 = userRoles.includes("GMDA")
+    const showActionButton3 = userRoles.includes("HSVP")
     console.log("Externaldata" , userRoles);
     // console.log("logg123" ,userRoles, showActionButton );
     const [selects, setSelects] = useState();
@@ -283,7 +286,7 @@ import FormLabel from '@mui/material/FormLabel';
                             <FormControl>
                             <div height={30}
                           style={{ maxWidth: 320, marginRight: 5 }}>
-              <input type="number" className="form-control"  disabled={!showActionButton} placeholder="" {...register("waterSupply")} />
+              <input type="number" className="form-control"  disabled={!showActionButton && !showActionButton1 && !showActionButton2 && !showActionButton3} placeholder="" {...register("waterSupply")} />
               </div>
                 </FormControl>
                 
@@ -323,7 +326,7 @@ import FormLabel from '@mui/material/FormLabel';
                             <FormControl>
                             <div height={30}
                           style={{ maxWidth: 320, marginRight: 5 }}>
-              <input type="number" className="form-control"  disabled={!showActionButton} placeholder="" {...register("sewerage")} />
+              <input type="number" className="form-control"  disabled={!showActionButton && !showActionButton1 && !showActionButton2 && !showActionButton3} placeholder="" {...register("sewerage")} />
               </div>
                 {/* </div> */}
     
@@ -367,7 +370,7 @@ import FormLabel from '@mui/material/FormLabel';
                             <FormControl>
                             <div height={30}
                           style={{ maxWidth: 320, marginRight: 5 }}>
-              <input type="number" className="form-control"  disabled={!showActionButton} placeholder="" {...register("stormWaterDrainage")} />
+              <input type="number" className="form-control"  disabled={!showActionButton && !showActionButton1 && !showActionButton2 && !showActionButton3} placeholder="" {...register("stormWaterDrainage")} />
               </div>
                 {/* </div> */}
     
@@ -409,7 +412,7 @@ import FormLabel from '@mui/material/FormLabel';
                             <FormControl>
                             <div height={30}
                           style={{ maxWidth: 320, marginRight: 5 }}>
-              <input type="number" className="form-control"  disabled={!showActionButton} placeholder="" {...register("roads")} />
+              <input type="number" className="form-control"  disabled={!showActionButton && !showActionButton1 && !showActionButton2 && !showActionButton3} placeholder="" {...register("roads")} />
               </div>
     
                 </FormControl>
@@ -450,7 +453,7 @@ import FormLabel from '@mui/material/FormLabel';
                             <FormControl>
                             <div height={30}
                           style={{ maxWidth: 320, marginRight: 5 }}>
-              <input type="number" className="form-control"  disabled={!showActionButton} placeholder="" {...register("streetLights")} />
+              <input type="number" className="form-control"  disabled={!showActionButton && !showActionButton1 && !showActionButton2 && !showActionButton3} placeholder="" {...register("streetLights")} />
               </div>
     
                 </FormControl>
@@ -489,7 +492,7 @@ import FormLabel from '@mui/material/FormLabel';
                             <FormControl>
                             <div height={30}
                           style={{ maxWidth: 320, marginRight: 5 }}>
-              <input type="number" className="form-control"  disabled={!showActionButton} placeholder="" {...register("horticulture")} />
+              <input type="number" className="form-control"  disabled={!showActionButton && !showActionButton1 && !showActionButton2 && !showActionButton3} placeholder="" {...register("horticulture")} />
               </div>
     
                 </FormControl>
@@ -530,7 +533,7 @@ import FormLabel from '@mui/material/FormLabel';
                             <FormControl>
                             <div height={30}
                           style={{ maxWidth: 320, marginRight: 5 }}>
-              <input type="number" className="form-control"  disabled={!showActionButton} placeholder="" {...register("anyApplicable")} />
+              <input type="number" className="form-control"  disabled={!showActionButton && !showActionButton1 && !showActionButton2 && !showActionButton3} placeholder="" {...register("anyApplicable")} />
               </div>
     
                 </FormControl>
@@ -571,7 +574,7 @@ import FormLabel from '@mui/material/FormLabel';
                             <FormControl>
                             <div height={30}
                           style={{ maxWidth: 320, marginRight: 5 }}>
-              <input type="number" className="form-control"  disabled={!showActionButton} placeholder="" {...register("maintenanceServices")} id="maintenanceServices" />
+              <input type="number" className="form-control"  disabled={!showActionButton && !showActionButton1 && !showActionButton2 && !showActionButton3} placeholder="" {...register("maintenanceServices")} id="maintenanceServices" />
               {/* <label htmlFor="sum">Total: {(watch("maintenanceServices"))?.toFixed(2)}</label>&nbsp;&nbsp; */}
               </div>
                 </FormControl>
@@ -615,7 +618,7 @@ import FormLabel from '@mui/material/FormLabel';
                             <FormControl>
                             <div height={30}
                           style={{ maxWidth: 320, marginRight: 5 }}>
-              <input type="number" className="form-control"  disabled={!showActionButton} placeholder="" {...register("totalDevelopmentCost")} id = "totalDevelopmentCost" />
+              <input type="number" className="form-control"  disabled={!showActionButton && !showActionButton1 && !showActionButton2 && !showActionButton3} placeholder="" {...register("totalDevelopmentCost")} id = "totalDevelopmentCost" />
               {/* <label htmlFor="sum">Total: {(watch("totalDevelopmentCost"))?.toFixed(2)}</label>&nbsp;&nbsp; */}
               </div>
     
