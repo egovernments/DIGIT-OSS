@@ -105,6 +105,7 @@ import FormLabel from '@mui/material/FormLabel';
 
     const userRoles = Digit.UserService.getUser()?.info?.roles.map((item) => item.code)  || [];
     const showActionButton = userRoles.includes("CE_HQ")
+    
     // console.log("logg123" ,userRoles, showActionButton );
     const [selects, setSelects] = useState();
     const [showhide, setShowhide] = useState("");
@@ -147,18 +148,28 @@ import FormLabel from '@mui/material/FormLabel';
   useEffect(() => {
     if (developerDataLabel) {
       setValue("electricInfra", apiResponse?.additionalDetails?.electricInfra);
+      setValue("electricInfraRaemarks", apiResponse?.additionalDetails?.electricInfraRaemarks);
       setValue("electricDistribution", apiResponse?.additionalDetails?.electricDistribution);
-      setValue("sewerLine", apiResponse?.additionalDetails?.sewerLine);
+      setValue("electricDistributionRemarks", apiResponse?.additionalDetails?.electricDistributionRemarks);
+      setValue("sourceWater", apiResponse?.additionalDetails?.sourceWater);
+      setValue("sourceWaterRemarks", apiResponse?.additionalDetails?.sourceWaterRemarks);
       setValue("stormwater", apiResponse?.additionalDetails?.stormwater);
+      setValue("stormwaterRemarks", apiResponse?.additionalDetails?.stormwaterRemarks);
       setValue("capacityUgt", apiResponse?.additionalDetails?.capacityUgt);
+      setValue("capacityUgtRemarks", apiResponse?.additionalDetails?.capacityUgtRemarks);
       setValue("capacityStp", apiResponse?.additionalDetails?.capacityStp);
+      setValue("capacityStpRemarks", apiResponse?.additionalDetails?.capacityStpRemarks);
       setValue("specifications", apiResponse?.additionalDetails?.specifications);
       setValue("waterSupply", apiResponse?.additionalDetails?.waterSupply);
+      setValue("waterSupplyRemarks", apiResponse?.additionalDetails?.waterSupplyRemarks);
       setValue("sewerNetwork", apiResponse?.additionalDetails?.sewerNetwork);
+      setValue("sewerNetworkRemarks", apiResponse?.additionalDetails?.sewerNetworkRemarks);
       setValue("stormwaterDrainage", apiResponse?.additionalDetails?.stormwaterDrainage);
+      setValue("stormwaterDrainageRemarks", apiResponse?.additionalDetails?.stormwaterDrainageRemarks);
       setValue("roadNetwork", apiResponse?.additionalDetails?.roadNetwork);
       setValue("horticlture", apiResponse?.additionalDetails?.horticlture);
-      setValue("acreCost", apiResponse?.additionalDetails?.acreCost);
+      setValue("ugtRemarks", apiResponse?.additionalDetails?.ugtRemarks);
+      setValue("ugt", apiResponse?.additionalDetails?.ugt);
       setValue("selfCertified", apiResponse?.additionalDetails?.selfCertified);
       setValue("streetLightening", apiResponse?.additionalDetails?.streetLightening);
      
@@ -254,7 +265,7 @@ import FormLabel from '@mui/material/FormLabel';
               </div>
             	</TableCell>
 							<TableCell align="left">
-              <div className="row">
+              <div>
                 <Form.Check
                   onChange={(e) => console.log(e)}
                   value="Y"
@@ -286,7 +297,10 @@ import FormLabel from '@mui/material/FormLabel';
               id="exampleFormControlTextarea1"
               placeholder="Enter your Remarks"
               autoFocus
-          
+              disabled={!showActionButton}
+              onChange={(e) => console.log(e)}
+              {...register("electricInfraRaemarks")}
+              inline
               rows="3"
            
             />
@@ -313,7 +327,7 @@ import FormLabel from '@mui/material/FormLabel';
 							</TableCell>
 							<TableCell align="left">
                            
-                            <div className="row">
+                            <div>
                             <Form.Check
                 onChange={(e) => console.log(e)}
                 value="Y"
@@ -339,13 +353,17 @@ import FormLabel from '@mui/material/FormLabel';
                             </div>
                 
 							</TableCell>
+             
+
                             <TableCell align="left">
                                         <textarea
               class="form-control"
               id="exampleFormControlTextarea2"
               placeholder="Enter your Remarks"
               autoFocus
-           
+              disabled={!showActionButton}
+              onChange={(e) => console.log(e)}
+              {...register("electricDistributionRemarks")}
               rows="3"
            
             />
@@ -403,7 +421,9 @@ import FormLabel from '@mui/material/FormLabel';
               id="exampleFormControlTextarea3"
               placeholder="Enter your Remarks"
               autoFocus
-          
+              disabled={!showActionButton}
+              onChange={(e) => console.log(e)}
+              {...register("stormwaterRemarks")}
               rows="3"
   
             />
@@ -460,7 +480,9 @@ import FormLabel from '@mui/material/FormLabel';
               id="exampleFormControlTextarea4"
               placeholder="Enter your Remarks"
               autoFocus
-           
+              disabled={!showActionButton}
+              onChange={(e) => console.log(e)}
+              {...register("sourceWaterRemarks")}
               rows="3"
            
             />
@@ -517,6 +539,9 @@ import FormLabel from '@mui/material/FormLabel';
               id="exampleFormControlTextarea5"
               placeholder="Enter your Remarks"
               autoFocus
+              disabled={!showActionButton}
+              onChange={(e) => console.log(e)}
+              {...register("capacityUgtRemarks")}
             rows="3"
             />
                                         </TableCell>
@@ -574,7 +599,9 @@ import FormLabel from '@mui/material/FormLabel';
               id="exampleFormControlTextarea6"
               placeholder="Enter your Remarks"
               autoFocus
-            
+              disabled={!showActionButton}
+              onChange={(e) => console.log(e)}
+              {...register("capacityStpRemarks")}
               rows="3"
            
             />
@@ -607,6 +634,7 @@ import FormLabel from '@mui/material/FormLabel';
                 id="default-radio"
                 label="Yes"
                 name="true"
+                disabled={!showActionButton}
                 {...register("ugt")}
                 inline
               ></Form.Check>
@@ -617,6 +645,7 @@ import FormLabel from '@mui/material/FormLabel';
                 id="default-radio"
                 label="No"
                 name="false"
+                disabled={!showActionButton}
                 {...register("ugt")}
                 inline
               ></Form.Check>
@@ -628,7 +657,9 @@ import FormLabel from '@mui/material/FormLabel';
               id="exampleFormControlTextarea7a"
               placeholder="Enter your Remarks"
               autoFocus
-            
+              disabled={!showActionButton}
+              onChange={(e) => console.log(e)}
+              {...register("ugtRemarks")}
               rows="3"
       
             />
@@ -683,6 +714,9 @@ import FormLabel from '@mui/material/FormLabel';
               id="exampleFormControlTextarea8"
               placeholder="Enter your Remarks"
               autoFocus
+              disabled={!showActionButton}
+              onChange={(e) => console.log(e)}
+              {...register("waterSupplyRemarks")}
             
               rows="3"
       
@@ -738,7 +772,9 @@ import FormLabel from '@mui/material/FormLabel';
               id="exampleFormControlTextarea7c"
               placeholder="Enter your Remarks"
               autoFocus
-            
+              disabled={!showActionButton}
+              onChange={(e) => console.log(e)}
+              {...register("sewerNetworkRemarks")}
               rows="3"
           
             />
@@ -794,7 +830,9 @@ import FormLabel from '@mui/material/FormLabel';
               id="exampleFormControlTextarea7d"
               placeholder="Enter your Remarks"
               autoFocus
-            
+              disabled={!showActionButton}
+              onChange={(e) => console.log(e)}
+              {...register("stormwaterDrainageRemarks")}
               rows="3"
             
             />

@@ -20,7 +20,7 @@ import { useTranslation } from "react-i18next";
 import { useLocation } from "react-router-dom";
 
 const Genarelinfo = (props) => {
-  useTranslation
+  // useTranslation
 
   const {t} = useTranslation();
   const { pathname: url } = useLocation();
@@ -449,10 +449,10 @@ const Genarelinfo = (props) => {
                   </Form.Control>
                   {/* {JSON.stringify(userRoles)}
                     {JSON.stringify(hideRemarks)} */}
-                    {/* display: hideRemarks?"none":"block", */}
+                    {/*  display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_PURPOSE_OF_LICENCE") ? "block" : "none", */}
                   <ReportProblemIcon
                     style={{
-                      display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("Purpose of colony") ? "block" : "none",
+                      display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_PURPOSE_OF_LICENCE") ? "block" : "none",
                   
                       color: fieldIconColors.purpose
                     }}
@@ -504,7 +504,7 @@ const Genarelinfo = (props) => {
                 
                   <ReportProblemIcon
                     style={{
-                      display: hideRemarks || hideRemarksPatwari ?"none":"block",
+                       display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_PURPOSE_OF_LICENCE") ? "block" : "none",
                 
                       color: fieldIconColors.potential
                     }}
@@ -540,7 +540,7 @@ const Genarelinfo = (props) => {
                     </Form.Control>
                     <ReportProblemIcon
                       style={{
-                        display: hideRemarks || hideRemarksPatwari ?"none":"block",
+                         display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_PURPOSE_OF_LICENCE") ? "block" : "none",
 
                         color: fieldIconColors.district
                       }}
@@ -575,7 +575,7 @@ const Genarelinfo = (props) => {
                     ></Form.Control>
                     <ReportProblemIcon
                       style={{
-                        display: hideRemarks || hideRemarksPatwari ?"none":"block",
+                         display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_PURPOSE_OF_LICENCE") ? "block" : "none",
                       
                         color: fieldIconColors.state
                       }}
@@ -750,11 +750,11 @@ Note: The term “Collaboration agreement" shall include all Development agreeme
                     </th>
                      
  </tr>
-                  {/* <tr className="border-top-0">
+                  <tr className="border-top-0">
                     <th class="fw-normal py-0 border-top-0">
                        <ReportProblemIcon
                       style={{
-                        display: hideRemarks || hideRemarksPatwari ?"none":"block",
+                         display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_DISTRICT_LAND_SCHEDULE") ? "block" : "none",
 
                         color: fieldIconColors.district
                       }}
@@ -770,7 +770,7 @@ Note: The term “Collaboration agreement" shall include all Development agreeme
                     <th class="fw-normal py-0 border-top-0">
                        <ReportProblemIcon
                       style={{
-                        display: hideRemarks || hideRemarksPatwari ?"none":"block",
+                         display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_DEVELOPMENT_PLAN_LAND_SCHEDULE") ? "block" : "none",
 
                         color: fieldIconColors.developmentPlan
                       }}
@@ -786,7 +786,7 @@ Note: The term “Collaboration agreement" shall include all Development agreeme
                   <th class="fw-normal py-0 border-top-0">
                     <ReportProblemIcon
                     style={{
-                      display: hideRemarks || hideRemarksPatwari ?"none":"block",
+                       display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_ZONE_LAND_SCHEDULE") ? "block" : "none",
                 
                       color: fieldIconColors.potential
                     }}
@@ -804,7 +804,7 @@ Note: The term “Collaboration agreement" shall include all Development agreeme
                       <ReportProblemIcon
                         style={{
                          
-                          display: hideRemarks || hideRemarksPatwari ?"none":"block",
+                           display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_SECTOR_LAND_SCHEDULE") ? "block" : "none",
                           color: fieldIconColors.sector
                         }}
                         onClick={() => {
@@ -820,7 +820,7 @@ Note: The term “Collaboration agreement" shall include all Development agreeme
                       <ReportProblemIcon
                         style={{
                          
-                          display: hideRemarks || hideRemarksPatwari ?"none":"block",
+                           display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_TEHSIL_LAND_SCHEDULE") ? "block" : "none",
                           color: fieldIconColors.tehsil
                         }}
                         onClick={() => {
@@ -835,7 +835,7 @@ Note: The term “Collaboration agreement" shall include all Development agreeme
                     <th class="fw-normal py-0 border-top-0">
                       <ReportProblemIcon
                         style={{
-                          display: hideRemarks?"none":"block",
+                           display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_REVENUE_ESTATE_LAND_SCHEDULE") ? "block" : "none",
                           color: fieldIconColors.revenue
                         }}
                         onClick={() => {
@@ -850,7 +850,7 @@ Note: The term “Collaboration agreement" shall include all Development agreeme
                    <th class="fw-normal py-0 border-top-0">
                       <ReportProblemIcon
                         style={{
-                          display: hideRemarks || hideRemarksPatwari ?"none":"block",
+                           display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_HADBAST_NUMBER_LAND_SCHEDULE") ? "block" : "none",
                          
                           color: fieldIconColors.hadbastNo
                         }}
@@ -866,8 +866,8 @@ Note: The term “Collaboration agreement" shall include all Development agreeme
                     <th class="fw-normal py-0 border-top-0">
                       <ReportProblemIcon
                         style={{
-                          // display: hideRemarks?"none":"block",
-                          display: hideRemarks || hideRemarksJE ?"none":"block",
+                          //  display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_PURPOSE_OF_LICENCE") ? "block" : "none",
+                          display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_RECTANGLE_NUMBER_LAND_SCHEDULE") ? "block" : "none",
                           color: fieldIconColors.rectangleNo
                         }}
                         onClick={() => {
@@ -882,7 +882,7 @@ Note: The term “Collaboration agreement" shall include all Development agreeme
                     <th class="fw-normal py-0 border-top-0">
                       <ReportProblemIcon
                         style={{
-                          display: hideRemarks || hideRemarksJE ?"none":"block",
+                          display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_KHEWATS_NUMBER_LAND_SCHEDULE") ? "block" : "none",
                           color: fieldIconColors.rectaNo
                         }}
                         onClick={() => {
@@ -897,7 +897,7 @@ Note: The term “Collaboration agreement" shall include all Development agreeme
                     <th class="fw-normal py-0 border-top-0">
                       <ReportProblemIcon
                         style={{
-                          display: hideRemarks || hideRemarksJE ?"none":"block",
+                          display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_PURPOSE_OF_LICENCE") ? "block" : "none",
                           color: fieldIconColors.landOwner
                         }}
                         onClick={() => {
@@ -912,9 +912,9 @@ Note: The term “Collaboration agreement" shall include all Development agreeme
                     <th class="fw-normal py-0 border-top-0">
                       <ReportProblemIcon
                         style={{
-                          // display: hideRemarks?"none":"block",
+                          //  display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_PURPOSE_OF_LICENCE") ? "block" : "none",
                           // display: hideRemarksPatwari?"none":"block",
-                          display: hideRemarks || hideRemarksPatwari ?"none":"block",
+                           display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_KHEWATS_NUMBER_LAND_SCHEDULE") ? "block" : "none",
                           color: fieldIconColors.typeLand
                         }}
                         onClick={() => {
@@ -929,9 +929,9 @@ Note: The term “Collaboration agreement" shall include all Development agreeme
                     <th class="fw-normal py-0 border-top-0">
                       <ReportProblemIcon
                         style={{
-                          // display: hideRemarks?"none":"block",
+                          //  display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_PURPOSE_OF_LICENCE") ? "block" : "none",
                           // display: hideRemarksPatwari?"none":"block",
-                          display: hideRemarks || hideRemarksPatwari ?"none":"block",
+                           display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_PURPOSE_OF_LICENCE") ? "block" : "none",
                           color: fieldIconColors.isChange
                         }}
                         onClick={() => {
@@ -947,9 +947,9 @@ Note: The term “Collaboration agreement" shall include all Development agreeme
                     <th class="fw-normal py-0 border-top-0">
                       <ReportProblemIcon
                         style={{
-                          // display: hideRemarks?"none":"block",
+                          //  display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_PURPOSE_OF_LICENCE") ? "block" : "none",
                           // display: hideRemarksPatwari?"none":"block",
-                          display: hideRemarks || hideRemarksPatwari ?"none":"block",
+                           display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_PURPOSE_OF_LICENCE") ? "block" : "none",
                           color: fieldIconColors.editRectangleNo
                         }}
                         onClick={() => {
@@ -968,7 +968,7 @@ Note: The term “Collaboration agreement" shall include all Development agreeme
                       {" "}
                       <ReportProblemIcon
                         style={{
-                          display: hideRemarks || hideRemarksJE ?"none":"block",
+                          display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_PURPOSE_OF_LICENCE") ? "block" : "none",
                           color: fieldIconColors.editKhewats
                         }}
                         onClick={() => {
@@ -985,7 +985,7 @@ Note: The term “Collaboration agreement" shall include all Development agreeme
                       <ReportProblemIcon
                         style={{
                           
-                          display: hideRemarks || hideRemarksPatwari ?"none":"block",
+                           display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_PURPOSE_OF_LICENCE") ? "block" : "none",
                           color: fieldIconColors.landOwnerRegistry
                         }}
                         onClick={() => {
@@ -1003,7 +1003,7 @@ Note: The term “Collaboration agreement" shall include all Development agreeme
                       {" "}
                       <ReportProblemIcon
                         style={{
-                          display: hideRemarks || hideRemarksJE ?"none":"block",
+                          display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_PURPOSE_OF_LICENCE") ? "block" : "none",
                           color: fieldIconColors.collaboration
                         }}
                         onClick={() => {
@@ -1019,7 +1019,7 @@ Note: The term “Collaboration agreement" shall include all Development agreeme
                       {" "}
                       <ReportProblemIcon
                         style={{
-                          display: hideRemarks || hideRemarksJE ?"none":"block",
+                          display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_PURPOSE_OF_LICENCE") ? "block" : "none",
                           color: fieldIconColors.developerCompany
                         }}
                         onClick={() => {
@@ -1035,7 +1035,7 @@ Note: The term “Collaboration agreement" shall include all Development agreeme
                       {" "}
                       <ReportProblemIcon
                         style={{
-                          display: hideRemarks || hideRemarksJE ?"none":"block",
+                          display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_PURPOSE_OF_LICENCE") ? "block" : "none",
                           color: fieldIconColors.agreementValidFrom
                         }}
                         onClick={() => {
@@ -1051,7 +1051,7 @@ Note: The term “Collaboration agreement" shall include all Development agreeme
                       {" "}
                       <ReportProblemIcon
                         style={{
-                          display: hideRemarks || hideRemarksJE ?"none":"block",
+                          display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_PURPOSE_OF_LICENCE") ? "block" : "none",
                           color: fieldIconColors.agreementIrrevocialble
                         }}
                         onClick={() => {
@@ -1067,7 +1067,7 @@ Note: The term “Collaboration agreement" shall include all Development agreeme
                       {" "}
                       <ReportProblemIcon
                         style={{
-                          display: hideRemarks || hideRemarksJE ?"none":"block",
+                          display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_PURPOSE_OF_LICENCE") ? "block" : "none",
                           color: fieldIconColors.authSignature
                         }}
                         onClick={() => {
@@ -1083,7 +1083,7 @@ Note: The term “Collaboration agreement" shall include all Development agreeme
                       {" "}
                       <ReportProblemIcon
                         style={{
-                          display: hideRemarks || hideRemarksJE ?"none":"block",
+                          display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_PURPOSE_OF_LICENCE") ? "block" : "none",
                           color: fieldIconColors.nameAuthSign
                         }}
                         onClick={() => {
@@ -1099,7 +1099,7 @@ Note: The term “Collaboration agreement" shall include all Development agreeme
                       {" "}
                       <ReportProblemIcon
                         style={{
-                          display: hideRemarks || hideRemarksJE ?"none":"block",
+                          display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_PURPOSE_OF_LICENCE") ? "block" : "none",
                           color: fieldIconColors.registeringAuthority
                         }}
                         onClick={() => {
@@ -1114,9 +1114,9 @@ Note: The term “Collaboration agreement" shall include all Development agreeme
                     <th class="fw-normal py-0 border-top-0">
                       <ReportProblemIcon
                         style={{
-                          // display: hideRemarks?"none":"block",
+                          //  display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_PURPOSE_OF_LICENCE") ? "block" : "none",
                           // display: hideRemarksPatwari?"none":"block",
-                          display: hideRemarks || hideRemarksPatwari ?"none":"block",
+                           display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_PURPOSE_OF_LICENCE") ? "block" : "none",
                           color: fieldIconColors.registeringAuthorityDoc
                         }}
                         onClick={() => {
@@ -1131,7 +1131,7 @@ Note: The term “Collaboration agreement" shall include all Development agreeme
                     <th class="fw-normal py-0 border-top-0">
                       <ReportProblemIcon
                         style={{
-                          display: hideRemarks || hideRemarksJE ?"none":"block",
+                          display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_PURPOSE_OF_LICENCE") ? "block" : "none",
                           color: fieldIconColors.consolidationType
                         }}
                         onClick={() => {
@@ -1146,7 +1146,7 @@ Note: The term “Collaboration agreement" shall include all Development agreeme
                     <th class="fw-normal py-0 border-top-0">
                       <ReportProblemIcon
                         style={{
-                          display: hideRemarks || hideRemarksJE ?"none":"block",
+                          display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_PURPOSE_OF_LICENCE") ? "block" : "none",
                           color: fieldIconColors.kanal
                         }}
                         onClick={() => {
@@ -1162,7 +1162,7 @@ Note: The term “Collaboration agreement" shall include all Development agreeme
                     <th class="fw-normal py-0 border-top-0">
                       <ReportProblemIcon
                         style={{
-                          display: hideRemarks || hideRemarksJE ?"none":"block",
+                          display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_PURPOSE_OF_LICENCE") ? "block" : "none",
                           color: fieldIconColors.marla
                         }}
                         onClick={() => {
@@ -1177,7 +1177,7 @@ Note: The term “Collaboration agreement" shall include all Development agreeme
                     <th class="fw-normal py-0 border-top-0">
                       <ReportProblemIcon
                         style={{
-                          display: hideRemarks || hideRemarksJE ?"none":"block",
+                          display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_PURPOSE_OF_LICENCE") ? "block" : "none",
                           color: fieldIconColors.sarsai
                         }}
                         onClick={() => {
@@ -1192,7 +1192,7 @@ Note: The term “Collaboration agreement" shall include all Development agreeme
                     <th class="fw-normal py-0 border-top-0">
                       <ReportProblemIcon
                         style={{
-                          display: hideRemarks || hideRemarksJE ?"none":"block",
+                          display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_PURPOSE_OF_LICENCE") ? "block" : "none",
                           color: fieldIconColors.bigha
                         }}
                         onClick={() => {
@@ -1208,7 +1208,7 @@ Note: The term “Collaboration agreement" shall include all Development agreeme
                     <th class="fw-normal py-0 border-top-0">
                       <ReportProblemIcon
                         style={{
-                          display: hideRemarks || hideRemarksJE ?"none":"block",
+                          display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_PURPOSE_OF_LICENCE") ? "block" : "none",
                           color: fieldIconColors.biswa
                         }}
                         onClick={() => {
@@ -1223,7 +1223,7 @@ Note: The term “Collaboration agreement" shall include all Development agreeme
                     <th class="fw-normal py-0 border-top-0">
                       <ReportProblemIcon
                         style={{
-                          display: hideRemarks || hideRemarksJE ?"none":"block",
+                          display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_PURPOSE_OF_LICENCE") ? "block" : "none",
                           color: fieldIconColors.biswansi
                         }}
                         onClick={() => {
@@ -1240,7 +1240,7 @@ Note: The term “Collaboration agreement" shall include all Development agreeme
                       <ReportProblemIcon
                         style={{
                           
-                          display: hideRemarks || hideRemarksPatwari ?"none":"block",
+                           display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_PURPOSE_OF_LICENCE") ? "block" : "none",
                           color: fieldIconColors.tehsil
                         }}
                         onClick={() => {
@@ -1252,7 +1252,7 @@ Note: The term “Collaboration agreement" shall include all Development agreeme
                         }}
                       ></ReportProblemIcon>
                     </th>
-                  </tr> */}
+                  </tr>
                 </thead>
                 <tbody>
                 {

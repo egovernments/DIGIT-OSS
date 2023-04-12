@@ -16,6 +16,8 @@ import RemoveIcon from "@mui/icons-material/Remove";
 import Collapse from "react-bootstrap/Collapse";
 import { IconButton } from "@mui/material";
 import { ScrutinyRemarksContext } from "../../../../../context/remarks-data-context";
+import InfoIcon from "@mui/icons-material/Info";
+import Tooltip from "@mui/material/Tooltip";
 
 
 const ServicePlanService = (props) => {
@@ -456,6 +458,31 @@ console.log("dataEDC",idwDataTreade);
              
             </div>
             </Col>
+
+            <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
+          <Col xs={6} md={6}>
+            <Form.Label style={{ margin: 2 }}>Proposed Source of Water Supply</Form.Label>
+            <textarea
+              class="form-control"
+              id="exampleFormControlTextarea1"
+              placeholder={apiResponse?.environmental}
+              autoFocus
+              // onChange={(e) => {
+              //   setDeveloperRemarks({ data: e.target.value });
+                
+              // }}
+            
+              // {...register("environmentalClearance")}
+              // onChange={(e) => setEnviromental(e.target.value)}
+              // value={apiResponse?.environmental}
+                rows="3"
+                disabled
+              
+            />
+            {/* <Form.Control type="text" /> */}
+          </Col>
+        </Form.Group>
+
           </Row>
               <br></br>
               <div className="table table-bordered table-responsive">
@@ -518,20 +545,15 @@ console.log("dataEDC",idwDataTreade);
                       <h2>Environmental Clearance.</h2>
                     </td>
                     <td component="th" scope="row">
-                      {/* <input
-                    type="file"
-                    className="form-control"
-                    {...register("environmentalClearance")}
-                    onChange1={(e) => setFile({ file: e.target.files[0] })}
-                  /> */}
+                    
                       <div className="btn btn-sm col-md-4">
-                        <IconButton onClick={()=>getDocShareholding(apiResponse?.environmentalClearance)}>
+                        <IconButton onClick={()=>getDocShareholding(apiResponse?.shapeFileAsPerTemplate)}>
                         <Visibility color="info" className="icon" />
                         </IconButton>
                       </div>
 
                       <div className="btn btn-sm col-md-4">
-                        <IconButton onClick={()=>getDocShareholding(apiResponse?.environmentalClearance)}>
+                        <IconButton onClick={()=>getDocShareholding(apiResponse?.shapeFileAsPerTemplate)}>
                         <FileDownload color="primary" className="mx-1" />
                         </IconButton>
                       </div>
@@ -545,12 +567,13 @@ console.log("dataEDC",idwDataTreade);
                             setLabelValue("Environmental Clearance."),
                               setSmShow(true),
                               console.log("modal open"),
-                              setFieldValue(apiResponse !== null ? apiResponse?.environmentalClearance : null);
+                              setFieldValue(apiResponse !== null ? apiResponse?.shapeFileAsPerTemplate : null);
                           }}
                         ></ReportProblemIcon>
                       </div>
                     </td>
                   </tr>
+                
                   <tr>
                     <td>
                       <div className="px-2">
@@ -558,7 +581,12 @@ console.log("dataEDC",idwDataTreade);
                       </div>
                     </td>
                     <td component="th" scope="row">
-                      <h2>Service plan in PDF (OCR Compatible) + GIS format.</h2>
+                  <h6 >
+                  Service plan in AutoCAD (DXF) file.
+                  <Tooltip title="Any amendment suggested by HSVP may be incorporated in the drawing accordingly">
+                    <InfoIcon style={{ cursor: "pointer" }} color="primary"></InfoIcon>
+                  </Tooltip>
+                </h6>
                     </td>
                     <td component="th" scope="row">
                       <div className="btn btn-sm col-md-4">
@@ -588,7 +616,7 @@ console.log("dataEDC",idwDataTreade);
                       </div>
                     </td>
                   </tr>
-                  <tr>
+                  {/* <tr>
                     <td>
                       <div className="px-2">
                         <p className="mb-2">4.</p>
@@ -624,8 +652,8 @@ console.log("dataEDC",idwDataTreade);
                         ></ReportProblemIcon>
                       </div>
                     </td>
-                  </tr>
-                  <tr>
+                  </tr> */}
+                  {/* <tr>
                     <td>
                       <div className="px-2">
                         <p className="mb-2">5.</p>
@@ -661,7 +689,7 @@ console.log("dataEDC",idwDataTreade);
                         ></ReportProblemIcon>
                       </div>
                     </td>
-                  </tr>
+                  </tr> */}
                 </tbody>
                 { (apiResponse?.purpose === "DDJAY_APHP" || apiResponse?.purpose === "RPL" || apiResponse?.purpose === "NILP"|| apiResponse?.purpose === "NILPC"|| apiResponse?.purpose === "IPA" || apiResponse?.purpose === "CPRS" || apiResponse?.purpose === "CICS") && (
               

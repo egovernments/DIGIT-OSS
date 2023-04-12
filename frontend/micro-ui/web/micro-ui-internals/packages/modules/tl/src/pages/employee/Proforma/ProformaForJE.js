@@ -287,14 +287,14 @@ function IndeterminateCheckbox() {
         }}
       >
         <span style={{ color: "#817f7f" }} className="">
-        PERFORMA FOR SCRUTINY (BY OFFICE JE)
+        PROFORMA FOR SCRUTINY (BY OFFICE JE)
         </span>
         {open2 ? <RemoveIcon></RemoveIcon> : <AddIcon></AddIcon>}
       </div>
       <Collapse in={open2}>
         <div id="example-collapse-text">
       <Card style={{ width: "126%", marginLeft: "-2px", paddingRight: "10px", marginTop: "20px", marginBottom: "52px" }}>
-        <h4 style={{ fontSize: "20px", marginLeft: "5px" }}>PERFORMA FOR SCRUTINY (BY OFFICE JE)</h4>
+        <h4 style={{ fontSize: "20px", marginLeft: "5px" }}>PROFORMA FOR SCRUTINY (BY OFFICE JE)</h4>
         <div className="card">
           <Form> 
             <TableContainer >

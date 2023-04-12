@@ -104,7 +104,8 @@ import FormLabel from '@mui/material/FormLabel';
     function ServicePlanExternal(props) {
 
     const userRoles = Digit.UserService.getUser()?.info?.roles.map((item) => item.code)  || [];
-    const showActionButton = userRoles.includes("DTP_HQ")
+    const showActionButton = userRoles.includes("FMDA")
+    console.log("Externaldata" , userRoles);
     // console.log("logg123" ,userRoles, showActionButton );
     const [selects, setSelects] = useState();
     const [showhide, setShowhide] = useState("");
