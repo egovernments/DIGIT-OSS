@@ -1687,7 +1687,7 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
                             />
                             {emailId && emailId.length > 0 && !emailId.match(Digit.Utils.getPattern("Email")) && (
                               <CardLabelError style={{ width: "100%", marginTop: "5px", fontSize: "16px", marginBottom: "12px", color: "red" }}>
-                                {t("BPA_REGISTERED_ADDRESS_INVALID")}
+                                {t("CORE_COMMON_APPLICANT_EMAIL_INVALID")}
                               </CardLabelError>
                             )}
                           </div>

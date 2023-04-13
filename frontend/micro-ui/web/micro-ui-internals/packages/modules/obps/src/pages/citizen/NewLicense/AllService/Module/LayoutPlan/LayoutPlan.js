@@ -50,7 +50,7 @@ function LayoutPlanClu() {
   const [selects, setSelects] = useState();
   const [showhide, setShowhide] = useState("");
   const { register, handleSubmit, setValue, getValues, watch } = useForm();
-  const [layOutPlanData, setLayOutPlanData] = useState("");
+  const [layOutPlanData, setLayOutPlanData] = useState([]);
   const [showToastError, setShowToastError] = useState({ label: "", error: false, success: false });
   const [toastError, setToastError] = useState("");
   const [applicantId, setApplicantId] = useState("");
@@ -90,11 +90,13 @@ function LayoutPlanClu() {
     };
     try {
       const Resp = await axios.post(`/tl-services/revisedPlan/_search?applicationNumber=${id}`, payload);
+      const userDataArray = Resp?.data?.revisedPlan?.[0];
       const userData = Resp?.data?.revisedPlan?.[0];
       // setValue(userData);
-      setLayOutPlanData(userData);
+      setLayOutPlanData(userDataArray);
+      // setLayOutPlanData(userData);
+      console.log("dasd", userDataArray);
       setLicNumber(userData?.licenseNo);
-      console.log("dasd", userData?.additionalDetails);
       setExistingArea(userData?.additionalDetails?.existingArea);
       setModalValue(userData?.additionalDetails?.existingAreaDetails);
       setProposedAreaRevision(userData?.additionalDetails?.areaProposedRevision);
@@ -156,33 +158,47 @@ function LayoutPlanClu() {
         console.log("LAY", postLayoutPlan);
         const Resp = await axios.post("/tl-services/revisedPlan/_create", postLayoutPlan);
         setLoader(false);
-        const useData = Resp?.data?.RevisedPlan?.[0];
+        // const useData = Resp?.data?.RevisedPlan?.[0];
       } else {
-        layOutPlanData.licenseNo = data?.licenseNo ? data?.licenseNo : layOutPlanData.licenseNo;
-        layOutPlanData.existingArea = data?.existingArea ? data?.existingArea : layOutPlanData.existingArea;
-        layOutPlanData.existingAreaDetails = data?.existingAreaDetails ? data?.existingAreaDetails : layOutPlanData.existingAreaDetails;
-        layOutPlanData.areaProposedRevision = data?.areaProposedRevision ? data?.areaProposedRevision : layOutPlanData.areaProposedRevision;
-        layOutPlanData.areaCommercial = data?.areaCommercial ? data?.areaCommercial : layOutPlanData.areaCommercial;
-        layOutPlanData.areaResidential = data?.areaResidential ? data?.areaResidential : layOutPlanData.areaResidential;
-        layOutPlanData.anyOtherFeature = data?.anyOtherFeature ? data?.anyOtherFeature : layOutPlanData.anyOtherFeature;
-        layOutPlanData.anyOtherRemarks = data?.anyOtherRemarks ? data?.anyOtherRemarks : layOutPlanData.anyOtherRemarks;
-        layOutPlanData.reasonRevisionLayoutPlanDoc = data?.reasonRevisionLayoutPlanDoc
+        // layOutPlanData.licenseNo = data?.licenseNo ? data?.licenseNo : layOutPlanData.additionalDetails?.licenseNo;
+        layOutPlanData.additionalDetails.existingArea = data?.existingArea ? data?.existingArea : layOutPlanData.additionalDetails?.existingArea;
+        layOutPlanData.additionalDetails.existingAreaDetails = data?.existingAreaDetails
+          ? data?.existingAreaDetails
+          : layOutPlanData.additionalDetails?.existingAreaDetails;
+        layOutPlanData.additionalDetails.areaProposedRevision = data?.areaProposedRevision
+          ? data?.areaProposedRevision
+          : layOutPlanData.additionalDetails?.areaProposedRevision;
+        layOutPlanData.additionalDetails.areaCommercial = data?.areaCommercial
+          ? data?.areaCommercial
+          : layOutPlanData.additionalDetails?.areaCommercial;
+        layOutPlanData.additionalDetails.areaResidential = data?.areaResidential
+          ? data?.areaResidential
+          : layOutPlanData.additionalDetails?.areaResidential;
+        layOutPlanData.additionalDetails.anyOtherFeature = data?.anyOtherFeature
+          ? data?.anyOtherFeature
+          : layOutPlanData.additionalDetails?.anyOtherFeature;
+        layOutPlanData.additionalDetails.anyOtherRemarks = data?.anyOtherRemarks
+          ? data?.anyOtherRemarks
+          : layOutPlanData.additionalDetails?.anyOtherRemarks;
+        layOutPlanData.additionalDetails.reasonRevisionLayoutPlanDoc = data?.reasonRevisionLayoutPlanDoc
           ? data?.reasonRevisionLayoutPlanDoc
-          : layOutPlanData.reasonRevisionLayoutPlanDoc;
-        layOutPlanData.earlierApprovedlayoutPlan = data?.earlierApprovedlayoutPlan
+          : layOutPlanData.additionalDetails?.reasonRevisionLayoutPlanDoc;
+        layOutPlanData.additionalDetails.earlierApprovedlayoutPlan = data?.earlierApprovedlayoutPlan
           ? data?.earlierApprovedlayoutPlan
-          : layOutPlanData.earlierApprovedlayoutPlan;
-        layOutPlanData.copyProposedlayoutPlan = data?.copyProposedlayoutPlan ? data?.copyProposedlayoutPlan : layOutPlanData.copyProposedlayoutPlan;
-        layOutPlanData.statusCreationAffidavitDoc = data?.statusCreationAffidavitDoc
+          : layOutPlanData.additionalDetails?.earlierApprovedlayoutPlan;
+        layOutPlanData.additionalDetails.copyProposedlayoutPlan = data?.copyProposedlayoutPlan
+          ? data?.copyProposedlayoutPlan
+          : layOutPlanData.additionalDetails?.copyProposedlayoutPlan;
+        layOutPlanData.additionalDetails.statusCreationAffidavitDoc = data?.statusCreationAffidavitDoc
           ? data?.statusCreationAffidavitDoc
-          : layOutPlanData.statusCreationAffidavitDoc;
-        layOutPlanData.boardResolutionAuthSignatoryDoc = data?.boardResolutionAuthSignatoryDoc
+          : layOutPlanData.additionalDetails?.statusCreationAffidavitDoc;
+        layOutPlanData.additionalDetails.boardResolutionAuthSignatoryDoc = data?.boardResolutionAuthSignatoryDoc
           ? data?.boardResolutionAuthSignatoryDoc
-          : layOutPlanData.boardResolutionAuthSignatoryDoc;
-        layOutPlanData.anyOther = data?.anyOther ? data?.anyOther : layOutPlanData.anyOther;
+          : layOutPlanData.additionalDetails?.boardResolutionAuthSignatoryDoc;
+        layOutPlanData.additionalDetails.anyOther = data?.anyOther ? data?.anyOther : layOutPlanData.additionalDetails?.anyOther;
 
         const updateRequest = {
-          requestInfo: {
+          RequestInfo: {
             api_id: "Rainmaker",
             ver: "1",
             ts: null,
@@ -192,8 +208,9 @@ function LayoutPlanClu() {
             msg_id: "",
             requester_id: "",
             authToken: token,
+            userInfo: userInfo,
           },
-          ReviseLayoutPlan: [
+          RevisedPlan: [
             {
               ...layOutPlanData,
               // "action": "FORWARD",
@@ -205,7 +222,7 @@ function LayoutPlanClu() {
             },
           ],
         };
-        const Resp = await axios.post("/tl-services/serviceplan/_update", updateRequest);
+        const Resp = await axios.post("/tl-services/revisedPlan/_update", updateRequest);
         setOpen(true);
         setApplicationNumber(Resp.data.servicePlanResponse[0].applicationNumber);
       }
