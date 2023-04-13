@@ -310,23 +310,26 @@ public class FSMValidator {
 
 		// SAN-889: Added validation for recevied payment
 		
-		if (null != fsmRequest.getWorkflow() && null != fsmRequest.getWorkflow().getAction()
-				&& fsmRequest.getWorkflow().getAction().equalsIgnoreCase(FSMConstants.WF_ACTION_COMPLETE)
-				&& isDsoRole && fsmRequest.getFsm().getAdvanceAmount()!=null) {
-			Map<String, String> additionalDetails = new HashMap<>();
-			try {
-				additionalDetails = fsmRequest.getFsm().getAdditionalDetails() != null
-						? (Map<String, String>) fsmRequest.getFsm().getAdditionalDetails()
-						: new HashMap<>();
-			} catch (Exception e) {
-				throw new CustomException(FSMErrorConstants.INVALID_ACTION, " Received payment type is mandatory!");
-			}
-			if (!additionalDetails.isEmpty() && additionalDetails.get(FSMConstants.RECEIVED_PAYMENT) == null)
-				throw new CustomException(FSMErrorConstants.INVALID_ACTION, " Received payment type is mandatory!");
-			log.info("additionalDetails.get(\"receivedPayment\"):: "
-					+ additionalDetails.get(FSMConstants.RECEIVED_PAYMENT));
-			mdmsValidator.validateReceivedPaymentType(additionalDetails.get(FSMConstants.RECEIVED_PAYMENT));
-		}
+		/*SM-2099 :Removed validation for received payment
+		 * 
+		 * if (null != fsmRequest.getWorkflow() && null !=
+		 * fsmRequest.getWorkflow().getAction() &&
+		 * fsmRequest.getWorkflow().getAction().equalsIgnoreCase(FSMConstants.
+		 * WF_ACTION_COMPLETE) && isDsoRole &&
+		 * fsmRequest.getFsm().getAdvanceAmount()!=null) { Map<String, String>
+		 * additionalDetails = new HashMap<>(); try { additionalDetails =
+		 * fsmRequest.getFsm().getAdditionalDetails() != null ? (Map<String, String>)
+		 * fsmRequest.getFsm().getAdditionalDetails() : new HashMap<>(); } catch
+		 * (Exception e) { throw new CustomException(FSMErrorConstants.INVALID_ACTION,
+		 * " Received payment type is mandatory!"); } if (!additionalDetails.isEmpty()
+		 * && additionalDetails.get(FSMConstants.RECEIVED_PAYMENT) == null) throw new
+		 * CustomException(FSMErrorConstants.INVALID_ACTION,
+		 * " Received payment type is mandatory!");
+		 * log.info("additionalDetails.get(\"receivedPayment\"):: " +
+		 * additionalDetails.get(FSMConstants.RECEIVED_PAYMENT));
+		 * mdmsValidator.validateReceivedPaymentType(additionalDetails.get(FSMConstants.
+		 * RECEIVED_PAYMENT)); }
+		 */
 		validations(fsmRequest, searchResult, mdmsData, fsm);
 
 	}
