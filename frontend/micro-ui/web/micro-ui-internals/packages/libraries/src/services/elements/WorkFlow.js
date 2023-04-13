@@ -261,9 +261,11 @@ export const WorkflowService = {
           } catch (err) { }
         }
 
-        // HANDLING ACTION FOR NEW VEHICLE LOG FROM UI SIDE
-        // HIDING PAY ACTION FOR DSO FROM UI SIDE
-        const nextActions = location.pathname.includes("new-vehicle-entry") ? action_newVehicle : location.pathname.includes("dso") ? actionRolePair.filter((i)=> i.action !== "PAY") : actionRolePair;
+      // TAKING OUT CURRENT APPL STATUS
+      const tempCheckStatus = timeline.map((i) => i.status)[0]
+      // HANDLING ACTION FOR NEW VEHICLE LOG FROM UI SIDE
+      // HIDING PAYMENT OPTION FOR DSO AND WHEN APPLICATION IS NOT IN PAYMENT STATUS 
+      const nextActions = location.pathname.includes("new-vehicle-entry") ? action_newVehicle : location.pathname.includes("dso") ? actionRolePair.filter((i)=> i.action !== "PAY") : tempCheckStatus.includes("WAITING_FOR_DISPOSAL") || tempCheckStatus.includes("PENDING_APPL_FEE_PAYMENT") ? actionRolePair : actionRolePair.filter((i)=> i.action !== "PAY");
 
         if (role !== "CITIZEN" && moduleCode === "PGR") {
           const onlyPendingForAssignmentStatusArray = timeline?.filter(e => e?.status === "PENDINGFORASSIGNMENT")
