@@ -216,7 +216,7 @@ import FormLabel from '@mui/material/FormLabel';
       <Card >
       <h4 style={{ fontSize: "25px", marginLeft: "21px" }}>Evaluation by Civil Engineer </h4>
         {/* <h4 style={{ fontSize: "25px", marginLeft: "21px" }}>Electrical Plan </h4> */}
-        <Card style={{ width: "126%", marginLeft: "-2px", paddingRight: "10px", marginTop: "20px", marginBottom: "52px" }}>
+        {/* <Card style={{ width: "126%", marginLeft: "-2px", paddingRight: "10px", marginTop: "20px", marginBottom: "52px" }}> */}
        
 
           {/* {JSON.stringify(apiResponse?.additionalDetails?.electricDistribution)} */}
@@ -236,7 +236,7 @@ import FormLabel from '@mui/material/FormLabel';
                Description
 						</TableCell>
 						<TableCell align="left">
-						Amount in lacs.
+						Conditional
 						</TableCell>
 						<TableCell align="Left">
 						Remarks
@@ -250,10 +250,10 @@ import FormLabel from '@mui/material/FormLabel';
 							sx={{ '&:last-child td, &:last-child th':
 								{ border: 0 } }}
 						>
-              <TableCell >
+              <TableCell style={{width:"50px"}} >
 							1
 							</TableCell>
-							<TableCell  align="left">
+							<TableCell  align="left" style={{width:"350px"}}>
                             <div>
                  <Form.Label className={classes.formLabel}>
                   <h2>
@@ -264,7 +264,7 @@ import FormLabel from '@mui/material/FormLabel';
                 </Form.Label>
               </div>
             	</TableCell>
-							<TableCell align="left">
+							<TableCell align="left" style={{width:"200px"}}>
               <div>
                 <Form.Check
                   onChange={(e) => console.log(e)}
@@ -304,6 +304,7 @@ import FormLabel from '@mui/material/FormLabel';
               rows="3"
            
             />
+            
                                         </TableCell>
 					
 						</TableRow>
@@ -867,7 +868,7 @@ import FormLabel from '@mui/material/FormLabel';
             </Button>
           </Row> */}
         </Card>
-      </Card>
+      {/* </Card> */}
       </div>
       </Collapse>
     </form>

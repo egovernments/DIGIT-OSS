@@ -87,13 +87,7 @@ import FormControl from '@mui/material/FormControl';
 import FormLabel from '@mui/material/FormLabel';
 import AddPost from "../Material/TextEditor";
 
-function RadioButtonsGroup() {
-
-    const userRoles = Digit.UserService.getUser()?.info?.roles.map((item) => item.code)  || [];
-    const showActionButton = userRoles.includes("AO_HQ")
-    const showActionButton1 = userRoles.includes("SO_HQ")
-    const showActionButton2 = userRoles.includes("CAO_HQ")
-    
+function ProformForRevenu() {
     const [selects, setSelects] = useState();
     const [showhide, setShowhide] = useState("");
     const { register, handleSubmit } = useForm();
@@ -126,14 +120,14 @@ function RadioButtonsGroup() {
         }}
       >
         <span style={{ color: "#817f7f" }} className="">
-        PROFORMA FOR SCRUTINY (BY OFFICE ACCOUNT BRANCH )
+        PROFORMA FOR SCRUTINY (BY OFFICE REVENUE BRANCH )
         </span>
         {open2 ? <RemoveIcon></RemoveIcon> : <AddIcon></AddIcon>}
       </div>
       <Collapse in={open2}>
         <div id="example-collapse-text">
             <Card style={{ width: "126%", marginLeft: "-2px", paddingRight: "10px", marginTop: "20px", marginBottom: "52px" }}>
-                <h4 style={{ fontSize: "20px", marginLeft: "5px" }}>PROFORMA FOR SCRUTINY (BY OFFICE ACCOUNT BRANCH )</h4>
+                <h4 style={{ fontSize: "20px", marginLeft: "5px" }}>PROFORMA FOR SCRUTINY (BY OFFICE REVENUE BRANCH )</h4>
                 <div className="card">
                     <Form>
                         <TableContainer >
@@ -180,11 +174,11 @@ function RadioButtonsGroup() {
                                                     <div className="d-flex flex-row align-items-center my-1">
 
                                                         <label htmlFor="approachFromProposedSector">
-                                                            <input {...register("approachFromProposedSector")} type="radio" disabled={!showActionButton && !showActionButton1 && !showActionButton2} value="Y" id="approachFromProposedSector" />
+                                                            <input {...register("approachFromProposedSector")} type="radio" value="Y" id="approachFromProposedSector" />
                                                             &nbsp;&nbsp; &nbsp; Yes &nbsp;&nbsp;
                                                         </label>
                                                         <label htmlFor="approachFromProposedSector">
-                                                            <input {...register("approachFromProposedSector")} type="radio" disabled={!showActionButton && !showActionButton1 && !showActionButton2} value="N" id="approachFromProposedSector" />
+                                                            <input {...register("approachFromProposedSector")} type="radio" value="N" id="approachFromProposedSector" />
                                                             &nbsp;&nbsp; &nbsp; No &nbsp;&nbsp;
                                                         </label>
                                                     </div>
@@ -194,9 +188,7 @@ function RadioButtonsGroup() {
 
                                         </TableCell>
                                         <TableCell align="left">
-                                       < AddPost 
-                                       disabled={!showActionButton && !showActionButton1 && !showActionButton2}
-                                       ></AddPost>
+                                       < AddPost></AddPost>
                                         </TableCell>
 
                                     </TableRow>
@@ -225,11 +217,11 @@ function RadioButtonsGroup() {
                                                     <div className="d-flex flex-row align-items-center my-1">
 
                                                         <label htmlFor="licencefeedeposited">
-                                                            <input {...register("licencefeedeposited")} type="radio" disabled={!showActionButton && !showActionButton1 && !showActionButton2} value="Y" id="licencefeedeposited" />
+                                                            <input {...register("licencefeedeposited")} type="radio" value="Y" id="licencefeedeposited" />
                                                             &nbsp;&nbsp;&nbsp; Yes &nbsp;&nbsp;
                                                         </label>
                                                         <label htmlFor="licencefeedeposited">
-                                                            <input {...register("licencefeedeposited")} type="radio" disabled={!showActionButton && !showActionButton1 && !showActionButton2} value="N" id="licencefeedeposited" />
+                                                            <input {...register("licencefeedeposited")} type="radio" value="N" id="licencefeedeposited" />
                                                             &nbsp;&nbsp;&nbsp; No &nbsp;&nbsp;
                                                         </label>
                                                     </div></div>
@@ -281,11 +273,11 @@ function RadioButtonsGroup() {
                                                     <div className="d-flex flex-row align-items-center my-1">
                                                         &nbsp;&nbsp;
                                                         <label htmlFor="applicantdeveloper">
-                                                            <input {...register("applicantdeveloper")} type="radio" disabled={!showActionButton && !showActionButton1 && !showActionButton2} value="Y" id="applicantdeveloper" />
+                                                            <input {...register("applicantdeveloper")} type="radio" value="Y" id="applicantdeveloper" />
                                                             &nbsp; Yes &nbsp;&nbsp;
                                                         </label>
                                                         <label htmlFor="applicantdeveloper">
-                                                            <input {...register("applicantdeveloper")} type="radio" value="N" disabled={!showActionButton && !showActionButton1 && !showActionButton2} id="applicantdeveloper" />
+                                                            <input {...register("applicantdeveloper")} type="radio" value="N" id="applicantdeveloper" />
                                                             &nbsp; No &nbsp;&nbsp;
                                                         </label>
                                                     </div></div>
@@ -333,11 +325,11 @@ function RadioButtonsGroup() {
                                                     <div className="d-flex flex-row align-items-center my-1">
                                                         &nbsp;&nbsp;
                                                         <label htmlFor="renewedreuisite">
-                                                            <input {...register("renewedreuisite")} type="radio" disabled={!showActionButton && !showActionButton1 && !showActionButton2} value="Y" id="renewedreuisite" />
+                                                            <input {...register("renewedreuisite")} type="radio" value="Y" id="renewedreuisite" />
                                                             &nbsp; Yes &nbsp;&nbsp;
                                                         </label>
                                                         <label htmlFor="renewedreuisite">
-                                                            <input {...register("renewedreuisite")} type="radio" disabled={!showActionButton && !showActionButton1 && !showActionButton2} value="N" id="renewedreuisite" />
+                                                            <input {...register("renewedreuisite")} type="radio" value="N" id="renewedreuisite" />
                                                             &nbsp; No &nbsp;&nbsp;
                                                         </label>
                                                     </div></div>
@@ -384,11 +376,11 @@ function RadioButtonsGroup() {
                                                     <div className="d-flex flex-row align-items-center my-1">
                                                         &nbsp;&nbsp;
                                                         <label htmlFor="additionalLicense">
-                                                            <input {...register("additionalLicense")} type="radio" disabled={!showActionButton && !showActionButton1 && !showActionButton2} value="Y" id="additionalLicense" />
+                                                            <input {...register("additionalLicense")} type="radio" value="Y" id="additionalLicense" />
                                                             &nbsp; Yes &nbsp;&nbsp;
                                                         </label>
                                                         <label htmlFor="additionalLicense">
-                                                            <input {...register("additionalLicense")} type="radio" disabled={!showActionButton && !showActionButton1 && !showActionButton2} value="N" id="additionalLicense" />
+                                                            <input {...register("additionalLicense")} type="radio" value="N" id="additionalLicense" />
                                                             &nbsp; No &nbsp;&nbsp;
                                                         </label>
                                                     </div></div>
@@ -436,11 +428,11 @@ function RadioButtonsGroup() {
                                                 <div className="d-flex flex-row align-items-center my-1">
                                                     &nbsp;&nbsp;
                                                     <label htmlFor="loigeneration">
-                                                        <input {...register("loigeneration")} type="radio" disabled={!showActionButton && !showActionButton1 && !showActionButton2} value="Y" id="loigeneration" />
+                                                        <input {...register("loigeneration")} type="radio" value="Y" id="loigeneration" />
                                                         &nbsp; Yes &nbsp;&nbsp;
                                                     </label>
                                                     <label htmlFor="loigeneration">
-                                                        <input {...register("loigeneration")} type="radio" disabled={!showActionButton && !showActionButton1 && !showActionButton2} value="N" id="loigeneration" />
+                                                        <input {...register("loigeneration")} type="radio" value="N" id="loigeneration" />
                                                         &nbsp; No &nbsp;&nbsp;
                                                     </label>
                                                 </div></div>
@@ -488,11 +480,11 @@ function RadioButtonsGroup() {
                                                     <div className="d-flex flex-row align-items-center my-1">
                                                         &nbsp;&nbsp;
                                                         <label htmlFor="loigeneration">
-                                                            <input {...register("outstandingdues")} type="radio" disabled={!showActionButton && !showActionButton1 && !showActionButton2} value="Y" id="outstandingdues" />
+                                                            <input {...register("outstandingdues")} type="radio" value="Y" id="outstandingdues" />
                                                             &nbsp; Yes &nbsp;&nbsp;
                                                         </label>
                                                         <label htmlFor="outstandingdues">
-                                                            <input {...register("outstandingdues")} type="radio" disabled={!showActionButton && !showActionButton1 && !showActionButton2} value="N" id="outstandingdues" />
+                                                            <input {...register("outstandingdues")} type="radio" value="N" id="outstandingdues" />
                                                             &nbsp; No &nbsp;&nbsp;
                                                         </label>
                                                     </div></div>
@@ -532,4 +524,4 @@ function RadioButtonsGroup() {
     );
 }
 
-export default RadioButtonsGroup;
+export default ProformForRevenu;

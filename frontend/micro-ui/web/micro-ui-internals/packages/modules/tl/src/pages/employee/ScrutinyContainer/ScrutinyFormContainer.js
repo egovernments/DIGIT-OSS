@@ -145,7 +145,7 @@ const ScrutinyFormcontainer = (props) => {
               masterDetails: [
                 {
                   "name": "rolesaccess",
-                  "filter": `[?(@.role=='${filterDataRole}'|| @.role=='${filterDataRole}')]`
+                  "filter": `[?(@.role=='${filterDataRole}'|| @.role=='${userRolesArray}')]`
                 },
                 {
                   "name": "rolesaccess",
