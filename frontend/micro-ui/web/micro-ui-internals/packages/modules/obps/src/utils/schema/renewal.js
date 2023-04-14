@@ -1,7 +1,7 @@
 import * as Yup from "yup";
 
 const VALIDATION_SCHEMA = Yup.object().shape({
-  licenseNo: Yup.string().required("This field is required."),
+  licenceNo: Yup.string().required("This field is required."),
   validUpto: Yup.string().required("This field is required."),
   renewalRequiredUpto: Yup.string().required("This field is required."),
   colonizerName: Yup.string().required("This field is required."),
