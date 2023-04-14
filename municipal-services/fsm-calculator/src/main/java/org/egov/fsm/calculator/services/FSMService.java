@@ -33,7 +33,7 @@ public class FSMService {
 		url.append(tenantId);
 
 		url.append("&");
-		url.append("applicationNo=");
+		url.append("applicationNos=");
 		url.append(applicationNo);
 
 		LinkedHashMap responseMap = null;
