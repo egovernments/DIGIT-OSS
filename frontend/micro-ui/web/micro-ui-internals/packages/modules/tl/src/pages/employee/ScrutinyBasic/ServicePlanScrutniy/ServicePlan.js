@@ -465,7 +465,7 @@ console.log("dataEDC",idwDataTreade);
             <textarea
               class="form-control"
               id="exampleFormControlTextarea1"
-              placeholder={apiResponse?.environmental}
+              placeholder={apiResponse?.environmentalClearance}
               autoFocus
               // onChange={(e) => {
               //   setDeveloperRemarks({ data: e.target.value });
@@ -474,7 +474,7 @@ console.log("dataEDC",idwDataTreade);
             
               // {...register("environmentalClearance")}
               // onChange={(e) => setEnviromental(e.target.value)}
-              // value={apiResponse?.environmental}
+              // value={apiResponse?.environmentalClearance}
                 rows="3"
                 disabled
               

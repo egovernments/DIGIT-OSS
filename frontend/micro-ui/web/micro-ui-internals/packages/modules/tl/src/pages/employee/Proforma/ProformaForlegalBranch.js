@@ -131,8 +131,11 @@ import RadioGroup from '@mui/material/RadioGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import FormControl from '@mui/material/FormControl';
 import FormLabel from '@mui/material/FormLabel';
+import { useTranslation } from "react-i18next";
 
 function ProformaForlegalBranch() {
+  const {t} = useTranslation();
+
   const [selects, setSelects] = useState();
   const [showhide, setShowhide] = useState("");
   const { register, handleSubmit } = useForm();
@@ -205,7 +208,8 @@ function ProformaForlegalBranch() {
 							</TableCell>
 							<TableCell  align="left">
                             <h2>
-                            Registered and irrevocable collaboration agreement/joint development agreement/Memorandum of understanding by and between land owners/ land-owning company and collaborator company of all the land mentioned in the schedule of land submitted is in order or not 
+                            {/* Whether registered and irrevocable collaboration agreement by and between land owners/ land owning company and collaborator company of all the land mentioned in schedule of land submitted.  */}
+                            {`${t("NWL_PROFORMA_TOTAL_LEGAL_WHETHER_REGISTERED_IRREVOCABLE_COLLABORATION")}`}
                     &nbsp;&nbsp;
                   </h2>
 							</TableCell>
@@ -257,7 +261,9 @@ function ProformaForlegalBranch() {
 							</TableCell>
 							<TableCell  align="left">
                             <h2>
-                            GPA/SPA in favour of the developer/ applicant submitted is in order or not.
+                            {/* GPA/SPA in favour of the developer/ applicant submitted is in order or not. */}
+                            {/* Whether applied khasra nos. correctly / accurately incorporated in collaboration agreement.  */}
+                            {`${t("NWL_PROFORMA_TOTAL_LEGAL_WHETHER_APPLIED_KHASRA_NOS_CORRECTLY")}`}
                     &nbsp;&nbsp;
                   </h2>
 							</TableCell>
@@ -311,7 +317,9 @@ function ProformaForlegalBranch() {
 							</TableCell>
 							<TableCell  align="left">
                             <h2>
-                            LLP agreement submitted, in case of firm is in order or not. 
+                            {/* Whether GPA/SPA in favour of the developer/ applicant submitted */}
+                            {`${t("NWL_PROFORMA_TOTAL_LEGAL_WHETHER_GPASPA_FAVOUR_DEVELOPER_APPLICANT")}`}
+                            {/* LLP agreement submitted, in case of firm is in order or not.  */}
                     &nbsp;&nbsp;
                   </h2>
 							</TableCell>
@@ -354,6 +362,171 @@ function ProformaForlegalBranch() {
                         
                         
                     </TableRow>
+                    <TableRow
+						
+            sx={{ '&:last-child td, &:last-child th':
+              { border: 0 } }}
+          >
+                          <TableCell >
+            4
+            </TableCell>
+            <TableCell  align="left">
+                          <h2>
+                          {/* Whether applied khasra nos. correctly / accurately incorporated in GPA/SPA.  */}
+                          {`${t("NWL_PROFORMA_TOTAL_LEGAL_WHETHER_APPLIIED_KHASRA_NOS_CORRECTLY")}`}
+                          {/* LLP agreement submitted, in case of firm is in order or not.  */}
+                  &nbsp;&nbsp;
+                </h2>
+            </TableCell>
+            <TableCell align="left">
+                        
+                          <FormControl>
+                          <div className="row">  
+                          {/* <div class="col-md-4 text-right"> */}
+                      <div className="d-flex flex-row align-items-center my-1">
+                        
+                        <label htmlFor="applicantdeveloper">
+                        <input {...register("appiiedKhasra")} type="radio" value="Y" id="applicantdeveloper" />
+                        &nbsp;&nbsp;&nbsp; Yes &nbsp;&nbsp;
+                      </label>
+                      <label htmlFor="applicantdeveloper">
+                        <input {...register("appiiedKhasra")} type="radio" value="N" id="applicantdeveloper" />
+                        &nbsp;&nbsp;&nbsp; No &nbsp;&nbsp;
+                      </label>
+                      </div></div>
+              {/* </div> */}
+  
+              </FormControl>
+              
+            </TableCell>
+                        
+                      <TableCell align="left">
+                                  <textarea
+        class="form-control"
+        id="exampleFormControlTextarea3"
+        placeholder="Enter your Remarks"
+        autoFocus
+      //   onChange={(e) => {
+      //     setDeveloperRemarks({ data: e.target.value });
+      //     setRemarksEntered(e.target.value);
+      //   }}
+        rows="3"
+      //   value={RemarksDeveloper.data}
+      />
+                                  </TableCell>
+                      
+                      
+                  </TableRow>
+                  <TableRow
+						
+            sx={{ '&:last-child td, &:last-child th':
+              { border: 0 } }}
+          >
+                          <TableCell >
+            5
+            </TableCell>
+            <TableCell  align="left">
+                          <h2>
+                          {/* Whether Board resolution in favour of authorized signatory for applying for licence and related work alongwith signatures of signatory duly verified in the board resolution submitted. */}
+                          {`${t("NWL_PROFORMA_TOTAL_LEGAL_WHETHER_BOARD_RESOLUTION_FAVOUR_AUTHORIZED")}`}
+                          {/* LLP agreement submitted, in case of firm is in order or not.  */}
+                  &nbsp;&nbsp;
+                </h2>
+            </TableCell>
+            <TableCell align="left">
+                        
+                          <FormControl>
+                          <div className="row">  
+                          {/* <div class="col-md-4 text-right"> */}
+                      <div className="d-flex flex-row align-items-center my-1">
+                        
+                        <label htmlFor="applicantdeveloper">
+                        <input {...register("applicantdeveloper")} type="radio" value="Y" id="applicantdeveloper" />
+                        &nbsp;&nbsp;&nbsp; Yes &nbsp;&nbsp;
+                      </label>
+                      <label htmlFor="applicantdeveloper">
+                        <input {...register("applicantdeveloper")} type="radio" value="N" id="applicantdeveloper" />
+                        &nbsp;&nbsp;&nbsp; No &nbsp;&nbsp;
+                      </label>
+                      </div></div>
+              {/* </div> */}
+  
+              </FormControl>
+              
+            </TableCell>
+                        
+                      <TableCell align="left">
+                                  <textarea
+        class="form-control"
+        id="exampleFormControlTextarea3"
+        placeholder="Enter your Remarks"
+        autoFocus
+      //   onChange={(e) => {
+      //     setDeveloperRemarks({ data: e.target.value });
+      //     setRemarksEntered(e.target.value);
+      //   }}
+        rows="3"
+      //   value={RemarksDeveloper.data}
+      />
+                                  </TableCell>
+                      
+                      
+                  </TableRow>
+                  <TableRow
+						
+            sx={{ '&:last-child td, &:last-child th':
+              { border: 0 } }}
+          >
+                          <TableCell >
+            6
+            </TableCell>
+            <TableCell  align="left">
+                          <h2>
+                          {/* Whether Indemnity bond indemnifying DTCP from any loss, if occurs due to any dispute on the applied land submitted. */}
+                          {`${t("NWL_PROFORMA_TOTAL_LEGAL_WHETHER_INDEMNITY_BOND_INDEMNIFYING_DTCP")}`}
+                          {/* LLP agreement submitted, in case of firm is in order or not.  */}
+                  &nbsp;&nbsp;
+                </h2>
+            </TableCell>
+            <TableCell align="left">
+                        
+                          <FormControl>
+                          <div className="row">  
+                          {/* <div class="col-md-4 text-right"> */}
+                      <div className="d-flex flex-row align-items-center my-1">
+                        
+                        <label htmlFor="applicantdeveloper">
+                        <input {...register("applicantdeveloper")} type="radio" value="Y" id="applicantdeveloper" />
+                        &nbsp;&nbsp;&nbsp; Yes &nbsp;&nbsp;
+                      </label>
+                      <label htmlFor="applicantdeveloper">
+                        <input {...register("applicantdeveloper")} type="radio" value="N" id="applicantdeveloper" />
+                        &nbsp;&nbsp;&nbsp; No &nbsp;&nbsp;
+                      </label>
+                      </div></div>
+              {/* </div> */}
+  
+              </FormControl>
+              
+            </TableCell>
+                        
+                      <TableCell align="left">
+                                  <textarea
+        class="form-control"
+        id="exampleFormControlTextarea3"
+        placeholder="Enter your Remarks"
+        autoFocus
+      //   onChange={(e) => {
+      //     setDeveloperRemarks({ data: e.target.value });
+      //     setRemarksEntered(e.target.value);
+      //   }}
+        rows="3"
+      //   value={RemarksDeveloper.data}
+      />
+                                  </TableCell>
+                      
+                      
+                  </TableRow>
                             
 							
 				

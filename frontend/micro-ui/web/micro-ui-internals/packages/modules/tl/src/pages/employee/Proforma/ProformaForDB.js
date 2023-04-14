@@ -24,6 +24,12 @@ import FormControl from '@mui/material/FormControl';
 import FormLabel from '@mui/material/FormLabel';
 
 function DrawingBranch() {
+
+  const userRoles = Digit.UserService.getUser()?.info?.roles.map((item) => item.code)  || [];
+  const showActionButton = userRoles.includes("AD_HQ")
+  const showActionButton1 = userRoles.includes("JD_HQ")
+  const showActionButton2 = userRoles.includes("SD_HQ")
+
   const [selects, setSelects] = useState();
   const [showhide, setShowhide] = useState("");
   const { register, handleSubmit } = useForm();

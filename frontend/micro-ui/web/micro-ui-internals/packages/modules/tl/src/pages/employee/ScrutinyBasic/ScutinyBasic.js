@@ -22,6 +22,7 @@ import DrawingBranch from "../Proforma/ProformaForDB";
 import ProformaForlegalBranch from "../Proforma/ProformaForlegalBranch";
 import ProformaPatwari from "../Proforma/ProformaForPatwari";
 import Addmoreinput from "../Complaince/Compliances";
+import ProformForRevenu from "../Proforma/ProformForRevenu";
 // import AddPost from "../Material/TextEditor";
 
 const ScrutitnyForms = ({ apiResponse, applicationNumber, refreshScrutinyData , histeroyData, feeandcharges , applicationStatus ,mDMSData }) => {
@@ -380,7 +381,33 @@ console.log("roleData",rolesDate )
               applicationStatus={applicationStatus}
               mDMSData={mDMSData}
             ></Feeandcharges>
-            {/* </Col> */}
+         
+          </div>
+          <div>
+            <ProformForRevenu></ProformForRevenu>
+          </div>
+          <div>
+          <RadioButtonsGroup>
+      </RadioButtonsGroup>
+          </div>
+          <div>
+          <IndeterminateCheckbox>
+      </IndeterminateCheckbox>
+          </div>
+          <div>
+          <ProformaForlegalBranch>
+      </ProformaForlegalBranch>
+          </div>
+          <div>
+          <DrawingBranch>
+      </DrawingBranch>
+          </div>
+          <div>
+          <ProformaPatwari>
+      </ProformaPatwari>
+          </div>
+          <div>
+            
           </div>
 
         </div>
@@ -401,26 +428,7 @@ console.log("roleData",rolesDate )
            ApiResponseData={apiResponse !== undefined ? apiResponse?.ApplicantPurpose : null}
         ></TemplatesPatwar>
       </div> */}
-      <div style={{ position: "relative", width: "100%", height: "100%", display: "flex" }}>
-      <RadioButtonsGroup>
-      </RadioButtonsGroup>
-      </div>
-      <div style={{ position: "relative", width: "100%", height: "100%", display: "flex" }}>
-      <IndeterminateCheckbox>
-      </IndeterminateCheckbox>
-      </div>
-      <div style={{ position: "relative", width: "100%", height: "100%", display: "flex" }}>
-      <DrawingBranch>
-      </DrawingBranch>
-      </div>
-      <div style={{ position: "relative", width: "100%", height: "100%", display: "flex" }}>
-      <ProformaPatwari>
-      </ProformaPatwari>
-      </div>
-      <div style={{ position: "relative", width: "100%", height: "100%", display: "flex" }}>
-      <ProformaForlegalBranch>
-      </ProformaForlegalBranch>
-      </div>
+      
       <div style={{ position: "relative", width: "100%", height: "100%", display: "flex" }}>
       <Addmoreinput>
       </Addmoreinput>

@@ -306,8 +306,8 @@ const ServiceScrutiny = (props) => {
           <div className="col-sm-2">
             <b><p className="head-font">Service Id: </p></b>
             <b><p className="head-font">
-              {/* {applicationData?.businessService} ask to renuka */}
-              Licence
+              {applicationData?.businessService}
+              {/* Licence */}
             </p></b>
           </div>
           <div className="col-sm-2">
@@ -324,9 +324,9 @@ const ServiceScrutiny = (props) => {
             <b><p className="head-font">{applicationData?.tcpDairyNumber}</p></b>
 
           </div>
-          <div className="col-sm-2">
+          {/* <div className="col-sm-2">
             <Button style={{ textAlign: "right" }} value="Submit" id="Submit" onChange1={handleChange} name="Submit" onClick={handleshow19}>Views PDF</Button>
-          </div>
+          </div> */}
         </div>
       </Card.Header>
       <Row style={{ top: 10, padding: 10 }}>
