@@ -19,6 +19,7 @@ import { Toast } from "@egovernments/digit-ui-react-components";
 import ErrorIcon from '@mui/icons-material/Error';
 import InfoIcon from "@mui/icons-material/Info";
 import Tooltip from "@mui/material/Tooltip";
+import { useTranslation } from "react-i18next";
 //import { getDocShareholding } from 'packages/modules/tl/src/pages/employee/ScrutinyBasic/ScrutinyDevelopment/docview.helper.js'
 
 
@@ -33,6 +34,7 @@ const ServicePlanService = () => {
   const [gisFormat, setGisFormat] = useState('')
   const [autocad, setAutoCad] = useState('')
   const [certifiedCopy, setCertifiedCopy] = useState('')
+  const {t}=useTranslation();
   const [drawingErr, setDrawingErr] = useState({
     'selfCertifiedDrawingFromEmpaneledDoc': false,
     'environmentalClearance': false,
@@ -286,8 +288,91 @@ const ServicePlanService = () => {
       return error.message;
     }
   };
-  
-  const handleClose = () => {
+  // const handleshow19 = async (e) => {
+  //   const payload = {
+
+  //     "RequestInfo": {
+
+  //       "apiId": "Rainmaker",
+
+  //       "ver": ".01",
+
+  //       "ts": null,
+
+  //       "action": "_update",
+
+  //       "did": "1",
+
+  //       "key": "",
+
+  //       "msgId": "20170310130900|en_IN",
+
+  //       "authToken": ""
+
+  //     }
+  //   }
+  //   const Resp = await axios.post(`/tl-services/new/license/pdf?applicationNumber=${id}`, payload, { responseType: "arraybuffer" })
+
+  //   console.log("logger12345...", Resp.data, userInfo)
+
+   
+
+  // };
+  // const handleChange = (e) => {
+  //   this.setState({ isRadioSelected: true });
+  // };
+  const handleClose = async (e) => {
+    const payload = {
+
+      "RequestInfo": {
+        "apiId": "Rainmaker",
+        "ver": "v1",
+        "ts": 0,
+        "action": "_search",
+        "did": "",
+        "key": "",
+        "msgId": "090909",
+        "requesterId": "",
+        "authToken": "408de886-cb18-487c-8e68-d171a5006b23",
+        "userInfo": {
+            "id": 1964,
+            "uuid": "ac14890e-ad92-42f8-b262-722773390672",
+            "userName": "8888854328",
+            "name": "Manik lal",
+            "mobileNumber": "8888854328",
+            "emailId": "manikl@gmail.com",
+            "locale": null,
+            "type": "CITIZEN",
+            "roles": [
+                {
+                    "name": "Developer",
+                    "code": "BPA_DEVELOPER",
+                    "tenantId": "hr"
+                },
+                {
+                    "name": "Builder",
+                    "code": "BPA_BUILDER",
+                    "tenantId": "hr"
+                },
+                {
+                    "name": "Citizen",
+                    "code": "CITIZEN",
+                    "tenantId": "hr"
+                }
+            ],
+            "active": true,
+            "tenantId": "hr",
+            "permanentCity": null
+        }
+    }
+    }
+    const Resp = await axios.post(`/tl-services/new/_generateTcpNumbers?loiNumber=${LOINumber}&businessService=SERVICE_PLAN`, payload)
+
+    console.log("logger12345...", Resp.data, userInfo)
+
+   
+
+
     setOpen(false)
     window.location.href = `/digit-ui/citizen`
   }
@@ -431,7 +516,7 @@ const ServicePlanService = () => {
               <div>
                 <label>
                   <h2>
-                    LOI Number <span style={{ color: "red" }}>*</span>
+                  {`${t("SP_APPLICANT_LOI_NUMBER")}`} <span style={{ color: "red" }}>*</span>
                   </h2>
                 </label>
               </div>
@@ -456,7 +541,7 @@ const ServicePlanService = () => {
               <div>
                 <label>
                   <h2>
-                    Name
+                  {`${t("SP_APPLICANT_NAME")}`}
                   </h2>
                 </label>
               </div>
@@ -473,7 +558,7 @@ const ServicePlanService = () => {
               <div>
                 <label>
                   <h2>
-                  Development Plan
+                  {`${t("SP_APPLICANT_DEVELOPMENT_PLAN")}`}
                   </h2>
                 </label>
               </div>
@@ -490,7 +575,7 @@ const ServicePlanService = () => {
               <div>
                 <label>
                   <h2>
-                  Purpose Of Licence 
+                  {`${t("SP_APPLICANT_PURPOSE_OF_LICENCE")}`} 
                   </h2>
                 </label>
               </div>
@@ -507,7 +592,7 @@ const ServicePlanService = () => {
               <div>
                 <label>
                   <h2>
-                  Total Area
+                  {`${t("SP_APPLICANT_TOTAL_AREA")}`}
                   </h2>
                 </label>
               </div>
@@ -524,7 +609,7 @@ const ServicePlanService = () => {
           <br></br>
           <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
           <Col xs={6} md={6}>
-            <Form.Label style={{ margin: 2 }}>Proposed Source of Water Supply</Form.Label>
+            <Form.Label style={{ margin: 2 }}>  {`${t("SP_APPLICANT_PROPOSED_SOURCE_WATER_SUPPLY")}`}</Form.Label>
             <textarea
               class="form-control"
               id="exampleFormControlTextarea1"
@@ -548,9 +633,9 @@ const ServicePlanService = () => {
           <div className="table table-bordered table-responsive">
             <thead>
               <tr>
-                <td style={{ textAlign: "center" }}>Sr.No.</td>
-                <td style={{ textAlign: "center" }}>Document's Type/Name</td>
-                <td style={{ textAlign: "center" }}>Actions</td>
+                <td style={{ textAlign: "center" }}> {`${t("SP_APPLICANT_SR_NO")}`}</td>
+                <td style={{ textAlign: "center" }}>{`${t("SP_APPLICANT_DOCUMENT_TYPE")}`}</td>
+                <td style={{ textAlign: "center" }}>{`${t("SP_APPLICANT_ACTION")}`}</td>
               </tr>
             </thead>
             <tbody>
@@ -561,7 +646,7 @@ const ServicePlanService = () => {
                   </div>
                 </td>
                 <td component="th" scope="row">
-                  <h2>Self-certified drawings from empanelled/certified architects that conform to the standard approved template as per the TCP layout plan / Site plan.</h2>
+                  <h2> {`${t("SP_APPLICANT_SELF_CERTIFIED_DRAWING_APPROVED_TEMPLATE")}`}</h2>
                   {drawingErr.selfCertifiedDrawingFromEmpaneledDoc ? <p style={{color: 'red'}}>Please upload self-certified drawings from empanelled/certified architects*</p> : " "}
                 </td>
                 <td component="th" scope="row">
@@ -643,7 +728,7 @@ const ServicePlanService = () => {
                   </div>
                 </td>
                 <td component="th" scope="row">
-                  <h2>Service plan in PDF (OCR Compatible) + GIS format.</h2>
+                  <h2>  {`${t("SP_APPLICANT_SERVICE_PLAN_IN-PDF_FORMAT")}`}</h2>
                   {drawingErr.shapeFileAsPerTemplate ? <p style={{color: 'red'}}>Please upload service plan pdf and gis format*</p> : " "}
 
                 </td>
@@ -687,7 +772,7 @@ const ServicePlanService = () => {
                 <td component="th" scope="row">
                   {/* <h2>Service plan in AutoCAD (DXF) file.</h2> */}
                   <h6 >
-                  Service plan in AutoCAD (DXF) file.
+                  {`${t("SP_APPLICANT_SERVICE_pLAN_AUTOCAD")}`}
                   <Tooltip title="Any amendment suggested by HSVP may be incorporated in the drawing accordingly">
                     <InfoIcon style={{ cursor: "pointer" }} color="primary"></InfoIcon>
                   </Tooltip>
@@ -776,7 +861,9 @@ const ServicePlanService = () => {
                   </div>
                 </td>
                 <td component="th" scope="row">
-                  <h2>Previously Uploaded layout plan (call)</h2>
+                  <h2> {`${t("SP_APPLICANT_PREVIOUSLY_LAYOUT_PLAN")}`}
+                    {/* Previously Uploaded layout plan (call) */}
+                    </h2>
                   {drawingErr.layoutPlan ? <p style={{color: 'red'}}>Please upload layout plan call*</p> : " "}
                 </td>
                 <td component="th" scope="row">
@@ -817,7 +904,9 @@ const ServicePlanService = () => {
                   </div>
                 </td>
                 <td component="th" scope="row">
-                  <h2>Upload the Revised layout plan</h2>
+                  <h2> {`${t("SP_APPLICANT_UPLOAD_REVISED_LAYOUT_PLAN")}`}
+                    {/* Upload the Revised layout plan */}
+                    </h2>
                   {drawingErr.revisedLayout ? <p style={{color: 'red'}}>Please upload revised layout plan*</p> : " "}
                 </td>
                 <td component="th" scope="row">
@@ -858,7 +947,7 @@ const ServicePlanService = () => {
                   </div>
                 </td>
                 <td component="th" scope="row">
-                  <h2>Upload Demarcation Plan in AutoCAD (DXF) file</h2>
+                  <h2>{`${t("SP_APPLICANT_UPLOAD_DEMARCATION_PLAN_AUTOAD")}`}</h2>
                   {drawingErr.demarcation ? <p style={{color: 'red'}}>Please upload demarcation plan*</p> : " "}
 
                 </td>
@@ -900,7 +989,7 @@ const ServicePlanService = () => {
                   </div>
                 </td>
                 <td component="th" scope="row">
-                  <h2>Upload Demarcation Plan in PDF (OCR Compatible) + GIS format.</h2>
+                  <h2> {`${t("SP_APPLICANT_UPLOAD_DEMARCATION_PLAN_PDF")}`}</h2>
                   {drawingErr.demarcationgis ? <p style={{color: 'red'}}>Please upload demarcation plan in PDF and GIS format*</p> : " "}
                 </td>
                 <td component="th" scope="row">
@@ -941,7 +1030,7 @@ const ServicePlanService = () => {
                   </div>
                 </td>
                 <td component="th" scope="row">
-                  <h2>Upload Excel of detailed layout structure</h2>
+                  <h2>{`${t("SP_APPLICANT_UPLOAD_EXCEL_LAYOUT_STRUCTURE")}`}</h2>
                   {drawingErr.layoutExcel ? <p style={{color: 'red'}}>Please upload excel of detailed layout structure*</p> : " "}
 
                 </td>
@@ -983,7 +1072,7 @@ const ServicePlanService = () => {
                   </div>
                 </td>
                 <td component="th" scope="row">
-                  <h2>Any other relevant document</h2>
+                  <h2> {`${t("SP_APPLICANT_OTHER_RELEVANT_DOCUMENT")}`}</h2>
                   {drawingErr.anyOtherdoc ? <p style={{color: 'red'}}>Please upload anyother relevant document*</p> : " "}
 
                 </td>

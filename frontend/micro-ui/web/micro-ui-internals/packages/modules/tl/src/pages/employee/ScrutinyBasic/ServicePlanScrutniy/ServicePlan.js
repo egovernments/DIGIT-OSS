@@ -18,9 +18,59 @@ import { IconButton } from "@mui/material";
 import { ScrutinyRemarksContext } from "../../../../../context/remarks-data-context";
 import InfoIcon from "@mui/icons-material/Info";
 import Tooltip from "@mui/material/Tooltip";
+import { useTranslation } from "react-i18next";
 
 
 const ServicePlanService = (props) => {
+
+  // onst classes = useStyles();
+  // const applicationStatus = props.applicationStatus ;
+  let user = Digit.UserService.getUser();
+  const userInfo = Digit.UserService.getUser()?.info || {};
+  const userRolesArray = userInfo?.roles.filter((user) => user.code !== "EMPLOYEE");
+  const filterDataRole = userRolesArray?.[0]?.code;
+  const userRoles = user?.info?.roles?.map((e) => e.code) || [];
+  
+  console.log("rolelogintime" , userRoles );
+  console.log("afterfilter12" , filterDataRole)
+
+  const mDMSData = props.mDMSData;
+  const mDMSDataRole = mDMSData?.map((e) => e.role) || [];
+  const hideRemarks = mDMSDataRole.includes(filterDataRole);
+  const applicationStatusMdms = mDMSData?.map((e) => e.applicationStatus) || [] ;
+  const hideRemarksPatwari = applicationStatusMdms.some((item) => item === applicationStatus) || [];
+  const [fileddataName, setFiledDataName] = useState ();
+const {t}=useTranslation();
+ useEffect(() =>{
+    if(mDMSData&&mDMSData?.length){
+      console.log("filedDataMdms" , mDMSData,mDMSData?.[0]?.field , mDMSData?.[0]?.field.map((item , index) => item.fields ));
+      setFiledDataName(mDMSData?.[0]?.field.map((item , index) => item.fields ))
+       
+    }
+    
+ },[mDMSData]
+ )
+ const showReportProblemIcon=(filedName)=>{
+   if (fileddataName&&fileddataName.length) {
+      let show = fileddataName.includes(filedName)
+      return show ;
+    } else {
+      return false ;
+    }
+ }
+ 
+  // mDMSData?.map((e) => e.role)||[]
+  console.log("happyRole" , userRoles);
+  console.log("happyDate" , mDMSData);
+  console.log("happyROLE" , mDMSDataRole);
+  console.log("happyapplicationStatusMdms" , applicationStatusMdms);
+  console.log("happyDateHIDE" , hideRemarksPatwari,showReportProblemIcon("Purpose of colony"),hideRemarks);
+
+
+
+
+
+
   const [selects, setSelects] = useState();
   const [showhide, setShowhide] = useState("");
   const [open2, setOpen2] = useState(false);
@@ -199,7 +249,7 @@ console.log("dataEDC",idwDataTreade);
                   {/* <Form.Group as={Col} controlId="formGridLicence"> */}
                   <div>
                     <Form.Label>
-                      <h5 className={classes.formLabel}>LOI Number &nbsp;</h5>
+                      <h5 className={classes.formLabel}>  {`${t("SP_SCRUTINY_LOI_NUMBER")}`} &nbsp;</h5>
                     </Form.Label>
                     <span className={classes.required}>*</span> &nbsp;&nbsp;
                   </div>
@@ -208,6 +258,7 @@ console.log("dataEDC",idwDataTreade);
 
                     <ReportProblemIcon
                       style={{
+                        display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("SP_SCRUTINY_LOI_NUMBER") ? "block" : "none",
                         color: fieldIconColors.loiNumber,
                       }}
                       onClick={() => {
@@ -325,7 +376,7 @@ console.log("dataEDC",idwDataTreade);
               <div>
                 <label>
                   <h2>
-                    Name
+                  {`${t("SP_SCRUTINY_NAME")}`}
                   </h2>
                 </label>
               </div>
@@ -342,6 +393,7 @@ console.log("dataEDC",idwDataTreade);
 
               <ReportProblemIcon
                 style={{
+                  display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("SP_SCRUTINY_NAME") ? "block" : "none",
                   color: fieldIconColors.devName,
                 }}
                 onClick={() => {
@@ -360,7 +412,7 @@ console.log("dataEDC",idwDataTreade);
               <div>
                 <label>
                   <h2>
-                  Development Plan
+                  {`${t("SP_SCRUTINY_DEVELOPMENT_PLAN")}`}
                   </h2>
                 </label>
               </div>
@@ -377,6 +429,7 @@ console.log("dataEDC",idwDataTreade);
 
               <ReportProblemIcon
                 style={{
+                  display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("SP_SCRUTINY_DEVELOPMENT_PLAN") ? "block" : "none",
                   color: fieldIconColors.developmentPlan,
                 }}
                 onClick={() => {
@@ -394,7 +447,7 @@ console.log("dataEDC",idwDataTreade);
               <div>
                 <label>
                   <h2>
-                  Purpose Of Licence 
+                  {`${t("SP_SCRUTINY_PURPOSE_LICENCE")}`} 
                   </h2>
                 </label>
               </div>
@@ -411,6 +464,7 @@ console.log("dataEDC",idwDataTreade);
 
               <ReportProblemIcon
                 style={{
+                  display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("SP_SCRUTINY_PURPOSE_LICENCE") ? "block" : "none",
                   color: fieldIconColors.purpose,
                 }}
                 onClick={() => {
@@ -428,7 +482,7 @@ console.log("dataEDC",idwDataTreade);
               <div>
                 <label>
                   <h2>
-                  Total Area
+                  {`${t("SP_SCRUTINY_TOTAL_AREA")}`}
                   </h2>
                 </label>
               </div>
@@ -445,6 +499,7 @@ console.log("dataEDC",idwDataTreade);
 
               <ReportProblemIcon
                 style={{
+                  display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("SP_SCRUTINY_TOTAL_AREA") ? "block" : "none",
                   color: fieldIconColors.totalArea,
                 }}
                 onClick={() => {
@@ -488,9 +543,9 @@ console.log("dataEDC",idwDataTreade);
               <div className="table table-bordered table-responsive">
                 <thead>
                   <tr>
-                    <td style={{ textAlign: "center" }}> Sr.No.</td>
-                    <td style={{ textAlign: "center" }}>Type Of Map/Plan</td>
-                    <td style={{ textAlign: "center" }}>Annexure</td>
+                    <td style={{ textAlign: "center" }}> {`${t("SP_SCRUTINY_SR_NO")}`}</td>
+                    <td style={{ textAlign: "center" }}> {`${t("SP_SCRUTINY_TYPE_OF_MAP")}`}</td>
+                    <td style={{ textAlign: "center" }}> {`${t("SP_SCRUTINY_ANNEXURE")}`}</td>
                   </tr>
                 </thead>
                 <tbody>
@@ -501,7 +556,7 @@ console.log("dataEDC",idwDataTreade);
                       </div>
                     </td>
                     <td component="th" scope="row">
-                      <h2>Self-certified drawings from empanelled/certified architects that conform to the standard approved template. as per the TCP layout plan / Site plan.</h2>
+                      <h2> {`${t("SP_SCRUTINY_SELF_CERTIFIED_DRAWING_CERTIFIED_ARCHITECT")}`}</h2>
                     </td>
                     <td component="th" scope="row">
                       <div className="btn btn-sm col-md-4">
@@ -518,6 +573,7 @@ console.log("dataEDC",idwDataTreade);
                       <div className="btn btn-sm col-md-4">
                         <ReportProblemIcon
                           style={{
+                            display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("SP_SCRUTINY_SELF_CERTIFIED_DRAWING_CERTIFIED_ARCHITECT") ? "block" : "none",
                             color: fieldIconColors.Selfcertified,
                           }}
                           onClick={() => {
@@ -542,7 +598,7 @@ console.log("dataEDC",idwDataTreade);
                       </div>
                     </td>
                     <td component="th" scope="row">
-                      <h2>Environmental Clearance.</h2>
+                      <h2> {`${t("SP_SCRUTINY_ENVIRONMENT_CLEARANCE")}`}</h2>
                     </td>
                     <td component="th" scope="row">
                     
@@ -560,6 +616,7 @@ console.log("dataEDC",idwDataTreade);
                       <div className="btn btn-sm col-md-4">
                         <ReportProblemIcon
                           style={{
+                            display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("SP_SCRUTINY_ENVIRONMENT_CLEARANCE") ? "block" : "none",
                             color: fieldIconColors.environmental,
                           }}
                           onClick={() => {
@@ -582,7 +639,7 @@ console.log("dataEDC",idwDataTreade);
                     </td>
                     <td component="th" scope="row">
                   <h6 >
-                  Service plan in AutoCAD (DXF) file.
+                  {`${t("SP_SCRUTINY_AUTOCAD_FILE")}`}
                   <Tooltip title="Any amendment suggested by HSVP may be incorporated in the drawing accordingly">
                     <InfoIcon style={{ cursor: "pointer" }} color="primary"></InfoIcon>
                   </Tooltip>
@@ -603,6 +660,7 @@ console.log("dataEDC",idwDataTreade);
                       <div className="btn btn-sm col-md-4">
                         <ReportProblemIcon
                           style={{
+                            display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("SP_SCRUTINY_AUTOCAD_FILE") ? "block" : "none",
                             color: fieldIconColors.template,
                           }}
                           onClick={() => {
@@ -697,11 +755,11 @@ console.log("dataEDC",idwDataTreade);
               <tr>
                 <td>
                   <div className="px-2">
-                    <p className="mb-2">6.</p>
+                    <p className="mb-2">4.</p>
                   </div>
                 </td>
                 <td component="th" scope="row">
-                  <h2>Previously Uploaded layout plan (call)</h2>
+                  <h2>{`${t("SP_SCRUTINY_PREVIOUSLY_UPDATED_LAYOUT_PLAN")}`}</h2>
                   {/* {drawingErr.selfCertifiedDrawingFromEmpaneledDoc ? <p style={{color: 'red'}}>Please upload self-certified drawings from empanelled/certified architects*</p> : " "} */}
                 </td>
                 {/* <td component="th" scope="row">
@@ -749,6 +807,7 @@ console.log("dataEDC",idwDataTreade);
                       <div className="btn btn-sm col-md-4">
                         <ReportProblemIcon
                           style={{
+                            display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("SP_SCRUTINY_PREVIOUSLY_UPDATED_LAYOUT_PLAN") ? "block" : "none",
                             color: fieldIconColors.certified,
                           }}
                           onClick={() => {
@@ -765,11 +824,11 @@ console.log("dataEDC",idwDataTreade);
               <tr>
                 <td>
                   <div className="px-2">
-                    <p className="mb-2">7.</p>
+                    <p className="mb-2">5.</p>
                   </div>
                 </td>
                 <td component="th" scope="row">
-                  <h2>Upload the Revised layout plan</h2>
+                  <h2>{`${t("SP_SCRUTINY_UPLOAD_REVISED_LAYOUT_PLAN")}`}</h2>
                   {/* {drawingErr.environmentalClearance ? <p style={{color: 'red'}}>Please upload environmental clearance drawings*</p> : " "} */}
                 </td>
                 {/* <td component="th" scope="row">
@@ -817,6 +876,7 @@ console.log("dataEDC",idwDataTreade);
                       <div className="btn btn-sm col-md-4">
                         <ReportProblemIcon
                           style={{
+                            display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("SP_SCRUTINY_UPLOAD_REVISED_LAYOUT_PLAN") ? "block" : "none",
                             color: fieldIconColors.certified,
                           }}
                           onClick={() => {
@@ -833,11 +893,11 @@ console.log("dataEDC",idwDataTreade);
               <tr>
                 <td>
                   <div className="px-2">
-                    <p className="mb-2">8.</p>
+                    <p className="mb-2">6.</p>
                   </div>
                 </td>
                 <td component="th" scope="row">
-                  <h2>Upload Demarcation Plan in AutoCAD (DXF) file</h2>
+                  <h2>{`${t("SP_SCRUTINY_UPLOAD_DEMARCATION_PLAN_AUTOAD")}`}</h2>
                   {/* {drawingErr.shapeFileAsPerTemplate ? <p style={{color: 'red'}}>Please upload service plan pdf and gis format*</p> : " "} */}
 
                 </td>
@@ -886,6 +946,7 @@ console.log("dataEDC",idwDataTreade);
                       <div className="btn btn-sm col-md-4">
                         <ReportProblemIcon
                           style={{
+                            display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("SP_SCRUTINY_UPLOAD_DEMARCATION_PLAN_AUTOAD") ? "block" : "none",
                             color: fieldIconColors.certified,
                           }}
                           onClick={() => {
@@ -902,11 +963,11 @@ console.log("dataEDC",idwDataTreade);
               <tr>
                 <td>
                   <div className="px-2">
-                    <p className="mb-2">9.</p>
+                    <p className="mb-2">7.</p>
                   </div>
                 </td>
                 <td component="th" scope="row">
-                  <h2>Upload Demarcation Plan in PDF (OCR Compatible) + GIS format.</h2>
+                  <h2>{`${t("SP_SCRUTINY_UPLOAD_DEMARCATION_PLAN_PDF")}`}</h2>
                   {/* {drawingErr.autoCadFile ? <p style={{color: 'red'}}>Please upload autocad file*</p> : " "} */}
                 </td>
                 {/* <td component="th" scope="row">
@@ -954,6 +1015,7 @@ console.log("dataEDC",idwDataTreade);
                       <div className="btn btn-sm col-md-4">
                         <ReportProblemIcon
                           style={{
+                            display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("SP_SCRUTINY_UPLOAD_DEMARCATION_PLAN_PDF") ? "block" : "none",
                             color: fieldIconColors.certified,
                           }}
                           onClick={() => {
@@ -970,11 +1032,11 @@ console.log("dataEDC",idwDataTreade);
               <tr>
                 <td>
                   <div className="px-2">
-                    <p className="mb-2">10.</p>
+                    <p className="mb-2">8.</p>
                   </div>
                 </td>
                 <td component="th" scope="row">
-                  <h2>Upload Excel of detailed layout structure</h2>
+                  <h2>{`${t("SP_SCRUTINY_UPLOAD_EXCEL_LAYOUT_STRUCTURE")}`}</h2>
                  
 
                 </td>
@@ -994,6 +1056,7 @@ console.log("dataEDC",idwDataTreade);
                       <div className="btn btn-sm col-md-4">
                         <ReportProblemIcon
                           style={{
+                            display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("SP_SCRUTINY_UPLOAD_EXCEL_LAYOUT_STRUCTURE") ? "block" : "none",
                             color: fieldIconColors.certified,
                           }}
                           onClick={() => {
@@ -1010,11 +1073,11 @@ console.log("dataEDC",idwDataTreade);
               <tr>
                 <td>
                   <div className="px-2">
-                    <p className="mb-2">11.</p>
+                    <p className="mb-2">9.</p>
                   </div>
                 </td>
                 <td component="th" scope="row">
-                  <h2>Any other relevant document </h2>
+                  <h2> {`${t("SP_SCRUTINY_OTHER_RELEVANT_DOCUMENT")}`}</h2>
                  
 
                 </td>
@@ -1034,6 +1097,7 @@ console.log("dataEDC",idwDataTreade);
                       <div className="btn btn-sm col-md-4">
                         <ReportProblemIcon
                           style={{
+                            display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("SP_SCRUTINY_OTHER_RELEVANT_DOCUMENT") ? "block" : "none",
                             color: fieldIconColors.certified,
                           }}
                           onClick={() => {
