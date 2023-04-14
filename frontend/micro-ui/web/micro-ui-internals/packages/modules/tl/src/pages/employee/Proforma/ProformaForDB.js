@@ -114,11 +114,11 @@ function DrawingBranch() {
                         <div className="d-flex flex-row align-items-center my-1">
                           
                           <label htmlFor="communitybuildings">
-                          <input {...register("communitybuildings")} type="radio" value="Y" id="communitybuildings" />
+                          <input {...register("communitybuildings")} type="radio" disabled={!showActionButton && !showActionButton1 && !showActionButton2}   value="Y" id="communitybuildings" />
                           &nbsp;&nbsp; &nbsp; Yes &nbsp;&nbsp;
                         </label>
                         <label htmlFor="communitybuildings">
-                          <input {...register("communitybuildings")} type="radio" value="N" id="communitybuildings" />
+                          <input {...register("communitybuildings")} type="radio" disabled={!showActionButton && !showActionButton1 && !showActionButton2}  value="N" id="communitybuildings" />
                           &nbsp;&nbsp; &nbsp; No &nbsp;&nbsp;
                         </label>
                         </div>
@@ -165,11 +165,11 @@ function DrawingBranch() {
                         <div className="d-flex flex-row align-items-center my-1">
                          
                           <label htmlFor="licenseapplication">
-                          <input {...register("licenseapplication")} type="radio" value="Y" id="licenseapplication" />
+                          <input {...register("licenseapplication")} type="radio" disabled={!showActionButton && !showActionButton1 && !showActionButton2}  value="Y" id="licenseapplication" />
                           &nbsp;&nbsp;&nbsp; Yes &nbsp;&nbsp;
                         </label>
                         <label htmlFor="licenseapplication">
-                          <input {...register("licenseapplication")} type="radio" value="N" id="licenseapplication" />
+                          <input {...register("licenseapplication")} type="radio" disabled={!showActionButton && !showActionButton1 && !showActionButton2}  value="N" id="licenseapplication" />
                           &nbsp;&nbsp;&nbsp; No &nbsp;&nbsp;
                         </label>
                         </div></div>
@@ -219,11 +219,11 @@ function DrawingBranch() {
                         <div className="d-flex flex-row align-items-center my-1">
                           &nbsp;&nbsp;
                           <label htmlFor="sitesituation">
-                          <input {...register("sitesituation")} type="radio" value="Y" id="sitesituation" />
+                          <input {...register("sitesituation")} type="radio" disabled={!showActionButton && !showActionButton1 && !showActionButton2}  value="Y" id="sitesituation" />
                           &nbsp; Yes &nbsp;&nbsp;
                         </label>
                         <label htmlFor="sitesituation">
-                          <input {...register("sitesituation")} type="radio" value="N" id="sitesituation" />
+                          <input {...register("sitesituation")} type="radio" disabled={!showActionButton && !showActionButton1 && !showActionButton2}  value="N" id="sitesituation" />
                           &nbsp; No &nbsp;&nbsp;
                         </label>
                         </div></div>
@@ -270,11 +270,11 @@ function DrawingBranch() {
                         <div className="d-flex flex-row align-items-center my-1">
                           &nbsp;&nbsp;
                           <label htmlFor="compactblock.">
-                          <input {...register("compactblock")} type="radio" value="Y" id="compactblock" />
+                          <input {...register("compactblock")} type="radio" disabled={!showActionButton && !showActionButton1 && !showActionButton2}  value="Y" id="compactblock" />
                           &nbsp; Yes &nbsp;&nbsp;
                         </label>
                         <label htmlFor="compactblock">
-                          <input {...register("compactblock")} type="radio" value="N" id="compactblock" />
+                          <input {...register("compactblock")} type="radio" disabled={!showActionButton && !showActionButton1 && !showActionButton2}  value="N" id="compactblock" />
                           &nbsp; No &nbsp;&nbsp;
                         </label>
                         </div></div>
@@ -320,11 +320,11 @@ function DrawingBranch() {
                         <div className="d-flex flex-row align-items-center my-1">
                           &nbsp;&nbsp;
                           <label htmlFor="ApproachNormsAsPerPolicy">
-                          <input {...register("ApproachNormsAsPerPolicy")} type="radio" value="Y" id="ApproachNormsAsPerPolicy" />
+                          <input {...register("ApproachNormsAsPerPolicy")} type="radio" disabled={!showActionButton && !showActionButton1 && !showActionButton2}  value="Y" id="ApproachNormsAsPerPolicy" />
                           &nbsp; Yes &nbsp;&nbsp;
                         </label>
                         <label htmlFor="ApproachNormsAsPerPolicy">
-                          <input {...register("ApproachNormsAsPerPolicy")} type="radio" value="N" id="ApproachNormsAsPerPolicy" />
+                          <input {...register("ApproachNormsAsPerPolicy")} type="radio" disabled={!showActionButton && !showActionButton1 && !showActionButton2}  value="N" id="ApproachNormsAsPerPolicy" />
                           &nbsp; No &nbsp;&nbsp;
                         </label>
                         </div></div>
@@ -370,11 +370,11 @@ function DrawingBranch() {
                         <div className="d-flex flex-row align-items-center my-1">
                           &nbsp;&nbsp;
                           <label htmlFor="SiteDetails">
-                          <input {...register("SiteDetails")} type="radio" value="Y" id="SiteDetails" />
+                          <input {...register("SiteDetails")} type="radio" disabled={!showActionButton && !showActionButton1 && !showActionButton2}  value="Y" id="SiteDetails" />
                           &nbsp; Yes &nbsp;&nbsp;
                         </label>
                         <label htmlFor="SiteDetails">
-                          <input {...register("SiteDetails")} type="radio" value="N" id="SiteDetails" />
+                          <input {...register("SiteDetails")} type="radio" disabled={!showActionButton && !showActionButton1 && !showActionButton2}  value="N" id="SiteDetails" />
                           &nbsp; No &nbsp;&nbsp;
                         </label>
                         </div></div>
@@ -431,11 +431,11 @@ function DrawingBranch() {
                         <div className="d-flex flex-row align-items-center my-1">
                          
                           <label htmlFor=" applicableFinalDevelopment">
-                          <input {...register("applicableFinalDevelopment")} type="radio" value="Y" id="applicableFinalDevelopment" />
+                          <input {...register("applicableFinalDevelopment")} type="radio" disabled={!showActionButton && !showActionButton1 && !showActionButton2}  value="Y" id="applicableFinalDevelopment" />
                           &nbsp; &nbsp; Yes &nbsp;&nbsp;
                         </label>
                         <label htmlFor="applicableFinalDevelopment">
-                          <input {...register("applicableFinalDevelopment")} type="radio" value="N" id="applicableFinalDevelopment" />
+                          <input {...register("applicableFinalDevelopment")} type="radio" disabled={!showActionButton && !showActionButton1 && !showActionButton2}  value="N" id="applicableFinalDevelopment" />
                           &nbsp;&nbsp;  No &nbsp;&nbsp;
                         </label>
                         </div></div>
@@ -481,11 +481,11 @@ function DrawingBranch() {
                         <div className="d-flex flex-row align-items-center my-1">
                          
                           <label htmlFor="zoneAsPerDevelopmentPlan">
-                          <input {...register("zoneAsPerDevelopmentPlan")} type="radio" value="Y" id="zoneAsPerDevelopmentPlan" />
+                          <input {...register("zoneAsPerDevelopmentPlan")} type="radio" disabled={!showActionButton && !showActionButton1 && !showActionButton2}  value="Y" id="zoneAsPerDevelopmentPlan" />
                           &nbsp; &nbsp; Yes &nbsp;&nbsp;
                         </label>
                         <label htmlFor="zoneAsPerDevelopmentPlan">
-                          <input {...register("zoneAsPerDevelopmentPlan")} type="radio" value="N" id="zoneAsPerDevelopmentPlan" />
+                          <input {...register("zoneAsPerDevelopmentPlan")} type="radio" disabled={!showActionButton && !showActionButton1 && !showActionButton2}  value="N" id="zoneAsPerDevelopmentPlan" />
                           &nbsp;&nbsp;  No &nbsp;&nbsp;
                         </label>
                         </div></div>
@@ -531,11 +531,11 @@ function DrawingBranch() {
                         <div className="d-flex flex-row align-items-center my-1">
                          
                           <label htmlFor="AppliedColony">
-                          <input {...register("AppliedColony")} type="radio" value="Y" id="AppliedColony" />
+                          <input {...register("AppliedColony")} type="radio" disabled={!showActionButton && !showActionButton1 && !showActionButton2}  value="Y" id="AppliedColony" />
                           &nbsp; &nbsp; Yes &nbsp;&nbsp;
                         </label>
                         <label htmlFor="AppliedColony">
-                          <input {...register("AppliedColony")} type="radio" value="N" id="AppliedColony" />
+                          <input {...register("AppliedColony")} type="radio" disabled={!showActionButton && !showActionButton1 && !showActionButton2}  value="N" id="AppliedColony" />
                           &nbsp;&nbsp;  No &nbsp;&nbsp;
                         </label>
                         </div></div>
@@ -580,11 +580,11 @@ function DrawingBranch() {
                         <div className="d-flex flex-row align-items-center my-1">
                          
                           <label htmlFor=" totalAreasector">
-                          <input {...register("totalAreasector")} type="radio" value="Y" id="totalAreasector" />
+                          <input {...register("totalAreasector")} type="radio" disabled={!showActionButton && !showActionButton1 && !showActionButton2}  value="Y" id="totalAreasector" />
                           &nbsp; &nbsp; Yes &nbsp;&nbsp;
                         </label>
                         <label htmlFor="totalAreasector">
-                          <input {...register("totalAreasector")} type="radio" value="N" id="totalAreasector" />
+                          <input {...register("totalAreasector")} type="radio" disabled={!showActionButton && !showActionButton1 && !showActionButton2}  value="N" id="totalAreasector" />
                           &nbsp;&nbsp;  No &nbsp;&nbsp;
                         </label>
                         </div></div>
@@ -630,11 +630,11 @@ function DrawingBranch() {
                         <div className="d-flex flex-row align-items-center my-1">
                          
                           <label htmlFor="netPlannedArea">
-                          <input {...register("netPlannedArea")} type="radio" value="Y" id="netPlannedArea" />
+                          <input {...register("netPlannedArea")} type="radio" disabled={!showActionButton && !showActionButton1 && !showActionButton2}  value="Y" id="netPlannedArea" />
                           &nbsp; &nbsp; Yes &nbsp;&nbsp;
                         </label>
                         <label htmlFor="netPlannedArea">
-                          <input {...register("netPlannedArea")} type="radio" value="N" id="netPlannedArea" />
+                          <input {...register("netPlannedArea")} type="radio" disabled={!showActionButton && !showActionButton1 && !showActionButton2}  value="N" id="netPlannedArea" />
                           &nbsp;&nbsp;  No &nbsp;&nbsp;
                         </label>
                         </div></div>
@@ -680,11 +680,11 @@ function DrawingBranch() {
                         <div className="d-flex flex-row align-items-center my-1">
                          
                           <label htmlFor="areaUnderSectorRoad">
-                          <input {...register("areaUnderSectorRoad")} type="radio" value="Y" id="areaUnderSectorRoad" />
+                          <input {...register("areaUnderSectorRoad")} type="radio" disabled={!showActionButton && !showActionButton1 && !showActionButton2}  value="Y" id="areaUnderSectorRoad" />
                           &nbsp; &nbsp; Yes &nbsp;&nbsp;
                         </label>
                         <label htmlFor="areaUnderSectorRoad">
-                          <input {...register("areaUnderSectorRoad")} type="radio" value="N" id="areaUnderSectorRoad" />
+                          <input {...register("areaUnderSectorRoad")} type="radio" disabled={!showActionButton && !showActionButton1 && !showActionButton2}  value="N" id="areaUnderSectorRoad" />
                           &nbsp;&nbsp;  No &nbsp;&nbsp;
                         </label>
                         </div></div>
@@ -730,11 +730,11 @@ function DrawingBranch() {
                         <div className="d-flex flex-row align-items-center my-1">
                          
                           <label htmlFor="areaUnderServiceRoad">
-                          <input {...register("areaUnderServiceRoad")} type="radio" value="Y" id="areaUnderServiceRoad" />
+                          <input {...register("areaUnderServiceRoad")} type="radio" disabled={!showActionButton && !showActionButton1 && !showActionButton2}  value="Y" id="areaUnderServiceRoad" />
                           &nbsp; &nbsp; Yes &nbsp;&nbsp;
                         </label>
                         <label htmlFor="areaUnderServiceRoad">
-                          <input {...register("areaUnderServiceRoad")} type="radio" value="N" id="areaUnderServiceRoad" />
+                          <input {...register("areaUnderServiceRoad")} type="radio" disabled={!showActionButton && !showActionButton1 && !showActionButton2}  value="N" id="areaUnderServiceRoad" />
                           &nbsp;&nbsp;  No &nbsp;&nbsp;
                         </label>
                         </div></div>
@@ -780,11 +780,11 @@ function DrawingBranch() {
                         <div className="d-flex flex-row align-items-center my-1">
                          
                           <label htmlFor="areaUnderGreenBelt">
-                          <input {...register("areaUnderGreenBelt")} type="radio" value="Y" id="areaUnderGreenBelt" />
+                          <input {...register("areaUnderGreenBelt")} type="radio" disabled={!showActionButton && !showActionButton1 && !showActionButton2}  value="Y" id="areaUnderGreenBelt" />
                           &nbsp; &nbsp; Yes &nbsp;&nbsp;
                         </label>
                         <label htmlFor="areaUnderGreenBelt">
-                          <input {...register("areaUnderGreenBelt")} type="radio" value="N" id="areaUnderGreenBelt" />
+                          <input {...register("areaUnderGreenBelt")} type="radio" disabled={!showActionButton && !showActionButton1 && !showActionButton2}  value="N" id="areaUnderGreenBelt" />
                           &nbsp;&nbsp;  No &nbsp;&nbsp;
                         </label>
                         </div></div>
@@ -830,11 +830,11 @@ function DrawingBranch() {
                         <div className="d-flex flex-row align-items-center my-1">
                          
                           <label htmlFor="internalCirculationRoad">
-                          <input {...register("internalCirculationRoad")} type="radio" value="Y" id="internalCirculationRoad" />
+                          <input {...register("internalCirculationRoad")} type="radio" disabled={!showActionButton && !showActionButton1 && !showActionButton2}  value="Y" id="internalCirculationRoad" />
                           &nbsp; &nbsp; Yes &nbsp;&nbsp;
                         </label>
                         <label htmlFor="internalCirculationRoad">
-                          <input {...register("internalCirculationRoad")} type="radio" value="N" id="internalCirculationRoad" />
+                          <input {...register("internalCirculationRoad")} type="radio" disabled={!showActionButton && !showActionButton1 && !showActionButton2}  value="N" id="internalCirculationRoad" />
                           &nbsp;&nbsp;  No &nbsp;&nbsp;
                         </label>
                         </div></div>
@@ -880,11 +880,11 @@ function DrawingBranch() {
                         <div className="d-flex flex-row align-items-center my-1">
                          
                           <label htmlFor="anyOther">
-                          <input {...register("anyOther")} type="radio" value="Y" id="anyOther" />
+                          <input {...register("anyOther")} type="radio" disabled={!showActionButton && !showActionButton1 && !showActionButton2}  value="Y" id="anyOther" />
                           &nbsp; &nbsp; Yes &nbsp;&nbsp;
                         </label>
                         <label htmlFor="anyOther">
-                          <input {...register("anyOther")} type="radio" value="N" id="anyOther" />
+                          <input {...register("anyOther")} type="radio" disabled={!showActionButton && !showActionButton1 && !showActionButton2}  value="N" id="anyOther" />
                           &nbsp;&nbsp;  No &nbsp;&nbsp;
                         </label>
                         </div></div>
@@ -930,11 +930,11 @@ function DrawingBranch() {
                         <div className="d-flex flex-row align-items-center my-1">
                          
                           <label htmlFor="receivedWithinThePrescribed">
-                          <input {...register("receivedWithinThePrescribed")} type="radio" value="Y" id="receivedWithinThePrescribed" />
+                          <input {...register("receivedWithinThePrescribed")} type="radio" disabled={!showActionButton && !showActionButton1 && !showActionButton2}  value="Y" id="receivedWithinThePrescribed" />
                           &nbsp; &nbsp; Yes &nbsp;&nbsp;
                         </label>
                         <label htmlFor="receivedWithinThePrescribed">
-                          <input {...register("receivedWithinThePrescribed")} type="radio" value="N" id="receivedWithinThePrescribed" />
+                          <input {...register("receivedWithinThePrescribed")} type="radio" disabled={!showActionButton && !showActionButton1 && !showActionButton2}  value="N" id="receivedWithinThePrescribed" />
                           &nbsp;&nbsp;  No &nbsp;&nbsp;
                         </label>
                         </div></div>

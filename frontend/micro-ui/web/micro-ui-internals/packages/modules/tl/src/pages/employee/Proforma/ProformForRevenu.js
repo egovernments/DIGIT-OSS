@@ -32,7 +32,7 @@
 // </div>
 // {/* <div class="col-md-4 text-right"> */}
 //     <input
-//       type="radio"
+//       type="radio"  disabled={!showActionButton }
 //       value="true"
 //       label="Yes"
 //       name="anyOtherFeature"
@@ -42,7 +42,7 @@
 //     />
 
 //     <input
-//       type="radio"
+//       type="radio"  disabled={!showActionButton }
 //       value="false"
 //       label="No"
 //       name="c"
@@ -86,8 +86,13 @@ import FormControlLabel from '@mui/material/FormControlLabel';
 import FormControl from '@mui/material/FormControl';
 import FormLabel from '@mui/material/FormLabel';
 import AddPost from "../Material/TextEditor";
+import { useTranslation } from "react-i18next";
 
 function ProformForRevenu() {
+    const {t} = useTranslation();
+    const userRoles = Digit.UserService.getUser()?.info?.roles.map((item) => item.code)  || [];
+    const showActionButton = userRoles.includes("Patwari")
+    
     const [selects, setSelects] = useState();
     const [showhide, setShowhide] = useState("");
     const { register, handleSubmit } = useForm();
@@ -157,38 +162,41 @@ function ProformForRevenu() {
                                                 { border: 0 }
                                         }}
                                     >
-                                        <TableCell >
+                                        <TableCell style={{width: "50"}} >
                                             1
                                         </TableCell>
-                                        <TableCell align="left">
+                                        <TableCell align="left" style={{width: "350"}}>
                                             <h2>
-                                            Whether Scrutiny fee @ Rs. 10 per sq.mtr of the applied land in case of plotted colony and @ Rs. 10 per sq.mtr X FAR in case of other than plotted colony deposited.
+                                            {/* Whether Scrutiny fee @ Rs. 10 per sq.mtr of the applied land in case of plotted colony and @ Rs. 10 per sq.mtr X FAR in case of other than plotted colony deposited. */}
+                                            {`${t("NWL_PROFORMA_WHETHER_SCRUTINY_FEE_@RS_10_PER")}`}
                                                 &nbsp;&nbsp;
                                             </h2>
                                         </TableCell>
-                                        <TableCell align="left">
+                                        <TableCell align="left" style={{width: "150"}}>
 
                                             <FormControl>
-                                                <div className="row">
+                                              
                                                     {/* <div class="col-md-4 text-right"> */}
                                                     <div className="d-flex flex-row align-items-center my-1">
 
                                                         <label htmlFor="approachFromProposedSector">
-                                                            <input {...register("approachFromProposedSector")} type="radio" value="Y" id="approachFromProposedSector" />
+                                                            <input {...register("approachFromProposedSector")} type="radio"  disabled={!showActionButton } value="Y" id="approachFromProposedSector" />
                                                             &nbsp;&nbsp; &nbsp; Yes &nbsp;&nbsp;
                                                         </label>
                                                         <label htmlFor="approachFromProposedSector">
-                                                            <input {...register("approachFromProposedSector")} type="radio" value="N" id="approachFromProposedSector" />
+                                                            <input {...register("approachFromProposedSector")} type="radio"  disabled={!showActionButton } value="N" id="approachFromProposedSector" />
                                                             &nbsp;&nbsp; &nbsp; No &nbsp;&nbsp;
                                                         </label>
-                                                    </div>
+                                                
                                                     {/* </div> */}
                                                 </div>
                                             </FormControl>
 
                                         </TableCell>
-                                        <TableCell align="left">
+                                        <TableCell align="left" style={{width: "750"}}>
+                                            <Card style={{width: "700"}}>
                                        < AddPost></AddPost>
+                                       </Card>
                                         </TableCell>
 
                                     </TableRow>
@@ -205,7 +213,8 @@ function ProformForRevenu() {
                                         </TableCell>
                                         <TableCell align="left">
                                             <h2>
-                                            Whether 25% of the licence fee deposited.
+                                            {/* Whether 25% of the licence fee deposited. */}
+                                            {`${t("NWL_PROFORMA_WHETHER_25%OF_THE_LICENCE_FEE_DEPOSITED")}`}
                                                 &nbsp;&nbsp;
                                             </h2>
                                         </TableCell>
@@ -217,11 +226,11 @@ function ProformForRevenu() {
                                                     <div className="d-flex flex-row align-items-center my-1">
 
                                                         <label htmlFor="licencefeedeposited">
-                                                            <input {...register("licencefeedeposited")} type="radio" value="Y" id="licencefeedeposited" />
+                                                            <input {...register("licencefeedeposited")} type="radio"  disabled={!showActionButton } value="Y" id="licencefeedeposited" />
                                                             &nbsp;&nbsp;&nbsp; Yes &nbsp;&nbsp;
                                                         </label>
                                                         <label htmlFor="licencefeedeposited">
-                                                            <input {...register("licencefeedeposited")} type="radio" value="N" id="licencefeedeposited" />
+                                                            <input {...register("licencefeedeposited")} type="radio"  disabled={!showActionButton } value="N" id="licencefeedeposited" />
                                                             &nbsp;&nbsp;&nbsp; No &nbsp;&nbsp;
                                                         </label>
                                                     </div></div>
@@ -261,7 +270,8 @@ function ProformForRevenu() {
                                         </TableCell>
                                         <TableCell align="left">
                                             <h2>
-                                                Documents submitted regarding the Financial position of the applicant/developer is in order or not.
+                                                {/* Documents submitted regarding the Financial position of the applicant/developer is in order or not. */}
+                                                {`${t("NWL_PROFORMA_DOCUMENTS_SUBMITTED_REGARDING_THE_FINANCIAL_POSITION")}`}
                                                 &nbsp;&nbsp;
                                             </h2>
                                         </TableCell>
@@ -273,11 +283,11 @@ function ProformForRevenu() {
                                                     <div className="d-flex flex-row align-items-center my-1">
                                                         &nbsp;&nbsp;
                                                         <label htmlFor="applicantdeveloper">
-                                                            <input {...register("applicantdeveloper")} type="radio" value="Y" id="applicantdeveloper" />
+                                                            <input {...register("applicantdeveloper")} type="radio"  disabled={!showActionButton } value="Y" id="applicantdeveloper" />
                                                             &nbsp; Yes &nbsp;&nbsp;
                                                         </label>
                                                         <label htmlFor="applicantdeveloper">
-                                                            <input {...register("applicantdeveloper")} type="radio" value="N" id="applicantdeveloper" />
+                                                            <input {...register("applicantdeveloper")} type="radio"  disabled={!showActionButton } value="N" id="applicantdeveloper" />
                                                             &nbsp; No &nbsp;&nbsp;
                                                         </label>
                                                     </div></div>
@@ -325,11 +335,11 @@ function ProformForRevenu() {
                                                     <div className="d-flex flex-row align-items-center my-1">
                                                         &nbsp;&nbsp;
                                                         <label htmlFor="renewedreuisite">
-                                                            <input {...register("renewedreuisite")} type="radio" value="Y" id="renewedreuisite" />
+                                                            <input {...register("renewedreuisite")} type="radio"  disabled={!showActionButton } value="Y" id="renewedreuisite" />
                                                             &nbsp; Yes &nbsp;&nbsp;
                                                         </label>
                                                         <label htmlFor="renewedreuisite">
-                                                            <input {...register("renewedreuisite")} type="radio" value="N" id="renewedreuisite" />
+                                                            <input {...register("renewedreuisite")} type="radio"  disabled={!showActionButton } value="N" id="renewedreuisite" />
                                                             &nbsp; No &nbsp;&nbsp;
                                                         </label>
                                                     </div></div>
@@ -376,11 +386,11 @@ function ProformForRevenu() {
                                                     <div className="d-flex flex-row align-items-center my-1">
                                                         &nbsp;&nbsp;
                                                         <label htmlFor="additionalLicense">
-                                                            <input {...register("additionalLicense")} type="radio" value="Y" id="additionalLicense" />
+                                                            <input {...register("additionalLicense")} type="radio"  disabled={!showActionButton } value="Y" id="additionalLicense" />
                                                             &nbsp; Yes &nbsp;&nbsp;
                                                         </label>
                                                         <label htmlFor="additionalLicense">
-                                                            <input {...register("additionalLicense")} type="radio" value="N" id="additionalLicense" />
+                                                            <input {...register("additionalLicense")} type="radio"  disabled={!showActionButton } value="N" id="additionalLicense" />
                                                             &nbsp; No &nbsp;&nbsp;
                                                         </label>
                                                     </div></div>
@@ -428,11 +438,11 @@ function ProformForRevenu() {
                                                 <div className="d-flex flex-row align-items-center my-1">
                                                     &nbsp;&nbsp;
                                                     <label htmlFor="loigeneration">
-                                                        <input {...register("loigeneration")} type="radio" value="Y" id="loigeneration" />
+                                                        <input {...register("loigeneration")} type="radio"  disabled={!showActionButton } value="Y" id="loigeneration" />
                                                         &nbsp; Yes &nbsp;&nbsp;
                                                     </label>
                                                     <label htmlFor="loigeneration">
-                                                        <input {...register("loigeneration")} type="radio" value="N" id="loigeneration" />
+                                                        <input {...register("loigeneration")} type="radio"  disabled={!showActionButton } value="N" id="loigeneration" />
                                                         &nbsp; No &nbsp;&nbsp;
                                                     </label>
                                                 </div></div>
@@ -480,11 +490,11 @@ function ProformForRevenu() {
                                                     <div className="d-flex flex-row align-items-center my-1">
                                                         &nbsp;&nbsp;
                                                         <label htmlFor="loigeneration">
-                                                            <input {...register("outstandingdues")} type="radio" value="Y" id="outstandingdues" />
+                                                            <input {...register("outstandingdues")} type="radio"  disabled={!showActionButton } value="Y" id="outstandingdues" />
                                                             &nbsp; Yes &nbsp;&nbsp;
                                                         </label>
                                                         <label htmlFor="outstandingdues">
-                                                            <input {...register("outstandingdues")} type="radio" value="N" id="outstandingdues" />
+                                                            <input {...register("outstandingdues")} type="radio"  disabled={!showActionButton } value="N" id="outstandingdues" />
                                                             &nbsp; No &nbsp;&nbsp;
                                                         </label>
                                                     </div></div>

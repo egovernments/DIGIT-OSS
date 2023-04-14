@@ -194,13 +194,9 @@ function RadioButtonsGroup() {
 
                                         </TableCell>
                                         <TableCell align="left">
-<<<<<<< HEAD
-                                       {/* < AddPost></AddPost> */}
-=======
-                                       < AddPost 
+                                       {/* < AddPost 
                                        disabled={!showActionButton && !showActionButton1 && !showActionButton2}
-                                       ></AddPost>
->>>>>>> ea95d08395601530dacbd804fe05b5a6e3a5d8e9
+                                       ></AddPost> */}
                                         </TableCell>
 
                                     </TableRow>
