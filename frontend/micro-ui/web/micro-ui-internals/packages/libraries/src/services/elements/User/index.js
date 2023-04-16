@@ -3,12 +3,13 @@ import { Request, ServiceRequest } from "../../atoms/Utils/Request";
 import { Storage } from "../../atoms/Utils/Storage";
 
 export const UserService = {
-  authenticate: (details) => {
+  authenticate: async(details) => {
     const data = new URLSearchParams();
     Object.entries(details).forEach(([key, value]) => data.append(key, value));
     data.append("scope", "read");
     data.append("grant_type", "password");
-    return ServiceRequest({
+    
+    let authResponse= await ServiceRequest({
       serviceName: "authenticate",
       url: Urls.Authenticate,
       data,
@@ -17,6 +18,11 @@ export const UserService = {
         "Content-Type": "application/x-www-form-urlencoded",
       },
     });
+      const invalidRoles = window?.globalConfigs?.getConfig("INVALIDROLES") || [];
+      if (invalidRoles && invalidRoles.length > 0 && authResponse && authResponse?.UserRequest?.roles?.some((role) => invalidRoles.includes(role.code))) {
+        throw new Error("ES_ERROR_USER_NOT_PERMITTED");
+      }
+      return authResponse;
   },
   logoutUser: () => {
     let user = UserService.getUser();

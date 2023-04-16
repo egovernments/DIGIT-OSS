@@ -76,7 +76,7 @@ const Login = ({ config: propsConfig, t, isDisabled }) => {
       Digit.SessionStorage.set("Employee.tenantId", info?.tenantId);
       setUser({ info, ...tokens });
     } catch (err) {
-      setShowToast(err?.response?.data?.error_description || "Invalid login credentials!");
+      setShowToast(err?.response?.data?.error_description ||( err?.message=="ES_ERROR_USER_NOT_PERMITTED" && t("ES_ERROR_USER_NOT_PERMITTED") )|| t("INVALID_LOGIN_CREDENTIALS"));
       setTimeout(closeToast, 5000);
     }
     setDisable(false);

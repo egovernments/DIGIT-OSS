@@ -11,7 +11,7 @@
   "devDependencies": {
     "@egovernments/digit-ui-libraries": "1.5.5",
     "@egovernments/digit-ui-module-dss": "1.5.5",
-    "@egovernments/digit-ui-module-core": "1.5.10",
+    "@egovernments/digit-ui-module-core": "1.5.12",
     "@egovernments/digit-ui-module-common": "1.5.5",
     "@egovernments/digit-ui-module-hrms": "1.5.6",
     "@egovernments/digit-ui-module-engagement": "1.5.5",
