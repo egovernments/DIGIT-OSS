@@ -324,7 +324,8 @@ function ProformForRevenu() {
                                         </TableCell>
                                         <TableCell align="left">
                                             <h2>
-                                                If the license application is under part migration/ migration, the parent license renewed/requisite renewal fee + applicable interest deposited is in order or not.
+                                                {/* If the license application is under part migration/ migration, the parent license renewed/requisite renewal fee + applicable interest deposited is in order or not. */}
+                                                {`${t("NWL_PROFORMA_IF_THE_LICENSE_APPLICATION_IS_UNDER_PART_MIGRATION")}`}
                                                 &nbsp;&nbsp;
                                             </h2>
                                         </TableCell>
@@ -376,6 +377,7 @@ function ProformForRevenu() {
                                         <TableCell align="left">
                                             <h2>
                                                 If Case for Additional License, Outstanding Dues of parent license.
+                                                {`${t("NWL_PROFORMA_IF_CASE_LICENSE_APPLICATION_IS_UNDER_PART_MIGRATION")}`}
                                                 &nbsp;&nbsp;
                                             </h2>
                                         </TableCell>
