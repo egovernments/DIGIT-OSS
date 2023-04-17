@@ -27,7 +27,10 @@ function ExtensionClu() {
   const {pathname:url} = useLocation();
   const authToken = Digit.UserService.getUser()?.access_token || null;
   const userInfo = Digit.UserService.getUser()?.info || {};
-  const extensionClu = (data) => console.log(data);
+  const extensionClu = (data) => {
+    console.log(data);
+    console.log("data stringified", JSON.stringify(data));
+  };
   const location = useLocation();
   const params = new URLSearchParams(location.search);
   
@@ -130,7 +133,7 @@ function ExtensionClu() {
                   message: "Invalid Case No."
                 },
                 maxLength: {
-                  value: 12,
+                  value: 19,
                   message: "Invalid Case No."
                 }
               })} onBlur={getData} />
@@ -152,7 +155,7 @@ function ExtensionClu() {
                   message: "Invalid Application Number"
                 },
                 maxLength: {
-                  value: 20,
+                  value: 50,
                   message: "Invalid Application Number"
                 }
               })} />
@@ -621,7 +624,7 @@ function ExtensionClu() {
                 </td>
               </tr>
               <tr>
-                <th scope="row">1</th>
+                <th scope="row">2</th>
                 <td>
                    {`${t("UPLOAD_CLU_PERMISSION_LETTER")}`}<span style={{ color: "red" }}>*</span>
                 </td>
@@ -635,7 +638,7 @@ function ExtensionClu() {
                 </td>
               </tr>
               <tr>
-                <th scope="row">2</th>
+                <th scope="row">3</th>
                 <td>
                   {" "}
                   {`${t("UPLOAD_UNDER_CONSTRUCTION_BUILDING_PHOTO")}`}{" "}<span style={{ color: "red" }}>*</span>
@@ -650,7 +653,7 @@ function ExtensionClu() {
                 </td>
               </tr>
               <tr>
-                <th scope="row">3</th>
+                <th scope="row">4</th>
                 <td>
                   {" "}
                    {`${t("RECEIPT_OF_APPLICATION_IF_ANY_SUBMITTED_FOR_TAKING_CERTIFICATE")}`}<span style={{ color: "red" }}>*</span>
@@ -665,7 +668,7 @@ function ExtensionClu() {
                 </td>
               </tr>
               <tr>
-                <th scope="row">4</th>
+                <th scope="row">5</th>
                 <td>
                   {" "}
                    {`${t("UPLOAD_APPROVED_BUILDING_PLAN")}`} <span style={{ color: "red" }}>*</span>
@@ -680,7 +683,7 @@ function ExtensionClu() {
                 </td>
               </tr>
               <tr>
-                <th scope="row">5</th>
+                <th scope="row">6</th>
                 <td>
                   {" "}
                    {`${t("INDEMNITY_BOND")}`} <span style={{ color: "red" }}>*</span>

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Button } from "@material-ui/core";
 import FormControl from "@mui/material/FormControl";
 import { useForm } from "react-hook-form";
@@ -9,6 +9,13 @@ import VisibilityIcon from "@mui/icons-material/Visibility";
 import { getDocShareholding } from "../../../docView/docView.help";
 import axios from "axios";
 import CusToaster from "../../../../../../components/Toaster";
+import SearchLicenceComp from "../../../../../../components/SearchLicence";
+import { FormHelperText } from "@mui/material";
+import FileDownload from "@mui/icons-material/FileDownload";
+import { useLocation } from "react-router-dom";
+import Spinner from "../../../../../../components/Loader";
+import Visibility from "@mui/icons-material/Visibility";
+import { useTranslation } from "react-i18next";
 
 function Beneficial() {
   const [applicantId, setApplicantId] = useState("");
@@ -16,11 +23,17 @@ function Beneficial() {
   const [showhide, setShowhide] = useState("");
   const [showToastError, setShowToastError] = useState({ label: "", error: false, success: false });
   const [beneficialInterestLabel, setBeneficialInterestLabel] = useState([]);
+  const [loader, setLoader] = useState(false);
+  const { t } = useTranslation();
+  const { pathname: url } = useLocation();
   const handleshowhide = (event) => {
     const getuser = event.target.value;
 
     setShowhide(getuser);
   };
+
+
+
   const {
     register,
     handleSubmit,
@@ -30,16 +43,247 @@ function Beneficial() {
     setValue,
   } = useForm({});
 
+  const changeOfDeveloperForm = [
+    {
+      label: t('NO_OBJECTION_CERTIFICATE_LABEL'),
+      fileName: "noObjectionCertificate",
+      selectorKey: "noObjectionCertificateFile"
+    },
+    {
+      label: t('CONSENT_LETTER_FROM_NEW_ENTITY_LABEL'),
+      fileName: "consentLetter",
+      selectorKey: "consentLetterFile"
+    },
+    {
+      label: t('JUSTIFICATION_FOR_SUCH_REQUEST_LABEL'),
+      fileName: "justificationCertificate",
+      selectorKey: "justificationCertificateFile"
+    },
+    {
+      label: t('THIRD_PARTY_RIGHTS_CERTIFICATE_LABEL'),
+      fileName: "thirdPartyRightsCertificate",
+      selectorKey: "thirdPartyRightsCertificateFile"
+    },
+    {
+      label: t('FINANCIAL_CAPACITY_CERTIFICATE_LABEL'),
+      fileName: "fiancialCapacityCertificate",
+      selectorKey: "fiancialCapacityCertificateFile"
+    },
+    {
+      label: t('ADMINISTRATIVE_CHARGE_CERTIFICATE_LABEL'),
+      fileName: "aministrativeChargeCertificate",
+      selectorKey: "aministrativeChargeCertificateFile"
+    },
+    {
+      label: t('RERA_REGISTRATION_CERTIFICATION_LABEL'),
+      fileName: "reraRegistrationCertificate",
+      selectorKey: "reraRegistrationCertificateFile"
+    },
+    {
+      label: t('BOARD_RESOLUTION_EXISTING_LABEL'),
+      fileName: "boardResolutionExisting",
+      selectorKey: "boardResolutionExistingFile"
+    },
+    {
+      label: t('BOARD_RESOLUTION_NEW_LABEL'),
+      fileName: "boardResolutionNewEntity",
+      selectorKey: "boardResolutionNewEntityFile"
+    },
+
+  ]
+
+  const joinDevForm = [
+    {
+      label: t('NO_OBJECTION_CERTIFICATE_LABEL'),
+      fileName: "noObjectionCertificate",
+      selectorKey: "noObjectionCertificateFile"
+    },
+    {
+      label: ('CONSENT_LETTER_FROM_NEW_ENTITY_LABEL'),
+      fileName: "consentLetter",
+      selectorKey: "consentLetterFile"
+    },
+    {
+      label: t('JUSTIFICATION_FOR_SUCH_REQUEST_LABEL'),
+      fileName: "justificationCertificate",
+      selectorKey: "justificationCertificateFile"
+    },
+    {
+      label: t('THIRD_PARTY_RIGHTS_CERTIFICATE_LABEL'),
+      fileName: "thirdPartyRightsCertificate",
+      selectorKey: "thirdPartyRightsCertificateFile"
+    },
+    {
+      label: t('ADMINISTRATIVE_CHARGE_CERTIFICATE_LABEL'),
+      fileName: "aministrativeChargeCertificate",
+      selectorKey: "aministrativeChargeCertificateFile"
+    },
+    {
+      label: t('JOINT_DEVELOPMENT_CERTIFICATE_LABEL'),
+      fileName: "jointDevelopmentCertificate",
+      selectorKey: "jointDevelopmentCertificateFile"
+    },
+    {
+      label: t('BOARD_RESOLUTION_EXISTING_LABEL'),
+      fileName: "boardResolutionExisting",
+      selectorKey: "boardResolutionExistingFile"
+    },
+    {
+      label: t('BOARD_RESOLUTION_NEW_LABEL'),
+      fileName: "boardResolutionNewEntity",
+      selectorKey: "boardResolutionNewEntityFile"
+    },
+
+  ]
+
+  const changeInShareholding = [
+    {
+      label: ('CONSENT_LETTER_FROM_NEW_ENTITY_LABEL'),
+      fileName: "consentLetter",
+      selectorKey: "consentLetterFile"
+    },
+    {
+      label: t('JUSTIFICATION_FOR_SUCH_REQUEST_LABEL'),
+      fileName: "justificationCertificate",
+      selectorKey: "justificationCertificateFile"
+    },
+    {
+      label: t('THIRD_PARTY_RIGHTS_CERTIFICATE_LABEL'),
+      fileName: "thirdPartyRightsCertificate",
+      selectorKey: "thirdPartyRightsCertificateFile"
+    },
+    {
+      label: t('ADMINISTRATIVE_CHARGE_CERTIFICATE_LABEL'),
+      fileName: "aministrativeChargeCertificate",
+      selectorKey: "aministrativeChargeCertificateFile"
+    },
+    {
+      label: t('SHAREHOLDING_PATTERN_CERTIFICATE_LABEL'),
+      fileName: "shareholdingPatternCertificate",
+      selectorKey: "shareholdingPatternCertificateFile"
+    },
+    {
+      label: t('RERA_REGISTRATION_CERTIFICATION_LABEL'),
+      fileName: "reraRegistrationCertificate",
+      selectorKey: "reraRegistrationCertificateFile"
+    },
+    {
+      label: t('BOARD_RESOLUTION_EXISTING_LABEL'),
+      fileName: "boardResolutionExisting",
+      selectorKey: "boardResolutionExistingFile"
+    },
+    {
+      label: t('BOARD_RESOLUTION_NEW_LABEL'),
+      fileName: "boardResolutionNewEntity",
+      selectorKey: "boardResolutionNewEntityFile"
+    },
+
+  ]
+  const [fileStoreId, setFileStoreId] = useState({});
+  const [selectedFiles, setSelectedFiles] = useState([]);
+  // const [loader, setLoader] = useState(false);
+  const token = window?.localStorage?.getItem("token");
+  const userInfo = Digit.UserService.getUser()?.info || {};
+  const location = useLocation();
+  const params = new URLSearchParams(location.search);
+  const [beneficialDetails, setBeneficialDetails] = useState();
+  const [developerServices, setDeveloperServices] = useState([]);
+
+  const getDeveloperServices = async () => {
+    setLoader(false);
+    try {
+      const body = {
+
+        "RequestInfo": {
+
+          "apiId": "Rainmaker",
+
+          "ver": "v1",
+
+          "ts": 0,
+
+          "action": "_search",
+
+          "did": "",
+
+          "key": "",
+
+          "msgId": "090909",
+
+          "authToken": "",
+
+          "correlationId": null
+
+
+
+        },
+
+        "MdmsCriteria": {
+
+          "tenantId": "hr",
+
+          "moduleDetails": [
+
+            {
+
+              "tenantId": "hr",
+
+              "moduleName": "common-masters",
+
+              "masterDetails": [
+
+                {
+
+
+
+                  "name": "ChangeBeneficial"
+
+
+
+                }
+
+              ]
+
+            }
+
+          ]
+
+        }
+
+      }
+      const Resp = await axios.post("/egov-mdms-service/v1/_search", body);
+      setDeveloperServices(Resp.data?.MdmsRes?.['common-masters']?.ChangeBeneficial || []);
+
+      setLoader(false);
+    } catch (err) {
+      setLoader(false);
+      setShowToastError({ label: err.message, error: true, success: false });
+    }
+  }
+
   // const beneficialNew = (data) => console.log(data);
   const beneficialNew = async (data) => {
-    const token = window?.localStorage?.getItem("token");
-    const userInfo = Digit.UserService.getUser()?.info || {};
+    setLoader(true);
     try {
       const postDistrict = {
         changeBeneficial: [
           {
-            ...data,
-          },
+            "licenseNumber": data?.licenceNo || "",
+            "developerServiceCode": data?.developerServiceCode || "",
+            "paidAmount": data?.paidAmount || "",
+            "areaInAcres": data?.areaInAcres || "",
+            "noObjectionCertificate": data?.noObjectionCertificate || "",
+            "consentLetter": data?.consentLetter || "",
+            "justificationCertificate": data?.justificationCertificate || "",
+            "thirdPartyRightsCertificate": data?.thirdPartyRightsCertificate || "",
+            "jointDevelopmentCertificate": data?.jointDevelopmentCertificate || "",
+            "aministrativeChargeCertificate": data?.aministrativeChargeCertificate || "",
+            "boardResolutionExisting": data?.boardResolutionExisting || "",
+            "boardResolutionNewEntity": data?.boardResolutionNewEntity || "",
+            "shareholdingPatternCertificate": data?.shareholdingPatternCertificate || "",
+            "reraRegistrationCertificate": data?.reraRegistrationCertificate || "",
+            "fiancialCapacityCertificate": data?.fiancialCapacityCertificate || ""
+          }
         ],
         RequestInfo: {
           apiId: "Rainmaker",
@@ -50,22 +294,125 @@ function Beneficial() {
       };
       const Resp = await axios.post("/tl-services/beneficial/_create", postDistrict);
       setBeneficialInterestLabel(Resp.data);
+      setLoader(false);
+      setShowToastError({ label: "Beneficial Created Successfully", error: false, success: true });
       // setApplicationNumber(Resp.data.changeBeneficial.applicationNumber);
     } catch (error) {
+      console.log("Submit Error ====> ", err.message);
       setLoader(false);
-      setToastError(error?.response?.data?.Errors?.[0]?.code);
-      setTimeout(() => {
-        setToastError(null);
-      }, 2000);
+      setShowToastError({ label: err.message, error: true, success: false });
       return error.message;
     }
   };
-  const [fileStoreId, setFileStoreId] = useState({});
-  const [selectedFiles, setSelectedFiles] = useState([]);
-  const [loader, setLoader] = useState(false);
-  const getDocumentData = async (file, fieldName) => {
+
+
+  const updateBeneficial = async (data) => {
+    setLoader(true);
+    try {
+      const postDistrict = {
+        changeBeneficial: [
+          {
+            ...beneficialDetails,
+            "licenseNumber": data?.licenceNo || "",
+            "developerServiceCode": data?.developerServiceCode || "",
+            "paidAmount": data?.paidAmount || "",
+            "areaInAcres": data?.areaInAcres || "",
+            "noObjectionCertificate": data?.noObjectionCertificate || "",
+            "consentLetter": data?.consentLetter || "",
+            "justificationCertificate": data?.justificationCertificate || "",
+            "thirdPartyRightsCertificate": data?.thirdPartyRightsCertificate || "",
+            "jointDevelopmentCertificate": data?.jointDevelopmentCertificate || "",
+            "aministrativeChargeCertificate": data?.aministrativeChargeCertificate || "",
+            "boardResolutionExisting": data?.boardResolutionExisting || "",
+            "boardResolutionNewEntity": data?.boardResolutionNewEntity || "",
+            "shareholdingPatternCertificate": data?.shareholdingPatternCertificate || "",
+            "reraRegistrationCertificate": data?.reraRegistrationCertificate || "",
+            "fiancialCapacityCertificate": data?.fiancialCapacityCertificate || ""
+          }
+        ],
+        RequestInfo: {
+          apiId: "Rainmaker",
+          msgId: "1669293303096|en_IN",
+          authToken: token,
+          userInfo: userInfo,
+        },
+      };
+      const Resp = await axios.post("/tl-services/beneficial/_update", postDistrict);
+      setBeneficialInterestLabel(Resp.data);
+      setLoader(false);
+      setShowToastError({ label: "Beneficial Interest Updated Successfully", error: false, success: true });
+      // setApplicationNumber(Resp.data.changeBeneficial.applicationNumber);
+    } catch (error) {
+      console.log("Submit Error ====> ", err.message);
+      setLoader(false);
+      setShowToastError({ label: err.message, error: true, success: false });
+      return error.message;
+    }
+  };
+
+
+  const getBeneficiaryDetails = async () => {
+    setLoader(true);
+    try {
+      const reqBody = {
+        "RequestInfo": {
+          "apiId": "Rainmaker",
+          "action": "",
+          "did": 1,
+          "key": "",
+          "msgId": "1662181431469|en_IN",
+          "requesterId": "",
+          "ts": "",
+          "ver": ".01",
+          "authToken": token
+        }
+      }
+
+      const Resp = await axios.post(`/tl-services/beneficial/_get?licenseNumber=${params.get('id')}`, reqBody);
+      console.log("BeneficiaryDetails ====> ", Resp, Resp?.data?.changeBeneficial?.[0], Resp?.data?.changeBeneficial?.[0]?.licenseNumber);
+      setBeneficialDetails(Resp?.data?.changeBeneficial?.[0]);
+      setValue("licenceNo", Resp?.data?.changeBeneficial?.[0]?.licenseNumber);
+      setValue("noObjectionCertificate", Resp?.data?.changeBeneficial?.[0]?.noObjectionCertificate);
+      setValue("justificationCertificate", Resp?.data?.changeBeneficial?.[0]?.justificationCertificate);
+      setValue("consentLetter", Resp?.data?.changeBeneficial?.[0]?.consentLetter);
+      setValue("thirdPartyRightsCertificate", Resp?.data?.changeBeneficial?.[0]?.thirdPartyRightsCertificate);
+      setValue("jointDevelopmentCertificate", Resp?.data?.changeBeneficial?.[0]?.jointDevelopmentCertificate);
+      setValue("aministrativeChargeCertificate", Resp?.data?.changeBeneficial?.[0]?.aministrativeChargeCertificate);
+      setValue("boardResolutionExisting", Resp?.data?.changeBeneficial?.[0]?.boardResolutionExisting);
+      setValue("boardResolutionNewEntity", Resp?.data?.changeBeneficial?.[0]?.boardResolutionNewEntity);
+      setValue("shareholdingPatternCertificate", Resp?.data?.changeBeneficial?.[0]?.shareholdingPatternCertificate);
+      setValue("fiancialCapacityCertificate", Resp?.data?.changeBeneficial?.[0]?.fiancialCapacityCertificate);
+      setValue("developerServiceCode", Resp?.data?.changeBeneficial?.[0]?.developerServiceCode);
+      setValue("reraRegistrationCertificate", Resp?.data?.changeBeneficial?.[0]?.reraRegistrationCertificate);
+      setValue("paidAmount", Resp?.data?.changeBeneficial?.[0]?.paidAmount);
+      setValue("areaInAcres", Resp?.data?.changeBeneficial?.[0]?.areaInAcres);
+      console.log("scene", Resp?.data?.changeBeneficial?.[0]?.areaInAcres)
+
+
+
+      setLoader(false);
+      setShowhide(Resp?.data?.changeBeneficial?.[0]?.developerServiceCode)
+
+    } catch (err) {
+      console.log("Submit Error ====> ", err.message);
+      setLoader(false);
+      setShowToastError({ label: err.message, error: true, success: false });
+      return error.message;
+    }
+  }
+
+  useEffect(() => {
+    getDeveloperServices();
+    if (params.get('id')) {
+      getBeneficiaryDetails();
+    }
+  }, [])
+
+
+
+  const uploadFile = async (file, fieldName) => {
     if (selectedFiles.includes(file.name)) {
-      setShowToastError({ key: "error" });
+      setShowToastError({ label: "Duplicate File", error: true, success: false });
       return;
     }
     const formData = new FormData();
@@ -86,723 +433,357 @@ function Beneficial() {
       //   setValue("tcpSubmissionReceivedFileName", file.name);
       // }
       setSelectedFiles([...selectedFiles, file.name]);
+      // console.log("Submit Error ====> ", err.message);
+
       setLoader(false);
-      setShowToast({ key: "success" });
+      setShowToastError({ label: err.message, error: true, success: false });
     } catch (error) {
+      console.log("Submit Error ====> ", err.message);
       setLoader(false);
-      return error.message;
+      setShowToastError({ label: err.message, error: true, success: false });
     }
   };
 
+
+  const formSubmitHandler = async (data) => {
+    if (params.get('id')) {
+      updateBeneficial(data)
+    } else {
+      beneficialNew(data);
+    }
+  }
+
   return (
     <div>
-      <form onSubmit={handleSubmit(beneficialNew)}>
+      <form onSubmit={handleSubmit(formSubmitHandler)}>
+
+        {
+          loader && <Spinner />
+        }
+
+        {showToastError && (
+          <CusToaster
+            label={showToastError?.label}
+            success={showToastError?.success}
+            error={showToastError?.error}
+            onClose={() => {
+              setShowToastError({ label: "", success: false, error: false });
+            }}
+          />
+        )}
+
         <div className="card" style={{ width: "126%", border: "5px solid #1266af" }}>
-          <h4 style={{ fontSize: "25px", marginLeft: "21px" }}>CHANGE IN BENEFICIAL INTEREST</h4>
+          <h4 style={{ fontSize: "25px", marginLeft: "21px" }}>{t('CHANGE_IN_BENEFICIAL_INTEREST')}</h4>
           <div className="card">
-            <div className="row-12">
-              <div className="col md={4} xxl lg-4">
-                <FormControl>
+            <div className="">
+              <div className="row">
+
+                <div className="col-12 p-3">
+                  <SearchLicenceComp
+                    watch={watch}
+                    register={register}
+                    control={control}
+                    setLoader={setLoader}
+                    errors={errors}
+                    setValue={setValue}
+                  />
+                </div>
+
+                {/* <FormControl>
                   <h2 className="FormLable"> Licence No </h2>
 
-                  <OutlinedInput type="text" className="Inputcontrol" placeholder="" {...register("applicationNumber")} />
-                </FormControl>
-                &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
-                <FormControl>
-                  <h2 className="FormLable">Select Service</h2>
+                  <OutlinedInput type="text" className="Inputcontrol" placeholder="" {...register("licenceNo",{
+                    required:"This field cannot be blank",
+                    minLength: {
+                      value: 4,
+                      message: "Invalid Licence No."
+                    }, maxLength: {
+                      value: 19,
+                      message: "Invalid Licence No."
+                    },
+                    pattern: {
+                      value: /^[a-zA-Z0-9]*$/,
+                      message: "Invalid Licence No."
+                    }
+                  })} />
 
-                  <select className="Inputcontrol" class="form-control" {...register("developerServiceCode")} onChange={(e) => handleshowhide(e)}>
-                    <option value=" ">----Select value-----</option>
-                    <option value="1">(a)Change of Developer</option>
-                    <option value="2">(b) Joint Development and/or Marketing rights</option>
-                    <option value="3">(c)Change in Share Holding Pattern</option>
+                  <FormHelperText error={Boolean(errors?.licenceNo)}>
+                  {errors?.licenceNo?.message}
+                </FormHelperText>
+                </FormControl> */}
+                {/* &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; */}
+                <FormControl className="col col-md-6 col-lg-4 p-3">
+                  <h2 className="FormLable">{t("SELECT_SERVICE")}</h2>
+
+                  <select className="Inputcontrol form-control h-auto" style={{ height: "auto", padding: "9px" }} {...register("developerServiceCode", {
+                    required: 'At least one should be selected'
+                  })} onChange={(e) => handleshowhide(e)}>
+                    <option value="">----Select value-----</option>
+                    {
+                      developerServices.map((item, index) => (
+                        <option key={index} value={item.developerServiceCode}>{item?.developerServiceName}</option>
+                      ))
+                    }
                   </select>
+                  <FormHelperText error={Boolean(errors?.developerServiceCode)}>
+                    {errors?.developerServiceCode?.message}
+                  </FormHelperText>
                 </FormControl>
-                &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
-                <FormControl>
-                  <h2 className="FormLable">Amount</h2>
-
-                  <OutlinedInput type="text" className="Inputcontrol" disabled {...register("amount")} />
+                {/* &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; */}
+                <FormControl className="col col-md-6 col-lg-4 p-3">
+                  <h2 className="FormLable">{t('Amount')}</h2>
+                  <OutlinedInput type="text" className="Inputcontrol" disabled {...register("paidAmount")} />
                 </FormControl>
-                <div className="col md={4} xxl lg-4">
-                  <div>
-                    {showhide === "2" && (
-                      <div>
-                        <h2 className="FormLable"> Area in Acres</h2>
+                {/* <div className="col md={4} xxl lg-4">
+                  <div> */}
 
-                        <OutlinedInput type="number" className="Inputcontrol" placeholder="" {...register("areaInAcres")} />
-                      </div>
-                    )}
-                  </div>
-                </div>
+                {showhide === "JDAMR" && (
+                  <FormControl className="col col-md:6 col-lg-4 p-3">
+                    <h2 className="FormLable"> {t('AREA_IN_ACRES')}</h2>
+
+                    <OutlinedInput type="number" className="Inputcontrol" placeholder="" {...register("areaInAcres", {
+                      required: "This field cannot be blank",
+                      validate: {
+                        min: (value) => Number(value) > 0 || 'Area in Acres should be minimum 1',
+                        max: (value) => Number(value) <= 10 || 'Area in Acres should be maximum 10'
+                      }
+                    })}
+                    // error={Boolean(errors?.areaInAcres)}
+                    />
+                    <FormHelperText error={Boolean(errors?.areaInAcres)}>
+                      {errors?.areaInAcres?.message}
+                    </FormHelperText>
+                  </FormControl>
+                )}
+                {/* </div>
+                </div> */}
                 <br />
-                <div className="row-12">
+                <div className="row-12 mt-3">
                   <div>
-                    {showhide === "1" && (
+                    {showhide === "COD" && (
                       // <div className="card">
                       <div className="table table-bordered table-responsive">
                         {/* <caption>List of users</caption> */}
                         <thead>
                           <tr>
-                            <th class="fw-normal">Sr.No</th>
-                            <th class="fw-normal">Field Name</th>
-                            <th class="fw-normal">Upload Documents</th>
+                            <th class="fw-normal">{t('SR_NO')}</th>
+                            <th class="fw-normal">{t('FIELD_NAME')}</th>
+                            <th class="fw-normal">{t("UPLOAD_DOCUMENTS")}</th>
                           </tr>
                         </thead>
                         <tbody>
-                          <tr>
-                            <th class="fw-normal">1</th>
-                            <td>
-                              No objection certificate from the existing ‘Developer, filed through its authorized signatory, specifically designated
-                              for the purpose; as well as from the ‘land owner licensees’, in person (not through GPA/SPA assignees), to the proposed
-                              change/assignmen
-                            </td>
-                            <td>
-                              <div>
-                                <input
-                                  type="file"
-                                  className="form-control"
-                                  accept="application/pdf/jpeg/png"
-                                  onChange={(e) => getDocumentData(e?.target?.files[0], "objectionCertificate")}
-                                />
 
-                                {watch("objectionCertificate") && (
-                                  <a onClick={() => getDocShareholding(watch("objectionCertificate"), setLoader)} className="btn btn-sm "></a>
-                                )}
-                              </div>
-                              {/* <input type="file" className="fom-control" placeholder="" {...register("objectionCertificate")}></input> */}
-                            </td>
-                          </tr>
-                          <tr>
-                            <th class="fw-normal">2</th>
-                            <td> A consent letter from the new entity for the proposed change </td>
-                            <td>
-                              <div>
-                                <input
-                                  type="file"
-                                  className="form-control"
-                                  accept="application/pdf/jpeg/png"
-                                  onChange={(e) => getDocumentData(e?.target?.files[0], "consentLetter")}
-                                />
+                          {
+                            changeOfDeveloperForm.map((item, index) => (
 
-                                {fileStoreId?.consentLetter ? (
-                                  <a onClick={() => getDocShareholding(fileStoreId?.consentLetter)} className="btn btn-sm "></a>
-                                ) : (
-                                  <p></p>
-                                )}
-                                <h3 style={{}}>{watch("consentLetterFileName") ? watch("consentLetterFileName") : null}</h3>
-                              </div>
-                              {/* <input type="file" className="fom-control" placeholder="" {...register("consentLetter")}></input> */}
-                            </td>
-                          </tr>
-                          <tr>
-                            <th class="fw-normal">3</th>
-                            <td> Justification for such request. </td>
-                            <td>
-                              <div>
-                                <input
-                                  type="file"
-                                  className="form-control"
-                                  accept="application/pdf/jpeg/png"
-                                  onChange={(e) => getDocumentData(e?.target?.files[0], "justification")}
-                                />
+                              <tr key={index}>
+                                <th class="fw-normal">{index + 1}</th>
+                                <td>
+                                  {item.label}
+                                </td>
 
-                                {fileStoreId?.justification ? (
-                                  <a onClick={() => getDocShareholding(fileStoreId?.justification)} className="btn btn-sm "></a>
-                                ) : (
-                                  <p></p>
-                                )}
-                                <h3 style={{}}>{watch("justificationFileName") ? watch("justificationFileName") : null}</h3>
-                              </div>
-                              {/* <input type="file" className="fom-control" placeholder="" {...register("justification")}></input> */}
-                            </td>
-                          </tr>
-                          <tr>
-                            <th class="fw-normal">4</th>
-                            <td>
-                              {" "}
-                              The status regarding the creation of third-party rights in the colony. In case no third-party rights are claimed to have
-                              been created in the colony, an affidavit to the said effect be also submitted by the existing developer{" "}
-                            </td>
-                            <td>
-                              <div>
-                                <input
-                                  type="file"
-                                  className="form-control"
-                                  accept="application/pdf/jpeg/png"
-                                  onChange={(e) => getDocumentData(e?.target?.files[0], "thirdPartyRights")}
-                                />
+                                {
+                                  watch(item.fileName) ?
+                                    (
+                                      <td>
+                                        <div className="d-flex justify-content-center">
+                                          <label title="Upload Document" for={item.selectorKey}>
+                                            {" "}
+                                            <FileUpload color="primary" for={item.selectorKey} />
+                                          </label>
+                                          <input id={item.selectorKey} type="file" placeholder="" className="form-control d-none" onChange={(e) => uploadFile(e.target.files[0], item.fileName)}
+                                          ></input>
 
-                                {fileStoreId?.thirdPartyRights ? (
-                                  <a onClick={() => getDocShareholding(fileStoreId?.thirdPartyRights)} className="btn btn-sm "></a>
-                                ) : (
-                                  <p></p>
-                                )}
-                                <h3 style={{}}>{watch("thirdPartyRightsFileName") ? watch("thirdPartyRightsFileName") : null}</h3>
-                              </div>
-                              {/* <input type="file" className="fom-control" placeholder="" {...register("thirdPartyRights")}></input> */}
-                            </td>
-                          </tr>
-                          <tr>
-                            <th class="fw-normal">5</th>
-                            <td>
-                              {" "}
-                              Documents about the Technical and Financial Capacity of the ‘new entity’ proposed to be inducted as a ‘Developer’ or
-                              ‘shareholder(s)’ as per prescribed policy parameters for grant of license.
-                            </td>
-                            <td>
-                              <div>
-                                <input
-                                  type="file"
-                                  className="form-control"
-                                  accept="application/pdf/jpeg/png"
-                                  onChange={(e) => getDocumentData(e?.target?.files[0], "fiancialCapacity")}
-                                />
+                                          {watch(item.fileName) && (
+                                            <a onClick={() => getDocShareholding(watch(item.fileName), setLoader)} className="btn btn-sm ">
+                                              <Visibility />
+                                            </a>
+                                          )}
+                                        </div>
 
-                                {fileStoreId?.fiancialCapacity ? (
-                                  <a onClick={() => getDocShareholding(fileStoreId?.fiancialCapacity)} className="btn btn-sm "></a>
-                                ) : (
-                                  <p></p>
-                                )}
-                                <h3 style={{}}>{watch("fiancialCapacityFileName") ? watch("fiancialCapacityFileName") : null}</h3>
-                              </div>
-                              {/* <input type="file" className="fom-control" placeholder="" {...register("fiancialCapacity")}></input> */}
-                            </td>
-                          </tr>
-                          <tr>
-                            <th class="fw-normal">6</th>
-                            <td> An undertaking to pay the balance administrative charges before final approval.</td>
-                            <td>
-                              <div>
-                                <input
-                                  type="file"
-                                  className="form-control"
-                                  accept="application/pdf/jpeg/png"
-                                  onChange={(e) => getDocumentData(e?.target?.files[0], "aministrativeChargeCertificates")}
-                                />
+                                      </td>
+                                    ) : (
+                                      <td>
+                                        <div>
+                                          <label title="Upload Document" for={item.selectorKey}>
+                                            {" "}
+                                            <FileUpload color="primary" for={item.selectorKey} />
+                                          </label>
+                                          <input id={item.selectorKey} type="file" placeholder="" className="form-control d-none" {...register(item.selectorKey, { required: "This Document is required" })} onChange={(e) => uploadFile(e.target.files[0], item.fileName)} ></input>
 
-                                {fileStoreId?.aministrativeChargeCertificates ? (
-                                  <a onClick={() => getDocShareholding(fileStoreId?.aministrativeChargeCertificates)} className="btn btn-sm "></a>
-                                ) : (
-                                  <p></p>
-                                )}
-                                <h3 style={{}}>
-                                  {watch("aministrativeChargeCertificatesFileName") ? watch("aministrativeChargeCertificatesFileName") : null}
-                                </h3>
-                              </div>
-                              {/* <input type="file" className="fom-control" placeholder="" {...register("aministrativeChargeCertificates")}></input> */}
-                            </td>
-                          </tr>
-                          <tr>
-                            <th class="fw-normal">7</th>
-                            <td> Status of RERA registration of project of non registered,then affidavit to this effect.</td>
-                            <td>
-                              <div>
-                                <input
-                                  type="file"
-                                  className="form-control"
-                                  accept="application/pdf/jpeg/png"
-                                  onChange={(e) => getDocumentData(e?.target?.files[0], "reraRegistration")}
-                                />
+                                          {watch(item.fileName) && (
+                                            <a onClick={() => getDocShareholding(watch(item.fileName), setLoader)} className="btn btn-sm "></a>
+                                          )}
+                                        </div>
 
-                                {fileStoreId?.reraRegistration ? (
-                                  <a onClick={() => getDocShareholding(fileStoreId?.reraRegistration)} className="btn btn-sm "></a>
-                                ) : (
-                                  <p></p>
-                                )}
-                                <h3 style={{}}>{watch("reraRegistrationFileName") ? watch("reraRegistrationFileName") : null}</h3>
-                              </div>
-                              {/* <input type="file" className="fom-control" placeholder="" {...register("reraRegistration")}></input> */}
-                            </td>
-                          </tr>
-                          <tr>
-                            <th class="fw-normal">8</th>
-                            <td> Board resolution of authorised signatory of “existing developer </td>
-                            <td>
-                              <div>
-                                <input
-                                  type="file"
-                                  className="form-control"
-                                  accept="application/pdf/jpeg/png"
-                                  onChange={(e) => getDocumentData(e?.target?.files[0], "boardResolutionExisting")}
-                                />
+                                        <h3 className="error-message" style={{ color: "red" }}>
+                                          {errors?.[item.selectorKey] && errors?.[item.selectorKey]?.message}
+                                        </h3>
 
-                                {fileStoreId?.boardResolutionExisting ? (
-                                  <a onClick={() => getDocShareholding(fileStoreId?.boardResolutionExisting)} className="btn btn-sm "></a>
-                                ) : (
-                                  <p></p>
-                                )}
-                                <h3 style={{}}>{watch("boardResolutionExistingFileName") ? watch("boardResolutionExistingFileName") : null}</h3>
-                              </div>
-                              {/* <input type="file" className="fom-control" placeholder="" {...register("boardResolutionExisting")}></input> */}
-                            </td>
-                          </tr>
-                          <tr>
-                            <th class="fw-normal">9</th>
-                            <td>
-                              {" "}
-                              Board resolution of authorised signatory of “new entity ”<span style={{ color: "red" }}>*</span>
-                            </td>
-                            <td>
-                              <div>
-                                <input
-                                  type="file"
-                                  className="form-control"
-                                  accept="application/pdf/jpeg/png"
-                                  onChange={(e) => getDocumentData(e?.target?.files[0], "boardResolutionNewEntity")}
-                                />
 
-                                {fileStoreId?.boardResolutionNewEntity ? (
-                                  <a onClick={() => getDocShareholding(fileStoreId?.boardResolutionNewEntity)} className="btn btn-sm "></a>
-                                ) : (
-                                  <p></p>
-                                )}
-                                <h3 style={{}}>{watch("boardResolutionNewEntityFileName") ? watch("boardResolutionNewEntityFileName") : null}</h3>
-                              </div>
-                              {/* <input type="file" className="fom-control" placeholder="" {...register("boardResolutionNewEntity")}></input> */}
-                            </td>
-                          </tr>
+                                      </td>
+                                    )
+                                }
+
+                              </tr>
+
+                            ))
+                          }
+
                         </tbody>
                       </div>
                       // </div>
                     )}
                   </div>
                   <div>
-                    {showhide === "2" && (
+                    {showhide === "JDAMR" && (
                       // <div className="card">
                       <div className="table table-bordered table-responsive">
                         {/* <caption>List of users</caption> */}
                         <thead>
                           <tr>
-                            <th class="fw-normal">Sr.No</th>
-                            <th class="fw-normal">Field Name</th>
-                            <th class="fw-normal">Upload Documents</th>
+                            <th class="fw-normal">{t('SR_NO')}</th>
+                            <th class="fw-normal">{t('FIELD_NAME')}</th>
+                            <th class="fw-normal">{t("UPLOAD_DOCUMENTS")}</th>
                           </tr>
                         </thead>
                         <tbody>
-                          <tr>
-                            <th class="fw-normal">1</th>
-                            <td>
-                              No objection certificate from the existing ‘Developer, filed through its authorized signatory, specifically designated
-                              for the purpose; as well as from the ‘land owner licensees’, in person (not through GPA/SPA assignees), to the proposed
-                              change/assignment
-                            </td>
-                            <td>
-                              <div>
-                                <input
-                                  type="file"
-                                  className="form-control"
-                                  accept="application/pdf/jpeg/png"
-                                  onChange={(e) => getDocumentData(e?.target?.files[0], "noObjectionCertificate")}
-                                />
 
-                                {fileStoreId?.noObjectionCertificate ? (
-                                  <a onClick={() => getDocShareholding(fileStoreId?.noObjectionCertificate)} className="btn btn-sm "></a>
-                                ) : (
-                                  <p></p>
-                                )}
-                                <h3 style={{}}>{watch("noObjectionCertificateFileName") ? watch("noObjectionCertificateFileName") : null}</h3>
-                              </div>
-                              {/* <input type="file" className="fom-control" placeholder="" {...register("noObjectionCertificate")}></input> */}
-                            </td>
-                          </tr>
-                          <tr>
-                            <th class="fw-normal">2</th>
-                            <td> A consent letter from the new entity for the proposed change. </td>
-                            <td>
-                              <div>
-                                <input
-                                  type="file"
-                                  className="form-control"
-                                  accept="application/pdf/jpeg/png"
-                                  onChange={(e) => getDocumentData(e?.target?.files[0], "consentLetter")}
-                                />
 
-                                {fileStoreId?.consentLetter ? (
-                                  <a onClick={() => getDocShareholding(fileStoreId?.consentLetter)} className="btn btn-sm "></a>
-                                ) : (
-                                  <p></p>
-                                )}
-                                <h3 style={{}}>{watch("consentLetterFileName") ? watch("consentLetterFileName") : null}</h3>
-                              </div>
-                              {/* <input type="file" className="fom-control" placeholder="" {...register("consentLetter")}></input> */}
-                            </td>
-                          </tr>
-                          <tr>
-                            <th class="fw-normal">3</th>
-                            <td> Justification for such request.</td>
-                            <td>
-                              <div>
-                                <input
-                                  type="file"
-                                  className="form-control"
-                                  accept="application/pdf/jpeg/png"
-                                  onChange={(e) => getDocumentData(e?.target?.files[0], "justificationRequest")}
-                                />
+                          {
+                            joinDevForm.map((item, index) => (
 
-                                {fileStoreId?.justificationRequest ? (
-                                  <a onClick={() => getDocShareholding(fileStoreId?.justificationRequest)} className="btn btn-sm "></a>
-                                ) : (
-                                  <p></p>
-                                )}
-                                <h3 style={{}}>{watch("justificationRequestFileName") ? watch("justificationRequestFileName") : null}</h3>
-                              </div>
-                              {/* <input type="file" className="fom-control" placeholder="" {...register("justificationRequest")}></input> */}
-                            </td>
-                          </tr>
-                          <tr>
-                            <th class="fw-normal">4</th>
-                            <td>
-                              {" "}
-                              The status regarding the creation of third-party rights in the colony. In case no third-party rights are claimed to have
-                              been created in the colony, an affidavit to the said effect be also submitted by the existing developer{" "}
-                            </td>
-                            <td>
-                              <div>
-                                <input
-                                  type="file"
-                                  className="form-control"
-                                  accept="application/pdf/jpeg/png"
-                                  onChange={(e) => getDocumentData(e?.target?.files[0], "thirdPartyclaimed")}
-                                />
+                              <tr key={index + "b"}>
+                                <th class="fw-normal">{index + 1}</th>
+                                <td>
+                                  {item.label}
+                                </td>
 
-                                {fileStoreId?.thirdPartyclaimed ? (
-                                  <a onClick={() => getDocShareholding(fileStoreId?.thirdPartyclaimed)} className="btn btn-sm "></a>
-                                ) : (
-                                  <p></p>
-                                )}
-                                <h3 style={{}}>{watch("thirdPartyclaimedFileName") ? watch("thirdPartyclaimedFileName") : null}</h3>
-                              </div>
-                              {/* <input type="file" className="fom-control" placeholder="" {...register("thirdPartyclaimed")}></input> */}
-                            </td>
-                          </tr>
-                          <tr>
-                            <th class="fw-normal">5</th>
-                            <td> Details of the applied area where joint development and /or marketing rights are to be assigned</td>
-                            <td>
-                              <div>
-                                <input
-                                  type="file"
-                                  className="form-control"
-                                  accept="application/pdf/jpeg/png"
-                                  onChange={(e) => getDocumentData(e?.target?.files[0], "thirdPartyclaimedFileName")}
-                                />
+                                {
+                                  watch(item.fileName) ?
+                                    (
+                                      <td>
+                                        <div className="d-flex justify-content-center">
+                                          <label title="Upload Document" for={item.selectorKey}>
+                                            {" "}
+                                            <FileUpload color="primary" for={item.selectorKey} />
+                                          </label>
+                                          <input id={item.selectorKey} type="file" placeholder="" className="form-control d-none" onChange={(e) => uploadFile(e.target.files[0], item.fileName)}
+                                          ></input>
 
-                                {fileStoreId?.thirdPartyclaimedFileName ? (
-                                  <a onClick={() => getDocShareholding(fileStoreId?.thirdPartyclaimedFileName)} className="btn btn-sm "></a>
-                                ) : (
-                                  <p></p>
-                                )}
-                                <h3 style={{}}>{watch("thirdPartyclaimedFileNameFileName") ? watch("thirdPartyclaimedFileNameFileName") : null}</h3>
-                              </div>
-                              {/* <input type="file" className="fom-control" placeholder="" {...register("jointDevelopment")}></input> */}
-                            </td>
-                          </tr>
-                          <tr>
-                            <th class="fw-normal">6</th>
-                            <td> An undertaking to pay the balance administrative charges before final approval.</td>
-                            <td>
-                              <div>
-                                <input
-                                  type="file"
-                                  className="form-control"
-                                  accept="application/pdf/jpeg/png"
-                                  onChange={(e) => getDocumentData(e?.target?.files[0], "balanceAministrative")}
-                                />
+                                          {watch(item.fileName) && (
+                                            <a onClick={() => getDocShareholding(watch(item.fileName), setLoader)} className="btn btn-sm ">
+                                              <Visibility />
+                                            </a>
+                                          )}
+                                        </div>
 
-                                {fileStoreId?.balanceAministrative ? (
-                                  <a onClick={() => getDocShareholding(fileStoreId?.balanceAministrative)} className="btn btn-sm "></a>
-                                ) : (
-                                  <p></p>
-                                )}
-                                <h3 style={{}}>{watch("balanceAministrativeFileName") ? watch("balanceAministrativeFileName") : null}</h3>
-                              </div>
-                              {/* <input type="file" className="fom-control" placeholder="" {...register("balanceAministrative")}></input> */}
-                            </td>
-                          </tr>
-                          <tr>
-                            <th class="fw-normal">7</th>
-                            <td> Board resolution of authorised signatory of “existing developer”.</td>
-                            <td>
-                              <div>
-                                <input
-                                  type="file"
-                                  className="form-control"
-                                  accept="application/pdf/jpeg/png"
-                                  onChange={(e) => getDocumentData(e?.target?.files[0], "boardResolutionDeveloper")}
-                                />
+                                      </td>
+                                    ) : (
+                                      <td>
+                                        <div>
+                                          <label title="Upload Document" for={item.selectorKey}>
+                                            {" "}
+                                            <FileUpload color="primary" for={item.selectorKey} />
+                                          </label>
+                                          <input id={item.selectorKey} type="file" placeholder="" className="form-control d-none" {...register(item.selectorKey, { required: "This Document is required" })} onChange={(e) => uploadFile(e.target.files[0], item.fileName)} ></input>
 
-                                {fileStoreId?.boardResolutionDeveloper ? (
-                                  <a onClick={() => getDocShareholding(fileStoreId?.boardResolutionDeveloper)} className="btn btn-sm "></a>
-                                ) : (
-                                  <p></p>
-                                )}
-                                <h3 style={{}}>{watch("boardResolutionDeveloperFileName") ? watch("boardResolutionDeveloperFileName") : null}</h3>
-                              </div>
-                              {/* <input type="file" className="fom-control" placeholder="" {...register("boardResolutionDeveloper")}></input> */}
-                            </td>
-                          </tr>
-                          <tr>
-                            <th class="fw-normal">8</th>
-                            <td> Board resolution of authorised signatory of “new entity ”</td>
-                            <td>
-                              <div>
-                                <input
-                                  type="file"
-                                  className="form-control"
-                                  accept="application/pdf/jpeg/png"
-                                  onChange={(e) => getDocumentData(e?.target?.files[0], "boardResolutionEntity")}
-                                />
+                                          {watch(item.fileName) && (
+                                            <a onClick={() => getDocShareholding(watch(item.fileName), setLoader)} className="btn btn-sm "></a>
+                                          )}
+                                        </div>
 
-                                {fileStoreId?.boardResolutionEntity ? (
-                                  <a onClick={() => getDocShareholding(fileStoreId?.boardResolutionEntity)} className="btn btn-sm "></a>
-                                ) : (
-                                  <p></p>
-                                )}
-                                <h3 style={{}}>{watch("boardResolutionEntityFileName") ? watch("boardResolutionEntityFileName") : null}</h3>
-                              </div>
-                              {/* <input type="file" className="fom-control" placeholder="" {...register("boardResolutionEntity")}></input> */}
-                            </td>
-                          </tr>
+                                        <h3 className="error-message" style={{ color: "red" }}>
+                                          {errors?.[item.selectorKey] && errors?.[item.selectorKey]?.message}
+                                        </h3>
+
+
+                                      </td>
+                                    )
+                                }
+
+                              </tr>
+
+                            ))
+                          }
+
                         </tbody>
                       </div>
                       // </div>
                     )}
                   </div>
                   <div>
-                    {showhide === "3" && (
+                    {showhide === "CISP" && (
                       // <div className="card">
 
                       <div className="table table-bordered table-responsive">
                         {/* <caption>List of users</caption> */}
                         <thead>
                           <tr>
-                            <th class="fw-normal">Sr.No</th>
-                            <th class="fw-normal">Field Name</th>
-                            <th class="fw-normal">Upload Documents</th>
+                            <th class="fw-normal">{t('SR_NO')}</th>
+                            <th class="fw-normal">{t('FIELD_NAME')}</th>
+                            <th class="fw-normal">{t("UPLOAD_DOCUMENTS")}</th>
                           </tr>
                         </thead>
                         <tbody>
-                          <tr>
-                            <th class="fw-normal">1</th>
-                            <td>
-                              No objection certificate from the existing ‘Developer, filed through its authorized signatory, specifically designated
-                              for the purpose; as well as from the ‘land owner licensees’, in person (not through GPA/SPA assignees), to the proposed
-                              change/assignment
-                            </td>
-                            <td>
-                              <div>
-                                <input
-                                  type="file"
-                                  className="form-control"
-                                  accept="application/pdf/jpeg/png"
-                                  onChange={(e) => getDocumentData(e?.target?.files[0], "proposedAssigment")}
-                                />
 
-                                {fileStoreId?.proposedAssigment ? (
-                                  <a onClick={() => getDocShareholding(fileStoreId?.proposedAssigment)} className="btn btn-sm "></a>
-                                ) : (
-                                  <p></p>
-                                )}
-                                <h3 style={{}}>{watch("proposedAssigmentFileName") ? watch("proposedAssigmentFileName") : null}</h3>
-                              </div>
-                              {/* <input type="file" className="fom-control" placeholder="" {...register("proposedAssigment")}></input> */}
-                            </td>
-                          </tr>
-                          <tr>
-                            <th class="fw-normal">2</th>
-                            <td> Justification for such request </td>
-                            <td>
-                              <div>
-                                <input
-                                  type="file"
-                                  className="form-control"
-                                  accept="application/pdf/jpeg/png"
-                                  onChange={(e) => getDocumentData(e?.target?.files[0], "justificationRequest")}
-                                />
 
-                                {fileStoreId?.justificationRequest ? (
-                                  <a onClick={() => getDocShareholding(fileStoreId?.justificationRequest)} className="btn btn-sm "></a>
-                                ) : (
-                                  <p></p>
-                                )}
-                                <h3 style={{}}>{watch("justificationRequestFileName") ? watch("justificationRequestFileName") : null}</h3>
-                              </div>
-                              {/* <input type="file" className="fom-control" placeholder="" {...register("justificationRequest")}></input> */}
-                            </td>
-                          </tr>
-                          <tr>
-                            <th class="fw-normal">3</th>
-                            <td>
-                              {" "}
-                              The status regarding the creation of third-party rights in the colony. In case no third-party rights are claimed to have
-                              been created in the colony, an affidavit to the said effect be also submitted by the existing developer{" "}
-                            </td>
-                            <td>
-                              <div>
-                                <input
-                                  type="file"
-                                  className="form-control"
-                                  accept="application/pdf/jpeg/png"
-                                  onChange={(e) => getDocumentData(e?.target?.files[0], "creationThirdParty")}
-                                />
+                          {
+                            changeInShareholding.map((item, index) => (
 
-                                {fileStoreId?.creationThirdParty ? (
-                                  <a onClick={() => getDocShareholding(fileStoreId?.creationThirdParty)} className="btn btn-sm "></a>
-                                ) : (
-                                  <p></p>
-                                )}
-                                <h3 style={{}}>{watch("creationThirdPartyFileName") ? watch("creationThirdPartyFileName") : null}</h3>
-                              </div>
-                              {/* <input type="file" className="fom-control" placeholder="" {...register("creationThirdParty")}></input> */}
-                            </td>
-                          </tr>
-                          <tr>
-                            <th class="fw-normal">4</th>
-                            <td>
-                              {" "}
-                              Documents about the Technical and Financial Capacity of the ‘new entity’ proposed to be inducted as a ‘Developer’ or
-                              ‘shareholder(s)’ as per prescribed policy parameters for grant of license
-                            </td>
-                            <td>
-                              <div>
-                                <input
-                                  type="file"
-                                  className="form-control"
-                                  accept="application/pdf/jpeg/png"
-                                  onChange={(e) => getDocumentData(e?.target?.files[0], "technicalAndFinancial")}
-                                />
+                              <tr key={index + "c"}>
+                                <th class="fw-normal">{index + 1}</th>
+                                <td>
+                                  {item.label}
+                                </td>
 
-                                {fileStoreId?.technicalAndFinancial ? (
-                                  <a onClick={() => getDocShareholding(fileStoreId?.technicalAndFinancial)} className="btn btn-sm "></a>
-                                ) : (
-                                  <p></p>
-                                )}
-                                <h3 style={{}}>{watch("technicalAndFinancialFileName") ? watch("technicalAndFinancialFileName") : null}</h3>
-                              </div>
-                              {/* <input type="file" className="fom-control" placeholder="" {...register("technicalAndFinancial")}></input> */}
-                            </td>
-                          </tr>
-                          <tr>
-                            <th class="fw-normal">5</th>
-                            <td> An undertaking to pay the balance administrative charges before final approval </td>
-                            <td>
-                              <div>
-                                <input
-                                  type="file"
-                                  className="form-control"
-                                  accept="application/pdf/jpeg/png"
-                                  onChange={(e) => getDocumentData(e?.target?.files[0], "aministrativeChargeCertificatesApproval")}
-                                />
+                                {
+                                  watch(item.fileName) ?
+                                    (
+                                      <td>
+                                        <div className="d-flex justify-content-center">
+                                          <label title="Upload Document" for={item.selectorKey}>
+                                            {" "}
+                                            <FileUpload color="primary" for={item.selectorKey} />
+                                          </label>
+                                          <input id={item.selectorKey} type="file" placeholder="" className="form-control d-none" onChange={(e) => uploadFile(e.target.files[0], item.fileName)}
+                                          ></input>
 
-                                {fileStoreId?.aministrativeChargeCertificatesApproval ? (
-                                  <a
-                                    onClick={() => getDocShareholding(fileStoreId?.aministrativeChargeCertificatesApproval)}
-                                    className="btn btn-sm "
-                                  ></a>
-                                ) : (
-                                  <p></p>
-                                )}
-                                <h3 style={{}}>
-                                  {watch("aministrativeChargeCertificatesApprovalFileName")
-                                    ? watch("aministrativeChargeCertificatesApprovalFileName")
-                                    : null}
-                                </h3>
-                              </div>
-                              {/* <input type="file" className="fom-control" placeholder="" {...register("aministrativeChargeCertificatesApproval")}></input> */}
-                            </td>
-                          </tr>
-                          <tr>
-                            <th class="fw-normal">6</th>
-                            <td> Proposed Shareholding Pattern of the developer company.</td>
-                            <td>
-                              <div>
-                                <input
-                                  type="file"
-                                  className="form-control"
-                                  accept="application/pdf/jpeg/png"
-                                  onChange={(e) => getDocumentData(e?.target?.files[0], "shareholdingPattern")}
-                                />
+                                          {watch(item.fileName) && (
+                                            <a onClick={() => getDocShareholding(watch(item.fileName), setLoader)} className="btn btn-sm ">
+                                              <Visibility />
+                                            </a>
+                                          )}
+                                        </div>
 
-                                {fileStoreId?.shareholdingPattern ? (
-                                  <a onClick={() => getDocShareholding(fileStoreId?.shareholdingPattern)} className="btn btn-sm "></a>
-                                ) : (
-                                  <p></p>
-                                )}
-                                <h3 style={{}}>{watch("shareholdingPatternFileName") ? watch("shareholdingPatternFileName") : null}</h3>
-                              </div>
-                              {/* <input type="file" className="fom-control" placeholder="" {...register("shareholdingPattern")}></input> */}
-                            </td>
-                          </tr>
-                          <tr>
-                            <th class="fw-normal">7</th>
-                            <td> Status of RERA registration of project of non registered,then affidavit to this effect.</td>
-                            <td>
-                              <div>
-                                <input
-                                  type="file"
-                                  className="form-control"
-                                  accept="application/pdf/jpeg/png"
-                                  onChange={(e) => getDocumentData(e?.target?.files[0], "statusOfRera")}
-                                />
+                                      </td>
+                                    ) : (
+                                      <td>
+                                        <div>
+                                          <label title="Upload Document" for={item.selectorKey}>
+                                            {" "}
+                                            <FileUpload color="primary" for={item.selectorKey} />
+                                          </label>
+                                          <input id={item.selectorKey} type="file" placeholder="" className="form-control d-none" {...register(item.selectorKey, { required: "This Document is required" })} onChange={(e) => uploadFile(e.target.files[0], item.fileName)} ></input>
 
-                                {fileStoreId?.statusOfRera ? (
-                                  <a onClick={() => getDocShareholding(fileStoreId?.statusOfRera)} className="btn btn-sm "></a>
-                                ) : (
-                                  <p></p>
-                                )}
-                                <h3 style={{}}>{watch("statusOfReraFileName") ? watch("statusOfReraFileName") : null}</h3>
-                              </div>
-                              {/* <input type="file" className="fom-control" placeholder="" {...register("statusOfRera")}></input> */}
-                            </td>
-                          </tr>
-                          <tr>
-                            <th class="fw-normal">8</th>
-                            <td> Board resolution of authorised signatory of “existing developer” </td>
-                            <td>
-                              <div>
-                                <input
-                                  type="file"
-                                  className="form-control"
-                                  accept="application/pdf/jpeg/png"
-                                  onChange={(e) => getDocumentData(e?.target?.files[0], "boardResolutionAuthorized")}
-                                />
+                                          {watch(item.fileName) && (
+                                            <a onClick={() => getDocShareholding(watch(item.fileName), setLoader)} className="btn btn-sm "></a>
+                                          )}
+                                        </div>
 
-                                {fileStoreId?.boardResolutionAuthorized ? (
-                                  <a onClick={() => getDocShareholding(fileStoreId?.boardResolutionAuthorized)} className="btn btn-sm "></a>
-                                ) : (
-                                  <p></p>
-                                )}
-                                <h3 style={{}}>{watch("boardResolutionAuthorizedFileName") ? watch("boardResolutionAuthorizedFileName") : null}</h3>
-                              </div>
-                              {/* <input type="file" className="fom-control" placeholder="" {...register("boardResolutionAuthorized")}></input> */}
-                            </td>
-                          </tr>
-                          <tr>
-                            <th class="fw-normal">9</th>
-                            <td>
-                              {" "}
-                              Board resolution of authorised signatory of “new entity ”<span style={{ color: "red" }}>*</span>
-                            </td>
-                            <td>
-                              <div>
-                                <input
-                                  type="file"
-                                  className="form-control"
-                                  accept="application/pdf/jpeg/png"
-                                  onChange={(e) => getDocumentData(e?.target?.files[0], "boardResolutionSignatory")}
-                                />
+                                        <h3 className="error-message" style={{ color: "red" }}>
+                                          {errors?.[item.selectorKey] && errors?.[item.selectorKey]?.message}
+                                        </h3>
 
-                                {fileStoreId?.boardResolutionSignatory ? (
-                                  <a onClick={() => getDocShareholding(fileStoreId?.boardResolutionSignatory)} className="btn btn-sm "></a>
-                                ) : (
-                                  <p></p>
-                                )}
-                                <h3 style={{}}>{watch("boardResolutionSignatoryFileName") ? watch("boardResolutionSignatoryFileName") : null}</h3>
-                              </div>
-                              {/* <input type="file" className="fom-control" placeholder="" {...register("boardResolutionSignatory")}></input> */}
-                            </td>
-                          </tr>
+
+                                      </td>
+                                    )
+                                }
+                              </tr>
+
+                            ))
+                          }
+
                         </tbody>
                       </div>
 
@@ -810,25 +791,26 @@ function Beneficial() {
                     )}
                   </div>
                 </div>
-                <div class="col-sm-12 text-right">
-                  <Button variant="contained" class="btn btn-primary btn-md center-block" type="submit" aria-label="right-end">
+                <div class="col-sm-12 text-right mt-3">
+                  <button id="btnSearch" type="submit" class="btn btn-primary btn-md center-block" style={{ marginRight: "5px" }}>
                     Pay
-                  </Button>{" "}
+                  </button>{" "}
                   &nbsp;
-                  <Button variant="contained" class="btn btn-primary btn-md center-block" type="save" aria-label="right-end">
+                  <button id="btnSearch" type="save" class="btn btn-primary btn-md center-block" style={{ marginRight: "5px" }}>
                     Save as Draft
-                  </Button>{" "}
+                  </button>{" "}
                   &nbsp;
-                  <Button variant="contained" class="btn btn-primary btn-md center-block" type="submit" aria-label="right-end">
+                  <button id="btnSearch" type="submit" class="btn btn-primary btn-md center-block" style={{}}>
                     Submit
-                  </Button>
+                  </button>
+
                 </div>
               </div>
             </div>
           </div>
         </div>
       </form>
-      {showToastError && (
+      {/* {showToastError && (
         <CusToaster
           label={showToastError?.label}
           success={showToastError?.success}
@@ -837,7 +819,7 @@ function Beneficial() {
             setShowToastError({ label: "", success: false, error: false });
           }}
         />
-      )}
+      )} */}
     </div>
   );
 }
