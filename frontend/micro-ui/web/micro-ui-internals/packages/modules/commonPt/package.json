@@ -1,6 +1,6 @@
 {
   "name": "@egovernments/digit-ui-module-commonpt",
-  "version": "1.6.0",
+  "version": "1.7.0-beta.1",
   "license": "MIT",
   "description": "Digit PT Light weight Module",
   "main": "dist/index.js",
@@ -19,7 +19,7 @@
     "react-router-dom": "5.3.0"
   },
   "dependencies": {
-    "@egovernments/digit-ui-react-components": "^1.6.0",
+    "@egovernments/digit-ui-react-components": "^1.7.0-beta.1",
     "lodash.merge": "^4.6.2",
     "react": "17.0.2",
     "react-dom": "17.0.2",

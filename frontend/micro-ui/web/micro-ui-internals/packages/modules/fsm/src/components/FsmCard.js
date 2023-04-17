@@ -103,7 +103,7 @@ const FSMCard = () => {
     },
     {
       label: t("ES_TITLE_FSM_REGISTRY"),
-      link: `/digit-ui/employee/fsm/registry`,
+      link: `/digit-ui/employee/fsm/registry?selectedTabs=VENDOR`,
       roles: ["FSM_ADMIN"],
     },
     {

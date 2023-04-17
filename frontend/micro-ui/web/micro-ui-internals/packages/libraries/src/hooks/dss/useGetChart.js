@@ -2,7 +2,7 @@ import { useQuery } from "react-query";
 import { startOfMonth, endOfMonth, getTime } from "date-fns";
 import { DSSService } from "../../services/elements/DSS";
 
-const getRequest = (type, code, requestDate, filters, moduleLevel = "", addlFilter) => {
+const getRequest = (type, code, requestDate, filters, moduleLevel = "", addlFilter, indexKeyForEmptyModule) => {
   let newFilter = { ...{ ...filters, ...addlFilter } };
   let updatedFilter = Object.keys(newFilter)
     .filter((ele) => newFilter[ele].length > 0)
@@ -16,7 +16,7 @@ const getRequest = (type, code, requestDate, filters, moduleLevel = "", addlFilt
       visualizationCode: code,
       queryType: "",
       filters: updatedFilter,
-      moduleLevel: moduleLevel,
+      moduleLevel: indexKeyForEmptyModule?.includes(code)? "" : moduleLevel,
       aggregationFactors: null,
       requestDate,
     },
@@ -38,11 +38,15 @@ const defaultSelect = (data) => {
 
 const useGetChart = (args) => {
   const { key, type, tenantId, requestDate, filters, moduleLevel, addlFilter } = args;
+  const indexKeyForEmptyModule = [
+    "nssPtCitizenFeedbackScore",
+    "nssPtCitizenServiceDeliveryIndex",
+  ];
   return useQuery(
     [args],
     () =>
       DSSService.getCharts({
-        ...getRequest(type, key, requestDate, filters, moduleLevel, addlFilter),
+        ...getRequest(type, key, requestDate, filters, moduleLevel, addlFilter, indexKeyForEmptyModule),
         headers: {
           tenantId,
         },

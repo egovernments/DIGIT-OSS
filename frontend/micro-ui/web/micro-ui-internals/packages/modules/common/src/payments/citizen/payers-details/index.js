@@ -5,17 +5,15 @@ import {
   RadioButtons,
   SubmitBar,
   BackButton,
-  CardLabel,
-  CardLabelDesc,
-  CardSectionHeader,
-  InfoBanner,
   Loader,
   TextInput,
   MobileNumber,
+  CheckBox,
+  CitizenConsentForm
 } from "@egovernments/digit-ui-react-components";
 import { useTranslation } from "react-i18next";
-import { useForm, Controller } from "react-hook-form";
-import { useParams, useHistory, useLocation, Redirect } from "react-router-dom";
+import { useForm } from "react-hook-form";
+import { useParams, useHistory, useLocation } from "react-router-dom";
 import { stringReplaceAll } from "../bills/routes/bill-details/utils";
 
 const SelectPaymentType = (props) => {
@@ -42,6 +40,8 @@ const SelectPaymentType = (props) => {
   const { workflow: wrkflow, tenantId: _tenantId, ConsumerName } = Digit.Hooks.useQueryParams();
   const [bill, setBill] = useState(state?.bill);
   const tenantId = state?.tenantId || _tenantId || Digit.UserService.getUser().info?.tenantId;
+  const isLoggedIn = Digit.UserService.getUser()
+
 
   const { data, isLoading } = state?.bill ? { isLoading: false } : Digit.Hooks.useFetchPayment({ tenantId, businessService, consumerCode });
 
@@ -70,10 +70,56 @@ const SelectPaymentType = (props) => {
   const { control, handleSubmit } = useForm();
   const [canSubmit, setCanSubmit] = useState(false);
   const [mobileNumberError, setmobileNumberError] = useState(null);
+  const [isCheckBox, setIsCheckBox] = useState(false);
+  const [isCCFEnabled, setisCCFEnabled] = useState(false);
+  const [mdmsConfig, setMdmsConfig] = useState("");
+  
+  const { isLoading: citizenConcentFormLoading, data:ccfData } = Digit.Hooks.useCustomMDMS(Digit.ULBService.getStateId(), "common-masters", [{ name: "CitizenConsentForm" }]);
+
+  function setTermsAndPolicyDetails(e) {
+    setIsCheckBox(e.target.checked)
+  }
+
+  const checkDisbaled = () => {
+    if (isCCFEnabled?.isCitizenConsentFormEnabled && !isLoggedIn?.access_token) {
+      const data = paymentType?.code !== optionSecound?.code ? false : userInfo ? false : !canSubmit;
+      let isEnabled = false
+      if (!data && isCheckBox) isEnabled = false;
+      else isEnabled = true;
+      return isEnabled;
+    } else {
+      return paymentType?.code !== optionSecound?.code ? false : userInfo ? false : !canSubmit
+    }
+  }
+
+  useEffect(()=> {
+    if (ccfData?.["common-masters"]?.CitizenConsentForm?.[0]?.isCitizenConsentFormEnabled) {
+      setisCCFEnabled(ccfData?.["common-masters"]?.CitizenConsentForm?.[0])
+    }
+  }, [ccfData]);
+
+  const onLinkClick = (e) => {
+    setMdmsConfig(e.target.id)
+}
+
+  const checkLabels = () => {
+    return <span>
+      {isCCFEnabled?.checkBoxLabels?.map((data, index) => {
+        return <span>
+          {/* {index == 0 && "CCF"} */}
+          {data?.linkPrefix && <span>{t(`${data?.linkPrefix}_`)}</span>}
+          {data?.link && <span id={data?.linkId} onClick={(e) => { onLinkClick(e) }} style={{ color: "#F47738", cursor: "pointer" }}>{t(`${data?.link}_`)}</span>}
+          {data?.linkPostfix && <span>{t(`${data?.linkPostfix}_`)}</span>}
+          {(index == isCCFEnabled?.checkBoxLabels?.length - 1) && t("LABEL")}
+        </span>
+      })}
+    </span>
+  }
+  
 
   useEffect(() => {
     if (!bill && data) {
-      let requiredBill = data.Bill.filter((e) => e.consumerCode == consumerCode)[0];
+      let requiredBill = data?.Bill?.filter((e) => e.consumerCode == consumerCode)[0];
       setBill(requiredBill);
     }
   }, [isLoading]);
@@ -115,7 +161,7 @@ const SelectPaymentType = (props) => {
   }
   };
 
-   if (isLoading || isUserLoading) {
+   if (isLoading || isUserLoading || citizenConcentFormLoading) {
     return <Loader />;
   } 
 
@@ -158,9 +204,32 @@ const SelectPaymentType = (props) => {
               </div>
             ) : null}
           </div>
+
+          {isCCFEnabled?.isCitizenConsentFormEnabled && !isLoggedIn?.access_token && <div>
+            <CheckBox
+              className="form-field"
+              label={checkLabels()}
+              value={isCheckBox}
+              checked={isCheckBox}
+              style={{ marginTop: "5px", marginLeft: "55px" }}
+              styles={{marginBottom: "30px"}}
+              onChange={setTermsAndPolicyDetails}
+            />
+
+            <CitizenConsentForm
+              styles={{}}
+              t={t}
+              isCheckBoxChecked={setTermsAndPolicyDetails}
+              labels={isCCFEnabled?.checkBoxLabels}
+              mdmsConfig={mdmsConfig}
+              setMdmsConfig={setMdmsConfig}
+            />
+          </div>}
+
           <SubmitBar
             label={t("CS_COMMON_NEXT")}
-            disabled={paymentType?.code !== optionSecound?.code ? false : userInfo ? false : !canSubmit}
+            disabled={checkDisbaled()}
+            // disabled={paymentType?.code !== optionSecound?.code ? false : userInfo ? false : !canSubmit}
             submit={true}
           />
         </Card>

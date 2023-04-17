@@ -48,6 +48,7 @@ const App = ({ path }) => {
       <Switch>
         <PrivateRoute path={`${path}/home`} component={BPACitizenHomeScreen} />
         <PrivateRoute path={`${path}/search/application`} component={(props) => <Search {...props} parentRoute={path} />} />
+        <PrivateRoute path={`${path}/search/obps-application`} component={(props) => <Search {...props} parentRoute={path} />} />
         <PrivateRoute path={`${path}/edcrscrutiny/apply`} component={CreateEDCR} />
         <PrivateRoute path={`${path}/edcrscrutiny/oc-apply`} component={CreateOCEDCR} />
         <PrivateRoute path={`${path}/bpa/:applicationType/:serviceType`} component={NewBuildingPermit} />

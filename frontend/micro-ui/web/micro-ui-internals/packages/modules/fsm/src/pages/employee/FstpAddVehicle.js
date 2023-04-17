@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { FormStep, TextInput, LabelFieldPair, CardLabel, Header } from "@egovernments/digit-ui-react-components";
+import { FormStep, TextInput, LabelFieldPair, CardLabel, Header, InfoIcon } from "@egovernments/digit-ui-react-components";
 import { useForm, Controller } from "react-hook-form";
 import _ from "lodash";
 import { useTranslation } from "react-i18next";
@@ -26,6 +26,14 @@ const FstpAddVehicle = ({ onSelect }) => {
           pattern: `[A-Z]{2}\\s{1}[0-9]{2}\\s{0,1}[A-Z]{1,2}\\s{1}[0-9]{4}`,
           title: t("ES_FSM_VEHICLE_FORMAT_TIP"),
         },
+        labelChildren: (
+          <div className="tooltip" style={{ paddingLeft: "10px", marginBottom: "-3px" }}>
+            <InfoIcon />
+            <span className="tooltiptext" style={{ width: "150px", left: "230%", fontSize: "14px" }}>
+              {t("ES_FSM_VEHICLE_FORMAT_TIP")}
+            </span>
+          </div>
+        ),
       },
     ],
     key: "vehicleNumber",

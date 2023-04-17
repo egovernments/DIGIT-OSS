@@ -14,7 +14,7 @@ import SelectProofIdentity from "./pageComponents/SelectProofIdentity";
 import SelectOwnershipProof from "./pageComponents/SelectOwnershipProof";
 import SelectTradeName from "./pageComponents/SelectTradeName";
 import SelectStructureType from "./pageComponents/SelectStructureType";
-import TLSelectStreet from "./pageComponents/TLSelectStreet";
+import SelectStreet from "./pageComponents/SelectStreet";
 import SelectVehicleType from "./pageComponents/SelectVehicleType";
 import SelectBuildingType from "./pageComponents/SelectBuildingType";
 import SelectCommencementDate from "./pageComponents/SelectCommencementDate";
@@ -119,7 +119,7 @@ const componentsToRegister = {
   SelectOwnerAddress,
   SelectProofIdentity,
   SelectOwnershipProof,
-  TLSelectStreet,
+  SelectStreet,
   TLCheckPage,
   TLDocument,
   TLAcknowledgement,

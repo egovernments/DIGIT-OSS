@@ -282,6 +282,7 @@ export const FormComposer = (props) => {
                       <CardLabel style={{ color: field.isSectionText ? "#505A5F" : "", marginBottom: props.inline ? "8px" : "revert" }}>
                         {t(field.label)}
                         {field.isMandatory ? " * " : null}
+                        {field.labelChildren && field.labelChildren}
                       </CardLabel>
                     )}
                     <div style={field.withoutLabel ? { width: "100%", ...props?.fieldStyle } : {}} className="field">

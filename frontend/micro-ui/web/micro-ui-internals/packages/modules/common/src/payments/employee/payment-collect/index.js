@@ -25,9 +25,16 @@ export const CollectPayment = (props) => {
 
   const { data: paymentdetails, isLoading } = Digit.Hooks.useFetchPayment({ tenantId: tenantId, consumerCode, businessService });
   const bill = paymentdetails?.Bill ? paymentdetails?.Bill[0] : {};
-  const { data: applicationData } = Digit.Hooks.fsm.useSearch(tenantId, { applicationNos: consumerCode }, { staleTime: Infinity, enabled: businessService?.toUpperCase()?.includes("FSM") ? true : false });
+  const { data: applicationData } = Digit.Hooks.fsm.useSearch(
+    tenantId,
+    { applicationNos: consumerCode },
+    { staleTime: Infinity, enabled: businessService?.toUpperCase()?.includes("FSM") ? true : false }
+  );
 
   const advanceBill = applicationData?.advanceAmount;
+
+  // const { data: applicationData } = Digit.Hooks.fsm.useSearch(tenantId, { applicationNos: consumerCode }, { staleTime: Infinity });
+  // const advanceBill = applicationData?.advanceAmount;
 
   // const { isLoading: storeLoading, data: store } = Digit.Services.useStore({
   //   stateCode: props.stateCode,
@@ -80,7 +87,9 @@ export const CollectPayment = (props) => {
     data.paidBy = data.paidBy.code;
 
     if (
-      BillDetailsFormConfig({ consumerCode, businessService }, t)[ModuleWorkflow ? (businessService === "SW" && ModuleWorkflow === "WS"? businessService : ModuleWorkflow) : businessService] &&
+      BillDetailsFormConfig({ consumerCode, businessService }, t)[
+        ModuleWorkflow ? (businessService === "SW" && ModuleWorkflow === "WS" ? businessService : ModuleWorkflow) : businessService
+      ] &&
       !data?.amount?.paymentAllowed
     ) {
       let action =
@@ -175,6 +184,9 @@ export const CollectPayment = (props) => {
       const resposne = await Digit.PaymentService.createReciept(tenantId, recieptRequest);
       queryClient.invalidateQueries();
       history.push(
+        IsDisconnectionFlow ? `${props.basePath}/success/${businessService}/${resposne?.Payments[0]?.paymentDetails[0]?.receiptNumber.replace(/\//g, "%2F")}/${
+          resposne?.Payments[0]?.paymentDetails[0]?.bill?.consumerCode
+        }?IsDisconnectionFlow=${IsDisconnectionFlow}` : 
         `${props.basePath}/success/${businessService}/${resposne?.Payments[0]?.paymentDetails[0]?.receiptNumber.replace(/\//g, "%2F")}/${
           resposne?.Payments[0]?.paymentDetails[0]?.bill?.consumerCode
         }?IsDisconnectionFlow=${IsDisconnectionFlow}`
@@ -218,7 +230,7 @@ export const CollectPayment = (props) => {
                 select={(d) => {
                   if (d.name == paidByMenu[0].name) {
                     props.setValue("payerName", bill?.payerName);
-                    // SM-1953: commenting to resolve showing mobile number when selecting the owner option 
+                    // SM-1953: commenting to resolve showing mobile number when selecting the owner option
                     // props.setValue("payerMobile", bill?.mobileNumber);
                   } else {
                     props.setValue("payerName", "");
@@ -235,7 +247,7 @@ export const CollectPayment = (props) => {
         {
           label: t("PAYMENT_PAYER_NAME_LABEL"),
           isMandatory: true,
-          disable : selectedPaidBy?.code === "OWNER" && (bill?.payerName || formState?.payerName) ? true : false,
+          disable: selectedPaidBy?.code === "OWNER" && (bill?.payerName || formState?.payerName) ? true : false,
           type: "text",
           populators: {
             name: "payerName",
@@ -258,7 +270,7 @@ export const CollectPayment = (props) => {
               required: true,
               pattern: /^[6-9]\d{9}$/,
             },
-            error: t("PAYMENT_INVALID_MOBILE"),
+            error: t("CORE_COMMON_APPLICANT_MOBILE_NUMBER_INVALID"),
             className: "payment-form-text-input-correction",
           },
         },
@@ -300,7 +312,9 @@ export const CollectPayment = (props) => {
 
   const getFormConfig = () => {
     if (
-      BillDetailsFormConfig({ consumerCode, businessService }, t)[ModuleWorkflow ? (businessService === "SW" && ModuleWorkflow === "WS"? businessService : ModuleWorkflow) : businessService] ||
+      BillDetailsFormConfig({ consumerCode, businessService }, t)[
+        ModuleWorkflow ? (businessService === "SW" && ModuleWorkflow === "WS" ? businessService : ModuleWorkflow) : businessService
+      ] ||
       ModuleWorkflow ||
       businessService === "TL" ||
       businessService.includes("ONE_TIME_FEE")
@@ -309,8 +323,12 @@ export const CollectPayment = (props) => {
     }
     let conf = config.concat(formConfigMap[formState?.paymentMode?.code] || []);
     conf = conf?.concat(cashConfig);
-    return BillDetailsFormConfig({ consumerCode, businessService }, t)[ModuleWorkflow ? (businessService === "SW" && ModuleWorkflow === "WS"? businessService : ModuleWorkflow) : businessService]
-      ? BillDetailsFormConfig({ consumerCode, businessService }, t)[ModuleWorkflow ? (businessService === "SW" && ModuleWorkflow === "WS"? businessService : ModuleWorkflow) : businessService].concat(conf)
+    return BillDetailsFormConfig({ consumerCode, businessService }, t)[
+      ModuleWorkflow ? (businessService === "SW" && ModuleWorkflow === "WS" ? businessService : ModuleWorkflow) : businessService
+    ]
+      ? BillDetailsFormConfig({ consumerCode, businessService }, t)[
+          ModuleWorkflow ? (businessService === "SW" && ModuleWorkflow === "WS" ? businessService : ModuleWorkflow) : businessService
+        ].concat(conf)
       : conf;
   };
   const checkFSM = window.location.href.includes("FSM");
@@ -329,7 +347,7 @@ export const CollectPayment = (props) => {
         onSubmit={onSubmit}
         formState={formState}
         defaultValues={getDefaultValues()}
-        isDisabled={IsDisconnectionFlow ? false : (bill?.totalAmount ? !bill.totalAmount > 0 : true)}
+        isDisabled={IsDisconnectionFlow ? false : bill?.totalAmount ? !bill.totalAmount > 0 : true}
         // isDisabled={BillDetailsFormConfig({ consumerCode }, t)[businessService] ? !}
         onFormValueChange={(setValue, formValue) => {
           if (!isEqual(formValue.paymentMode, selectedPaymentMode)) {

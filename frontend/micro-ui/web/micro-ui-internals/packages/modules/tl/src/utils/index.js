@@ -536,8 +536,7 @@ export const stringToBoolean = (value) => {
 //FinancialYear
 export const convertToEditTrade = (data, fy = []) => {
   const currrentFYending = fy?.filter(item => item?.code === data?.financialYear)?.[0]?.endingDate;
-  //added 1*1000 to add 1ms to epoch time 
-  const nextFinancialYearForRenewal = fy?.filter(item => item?.startingDate === currrentFYending+1000)?.[0]?.code;
+  const nextFinancialYearForRenewal = fy?.filter(item => item?.startingDate === currrentFYending)?.[0]?.code;
   let isDirectrenewal = stringToBoolean(sessionStorage.getItem("isDirectRenewal"));
   let isSameAsPropertyOwner = sessionStorage.getItem("isSameAsPropertyOwner"); 
   let formdata = {

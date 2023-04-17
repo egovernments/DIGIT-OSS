@@ -74,7 +74,7 @@ window.Digit.ComponentRegistryService.setupRegistry({
   HRMSModule,
   TLModule,
   TLLinks,
-  ReceiptsModule
+  // ReceiptsModule
 });
 
 initPGRComponents();
@@ -83,7 +83,7 @@ initDSSComponents();
 initMCollectComponents();
 initHRMSComponents();
 initTLComponents();
-initReceiptsComponents();
+// initReceiptsComponents();
 initOBPSComponents();
 initNOCComponents();
 initEngagementComponents();

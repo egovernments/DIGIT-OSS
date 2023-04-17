@@ -79,6 +79,9 @@ const Urls = {
     assessment_search: "/property-services/assessment/_search",
     payment_search: "/collection-services/payments/PT/_search",
     pt_calculate_mutation: "/pt-calculator-v2/propertytax/mutation/_calculate",
+    cfcreate: "/service-request/service/v1/_create",
+    cfdefinitionsearch: "/service-request/service/definition/v1/_search",
+    cfsearch: "/service-request/service/v1/_search",
   },
 
   dss: {

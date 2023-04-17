@@ -1,4 +1,4 @@
-import { BackButton, WhatsappIcon, Card, CitizenHomeCard, CitizenInfoLabel } from "@egovernments/digit-ui-react-components";
+import { BackButton, WhatsappIcon, Card, CitizenHomeCard, CitizenInfoLabel, PrivateRoute } from "@egovernments/digit-ui-react-components";
 import React from "react";
 import { useTranslation } from "react-i18next";
 import { Route, Switch, useRouteMatch, useHistory, Link } from "react-router-dom";
@@ -15,6 +15,8 @@ import ErrorComponent from "../../components/ErrorComponent";
 import FAQsSection from "./FAQs/FAQs";
 import HowItWorks from "./HowItWorks/howItWorks";
 import StaticDynamicCard from "./StaticDynamicComponent/StaticDynamicCard";
+import AcknowledgementCF from "../../components/AcknowledgementCF";
+import CitizenFeedback from "../../components/CitizenFeedback";
 import Search from "./SearchApp";
 const sidebarHiddenFor = [
   "digit-ui/citizen/register/name",
@@ -162,6 +164,9 @@ const Home = ({
           <Route exact path={path}>
             <CitizenHome />
           </Route>
+
+          <PrivateRoute path={`${path}/feedback`} component={CitizenFeedback}></PrivateRoute>
+          <PrivateRoute path={`${path}/feedback-acknowledgement`} component={AcknowledgementCF}></PrivateRoute>
 
           <Route exact path={`${path}/select-language`}>
             <LanguageSelection />

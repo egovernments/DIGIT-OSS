@@ -28,9 +28,9 @@ const MyApplication = () => {
   const { data: bpaData, isLoading: isBpaSearchLoading, revalidate: bpaRevalidate } = Digit.Hooks.obps.useBPASearch(tenantId, {
     requestor,
     mobileNumber: requestor,
-    limit: -1,
+    limit: 50 - (data?.Licenses?.length ? Number(data?.Licenses?.length) : 0),
     offset: 0,
-  });
+  }, {enabled: !isLoading ? true : false});
   const { isMdmsLoading, data: mdmsData } = Digit.Hooks.obps.useMDMS(Digit.ULBService.getStateId(), "BPA", ["RiskTypeComputation"]);
 
   const getBPAREGFormData = (data) => {
@@ -176,6 +176,13 @@ const MyApplication = () => {
           )
         }
       })}
+
+      <div style={{ marginLeft: "16px", marginTop: "16px", marginBottom: "46px" }}>
+        <span>{`${t("BPA_NOT_ABLE_TO_FIND_APP_MSG")} `} </span>
+        <span className="link">
+          <Link to="/digit-ui/citizen/obps/search/obps-application">{t("BPA_CLICK_HERE_TO_SEARCH_LINK")}</Link>
+        </span>
+      </div>
     </Fragment>
   );
 };
