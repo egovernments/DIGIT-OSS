@@ -99,7 +99,8 @@ import RadioGroup from '@mui/material/RadioGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import FormControl from '@mui/material/FormControl';
 import FormLabel from '@mui/material/FormLabel';
-
+import { useTransition } from "react";
+import { useTranslation } from "react-i18next";
 // const ServicePlanCivil = () => {
     function ServicePlanExternal(props) {
 
@@ -117,7 +118,7 @@ import FormLabel from '@mui/material/FormLabel';
     const edcDataTreade = props. edcDataTreade;
     const classes = useStyles();
    
-  
+  const {t}=useTranslation();
     const handleshowhide = (event) => {
       const getuser = event.target.value;
   
@@ -249,13 +250,13 @@ import FormLabel from '@mui/material/FormLabel';
 				<TableHead>
 					<TableRow>
 						<TableCell>
-							Sr.No
+            {`${t("SP_EXTERNAL_SCRUTINY_SR_NO")}`}
 						</TableCell>
 						<TableCell align="left">
-                        Description
+            {`${t("SP_EXTERNAL_SCRUTINY_DESCRIPTION")}`}
 						</TableCell>
 						<TableCell align="left">
-						Amount in lacs.
+            {`${t("SP_EXTERNAL_SCRUTINY_AMOUNT_IN_LAKHS")}`}
 						</TableCell>
 						{/* <TableCell align="right">
 						Remarks
@@ -276,7 +277,7 @@ import FormLabel from '@mui/material/FormLabel';
                             <div>
                 <Form.Label className={classes.formLabel}>
                   <h2>
-                  Water Supply <span style={{ color: "red" }}>*</span>
+                  {`${t("SP_EXTERNAL_SCRUTINY_WATER_SUPPLY")}`} <span style={{ color: "red" }}>*</span>
                   </h2>
                 </Form.Label>
               </div>
@@ -316,7 +317,7 @@ import FormLabel from '@mui/material/FormLabel';
                             <div>
                 <Form.Label className={classes.formLabel}>
                   <h2>
-                  Sewerage <span style={{ color: "red" }}>*</span>
+                  {`${t("SP_EXTERNAL_SCRUTINY_SEWARAGE")}`} <span style={{ color: "red" }}>*</span>
                   </h2>
                 </Form.Label>
               </div>
@@ -360,7 +361,7 @@ import FormLabel from '@mui/material/FormLabel';
                             <div>
                 <Form.Label className={classes.formLabel}>
                   <h2>
-                  Storm water Drainage <span style={{ color: "red" }}>*</span>
+                  {`${t("SP_EXTERNAL_SCRUTINY_STORM_WATER_DRAINAGE")}`} <span style={{ color: "red" }}>*</span>
                   </h2>
                 </Form.Label>
               </div>
@@ -403,7 +404,7 @@ import FormLabel from '@mui/material/FormLabel';
                             <div>
                 <Form.Label className={classes.formLabel}>
                   <h2>
-                  Roads <span style={{ color: "red" }}>*</span>
+                  {`${t("SP_EXTERNAL_SCRUTINY_ROADS")}`} <span style={{ color: "red" }}>*</span>
                   </h2>
                 </Form.Label>
               </div>
@@ -443,7 +444,7 @@ import FormLabel from '@mui/material/FormLabel';
                             <div>
                 <Form.Label className={classes.formLabel}>
                   <h2>
-                  Street Lights <span style={{ color: "red" }}>*</span>
+                  {`${t("SP_EXTERNAL_SCRUTINY_STREET_LIGHTS")}`} <span style={{ color: "red" }}>*</span>
                   </h2>
                 </Form.Label>
               </div>
@@ -482,7 +483,7 @@ import FormLabel from '@mui/material/FormLabel';
                             <div>
                 <Form.Label className={classes.formLabel}>
                   <h2>
-                  Horticulture <span style={{ color: "red" }}>*</span>
+                  {`${t("SP_EXTERNAL_SCRUTINY_HORTICULTURE")}`} <span style={{ color: "red" }}>*</span>
                   </h2>
                 </Form.Label>
               </div>
@@ -523,7 +524,7 @@ import FormLabel from '@mui/material/FormLabel';
                             <div>
                 <Form.Label className={classes.formLabel}>
                   <h2>
-                  Any other, if applicable <span style={{ color: "red" }}>*</span>
+                  {`${t("SP_EXTERNAL_SCRUTINY_ANY_OTHER")}`} <span style={{ color: "red" }}>*</span>
                   </h2>
                 </Form.Label>
               </div>
@@ -564,7 +565,7 @@ import FormLabel from '@mui/material/FormLabel';
                             <div>
                 <Form.Label className={classes.formLabel}>
                   <h2>
-                  Maintenance of services for 10 years  <span style={{ color: "red" }}>*</span>
+                  {`${t("SP_EXTERNAL_SCRUTINY_MAINTENANCE_SERVICE_10YEARS")}`} <span style={{ color: "red" }}>*</span>
                   </h2>
                 </Form.Label>
               </div>
@@ -608,7 +609,7 @@ import FormLabel from '@mui/material/FormLabel';
                             <div>
                 <Form.Label className={classes.formLabel}>
                   <h2>
-                  Total Development Cost <span style={{ color: "red" }}>*</span>
+                  {`${t("SP_EXTERNAL_SCRUTINY_TOTAL_DEVELOPMENT_COST")}`} <span style={{ color: "red" }}>*</span>
                   </h2>
                 </Form.Label>
               </div>
@@ -649,7 +650,7 @@ import FormLabel from '@mui/material/FormLabel';
                             <div>
                 <Form.Label className={classes.formLabel}>
                   <h2>
-                  Development Cost of per acre  <span style={{ color: "red" }}>*</span>
+                  {`${t("SP_EXTERNAL_SCRUTINY_DEVELOPMENT_COST_PER_ACRE")}`}  <span style={{ color: "red" }}>*</span>
                   </h2>
                 </Form.Label>
               </div>
@@ -689,7 +690,7 @@ import FormLabel from '@mui/material/FormLabel';
                             <div>
                 <Form.Label className={classes.formLabel}>
                   <h2>
-                  Net Development Cost  <span style={{ color: "red" }}>*</span>
+                  {`${t("SP_EXTERNAL_SCRUTINY_NET_DEVELOPMENT_COST")}`}  <span style={{ color: "red" }}>*</span>
                   </h2>
                 </Form.Label>
               </div>
@@ -728,7 +729,7 @@ import FormLabel from '@mui/material/FormLabel';
                             <div>
                 <Form.Label className={classes.formLabel}>
                   <h2>
-                  25% BG required  <span style={{ color: "red" }}>*</span>
+                  {`${t("SP_EXTERNAL_SCRUTINY_25%_BG_REQUIRED")}`}  <span style={{ color: "red" }}>*</span>
                   </h2>
                 </Form.Label>
               </div>
@@ -768,7 +769,7 @@ import FormLabel from '@mui/material/FormLabel';
                             <div>
                 <Form.Label className={classes.formLabel}>
                   <h2>
-                  BG required to be demanded for SPE   <span style={{ color: "red" }}>*</span>
+                  {`${t("SP_EXTERNAL_SCRUTINY_BG_REQUIRED_DEMANDED")}`}  <span style={{ color: "red" }}>*</span>
                   </h2>
                 </Form.Label>
               </div>

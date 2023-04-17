@@ -99,6 +99,7 @@ import RadioGroup from '@mui/material/RadioGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import FormControl from '@mui/material/FormControl';
 import FormLabel from '@mui/material/FormLabel';
+import { useTranslation } from "react-i18next";
 
 // const ServicePlanCivil = () => {
     function ServicePlanCivil(props) {
@@ -111,7 +112,7 @@ import FormLabel from '@mui/material/FormLabel';
     const [showhide, setShowhide] = useState("");
     const apiResponse = props.apiResponse
     const classes = useStyles();
-   
+   const {t}=useTranslation();
   
     const handleshowhide = (event) => {
       const getuser = event.target.value;
@@ -230,16 +231,20 @@ import FormLabel from '@mui/material/FormLabel';
 				<TableHead>
 					<TableRow>
 						<TableCell>
-							Sr.No
+            {`${t("SP_CIVIL_SCRUTINY_SR_NO")}`}
+							{/* Sr.No */}
 						</TableCell>
 						<TableCell align="left">
-               Description
+            {`${t("SP_CIVIL_SCRUTINY_DESCRIPTIONS")}`}
+               {/* Description */}
 						</TableCell>
 						<TableCell align="left">
-						Conditional
+            {`${t("SP_CIVIL_SCRUTINY_CONDITION")}`}
+						{/* Conditional */}
 						</TableCell>
 						<TableCell align="Left">
-						Remarks
+            {`${t("SP_CIVIL_SCRUTINY_REMARK")}`}
+						{/* Remarks */}
 						</TableCell>
 						
 					</TableRow>
@@ -257,7 +262,8 @@ import FormLabel from '@mui/material/FormLabel';
                             <div>
                  <Form.Label className={classes.formLabel}>
                   <h2>
-                  Showing the location of the potable water, sewer line, treated water line and storm water line to connect the trunk water supply network.
+                  {`${t("SP_CIVIL_SCRUTINY_LOCATION_PORTABLE_WATER_CONNECT_SUPPLY_NETWORK")}`}
+                  {/* Showing the location of the potable water, sewer line, treated water line and storm water line to connect the trunk water supply network. */}
                    
                   </h2>
                  
@@ -319,7 +325,8 @@ import FormLabel from '@mui/material/FormLabel';
 							<TableCell  align="left">
               <div>
                 <Form.Label className={classes.formLabel}>
-                 Proposed source of water supply as informed by the applicant 
+                {`${t("SP_CIVIL_SCRUTINY_PROPOSED_SOURCE_WATER_SUPPLY_INFORMED")}`}
+                 {/* Proposed source of water supply as informed by the applicant  */}
                   <span style={{ color: "red" }}>*</span>
                   
                 </Form.Label>
@@ -384,7 +391,8 @@ import FormLabel from '@mui/material/FormLabel';
 							<TableCell  align="left">
               <div>
                 <Form.Label className={classes.formLabel}>
-               The capacity of STP as per population norms.
+                {`${t("SP_CIVIL_SCRUTINY_CAPACITY_OF_STP_POPULATION_NORMS")}`}
+               {/* The capacity of STP as per population norms. */}
                   <span style={{ color: "red" }}>*</span>
                 </Form.Label>
               </div>
@@ -444,7 +452,8 @@ import FormLabel from '@mui/material/FormLabel';
                     
                 <div>
                 <Form.Label className={classes.formLabel}>
-                Level of storm water and sewer line in conformity with approved EDC infrastructure works. yes 110 <span style={{ color: "red" }}>*</span> 
+                {`${t("SP_CIVIL_SCRUTINY_LEVEL_OF_STORM_WATER_CONFIRMITY_WORKS")}`}
+                {/* Level of storm water and sewer line in conformity with approved EDC infrastructure works. yes 110 <span style={{ color: "red" }}>*</span>  */}
                 </Form.Label>
               </div>
          
@@ -502,7 +511,9 @@ import FormLabel from '@mui/material/FormLabel';
 							<TableCell  align="left">
               <div>
                 <Form.Label className={classes.formLabel}>
-                 The capacity of UGT as per population health norms. <span style={{ color: "red" }}>*</span> 
+                {`${t("SP_CIVIL_SCRUTINY_CAPACITY_UGT_POPULATION_HEALTH_NORMS")}`}
+                 {/* The capacity of UGT as per population health norms. */}
+                  <span style={{ color: "red" }}>*</span> 
                 </Form.Label>
               </div>
               
@@ -560,7 +571,9 @@ import FormLabel from '@mui/material/FormLabel';
 							<TableCell  align="left">
               <div>
                 <Form.Label>
-               Specifications of the Public Health Department. yes <span style={{ color: "red" }}>*</span> &nbsp;&nbsp;
+                {`${t("SP_CIVIL_SCRUTINY_SPECIFICATION_PUBLIC_HEALTH_DEPARTMENT")}`}
+               {/* Specifications of the Public Health Department. yes  */}
+               <span style={{ color: "red" }}>*</span> &nbsp;&nbsp;
                 </Form.Label>
               </div>
             
@@ -620,7 +633,9 @@ import FormLabel from '@mui/material/FormLabel';
               <div>
                 <Form.Label className={classes.formLabel}>
                   <h2>
-                 Sewer network. <span style={{ color: "red" }}>*</span>
+                  {`${t("SP_CIVIL_SCRUTINY_SEWER_NETWORKS")}`}
+                 {/* Sewer network.  */}
+                 <span style={{ color: "red" }}>*</span>
                   </h2>
                 </Form.Label>
               </div>
@@ -679,7 +694,9 @@ import FormLabel from '@mui/material/FormLabel';
 							<TableCell  align="left">
               <div>
                 <Form.Label className={classes.formLabel}>
-              Road network.<span style={{ color: "red" }}>*</span> 
+                {`${t("SP_CIVIL_SCRUTINY_ROAD_NETWORKS")}`}
+              {/* Road network. */}
+              <span style={{ color: "red" }}>*</span> 
                 </Form.Label>
               </div>
              </TableCell>
@@ -737,7 +754,9 @@ import FormLabel from '@mui/material/FormLabel';
 							<TableCell  align="left">
               <div>
                 <Form.Label className={classes.formLabel}>
-              Street lightening. <span style={{ color: "red" }}>*</span> 
+                {`${t("SP_CIVIL_SCRUTINY_STREET_LIGHTENINGS")}`}
+              {/* Street lightening. */}
+               <span style={{ color: "red" }}>*</span> 
                 </Form.Label>
               </div>
              </TableCell>
@@ -793,7 +812,9 @@ import FormLabel from '@mui/material/FormLabel';
 							<TableCell  align="left">
               <div>
                 <Form.Label className={classes.formLabel}>
-              Horticulture.<span style={{ color: "red" }}>*</span> 
+                {`${t("SP_CIVIL_SCRUTINY_HORTICULTURES")}`}
+              {/* Horticulture. */}
+              <span style={{ color: "red" }}>*</span> 
                 </Form.Label>
               </div>
               
