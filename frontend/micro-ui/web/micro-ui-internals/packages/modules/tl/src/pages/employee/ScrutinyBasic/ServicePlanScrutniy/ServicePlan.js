@@ -16,9 +16,56 @@ import RemoveIcon from "@mui/icons-material/Remove";
 import Collapse from "react-bootstrap/Collapse";
 import { IconButton } from "@mui/material";
 import { ScrutinyRemarksContext } from "../../../../../context/remarks-data-context";
+import InfoIcon from "@mui/icons-material/Info";
+import Tooltip from "@mui/material/Tooltip";
 import { useTranslation } from "react-i18next";
 
 const ServicePlanService = (props) => {
+  // onst classes = useStyles();
+  // const applicationStatus = props.applicationStatus ;
+  let user = Digit.UserService.getUser();
+  const userInfo = Digit.UserService.getUser()?.info || {};
+  const userRolesArray = userInfo?.roles.filter((user) => user.code !== "EMPLOYEE");
+  const filterDataRole = userRolesArray?.[0]?.code;
+  const userRoles = user?.info?.roles?.map((e) => e.code) || [];
+
+  console.log("rolelogintime", userRoles);
+  console.log("afterfilter12", filterDataRole);
+
+  const mDMSData = props.mDMSData;
+  const mDMSDataRole = mDMSData?.map((e) => e.role) || [];
+  const hideRemarks = mDMSDataRole.includes(filterDataRole);
+  const applicationStatusMdms = mDMSData?.map((e) => e.applicationStatus) || [];
+  const hideRemarksPatwari = applicationStatusMdms.some((item) => item === applicationStatus) || [];
+  const [fileddataName, setFiledDataName] = useState();
+  const { t } = useTranslation();
+  useEffect(() => {
+    if (mDMSData && mDMSData?.length) {
+      console.log(
+        "filedDataMdms",
+        mDMSData,
+        mDMSData?.[0]?.field,
+        mDMSData?.[0]?.field.map((item, index) => item.fields)
+      );
+      setFiledDataName(mDMSData?.[0]?.field.map((item, index) => item.fields));
+    }
+  }, [mDMSData]);
+  const showReportProblemIcon = (filedName) => {
+    if (fileddataName && fileddataName.length) {
+      let show = fileddataName.includes(filedName);
+      return show;
+    } else {
+      return false;
+    }
+  };
+
+  // mDMSData?.map((e) => e.role)||[]
+  console.log("happyRole", userRoles);
+  console.log("happyDate", mDMSData);
+  console.log("happyROLE", mDMSDataRole);
+  console.log("happyapplicationStatusMdms", applicationStatusMdms);
+  console.log("happyDateHIDE", hideRemarksPatwari, showReportProblemIcon("Purpose of colony"), hideRemarks);
+
   const [selects, setSelects] = useState();
   const [showhide, setShowhide] = useState("");
   const [open2, setOpen2] = useState(false);
@@ -28,7 +75,7 @@ const ServicePlanService = (props) => {
   const apiResponse = props.apiResponse;
   const idwDataTreade = props.idwDataTreade;
   const edcDataTreade = props.edcDataTreade;
-  const { t } = useTranslation();
+  const applicationStatus = props.applicationStatus;
   //  apiResponse,refreshScrutinyData, applicationNumber,iconStates
   const handleshowhide = (event) => {
     const getuser = event.target.value;
@@ -53,10 +100,9 @@ const ServicePlanService = (props) => {
   const [smShow, setSmShow] = useState(false);
   const [labelValue, setLabelValue] = useState("");
   const Colors = {
-    conditional: "#2874A6",
+    Conditional: "#2874A6",
     approved: "#09cb3d",
     disapproved: "#ff0000",
-
     info: "#FFB602",
   };
 
@@ -137,12 +183,12 @@ const ServicePlanService = (props) => {
           tempFieldColorState = {
             ...tempFieldColorState,
             [item.key]:
-              fieldPresent[0].isApproved === "approved"
+              fieldPresent[0].isApproved === "In Order"
                 ? Colors.approved
-                : fieldPresent[0].isApproved === "disapproved"
+                : fieldPresent[0].isApproved === "Not In Order"
                 ? Colors.disapproved
-                : fieldPresent[0].isApproved === "conditional"
-                ? Colors.conditional
+                : fieldPresent[0].isApproved === "Conditional"
+                ? Colors.Conditional
                 : Colors.info,
           };
         }
@@ -165,6 +211,8 @@ const ServicePlanService = (props) => {
       setSelectedFieldData(null);
     }
   }, [labelValue]);
+
+  const businessService = apiResponse.businessService;
 
   console.log("dataEDC", idwDataTreade);
 
@@ -198,7 +246,7 @@ const ServicePlanService = (props) => {
           <Card
           //   style={{ width: "126%", border: "5px solid #1266af" }}
           >
-            <h4 style={{ fontSize: "25px", marginLeft: "21px" }}>Service Plan</h4>
+            <h4 style={{ fontSize: "25px", marginLeft: "21px" }}>Service Plan </h4>
             <h4 style={{ fontSize: "20px", textAlign: "left" }}>
               EDC : {edcDataTreade} &nbsp;&nbsp; IDW : {idwDataTreade}
             </h4>
@@ -208,11 +256,7 @@ const ServicePlanService = (props) => {
                   {/* <Form.Group as={Col} controlId="formGridLicence"> */}
                   <div>
                     <Form.Label>
-                      <h5 className={classes.formLabel}>
-                        {`${t("SP_SCRUTINY_LOI_NUMBER")}`}
-                        {/* LOI Number  */}
-                        &nbsp;
-                      </h5>
+                      <h5 className={classes.formLabel}> {`${t("SP_SCRUTINY_LOI_NUMBER")}`} &nbsp;</h5>
                     </Form.Label>
                     <span className={classes.required}>*</span> &nbsp;&nbsp;
                   </div>
@@ -221,6 +265,7 @@ const ServicePlanService = (props) => {
 
                     <ReportProblemIcon
                       style={{
+                        display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("SP_SCRUTINY_LOI_NUMBER") ? "block" : "none",
                         color: fieldIconColors.loiNumber,
                       }}
                       onClick={() => {
@@ -239,7 +284,7 @@ const ServicePlanService = (props) => {
                       selectedFieldData={selectedFieldData}
                       fieldValue={fieldValue}
                       remarksUpdate={currentRemarks}
-                    applicationStatus = {applicationStatus}
+                      applicationStatus={applicationStatus}
                     ></ModalChild>
                   </div>
                   {/* </Form.Group> */}
@@ -337,10 +382,7 @@ const ServicePlanService = (props) => {
                 <Col className="col-3">
                   <div>
                     <label>
-                      <h2>
-                        {`${t("SP_SCRUTINY_NAME")}`}
-                        {/* Name */}
-                      </h2>
+                      <h2>{`${t("SP_SCRUTINY_NAME")}`}</h2>
                     </label>
                   </div>
                   {/* <input
@@ -356,6 +398,7 @@ const ServicePlanService = (props) => {
 
                     <ReportProblemIcon
                       style={{
+                        display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("SP_SCRUTINY_NAME") ? "block" : "none",
                         color: fieldIconColors.devName,
                       }}
                       onClick={() => {
@@ -371,10 +414,7 @@ const ServicePlanService = (props) => {
                 <Col className="col-3">
                   <div>
                     <label>
-                      <h2>
-                        {`${t("SP_SCRUTINY_DEVELOPMENT_PLAN")}`}
-                        {/* Development Plan */}
-                      </h2>
+                      <h2>{`${t("SP_SCRUTINY_DEVELOPMENT_PLAN")}`}</h2>
                     </label>
                   </div>
                   {/* <input
@@ -390,6 +430,7 @@ const ServicePlanService = (props) => {
 
                     <ReportProblemIcon
                       style={{
+                        display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("SP_SCRUTINY_DEVELOPMENT_PLAN") ? "block" : "none",
                         color: fieldIconColors.developmentPlan,
                       }}
                       onClick={() => {
@@ -405,10 +446,7 @@ const ServicePlanService = (props) => {
                 <Col className="col-3">
                   <div>
                     <label>
-                      <h2>
-                        {`${t("SP_SCRUTINY_PURPOSE_LICENCE")}`}
-                        {/* Purpose Of Licence  */}
-                      </h2>
+                      <h2>{`${t("SP_SCRUTINY_PURPOSE_LICENCE")}`}</h2>
                     </label>
                   </div>
                   {/* <input
@@ -424,6 +462,7 @@ const ServicePlanService = (props) => {
 
                     <ReportProblemIcon
                       style={{
+                        display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("SP_SCRUTINY_PURPOSE_LICENCE") ? "block" : "none",
                         color: fieldIconColors.purpose,
                       }}
                       onClick={() => {
@@ -439,10 +478,7 @@ const ServicePlanService = (props) => {
                 <Col className="col-3">
                   <div>
                     <label>
-                      <h2>
-                        {`${t("SP_SCRUTINY_TOTAL_AREA")}`}
-                        {/* Total Area */}
-                      </h2>
+                      <h2>{`${t("SP_SCRUTINY_TOTAL_AREA")}`}</h2>
                     </label>
                   </div>
                   {/* <input
@@ -458,6 +494,7 @@ const ServicePlanService = (props) => {
 
                     <ReportProblemIcon
                       style={{
+                        display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("SP_SCRUTINY_TOTAL_AREA") ? "block" : "none",
                         color: fieldIconColors.totalArea,
                       }}
                       onClick={() => {
@@ -470,24 +507,37 @@ const ServicePlanService = (props) => {
                     ></ReportProblemIcon>
                   </div>
                 </Col>
+
+                <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
+                  <Col xs={6} md={6}>
+                    <Form.Label style={{ margin: 2 }}>Proposed Source of Water Supply</Form.Label>
+                    <textarea
+                      class="form-control"
+                      id="exampleFormControlTextarea1"
+                      placeholder={apiResponse?.environmentalClearance}
+                      autoFocus
+                      // onChange={(e) => {
+                      //   setDeveloperRemarks({ data: e.target.value });
+
+                      // }}
+
+                      // {...register("environmentalClearance")}
+                      // onChange={(e) => setEnviromental(e.target.value)}
+                      // value={apiResponse?.environmentalClearance}
+                      rows="3"
+                      disabled
+                    />
+                    {/* <Form.Control type="text" /> */}
+                  </Col>
+                </Form.Group>
               </Row>
               <br></br>
               <div className="table table-bordered table-responsive">
                 <thead>
                   <tr>
-                    <td style={{ textAlign: "center" }}>
-                      {" "}
-                      {`${t("SP_SCRUTINY_SR_NO")}`}
-                      {/* Sr.No. */}
-                    </td>
-                    <td style={{ textAlign: "center" }}>
-                      {`${t("SP_SCRUTINY_TYPE_OF_MAP")}`}
-                      {/* Type Of Map/Plan */}
-                    </td>
-                    <td style={{ textAlign: "center" }}>
-                      {`${t("SP_SCRUTINY_ANNEXURE")}`}
-                      {/* Annexure */}
-                    </td>
+                    <td style={{ textAlign: "center" }}> {`${t("SP_SCRUTINY_SR_NO")}`}</td>
+                    <td style={{ textAlign: "center" }}> {`${t("SP_SCRUTINY_TYPE_OF_MAP")}`}</td>
+                    <td style={{ textAlign: "center" }}> {`${t("SP_SCRUTINY_ANNEXURE")}`}</td>
                   </tr>
                 </thead>
                 <tbody>
@@ -498,10 +548,7 @@ const ServicePlanService = (props) => {
                       </div>
                     </td>
                     <td component="th" scope="row">
-                      <h2>
-                        {`${t("SP_SCRUTINY_SELF_CERTIFIED_DRAWING_CERTIFIED_ARCHITECT")}`}
-                        {/* Self-certified drawings from empanelled/certified architects that conform to the standard approved template. as per the TCP layout plan / Site plan. */}
-                      </h2>
+                      <h2> {`${t("SP_SCRUTINY_SELF_CERTIFIED_DRAWING_CERTIFIED_ARCHITECT")}`}</h2>
                     </td>
                     <td component="th" scope="row">
                       <div className="btn btn-sm col-md-4">
@@ -518,6 +565,10 @@ const ServicePlanService = (props) => {
                       <div className="btn btn-sm col-md-4">
                         <ReportProblemIcon
                           style={{
+                            display:
+                              hideRemarks && hideRemarksPatwari && showReportProblemIcon("SP_SCRUTINY_SELF_CERTIFIED_DRAWING_CERTIFIED_ARCHITECT")
+                                ? "block"
+                                : "none",
                             color: fieldIconColors.Selfcertified,
                           }}
                           onClick={() => {
@@ -540,27 +591,25 @@ const ServicePlanService = (props) => {
                       </div>
                     </td>
                     <td component="th" scope="row">
-                      <h2>
-                        {`${t("SP_SCRUTINY_ENVIRONMENT_CLEARANCE")}`}
-                        {/* Environmental Clearance. */}
-                      </h2>
+                      <h2> {`${t("SP_SCRUTINY_ENVIRONMENT_CLEARANCE")}`}</h2>
                     </td>
                     <td component="th" scope="row">
-                    
                       <div className="btn btn-sm col-md-4">
-                        <IconButton onClick={() => getDocShareholding(apiResponse?.environmentalClearance)}>
+                        <IconButton onClick={() => getDocShareholding(apiResponse?.shapeFileAsPerTemplate)}>
                           <Visibility color="info" className="icon" />
                         </IconButton>
                       </div>
 
                       <div className="btn btn-sm col-md-4">
-                        <IconButton onClick={() => getDocShareholding(apiResponse?.environmentalClearance)}>
+                        <IconButton onClick={() => getDocShareholding(apiResponse?.shapeFileAsPerTemplate)}>
                           <FileDownload color="primary" className="mx-1" />
                         </IconButton>
                       </div>
                       <div className="btn btn-sm col-md-4">
                         <ReportProblemIcon
                           style={{
+                            display:
+                              hideRemarks && hideRemarksPatwari && showReportProblemIcon("SP_SCRUTINY_ENVIRONMENT_CLEARANCE") ? "block" : "none",
                             color: fieldIconColors.environmental,
                           }}
                           onClick={() => {
@@ -574,7 +623,7 @@ const ServicePlanService = (props) => {
                       </div>
                     </td>
                   </tr>
-                
+
                   <tr>
                     <td>
                       <div className="px-2">
@@ -582,10 +631,12 @@ const ServicePlanService = (props) => {
                       </div>
                     </td>
                     <td component="th" scope="row">
-                      <h2>
-                        {`${t("SP_SCRUTINY_SERVICE_PLAN_PDF_FORMAT")}`}
-                        {/* Service plan in PDF (OCR Compatible) + GIS format. */}
-                      </h2>
+                      <h6>
+                        {`${t("SP_SCRUTINY_AUTOCAD_FILE")}`}
+                        <Tooltip title="Any amendment suggested by HSVP may be incorporated in the drawing accordingly">
+                          <InfoIcon style={{ cursor: "pointer" }} color="primary"></InfoIcon>
+                        </Tooltip>
+                      </h6>
                     </td>
                     <td component="th" scope="row">
                       <div className="btn btn-sm col-md-4">
@@ -602,6 +653,7 @@ const ServicePlanService = (props) => {
                       <div className="btn btn-sm col-md-4">
                         <ReportProblemIcon
                           style={{
+                            display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("SP_SCRUTINY_AUTOCAD_FILE") ? "block" : "none",
                             color: fieldIconColors.template,
                           }}
                           onClick={() => {
@@ -622,21 +674,18 @@ const ServicePlanService = (props) => {
                       </div>
                     </td>
                     <td component="th" scope="row">
-                      <h2>
-                        {`${t("SP_SCRUTINY_AUTOCAD_FILE")}`}
-                        {/* Service plan in AutoCAD (DXF) file */}
-                      </h2>
+                      <h2>Service plan in AutoCAD (DXF) file</h2>
                     </td>
                     <td component="th" scope="row">
                       <div className="btn btn-sm col-md-4">
-                        <IconButton onClick={() => getDocShareholding(apiResponse?.autoCadFile)}>
-                          <Visibility color="info" className="icon" />
+                        <IconButton onClick={()=>getDocShareholding(apiResponse?.autoCadFile)}>
+                        <Visibility color="info" className="icon" />
                         </IconButton>
                       </div>
 
                       <div className="btn btn-sm col-md-4">
-                        <IconButton onClick={() => getDocShareholding(apiResponse?.autoCadFile)}>
-                          <FileDownload color="primary" className="mx-1" />
+                        <IconButton onClick={()=>getDocShareholding(apiResponse?.autoCadFile)}>
+                        <FileDownload color="primary" className="mx-1" />
                         </IconButton>
                       </div>
                       <div className="btn btn-sm col-md-4">
@@ -662,21 +711,18 @@ const ServicePlanService = (props) => {
                       </div>
                     </td>
                     <td component="th" scope="row">
-                      <h2>
-                        {`${t("SP_SCRUTINY_CERTIFIED_COPY_VERIFIED_THIRD_PARTY")}`}
-                        {/* Certified copy of the Service plan verified by a third party. */}
-                      </h2>
+                      <h2>Certified copy of the Service plan verified by a third party.</h2>
                     </td>
                     <td component="th" scope="row">
                       <div className="btn btn-sm col-md-4">
-                        <IconButton onClick={() => getDocShareholding(apiResponse?.certifieadCopyOfThePlan)}>
-                          <Visibility color="info" className="icon" />
+                        <IconButton onClick={()=>getDocShareholding(apiResponse?.certifieadCopyOfThePlan)}>
+                        <Visibility color="info" className="icon" />
                         </IconButton>
                       </div>
 
                       <div className="btn btn-sm col-md-4">
-                        <IconButton onClick={() => getDocShareholding(apiResponse?.certifieadCopyOfThePlan)}>
-                          <FileDownload color="primary" className="mx-1" />
+                        <IconButton onClick={()=>getDocShareholding(apiResponse?.certifieadCopyOfThePlan)}>
+                        <FileDownload color="primary" className="mx-1" />
                         </IconButton>
                       </div>
                       <div className="btn btn-sm col-md-4">
@@ -707,14 +753,11 @@ const ServicePlanService = (props) => {
                     <tr>
                       <td>
                         <div className="px-2">
-                          <p className="mb-2">6.</p>
+                          <p className="mb-2">4.</p>
                         </div>
                       </td>
                       <td component="th" scope="row">
-                        <h2>
-                          {`${t("SP_SCRUTINY_PREVIOUSLY_UPDATED_LAYOUT_PLAN")}`}
-                          {/* Previously Uploaded layout plan (call) */}
-                        </h2>
+                        <h2>{`${t("SP_SCRUTINY_PREVIOUSLY_UPDATED_LAYOUT_PLAN")}`}</h2>
                         {/* {drawingErr.selfCertifiedDrawingFromEmpaneledDoc ? <p style={{color: 'red'}}>Please upload self-certified drawings from empanelled/certified architects*</p> : " "} */}
                       </td>
                       {/* <td component="th" scope="row">
@@ -762,6 +805,10 @@ const ServicePlanService = (props) => {
                         <div className="btn btn-sm col-md-4">
                           <ReportProblemIcon
                             style={{
+                              display:
+                                hideRemarks && hideRemarksPatwari && showReportProblemIcon("SP_SCRUTINY_PREVIOUSLY_UPDATED_LAYOUT_PLAN")
+                                  ? "block"
+                                  : "none",
                               color: fieldIconColors.certified,
                             }}
                             onClick={() => {
@@ -778,14 +825,11 @@ const ServicePlanService = (props) => {
                     <tr>
                       <td>
                         <div className="px-2">
-                          <p className="mb-2">7.</p>
+                          <p className="mb-2">5.</p>
                         </div>
                       </td>
                       <td component="th" scope="row">
-                        <h2>
-                          {`${t("SP_SCRUTINY_UPLOAD_REVISED_LAYOUT_PLAN")}`}
-                          {/* Upload the Revised layout plan */}
-                        </h2>
+                        <h2>{`${t("SP_SCRUTINY_UPLOAD_REVISED_LAYOUT_PLAN")}`}</h2>
                         {/* {drawingErr.environmentalClearance ? <p style={{color: 'red'}}>Please upload environmental clearance drawings*</p> : " "} */}
                       </td>
                       {/* <td component="th" scope="row">
@@ -833,6 +877,10 @@ const ServicePlanService = (props) => {
                         <div className="btn btn-sm col-md-4">
                           <ReportProblemIcon
                             style={{
+                              display:
+                                hideRemarks && hideRemarksPatwari && showReportProblemIcon("SP_SCRUTINY_UPLOAD_REVISED_LAYOUT_PLAN")
+                                  ? "block"
+                                  : "none",
                               color: fieldIconColors.certified,
                             }}
                             onClick={() => {
@@ -849,14 +897,11 @@ const ServicePlanService = (props) => {
                     <tr>
                       <td>
                         <div className="px-2">
-                          <p className="mb-2">8.</p>
+                          <p className="mb-2">6.</p>
                         </div>
                       </td>
                       <td component="th" scope="row">
-                        <h2>
-                          {`${t("SP_SCRUTINY_UPLOAD_DEMARCATION_PLAN_AUTOAD")}`}
-                          {/* Upload Demarcation Plan in AutoCAD (DXF) file */}
-                        </h2>
+                        <h2>{`${t("SP_SCRUTINY_UPLOAD_DEMARCATION_PLAN_AUTOAD")}`}</h2>
                         {/* {drawingErr.shapeFileAsPerTemplate ? <p style={{color: 'red'}}>Please upload service plan pdf and gis format*</p> : " "} */}
                       </td>
                       {/* <td component="th" scope="row">
@@ -904,6 +949,10 @@ const ServicePlanService = (props) => {
                         <div className="btn btn-sm col-md-4">
                           <ReportProblemIcon
                             style={{
+                              display:
+                                hideRemarks && hideRemarksPatwari && showReportProblemIcon("SP_SCRUTINY_UPLOAD_DEMARCATION_PLAN_AUTOAD")
+                                  ? "block"
+                                  : "none",
                               color: fieldIconColors.certified,
                             }}
                             onClick={() => {
@@ -920,14 +969,11 @@ const ServicePlanService = (props) => {
                     <tr>
                       <td>
                         <div className="px-2">
-                          <p className="mb-2">9.</p>
+                          <p className="mb-2">7.</p>
                         </div>
                       </td>
                       <td component="th" scope="row">
-                        <h2>
-                          {`${t("SP_SCRUTINY_UPLOAD_DEMARCATION_PLAN_PDF")}`}
-                          {/* Upload Demarcation Plan in PDF (OCR Compatible) + GIS format. */}
-                        </h2>
+                        <h2>{`${t("SP_SCRUTINY_UPLOAD_DEMARCATION_PLAN_PDF")}`}</h2>
                         {/* {drawingErr.autoCadFile ? <p style={{color: 'red'}}>Please upload autocad file*</p> : " "} */}
                       </td>
                       {/* <td component="th" scope="row">
@@ -975,6 +1021,10 @@ const ServicePlanService = (props) => {
                         <div className="btn btn-sm col-md-4">
                           <ReportProblemIcon
                             style={{
+                              display:
+                                hideRemarks && hideRemarksPatwari && showReportProblemIcon("SP_SCRUTINY_UPLOAD_DEMARCATION_PLAN_PDF")
+                                  ? "block"
+                                  : "none",
                               color: fieldIconColors.certified,
                             }}
                             onClick={() => {
@@ -991,14 +1041,11 @@ const ServicePlanService = (props) => {
                     <tr>
                       <td>
                         <div className="px-2">
-                          <p className="mb-2">10.</p>
+                          <p className="mb-2">8.</p>
                         </div>
                       </td>
                       <td component="th" scope="row">
-                        <h2>
-                          {`${t("SP_SCRUTINY_UPLOAD_EXCEL_LAYOUT_STRUCTURE")}`}
-                          {/* Upload Excel of detailed layout structure */}
-                        </h2>
+                        <h2>{`${t("SP_SCRUTINY_UPLOAD_EXCEL_LAYOUT_STRUCTURE")}`}</h2>
                       </td>
 
                       <td component="th" scope="row">
@@ -1016,6 +1063,10 @@ const ServicePlanService = (props) => {
                         <div className="btn btn-sm col-md-4">
                           <ReportProblemIcon
                             style={{
+                              display:
+                                hideRemarks && hideRemarksPatwari && showReportProblemIcon("SP_SCRUTINY_UPLOAD_EXCEL_LAYOUT_STRUCTURE")
+                                  ? "block"
+                                  : "none",
                               color: fieldIconColors.certified,
                             }}
                             onClick={() => {
@@ -1032,14 +1083,11 @@ const ServicePlanService = (props) => {
                     <tr>
                       <td>
                         <div className="px-2">
-                          <p className="mb-2">11.</p>
+                          <p className="mb-2">9.</p>
                         </div>
                       </td>
                       <td component="th" scope="row">
-                        <h2>
-                          {`${t("SP_SCRUTINY_OTHER_RELEVANT_DOCUMENT")}`}
-                          {/* Any other relevant document */}
-                        </h2>
+                        <h2> {`${t("SP_SCRUTINY_OTHER_RELEVANT_DOCUMENT")}`}</h2>
                       </td>
 
                       <td component="th" scope="row">
@@ -1057,6 +1105,8 @@ const ServicePlanService = (props) => {
                         <div className="btn btn-sm col-md-4">
                           <ReportProblemIcon
                             style={{
+                              display:
+                                hideRemarks && hideRemarksPatwari && showReportProblemIcon("SP_SCRUTINY_OTHER_RELEVANT_DOCUMENT") ? "block" : "none",
                               color: fieldIconColors.certified,
                             }}
                             onClick={() => {
