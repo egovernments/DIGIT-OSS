@@ -761,7 +761,7 @@ function LayoutPlanClu() {
                         </span>
                       </td>
                     </tr>
-                    <tr>
+                    {/* <tr>
                       <td scope="row">6</td>
                       <td>
                         {`${t("REV_LAYOUT_ANY_OTHER")}`}
@@ -785,7 +785,7 @@ function LayoutPlanClu() {
                               <VisibilityIcon color="info" className="icon" />
                             </a>
                           )} */}
-                          {fileStoreId?.anyOther ? (
+                    {/* {fileStoreId?.anyOther ? (
                             <VisibilityIcon color="primary" onClick={() => viewDocument(fileStoreId?.anyOther)}>
                               {" "}
                             </VisibilityIcon>
@@ -801,7 +801,7 @@ function LayoutPlanClu() {
                           )}
                         </span>
                       </td>
-                    </tr>
+                    </tr> */}
                   </tbody>
                 </table>
               </div>

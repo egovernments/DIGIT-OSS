@@ -30,6 +30,8 @@ const selectTypeData = [{ label: "test", value: "test" }];
 const AdditionalDocument = () => {
   const [loader, setLoader] = useState(false);
   const [modalValue, setModalValue] = useState([]);
+  const [documentDescription, setDocumentDescription] = useState("");
+  const [uploadDoc, setUploadDoc] = useState("");
   const {
     register,
     handleSubmit,
@@ -51,10 +53,10 @@ const AdditionalDocument = () => {
     setModalShow(false);
   };
   const handleSubmitExistingArea = () => {
-    if (licenseNoModal !== "" && areaModal !== "") {
+    if (documentDescription !== "" && uploadDoc !== "") {
       const values = {
-        licenseNoPop: licenseNoModal,
-        areaModalPop: areaModal,
+        documentDescriptionPop: documentDescription,
+        uploadDocPop: uploadDoc,
       };
 
       // console.log("DATFRM", values);
@@ -63,6 +65,7 @@ const AdditionalDocument = () => {
       setModalShow(false);
     }
   };
+
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -147,8 +150,8 @@ const AdditionalDocument = () => {
                               <StyledTableCell component="th" scope="row">
                                 {input + 1}
                               </StyledTableCell>
-                              <StyledTableCell>{elementInArray.licenseNoPop}</StyledTableCell>
-                              <StyledTableCell>{elementInArray.areaModalPop}</StyledTableCell>
+                              <StyledTableCell>{elementInArray.documentDescriptionPop}</StyledTableCell>
+                              <StyledTableCell>{elementInArray.uploadDocPop}</StyledTableCell>
 
                               <StyledTableCell align="center">
                                 <a href="javascript:void(0)" title="Delete record" onClick={() => deleteTableRows(-1)}>
@@ -218,29 +221,29 @@ const AdditionalDocument = () => {
             <Row>
               <Col md={3} xxl lg="3">
                 <FormControl>
-                  <label htmlFor="licenseNoModal" className="text">
+                  <label htmlFor="documentDescription" className="text">
                     Document Description <span className="text-danger font-weight-bold">*</span>
                   </label>
                   <OutlinedInput
                     type="number"
                     placeholder=""
                     className="Inputcontrol"
-                    name="licenseNoModal"
-                    onChange={(e) => setLicenseNoModal(e.target.value)}
+                    name="documentDescription"
+                    onChange={(e) => setdocumentDescription(e.target.value)}
                   />
                 </FormControl>
               </Col>
               <Col md={3} xxl lg="3">
                 <FormControl>
-                  <label htmlFor="areaModal" className="text">
+                  <label htmlFor="uploadDoc" className="text">
                     Upload Document <span className="text-danger font-weight-bold">*</span>
                   </label>
                   <OutlinedInput
-                    type="text"
+                    type="file"
                     placeholder=""
                     className="Inputcontrol"
-                    name="areaModal"
-                    onChange={(e) => setAreaModal(e.target.value)}
+                    name="uploadDoc"
+                    onChange={(e) => setuploadDoc(e.target.value)}
                   />
                 </FormControl>
               </Col>
