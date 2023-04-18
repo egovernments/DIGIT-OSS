@@ -460,6 +460,21 @@ const Home = () => {
           },
         ],
       },
+      {
+        name: t("General Services"),
+        Icon: <TransferLic className="fill-path-primary-main" />,
+        value: "six",
+        links: [
+          {
+            link: `/digit-ui/citizen/obps/additionalDoc`,
+            i18nKey: t("Additional Documents"),
+          },
+          {
+            link: `/digit-ui/citizen/obps/payment`,
+            i18nKey: t("Payment"),
+          },
+        ],
+      },
       // {
       //   name: t("PROVIDE_LICENSE_DETAILS"),
       //   Icon: <CaseIcon className="fill-path-primary-main" />,

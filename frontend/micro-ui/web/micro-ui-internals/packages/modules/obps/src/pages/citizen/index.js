@@ -53,7 +53,8 @@ import CompositionClu from "./NewLicense/AllService/Module/CompositionClu/Compos
 import Standard from "./NewLicense/AllService/Module/StandardDesign/StandardDesign";
 import ExtensionCom from "./NewLicense/AllService/Module/ExtensionCommunity/ExtensionCom";
 import LowMedium from "./NewLicense/AllService/Module/BuildingPlanApproval/LowMedium";
-import LayoutPlanInbox from "./ApplicationDetail/LayoutPlanInbox";
+import AdditionalDocument from "./NewLicense/AllService/Module/AdditionalDocument/AdditionalDocument";
+import Payment from "./NewLicense/AllService/Module/Payment/Payment";
 
 const App = ({ path }) => {
   const location = useLocation();
@@ -129,8 +130,8 @@ const App = ({ path }) => {
         <PrivateRoute path={`${path}/Standard`} component={Standard} />
         <PrivateRoute path={`${path}/ExtensionCom`} component={ExtensionCom} />
         <PrivateRoute path={`${path}/BPALowMedium`} component={LowMedium} />
-        <PrivateRoute path={`${path}/LayoutPlanClu`} component={LayoutPlanClu} />
-        <PrivateRoute path={`${path}/layoutPlan/my-application`} component={LayoutPlanInbox} />
+        <PrivateRoute path={`${path}/additionalDoc`} component={AdditionalDocument} />
+        <PrivateRoute path={`${path}/payment`} component={Payment} />
         {/* .............................................................................. */}
 
         {/* <PrivateRoute path={`${path}/Beneficialscrutiny`} component={Beneficialscrutiny} />
