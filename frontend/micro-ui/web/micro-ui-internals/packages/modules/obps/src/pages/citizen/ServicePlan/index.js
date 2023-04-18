@@ -20,6 +20,7 @@ import ErrorIcon from '@mui/icons-material/Error';
 import InfoIcon from "@mui/icons-material/Info";
 import Tooltip from "@mui/material/Tooltip";
 import { useTranslation } from "react-i18next";
+import CusToaster from "../../../components/Toaster";
 //import { getDocShareholding } from 'packages/modules/tl/src/pages/employee/ScrutinyBasic/ScrutinyDevelopment/docview.helper.js'
 
 
@@ -70,7 +71,7 @@ const ServicePlanService = () => {
   // const [stepData, setStepData] = useState(null);
   const [selectedFiles, setSelectedFiles] = useState([]);
   const [showToast, setShowToast] = useState(null);
-  const [showToastError, setShowToastError] = useState(null);
+  const [showToastError, setShowToastError] = useState({ label: "", error: false, success: false });
   const [loader, setLoader] = useState(false);
   const [fileStoreId, setFileStoreId] = useState({});
   const [spaction, setSPAction] = useState('')
@@ -260,13 +261,41 @@ const ServicePlanService = () => {
     }
   }
 
+  // const getDocumentData = async (file, fieldName) => {
+  //   console.log("documentData", fieldName);
+  //   if (selectedFiles.includes(file.name)) {
+  //     setShowToastError({ key: "error" });
+  //     return;
+  //   }
+  //   setDrawingErr({...drawingErr, [fieldName]: false})
+  //   const formData = new FormData();
+  //   formData.append("file", file);
+  //   formData.append("tenantId", "hr");
+  //   formData.append("module", "property-upload");
+  //   formData.append("tag", "tag-property");
+  //   setLoader(true);
+  //   try {
+  //     const Resp = await axios.post("/filestore/v1/files", formData, {});
+  //     console.log("documentData", Resp?.data?.files);
+  //     setValue(fieldName, Resp?.data?.files?.[0]?.fileStoreId);
+  //     setFileStoreId({ ...fileStoreId, [fieldName]: Resp?.data?.files?.[0]?.fileStoreId });
+     
+  //     setSelectedFiles([...selectedFiles, file.name]);
+
+  //     setLoader(false);
+  //     setShowToast({ key: "success" });
+  //   } catch (error) {
+  //     setLoader(false);
+  //     return error.message;
+  //   }
+  // };
+
+
   const getDocumentData = async (file, fieldName) => {
-    console.log("documentData", fieldName);
     if (selectedFiles.includes(file.name)) {
-      setShowToastError({ key: "error" });
+      setShowToastError({ label: "Duplicate file Selected", error: true, success: false });
       return;
     }
-    setDrawingErr({...drawingErr, [fieldName]: false})
     const formData = new FormData();
     formData.append("file", file);
     formData.append("tenantId", "hr");
@@ -275,19 +304,17 @@ const ServicePlanService = () => {
     setLoader(true);
     try {
       const Resp = await axios.post("/filestore/v1/files", formData, {});
-      console.log("documentData", Resp?.data?.files);
       setValue(fieldName, Resp?.data?.files?.[0]?.fileStoreId);
       setFileStoreId({ ...fileStoreId, [fieldName]: Resp?.data?.files?.[0]?.fileStoreId });
-     
       setSelectedFiles([...selectedFiles, file.name]);
-
       setLoader(false);
-      setShowToast({ key: "success" });
+      setShowToastError({ label: "File Uploaded Successfully", error: false, success: true });
     } catch (error) {
       setLoader(false);
       return error.message;
     }
   };
+
   // const handleshow19 = async (e) => {
   //   const payload = {
 
@@ -1144,28 +1171,27 @@ const ServicePlanService = () => {
 
     </Dialog>
     </React.Fragment>
-    {showToast && (
-        <Toast
-          success={showToast?.key === "success" ? true : false}
-          label="Document Uploaded Successfully"
-          isDleteBtn={true}
+    {showToastError && (
+        <CusToaster
+          label={showToastError?.label}
+          success={showToastError?.success}
+          error={showToastError?.error}
           onClose={() => {
-            setShowToast(null);
-            // setError(null);
+            setShowToastError({ label: "", success: false, error: false });
           }}
         />
       )}
-      {showToastError && (
+      {/* {showToastError && (
         <Toast
           error={showToastError?.key === "error" ? true : false}
           label="Duplicate file Selected"
           isDleteBtn={true}
           onClose={() => {
             setShowToastError(null);
-            // setError(null);
+           
           }}
         />
-      )}
+      )} */}
     </div>
   );
 };
