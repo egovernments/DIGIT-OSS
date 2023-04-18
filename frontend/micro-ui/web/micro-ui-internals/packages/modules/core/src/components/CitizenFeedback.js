@@ -127,7 +127,7 @@ const CitizenFeedback = ({popup = false, onClose, setShowToast, data}) => {
   }
 
   const getCommentCheck = () => {
-    if(comment && comment?.length < 50)
+    if(comment && comment?.length < 64)
     return true;
     else if(rating)
     return false;
@@ -151,9 +151,9 @@ const CitizenFeedback = ({popup = false, onClose, setShowToast, data}) => {
           <CardLabel>{t(getCommentHeader())}</CardLabel>
           <TextArea 
              name="" 
-             minLength = "50"
+             minLength = "64"
              onChange={onComments}></TextArea>
-             {comment && comment?.length < 50 && <CardLabelError>{t("CS_MIN_LENGTH_50")}</CardLabelError>}
+             {comment && comment?.length < 64 && <CardLabelError>{t("CS_MIN_LENGTH_64")}</CardLabelError>}
           </div>}
           <SubmitBar label={t(`${"PT"}_SUBMIT`)} onSubmit={onSubmit} disabled={getCommentCheck()} />
           {!popup && <div className="link" style={isMobile ? { marginTop: "8px", width: "100%", textAlign: "center" } : {marginTop:"8px"}}>
