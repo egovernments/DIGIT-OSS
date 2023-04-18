@@ -517,7 +517,8 @@ console.log("log123Disrenu" ,id);
                 <div key={index}>
                   <hr style={{ marginTop: 5, marginBottom: 5 }}></hr>
                   
-                  {item.comment}
+                  {/* {item.comment} */}
+                  {<div dangerouslySetInnerHTML={{__html: item.comment}}/>}
                   <div className="text-right">
                    
                     <div class="font-weight-bold">

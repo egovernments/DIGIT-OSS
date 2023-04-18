@@ -97,7 +97,7 @@ const ServicePlanModal = ({ t, action, tenantId, state, id, closeModal, submitAc
     applicationData = {
       ...applicationData,
       action: action?.action,
-      comments: comment,
+      comment: comment,
       // assignee: !selectedApprover?.uuid ? null : [selectedApprover?.uuid],
       assignee: selectedApprover?.length ? selectedApprover.map((ele)=>ele[1]?.uuid):[],
       // assignee: action?.isTerminateState ? [] : [selectedApprover?.uuid],
