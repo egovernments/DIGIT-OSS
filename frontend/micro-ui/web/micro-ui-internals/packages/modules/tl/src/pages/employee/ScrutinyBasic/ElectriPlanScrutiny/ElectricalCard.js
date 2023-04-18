@@ -37,6 +37,7 @@ const authToken = Digit.UserService.getUser()?.access_token || null;
   const [businessService, setBusinessService] = useState("ELECTRICAL_PLAN");
   const [moduleCode,setModuleCode] = useState("TL")
   const [ scrutinyDetails, setScrutinyDetails] = useState();
+  const [status , setStatus] = useState();
   // const [applicationNumber,setApplicationNumber] = useState("");
   const [applicationDetails, setApplicationDetails] = useState();
   const [workflowDetails, setWorkflowDetails] = useState();
@@ -73,6 +74,7 @@ const authToken = Digit.UserService.getUser()?.access_token || null;
       });
     //   console.log("Response From API1", Resp, Resp?.Licenses[0]?.applicationNumber,Resp);
       setScrutinyDetails(Resp?.electricPlanResponse?.[0]);
+      setStatus(Resp?.electricPlanResponse?.[0]?.status);
 
       console.log("devDel123",Resp?.electricPlanResponse?.[0]);
       setApplicationData(Resp?.electricPlanResponse?.[0]);
@@ -167,6 +169,10 @@ const authToken = Digit.UserService.getUser()?.access_token || null;
     }
 
     closeModal();
+    setTimeout(() => {
+     
+      window.location.href = `/digit-ui/employee/tl/electricPlanInbox`
+      }, 3000);
   };
 
   // useEffect(()=>{
@@ -226,6 +232,7 @@ const authToken = Digit.UserService.getUser()?.access_token || null;
          apiResponse={scrutinyDetails}
          applicationNumber={id}
          refreshScrutinyData={getScrutinyData}
+         applicationStatus={status}
          ></ElecticalBase>
       </Row>
       {/* {JSON.stringify(scrutinyDetails)} */}

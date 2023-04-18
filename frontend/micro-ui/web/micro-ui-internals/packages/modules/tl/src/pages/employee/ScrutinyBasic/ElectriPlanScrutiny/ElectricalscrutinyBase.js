@@ -133,7 +133,7 @@ import axios from "axios";
 
 // import AddIcon from "@mui/icons-material/Add";
 
-const ElecticalBase = ({apiResponse,applicationNumber,refreshScrutinyData,histeroyData}) => {
+const ElecticalBase = ({apiResponse,applicationNumber,refreshScrutinyData,histeroyData, applicationStatus}) => {
 //   const personalInfoRef = useRef();
 //   const generalInfoRef = useRef();
 //   const developerInfoRef = useRef();
@@ -154,7 +154,7 @@ const ElecticalBase = ({apiResponse,applicationNumber,refreshScrutinyData,hister
   const [displayFeeandCharges, setDisplayFeeandChargesInfo] = useState([]);
   // const [displayLicenseDetails, setDisplayLicenseDetailsInfo] = useState([]);
   // const [displayLicenseDetailsCheckedlist, setDisplayCheckedLicenseDetailsList] = useState([]);
-const { remarksData,iconStates,handleGetFiledsStatesById,handleGetRemarkssValues } = useContext(ScrutinyRemarksContext);
+  const { remarksData,iconStates,rolesDate,handleRoles,handleGetFiledsStatesById,handleGetRemarkssValues } = useContext(ScrutinyRemarksContext);
   const [displayJeLand, setDisplayJeLand] = useState([]);
   const [ActiveKey, setActiveKey] = useState(1);
   const [defaultHeightPersonal, setDefaultHeightPersonal] = useState(0);
@@ -432,6 +432,7 @@ const { remarksData,iconStates,handleGetFiledsStatesById,handleGetRemarkssValues
            passCheckedList={getCheckedGeneralInfoValue}
            onClick={() => setOpen(!open)}
            dataForIcons={iconStates}
+           applicationStatus={applicationStatus} 
            ></ElectricalPlanScrutiny>
          </div>
          {/* {JSON.stringify(apiResponse)} */}
