@@ -1,10 +1,15 @@
 import React, { useState, useEffect, useContext } from "react";
 import { Card, Row, Col, Form, Button } from "react-bootstrap";
 import { useForm } from "react-hook-form";
-// import axios from "axios";
+import axios from "axios";
 import VisibilityIcon from "@mui/icons-material/Visibility";
-// import FileDownload from "@mui/icons-material/FileDownload";
-import Visibility from "@mui/icons-material/Visibility";
+import { Dialog, stepIconClasses } from "@mui/material";
+import DialogActions from "@mui/material/DialogActions";
+import DialogContent from "@mui/material/DialogContent";
+import DialogContentText from "@mui/material/DialogContentText";
+import DialogTitle from "@mui/material/DialogTitle";
+import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
+import FileUploadIcon from "@mui/icons-material/FileUpload";
 import FileDownload from "@mui/icons-material/FileDownload";
 import { getDocShareholding } from "../ScrutinyDevelopment/docview.helper";
 import ModalChild from "../Remarks/ModalChild/";
@@ -38,13 +43,17 @@ const ElectricalPlanScrutiny = (props) => {
     formState: { errors },
     control,
     setValue,
-  } = useForm({});
+    watch,
+  } = useForm({
+    mode: "onChange",
 
-  const servicePlan = (data) => console.log(data);
+    shouldFocusError: true,
+  });
+  const userInfo = Digit.UserService.getUser();
 
-  const classes = useStyles();
-  const currentRemarks = (data) => {
-    props.showTable({ data: data.data });
+  const getLoiPattern = (loiNumber) => {
+    const pattern = /^(?=\D*\d)(?=.*[/])(?=.*[-])[a-zA-Z0-9\/-]{15,30}$/;
+    return pattern.test(loiNumber);
   };
 
   const [smShow, setSmShow] = useState(false);
@@ -56,45 +65,104 @@ const ElectricalPlanScrutiny = (props) => {
 
     info: "#FFB602",
   };
+  const servicePlan = async (data) => {
+    const token = window?.localStorage?.getItem("token");
+    const tenantId = Digit.ULBService.getCurrentTenantId();
+    console.log(data, "service-service");
+    try {
+      if (!applicationId) {
+        data.devName = devName;
+        data.developmentPlan = developmentPlan;
+        data.purpose = purpose;
+        data.totalArea = totalArea;
+        const isValid = checkValid(data);
+        // if(!isValid){
+        //   console.log("Dont call create")
+        //   return null
+        // }
+        const postDistrict = {
+          requestInfo: {
+            api_id: "Rainmaker",
+            ver: "1",
+            ts: null,
+            action: "create",
+            did: "",
+            key: "",
+            msg_id: "",
+            requester_id: "",
+            authToken: token,
+            userInfo: userInfo.info,
+          },
 
-  const handlemodaldData = (data) => {
-    // setmodaldData(data.data);
-    setSmShow(false);
-    console.log("here", openedModal, data);
-    if (openedModal && data) {
-      setFieldIconColors({ ...fieldIconColors, [openedModal]: data.data.isApproved ? Colors.approved : Colors.disapproved });
+          ServicePlanRequest: [
+            {
+              ...data,
+              action: "APPLY",
+              tenantId: tenantId,
+              businessService: "SERVICE_PLAN",
+              workflowCode: "SERVICE_PLAN",
+              comment: "",
+              assignee: null,
+            },
+          ],
+        };
+        const Resp = await axios.post("/tl-services/serviceplan/_create", postDistrict);
+        setServicePlanDataLabel(Resp.data);
+        setOpen(true);
+        setApplicationNumber(Resp.data.servicePlanResponse[0].applicationNumber);
+      } else {
+        servicePlanRes.loiNumber = data?.loiNumber ? data?.loiNumber : servicePlanRes.loiNumber;
+        servicePlanRes.selfCertifiedDrawingFromEmpaneledDoc = data?.selfCertifiedDrawingFromEmpaneledDoc
+          ? data?.selfCertifiedDrawingFromEmpaneledDoc
+          : servicePlanRes.selfCertifiedDrawingFromEmpaneledDoc;
+        servicePlanRes.environmentalClearance = data?.environmentalClearance ? data?.environmentalClearance : servicePlanRes.environmentalClearance;
+        servicePlanRes.shapeFileAsPerTemplate = data?.shapeFileAsPerTemplate ? data?.shapeFileAsPerTemplate : servicePlanRes.shapeFileAsPerTemplate;
+        servicePlanRes.autoCadFile = data?.autoCadFile ? data?.autoCadFile : servicePlanRes.autoCadFile;
+        servicePlanRes.certifieadCopyOfThePlan = data?.certifieadCopyOfThePlan
+          ? data?.certifieadCopyOfThePlan
+          : servicePlanRes.certifieadCopyOfThePlan;
+        servicePlanRes.devName = devName;
+        servicePlanRes.developmentPlan = developmentPlan;
+        servicePlanRes.purpose = purpose;
+        servicePlanRes.totalArea = totalArea;
+        const isvalidUpdate = checkValid(servicePlanRes);
+        console.log({ servicePlanRes, data, isvalidUpdate }, "jjjjjjjjjjjjjj");
+        if (!isvalidUpdate) {
+          console.log("Dont call update");
+          return null;
+        }
+        const updateRequest = {
+          requestInfo: {
+            api_id: "Rainmaker",
+            ver: "1",
+            ts: null,
+            action: "create",
+            did: "",
+            key: "",
+            msg_id: "",
+            requester_id: "",
+            authToken: token,
+          },
+          ServicePlanRequest: [
+            {
+              ...servicePlanRes,
+              // "action": "FORWARD",
+              // "tenantId":  tenantId,
+              // "businessService": "SERVICE_PLAN",
+              workflowCode: "SERVICE_PLAN",
+              // "comment": "",
+              // "assignee": null
+            },
+          ],
+        };
+        const Resp = await axios.post("/tl-services/serviceplan/_update", updateRequest);
+        setOpen(true);
+        setApplicationNumber(Resp.data.servicePlanResponse[0].applicationNumber);
+      }
+    } catch (error) {
+      console.log(error.message);
     }
-    setOpennedModal("");
-    setLabelValue("");
   };
-  const [selectedFieldData, setSelectedFieldData] = useState();
-  const [fieldValue, setFieldValue] = useState("");
-  const [openedModal, setOpennedModal] = useState("");
-  const [fieldIconColors, setFieldIconColors] = useState({
-    loiNumber: Colors.info,
-    electricInfra: Colors.info,
-    electricDistribution: Colors.info,
-    electricalCapacity: Colors.info,
-    switchingStation: Colors.info,
-    LoadSancation: Colors.info,
-    selfCenteredDrawings: Colors.info,
-    autoCad: Colors.info,
-    pdfFormat: Colors.info,
-    environmentalClearance: Colors.info,
-    verifiedPlan: Colors.info,
-    state: Colors.info,
-    type: Colors.info,
-    lciSignedBy: Colors.info,
-    lciNotSigned: Colors.info,
-    parmanentAddress: Colors.info,
-    addressForCommunication: Colors.info,
-    authPerson: Colors.info,
-    emailForCommunication: Colors.info,
-    purpose: Colors.info,
-    totalArea: Colors.info,
-    devName: Colors.info,
-    developmentPlan: Colors.info,
-  });
 
   const fieldIdList = [
     { label: "LOI Number", key: "loiNumber" },
@@ -161,6 +229,47 @@ const ElectricalPlanScrutiny = (props) => {
   }, [labelValue]);
 
   console.log("Digit123", apiResponse);
+  let user = Digit.UserService.getUser();
+  const userInfo = Digit.UserService.getUser()?.info || {};
+  const userRolesArray = userInfo?.roles.filter((user) => user.code !== "EMPLOYEE");
+  const filterDataRole = userRolesArray?.[0]?.code;
+  const userRoles = user?.info?.roles?.map((e) => e.code) || [];
+
+  console.log("rolelogintime", userRoles);
+  console.log("afterfilter12", filterDataRole);
+  const mDMSData = props.mDMSData;
+  const mDMSDataRole = mDMSData?.map((e) => e.role) || [];
+  const hideRemarks = mDMSDataRole.includes(filterDataRole);
+  const applicationStatusMdms = mDMSData?.map((e) => e.applicationStatus) || [];
+  const hideRemarksPatwari = applicationStatusMdms.some((item) => item === applicationStatus) || [];
+  const [fileddataName, setFiledDataName] = useState();
+
+  useEffect(() => {
+    if (mDMSData && mDMSData?.length) {
+      console.log(
+        "filedDataMdms",
+        mDMSData,
+        mDMSData?.[0]?.field,
+        mDMSData?.[0]?.field.map((item, index) => item.fields)
+      );
+      setFiledDataName(mDMSData?.[0]?.field.map((item, index) => item.fields));
+    }
+  }, [mDMSData]);
+  const showReportProblemIcon = (filedName) => {
+    if (fileddataName && fileddataName.length) {
+      let show = fileddataName.includes(filedName);
+      return show;
+    } else {
+      return false;
+    }
+  };
+
+  // mDMSData?.map((e) => e.role)||[]
+  console.log("happyRole", userRoles);
+  console.log("happyDate", mDMSData);
+  console.log("happyROLE", mDMSDataRole);
+  console.log("happyapplicationStatusMdms", applicationStatusMdms);
+  console.log("happyDateHIDE", hideRemarksPatwari, showReportProblemIcon("Purpose of colony"), hideRemarks);
 
   return (
     <form>
@@ -211,6 +320,7 @@ const ElectricalPlanScrutiny = (props) => {
 
                     <ReportProblemIcon
                       style={{
+                        display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("EP_SCRUTINY_LOI_NO") ? "block" : "none",
                         color: fieldIconColors.loiNumber,
                       }}
                       onClick={() => {
@@ -263,6 +373,7 @@ const ElectricalPlanScrutiny = (props) => {
 
                     <ReportProblemIcon
                       style={{
+                        display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("EP_SCRUTINY_NAME") ? "block" : "none",
                         color: fieldIconColors.devName,
                       }}
                       onClick={() => {
@@ -297,6 +408,7 @@ const ElectricalPlanScrutiny = (props) => {
 
                     <ReportProblemIcon
                       style={{
+                        display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("EP_SCRUTINY_DEVELOPMENT_PLAN") ? "block" : "none",
                         color: fieldIconColors.developmentPlan,
                       }}
                       onClick={() => {
@@ -331,6 +443,7 @@ const ElectricalPlanScrutiny = (props) => {
 
                     <ReportProblemIcon
                       style={{
+                        display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("EP_SCRUTINY_PURPOSE_OF_LICENCE") ? "block" : "none",
                         color: fieldIconColors.purpose,
                       }}
                       onClick={() => {
@@ -365,6 +478,7 @@ const ElectricalPlanScrutiny = (props) => {
 
                     <ReportProblemIcon
                       style={{
+                        display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("EP_SCRUTINY_TOTAL_AREA") ? "block" : "none",
                         color: fieldIconColors.totalArea,
                       }}
                       onClick={() => {
@@ -405,6 +519,10 @@ const ElectricalPlanScrutiny = (props) => {
                     </label>
                     <ReportProblemIcon
                       style={{
+                        display:
+                          hideRemarks && hideRemarksPatwari && showReportProblemIcon("EP_SCRUTINY_ELECTRICAL_INFRASTRUCTURE_FOR_ELECTRICAL_NEED")
+                            ? "block"
+                            : "none",
                         color: fieldIconColors.electricInfra,
                       }}
                       onClick={() => {
@@ -455,6 +573,10 @@ const ElectricalPlanScrutiny = (props) => {
                     </label>
                     <ReportProblemIcon
                       style={{
+                        display:
+                          hideRemarks && hideRemarksPatwari && showReportProblemIcon("EP_SCRUTINY_PROVISION_ELECTRICITY_DISTRIBUTION")
+                            ? "block"
+                            : "none",
                         color: fieldIconColors.electricDistribution,
                       }}
                       onClick={() => {
@@ -495,6 +617,10 @@ const ElectricalPlanScrutiny = (props) => {
                     </label>
                     <ReportProblemIcon
                       style={{
+                        display:
+                          hideRemarks && hideRemarksPatwari && showReportProblemIcon("EP_SCRUTINY_CAPACITY_OF_PROPOSED_ELECTRICAL_SUBSTATION")
+                            ? "block"
+                            : "none",
                         color: fieldIconColors.electricalCapacity,
                       }}
                       onClick={() => {
@@ -550,6 +676,10 @@ const ElectricalPlanScrutiny = (props) => {
 
                     <ReportProblemIcon
                       style={{
+                        display:
+                          hideRemarks && hideRemarksPatwari && showReportProblemIcon("EP_SCRUTINY_PROVISION_OF_33KV_SWITCHING_STATION")
+                            ? "block"
+                            : "none",
                         color: fieldIconColors.switchingStation,
                       }}
                       onClick={() => {
@@ -600,6 +730,7 @@ const ElectricalPlanScrutiny = (props) => {
                     </label>
                     <ReportProblemIcon
                       style={{
+                        display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("EP_SCRUTINY_LAND_SANCTION_APPROVAL") ? "block" : "none",
                         color: fieldIconColors.LoadSancation,
                       }}
                       onClick={() => {
@@ -663,6 +794,10 @@ const ElectricalPlanScrutiny = (props) => {
                       <div className="btn btn-sm col-md-4">
                         <ReportProblemIcon
                           style={{
+                            display:
+                              hideRemarks && hideRemarksPatwari && showReportProblemIcon("EP_SCRUTINY_SELF_CERTIFIED_DRAWING-TEMPLATE_AS_PER_TCP")
+                                ? "block"
+                                : "none",
                             color: fieldIconColors.selfCenteredDrawings,
                           }}
                           onClick={() => {
@@ -706,6 +841,8 @@ const ElectricalPlanScrutiny = (props) => {
                       <div className="btn btn-sm col-md-4">
                         <ReportProblemIcon
                           style={{
+                            display:
+                              hideRemarks && hideRemarksPatwari && showReportProblemIcon("EP_SCRUTINY_ENVIRONMENT_CLEARANCE") ? "block" : "none",
                             color: fieldIconColors.environmentalClearance,
                           }}
                           onClick={() => {
@@ -747,6 +884,7 @@ const ElectricalPlanScrutiny = (props) => {
                       <div className="btn btn-sm col-md-4">
                         <ReportProblemIcon
                           style={{
+                            display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("EP_SCRUTINY_ELECTRICAL_PLAN_PDF") ? "block" : "none",
                             color: fieldIconColors.pdfFormat,
                           }}
                           onClick={() => {
@@ -788,6 +926,7 @@ const ElectricalPlanScrutiny = (props) => {
                       <div className="btn btn-sm col-md-4">
                         <ReportProblemIcon
                           style={{
+                            display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("EP_SCRUTINY_AUTOCAD_FILE") ? "block" : "none",
                             color: fieldIconColors.autoCad,
                           }}
                           onClick={() => {
@@ -828,6 +967,10 @@ const ElectricalPlanScrutiny = (props) => {
                       <div className="btn btn-sm col-md-4">
                         <ReportProblemIcon
                           style={{
+                            display:
+                              hideRemarks && hideRemarksPatwari && showReportProblemIcon("EP_SCRUTINY_CERTIFIED_COPY_VERIFIED_THIRD_PARTY")
+                                ? "block"
+                                : "none",
                             color: fieldIconColors.verifiedPlan,
                           }}
                           onClick={() => {

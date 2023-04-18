@@ -90,12 +90,16 @@ import RadioGroup from "@mui/material/RadioGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import FormControl from "@mui/material/FormControl";
 import FormLabel from "@mui/material/FormLabel";
+import { useTransition } from "react";
 import { useTranslation } from "react-i18next";
-
 // const ServicePlanCivil = () => {
 function ServicePlanExternal(props) {
   const userRoles = Digit.UserService.getUser()?.info?.roles.map((item) => item.code) || [];
-  const showActionButton = userRoles.includes("FMDA" || "HSVP" || "GMDA" || "DTP_HQ");
+  const showActionButton = userRoles.includes("FMDA");
+  const showActionButton1 = userRoles.includes("PMDA");
+  const showActionButton2 = userRoles.includes("GMDA");
+  const showActionButton3 = userRoles.includes("HSVP");
+  console.log("Externaldata", userRoles);
   // console.log("logg123" ,userRoles, showActionButton );
   const [selects, setSelects] = useState();
   const [showhide, setShowhide] = useState("");
@@ -104,6 +108,7 @@ function ServicePlanExternal(props) {
   const edcDataTreade = props.edcDataTreade;
   const classes = useStyles();
 
+  const { t } = useTranslation();
   const handleshowhide = (event) => {
     const getuser = event.target.value;
 
@@ -228,18 +233,9 @@ function ServicePlanExternal(props) {
                     <Table aria-label="simple table">
                       <TableHead>
                         <TableRow>
-                          <TableCell>
-                            {`${t("SP_EXTERNAL_SCRUTINY_SR_NO")}`}
-                            {/* // Sr.No */}
-                          </TableCell>
-                          <TableCell align="left">
-                            {`${t("SP_EXTERNAL_SCRUTINY_DESCRIPTION")}`}
-                            {/* // Description */}
-                          </TableCell>
-                          <TableCell align="left">
-                            {`${t("SP_EXTERNAL_SCRUTINY_AMOUNT_IN_LAKHS")}`}
-                            {/* Amount in lacs. */}
-                          </TableCell>
+                          <TableCell>{`${t("SP_EXTERNAL_SCRUTINY_SR_NO")}`}</TableCell>
+                          <TableCell align="left">{`${t("SP_EXTERNAL_SCRUTINY_DESCRIPTION")}`}</TableCell>
+                          <TableCell align="left">{`${t("SP_EXTERNAL_SCRUTINY_AMOUNT_IN_LAKHS")}`}</TableCell>
                           {/* <TableCell align="right">
 						Remarks
 						</TableCell> */}
@@ -252,9 +248,7 @@ function ServicePlanExternal(props) {
                             <div>
                               <Form.Label className={classes.formLabel}>
                                 <h2>
-                                  {`${t("SP_EXTERNAL_SCRUTINY_WATER_SUPPLY")}`}
-                                  {/* Water Supply  */}
-                                  <span style={{ color: "red" }}>*</span>
+                                  {`${t("SP_EXTERNAL_SCRUTINY_WATER_SUPPLY")}`} <span style={{ color: "red" }}>*</span>
                                 </h2>
                               </Form.Label>
                             </div>
@@ -290,9 +284,7 @@ function ServicePlanExternal(props) {
                             <div>
                               <Form.Label className={classes.formLabel}>
                                 <h2>
-                                  {`${t("SP_EXTERNAL_SCRUTINY_SEWARAGE")}`}
-                                  {/* Sewerage  */}
-                                  <span style={{ color: "red" }}>*</span>
+                                  {`${t("SP_EXTERNAL_SCRUTINY_SEWARAGE")}`} <span style={{ color: "red" }}>*</span>
                                 </h2>
                               </Form.Label>
                             </div>
@@ -324,9 +316,7 @@ function ServicePlanExternal(props) {
                             <div>
                               <Form.Label className={classes.formLabel}>
                                 <h2>
-                                  {`${t("SP_EXTERNAL_SCRUTINY_STORM_WATER_DRAINAGE")}`}
-                                  {/* Storm water Drainage  */}
-                                  <span style={{ color: "red" }}>*</span>
+                                  {`${t("SP_EXTERNAL_SCRUTINY_STORM_WATER_DRAINAGE")}`} <span style={{ color: "red" }}>*</span>
                                 </h2>
                               </Form.Label>
                             </div>
@@ -363,9 +353,7 @@ function ServicePlanExternal(props) {
                             <div>
                               <Form.Label className={classes.formLabel}>
                                 <h2>
-                                  {`${t("SP_EXTERNAL_SCRUTINY_ROADS")}`}
-                                  {/* Roads */}
-                                  <span style={{ color: "red" }}>*</span>
+                                  {`${t("SP_EXTERNAL_SCRUTINY_ROADS")}`} <span style={{ color: "red" }}>*</span>
                                 </h2>
                               </Form.Label>
                             </div>
@@ -395,9 +383,7 @@ function ServicePlanExternal(props) {
                             <div>
                               <Form.Label className={classes.formLabel}>
                                 <h2>
-                                  {`${t("SP_EXTERNAL_SCRUTINY_STREET_LIGHTS")}`}
-                                  {/* Street Lights  */}
-                                  <span style={{ color: "red" }}>*</span>
+                                  {`${t("SP_EXTERNAL_SCRUTINY_STREET_LIGHTS")}`} <span style={{ color: "red" }}>*</span>
                                 </h2>
                               </Form.Label>
                             </div>
@@ -431,9 +417,7 @@ function ServicePlanExternal(props) {
                             <div>
                               <Form.Label className={classes.formLabel}>
                                 <h2>
-                                  {`${t("SP_EXTERNAL_SCRUTINY_HORTICULTURE")}`}
-                                  {/* Horticulture  */}
-                                  <span style={{ color: "red" }}>*</span>
+                                  {`${t("SP_EXTERNAL_SCRUTINY_HORTICULTURE")}`} <span style={{ color: "red" }}>*</span>
                                 </h2>
                               </Form.Label>
                             </div>
@@ -470,9 +454,7 @@ function ServicePlanExternal(props) {
                             <div>
                               <Form.Label className={classes.formLabel}>
                                 <h2>
-                                  {`${t("SP_EXTERNAL_SCRUTINY_ANY_OTHER")}`}
-                                  {/* Any other, if applicable  */}
-                                  <span style={{ color: "red" }}>*</span>
+                                  {`${t("SP_EXTERNAL_SCRUTINY_ANY_OTHER")}`} <span style={{ color: "red" }}>*</span>
                                 </h2>
                               </Form.Label>
                             </div>
@@ -508,9 +490,7 @@ function ServicePlanExternal(props) {
                             <div>
                               <Form.Label className={classes.formLabel}>
                                 <h2>
-                                  {`${t("SP_EXTERNAL_SCRUTINY_MAINTENANCE_SERVICE_10YEARS")}`}
-                                  {/* Maintenance of services for 10 years */}
-                                  <span style={{ color: "red" }}>*</span>
+                                  {`${t("SP_EXTERNAL_SCRUTINY_MAINTENANCE_SERVICE_10YEARS")}`} <span style={{ color: "red" }}>*</span>
                                 </h2>
                               </Form.Label>
                             </div>
@@ -552,9 +532,7 @@ function ServicePlanExternal(props) {
                             <div>
                               <Form.Label className={classes.formLabel}>
                                 <h2>
-                                  {`${t("SP_EXTERNAL_SCRUTINY_TOTAL_DEVELOPMENT_COST")}`}
-                                  {/* Total Development Cost  */}
-                                  <span style={{ color: "red" }}>*</span>
+                                  {`${t("SP_EXTERNAL_SCRUTINY_TOTAL_DEVELOPMENT_COST")}`} <span style={{ color: "red" }}>*</span>
                                 </h2>
                               </Form.Label>
                             </div>
@@ -592,9 +570,7 @@ function ServicePlanExternal(props) {
                             <div>
                               <Form.Label className={classes.formLabel}>
                                 <h2>
-                                  {`${t("SP_EXTERNAL_SCRUTINY_DEVELOPMENT_COST_PER_ACRE")}`}
-                                  {/* Development Cost of per acre  */}
-                                  <span style={{ color: "red" }}>*</span>
+                                  {`${t("SP_EXTERNAL_SCRUTINY_DEVELOPMENT_COST_PER_ACRE")}`} <span style={{ color: "red" }}>*</span>
                                 </h2>
                               </Form.Label>
                             </div>
@@ -624,9 +600,7 @@ function ServicePlanExternal(props) {
                             <div>
                               <Form.Label className={classes.formLabel}>
                                 <h2>
-                                  {`${t("SP_EXTERNAL_SCRUTINY_NET_DEVELOPMENT_COST")}`}
-                                  {/* Net Development Cost  */}
-                                  <span style={{ color: "red" }}>*</span>
+                                  {`${t("SP_EXTERNAL_SCRUTINY_NET_DEVELOPMENT_COST")}`} <span style={{ color: "red" }}>*</span>
                                 </h2>
                               </Form.Label>
                             </div>
@@ -654,9 +628,7 @@ function ServicePlanExternal(props) {
                             <div>
                               <Form.Label className={classes.formLabel}>
                                 <h2>
-                                  {`${t("SP_EXTERNAL_SCRUTINY_25%_BG_REQUIRED")}`}
-                                  {/* 25% BG required */}
-                                  <span style={{ color: "red" }}>*</span>
+                                  {`${t("SP_EXTERNAL_SCRUTINY_25%_BG_REQUIRED")}`} <span style={{ color: "red" }}>*</span>
                                 </h2>
                               </Form.Label>
                             </div>
@@ -686,9 +658,7 @@ function ServicePlanExternal(props) {
                             <div>
                               <Form.Label className={classes.formLabel}>
                                 <h2>
-                                  {`${t("SP_EXTERNAL_SCRUTINY_BG_REQUIRED_DEMANDED")}`}
-                                  {/* BG required to be demanded for SPE */}
-                                  <span style={{ color: "red" }}>*</span>
+                                  {`${t("SP_EXTERNAL_SCRUTINY_BG_REQUIRED_DEMANDED")}`} <span style={{ color: "red" }}>*</span>
                                 </h2>
                               </Form.Label>
                             </div>

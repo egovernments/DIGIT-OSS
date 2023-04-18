@@ -1,6 +1,5 @@
-import { Dropdown, MultiSelectDropdown, UploadFile,AdvanceTextArea } from "@egovernments/digit-ui-react-components";
+import { AdvanceTextArea, Dropdown, MultiSelectDropdown, UploadFile } from "@egovernments/digit-ui-react-components";
 import React from "react";
-
 
 
 
@@ -65,12 +64,12 @@ export const configTLApproverApplication = ({
           {
             label: t("WF_COMMON_COMMENTS"),
             // type: "textarea",
-            populators: (
+            populators: (  
               <AdvanceTextArea
               modal={true}
               setState={setComment}
               ></AdvanceTextArea>
-          )
+            )
             // populators: {
             //   name: "comments",
             // },

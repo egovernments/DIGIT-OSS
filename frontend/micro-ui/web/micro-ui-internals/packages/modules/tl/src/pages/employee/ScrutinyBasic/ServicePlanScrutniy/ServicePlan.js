@@ -66,6 +66,55 @@ const ServicePlanService = (props) => {
   console.log("happyapplicationStatusMdms", applicationStatusMdms);
   console.log("happyDateHIDE", hideRemarksPatwari, showReportProblemIcon("Purpose of colony"), hideRemarks);
 
+
+  // onst classes = useStyles();
+  // const applicationStatus = props.applicationStatus ;
+  let user = Digit.UserService.getUser();
+  const userInfo = Digit.UserService.getUser()?.info || {};
+  const userRolesArray = userInfo?.roles.filter((user) => user.code !== "EMPLOYEE");
+  const filterDataRole = userRolesArray?.[0]?.code;
+  const userRoles = user?.info?.roles?.map((e) => e.code) || [];
+  
+  console.log("rolelogintime" , userRoles );
+  console.log("afterfilter12" , filterDataRole)
+
+  const mDMSData = props.mDMSData;
+  const mDMSDataRole = mDMSData?.map((e) => e.role) || [];
+  const hideRemarks = mDMSDataRole.includes(filterDataRole);
+  const applicationStatusMdms = mDMSData?.map((e) => e.applicationStatus) || [] ;
+  const hideRemarksPatwari = applicationStatusMdms.some((item) => item === applicationStatus) || [];
+  const [fileddataName, setFiledDataName] = useState ();
+const {t}=useTranslation();
+ useEffect(() =>{
+    if(mDMSData&&mDMSData?.length){
+      console.log("filedDataMdms" , mDMSData,mDMSData?.[0]?.field , mDMSData?.[0]?.field.map((item , index) => item.fields ));
+      setFiledDataName(mDMSData?.[0]?.field.map((item , index) => item.fields ))
+       
+    }
+    
+ },[mDMSData]
+ )
+ const showReportProblemIcon=(filedName)=>{
+   if (fileddataName&&fileddataName.length) {
+      let show = fileddataName.includes(filedName)
+      return show ;
+    } else {
+      return false ;
+    }
+ }
+ 
+  // mDMSData?.map((e) => e.role)||[]
+  console.log("happyRole" , userRoles);
+  console.log("happyDate" , mDMSData);
+  console.log("happyROLE" , mDMSDataRole);
+  console.log("happyapplicationStatusMdms" , applicationStatusMdms);
+  console.log("happyDateHIDE" , hideRemarksPatwari,showReportProblemIcon("Purpose of colony"),hideRemarks);
+
+
+
+
+
+
   const [selects, setSelects] = useState();
   const [showhide, setShowhide] = useState("");
   const [open2, setOpen2] = useState(false);
@@ -257,6 +306,7 @@ const ServicePlanService = (props) => {
                   <div>
                     <Form.Label>
                       <h5 className={classes.formLabel}> {`${t("SP_SCRUTINY_LOI_NUMBER")}`} &nbsp;</h5>
+                      <h5 className={classes.formLabel}>  {`${t("SP_SCRUTINY_LOI_NUMBER")}`} &nbsp;</h5>
                     </Form.Label>
                     <span className={classes.required}>*</span> &nbsp;&nbsp;
                   </div>
@@ -386,6 +436,15 @@ const ServicePlanService = (props) => {
                     </label>
                   </div>
                   {/* <input
+            <Col className="col-3">
+              <div>
+                <label>
+                  <h2>
+                  {`${t("SP_SCRUTINY_NAME")}`}
+                  </h2>
+                </label>
+              </div>
+              {/* <input
                 type="string"
                 className="form-control"
                 {...register("devName")}
@@ -418,6 +477,32 @@ const ServicePlanService = (props) => {
                     </label>
                   </div>
                   {/* <input
+              <ReportProblemIcon
+                style={{
+                  display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("SP_SCRUTINY_NAME") ? "block" : "none",
+                  color: fieldIconColors.devName,
+                }}
+                onClick={() => {
+                  setOpennedModal("devName");
+                  setLabelValue("Name"),
+                    setSmShow(true),
+                    console.log("modal open"),
+                    setFieldValue(apiResponse !== null ? apiResponse.devName : null);
+                }}
+              ></ReportProblemIcon>
+              
+             
+            </div>
+            </Col>
+            <Col className="col-3">
+              <div>
+                <label>
+                  <h2>
+                  {`${t("SP_SCRUTINY_DEVELOPMENT_PLAN")}`}
+                  </h2>
+                </label>
+              </div>
+              {/* <input
                 type="string"
                 className="form-control"
                 {...register("developmentPlan")}
@@ -450,6 +535,31 @@ const ServicePlanService = (props) => {
                     </label>
                   </div>
                   {/* <input
+              <ReportProblemIcon
+                style={{
+                  display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("SP_SCRUTINY_DEVELOPMENT_PLAN") ? "block" : "none",
+                  color: fieldIconColors.developmentPlan,
+                }}
+                onClick={() => {
+                  setOpennedModal("developmentPlan");
+                  setLabelValue("Development Plan"),
+                    setSmShow(true),
+                    console.log("modal open"),
+                    setFieldValue(apiResponse !== null ? apiResponse.developmentPlan : null);
+                }}
+              ></ReportProblemIcon>
+             
+            </div>
+            </Col>
+            <Col className="col-3">
+              <div>
+                <label>
+                  <h2>
+                  {`${t("SP_SCRUTINY_PURPOSE_LICENCE")}`} 
+                  </h2>
+                </label>
+              </div>
+              {/* <input
                 type="string"
                 className="form-control"
                 {...register("purpose")}
@@ -482,6 +592,31 @@ const ServicePlanService = (props) => {
                     </label>
                   </div>
                   {/* <input
+              <ReportProblemIcon
+                style={{
+                  display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("SP_SCRUTINY_PURPOSE_LICENCE") ? "block" : "none",
+                  color: fieldIconColors.purpose,
+                }}
+                onClick={() => {
+                  setOpennedModal("purpose");
+                  setLabelValue("Purpose Of Licence"),
+                    setSmShow(true),
+                    console.log("modal open"),
+                    setFieldValue(apiResponse !== null ? apiResponse.purpose : null);
+                }}
+              ></ReportProblemIcon>
+             
+            </div>
+            </Col>
+            <Col className="col-3">
+              <div>
+                <label>
+                  <h2>
+                  {`${t("SP_SCRUTINY_TOTAL_AREA")}`}
+                  </h2>
+                </label>
+              </div>
+              {/* <input
                 type="string"
                 className="form-control"
                 {...register("totalArea")}
@@ -507,6 +642,22 @@ const ServicePlanService = (props) => {
                     ></ReportProblemIcon>
                   </div>
                 </Col>
+              <ReportProblemIcon
+                style={{
+                  display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("SP_SCRUTINY_TOTAL_AREA") ? "block" : "none",
+                  color: fieldIconColors.totalArea,
+                }}
+                onClick={() => {
+                  setOpennedModal("totalArea");
+                  setLabelValue("Total Area"),
+                    setSmShow(true),
+                    console.log("modal open"),
+                    setFieldValue(apiResponse !== null ? apiResponse.totalArea : null);
+                }}
+              ></ReportProblemIcon>
+             
+            </div>
+            </Col>
 
                 <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
                   <Col xs={6} md={6}>
@@ -569,6 +720,7 @@ const ServicePlanService = (props) => {
                               hideRemarks && hideRemarksPatwari && showReportProblemIcon("SP_SCRUTINY_SELF_CERTIFIED_DRAWING_CERTIFIED_ARCHITECT")
                                 ? "block"
                                 : "none",
+                            display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("SP_SCRUTINY_SELF_CERTIFIED_DRAWING_CERTIFIED_ARCHITECT") ? "block" : "none",
                             color: fieldIconColors.Selfcertified,
                           }}
                           onClick={() => {
@@ -610,6 +762,7 @@ const ServicePlanService = (props) => {
                           style={{
                             display:
                               hideRemarks && hideRemarksPatwari && showReportProblemIcon("SP_SCRUTINY_ENVIRONMENT_CLEARANCE") ? "block" : "none",
+                            display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("SP_SCRUTINY_ENVIRONMENT_CLEARANCE") ? "block" : "none",
                             color: fieldIconColors.environmental,
                           }}
                           onClick={() => {
@@ -637,6 +790,12 @@ const ServicePlanService = (props) => {
                           <InfoIcon style={{ cursor: "pointer" }} color="primary"></InfoIcon>
                         </Tooltip>
                       </h6>
+                  <h6 >
+                  {`${t("SP_SCRUTINY_AUTOCAD_FILE")}`}
+                  <Tooltip title="Any amendment suggested by HSVP may be incorporated in the drawing accordingly">
+                    <InfoIcon style={{ cursor: "pointer" }} color="primary"></InfoIcon>
+                  </Tooltip>
+                </h6>
                     </td>
                     <td component="th" scope="row">
                       <div className="btn btn-sm col-md-4">
@@ -761,6 +920,20 @@ const ServicePlanService = (props) => {
                         {/* {drawingErr.selfCertifiedDrawingFromEmpaneledDoc ? <p style={{color: 'red'}}>Please upload self-certified drawings from empanelled/certified architects*</p> : " "} */}
                       </td>
                       {/* <td component="th" scope="row">
+                { (apiResponse?.purpose === "DDJAY_APHP" || apiResponse?.purpose === "RPL" || apiResponse?.purpose === "NILP"|| apiResponse?.purpose === "NILPC"|| apiResponse?.purpose === "IPA" || apiResponse?.purpose === "CPRS" || apiResponse?.purpose === "CICS") && (
+              
+              <tbody>
+              <tr>
+                <td>
+                  <div className="px-2">
+                    <p className="mb-2">4.</p>
+                  </div>
+                </td>
+                <td component="th" scope="row">
+                  <h2>{`${t("SP_SCRUTINY_PREVIOUSLY_UPDATED_LAYOUT_PLAN")}`}</h2>
+                  {/* {drawingErr.selfCertifiedDrawingFromEmpaneledDoc ? <p style={{color: 'red'}}>Please upload self-certified drawings from empanelled/certified architects*</p> : " "} */}
+                </td>
+                {/* <td component="th" scope="row">
                   <label for='file-input-1'>
                     <FileUploadIcon 
                     color="primary"
@@ -833,6 +1006,39 @@ const ServicePlanService = (props) => {
                         {/* {drawingErr.environmentalClearance ? <p style={{color: 'red'}}>Please upload environmental clearance drawings*</p> : " "} */}
                       </td>
                       {/* <td component="th" scope="row">
+                      <div className="btn btn-sm col-md-4">
+                        <IconButton onClick={()=>getDocShareholding(apiResponse?.certifieadCopyOfThePlan)}>
+                        <FileDownload color="primary" className="mx-1" />
+                        </IconButton>
+                      </div>
+                      <div className="btn btn-sm col-md-4">
+                        <ReportProblemIcon
+                          style={{
+                            display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("SP_SCRUTINY_PREVIOUSLY_UPDATED_LAYOUT_PLAN") ? "block" : "none",
+                            color: fieldIconColors.certified,
+                          }}
+                          onClick={() => {
+                            setOpennedModal("Uploaded");
+                            setLabelValue("Previously Uploaded layout plan (call)"),
+                              setSmShow(true),
+                              console.log("modal open"),
+                              setFieldValue(apiResponse !== null ? apiResponse?.certifieadCopyOfThePlan : null);
+                          }}
+                        ></ReportProblemIcon>
+                      </div>
+                    </td>
+              </tr>
+              <tr>
+                <td>
+                  <div className="px-2">
+                    <p className="mb-2">5.</p>
+                  </div>
+                </td>
+                <td component="th" scope="row">
+                  <h2>{`${t("SP_SCRUTINY_UPLOAD_REVISED_LAYOUT_PLAN")}`}</h2>
+                  {/* {drawingErr.environmentalClearance ? <p style={{color: 'red'}}>Please upload environmental clearance drawings*</p> : " "} */}
+                </td>
+                {/* <td component="th" scope="row">
                 <label for='file-input-2'>
                     <FileUploadIcon 
                     color="primary"
@@ -905,6 +1111,40 @@ const ServicePlanService = (props) => {
                         {/* {drawingErr.shapeFileAsPerTemplate ? <p style={{color: 'red'}}>Please upload service plan pdf and gis format*</p> : " "} */}
                       </td>
                       {/* <td component="th" scope="row">
+                      <div className="btn btn-sm col-md-4">
+                        <IconButton onClick={()=>getDocShareholding(apiResponse?.certifieadCopyOfThePlan)}>
+                        <FileDownload color="primary" className="mx-1" />
+                        </IconButton>
+                      </div>
+                      <div className="btn btn-sm col-md-4">
+                        <ReportProblemIcon
+                          style={{
+                            display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("SP_SCRUTINY_UPLOAD_REVISED_LAYOUT_PLAN") ? "block" : "none",
+                            color: fieldIconColors.certified,
+                          }}
+                          onClick={() => {
+                            setOpennedModal("Revised");
+                            setLabelValue("Upload the Revised layout plan"),
+                              setSmShow(true),
+                              console.log("modal open"),
+                              setFieldValue(apiResponse !== null ? apiResponse?.certifieadCopyOfThePlan : null);
+                          }}
+                        ></ReportProblemIcon>
+                      </div>
+                    </td>
+              </tr>
+              <tr>
+                <td>
+                  <div className="px-2">
+                    <p className="mb-2">6.</p>
+                  </div>
+                </td>
+                <td component="th" scope="row">
+                  <h2>{`${t("SP_SCRUTINY_UPLOAD_DEMARCATION_PLAN_AUTOAD")}`}</h2>
+                  {/* {drawingErr.shapeFileAsPerTemplate ? <p style={{color: 'red'}}>Please upload service plan pdf and gis format*</p> : " "} */}
+
+                </td>
+                {/* <td component="th" scope="row">
                 <label for='file-input-3'>
                     <FileUploadIcon 
                     color="primary"
@@ -977,6 +1217,39 @@ const ServicePlanService = (props) => {
                         {/* {drawingErr.autoCadFile ? <p style={{color: 'red'}}>Please upload autocad file*</p> : " "} */}
                       </td>
                       {/* <td component="th" scope="row">
+                      <div className="btn btn-sm col-md-4">
+                        <IconButton onClick={()=>getDocShareholding(apiResponse?.certifieadCopyOfThePlan)}>
+                        <FileDownload color="primary" className="mx-1" />
+                        </IconButton>
+                      </div>
+                      <div className="btn btn-sm col-md-4">
+                        <ReportProblemIcon
+                          style={{
+                            display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("SP_SCRUTINY_UPLOAD_DEMARCATION_PLAN_AUTOAD") ? "block" : "none",
+                            color: fieldIconColors.certified,
+                          }}
+                          onClick={() => {
+                            setOpennedModal("certified");
+                            setLabelValue("Certified copy of the Service plan verified by a third party"),
+                              setSmShow(true),
+                              console.log("modal open"),
+                              setFieldValue(apiResponse !== null ? apiResponse?.certifieadCopyOfThePlan : null);
+                          }}
+                        ></ReportProblemIcon>
+                      </div>
+                    </td>
+              </tr>
+              <tr>
+                <td>
+                  <div className="px-2">
+                    <p className="mb-2">7.</p>
+                  </div>
+                </td>
+                <td component="th" scope="row">
+                  <h2>{`${t("SP_SCRUTINY_UPLOAD_DEMARCATION_PLAN_PDF")}`}</h2>
+                  {/* {drawingErr.autoCadFile ? <p style={{color: 'red'}}>Please upload autocad file*</p> : " "} */}
+                </td>
+                {/* <td component="th" scope="row">
                 <label for='file-input-4'>
                     <FileUploadIcon 
                     color="primary"
@@ -1054,48 +1327,87 @@ const ServicePlanService = (props) => {
                             <Visibility color="info" className="icon" />
                           </IconButton>
                         </div>
+                      <div className="btn btn-sm col-md-4">
+                        <IconButton onClick={()=>getDocShareholding(apiResponse?.certifieadCopyOfThePlan)}>
+                        <FileDownload color="primary" className="mx-1" />
+                        </IconButton>
+                      </div>
+                      <div className="btn btn-sm col-md-4">
+                        <ReportProblemIcon
+                          style={{
+                            display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("SP_SCRUTINY_UPLOAD_DEMARCATION_PLAN_PDF") ? "block" : "none",
+                            color: fieldIconColors.certified,
+                          }}
+                          onClick={() => {
+                            setOpennedModal("certified");
+                            setLabelValue("Certified copy of the Service plan verified by a third party"),
+                              setSmShow(true),
+                              console.log("modal open"),
+                              setFieldValue(apiResponse !== null ? apiResponse?.certifieadCopyOfThePlan : null);
+                          }}
+                        ></ReportProblemIcon>
+                      </div>
+                    </td>
+              </tr>
+              <tr>
+                <td>
+                  <div className="px-2">
+                    <p className="mb-2">8.</p>
+                  </div>
+                </td>
+                <td component="th" scope="row">
+                  <h2>{`${t("SP_SCRUTINY_UPLOAD_EXCEL_LAYOUT_STRUCTURE")}`}</h2>
+                 
 
-                        <div className="btn btn-sm col-md-4">
-                          <IconButton onClick={() => getDocShareholding(apiResponse?.certifieadCopyOfThePlan)}>
-                            <FileDownload color="primary" className="mx-1" />
-                          </IconButton>
-                        </div>
-                        <div className="btn btn-sm col-md-4">
-                          <ReportProblemIcon
-                            style={{
-                              display:
-                                hideRemarks && hideRemarksPatwari && showReportProblemIcon("SP_SCRUTINY_UPLOAD_EXCEL_LAYOUT_STRUCTURE")
-                                  ? "block"
-                                  : "none",
-                              color: fieldIconColors.certified,
-                            }}
-                            onClick={() => {
-                              setOpennedModal("certified");
-                              setLabelValue("Certified copy of the Service plan verified by a third party"),
-                                setSmShow(true),
-                                console.log("modal open"),
-                                setFieldValue(apiResponse !== null ? apiResponse?.certifieadCopyOfThePlan : null);
-                            }}
-                          ></ReportProblemIcon>
-                        </div>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>
-                        <div className="px-2">
-                          <p className="mb-2">9.</p>
-                        </div>
-                      </td>
-                      <td component="th" scope="row">
-                        <h2> {`${t("SP_SCRUTINY_OTHER_RELEVANT_DOCUMENT")}`}</h2>
-                      </td>
+                </td>
+             
+                <td component="th" scope="row">
+                      <div className="btn btn-sm col-md-4">
+                        <IconButton onClick={()=>getDocShareholding(apiResponse?.certifieadCopyOfThePlan)}>
+                        <Visibility color="info" className="icon" />
+                        </IconButton>
+                      </div>
 
-                      <td component="th" scope="row">
-                        <div className="btn btn-sm col-md-4">
-                          <IconButton onClick={() => getDocShareholding(apiResponse?.certifieadCopyOfThePlan)}>
-                            <Visibility color="info" className="icon" />
-                          </IconButton>
-                        </div>
+                      <div className="btn btn-sm col-md-4">
+                        <IconButton onClick={()=>getDocShareholding(apiResponse?.certifieadCopyOfThePlan)}>
+                        <FileDownload color="primary" className="mx-1" />
+                        </IconButton>
+                      </div>
+                      <div className="btn btn-sm col-md-4">
+                        <ReportProblemIcon
+                          style={{
+                            display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("SP_SCRUTINY_UPLOAD_EXCEL_LAYOUT_STRUCTURE") ? "block" : "none",
+                            color: fieldIconColors.certified,
+                          }}
+                          onClick={() => {
+                            setOpennedModal("certified");
+                            setLabelValue("Certified copy of the Service plan verified by a third party"),
+                              setSmShow(true),
+                              console.log("modal open"),
+                              setFieldValue(apiResponse !== null ? apiResponse?.certifieadCopyOfThePlan : null);
+                          }}
+                        ></ReportProblemIcon>
+                      </div>
+                    </td>
+              </tr>
+              <tr>
+                <td>
+                  <div className="px-2">
+                    <p className="mb-2">9.</p>
+                  </div>
+                </td>
+                <td component="th" scope="row">
+                  <h2> {`${t("SP_SCRUTINY_OTHER_RELEVANT_DOCUMENT")}`}</h2>
+                 
+
+                </td>
+             
+                <td component="th" scope="row">
+                      <div className="btn btn-sm col-md-4">
+                        <IconButton onClick={()=>getDocShareholding(apiResponse?.certifieadCopyOfThePlan)}>
+                        <Visibility color="info" className="icon" />
+                        </IconButton>
+                      </div>
 
                         <div className="btn btn-sm col-md-4">
                           <IconButton onClick={() => getDocShareholding(apiResponse?.certifieadCopyOfThePlan)}>
@@ -1122,6 +1434,30 @@ const ServicePlanService = (props) => {
                     </tr>
                   </tbody>
                 )}
+                      <div className="btn btn-sm col-md-4">
+                        <IconButton onClick={()=>getDocShareholding(apiResponse?.certifieadCopyOfThePlan)}>
+                        <FileDownload color="primary" className="mx-1" />
+                        </IconButton>
+                      </div>
+                      <div className="btn btn-sm col-md-4">
+                        <ReportProblemIcon
+                          style={{
+                            display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("SP_SCRUTINY_OTHER_RELEVANT_DOCUMENT") ? "block" : "none",
+                            color: fieldIconColors.certified,
+                          }}
+                          onClick={() => {
+                            setOpennedModal("certified");
+                            setLabelValue("Certified copy of the Service plan verified by a third party"),
+                              setSmShow(true),
+                              console.log("modal open"),
+                              setFieldValue(apiResponse !== null ? apiResponse?.certifieadCopyOfThePlan : null);
+                          }}
+                        ></ReportProblemIcon>
+                      </div>
+                    </td>
+              </tr>
+              </tbody>
+              )}
               </div>
             </Card>
           </Card>
