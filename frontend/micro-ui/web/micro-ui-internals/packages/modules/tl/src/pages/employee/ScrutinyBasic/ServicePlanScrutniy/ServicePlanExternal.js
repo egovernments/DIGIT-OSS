@@ -90,7 +90,7 @@ import RadioGroup from "@mui/material/RadioGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import FormControl from "@mui/material/FormControl";
 import FormLabel from "@mui/material/FormLabel";
-import { useTransition } from "react";
+
 import { useTranslation } from "react-i18next";
 // const ServicePlanCivil = () => {
 function ServicePlanExternal(props) {
@@ -130,7 +130,7 @@ function ServicePlanExternal(props) {
   const [open, setOpen] = useState(false);
   const [open2, setOpen2] = useState(false);
   const [applicationNumber, setApplicationNumber] = useState();
-  const { t } = useTranslation();
+
   const [developerDataLabel, setDeveloperDataLabel] = useState([]);
 
   const servicePlan = (data) => {

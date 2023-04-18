@@ -23,8 +23,6 @@ import CusToaster from "../../../components/Toaster";
 //import { getDocShareholding } from 'packages/modules/tl/src/pages/employee/ScrutinyBasic/ScrutinyDevelopment/docview.helper.js'
 
 const ServicePlanService = () => {
-  useTranslation;
-  const { t } = useTranslation();
   // const { pathname: url } = useLocation();
 
   const [file, setFile] = useState(null);

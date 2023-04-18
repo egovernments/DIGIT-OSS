@@ -1,15 +1,10 @@
 import React, { useState, useEffect, useContext } from "react";
 import { Card, Row, Col, Form, Button } from "react-bootstrap";
 import { useForm } from "react-hook-form";
-import axios from "axios";
+// import axios from "axios";
 import VisibilityIcon from "@mui/icons-material/Visibility";
-import { Dialog, stepIconClasses } from "@mui/material";
-import DialogActions from "@mui/material/DialogActions";
-import DialogContent from "@mui/material/DialogContent";
-import DialogContentText from "@mui/material/DialogContentText";
-import DialogTitle from "@mui/material/DialogTitle";
-import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
-import FileUploadIcon from "@mui/icons-material/FileUpload";
+// import FileDownload from "@mui/icons-material/FileDownload";
+import Visibility from "@mui/icons-material/Visibility";
 import FileDownload from "@mui/icons-material/FileDownload";
 import { getDocShareholding } from "../ScrutinyDevelopment/docview.helper";
 import ModalChild from "../Remarks/ModalChild/";
@@ -43,17 +38,13 @@ const ElectricalPlanScrutiny = (props) => {
     formState: { errors },
     control,
     setValue,
-    watch,
-  } = useForm({
-    mode: "onChange",
+  } = useForm({});
 
-    shouldFocusError: true,
-  });
-  const userInfo = Digit.UserService.getUser();
+  const servicePlan = (data) => console.log(data);
 
-  const getLoiPattern = (loiNumber) => {
-    const pattern = /^(?=\D*\d)(?=.*[/])(?=.*[-])[a-zA-Z0-9\/-]{15,30}$/;
-    return pattern.test(loiNumber);
+  const classes = useStyles();
+  const currentRemarks = (data) => {
+    props.showTable({ data: data.data });
   };
 
   const [smShow, setSmShow] = useState(false);
@@ -65,104 +56,45 @@ const ElectricalPlanScrutiny = (props) => {
 
     info: "#FFB602",
   };
-  const servicePlan = async (data) => {
-    const token = window?.localStorage?.getItem("token");
-    const tenantId = Digit.ULBService.getCurrentTenantId();
-    console.log(data, "service-service");
-    try {
-      if (!applicationId) {
-        data.devName = devName;
-        data.developmentPlan = developmentPlan;
-        data.purpose = purpose;
-        data.totalArea = totalArea;
-        const isValid = checkValid(data);
-        // if(!isValid){
-        //   console.log("Dont call create")
-        //   return null
-        // }
-        const postDistrict = {
-          requestInfo: {
-            api_id: "Rainmaker",
-            ver: "1",
-            ts: null,
-            action: "create",
-            did: "",
-            key: "",
-            msg_id: "",
-            requester_id: "",
-            authToken: token,
-            userInfo: userInfo.info,
-          },
 
-          ServicePlanRequest: [
-            {
-              ...data,
-              action: "APPLY",
-              tenantId: tenantId,
-              businessService: "SERVICE_PLAN",
-              workflowCode: "SERVICE_PLAN",
-              comment: "",
-              assignee: null,
-            },
-          ],
-        };
-        const Resp = await axios.post("/tl-services/serviceplan/_create", postDistrict);
-        setServicePlanDataLabel(Resp.data);
-        setOpen(true);
-        setApplicationNumber(Resp.data.servicePlanResponse[0].applicationNumber);
-      } else {
-        servicePlanRes.loiNumber = data?.loiNumber ? data?.loiNumber : servicePlanRes.loiNumber;
-        servicePlanRes.selfCertifiedDrawingFromEmpaneledDoc = data?.selfCertifiedDrawingFromEmpaneledDoc
-          ? data?.selfCertifiedDrawingFromEmpaneledDoc
-          : servicePlanRes.selfCertifiedDrawingFromEmpaneledDoc;
-        servicePlanRes.environmentalClearance = data?.environmentalClearance ? data?.environmentalClearance : servicePlanRes.environmentalClearance;
-        servicePlanRes.shapeFileAsPerTemplate = data?.shapeFileAsPerTemplate ? data?.shapeFileAsPerTemplate : servicePlanRes.shapeFileAsPerTemplate;
-        servicePlanRes.autoCadFile = data?.autoCadFile ? data?.autoCadFile : servicePlanRes.autoCadFile;
-        servicePlanRes.certifieadCopyOfThePlan = data?.certifieadCopyOfThePlan
-          ? data?.certifieadCopyOfThePlan
-          : servicePlanRes.certifieadCopyOfThePlan;
-        servicePlanRes.devName = devName;
-        servicePlanRes.developmentPlan = developmentPlan;
-        servicePlanRes.purpose = purpose;
-        servicePlanRes.totalArea = totalArea;
-        const isvalidUpdate = checkValid(servicePlanRes);
-        console.log({ servicePlanRes, data, isvalidUpdate }, "jjjjjjjjjjjjjj");
-        if (!isvalidUpdate) {
-          console.log("Dont call update");
-          return null;
-        }
-        const updateRequest = {
-          requestInfo: {
-            api_id: "Rainmaker",
-            ver: "1",
-            ts: null,
-            action: "create",
-            did: "",
-            key: "",
-            msg_id: "",
-            requester_id: "",
-            authToken: token,
-          },
-          ServicePlanRequest: [
-            {
-              ...servicePlanRes,
-              // "action": "FORWARD",
-              // "tenantId":  tenantId,
-              // "businessService": "SERVICE_PLAN",
-              workflowCode: "SERVICE_PLAN",
-              // "comment": "",
-              // "assignee": null
-            },
-          ],
-        };
-        const Resp = await axios.post("/tl-services/serviceplan/_update", updateRequest);
-        setOpen(true);
-        setApplicationNumber(Resp.data.servicePlanResponse[0].applicationNumber);
-      }
-    } catch (error) {
-      console.log(error.message);
+  const handlemodaldData = (data) => {
+    // setmodaldData(data.data);
+    setSmShow(false);
+    console.log("here", openedModal, data);
+    if (openedModal && data) {
+      setFieldIconColors({ ...fieldIconColors, [openedModal]: data.data.isApproved ? Colors.approved : Colors.disapproved });
     }
+    setOpennedModal("");
+    setLabelValue("");
   };
+  const [selectedFieldData, setSelectedFieldData] = useState();
+  const [fieldValue, setFieldValue] = useState("");
+  const [openedModal, setOpennedModal] = useState("");
+  const [fieldIconColors, setFieldIconColors] = useState({
+    loiNumber: Colors.info,
+    electricInfra: Colors.info,
+    electricDistribution: Colors.info,
+    electricalCapacity: Colors.info,
+    switchingStation: Colors.info,
+    LoadSancation: Colors.info,
+    selfCenteredDrawings: Colors.info,
+    autoCad: Colors.info,
+    pdfFormat: Colors.info,
+    environmentalClearance: Colors.info,
+    verifiedPlan: Colors.info,
+    state: Colors.info,
+    type: Colors.info,
+    lciSignedBy: Colors.info,
+    lciNotSigned: Colors.info,
+    parmanentAddress: Colors.info,
+    addressForCommunication: Colors.info,
+    authPerson: Colors.info,
+    emailForCommunication: Colors.info,
+    purpose: Colors.info,
+    totalArea: Colors.info,
+    devName: Colors.info,
+    developmentPlan: Colors.info,
+  });
 
   const fieldIdList = [
     { label: "LOI Number", key: "loiNumber" },

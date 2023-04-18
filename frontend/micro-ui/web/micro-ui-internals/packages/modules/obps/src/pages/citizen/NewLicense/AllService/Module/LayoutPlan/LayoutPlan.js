@@ -41,6 +41,7 @@ import VisibilityIcon from "@mui/icons-material/Visibility";
 import FileUpload from "@mui/icons-material/FileUpload";
 import { useLocation } from "react-router-dom";
 import { IconButton } from "@mui/material";
+import SearchLicenceComp from "../../../../../../components/SearchLicence";
 function LayoutPlanClu() {
   const { t } = useTranslation();
   const location = useLocation();
@@ -49,7 +50,15 @@ function LayoutPlanClu() {
   const [loader, setLoader] = useState(false);
   const [selects, setSelects] = useState();
   const [showhide, setShowhide] = useState("");
-  const { register, handleSubmit, setValue, getValues, watch } = useForm();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    control,
+    watch,
+    setValue,
+  } = useForm({});
+  // const { register, handleSubmit, setValue, getValues, watch } = useForm();
   const [layOutPlanData, setLayOutPlanData] = useState([]);
   const [showToastError, setShowToastError] = useState({ label: "", error: false, success: false });
   const [toastError, setToastError] = useState("");
@@ -125,6 +134,7 @@ function LayoutPlanClu() {
   }, []);
 
   const layoutPlan = async (data) => {
+    const numberLic = data?.licenceNo;
     const token = window?.localStorage?.getItem("token");
     // console.log(data);
 
@@ -135,7 +145,7 @@ function LayoutPlanClu() {
             {
               action: "APPLY",
               tenantId: tenantId,
-              licenseNo: data?.licenseNo,
+              licenseNo: numberLic,
               ReviseLayoutPlan: {
                 ...data,
                 existingAreaDetails: modalValue,
@@ -213,6 +223,7 @@ function LayoutPlanClu() {
           RevisedPlan: [
             {
               ...layOutPlanData,
+
               // "action": "FORWARD",
               // "tenantId":  tenantId,
               // "businessService": "SERVICE_PLAN",
@@ -341,13 +352,13 @@ function LayoutPlanClu() {
           <h4 className="my-2">
             <b>APPROVAL OF REVISED LAYOUT PLAN OF LICENSE</b>
           </h4>
-          <div className="row">
-            <Col md={4} lg={4} mb={3}>
-              <FormControl>
-                <FormLabel id="lic_no" sx={{ fontWeight: "bold" }}>
+          <div className="card">
+            <div className="row gy-3">
+              {/* <FormLabel id="lic_no" sx={{ fontWeight: "bold" }}>
                   {`${t("REV_LAYOUT_LICENSE_NO")}`} <span style={{ color: "red" }}>*</span>
-                </FormLabel>
-                <OutlinedInput
+                </FormLabel> */}
+              <SearchLicenceComp watch={watch} register={register} control={control} setLoader={setLoader} errors={errors} setValue={setValue} />
+              {/* <OutlinedInput
                   aria-labelledby="lic_no"
                   type="number"
                   placeholder=""
@@ -355,25 +366,25 @@ function LayoutPlanClu() {
                   {...register("licenseNo")}
                   onChange={(e) => setLicNumber(e.target.value)}
                   value={licenseNoVal}
-                />
-              </FormControl>
-            </Col>
-            <Col md={4} lg={4} mb={3}>
-              <FormControl>
-                <FormLabel id="existing_area" sx={{ fontWeight: "bold" }}>
-                  {`${t("REV_LAYOUT_EXISTING_AREA")}`} <span style={{ color: "red" }}>*</span>
-                </FormLabel>
-                <OutlinedInput
-                  aria-labelledby="existing_area"
-                  type="text"
-                  placeholder=""
-                  className="Inputcontrol"
-                  {...register("existingArea")}
-                  onChange={(e) => setExistingArea(e.target.value)}
-                  value={existingAreaVal}
-                />
-              </FormControl>
-            </Col>
+                /> */}
+
+              <Col md={4} lg={4} mb={3}>
+                <FormControl>
+                  <FormLabel id="existing_area" sx={{ fontWeight: "bold" }}>
+                    {`${t("REV_LAYOUT_EXISTING_AREA")}`} <span style={{ color: "red" }}>*</span>
+                  </FormLabel>
+                  <OutlinedInput
+                    aria-labelledby="existing_area"
+                    type="text"
+                    placeholder=""
+                    className="Inputcontrol"
+                    {...register("existingArea")}
+                    onChange={(e) => setExistingArea(e.target.value)}
+                    value={existingAreaVal}
+                  />
+                </FormControl>
+              </Col>
+            </div>
             <Col md={12} lg={12} mb={3} sx={{ marginY: 2 }}>
               <Paper sx={{ width: "100%", overflow: "hidden", marginY: 2 }}>
                 <TableContainer sx={{ maxHeight: 440 }}>
@@ -437,98 +448,101 @@ function LayoutPlanClu() {
                 </button>
               </Col>
             </Col>
-            <Col md={4} lg={4} mb={3}>
-              <FormControl>
-                <FormLabel id="propesed_revision" sx={{ fontWeight: "bold" }}>
-                  {`${t("REV_LAYOUT_AREA_PROPOSED_REVISION")}`} <span style={{ color: "red" }}>*</span>
-                </FormLabel>
-                <OutlinedInput
-                  type="text"
-                  aria-labelledby="propesed_revision"
-                  placeholder=""
-                  className="Inputcontrol"
-                  {...register("areaProposedRevision")}
-                  onChange={(e) => setProposedAreaRevision(e.target.value)}
-                  value={proposedAreaRevisionVal}
-                />
-              </FormControl>
-            </Col>
-            <Col md={4} lg={4} mb={3}>
-              <FormControl>
-                <FormLabel id="commercial_area" sx={{ fontWeight: "bold" }}>
-                  {`${t("REV_LAYOUT_AREA_COMMERCIAL")}`} <span style={{ color: "red" }}>*</span>
-                </FormLabel>
-                <OutlinedInput
-                  type="text"
-                  aria-aria-labelledby="commercial_area"
-                  placeholder=""
-                  className="Inputcontrol"
-                  {...register("areaCommercial")}
-                  onChange={(e) => setAreaCommercial(e.target.value)}
-                  value={areaCommercialVal}
-                />
-              </FormControl>
-            </Col>
-            <Col md={4} lg={4} mb={3}>
-              <FormControl>
-                <FormLabel id="residential_area" sx={{ fontWeight: "bold" }}>
-                  {`${t("REV_LAYOUT_AREA_RESIDENTIAL")}`} <span style={{ color: "red" }}>*</span>
-                </FormLabel>
-                <OutlinedInput
-                  type="text"
-                  aria-aria-labelledby="residential_area"
-                  placeholder=""
-                  className="Inputcontrol"
-                  {...register("areaResidential")}
-                  onChange={(e) => setAreaResidential(e.target.value)}
-                  value={areaResidentialVal}
-                />
-              </FormControl>
-            </Col>
-          </div>
-          <br></br>
-          <div className="row-12">
-            <Col md={4} lg={4}>
-              <FormControl>
-                <FormLabel id="demo-row-radio-buttons-group-label" sx={{ fontWeight: "bold" }}>
-                  {`${t("REV_LAYOUT_ANY_OTHER_REMARK")}`} <span style={{ color: "red" }}>*</span>
-                </FormLabel>
-                <RadioGroup row aria-labelledby="demo-row-radio-buttons-group-label" name="row-radio-buttons-group">
-                  <FormControlLabel
-                    value="Y"
-                    control={<Radio />}
-                    {...register("anyOtherFeature")}
-                    label="Yes"
-                    checked={anyOtherRemarkVal == "Y" ? true : false}
-                    onChange={(e) => setAnyOtherRemark(e.target.value)}
-                  />
-                  <FormControlLabel
-                    value="N"
-                    control={<Radio />}
-                    {...register("anyOtherFeature")}
-                    label="No"
-                    checked={anyOtherRemarkVal == "N" ? true : false}
-                    onChange={(e) => setAnyOtherRemark(e.target.value)}
-                  />
-                </RadioGroup>
-              </FormControl>
-            </Col>
-            {watch("anyOtherFeature") == "Y" || anyOtherRemarkVal == "Y" ? (
-              <Col md={4} lg={4}>
+            <div className="row">
+              <Col md={4} lg={4} mb={3}>
                 <FormControl>
-                  {/* <FormLabel id="any_remarks">Any other remark</FormLabel> */}
-                  <textarea
-                    className="form-control"
-                    aria-labelledby="any_remarks"
-                    {...register("anyOtherRemarks")}
-                    onChange={(e) => setAnyOtherRemarkTextVal(e.target.value)}
-                    value={anyOtherRemarkTextVal}
-                  ></textarea>
+                  <FormLabel id="propesed_revision" sx={{ fontWeight: "bold" }}>
+                    {`${t("REV_LAYOUT_AREA_PROPOSED_REVISION")}`} <span style={{ color: "red" }}>*</span>
+                  </FormLabel>
+                  <OutlinedInput
+                    type="text"
+                    aria-labelledby="propesed_revision"
+                    placeholder=""
+                    className="Inputcontrol"
+                    {...register("areaProposedRevision")}
+                    onChange={(e) => setProposedAreaRevision(e.target.value)}
+                    value={proposedAreaRevisionVal}
+                  />
                 </FormControl>
               </Col>
-            ) : (
-              <p></p>
-            )}
+              <Col md={4} lg={4} mb={3}>
+                <FormControl>
+                  <FormLabel id="commercial_area" sx={{ fontWeight: "bold" }}>
+                    {`${t("REV_LAYOUT_AREA_COMMERCIAL")}`} <span style={{ color: "red" }}>*</span>
+                  </FormLabel>
+                  <OutlinedInput
+                    type="text"
+                    aria-aria-labelledby="commercial_area"
+                    placeholder=""
+                    className="Inputcontrol"
+                    {...register("areaCommercial")}
+                    onChange={(e) => setAreaCommercial(e.target.value)}
+                    value={areaCommercialVal}
+                  />
+                </FormControl>
+              </Col>
+              <Col md={4} lg={4} mb={3}>
+                <FormControl>
+                  <FormLabel id="residential_area" sx={{ fontWeight: "bold" }}>
+                    {`${t("REV_LAYOUT_AREA_RESIDENTIAL")}`} <span style={{ color: "red" }}>*</span>
+                  </FormLabel>
+                  <OutlinedInput
+                    type="text"
+                    aria-aria-labelledby="residential_area"
+                    placeholder=""
+                    className="Inputcontrol"
+                    {...register("areaResidential")}
+                    onChange={(e) => setAreaResidential(e.target.value)}
+                    value={areaResidentialVal}
+                  />
+                </FormControl>
+              </Col>
+            </div>
+
+            <br></br>
+            <div className="row-12">
+              <Col md={4} lg={4}>
+                <FormControl>
+                  <FormLabel id="demo-row-radio-buttons-group-label" sx={{ fontWeight: "bold" }}>
+                    {`${t("REV_LAYOUT_ANY_OTHER_REMARK")}`} <span style={{ color: "red" }}>*</span>
+                  </FormLabel>
+                  <RadioGroup row aria-labelledby="demo-row-radio-buttons-group-label" name="row-radio-buttons-group">
+                    <FormControlLabel
+                      value="Y"
+                      control={<Radio />}
+                      {...register("anyOtherFeature")}
+                      label="Yes"
+                      checked={anyOtherRemarkVal == "Y" ? true : false}
+                      onChange={(e) => setAnyOtherRemark(e.target.value)}
+                    />
+                    <FormControlLabel
+                      value="N"
+                      control={<Radio />}
+                      {...register("anyOtherFeature")}
+                      label="No"
+                      checked={anyOtherRemarkVal == "N" ? true : false}
+                      onChange={(e) => setAnyOtherRemark(e.target.value)}
+                    />
+                  </RadioGroup>
+                </FormControl>
+              </Col>
+              {watch("anyOtherFeature") == "Y" || anyOtherRemarkVal == "Y" ? (
+                <Col md={4} lg={4}>
+                  <FormControl>
+                    {/* <FormLabel id="any_remarks">Any other remark</FormLabel> */}
+                    <textarea
+                      className="form-control"
+                      aria-labelledby="any_remarks"
+                      {...register("anyOtherRemarks")}
+                      onChange={(e) => setAnyOtherRemarkTextVal(e.target.value)}
+                      value={anyOtherRemarkTextVal}
+                    ></textarea>
+                  </FormControl>
+                </Col>
+              ) : (
+                <p></p>
+              )}
+            </div>
           </div>
           <div className=" col-12 m-auto">
             <div className="card">
