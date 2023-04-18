@@ -333,7 +333,7 @@ const ServicePlanService = () => {
     }
     const Resp = await axios.post(`/tl-services/v1/_search?loiNumber=${LOINumber}`, loiRequest);
     console.log(Resp, "RRRRRRRRRRR");
-    setDevName(Resp?.data?.Licenses?.[0]?.tradeLicenseDetail?.additionalDetail?.[0]?.ApplicantInfo?.devDetail?.addInfo?.name)
+    setDevName(Resp?.data?.Licenses?.[0]?.tradeLicenseDetail?.additionalDetail?.[0]?.ApplicantInfo?.devDetail?.addInfo?.companyName)
     setDevelopmentPlan(Resp?.data?.Licenses?.[0]?.tradeLicenseDetail?.additionalDetail?.[0]?.ApplicantPurpose?.AppliedLandDetails?.[0]?.developmentPlan)
     setPurpose(Resp?.data?.Licenses?.[0]?.tradeLicenseDetail?.additionalDetail?.[0]?.ApplicantPurpose?.purpose)
     setTotalArea(Resp?.data?.Licenses?.[0]?.tradeLicenseDetail?.additionalDetail?.[0]?.ApplicantPurpose?.totalArea)
@@ -772,7 +772,7 @@ const ServicePlanService = () => {
               <tr>
                 <td>
                   <div className="px-2">
-                    <p className="mb-2">6.</p>
+                    <p className="mb-2">4.</p>
                   </div>
                 </td>
                 <td component="th" scope="row">
@@ -813,7 +813,7 @@ const ServicePlanService = () => {
               <tr>
                 <td>
                   <div className="px-2">
-                    <p className="mb-2">7.</p>
+                    <p className="mb-2">5.</p>
                   </div>
                 </td>
                 <td component="th" scope="row">
@@ -854,7 +854,7 @@ const ServicePlanService = () => {
               <tr>
                 <td>
                   <div className="px-2">
-                    <p className="mb-2">8.</p>
+                    <p className="mb-2">6.</p>
                   </div>
                 </td>
                 <td component="th" scope="row">
@@ -896,7 +896,7 @@ const ServicePlanService = () => {
               <tr>
                 <td>
                   <div className="px-2">
-                    <p className="mb-2">9.</p>
+                    <p className="mb-2">7.</p>
                   </div>
                 </td>
                 <td component="th" scope="row">
@@ -937,7 +937,7 @@ const ServicePlanService = () => {
               <tr>
                 <td>
                   <div className="px-2">
-                    <p className="mb-2">10.</p>
+                    <p className="mb-2">8.</p>
                   </div>
                 </td>
                 <td component="th" scope="row">
@@ -979,7 +979,7 @@ const ServicePlanService = () => {
               <tr>
                 <td>
                   <div className="px-2">
-                    <p className="mb-2">11.</p>
+                    <p className="mb-2">9.</p>
                   </div>
                 </td>
                 <td component="th" scope="row">
