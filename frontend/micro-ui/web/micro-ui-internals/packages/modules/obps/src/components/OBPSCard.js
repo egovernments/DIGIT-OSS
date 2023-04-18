@@ -11,6 +11,10 @@ const OBPSCard = () => {
     const BgRole = ["SO_HQ", "AO_HQ", "CAO_HQ", "DTCP_HR", "DTP_HQ", "AD_HQ", "JD_HQ", "Patwari_HQ", "ATP_HQ", "NAYAB_TEHSILDAR"]
     const SP_Role = ["CTP_HR", "AO_HQ", "AD_HQ", "JD_HQ", "SD_HQ", "DTCP_HR", "DTP_HQ", "JE_HQ", "STP_HQ", "ASST_JE_HQ", "CE_HQ", "HSVP", "GMDA", "FMDA", "PMDA"]
     const EP_Role = ["CTP_HR","AO_HQ", "JD_HQ", "SD_HQ","DTCP_HR", "DTP_HQ", "JE_HQ", "STP_HQ", "ASST_JE_HQ", "EE_HQ", "PUD"]
+    const TOL_Role = ["CTP_HR","AO_HQ", "JD_HQ", "SD_HQ","DTCP_HR", "DTP_HQ", "JE_HQ", "STP_HQ", "ASST_JE_HQ", "EE_HQ", "PUD"]
+    const SL_Role = ["CTP_HR","AO_HQ", "JD_HQ", "SD_HQ","DTCP_HR", "DTP_HQ", "JE_HQ", "STP_HQ", "ASST_JE_HQ", "EE_HQ", "PUD"]
+    const ARLP_Role = ["CTP_HR","AO_HQ", "JD_HQ", "SD_HQ","DTCP_HR", "DTP_HQ", "JE_HQ", "STP_HQ", "ASST_JE_HQ", "EE_HQ", "PUD"]
+    const CBI_Role = ["CTP_HR","AO_HQ", "JD_HQ", "SD_HQ","DTCP_HR", "DTP_HQ", "JE_HQ", "STP_HQ", "ASST_JE_HQ", "EE_HQ", "PUD"]
     function isBankGuarrantee(){
         let isGuarantee = false
         for(let i=0; i<userRoles.length; i++){
@@ -39,6 +43,42 @@ const OBPSCard = () => {
           }
         }
         return isEP
+      }
+      function isTRANSFEREmp(){
+        let isTOL = false
+        for(let i=0; i<userRoles.length; i++){
+          if(TOL_Role.includes(userRoles[i].code)){
+            isTOL = true
+          }
+        }
+        return isTOL
+      }
+      function isSURRENDEmp(){
+        let isSL = false
+        for(let i=0; i<userRoles.length; i++){
+          if(SL_Role.includes(userRoles[i].code)){
+            isSL = true
+          }
+        }
+        return isSL
+      }
+      function isREVISEDEmp(){
+        let isARLP = false
+        for(let i=0; i<userRoles.length; i++){
+          if(ARLP_Role.includes(userRoles[i].code)){
+            isARLP = true
+          }
+        }
+        return isARLP
+      }
+      function isCHANGEEmp(){
+        let isCBI = false
+        for(let i=0; i<userRoles.length; i++){
+          if(CBI_Role.includes(userRoles[i].code)){
+            isCBI = true
+          }
+        }
+        return isCBI
       }
         
     const [isStateLocalisation, setIsStateLocalisation] = useState(true);
@@ -106,6 +146,79 @@ const OBPSCard = () => {
           },
         ],
       };
+      const propsForTranserModuleCard = {
+        Icon: <DocumentIconSolid />,
+        moduleName: t("TRANSFER_LICIENCE_CARD"),
+        kpis: [
+          {
+            count: "-",
+            label: t("TRANSFER_LICIENCE_CARD"),
+            link: `/digit-ui/employee/tl/TranferInbox`,
+          },
+        ],
+        links: [
+          {
+            count: "-",
+            label: t("ES_TITLE_INBOX"),
+            link: `/digit-ui/employee/tl/TranferInbox`,
+          }
+        ],
+      };
+      const propsForSURRENDModuleCard = {
+        Icon: <DocumentIconSolid />,
+        moduleName: t("SURREND_OF_LICENSE_CARD"),
+        kpis: [
+          {
+            count: "-",
+            label: t("SURREND_OF_LICENSE_CARD"),
+            link: `/digit-ui/employee/tl/SurrenderInbox`,
+          },
+        ],
+        links: [
+          {
+            count: "-",
+            label: t("ES_TITLE_INBOX"),
+            link: `/digit-ui/employee/tl/SurrenderInbox`,
+          }
+        ],
+      };
+      const propsForREVISEDModuleCard = {
+        Icon: <DocumentIconSolid />,
+        moduleName: t("REVISED_LAYOUT_PLAN_CARD"),
+        kpis: [
+          {
+            count: "-",
+            label: t("REVISED_LAYOUT_PLAN_CARD"),
+            link: `/digit-ui/employee/tl/LayoutPlanInbox`,
+          },
+        ],
+        links: [
+          {
+            count: "-",
+            label: t("ES_TITLE_INBOX"),
+            link: `/digit-ui/employee/tl/LayoutPlanInbox`,
+          }
+        ],
+      };
+      const propsForCHANGEModuleCard = {
+        Icon: <DocumentIconSolid />,
+        moduleName: t("CHANGE_OF_BENEFICIAL_CARD"),
+        kpis: [
+          {
+            count: "-",
+            label: t("CHANGE_OF_BENEFICIAL_CARD"),
+            link: `/digit-ui/employee/tl/BeneficialInbox`,
+          },
+        ],
+        links: [
+          {
+            count: "-",
+            label: t("ES_TITLE_INBOX"),
+            link: `/digit-ui/employee/tl/BeneficialInbox`,
+          }
+        ],
+      };
+      
 
       const obpsSubModuleProps = []
 
@@ -122,6 +235,10 @@ const OBPSCard = () => {
       obpsSubModuleProps.push(propsForServiceModuleCard)
       obpsSubModuleProps.push(propsForElectricModuleCard)
       obpsSubModuleProps.push(propsForBankModuleCard)
+      obpsSubModuleProps.push(propsForTranserModuleCard)
+      obpsSubModuleProps.push(propsForSURRENDModuleCard)
+      obpsSubModuleProps.push(propsForREVISEDModuleCard)
+      obpsSubModuleProps.push(propsForCHANGEModuleCard)
         return (
         <React.Fragment>
         {

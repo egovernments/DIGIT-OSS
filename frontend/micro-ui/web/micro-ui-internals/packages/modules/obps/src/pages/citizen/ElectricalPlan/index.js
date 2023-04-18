@@ -16,6 +16,7 @@ import ScrollToTop from "@egovernments/digit-ui-react-components/src/atoms/Scrol
 import Spinner from "../../../components/Loader";
 import { Toast } from "@egovernments/digit-ui-react-components";
 import ErrorIcon from "@mui/icons-material/Error";
+import { useTranslation } from "react-i18next";
 
 const electricalPlanService = () => {
   const {
@@ -53,6 +54,7 @@ const electricalPlanService = () => {
   const [purpose, setPurpose] = useState("");
   const [developmentPlan, setDevelopmentPlan] = useState("");
   const [totalArea, setTotalArea] = useState("");
+  const { t } = useTranslation();
   const [drawingErr, setDrawingErr] = useState({
     selfCenteredDrawings: false,
     environmentalClearance: false,
@@ -361,7 +363,7 @@ const electricalPlanService = () => {
       // setGSTNumber(Resp?.data?.Licenses?.[0]?.tradeLicenseDetail?.additionalDetail?.[0]?.ApplicantInfo?.devDetail?.addInfo?.gst_Number)
       // setMobileNumber(Resp?.data?.Licenses?.[0]?.tradeLicenseDetail?.additionalDetail?.[0]?.ApplicantInfo?.devDetail?.addInfo?.mobileNumberUser)
 
-      setDevName(Resp?.data?.Licenses?.[0]?.tradeLicenseDetail?.additionalDetail?.[0]?.ApplicantInfo?.devDetail?.addInfo?.name);
+      setDevName(Resp?.data?.Licenses?.[0]?.tradeLicenseDetail?.additionalDetail?.[0]?.ApplicantInfo?.devDetail?.addInfo?.companyName);
       setDevelopmentPlan(
         Resp?.data?.Licenses?.[0]?.tradeLicenseDetail?.additionalDetail?.[0]?.ApplicantPurpose?.AppliedLandDetails?.[0]?.developmentPlan
       );
@@ -457,7 +459,9 @@ const electricalPlanService = () => {
                   <div>
                     <Form.Label>
                       <h2>
-                        LOI Number <span style={{ color: "red" }}>*</span>
+                        {`${t("EP_APPLICANT_LOI_NUMBER")}`}
+                        {/* LOI Number */}
+                        <span style={{ color: "red" }}>*</span>
                       </h2>
                     </Form.Label>
                   </div>
@@ -488,7 +492,10 @@ const electricalPlanService = () => {
                 <Col className="col-3">
                   <div>
                     <label>
-                      <h2>Name</h2>
+                      <h2>
+                        {`${t("EP_APPLICANT_NAME")}`}
+                        {/* Name */}
+                      </h2>
                     </label>
                   </div>
                   <input
@@ -503,7 +510,10 @@ const electricalPlanService = () => {
                 <Col className="col-3">
                   <div>
                     <label>
-                      <h2>Development Plan</h2>
+                      <h2>
+                        {`${t("EP_APPLICANT_DEVELOPMENT_PLAN")}`}
+                        {/* Development Plan */}
+                      </h2>
                     </label>
                   </div>
                   <input
@@ -518,7 +528,10 @@ const electricalPlanService = () => {
                 <Col className="col-3">
                   <div>
                     <label>
-                      <h2>Purpose Of Licence</h2>
+                      <h2>
+                        {`${t("EP_APPLICANT_PURPOSE_OF_LICENCE")}`}
+                        {/* Purpose Of Licence */}
+                      </h2>
                     </label>
                   </div>
                   <input
@@ -533,7 +546,10 @@ const electricalPlanService = () => {
                 <Col className="col-3">
                   <div>
                     <label>
-                      <h2>Total Area</h2>
+                      <h2>
+                        {`${t("EP_APPLICANT_TOTAL_AREA")}`}
+                        {/* Total Area */}
+                      </h2>
                     </label>
                   </div>
                   <input
@@ -625,7 +641,8 @@ const electricalPlanService = () => {
                   <div>
                     <Form.Label>
                       <h2>
-                        Electrical infrastructure sufficient to cater for the electrical need of the project area{" "}
+                        {`${t("EP_APPLICANT_ELECTRICAL_INFRASTRUCTURE_FOR_ELECTRICAL_NEED")}`}
+                        {/* Electrical infrastructure sufficient to cater for the electrical need of the project area{" "} */}
                         <span style={{ color: "red" }}>*</span> &nbsp;&nbsp;
                       </h2>
                     </Form.Label>
@@ -659,7 +676,8 @@ const electricalPlanService = () => {
                   <br></br>
                   <div>
                     <Form.Label>
-                      Provision of the electricity distribution in the project area by the instructions of the DHBVN{" "}
+                      {`${t("EP_APPLICANT_PROVISION_ELECTRICITY_DISTRIBUTION")}`}
+                      {/* Provision of the electricity distribution in the project area by the instructions of the DHBVN{" "} */}
                       <span style={{ color: "red" }}>*</span> &nbsp;&nbsp;
                     </Form.Label>
                     {/* {booleanErr?.electricDistribution ? <p style={{color: 'red'}}>Please select electrical distribution*</p> : " "} */}
@@ -692,7 +710,8 @@ const electricalPlanService = () => {
                   <br></br>
                   <div>
                     <Form.Label>
-                      The capacity of the proposed electrical substation as per the requirement <span style={{ color: "red" }}>*</span> &nbsp;&nbsp;
+                      {`${t("EP_APPLICANT_CAPACITY_OF_PROPOSED_ELECTRICAL_SUBSTATION")}`}
+                      {/* The capacity of the proposed electrical substation as per the requirement <span style={{ color: "red" }}>*</span> &nbsp;&nbsp; */}
                     </Form.Label>
                     {/* {booleanErr?.electricalCapacity ? <p style={{color: 'red'}}>Please select electrical capacity*</p> : " "} */}
                     <Form.Check
@@ -723,7 +742,8 @@ const electricalPlanService = () => {
                 <Col className="ms-auto" md={12} xxl lg="12">
                   <div>
                     <Form.Label>
-                      Provision of 33 Kv switching station for the electrical infrastructure as per the approved layout plan
+                      {`${t("EP_APPLICANT_PROVISION_OF_33KV_SWITCHING_STATION")}`}
+                      {/* Provision of 33 Kv switching station for the electrical infrastructure as per the approved layout plan */}
                       <span style={{ color: "red" }}>*</span> &nbsp;&nbsp;
                     </Form.Label>
                     {/* {booleanErr?.LoadSancation ? <p style={{color: 'red'}}>Please select layout plan*</p> : " "} */}
@@ -755,7 +775,8 @@ const electricalPlanService = () => {
                 <Col className="ms-auto" md={12} xxl lg="12">
                   <div>
                     <Form.Label>
-                      Load sanction approval as per the requirement <span style={{ color: "red" }}>*</span> &nbsp;&nbsp;
+                      {`${t("EP_APPLICANT_LAND_SANCTION_APPROVAL")}`}
+                      {/* Load sanction approval as per the requirement <span style={{ color: "red" }}>*</span> &nbsp;&nbsp; */}
                     </Form.Label>
                     {/* {booleanErr?.LoadSancation ? <p style={{color: 'red'}}>Please select load sanction*</p> : " "} */}
                     <Form.Check
@@ -790,9 +811,21 @@ const electricalPlanService = () => {
               <div className="table table-bordered table-responsive">
                 <thead>
                   <tr>
-                    <td style={{ textAlign: "center" }}>Sr.No.</td>
-                    <td style={{ textAlign: "center" }}>Document's Type/Name</td>
-                    <td style={{ textAlign: "center" }}>Actions</td>
+                    <td style={{ textAlign: "center" }}>
+                      {" "}
+                      {`${t("EP_APPLICANT_SR_NO")}`}
+                      {/* Sr.No. */}
+                    </td>
+                    <td style={{ textAlign: "center" }}>
+                      {" "}
+                      {`${t("EP_APPLICANT_DOCUMENT_TYPE")}`}
+                      {/* Document's Type/Name */}
+                    </td>
+                    <td style={{ textAlign: "center" }}>
+                      {" "}
+                      {`${t("EP_APPLICANT_ACTIONS")}`}
+                      {/* Actions */}
+                    </td>
                   </tr>
                 </thead>
                 <tbody>
@@ -804,8 +837,9 @@ const electricalPlanService = () => {
                     </td>
                     <td component="th" scope="row">
                       <h2>
-                        Self-certified drawings from empanelled/certified architects that conform to the standard approved template as per the TCP
-                        layout plan / Site plan.
+                        {`${t("EP_APPLICANT_SELF_CERTIFIED_DRAWING-TEMPLATE_AS_PER_TCP")}`}
+                        {/* Self-certified drawings from empanelled/certified architects that conform to the standard approved template as per the TCP
+                        layout plan / Site plan. */}
                       </h2>
                       {drawingErr.selfCenteredDrawings ? (
                         <p style={{ color: "red" }}>Please upload self-certified drawings from empanelled/certified architects*</p>
@@ -850,7 +884,11 @@ const electricalPlanService = () => {
                       </div>
                     </td>
                     <td component="th" scope="row">
-                      <h2>Environmental Clearance.</h2>
+                      <h2>
+                        {" "}
+                        {`${t("EP_APPLICANT_ENVIRONMENT_CLEARANCE")}`}
+                        {/* Environmental Clearance. */}
+                      </h2>
                       {drawingErr.environmentalClearance ? <p style={{ color: "red" }}>Please upload environmental clearance drawings*</p> : " "}
                     </td>
                     <td component="th" scope="row">
@@ -890,7 +928,11 @@ const electricalPlanService = () => {
                       </div>
                     </td>
                     <td component="th" scope="row">
-                      <h2>Electrical plan PDF (OCR Compatible) + GIS format.</h2>
+                      <h2>
+                        {" "}
+                        {`${t("EP_APPLICANT_ELECTRICAL_PLAN_PDF")}`}
+                        {/* Electrical plan PDF (OCR Compatible) + GIS format. */}
+                      </h2>
                       {drawingErr.pdfFormat ? <p style={{ color: "red" }}>Please upload electrical plan pdf and gis format*</p> : " "}
                     </td>
                     <td component="th" scope="row">
@@ -930,7 +972,11 @@ const electricalPlanService = () => {
                       </div>
                     </td>
                     <td component="th" scope="row">
-                      <h2>Electrical plan in AutoCAD (DXF) file.</h2>
+                      <h2>
+                        {" "}
+                        {`${t("EP_APPLICANT_AUTOCAD_FILE")}`}
+                        {/* Electrical plan in AutoCAD (DXF) file. */}
+                      </h2>
                       {drawingErr.autoCad ? <p style={{ color: "red" }}>Please upload electrical plan in autocad file*</p> : " "}
                     </td>
                     <td component="th" scope="row">
@@ -970,7 +1016,11 @@ const electricalPlanService = () => {
                       </div>
                     </td>
                     <td component="th" scope="row">
-                      <h2>Certified copy of the Electrical plan verified by a third party.</h2>
+                      <h2>
+                        {" "}
+                        {`${t("EP_APPLICANT_CERTIFIED_COPY_VERIFIED_THIRD_PARTY")}`}
+                        {/* Certified copy of the Electrical plan verified by a third party. */}
+                      </h2>
                       {drawingErr.verifiedPlan ? <p style={{ color: "red" }}>Please upload certified copy of the electrical plan*</p> : " "}
                     </td>
                     <td component="th" scope="row">

@@ -6,9 +6,9 @@ import { Header } from "@egovernments/digit-ui-react-components";
 
 
 
-const TranferInbox = ({
+const LayoutPlanInbox = ({
   parentRoute,
-  businessService = ["TRANSFER_OF_LICIENCE"],
+  businessService = ["REVISED_LAYOUT_PLAN"],
   initialStates = {},
   filterComponent,
   isInbox
@@ -30,7 +30,7 @@ const TranferInbox = ({
     ? { limit: 100, offset: 0, sortBy: sortParams?.[0]?.id, sortOrder: sortParams?.[0]?.desc ? "DESC" : "ASC" }
     : { limit: pageSize, offset: pageOffset, sortBy: sortParams?.[0]?.id, sortOrder: sortParams?.[0]?.desc ? "DESC" : "ASC" };
 
-    const { isFetching, isLoading: hookLoading, searchResponseKey, data, searchFields, ...rest } = Digit.Hooks.obps.useTOLInbox({
+    const { isFetching, isLoading: hookLoading, searchResponseKey, data, searchFields, ...rest } = Digit.Hooks.obps.useLPInbox({
     tenantId,
     filters: { ...searchParams, ...paginationParams, sortParams },
     config: {}
@@ -150,4 +150,4 @@ const TranferInbox = ({
   }
 }
 
-export default TranferInbox
+export default LayoutPlanInbox

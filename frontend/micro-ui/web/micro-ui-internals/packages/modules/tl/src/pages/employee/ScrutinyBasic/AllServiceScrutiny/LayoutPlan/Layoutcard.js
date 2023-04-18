@@ -1,3 +1,4 @@
+
 import axios from "axios";
 import { size } from "lodash";
 import React, { useState, useEffect } from "react";
@@ -8,16 +9,22 @@ import { useTranslation } from "react-i18next";
 import { useQueryClient } from "react-query";
 import { useHistory, useParams } from "react-router-dom";
 import ApplicationDetailsActionBar from "../../../../../../../templates/ApplicationDetails/components/ApplicationDetailsActionBar";
-
+// import ApplicationDetailsActionBar from "../../../../../../../templates/ApplicationDetails/components/ApplicationDetailsActionBar";
+// import ActionModal from "../../../../../../templates/ApplicationDetails/Modal";
 import ActionModal from "../../../../../../../templates/ApplicationDetails";
+// import ScrutitnyForms from "../ScrutinyBasic/ScutinyBasic";
+// import ServiceBase from "./ServiceBase";
+import LayoutBasic from "./LayoutPlanBaisc";
 
-import RenewalBasic from "./RenewalBasic";
+const LayoutPlanScritny = (props) => {
 
-const RenewalScrutiny = (props) => {
   const { id } = useParams();
 
   const userInfo = Digit.UserService.getUser()?.info || {};
   const authToken = Digit.UserService.getUser()?.access_token || null;
+  // const applicationNumber = "HR-TL-2022-12-07-000498"
+
+  // let applicationNumber = "";
   const tenantId = Digit.ULBService.getCurrentTenantId();
   const state = Digit.ULBService.getStateId();
   const { t } = useTranslation();
@@ -30,16 +37,16 @@ const RenewalScrutiny = (props) => {
   const [isWarningPop, setWarningPopUp] = useState(false);
   const [showhide19, setShowhide19] = useState("true");
   const [businessService, setBusinessService] = useState("SERVICE_PLAN");
-  const [moduleCode, setModuleCode] = useState("TL");
+  const [moduleCode, setModuleCode] = useState("TL")
   const [scrutinyDetails, setScrutinyDetails] = useState();
-
+  // const [applicationNumber,setApplicationNumber] = useState("");
   const [applicationDetails, setApplicationDetails] = useState();
   const [workflowDetails, setWorkflowDetails] = useState();
   const [applicationData, setApplicationData] = useState();
   const [additionalDetails, setAdditionalDetails] = useState({});
   const [loiNumberSet, setLOINumberSet] = useState("");
-  const [edcDataTreade, setEdcDataTreade] = useState("");
-  const [idwDataTreade, setIdwDataTreade] = useState("");
+  const [edcDataTreade ,setEdcDataTreade] = useState("");
+  const [idwDataTreade ,setIdwDataTreade] = useState("");
 
   //   const authToken = Digit.UserService.getUser()?.access_token || null;
 
@@ -52,35 +59,38 @@ const RenewalScrutiny = (props) => {
     this.setState({ isRadioSelected: true });
   };
 
+
   const getScrutinyData = async () => {
     console.log("log123... userInfo", authToken);
     let requestInfo = {
-      RequestInfo: {
-        api_id: "1",
-        ver: "1",
-        ts: null,
-        action: "create",
-        did: "",
-        key: "",
-        msg_id: "",
-        requester_id: "",
-        authToken: authToken,
-      },
-    };
+
+      "RequestInfo": {
+        "api_id": "1",
+        "ver": "1",
+        "ts": null,
+        "action": "create",
+        "did": "",
+        "key": "",
+        "msg_id": "",
+        "requester_id": "",
+        "authToken": authToken
+      }
+    }
     try {
-      const Resp = await axios.post(`/tl-services/renewal/_get?applicationNumber=${id}`, requestInfo).then((response) => {
+      const Resp = await axios.post(`/tl-services/_ApprovalStandard/_search?applicationNumber=${id}`, requestInfo).then((response) => {
         return response?.data;
       });
       //   console.log("Response From API1", Resp, Resp?.Licenses[0]?.applicationNumber,Resp);
       setScrutinyDetails(Resp?.servicePlanResponse?.[0]);
-
+      
+      
       console.log("devDel1234", Resp?.servicePlanResponse?.[0]?.loiNumber);
-      const loiNumber = Resp?.servicePlanResponse?.[0]?.loiNumber;
+      const loiNumber =  Resp?.servicePlanResponse?.[0]?.loiNumber
       setApplicationData(Resp?.servicePlanResponse?.[0]);
       setApplicationDetails({
         applicationData: Resp?.servicePlanResponse?.[0],
-        workflowCode: Resp?.servicePlanResponse?.[0].businessService,
-      });
+        workflowCode: Resp?.servicePlanResponse?.[0].businessService
+      })
       // console.log("Loi1234787", userInfo );
       // console.log("Loi1234", loiNumber );
       const loiRequest = {
@@ -94,15 +104,17 @@ const RenewalScrutiny = (props) => {
           msg_id: "090909",
           requesterId: "",
           authToken: authToken,
-          userInfo: userInfo,
+          "userInfo": userInfo
         },
-      };
-
-      const Resploi = await axios.post(`/tl-services/v1/_search?loiNumber=${loiNumber}`, loiRequest);
+      }
+      
+     
+      const Resploi =await axios.post(`/tl-services/v1/_search?loiNumber=${loiNumber}`, loiRequest);
       // console.log("Afterloi", Resploi );
       console.log("EDCR1234", Resploi?.data?.Licenses?.[0]?.tradeLicenseDetail?.EDC);
-      setEdcDataTreade(Resploi?.data?.Licenses?.[0]?.tradeLicenseDetail?.EDC);
-      setIdwDataTreade(Resploi?.data?.Licenses?.[0]?.tradeLicenseDetail?.IDW);
+      setEdcDataTreade(Resploi?.data?.Licenses?.[0]?.tradeLicenseDetail?.EDC)
+      setIdwDataTreade(Resploi?.data?.Licenses?.[0]?.tradeLicenseDetail?.IDW)
+      
 
       // setScrutinyDetails(Resp?.servicePlanResponse?.[0]);
 
@@ -133,11 +145,13 @@ const RenewalScrutiny = (props) => {
     mutate,
   } = Digit.Hooks.tl.useApplicationActions(tenantId);
 
+
   function onActionSelect(action) {
     if (action) {
       if (action?.isWarningPopUp) {
         setWarningPopUp(true);
-      } else if (action?.redirectionUrll) {
+      }
+      else if (action?.redirectionUrll) {
         window.location.assign(`${window.location.origin}/digit-ui/employee/payment/collect/${action?.redirectionUrll?.pathname}`);
       } else if (!action?.redirectionUrl) {
         setShowModal(true);
@@ -164,24 +178,26 @@ const RenewalScrutiny = (props) => {
   // };
 
   const closeModal = () => {
+    
     setTimeout(() => {
       setSelectedAction(null);
       setShowModal(false);
-      window.location.href = `/digit-ui/employee/tl/servicePlanInbox`;
-    }, 3000);
+      window.location.href = `/digit-ui/employee/tl/servicePlanInbox`
+      }, 3000);
   };
 
   const closeWarningPopup = () => {
     setWarningPopUp(false);
-  };
+  }
 
   const submitAction = async (data = {}, nocData = false, isOBPS = {}) => {
-    let tempdata = data || {};
+    let tempdata = data || {}
     tempdata.ServicePlanRequest[0].additionalDetails = additionalDetails;
-    console.log("logger log1223", tempdata);
+    console.log("logger log1223", tempdata)
+
 
     try {
-      let body = {
+      let body = { 
         ...tempdata,
 
         RequestInfo: {
@@ -193,14 +209,14 @@ const RenewalScrutiny = (props) => {
           key: "",
           msg_id: "",
           requester_id: "",
-          authToken: authToken,
-        },
-      };
+          authToken: authToken
+        }
+      }
       console.log("logger log1223 body", body);
       const response = await axios.post("/tl-services/serviceplan/_update", body);
       console.log("Update API Response ====> ", response.data);
     } catch (error) {
-      console.log("Update Error ===> ", error.message);
+      console.log("Update Error ===> ", error.message)
     }
     // closeModal();
     // setTimeout(() => {
@@ -208,20 +224,23 @@ const RenewalScrutiny = (props) => {
     //   window.location.href = `/digit-ui/employee/tl/servicePlanInbox`
     // }, 3000);
     closeModal();
+    
   };
 
+
+
   useEffect(() => {
-    console.log("logService...wrkflw12", id, workflowDetailsTemp, scrutinyDetails, applicationDetails);
+    console.log("logService...wrkflw12", id, workflowDetailsTemp, scrutinyDetails, applicationDetails)
     // console.log("logService...wrkflw12",id,workflowDetailsTemp,scrutinyDetails,applicationDetails,processInstances)
     if (workflowDetailsTemp?.data?.applicationBusinessService) {
       setWorkflowDetails(workflowDetailsTemp);
       setBusinessService(workflowDetailsTemp?.data?.applicationBusinessService);
-      console.log("Datapoint1", workflowDetailsTemp?.data?.processInstances);
+      console.log("Datapoint1", workflowDetailsTemp?.data?.processInstances)
       // setDataHistory("Datapoint" , workflowDetailsTemp?.data?.processInstances.map((array) => array.map((object))))
       //  = (e) => {
       //   const getshow = e.target.value;
       //   setShowhide19(getshow);
-      console.log("Datapoint", workflowDetailsTemp?.data?.processInstances?.[0]);
+        console.log("Datapoint", workflowDetailsTemp?.data?.processInstances?.[0])
       //   DetailsofAppliedLand?.dgpsDetails.map((array) => array.map((object) => `${object.latitude},${object.longitude}`).join(":") ).join("|")
       //   let query =  DetailsofAppliedLand?.dgpsDetails.map((array) => array.map((object) => `${object.latitude},${object.longitude}`).join(":") ).join("|")
       //   console.log("Qurey" , query);
@@ -230,10 +249,13 @@ const RenewalScrutiny = (props) => {
     }
   }, [workflowDetailsTemp?.data]);
 
+
+
   useEffect(() => {
-    console.log("ServicePlan12");
+    console.log("ServicePlan12")
     getScrutinyData();
-  }, []);
+  }, [])
+
 
   return (
     <Card>
@@ -269,7 +291,7 @@ const RenewalScrutiny = (props) => {
           refreshScrutinyData={getScrutinyData}
         ></ScrutitnyForms> */}
         {/* <ElecticalBase/> */}
-        <RenewalBasic
+        <LayoutBasic
           apiResponse={scrutinyDetails}
           histeroyData={workflowDetailsTemp}
           applicationNumber={id}
@@ -277,10 +299,11 @@ const RenewalScrutiny = (props) => {
           setAdditionalDetails={setAdditionalDetails}
           edcDataTreade={idwDataTreade}
           idwDataTreade={edcDataTreade}
-        ></RenewalBasic>
+        ></LayoutBasic>
       </Row>
       {/* <Row style={{ top: 10, padding: "10px 22px" }}> */}
       <Row style={{ top: 10, padding: "10px 22px" }}>
+
         <Card>
           <Card.Header class="fw-normal" style={{ top: 5, padding: 5, fontSize: 20, height: 55, lineHeight: 2 }}>
             <p class="fw-normal text-center">Remarks History </p>
@@ -288,6 +311,7 @@ const RenewalScrutiny = (props) => {
           {/* {applicationData?.comment} */}
           {/* {JSON.stringify(workflowDetailsTemp?.data?.processInstances?.[0])} */}
 
+          
           {/* {workflowDetailsTemp?.data?.processInstances?.map((item, index) => (
             <div className="row" key={index}>
               {index}
@@ -309,9 +333,11 @@ const RenewalScrutiny = (props) => {
           }
            */}
         </Card>
+
       </Row>
 
       <Row>
+
         {/* <div class="col-md-10 bg-light text-right" style={{ position: "relative", marginBottom: 30 }}>
 
 
@@ -366,10 +392,7 @@ const RenewalScrutiny = (props) => {
               state={state}
               id={id}
               applicationDetails={applicationDetails}
-              applicationData={{
-                ...applicationDetails?.applicationData,
-                workflowCode: applicationDetails?.applicationData?.workflowCode || "SERVICE_PLAN",
-              }}
+              applicationData={{ ...applicationDetails?.applicationData, workflowCode: applicationDetails?.applicationData?.workflowCode || "SERVICE_PLAN" }}
               closeModal={closeModal}
               submitAction={submitAction}
               actionData={workflowDetails?.data?.timeline}
@@ -408,16 +431,15 @@ const RenewalScrutiny = (props) => {
         </div>
         {showhide19 === "Submit" && (
           <div>
-            <Button style={{ textAlign: "right" }}>
-              {" "}
-              <a href="http://localhost:3000/digit-ui/employee/tl/Loi">Generate LOI</a>
-            </Button>
+            <Button style={{ textAlign: "right" }}> <a href="http://localhost:3000/digit-ui/employee/tl/Loi" >Generate LOI</a></Button>
           </div>
         )}
+
+
       </Row>
       {/* </Row> */}
     </Card>
   );
 };
 
-export default RenewalScrutiny;
+export default LayoutPlanScritny;

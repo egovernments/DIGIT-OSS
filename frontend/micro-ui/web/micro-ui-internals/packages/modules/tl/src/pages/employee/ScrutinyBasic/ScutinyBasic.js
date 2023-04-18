@@ -23,6 +23,7 @@ import ProformaForlegalBranch from "../Proforma/ProformaForlegalBranch";
 import ProformaPatwari from "../Proforma/ProformaForPatwari";
 import Addmoreinput from "../Complaince/Compliances";
 import ProformForRevenu from "../Proforma/ProformForRevenu";
+import AdditionalDocument from "./AdditionalDocument";
 // import AddPost from "../Material/TextEditor";
 
 const ScrutitnyForms = ({ apiResponse, applicationNumber, refreshScrutinyData , histeroyData, feeandcharges , applicationStatus ,mDMSData }) => {
@@ -382,6 +383,11 @@ console.log("roleData",rolesDate )
               mDMSData={mDMSData}
             ></Feeandcharges>
          
+          </div>
+          <div>
+            <AdditionalDocument>
+              
+            </AdditionalDocument>
           </div>
           <div>
             <ProformForRevenu></ProformForRevenu>

@@ -55,7 +55,10 @@ const ScrutinyFormcontainer = (props) => {
   const userInfo = Digit.UserService.getUser()?.info || {};
   const userRolesArray = userInfo?.roles.filter((user) => user.code !== "EMPLOYEE");
   const filterDataRole = userRolesArray?.[0]?.code;
-  // console.log("filterDataRole" , filterDataRole );
+  let user = Digit.UserService.getUser();
+  const userRoles = user?.info?.roles?.map((e) => e.code);
+  const showRemarksSection = userRoles.includes("DTCP_HR")
+ 
 
   const handleshow19 = async (e) => {
     const payload = {
@@ -347,24 +350,26 @@ const ScrutinyFormcontainer = (props) => {
         console.log(error);
       }
 
+      if (showRemarksSection==="DTCP_HR"){
+        let requestInfo = {
 
-      let requestInfo = {
-
-        RequestInfo: {
-          apiId: "Rainmaker",
-          ver: "v1",
-          ts: 0,
-          action: "_search",
-          did: "",
-          key: "",
-          msgId: "090909",
-          requesterId: "",
-          authToken: authToken,
-          userInfo: userInfo
-
+          RequestInfo: {
+            apiId: "Rainmaker",
+            ver: "v1",
+            ts: 0,
+            action: "_search",
+            did: "",
+            key: "",
+            msgId: "090909",
+            requesterId: "",
+            authToken: authToken,
+            userInfo: userInfo
+  
+          }
         }
-      }
-      console.log("TCPaccess", requestInfo)
+        console.log("TCPaccess", requestInfo)
+       
+    
       // return;
 
       try {
@@ -379,6 +384,7 @@ const ScrutinyFormcontainer = (props) => {
         console.log(error);
 
       }
+    }
 
       const payload = {
 

@@ -1,234 +1,3 @@
-// import * as React from 'react';
-// import Box from '@mui/material/Box';
-// import { Card } from '@mui/material';
-// import Checkbox from '@mui/material/Checkbox';
-// import FormControlLabel from '@mui/material/FormControlLabel';
-
-// export default function IndeterminateCheckbox() {
-//   const [checked, setChecked] = React.useState([true, false]);
-
-//   const handleChange1 = (event) => {
-//     setChecked([event.target.checked, event.target.checked]);
-//   };
-
-//   const handleChange2 = (event) => {
-//     setChecked([event.target.checked, checked[1]]);
-//   };
-
-//   const handleChange3 = (event) => {
-//     setChecked([checked[0], event.target.checked[2]]);
-//   };
-//   const handleChange4 = (event) => {
-//     setChecked([checked[1], event.target.checked[3]]);
-//   };
-//   const handleChange5 = (event) => {
-//     setChecked([checked[2], event.target.checked[4]]);
-//   };
-//   const handleChange6 = (event) => {
-//     setChecked([checked[3], event.target.checked[5]]);
-//   };
-//   const handleChange7 = (event) => {
-//     setChecked([checked[4], event.target.checked]);
-//   };
-  
-
-//   const children = (
-//     <Box sx={{ display: 'flex', flexDirection: 'column', ml: 3 }}>
-//       <FormControlLabel
-//         label="Scrutiny fee deposited is in order or not."
-//         control={<Checkbox checked={checked[0]} onChange={handleChange2} />}
-//       />
-//       <FormControlLabel
-//         label="25% of the licence fee deposited is in order or not."
-//         control={<Checkbox checked={checked[1]} onChange={handleChange3} />}
-//       />
-//       <FormControlLabel
-//         label="Documents submitted regarding the Financial position of the applicant/developer is in order or not."
-//         control={<Checkbox checked={checked[2]} onChange={handleChange4} />}
-//       />
-//       <FormControlLabel
-//         label="If the license application is under part migration/ migration, the parent license renewed/requisite renewal fee + applicable interest deposited is in order or not."
-//         control={<Checkbox checked={checked[3]} onChange={handleChange5} />}
-//       />
-//       <FormControlLabel
-//         label="25% of the licence fee deposited is in order or not."
-//         control={<Checkbox checked={checked[4]} onChange={handleChange6} />}
-//       />
-//       <FormControlLabel
-//         label="25% of the licence fee deposited is in order or not."
-//         control={<Checkbox checked={checked[5]} onChange={handleChange7} />}
-//       />
-//     </Box>
-//   );
-
-//   return (
-//     <Card>
-//     <div>
-//       <FormControlLabel
-//         label="Parent"
-//         control={
-//           <Checkbox
-//             checked={checked[0] && checked[1] && checked[2] && checked[3] && checked[4] && checked[5]}
-//             indeterminate={checked[0] !== checked[1] !== checked[2] !== checked[3] !== checked[4]  !== checked[5]}
-//             onChange={handleChange1}
-//           />
-//         }
-//       />
-//       {children}
-//     </div>
-//     </Card>
-//   );
-// }
-
-// import * as React from 'react';
-// import Box from '@mui/material/Box';
-// import FormLabel from '@mui/material/FormLabel';
-// import FormControl from '@mui/material/FormControl';
-// import FormGroup from '@mui/material/FormGroup';
-// import FormControlLabel from '@mui/material/FormControlLabel';
-// import FormHelperText from '@mui/material/FormHelperText';
-// import Checkbox from '@mui/material/Checkbox';
-
-// export default function IndeterminateCheckbox() {
-//   const [state, setState] = React.useState({
-//     gilad: true,
-//     jason: false,
-//     antoine: false,
-//   });
-
-//   const handleChange = (event) => {
-//     setState({
-//       ...state,
-//       [event.target.name]: event.target.checked,
-//     });
-//   };
-
-//   const { gilad, jason, antoine } = state;
-//   const error = [gilad, jason, antoine].filter((v) => v).length !== 2;
-
-//   return (
-//     <Box sx={{ display: 'flex' }}>
-//       <FormControl sx={{ m: 3 }} component="fieldset" variant="standard">
-//         <FormLabel component="legend">Assign responsibility</FormLabel>
-//         <FormGroup>
-//           <FormControlLabel
-//             control={
-//               <Checkbox checked={gilad} onChange={handleChange} name="gilad" />
-//             }
-//             label="Scrutiny fee deposited is in order or not."
-//           />
-//           <FormControlLabel
-//             control={
-//               <Checkbox checked={jason} onChange={handleChange} name="jason" />
-//             }
-//             label="25% of the licence fee deposited is in order or not."
-//           />
-//           <FormControlLabel
-//             control={
-//               <Checkbox checked={antoine} onChange={handleChange} name="antoine" />
-//             }
-//             label="Documents submitted regarding the Financial position of the applicant/developer is in order or not."
-//           />
-//         </FormGroup>
-//         <FormHelperText>Be careful</FormHelperText>
-//       </FormControl>
-//       {/* <FormControl
-//         required
-//         error={error}
-//         component="fieldset"
-//         sx={{ m: 3 }}
-//         variant="standard"
-//       >
-//         <FormLabel component="legend">Pick two</FormLabel>
-//         <FormGroup>
-//           <FormControlLabel
-//             control={
-//               <Checkbox checked={gilad} onChange={handleChange} name="gilad" />
-//             }
-//             label="Gilad Gray"
-//           />
-//           <FormControlLabel
-//             control={
-//               <Checkbox checked={jason} onChange={handleChange} name="jason" />
-//             }
-//             label="Jason Killian"
-//           />
-//           <FormControlLabel
-//             control={
-//               <Checkbox checked={antoine} onChange={handleChange} name="antoine" />
-//             }
-//             label="Antoine Llorca"
-//           />
-//         </FormGroup>
-//         <FormHelperText>You can display an error</FormHelperText>
-//       </FormControl> */}
-//     </Box>
-//   );
-// }
-
-// import React, { useState } from "react";
-// import { Button } from "@material-ui/core";
-// import FormControl from "@mui/material/FormControl";
-// import { useForm } from "react-hook-form";
-// import OutlinedInput from "@mui/material/OutlinedInput";
-
-// function RadioButtonsGroup() {
-//   const [selects, setSelects] = useState();
-//   const [showhide, setShowhide] = useState("");
-//   const { register, handleSubmit } = useForm();
-//   const RadioButtonsGroup = (data) => console.log(data);
-
-//   const handleshowhide = (event) => {
-//     const getuser = event.target.value;
-
-//     setShowhide(getuser);
-//   };
-//   return (
-//     <form onSubmit={handleSubmit(RadioButtonsGroup)}>
-//       <div className="card" style={{ width: "126%", border: "5px solid #1266af" }}>
-//         <h4 style={{ fontSize: "25px", marginLeft: "21px" }}>APPROVAL OF REVISED LAYOUT PLAN OF LICENSE</h4>
-        
- 
-//         <div className="row">
-//     <FormControl>
-
-//   <div class="col-sm-8 text-left">
-// <h2 className="FormLable">
-//   Any other feature
-//   <span style={{ color: "red" }}>*</span>
-// </h2>
-// </div>
-// {/* <div class="col-md-4 text-right"> */}
-//     <input
-//       type="radio"
-//       value="true"
-//       label="Yes"
-//       name="anyOtherFeature"
-//       id="anyOtherFeature"
-//       {...register(" anyOtherFeature")}
-//       onChange={(e) => handleselects(e)}
-//     />
-
-//     <input
-//       type="radio"
-//       value="false"
-//       label="No"
-//       name="c"
-//       id="anyOtherFeature"
-//       {...register("anyOtherFeature")}
-//       onChange={(e) => handleselects(e)}
-//     />
-//   </div>
-
-// </FormControl>
-// </div>
-// </div>
-//     </form>
-//   );
-// }
-
-// export default RadioButtonsGroup;
-
 import React, { useState } from "react";
 import Button from "react-bootstrap/Button";
 import Col from "react-bootstrap/Col";
@@ -255,6 +24,11 @@ import FormControl from '@mui/material/FormControl';
 import FormLabel from '@mui/material/FormLabel';
 
 function IndeterminateCheckbox() {
+
+
+  const userRoles = Digit.UserService.getUser()?.info?.roles.map((item) => item.code)  || [];
+  const showActionButton = userRoles.includes("JE_HQ")
+  
   const [selects, setSelects] = useState();
   const [showhide, setShowhide] = useState("");
   const { register, handleSubmit } = useForm();
@@ -305,7 +79,7 @@ function IndeterminateCheckbox() {
 							Sr.No
 						</TableCell>
 						<TableCell align="left">
-                        Description
+           Description
 						</TableCell>
 						<TableCell align="right">
 						Action
@@ -335,19 +109,19 @@ function IndeterminateCheckbox() {
                            
                             <FormControl>
                             <div className="row">  
-                            {/* <div class="col-md-4 text-right"> */}
+                    
                         <div className="d-flex flex-row align-items-center my-1">
                           
                           <label htmlFor="submittedIsInOrder ">
-                          <input {...register("submittedIsInOrder")} type="radio" value="Y" id="submittedIsInOrder" />
+                          <input {...register("submittedIsInOrder")} type="radio"  disabled={!showActionButton }   value="Y" id="submittedIsInOrder" />
                           &nbsp;&nbsp; &nbsp; Yes &nbsp;&nbsp;
                         </label>
                         <label htmlFor="submittedIsInOrder">
-                          <input {...register("submittedIsInOrder")} type="radio" value="N" id="submittedIsInOrder" />
+                          <input {...register("submittedIsInOrder")} type="radio"  disabled={!showActionButton } value="N" id="submittedIsInOrder" />
                           &nbsp;&nbsp; &nbsp; No &nbsp;&nbsp;
                         </label>
                         </div>
-                        {/* </div> */}
+                   
                 </div>
                 </FormControl>
                 
@@ -391,11 +165,11 @@ function IndeterminateCheckbox() {
                         <div className="d-flex flex-row align-items-center my-1">
                          
                           <label htmlFor="scrutinyFeeOrder">
-                          <input {...register("scrutinyFeeOrder")} type="radio" value="Y" id="scrutinyFeeOrder" />
+                          <input {...register("scrutinyFeeOrder")} type="radio"  disabled={!showActionButton } value="Y" id="scrutinyFeeOrder" />
                           &nbsp;&nbsp;&nbsp; Yes &nbsp;&nbsp;
                         </label>
                         <label htmlFor="scrutinyFeeOrder">
-                          <input {...register("scrutinyFeeOrder")} type="radio" value="N" id="scrutinyFeeOrder" />
+                          <input {...register("scrutinyFeeOrder")} type="radio"  disabled={!showActionButton } value="N" id="scrutinyFeeOrder" />
                           &nbsp;&nbsp;&nbsp; No &nbsp;&nbsp;
                         </label>
                         </div></div>
@@ -445,11 +219,11 @@ function IndeterminateCheckbox() {
                         <div className="d-flex flex-row align-items-center my-1">
                           &nbsp;&nbsp;
                           <label htmlFor="depositedOrderNot.">
-                          <input {...register("depositedOrderNot")} type="radio" value="Y" id="depositedOrderNot" />
+                          <input {...register("depositedOrderNot")} type="radio"  disabled={!showActionButton } value="Y" id="depositedOrderNot" />
                           &nbsp; Yes &nbsp;&nbsp;
                         </label>
                         <label htmlFor="depositedOrderNot">
-                          <input {...register("depositedOrderNot")} type="radio" value="N" id="depositedOrderNot" />
+                          <input {...register("depositedOrderNot")} type="radio"  disabled={!showActionButton } value="N" id="depositedOrderNot" />
                           &nbsp; No &nbsp;&nbsp;
                         </label>
                         </div></div>
@@ -496,11 +270,11 @@ function IndeterminateCheckbox() {
                         <div className="d-flex flex-row align-items-center my-1">
                           &nbsp;&nbsp;
                           <label htmlFor="compactblock.">
-                          <input {...register("compactblock")} type="radio" value="Y" id="compactblock" />
+                          <input {...register("compactblock")} type="radio"  disabled={!showActionButton } value="Y" id="compactblock" />
                           &nbsp; Yes &nbsp;&nbsp;
                         </label>
                         <label htmlFor="compactblock">
-                          <input {...register("compactblock")} type="radio" value="N" id="compactblock" />
+                          <input {...register("compactblock")} type="radio"  disabled={!showActionButton } value="N" id="compactblock" />
                           &nbsp; No &nbsp;&nbsp;
                         </label>
                         </div></div>
@@ -546,11 +320,11 @@ function IndeterminateCheckbox() {
                         <div className="d-flex flex-row align-items-center my-1">
                           &nbsp;&nbsp;
                           <label htmlFor="ApproachNormsAsPerPolicy">
-                          <input {...register("ApproachNormsAsPerPolicy")} type="radio" value="Y" id="ApproachNormsAsPerPolicy" />
+                          <input {...register("ApproachNormsAsPerPolicy")} type="radio"  disabled={!showActionButton } value="Y" id="ApproachNormsAsPerPolicy" />
                           &nbsp; Yes &nbsp;&nbsp;
                         </label>
                         <label htmlFor="ApproachNormsAsPerPolicy">
-                          <input {...register("ApproachNormsAsPerPolicy")} type="radio" value="N" id="ApproachNormsAsPerPolicy" />
+                          <input {...register("ApproachNormsAsPerPolicy")} type="radio"  disabled={!showActionButton } value="N" id="ApproachNormsAsPerPolicy" />
                           &nbsp; No &nbsp;&nbsp;
                         </label>
                         </div></div>
@@ -596,11 +370,11 @@ function IndeterminateCheckbox() {
                         <div className="d-flex flex-row align-items-center my-1">
                           &nbsp;&nbsp;
                           <label htmlFor="SiteDetails">
-                          <input {...register("SiteDetails")} type="radio" value="Y" id="SiteDetails" />
+                          <input {...register("SiteDetails")} type="radio"  disabled={!showActionButton } value="Y" id="SiteDetails" />
                           &nbsp; Yes &nbsp;&nbsp;
                         </label>
                         <label htmlFor="SiteDetails">
-                          <input {...register("SiteDetails")} type="radio" value="N" id="SiteDetails" />
+                          <input {...register("SiteDetails")} type="radio"  disabled={!showActionButton } value="N" id="SiteDetails" />
                           &nbsp; No &nbsp;&nbsp;
                         </label>
                         </div></div>
@@ -642,11 +416,11 @@ function IndeterminateCheckbox() {
                         <div className="d-flex flex-row align-items-center my-1">
                          
                           <label htmlFor=" applicableFinalDevelopment">
-                          <input {...register("applicableFinalDevelopment")} type="radio" value="Y" id="applicableFinalDevelopment" />
+                          <input {...register("applicableFinalDevelopment")} type="radio"  disabled={!showActionButton } value="Y" id="applicableFinalDevelopment" />
                           &nbsp; &nbsp; Yes &nbsp;&nbsp;
                         </label>
                         <label htmlFor="applicableFinalDevelopment">
-                          <input {...register("applicableFinalDevelopment")} type="radio" value="N" id="applicableFinalDevelopment" />
+                          <input {...register("applicableFinalDevelopment")} type="radio"  disabled={!showActionButton } value="N" id="applicableFinalDevelopment" />
                           &nbsp;&nbsp;  No &nbsp;&nbsp;
                         </label>
                         </div></div>
@@ -691,11 +465,11 @@ function IndeterminateCheckbox() {
                         <div className="d-flex flex-row align-items-center my-1">
                          
                           <label htmlFor=" applicableFinalDevelopment">
-                          <input {...register("applicableFinalDevelopment")} type="radio" value="Y" id="applicableFinalDevelopment" />
+                          <input {...register("applicableFinalDevelopment")} type="radio"  disabled={!showActionButton } value="Y" id="applicableFinalDevelopment" />
                           &nbsp; &nbsp; Yes &nbsp;&nbsp;
                         </label>
                         <label htmlFor="applicableFinalDevelopment">
-                          <input {...register("applicableFinalDevelopment")} type="radio" value="N" id="applicableFinalDevelopment" />
+                          <input {...register("applicableFinalDevelopment")} type="radio"  disabled={!showActionButton } value="N" id="applicableFinalDevelopment" />
                           &nbsp;&nbsp;  No &nbsp;&nbsp;
                         </label>
                         </div></div>
@@ -741,11 +515,11 @@ function IndeterminateCheckbox() {
                         <div className="d-flex flex-row align-items-center my-1">
                          
                           <label htmlFor="zoneAsPerDevelopmentPlan">
-                          <input {...register("zoneAsPerDevelopmentPlan")} type="radio" value="Y" id="zoneAsPerDevelopmentPlan" />
+                          <input {...register("zoneAsPerDevelopmentPlan")} type="radio"  disabled={!showActionButton } value="Y" id="zoneAsPerDevelopmentPlan" />
                           &nbsp; &nbsp; Yes &nbsp;&nbsp;
                         </label>
                         <label htmlFor="zoneAsPerDevelopmentPlan">
-                          <input {...register("zoneAsPerDevelopmentPlan")} type="radio" value="N" id="zoneAsPerDevelopmentPlan" />
+                          <input {...register("zoneAsPerDevelopmentPlan")} type="radio"  disabled={!showActionButton } value="N" id="zoneAsPerDevelopmentPlan" />
                           &nbsp;&nbsp;  No &nbsp;&nbsp;
                         </label>
                         </div></div>
@@ -791,11 +565,11 @@ function IndeterminateCheckbox() {
                         <div className="d-flex flex-row align-items-center my-1">
                          
                           <label htmlFor="AppliedColony">
-                          <input {...register("AppliedColony")} type="radio" value="Y" id="AppliedColony" />
+                          <input {...register("AppliedColony")} type="radio"  disabled={!showActionButton } value="Y" id="AppliedColony" />
                           &nbsp; &nbsp; Yes &nbsp;&nbsp;
                         </label>
                         <label htmlFor="AppliedColony">
-                          <input {...register("AppliedColony")} type="radio" value="N" id="AppliedColony" />
+                          <input {...register("AppliedColony")} type="radio"  disabled={!showActionButton } value="N" id="AppliedColony" />
                           &nbsp;&nbsp;  No &nbsp;&nbsp;
                         </label>
                         </div></div>
@@ -841,11 +615,11 @@ function IndeterminateCheckbox() {
                         <div className="d-flex flex-row align-items-center my-1">
                          
                           <label htmlFor=" totalAreasector">
-                          <input {...register("totalAreasector")} type="radio" value="Y" id="totalAreasector" />
+                          <input {...register("totalAreasector")} type="radio"  disabled={!showActionButton } value="Y" id="totalAreasector" />
                           &nbsp; &nbsp; Yes &nbsp;&nbsp;
                         </label>
                         <label htmlFor="totalAreasector">
-                          <input {...register("totalAreasector")} type="radio" value="N" id="totalAreasector" />
+                          <input {...register("totalAreasector")} type="radio"  disabled={!showActionButton } value="N" id="totalAreasector" />
                           &nbsp;&nbsp;  No &nbsp;&nbsp;
                         </label>
                         </div></div>
@@ -891,11 +665,11 @@ function IndeterminateCheckbox() {
                         <div className="d-flex flex-row align-items-center my-1">
                          
                           <label htmlFor="netPlannedArea">
-                          <input {...register("netPlannedArea")} type="radio" value="Y" id="netPlannedArea" />
+                          <input {...register("netPlannedArea")} type="radio"  disabled={!showActionButton } value="Y" id="netPlannedArea" />
                           &nbsp; &nbsp; Yes &nbsp;&nbsp;
                         </label>
                         <label htmlFor="netPlannedArea">
-                          <input {...register("netPlannedArea")} type="radio" value="N" id="netPlannedArea" />
+                          <input {...register("netPlannedArea")} type="radio"  disabled={!showActionButton } value="N" id="netPlannedArea" />
                           &nbsp;&nbsp;  No &nbsp;&nbsp;
                         </label>
                         </div></div>
@@ -941,11 +715,11 @@ function IndeterminateCheckbox() {
                         <div className="d-flex flex-row align-items-center my-1">
                          
                           <label htmlFor="areaUnderSectorRoad">
-                          <input {...register("areaUnderSectorRoad")} type="radio" value="Y" id="areaUnderSectorRoad" />
+                          <input {...register("areaUnderSectorRoad")} type="radio"  disabled={!showActionButton } value="Y" id="areaUnderSectorRoad" />
                           &nbsp; &nbsp; Yes &nbsp;&nbsp;
                         </label>
                         <label htmlFor="areaUnderSectorRoad">
-                          <input {...register("areaUnderSectorRoad")} type="radio" value="N" id="areaUnderSectorRoad" />
+                          <input {...register("areaUnderSectorRoad")} type="radio"  disabled={!showActionButton } value="N" id="areaUnderSectorRoad" />
                           &nbsp;&nbsp;  No &nbsp;&nbsp;
                         </label>
                         </div></div>
@@ -991,11 +765,11 @@ function IndeterminateCheckbox() {
                         <div className="d-flex flex-row align-items-center my-1">
                          
                           <label htmlFor="areaUnderServiceRoad">
-                          <input {...register("areaUnderServiceRoad")} type="radio" value="Y" id="areaUnderServiceRoad" />
+                          <input {...register("areaUnderServiceRoad")} type="radio"  disabled={!showActionButton } value="Y" id="areaUnderServiceRoad" />
                           &nbsp; &nbsp; Yes &nbsp;&nbsp;
                         </label>
                         <label htmlFor="areaUnderServiceRoad">
-                          <input {...register("areaUnderServiceRoad")} type="radio" value="N" id="areaUnderServiceRoad" />
+                          <input {...register("areaUnderServiceRoad")} type="radio"  disabled={!showActionButton } value="N" id="areaUnderServiceRoad" />
                           &nbsp;&nbsp;  No &nbsp;&nbsp;
                         </label>
                         </div></div>
@@ -1041,11 +815,11 @@ function IndeterminateCheckbox() {
                         <div className="d-flex flex-row align-items-center my-1">
                          
                           <label htmlFor="areaUnderGreenBelt">
-                          <input {...register("areaUnderGreenBelt")} type="radio" value="Y" id="areaUnderGreenBelt" />
+                          <input {...register("areaUnderGreenBelt")} type="radio"  disabled={!showActionButton } value="Y" id="areaUnderGreenBelt" />
                           &nbsp; &nbsp; Yes &nbsp;&nbsp;
                         </label>
                         <label htmlFor="areaUnderGreenBelt">
-                          <input {...register("areaUnderGreenBelt")} type="radio" value="N" id="areaUnderGreenBelt" />
+                          <input {...register("areaUnderGreenBelt")} type="radio"  disabled={!showActionButton } value="N" id="areaUnderGreenBelt" />
                           &nbsp;&nbsp;  No &nbsp;&nbsp;
                         </label>
                         </div></div>
@@ -1091,11 +865,11 @@ function IndeterminateCheckbox() {
                         <div className="d-flex flex-row align-items-center my-1">
                          
                           <label htmlFor="internalCirculationRoad">
-                          <input {...register("internalCirculationRoad")} type="radio" value="Y" id="internalCirculationRoad" />
+                          <input {...register("internalCirculationRoad")} type="radio"  disabled={!showActionButton } value="Y" id="internalCirculationRoad" />
                           &nbsp; &nbsp; Yes &nbsp;&nbsp;
                         </label>
                         <label htmlFor="internalCirculationRoad">
-                          <input {...register("internalCirculationRoad")} type="radio" value="N" id="internalCirculationRoad" />
+                          <input {...register("internalCirculationRoad")} type="radio"  disabled={!showActionButton } value="N" id="internalCirculationRoad" />
                           &nbsp;&nbsp;  No &nbsp;&nbsp;
                         </label>
                         </div></div>
@@ -1141,11 +915,11 @@ function IndeterminateCheckbox() {
                         <div className="d-flex flex-row align-items-center my-1">
                          
                           <label htmlFor="anyOther">
-                          <input {...register("anyOther")} type="radio" value="Y" id="anyOther" />
+                          <input {...register("anyOther")} type="radio"  disabled={!showActionButton } value="Y" id="anyOther" />
                           &nbsp; &nbsp; Yes &nbsp;&nbsp;
                         </label>
                         <label htmlFor="anyOther">
-                          <input {...register("anyOther")} type="radio" value="N" id="anyOther" />
+                          <input {...register("anyOther")} type="radio"  disabled={!showActionButton } value="N" id="anyOther" />
                           &nbsp;&nbsp;  No &nbsp;&nbsp;
                         </label>
                         </div></div>
@@ -1191,11 +965,11 @@ function IndeterminateCheckbox() {
                         <div className="d-flex flex-row align-items-center my-1">
                          
                           <label htmlFor="receivedWithinThePrescribed">
-                          <input {...register("receivedWithinThePrescribed")} type="radio" value="Y" id="receivedWithinThePrescribed" />
+                          <input {...register("receivedWithinThePrescribed")} type="radio"  disabled={!showActionButton } value="Y" id="receivedWithinThePrescribed" />
                           &nbsp; &nbsp; Yes &nbsp;&nbsp;
                         </label>
                         <label htmlFor="receivedWithinThePrescribed">
-                          <input {...register("receivedWithinThePrescribed")} type="radio" value="N" id="receivedWithinThePrescribed" />
+                          <input {...register("receivedWithinThePrescribed")} type="radio"  disabled={!showActionButton } value="N" id="receivedWithinThePrescribed" />
                           &nbsp;&nbsp;  No &nbsp;&nbsp;
                         </label>
                         </div></div>
@@ -1240,11 +1014,11 @@ function IndeterminateCheckbox() {
                         <div className="d-flex flex-row align-items-center my-1">
                          
                           <label htmlFor="receivedWithinThePrescribed">
-                          <input {...register("receivedWithinThePrescribed")} type="radio" value="Y" id="receivedWithinThePrescribed" />
+                          <input {...register("receivedWithinThePrescribed")} type="radio"  disabled={!showActionButton } value="Y" id="receivedWithinThePrescribed" />
                           &nbsp; &nbsp; Yes &nbsp;&nbsp;
                         </label>
                         <label htmlFor="receivedWithinThePrescribed">
-                          <input {...register("receivedWithinThePrescribed")} type="radio" value="N" id="receivedWithinThePrescribed" />
+                          <input {...register("receivedWithinThePrescribed")} type="radio"  disabled={!showActionButton } value="N" id="receivedWithinThePrescribed" />
                           &nbsp;&nbsp;  No &nbsp;&nbsp;
                         </label>
                         </div></div>
@@ -1289,11 +1063,11 @@ function IndeterminateCheckbox() {
                         <div className="d-flex flex-row align-items-center my-1">
                          
                           <label htmlFor="receivedWithinThePrescribed">
-                          <input {...register("receivedWithinThePrescribed")} type="radio" value="Y" id="receivedWithinThePrescribed" />
+                          <input {...register("receivedWithinThePrescribed")} type="radio"  disabled={!showActionButton } value="Y" id="receivedWithinThePrescribed" />
                           &nbsp; &nbsp; Yes &nbsp;&nbsp;
                         </label>
                         <label htmlFor="receivedWithinThePrescribed">
-                          <input {...register("receivedWithinThePrescribed")} type="radio" value="N" id="receivedWithinThePrescribed" />
+                          <input {...register("receivedWithinThePrescribed")} type="radio"  disabled={!showActionButton } value="N" id="receivedWithinThePrescribed" />
                           &nbsp;&nbsp;  No &nbsp;&nbsp;
                         </label>
                         </div></div>
@@ -1339,11 +1113,11 @@ function IndeterminateCheckbox() {
                         <div className="d-flex flex-row align-items-center my-1">
                          
                           <label htmlFor="receivedWithinThePrescribed">
-                          <input {...register("receivedWithinThePrescribed")} type="radio" value="Y" id="receivedWithinThePrescribed" />
+                          <input {...register("receivedWithinThePrescribed")} type="radio"  disabled={!showActionButton } value="Y" id="receivedWithinThePrescribed" />
                           &nbsp; &nbsp; Yes &nbsp;&nbsp;
                         </label>
                         <label htmlFor="receivedWithinThePrescribed">
-                          <input {...register("receivedWithinThePrescribed")} type="radio" value="N" id="receivedWithinThePrescribed" />
+                          <input {...register("receivedWithinThePrescribed")} type="radio"  disabled={!showActionButton } value="N" id="receivedWithinThePrescribed" />
                           &nbsp;&nbsp;  No &nbsp;&nbsp;
                         </label>
                         </div></div>
@@ -1389,11 +1163,11 @@ function IndeterminateCheckbox() {
                         <div className="d-flex flex-row align-items-center my-1">
                          
                           <label htmlFor="receivedWithinThePrescribed">
-                          <input {...register("receivedWithinThePrescribed")} type="radio" value="Y" id="receivedWithinThePrescribed" />
+                          <input {...register("receivedWithinThePrescribed")} type="radio"  disabled={!showActionButton } value="Y" id="receivedWithinThePrescribed" />
                           &nbsp; &nbsp; Yes &nbsp;&nbsp;
                         </label>
                         <label htmlFor="receivedWithinThePrescribed">
-                          <input {...register("receivedWithinThePrescribed")} type="radio" value="N" id="receivedWithinThePrescribed" />
+                          <input {...register("receivedWithinThePrescribed")} type="radio"  disabled={!showActionButton } value="N" id="receivedWithinThePrescribed" />
                           &nbsp;&nbsp;  No &nbsp;&nbsp;
                         </label>
                         </div></div>
@@ -1440,11 +1214,11 @@ function IndeterminateCheckbox() {
                         <div className="d-flex flex-row align-items-center my-1">
                          
                           <label htmlFor="receivedWithinThePrescribed">
-                          <input {...register("receivedWithinThePrescribed")} type="radio" value="Y" id="receivedWithinThePrescribed" />
+                          <input {...register("receivedWithinThePrescribed")} type="radio"  disabled={!showActionButton } value="Y" id="receivedWithinThePrescribed" />
                           &nbsp; &nbsp; Yes &nbsp;&nbsp;
                         </label>
                         <label htmlFor="receivedWithinThePrescribed">
-                          <input {...register("receivedWithinThePrescribed")} type="radio" value="N" id="receivedWithinThePrescribed" />
+                          <input {...register("receivedWithinThePrescribed")} type="radio"  disabled={!showActionButton } value="N" id="receivedWithinThePrescribed" />
                           &nbsp;&nbsp;  No &nbsp;&nbsp;
                         </label>
                         </div></div>
@@ -1489,11 +1263,11 @@ function IndeterminateCheckbox() {
                     <div className="d-flex flex-row align-items-center my-1">
                      
                       <label htmlFor="receivedWithinThePrescribed">
-                      <input {...register("receivedWithinThePrescribed")} type="radio" value="Y" id="receivedWithinThePrescribed" />
+                      <input {...register("receivedWithinThePrescribed")} type="radio"  disabled={!showActionButton } value="Y" id="receivedWithinThePrescribed" />
                       &nbsp; &nbsp; Yes &nbsp;&nbsp;
                     </label>
                     <label htmlFor="receivedWithinThePrescribed">
-                      <input {...register("receivedWithinThePrescribed")} type="radio" value="N" id="receivedWithinThePrescribed" />
+                      <input {...register("receivedWithinThePrescribed")} type="radio"  disabled={!showActionButton } value="N" id="receivedWithinThePrescribed" />
                       &nbsp;&nbsp;  No &nbsp;&nbsp;
                     </label>
                     </div></div>
