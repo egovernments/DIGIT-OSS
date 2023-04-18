@@ -16,7 +16,7 @@ import Beneficial from "../employee/ScrutinyBasic/AllServiceScrutiny/BeneficialI
 import TransferLic from "../employee/ScrutinyBasic/AllServiceScrutiny/TransferLic/TransferLicense";
 import SurrenderLic from "../employee/ScrutinyBasic/AllServiceScrutiny/SurrenderLic/SurrenderLic";
 import ExtensionClu from "../employee/ScrutinyBasic/AllServiceScrutiny/ExtensionClu/ExtensionClu";
-import LayoutPlanClu from "../employee/ScrutinyBasic/AllServiceScrutiny/LayoutPlan/LayoutPlan";
+import LayoutPlanScritny from "../employee/ScrutinyBasic/AllServiceScrutiny/LayoutPlan/Layoutcard";
 import ExtensionCom from "../employee/ScrutinyBasic/AllServiceScrutiny/ExtensionCommunity/ExtensionCom";
 import StandardDesign from "../employee/ScrutinyBasic/AllServiceScrutiny/StandardDesign/StandardDesign";
 import CompositionClu from "../employee/ScrutinyBasic/AllServiceScrutiny/CompositionClu/CompositionClu";
@@ -24,6 +24,7 @@ import CompletionLic from "../employee/ScrutinyBasic/AllServiceScrutiny/Completi
 import ServiceScrutiny from "./ScrutinyBasic/ServicePlanScrutniy/ServiceCard";
 import ElectricalScrutiny from "./ScrutinyBasic/ElectriPlanScrutiny/ElectricalCard";
 import TransferScrutiny from "../employee/ScrutinyBasic/AllServiceScrutiny/TransferLic/TransferCard";
+
 // import SubmitNew from "../employee/ScrutinyBasic/AllServiceScrutiny/BankGuarantee/SubmitNew";
 // import basicScrutiny from "../employee/ScrutinyBasic/AllServiceScrutiny/BankScrutiny/basicScrutiny";
 // import FormBank from "../employee/ScrutinyBasic/AllServiceScrutiny/BankGuarantee/FormBankScrutniy/FormBank";
@@ -35,6 +36,10 @@ import ExtensionCard from "./ScrutinyBasic/AllServiceScrutiny/BankGuarantee/Exte
 import ReplaceCard from "./ScrutinyBasic/AllServiceScrutiny/BankGuarantee/Replacebank/ReplaceCard";
 import ReleaseCard from "./ScrutinyBasic/AllServiceScrutiny/BankGuarantee/ReleaseBank/ReleaseCard";
 import { TLContextProvider } from "../../../context";
+import TranferInbox from "./ScrutinyBasic/AllServiceScrutiny/TransferLic/Inbox";
+import SurrenderInbox from "./ScrutinyBasic/AllServiceScrutiny/SurrenderLic/Inbox";
+import LayoutPlanInbox from "./ScrutinyBasic/AllServiceScrutiny/LayoutPlan/Inbox";
+import BeneficialInbox from "./ScrutinyBasic/AllServiceScrutiny/BeneficialInterest/Inbox";
 
 const TLBreadCrumb = ({ location }) => {
   const { t } = useTranslation();
@@ -186,6 +191,7 @@ const EmployeeApp = ({ path, url, userType }) => {
   const Response = Digit?.ComponentRegistryService?.getComponent("TLResponse");
   const Search = Digit?.ComponentRegistryService?.getComponent("TLSearch");
 
+
   return (
     <TLContextProvider>
       <Switch>
@@ -234,13 +240,17 @@ const EmployeeApp = ({ path, url, userType }) => {
             <PrivateRoute path={`${path}/SurrenderLic`} component={SurrenderLic} />
             <PrivateRoute path={`${path}/ExtensionClu`} component={ExtensionClu} />
             <PrivateRoute path={`${path}/ExtensionCom`} component={ExtensionCom} />
-            <PrivateRoute path={`${path}/LayoutPlanClu`} component={LayoutPlanClu} />
+            <PrivateRoute path={`${path}/LayoutPlanScritny/:id`} component={LayoutPlanScritny} />
             <PrivateRoute path={`${path}/StandardDesign`} component={StandardDesign} />
             <PrivateRoute path={`${path}/CompositionClu`} component={CompositionClu} />
             <PrivateRoute path={`${path}/CompletionLic`} component={CompletionLic} />
             <PrivateRoute path={`${path}/ServiceScrutiny/:id`} component={ServiceScrutiny} />
             {/* <PrivateRoute path={`${path}/ScrutinyForm`} component={ScrutinyForm} /> */}
             <PrivateRoute path={`${path}/ScrutinyForm/:id`} component={ScrutinyForm} />
+            <PrivateRoute path={`${path}/SurrenderInbox`} component={(props) => <SurrenderInbox parentRoute={path} businessService={["SURREND_OF_LICENSE"]} filterComponent="TL_INBOX_FILTER" initialStates={{}} isInbox={true} /> } /> 
+            <PrivateRoute path={`${path}/LayoutPlanInbox`} component={(props) => <LayoutPlanInbox parentRoute={path} businessService={["REVISED_LAYOUT_PLAN"]} filterComponent="TL_INBOX_FILTER" initialStates={{}} isInbox={true} /> } /> 
+            <PrivateRoute path={`${path}/BeneficialInbox`} component={(props) => <BeneficialInbox parentRoute={path} businessService={["CHANGE_OF_BENEFICIAL"]} filterComponent="TL_INBOX_FILTER" initialStates={{}} isInbox={true} /> } /> 
+            <PrivateRoute path={`${path}/TranferInbox`} component={(props) => <TranferInbox parentRoute={path} businessService={["TRANSFER_OF_LICIENCE"]} filterComponent="TL_INBOX_FILTER" initialStates={{}} isInbox={true} /> } /> 
             <PrivateRoute path={`${path}/servicePlanInbox`} component={(props) => <ServicePlanInbox parentRoute={path} businessService={["SERVICE_PLAN_DEMARCATION","SERVICE_PLAN"]} filterComponent="TL_INBOX_FILTER" initialStates={{}} isInbox={true} /> } /> 
             <PrivateRoute path={`${path}/electricPlanInbox`} component={(props) => <ElectricalPlanInbox parentRoute={path} businessService="ELECTRICAL_PLAN" filterComponent="TL_INBOX_FILTER" initialStates={{}} isInbox={true} /> } /> 
             <PrivateRoute path={`${path}/bankGuaranteeInbox`} component={(props) => <BankGuaranteePlan parentRoute={path} businessService={["BG_NEW","SERVICE_PLAN"]} filterComponent="TL_INBOX_FILTER" initialStates={{}} isInbox={true} /> } /> 
