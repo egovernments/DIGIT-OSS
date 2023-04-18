@@ -9,6 +9,7 @@ import axios from "axios";
 import CusToaster from "../../../../../../components/Toaster";
 import { useTranslation } from "react-i18next";
 import { useLocation, useParams } from "react-router-dom";
+import SearchLicenceComp from "../../../../../../components/SearchLicence";
 
 function SurrenderLic() {
   const [selects, setSelects] = useState();
@@ -53,7 +54,7 @@ function SurrenderLic() {
       console.log("Response ====> ", response);
       setLicenseData(response?.data?.surrendOfLicense?.[0]);
       const details = response?.data?.surrendOfLicense?.[0]
-      setValue("licenseNo", details?.licenseNo);
+      setValue("licenceNo", details?.licenseNo);
       setValue("selectType", details?.selectType);
       setValue("areaFallingUnder", details?.areaFallingUnder);
       setValue("thirdPartyRights", details?.thirdPartyRights);
@@ -137,7 +138,7 @@ function SurrenderLic() {
           {
             "tenantId": "hr",
             "action": "",
-            "licenseNo": data?.licenseNo,
+            "licenseNo": data?.licenceNo,
             "selectType": data?.selectType,
             "areaFallingUnder": data?.areaFallingUnder,
             "thirdPartyRights": data?.thirdPartyRights,
@@ -196,7 +197,7 @@ function SurrenderLic() {
             ...licenseData,
             "tenantId": "hr",
             "action": "",
-            "licenseNo": data?.licenseNo,
+            "licenseNo": data?.licenceNo,
             "selectType": data?.selectType,
             "areaFallingUnder": data?.areaFallingUnder,
             "thirdPartyRights": data?.thirdPartyRights,
@@ -214,7 +215,8 @@ function SurrenderLic() {
             "revisedLayoutPlanfileUrl": data?.revisedLayoutPlanfileUrl,
             "availedEdcfileUrl": data?.availedEdcfileUrl,
             "areaFallingUnderfileUrl": data?.areaFallingUnderfileUrl,
-            "areaFallingDividing": data?.areaFallingDividing
+            "areaFallingDividing": data?.areaFallingDividing,
+            
           }
         ]
       }
@@ -270,12 +272,23 @@ function SurrenderLic() {
         <div className="card">
           <br></br>
           <div className="row-12">
+
+          <div className="col-12 p-3">
+                  <SearchLicenceComp
+                    watch={watch}
+                    register={register}
+                    control={control}
+                    setLoader={setLoading}
+                    errors={errors}
+                    setValue={setValue}
+                  />
+                </div> 
             <div className="col md={4} xxl lg-4">
-              <FormControl>
+              {/* <FormControl> */}
                 {/* <h2 className="FormLable">
                   Licence No . <span style={{ color: "red" }}>*</span>
                 </h2> */}
-                <InputLabel id="select-label" >
+                {/* <InputLabel id="select-label" >
                   {`${t("LICENSE_NO")}`} <span style={{ color: "red" }}>*</span>
                 </InputLabel>
 
@@ -300,7 +313,7 @@ function SurrenderLic() {
                   {errors?.licenseNo?.message}
                 </FormHelperText>
               </FormControl>
-              &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
+              &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; */}
 
               <FormControl  >
                 <InputLabel id="select-label" >
