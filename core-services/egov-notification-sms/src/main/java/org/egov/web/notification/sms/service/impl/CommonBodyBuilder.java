@@ -19,9 +19,9 @@ public class CommonBodyBuilder implements SMSBodyBuilder {
 	@Autowired
 	private SMSProperties smsProps;
 	
-	public static final String SMS_TEMPLATE_ID = "template_id";
+	public static final String SMS_TEMPLATE_ID = "t_id";
 	
-	public static final String SMS_PE_ID = "pe_id";
+	public static final String SMS_PE_ID = "e_id";
 
 	public MultiValueMap<String, String> getSmsRequestBody(Sms sms) {
 		MultiValueMap<String, String> map = new LinkedMultiValueMap<>();
