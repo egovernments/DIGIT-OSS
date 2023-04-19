@@ -153,7 +153,7 @@ const CitizenFeedback = ({popup = false, onClose, setShowToast, data}) => {
              name="" 
              minLength = "64"
              onChange={onComments}></TextArea>
-             {comment && comment?.length < 64 && <CardLabelError>{t("CS_MIN_LENGTH_64")}</CardLabelError>}
+             {comment && comment?.length < 64 && <CardLabelError style={{marginTop:"-20px", marginBottom:"25px"}}>{t("CS_MIN_LENGTH_64")}</CardLabelError>}
           </div>}
           <SubmitBar label={t(`${"PT"}_SUBMIT`)} onSubmit={onSubmit} disabled={getCommentCheck()} />
           {!popup && <div className="link" style={isMobile ? { marginTop: "8px", width: "100%", textAlign: "center" } : {marginTop:"8px"}}>

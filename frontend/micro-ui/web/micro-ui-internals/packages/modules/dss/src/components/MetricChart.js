@@ -13,7 +13,7 @@ const MetricData = ({ t, data, code, indexValuesWithStar }) => {
     <div>
       <p className="heading-m" style={{ textAlign: "right", paddingTop: "0px", whiteSpace: "nowrap" }}>
         {indexValuesWithStar?.includes(code) ? (
-          <Rating toolTipText={t("COMMON_RATING_LABEL")} currentRating={Math.round(data?.headerValue * 10) / 10} styles={{ width: "unset" }} starStyles={{ width: "25px" }} />
+          <Rating toolTipText={t("COMMON_RATING_LABEL")} currentRating={Math.round(data?.headerValue * 10) / 10} styles={{ width: "unset", marginBottom:"unset" }} starStyles={{ width: "25px" }} />
         ) : (
           `${Digit.Utils.dss.formatter(data?.headerValue, data?.headerSymbol, value?.denomination, true, t)} ${
             code === "totalSludgeTreated" ? t(`DSS_KL`) : ""

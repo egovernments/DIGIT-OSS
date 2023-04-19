@@ -23,7 +23,7 @@ const BannerPicker = (props) => {
     <Banner
       message={GetActionMessage(props)}
       applicationNumber={""}
-      style = {props.isMobile ? {} : {width:"740px"}}
+      style = {props.isMobile ? {width : "unset"} : {width:"740px"}}
       //info={props.isSuccess ? props.t("PT_APPLICATION_NO") : ""}
       successful={props?.isSuccess}
     />
@@ -40,13 +40,15 @@ const AcknowledgementCF = ({ data, onSuccess }) => {
 
   return (
     <form>
-    <Card>
+    <Card style={isMobile ? {padding:"unset"} : {}}>
       <BannerPicker t={t} data={location.state} isSuccess={location.state?.result?.Service?.[0]?true : false} isMobile={isMobile} isLoading={/*mutation.isIdle || mutation.isLoading*/ false} />
-      {location.state?.result?.Service?.[0] && <CardText>{t("CS_CF_FEEDBACK_RESPONSE")}</CardText>}
+      {location.state?.result?.Service?.[0] && <CardText style={{padding:"0px 10px 0px 10px"}}>{t("CS_CF_FEEDBACK_RESPONSE")}</CardText>}
       {!(location.state?.result?.Service?.[0]) && <CardText>{t("CS_FILE_PROPERTY_FAILED_RESPONSE")}</CardText>}
+      <div style={{padding:"0px 10px 20px 10px"}}>
       <Link to={`/digit-ui/citizen`}>
         <SubmitBar label={t("CS_COMMON_GO_BACK_TO_HOME")} />
       </Link>
+      </div>
     </Card>
     </form>
   );
