@@ -149,11 +149,11 @@ function Standard() {
                 <OutlinedInput type="text" required={true} disabled={true} placeholder="" className="Inputcontrol" {...register("amount")} />
               </FormControl>
               &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
-              <FormControl>
+              {/* <FormControl>
                 <Button variant="contained" class="btn btn-primary btn-md center-block" type="submit">
                   Pay
                 </Button>
-              </FormControl>
+              </FormControl> */}
             </div>
           </div>
           <div class="row">
