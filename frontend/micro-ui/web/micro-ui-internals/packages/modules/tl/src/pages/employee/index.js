@@ -42,7 +42,7 @@ import LayoutPlanInbox from "./ScrutinyBasic/AllServiceScrutiny/LayoutPlan/Inbox
 import BeneficialInbox from "./ScrutinyBasic/AllServiceScrutiny/BeneficialInterest/Inbox";
 import StandardInbox from "./ScrutinyBasic/AllServiceScrutiny/StandardDesign/Inbox";
 import RenewalInbox from "./ScrutinyBasic/AllServiceScrutiny/Renewal/Inbox";
-import SurrenderLicScrutiny from "../employee/ScrutinyBasic/AllServiceScrutiny/SurrenderLic/SurrenderLic";
+import Beneficialscrutiny from "../employee/ScrutinyBasic/AllServiceScrutiny/BeneficialInterest/Beneficial";
 
 const TLBreadCrumb = ({ location }) => {
   const { t } = useTranslation();
@@ -237,7 +237,7 @@ const EmployeeApp = ({ path, url, userType }) => {
             {/* <PrivateRoute path={`${path}/Loi`} component={Loi} /> */}
             <PrivateRoute path={`${path}/Records`} component={Records} />
             <PrivateRoute path={`${path}/RenewalScrutiny/:id`} component={RenewalScrutiny} />
-            <PrivateRoute path={`${path}/Beneficial`} component={Beneficial} />
+            <PrivateRoute path={`${path}/Beneficialscrutiny/:id`} component={Beneficialscrutiny} />
             <PrivateRoute path={`${path}/TransferScrutiny/:id`} component={TransferScrutiny} />
             <PrivateRoute path={`${path}/SurrenderLic/:id`} component={SurrenderLic} />
             <PrivateRoute path={`${path}/ExtensionClu/:id`} component={ExtensionClu} />
