@@ -373,7 +373,7 @@ function LayoutPlanClu() {
                   <FormLabel id="existing_area" sx={{ fontWeight: "bold" }}>
                     {`${t("REV_LAYOUT_EXISTING_AREA")}`} <span style={{ color: "red" }}>*</span>
                   </FormLabel>
-                  <OutlinedInput
+                  {/* <OutlinedInput
                     aria-labelledby="existing_area"
                     type="text"
                     placeholder=""
@@ -381,7 +381,7 @@ function LayoutPlanClu() {
                     {...register("existingArea")}
                     onChange={(e) => setExistingArea(e.target.value)}
                     value={existingAreaVal}
-                  />
+                  /> */}
                 </FormControl>
               </Col>
             </div>
@@ -408,7 +408,7 @@ function LayoutPlanClu() {
                               <StyledTableCell>{elementInArray.licenseNoPop}</StyledTableCell>
                               <StyledTableCell>{elementInArray.areaModalPop}</StyledTableCell>
 
-                              <StyledTableCell align="center">
+                              <StyledTableCell >
                                 <a href="javascript:void(0)" title="Delete record" onClick={() => deleteTableRows(-1)}>
                                   <DeleteIcon style={{ fill: "#ff1a1a" }} />
                                 </a>
@@ -432,6 +432,7 @@ function LayoutPlanClu() {
                   onRowsPerPageChange={handleChangeRowsPerPage}
                 />
               </Paper>
+              <div className="row">
               <Col sx={{ marginY: 2 }}>
                 <button
                   type="button"
@@ -447,12 +448,61 @@ function LayoutPlanClu() {
                   Add More
                 </button>
               </Col>
+               <Col md={4} lg={4} mb={3}>
+                <FormControl>
+                  <FormLabel id="existing_area" sx={{ fontWeight: "bold" }}>
+                    Total Area <span style={{ color: "red" }}>*</span>
+                
+                  <OutlinedInput
+                    aria-labelledby="existing_area"
+                    type="text"
+                    placeholder=""
+                    className="Inputcontrol"
+                    {...register("existingArea")}
+                  
+                  />
+                    </FormLabel>
+                </FormControl>
+              </Col>
+               
+                </div>
             </Col>
-            <div className="row">
+             <div className="table table-bordered table-responsive">
+                        {/* <caption>List of users</caption> */}
+                        <thead>
+                          <tr>
+                             <th class="fw-normal"></th>
+                            <th class="fw-normal" style={{ textAlign: "center" }}>In Acres</th>
+                            <th class="fw-normal"style={{ textAlign: "center" }}>In sq.m</th>
+                           
+                          </tr>
+                        </thead>
+                      <tbody>
+                         <tr>
+                            <td>Area proposed in revision</td>
+                            <td><input type="number"className="form-control" {...register("areaProposedRevision")} id="areaProposedRevision" /></td>
+                            <td style={{ textAlign: "center" }}>{(watch("areaProposedRevision") * 4046.86)?.toFixed(3)}</td>
+                          </tr>
+                          <tr>
+                            <td>Commercial area</td>
+                            <td><input type="number"className="form-control"  {...register("areaCommercial")} id="areaCommercial"/></td>
+                            <td style={{ textAlign: "center" }}>{(watch("areaCommercial") * 4046.86)?.toFixed(3)}</td>
+                          </tr>
+                          <tr>
+                            <td>Residential area</td>
+                            <td><input type="number"className="form-control" {...register("areaResidential")} id="areaResidential"/></td>
+                            <td style={{ textAlign: "center" }}>{(watch("areaResidential") * 4046.86)?.toFixed(3)}</td>
+                          </tr>
+                       
+                      </tbody>
+                      </div>
+            {/* <div className="row">
+
               <Col md={4} lg={4} mb={3}>
                 <FormControl>
                   <FormLabel id="propesed_revision" sx={{ fontWeight: "bold" }}>
-                    {`${t("REV_LAYOUT_AREA_PROPOSED_REVISION")}`} <span style={{ color: "red" }}>*</span>
+                    {`${t("REV_LAYOUT_AREA_PROPOSED_REVISION")}`}
+                     <span style={{ color: "red" }}>*</span>
                   </FormLabel>
                   <OutlinedInput
                     type="text"
@@ -464,7 +514,8 @@ function LayoutPlanClu() {
                     value={proposedAreaRevisionVal}
                   />
                 </FormControl>
-              </Col>
+                </Col>
+        
               <Col md={4} lg={4} mb={3}>
                 <FormControl>
                   <FormLabel id="commercial_area" sx={{ fontWeight: "bold" }}>
@@ -497,10 +548,40 @@ function LayoutPlanClu() {
                   />
                 </FormControl>
               </Col>
-            </div>
+            </div> */}
 
             <br></br>
-            <div className="row-12">
+              <div className="col col-12">
+                                    <h2>
+                                      {`${t("REV_LAYOUT_ANY_OTHER_REMARK")}`}<span style={{ color: "red" }}>*</span>&nbsp; &nbsp;&nbsp;
+                                    </h2>
+
+                                    <label htmlFor="anyOtherFeature">
+                                      <input {...register("anyOtherFeature")} type="radio" value="Y" id="anyOtherFeature" />
+                                      &nbsp; Yes &nbsp;&nbsp;
+                                    </label>
+                                    <label htmlFor="anyOtherFeature">
+                                      <input {...register("anyOtherFeature")} type="radio" value="N" id="anyOtherFeature" />
+                                      &nbsp; No &nbsp;&nbsp;
+                                    </label>
+                                     {watch("anyOtherFeature") === "Y" && (
+                                      <div className="row ">
+                                        <Col md={4} lg={4}>
+                  <FormControl>
+                    {/* <FormLabel id="any_remarks">Any other remark</FormLabel> */}
+                    <textarea
+                      className="form-control"
+                      aria-labelledby="any_remarks"
+                      {...register("anyOtherRemarks")}
+                      onChange={(e) => setAnyOtherRemarkTextVal(e.target.value)}
+                      value={anyOtherRemarkTextVal}
+                    ></textarea>
+                  </FormControl>
+                </Col>
+                                      </div>
+                                    )}
+                                    </div>
+            {/* <div className="row-12">
               <Col md={4} lg={4}>
                 <FormControl>
                   <FormLabel id="demo-row-radio-buttons-group-label" sx={{ fontWeight: "bold" }}>
@@ -529,7 +610,7 @@ function LayoutPlanClu() {
               {watch("anyOtherFeature") == "Y" || anyOtherRemarkVal == "Y" ? (
                 <Col md={4} lg={4}>
                   <FormControl>
-                    {/* <FormLabel id="any_remarks">Any other remark</FormLabel> */}
+                   
                     <textarea
                       className="form-control"
                       aria-labelledby="any_remarks"
@@ -542,7 +623,7 @@ function LayoutPlanClu() {
               ) : (
                 <p></p>
               )}
-            </div>
+            </div> */}
           </div>
           <div className=" col-12 m-auto">
             <div className="card">
