@@ -10,6 +10,9 @@ import CusToaster from "../../../../../../components/Toaster";
 import { useTranslation } from "react-i18next";
 import { useLocation, useParams } from "react-router-dom";
 import SearchLicenceComp from "../../../../../../components/SearchLicence";
+import Visibility from "@mui/icons-material/Visibility";
+import FileUpload from "@mui/icons-material/FileUpload";
+import { getDocShareholding } from "../../../docView/docView.help";
 
 function SurrenderLic() {
   const [selects, setSelects] = useState();
@@ -72,7 +75,7 @@ function SurrenderLic() {
       setValue("revisedLayoutPlanfileUrl", details?.revisedLayoutPlanfileUrl);
       setValue("availedEdcfileUrl", details?.availedEdcfileUrl);
       setValue("areaFallingUnderfileUrl", details?.areaFallingUnderfileUrl);
-      setValue("areaFallingDividing",details?.areaFallingDividing);
+      setValue("areaFallingDividing", details?.areaFallingDividing);
       setLoading(false);
     } catch (error) {
       console.log("Get Error ====> ", error.message);
@@ -216,7 +219,7 @@ function SurrenderLic() {
             "availedEdcfileUrl": data?.availedEdcfileUrl,
             "areaFallingUnderfileUrl": data?.areaFallingUnderfileUrl,
             "areaFallingDividing": data?.areaFallingDividing,
-            
+
           }
         ]
       }
@@ -273,22 +276,22 @@ function SurrenderLic() {
           <br></br>
           <div className="row-12">
 
-          <div className="col-12 p-3">
-                  <SearchLicenceComp
-                    watch={watch}
-                    register={register}
-                    control={control}
-                    setLoader={setLoading}
-                    errors={errors}
-                    setValue={setValue}
-                  />
-                </div> 
+            <div className="col-12 p-3">
+              <SearchLicenceComp
+                watch={watch}
+                register={register}
+                control={control}
+                setLoader={setLoading}
+                errors={errors}
+                setValue={setValue}
+              />
+            </div>
             <div className="col md={4} xxl lg-4">
               {/* <FormControl> */}
-                {/* <h2 className="FormLable">
+              {/* <h2 className="FormLable">
                   Licence No . <span style={{ color: "red" }}>*</span>
                 </h2> */}
-                {/* <InputLabel id="select-label" >
+              {/* <InputLabel id="select-label" >
                   {`${t("LICENSE_NO")}`} <span style={{ color: "red" }}>*</span>
                 </InputLabel>
 
@@ -328,7 +331,7 @@ function SurrenderLic() {
                     required: "At least one should be selected"
                   })}
                   value={watch("selectType") || ""}
-                  
+
                   // onChange={(e) => handleshowhide(e)}
                   error={errors.selectType !== undefined}
                 // input ={<TextField label="Select Type (Complete or Partial) *" variant="standard" value={"COMPLETE"} />}
@@ -526,32 +529,56 @@ function SurrenderLic() {
                         <td>
                           {" "}
                           {`${t("APPROVED_COPY_OF_ZONING_PLAN")}`} <span style={{ color: "red" }}>*</span>
-                          {
+                          {/* {
                             watch("zoningLayoutPlanfileUrl") &&
                             (
                               <div>
                                 <small>File Uploaded</small>
                               </div>
                             )
-                          }
+                          } */}
                         </td>
                         {
                           watch("zoningLayoutPlanfileUrl") ?
                             (
-                              <td>
-                                <input type="file" placeholder="" className="form-control" onChange={(e) => uploadFile(e.target.files[0], "zoningLayoutPlan")} ></input>
+                              <td className="d-flex justify-content-center">
+
+                                <label title="Upload Document" for={'zoningLayoutPlan'}>
+                                  {" "}
+                                  <FileUpload color="primary" for={'zoningLayoutPlan'} />
+                                </label>
+
+                                <input id="zoningLayoutPlan" type="file" placeholder="" className="form-control d-none" onChange={(e) => uploadFile(e.target.files[0], "zoningLayoutPlan")} ></input>
+
                                 <h3 className="error-message" style={{ color: "red" }}>
                                   {errors?.zoningLayoutPlan && errors?.zoningLayoutPlan?.message}
                                 </h3>
-                                {/* <input type="file" placeholder="" className="form-control" {...register("oning/LayoutPlan")}></input> */}
+
+                                {watch('zoningLayoutPlanfileUrl') && (
+                                  <a onClick={() => getDocShareholding(watch('zoningLayoutPlanfileUrl'), setLoading)} className="btn btn-sm ">
+                                    <Visibility />
+                                  </a>
+                                )}
+
                               </td>
                             ) : (
-                              <td>
-                                <input type="file" placeholder="" className="form-control" {...register("zoningLayoutPlan", { required: "This Document is required" })} onChange={(e) => uploadFile(e.target.files[0], "zoningLayoutPlan")} ></input>
+                              <td className="d-flex justify-content-center">
+
+                                <label title="Upload Document" for={'zoningLayoutPlan'}>
+                                  {" "}
+                                  <FileUpload color="primary" for={'zoningLayoutPlan'} />
+                                </label>
+
+                                <input id="zoningLayoutPlan" type="file" placeholder="" className="form-control d-none" {...register("zoningLayoutPlan", { required: "This Document is required" })} onChange={(e) => uploadFile(e.target.files[0], "zoningLayoutPlan")} ></input>
                                 <h3 className="error-message" style={{ color: "red" }}>
                                   {errors?.zoningLayoutPlan && errors?.zoningLayoutPlan?.message}
                                 </h3>
-                                {/* <input type="file" placeholder="" className="form-control" {...register("oning/LayoutPlan")}></input> */}
+
+                                {watch('zoningLayoutPlanfileUrl') && (
+                                  <a onClick={() => getDocShareholding(watch('zoningLayoutPlanfileUrl'), setLoading)} className="btn btn-sm ">
+                                    <Visibility />
+                                  </a>
+                                )}
                               </td>
                             )
                         }
@@ -562,31 +589,54 @@ function SurrenderLic() {
                         <td>
                           {" "}
                           {`${t("LICENSE_COPY")}`} <span style={{ color: "red" }}>*</span>
-                          {
+                          {/* {
                             watch("licenseCopyfileUrl") &&
                             (
                               <div>
                                 <small>File Uploaded</small>
                               </div>
                             )
-                          }
+                          } */}
                         </td>
 
                         {
                           watch("licenseCopyfileUrl") ?
                             (
-                              <td>
-                                <input type="file" placeholder="" className="form-control" onChange={(e) => uploadFile(e.target.files[0], "licenseCopy")} ></input>
+                              <td className="d-flex justify-content-center">
+
+                                <label title="Upload Document" for={'licenseCopy'}>
+                                  {" "}
+                                  <FileUpload color="primary" for={'licenseCopy'} />
+                                </label>
+
+                                <input id="licenseCopy" type="file" placeholder="" className="form-control d-none" onChange={(e) => uploadFile(e.target.files[0], "licenseCopy")} ></input>
                                 <h3 className="error-message" style={{ color: "red" }}>
                                   {errors?.licenseCopy && errors?.licenseCopy?.message}
                                 </h3>
+
+                                {watch('licenseCopyfileUrl') && (
+                                  <a onClick={() => getDocShareholding(watch('licenseCopyfileUrl'), setLoading)} className="btn btn-sm ">
+                                    <Visibility />
+                                  </a>
+                                )}
                               </td>
                             ) : (
-                              <td>
-                                <input type="file" placeholder="" className="form-control" {...register("licenseCopy", { required: "This Document is required" })} onChange={(e) => uploadFile(e.target.files[0], "licenseCopy")} ></input>
+                              <td className="d-flex justify-content-center">
+                                <label title="Upload Document" for={'licenseCopy'}>
+                                  {" "}
+                                  <FileUpload color="primary" for={'licenseCopy'} />
+                                </label>
+
+                                <input id="licenseCopy" type="file" placeholder="" className="form-control d-none" {...register("licenseCopy", { required: "This Document is required" })} onChange={(e) => uploadFile(e.target.files[0], "licenseCopy")} ></input>
                                 <h3 className="error-message" style={{ color: "red" }}>
                                   {errors?.licenseCopy && errors?.licenseCopy?.message}
                                 </h3>
+
+                                {watch('licenseCopyfileUrl') && (
+                                  <a onClick={() => getDocShareholding(watch('licenseCopyfileUrl'), setLoading)} className="btn btn-sm ">
+                                    <Visibility />
+                                  </a>
+                                )}
                               </td>
                             )
                         }
@@ -597,30 +647,54 @@ function SurrenderLic() {
                         <td>
                           {" "}
                           {`${t("EDC_AVAILED")}`}<span style={{ color: "red" }}>*</span>
-                          {
+                          {/* {
                             watch("edcaVailedfileUrl") &&
                             (
                               <div>
                                 <small>File Uploaded</small>
                               </div>
                             )
-                          }
+                          } */}
                         </td>
                         {
                           watch("edcaVailedfileUrl") ?
                             (
-                              <td>
-                                <input type="file" placeholder="" className="form-control" onChange={(e) => uploadFile(e.target.files[0], "edcaVailed")} ></input>
+                              <td className="d-flex justify-content-center">
+                                <label title="Upload Document" for={'edcaVailed'}>
+                                  {" "}
+                                  <FileUpload color="primary" for={'edcaVailed'} />
+                                </label>
+
+                                <input id="edcaVailed" type="file" placeholder="" className="form-control d-none" onChange={(e) => uploadFile(e.target.files[0], "edcaVailed")} ></input>
                                 <h3 className="error-message" style={{ color: "red" }}>
                                   {errors?.edcaVailed && errors?.edcaVailed?.message}
                                 </h3>
+
+                                {watch('edcaVailedfileUrl') && (
+                                  <a onClick={() => getDocShareholding(watch('edcaVailedfileUrl'), setLoading)} className="btn btn-sm ">
+                                    <Visibility />
+                                  </a>
+                                )}
+
                               </td>
                             ) : (
-                              <td>
-                                <input type="file" placeholder="" className="form-control" {...register("edcaVailed", { required: "This Document is required" })} onChange={(e) => uploadFile(e.target.files[0], "edcaVailed")} ></input>
+                              <td className="d-flex justify-content-center">
+                                <label title="Upload Document" for={'edcaVailed'}>
+                                  {" "}
+                                  <FileUpload color="primary" for={'edcaVailed'} />
+                                </label>
+
+                                <input id="edcaVailed" type="file" placeholder="" className="form-control d-none" {...register("edcaVailed", { required: "This Document is required" })} onChange={(e) => uploadFile(e.target.files[0], "edcaVailed")} ></input>
                                 <h3 className="error-message" style={{ color: "red" }}>
                                   {errors?.edcaVailed && errors?.edcaVailed?.message}
                                 </h3>
+
+                                {watch('edcaVailedfileUrl') && (
+                                  <a onClick={() => getDocShareholding(watch('edcaVailedfileUrl'), setLoading)} className="btn btn-sm ">
+                                    <Visibility />
+                                  </a>
+                                )}
+
                               </td>
                             )
                         }
@@ -634,32 +708,52 @@ function SurrenderLic() {
                             <td>
                               {`${t("DECLARATION_OF_THIRD_PARTY_RIGHTS")}`}
                               <span style={{ color: "red" }}>*</span>
-                              {
+                              {/* {
                                 watch("thirdPartyRightsDeclarationfileUrl") &&
                                 (
                                   <div>
                                     <small>File Uploaded</small>
                                   </div>
                                 )
-                              }
+                              } */}
                             </td>
                             {
                               watch("thirdPartyRightsDeclarationfileUrl") ?
                                 (
-                                  <td>
-                                    {/* <input type="file" placeholder="" className="form-control" {...register("oning/LayoutPlan")}></input> */}
-                                    <input type="file" placeholder="" className="form-control" onChange={(e) => uploadFile(e.target.files[0], "thirdPartyRightsDeclaration")} ></input>
+                                  <td className="d-flex justify-content-center">
+                                    <label title="Upload Document" for={'thirdPartyRightsDeclaration'}>
+                                      {" "}
+                                      <FileUpload color="primary" for={'thirdPartyRightsDeclaration'} />
+                                    </label>
+
+                                    <input id="thirdPartyRightsDeclaration" type="file" placeholder="" className="form-control d-none" onChange={(e) => uploadFile(e.target.files[0], "thirdPartyRightsDeclaration")} ></input>
                                     <h3 className="error-message" style={{ color: "red" }}>
                                       {errors?.thirdPartyRightsDeclaration && errors?.thirdPartyRightsDeclaration?.message}
                                     </h3>
+
+                                    {watch('thirdPartyRightsDeclarationfileUrl') && (
+                                      <a onClick={() => getDocShareholding(watch('thirdPartyRightsDeclarationfileUrl'), setLoading)} className="btn btn-sm ">
+                                        <Visibility />
+                                      </a>
+                                    )}
+
                                   </td>
                                 ) : (
-                                  <td>
-                                    {/* <input type="file" placeholder="" className="form-control" {...register("oning/LayoutPlan")}></input> */}
-                                    <input type="file" placeholder="" className="form-control" {...register("thirdPartyRightsDeclaration", { required: "This Document is required" })} onChange={(e) => uploadFile(e.target.files[0], "thirdPartyRightsDeclaration")} ></input>
+                                  <td className="d-flex justify-content-center">
+                                    <label title="Upload Document" for={'thirdPartyRightsDeclaration'}>
+                                      {" "}
+                                      <FileUpload color="primary" for={'thirdPartyRightsDeclaration'} />
+                                    </label>
+
+                                    <input id="thirdPartyRightsDeclaration" type="file" placeholder="" className="form-control d-none" {...register("thirdPartyRightsDeclaration", { required: "This Document is required" })} onChange={(e) => uploadFile(e.target.files[0], "thirdPartyRightsDeclaration")} ></input>
                                     <h3 className="error-message" style={{ color: "red" }}>
                                       {errors?.thirdPartyRightsDeclaration && errors?.thirdPartyRightsDeclaration?.message}
                                     </h3>
+                                    {watch('thirdPartyRightsDeclarationfileUrl') && (
+                                      <a onClick={() => getDocShareholding(watch('thirdPartyRightsDeclarationfileUrl'), setLoading)} className="btn btn-sm ">
+                                        <Visibility />
+                                      </a>
+                                    )}
                                   </td>
                                 )
                             }
@@ -675,32 +769,50 @@ function SurrenderLic() {
                             <td>
                               {`${t("DETAILED_SCHEME_OF_RELOCATION")}`}
                               <span style={{ color: "red" }}>*</span>
-                              {
+                              {/* {
                                 watch("detailedRelocationSchemefileUrl") &&
                                 (
                                   <div>
                                     <small>File Uploaded</small>
                                   </div>
                                 )
-                              }
+                              } */}
                             </td>
                             {
                               watch("detailedRelocationSchemefileUrl") ?
                                 (
-                                  <td>
-                                    {/* <input type="file" placeholder="" className="form-control" {...register("oning/LayoutPlan")}></input> */}
-                                    <input type="file" placeholder="" className="form-control" onChange={(e) => uploadFile(e.target.files[0], "detailedRelocationScheme")} ></input>
+                                  <td className="d-flex justify-content-center">
+                                    <label title="Upload Document" for={'detailedRelocationScheme'}>
+                                      {" "}
+                                      <FileUpload color="primary" for={'detailedRelocationScheme'} />
+                                    </label>
+
+                                    <input id="detailedRelocationScheme" type="file" placeholder="" className="form-control d-none" onChange={(e) => uploadFile(e.target.files[0], "detailedRelocationScheme")} ></input>
                                     <h3 className="error-message" style={{ color: "red" }}>
                                       {errors?.detailedRelocationScheme && errors?.detailedRelocationScheme?.message}
                                     </h3>
+                                    {watch('detailedRelocationSchemefileUrl') && (
+                                      <a onClick={() => getDocShareholding(watch('detailedRelocationSchemefileUrl'), setLoading)} className="btn btn-sm ">
+                                        <Visibility />
+                                      </a>
+                                    )}
                                   </td>
                                 ) : (
-                                  <td>
-                                    {/* <input type="file" placeholder="" className="form-control" {...register("oning/LayoutPlan")}></input> */}
-                                    <input type="file" placeholder="" className="form-control" {...register("detailedRelocationScheme", { required: "This Document is required" })} onChange={(e) => uploadFile(e.target.files[0], "detailedRelocationScheme")} ></input>
+                                  <td className="d-flex justify-content-center">
+                                    <label title="Upload Document" for={'detailedRelocationScheme'}>
+                                      {" "}
+                                      <FileUpload color="primary" for={'detailedRelocationScheme'} />
+                                    </label>
+
+                                    <input id="detailedRelocationScheme" type="file" placeholder="" className="form-control d-none" {...register("detailedRelocationScheme", { required: "This Document is required" })} onChange={(e) => uploadFile(e.target.files[0], "detailedRelocationScheme")} ></input>
                                     <h3 className="error-message" style={{ color: "red" }}>
                                       {errors?.detailedRelocationScheme && errors?.detailedRelocationScheme?.message}
                                     </h3>
+                                    {watch('detailedRelocationSchemefileUrl') && (
+                                      <a onClick={() => getDocShareholding(watch('detailedRelocationSchemefileUrl'), setLoading)} className="btn btn-sm ">
+                                        <Visibility />
+                                      </a>
+                                    )}
                                   </td>
                                 )
                             }
@@ -764,30 +876,50 @@ function SurrenderLic() {
                             {" "}
                             {`${t("GIFT_DEED")}`}
                             <span style={{ color: "red" }}>*</span>
-                            {
+                            {/* {
                               watch("giftDeedfileUrl") &&
                               (
                                 <div>
                                   <small>File Uploaded</small>
                                 </div>
                               )
-                            }
+                            } */}
                           </td>
                           {
                             watch("giftDeedfileUrl") ?
                               (
-                                <td>
-                                  <input type="file" placeholder="" className="form-control" onChange={(e) => uploadFile(e.target.files[0], "giftDeed")} ></input>
+                                <td className="d-flex justify-content-center">
+                                  <label title="Upload Document" for={'giftDeed'}>
+                                      {" "}
+                                      <FileUpload color="primary" for={'giftDeed'} />
+                                    </label>
+
+                                    <input id="giftDeed" type="file" placeholder="" className="form-control d-none" onChange={(e) => uploadFile(e.target.files[0], "giftDeed")} ></input>
                                   <h3 className="error-message" style={{ color: "red" }}>
                                     {errors?.giftDeed && errors?.giftDeed?.message}
                                   </h3>
+                                  {watch('giftDeedfileUrl') && (
+                                      <a onClick={() => getDocShareholding(watch('giftDeedfileUrl'), setLoading)} className="btn btn-sm ">
+                                        <Visibility />
+                                      </a>
+                                    )}
                                 </td>
                               ) : (
-                                <td>
-                                  <input type="file" placeholder="" className="form-control" {...register("giftDeed", { required: "This Document is required" })} onChange={(e) => uploadFile(e.target.files[0], "giftDeed")} ></input>
+                                <td className="d-flex justify-content-center">
+                                  <label title="Upload Document" for={'giftDeed'}>
+                                      {" "}
+                                      <FileUpload color="primary" for={'giftDeed'} />
+                                    </label>
+
+                                    <input id="giftDeed" type="file" placeholder="" className="form-control d-none" {...register("giftDeed", { required: "This Document is required" })} onChange={(e) => uploadFile(e.target.files[0], "giftDeed")} ></input>
                                   <h3 className="error-message" style={{ color: "red" }}>
                                     {errors?.giftDeed && errors?.giftDeed?.message}
                                   </h3>
+                                  {watch('giftDeedfileUrl') && (
+                                      <a onClick={() => getDocShareholding(watch('giftDeedfileUrl'), setLoading)} className="btn btn-sm ">
+                                        <Visibility />
+                                      </a>
+                                    )}
                                 </td>
                               )
                           }
@@ -799,30 +931,53 @@ function SurrenderLic() {
                             {" "}
                             {`${t("MUTATION")}`}
                             <span style={{ color: "red" }}>*</span>
-                            {
+                            {/* {
                               watch("mutationfileUrl") &&
                               (
                                 <div>
                                   <small>File Uploaded</small>
                                 </div>
                               )
-                            }
+                            } */}
                           </td>
                           {
                             watch("mutationfileUrl") ?
                               (
-                                <td>
-                                  <input type="file" placeholder="" className="form-control" onChange={(e) => uploadFile(e.target.files[0], "mutation")} ></input>
+                                <td className="d-flex justify-content-center">
+                                  <label title="Upload Document" for={'mutation'}>
+                                      {" "}
+                                      <FileUpload color="primary" for={'mutation'} />
+                                    </label>
+
+                                    <input id="mutation" type="file" placeholder="" className="form-control d-none" onChange={(e) => uploadFile(e.target.files[0], "mutation")} ></input>
                                   <h3 className="error-message" style={{ color: "red" }}>
                                     {errors?.mutation && errors?.mutation?.message}
                                   </h3>
+
+                                  {watch('mutationfileUrl') && (
+                                      <a onClick={() => getDocShareholding(watch('mutationfileUrl'), setLoading)} className="btn btn-sm ">
+                                        <Visibility />
+                                      </a>
+                                    )}
                                 </td>
                               ) : (
-                                <td>
-                                  <input type="file" placeholder="" className="form-control" {...register("mutation", { required: "This Document is required" })} onChange={(e) => uploadFile(e.target.files[0], "mutation")} ></input>
+                                <td className="d-flex justify-content-center">
+                                  <label title="Upload Document" for={'mutation'}>
+                                      {" "}
+                                      <FileUpload color="primary" for={'mutation'} />
+                                    </label>
+
+                                    <input id="mutation" type="file" placeholder="" className="form-control d-none" {...register("mutation", { required: "This Document is required" })} onChange={(e) => uploadFile(e.target.files[0], "mutation")} ></input>
                                   <h3 className="error-message" style={{ color: "red" }}>
                                     {errors?.mutation && errors?.mutation?.message}
                                   </h3>
+
+                                  {watch('mutationfileUrl') && (
+                                      <a onClick={() => getDocShareholding(watch('mutationfileUrl'), setLoading)} className="btn btn-sm ">
+                                        <Visibility />
+                                      </a>
+                                    )}
+
                                 </td>
                               )
                           }
@@ -833,30 +988,50 @@ function SurrenderLic() {
                           <td>
                             {" "}
                             {`${t("JAMABANDHI")}`}<span style={{ color: "red" }}>*</span>
-                            {
+                            {/* {
                               watch("jamabandhifileUrl") &&
                               (
                                 <div>
                                   <small>File Uploaded</small>
                                 </div>
                               )
-                            }
+                            } */}
                           </td>
                           {
                             watch("jamabandhifileUrl") ?
                               (
-                                <td>
-                                  <input type="file" placeholder="" className="form-control" onChange={(e) => uploadFile(e.target.files[0], "jamabandhi")} ></input>
+                                <td className="d-flex justify-content-center">
+                                  <label title="Upload Document" for={'jamabandhi'}>
+                                      {" "}
+                                      <FileUpload color="primary" for={'jamabandhi'} />
+                                    </label>
+
+                                    <input id="jamabandhi" type="file" placeholder="" className="form-control d-none" onChange={(e) => uploadFile(e.target.files[0], "jamabandhi")} ></input>
                                   <h3 className="error-message" style={{ color: "red" }}>
                                     {errors?.jamabandhi && errors?.jamabandhi?.message}
                                   </h3>
+                                  {watch('jamabandhifileUrl') && (
+                                      <a onClick={() => getDocShareholding(watch('jamabandhifileUrl'), setLoading)} className="btn btn-sm ">
+                                        <Visibility />
+                                      </a>
+                                    )}
                                 </td>
                               ) : (
-                                <td>
-                                  <input type="file" placeholder="" className="form-control" {...register("jamabandhi", { required: "This Document is required" })} onChange={(e) => uploadFile(e.target.files[0], "jamabandhi")} ></input>
+                                <td className="d-flex justify-content-center">
+                                  <label title="Upload Document" for={'jamabandhi'}>
+                                      {" "}
+                                      <FileUpload color="primary" for={'jamabandhi'} />
+                                    </label>
+
+                                    <input id="jamabandhi" type="file" placeholder="" className="form-control d-none" {...register("jamabandhi", { required: "This Document is required" })} onChange={(e) => uploadFile(e.target.files[0], "jamabandhi")} ></input>
                                   <h3 className="error-message" style={{ color: "red" }}>
                                     {errors?.jamabandhi && errors?.jamabandhi?.message}
                                   </h3>
+                                  {watch('jamabandhifileUrl') && (
+                                      <a onClick={() => getDocShareholding(watch('jamabandhifileUrl'), setLoading)} className="btn btn-sm ">
+                                        <Visibility />
+                                      </a>
+                                    )}
                                 </td>
                               )
                           }
@@ -888,30 +1063,50 @@ function SurrenderLic() {
                         <td>
                           {" "}
                           {`${t("DECLARATION_IDW_WORKS")}`}<span style={{ color: "red" }}>*</span>
-                          {
+                          {/* {
                             watch("declarationIDWWorksfileUrl") &&
                             (
                               <div>
                                 <small>File Uploaded</small>
                               </div>
                             )
-                          }
+                          } */}
                         </td>
                         {
                           watch("declarationIDWWorksfileUrl") ?
                             (
-                              <td>
-                                <input type="file" placeholder="" className="form-control" onChange={(e) => uploadFile(e.target.files[0], "declarationIDWWorks")} ></input>
+                              <td className="d-flex justify-content-center">
+                                <label title="Upload Document" for={'declarationIDWWorks'}>
+                                      {" "}
+                                      <FileUpload color="primary" for={'declarationIDWWorks'} />
+                                    </label>
+
+                                    <input id="declarationIDWWorks" type="file" placeholder="" className="form-control d-none" onChange={(e) => uploadFile(e.target.files[0], "declarationIDWWorks")} ></input>
                                 <h3 className="error-message" style={{ color: "red" }}>
                                   {errors?.declarationIDWWorks && errors?.declarationIDWWorks?.message}
                                 </h3>
+                                {watch('declarationIDWWorksfileUrl') && (
+                                      <a onClick={() => getDocShareholding(watch('declarationIDWWorksfileUrl'), setLoading)} className="btn btn-sm ">
+                                        <Visibility />
+                                      </a>
+                                    )}
                               </td>
                             ) : (
-                              <td>
-                                <input type="file" placeholder="" className="form-control" {...register("declarationIDWWorks", { required: "This Document is required" })} onChange={(e) => uploadFile(e.target.files[0], "declarationIDWWorks")} ></input>
+                              <td className="d-flex justify-content-center">
+                                <label title="Upload Document" for={'declarationIDWWorks'}>
+                                      {" "}
+                                      <FileUpload color="primary" for={'declarationIDWWorks'} />
+                                    </label>
+
+                                    <input id="declarationIDWWorks" type="file" placeholder="" className="form-control d-none" {...register("declarationIDWWorks", { required: "This Document is required" })} onChange={(e) => uploadFile(e.target.files[0], "declarationIDWWorks")} ></input>
                                 <h3 className="error-message" style={{ color: "red" }}>
                                   {errors?.declarationIDWWorks && errors?.declarationIDWWorks?.message}
                                 </h3>
+                                {watch('declarationIDWWorksfileUrl') && (
+                                      <a onClick={() => getDocShareholding(watch('declarationIDWWorksfileUrl'), setLoading)} className="btn btn-sm ">
+                                        <Visibility />
+                                      </a>
+                                    )}
                               </td>
                             )
                         }
@@ -923,30 +1118,50 @@ function SurrenderLic() {
                           {" "}
                           {`${t("REVISED_LAYOUT_PLAN")}`}
                           <span style={{ color: "red" }}>*</span>
-                          {
+                          {/* {
                             watch("revisedLayoutPlanfileUrl") &&
                             (
                               <div>
                                 <small>File Uploaded</small>
                               </div>
                             )
-                          }
+                          } */}
                         </td>
                         {
                           watch("revisedLayoutPlanfileUrl") ?
                             (
-                              <td>
-                                <input type="file" placeholder="" className="form-control" onChange={(e) => uploadFile(e.target.files[0], "revisedLayoutPlan")} ></input>
+                              <td className="d-flex justify-content-center">
+                                <label title="Upload Document" for={'revisedLayoutPlan'}>
+                                      {" "}
+                                      <FileUpload color="primary" for={'revisedLayoutPlan'} />
+                                    </label>
+
+                                    <input id="revisedLayoutPlan" type="file" placeholder="" className="form-control d-none" onChange={(e) => uploadFile(e.target.files[0], "revisedLayoutPlan")} ></input>
                                 <h3 className="error-message" style={{ color: "red" }}>
                                   {errors?.revisedLayoutPlan && errors?.revisedLayoutPlan?.message}
                                 </h3>
+                                {watch('revisedLayoutPlanfileUrl') && (
+                                      <a onClick={() => getDocShareholding(watch('revisedLayoutPlanfileUrl'), setLoading)} className="btn btn-sm ">
+                                        <Visibility />
+                                      </a>
+                                    )}
                               </td>
                             ) : (
-                              <td>
-                                <input type="file" placeholder="" className="form-control" {...register("revisedLayoutPlan", { required: "This Document is required" })} onChange={(e) => uploadFile(e.target.files[0], "revisedLayoutPlan")} ></input>
+                              <td className="d-flex justify-content-center">
+                                <label title="Upload Document" for={'revisedLayoutPlan'}>
+                                      {" "}
+                                      <FileUpload color="primary" for={'revisedLayoutPlan'} />
+                                    </label>
+
+                                    <input id="revisedLayoutPlan" type="file" placeholder="" className="form-control d-none" {...register("revisedLayoutPlan", { required: "This Document is required" })} onChange={(e) => uploadFile(e.target.files[0], "revisedLayoutPlan")} ></input>
                                 <h3 className="error-message" style={{ color: "red" }}>
                                   {errors?.revisedLayoutPlan && errors?.revisedLayoutPlan?.message}
                                 </h3>
+                                {watch('revisedLayoutPlanfileUrl') && (
+                                      <a onClick={() => getDocShareholding(watch('revisedLayoutPlanfileUrl'), setLoading)} className="btn btn-sm ">
+                                        <Visibility />
+                                      </a>
+                                    )}
                               </td>
                             )
                         }
@@ -957,30 +1172,50 @@ function SurrenderLic() {
                         <td>
                           {" "}
                           {`${t("EDC_AVAILED")}`}<span style={{ color: "red" }}>*</span>
-                          {
+                          {/* {
                             watch("availedEdcfileUrl") &&
                             (
                               <div>
                                 <small>File Uploaded</small>
                               </div>
                             )
-                          }
+                          } */}
                         </td>
                         {
                           watch("availedEdcfileUrl") ?
                             (
-                              <td>
-                                <input type="file" placeholder="" className="form-control" onChange={(e) => uploadFile(e.target.files[0], "availedEdc")} ></input>
+                              <td className="d-flex justify-content-center">
+                                <label title="Upload Document" for={'availedEdc'}>
+                                      {" "}
+                                      <FileUpload color="primary" for={'availedEdc'} />
+                                    </label>
+
+                                    <input id="availedEdc" type="file" placeholder="" className="form-control d-none" onChange={(e) => uploadFile(e.target.files[0], "availedEdc")} ></input>
                                 <h3 className="error-message" style={{ color: "red" }}>
                                   {errors?.availedEdc && errors?.availedEdc?.message}
                                 </h3>
+                                {watch('availedEdcfileUrl') && (
+                                      <a onClick={() => getDocShareholding(watch('availedEdcfileUrl'), setLoading)} className="btn btn-sm ">
+                                        <Visibility />
+                                      </a>
+                                    )}
                               </td>
                             ) : (
-                              <td>
-                                <input type="file" placeholder="" className="form-control" {...register("availedEdc", { required: "This Document is required" })} onChange={(e) => uploadFile(e.target.files[0], "availedEdc")} ></input>
+                              <td className="d-flex justify-content-center">
+                                <label title="Upload Document" for={'availedEdc'}>
+                                      {" "}
+                                      <FileUpload color="primary" for={'availedEdc'} />
+                                    </label>
+
+                                    <input id="availedEdc" type="file" placeholder="" className="form-control d-none" {...register("availedEdc", { required: "This Document is required" })} onChange={(e) => uploadFile(e.target.files[0], "availedEdc")} ></input>
                                 <h3 className="error-message" style={{ color: "red" }}>
                                   {errors?.availedEdc && errors?.availedEdc?.message}
                                 </h3>
+                                {watch('availedEdcfileUrl') && (
+                                      <a onClick={() => getDocShareholding(watch('availedEdcfileUrl'), setLoading)} className="btn btn-sm ">
+                                        <Visibility />
+                                      </a>
+                                    )}
                               </td>
                             )
                         }
@@ -991,30 +1226,50 @@ function SurrenderLic() {
                         <td>
                           {" "}
                           {`${t("AREA_FALLING_UNDER_24M_ROAD_OR_SECTOR_DIVIDING_ROAD")}`} <span style={{ color: "red" }}>*</span>
-                          {
+                          {/* {
                             watch("areaFallingUnderfileUrl") &&
                             (
                               <div>
                                 <small>File Uploaded</small>
                               </div>
                             )
-                          }
+                          } */}
                         </td>
                         {
                           watch("areaFallingUnderfileUrl") ?
                             (
-                              <td>
-                                <input type="file" placeholder="" className="form-control" onChange={(e) => uploadFile(e.target.files[0], "areaFallingUnder")} ></input>
+                              <td className="d-flex justify-content-center">
+                                <label title="Upload Document" for={'areaFallingUnder'}>
+                                      {" "}
+                                      <FileUpload color="primary" for={'areaFallingUnder'} />
+                                    </label>
+
+                                    <input id="areaFallingUnder" type="file" placeholder="" className="form-control d-none" onChange={(e) => uploadFile(e.target.files[0], "areaFallingUnder")} ></input>
                                 <h3 className="error-message" style={{ color: "red" }}>
                                   {errors?.areaFallingUnderfile && errors?.areaFallingUnderfile?.message}
                                 </h3>
+                                {watch('areaFallingUnderfileUrl') && (
+                                      <a onClick={() => getDocShareholding(watch('areaFallingUnderfileUrl'), setLoading)} className="btn btn-sm ">
+                                        <Visibility />
+                                      </a>
+                                    )}
                               </td>
                             ) : (
-                              <td>
-                                <input type="file" placeholder="" className="form-control" {...register("areaFallingUnderfile", { required: "This Document is required" })} onChange={(e) => uploadFile(e.target.files[0], "areaFallingUnder")} ></input>
+                              <td className="d-flex justify-content-center">
+                                <label title="Upload Document" for={'areaFallingUnder'}>
+                                      {" "}
+                                      <FileUpload color="primary" for={'areaFallingUnder'} />
+                                    </label>
+
+                                    <input id="areaFallingUnder" type="file" placeholder="" className="form-control d-none" {...register("areaFallingUnderfile", { required: "This Document is required" })} onChange={(e) => uploadFile(e.target.files[0], "areaFallingUnder")} ></input>
                                 <h3 className="error-message" style={{ color: "red" }}>
                                   {errors?.areaFallingUnderfile && errors?.areaFallingUnderfile?.message}
                                 </h3>
+                                {watch('areaFallingUnderfileUrl') && (
+                                      <a onClick={() => getDocShareholding(watch('areaFallingUnderfileUrl'), setLoading)} className="btn btn-sm ">
+                                        <Visibility />
+                                      </a>
+                                    )}
                               </td>
                             )
                         }
@@ -1027,32 +1282,50 @@ function SurrenderLic() {
                             <td>
                               {`${t("DECLARATION_OF_THIRD_PARTY_RIGHTS")}`}
                               <span style={{ color: "red" }}>*</span>
-                              {
+                              {/* {
                                 watch("thirdPartyRightsDeclarationfileUrl") &&
                                 (
                                   <div>
                                     <small>File Uploaded</small>
                                   </div>
                                 )
-                              }
+                              } */}
                             </td>
                             {
                               watch("thirdPartyRightsDeclarationfileUrl") ?
                                 (
-                                  <td>
-                                    {/* <input type="file" placeholder="" className="form-control" {...register("oning/LayoutPlan")}></input> */}
-                                    <input type="file" placeholder="" className="form-control" onChange={(e) => uploadFile(e.target.files[0], "thirdPartyRightsDeclaration")} ></input>
+                                  <td className="d-flex justify-content-center">
+                                    <label title="Upload Document" for={'thirdPartyRightsDeclaration'}>
+                                      {" "}
+                                      <FileUpload color="primary" for={'thirdPartyRightsDeclaration'} />
+                                    </label>
+
+                                    <input id="thirdPartyRightsDeclaration" type="file" placeholder="" className="form-control d-none" onChange={(e) => uploadFile(e.target.files[0], "thirdPartyRightsDeclaration")} ></input>
                                     <h3 className="error-message" style={{ color: "red" }}>
                                       {errors?.thirdPartyRightsDeclaration && errors?.thirdPartyRightsDeclaration?.message}
                                     </h3>
+                                    {watch('thirdPartyRightsDeclarationfileUrl') && (
+                                      <a onClick={() => getDocShareholding(watch('thirdPartyRightsDeclarationfileUrl'), setLoading)} className="btn btn-sm ">
+                                        <Visibility />
+                                      </a>
+                                    )}
                                   </td>
                                 ) : (
-                                  <td>
-                                    {/* <input type="file" placeholder="" className="form-control" {...register("oning/LayoutPlan")}></input> */}
-                                    <input type="file" placeholder="" className="form-control" {...register("thirdPartyRightsDeclaration", { required: "This Document is required" })} onChange={(e) => uploadFile(e.target.files[0], "thirdPartyRightsDeclaration")} ></input>
+                                  <td className="d-flex justify-content-center">
+                                    <label title="Upload Document" for={'thirdPartyRightsDeclaration'}>
+                                      {" "}
+                                      <FileUpload color="primary" for={'thirdPartyRightsDeclaration'} />
+                                    </label>
+
+                                    <input id="thirdPartyRightsDeclaration" type="file" placeholder="" className="form-control d-none" {...register("thirdPartyRightsDeclaration", { required: "This Document is required" })} onChange={(e) => uploadFile(e.target.files[0], "thirdPartyRightsDeclaration")} ></input>
                                     <h3 className="error-message" style={{ color: "red" }}>
                                       {errors?.thirdPartyRightsDeclaration && errors?.thirdPartyRightsDeclaration?.message}
                                     </h3>
+                                    {watch('thirdPartyRightsDeclarationfileUrl') && (
+                                      <a onClick={() => getDocShareholding(watch('thirdPartyRightsDeclarationfileUrl'), setLoading)} className="btn btn-sm ">
+                                        <Visibility />
+                                      </a>
+                                    )}
                                   </td>
                                 )
                             }
@@ -1068,32 +1341,50 @@ function SurrenderLic() {
                             <td>
                               {`${t("DETAILED_SCHEME_OF_RELOCATION")}`}
                               <span style={{ color: "red" }}>*</span>
-                              {
+                              {/* {
                                 watch("detailedRelocationSchemefileUrl") &&
                                 (
                                   <div>
                                     <small>File Uploaded</small>
                                   </div>
                                 )
-                              }
+                              } */}
                             </td>
                             {
                               watch("detailedRelocationSchemefileUrl") ?
                                 (
-                                  <td>
-                                    {/* <input type="file" placeholder="" className="form-control" {...register("oning/LayoutPlan")}></input> */}
-                                    <input type="file" placeholder="" className="form-control" onChange={(e) => uploadFile(e.target.files[0], "detailedRelocationScheme")} ></input>
+                                  <td className="d-flex justify-content-center">
+                                    <label title="Upload Document" for={'detailedRelocationScheme'}>
+                                      {" "}
+                                      <FileUpload color="primary" for={'detailedRelocationScheme'} />
+                                    </label>
+
+                                    <input id="detailedRelocationScheme" type="file" placeholder="" className="form-control d-none" onChange={(e) => uploadFile(e.target.files[0], "detailedRelocationScheme")} ></input>
                                     <h3 className="error-message" style={{ color: "red" }}>
                                       {errors?.detailedRelocationScheme && errors?.detailedRelocationScheme?.message}
                                     </h3>
+                                    {watch('detailedRelocationSchemefileUrl') && (
+                                      <a onClick={() => getDocShareholding(watch('detailedRelocationSchemefileUrl'), setLoading)} className="btn btn-sm ">
+                                        <Visibility />
+                                      </a>
+                                    )}
                                   </td>
                                 ) : (
-                                  <td>
-                                    {/* <input type="file" placeholder="" className="form-control" {...register("oning/LayoutPlan")}></input> */}
-                                    <input type="file" placeholder="" className="form-control" {...register("detailedRelocationScheme", { required: "This Document is required" })} onChange={(e) => uploadFile(e.target.files[0], "detailedRelocationScheme")} ></input>
+                                  <td className="d-flex justify-content-center">
+                                    <label title="Upload Document" for={'detailedRelocationScheme'}>
+                                      {" "}
+                                      <FileUpload color="primary" for={'detailedRelocationScheme'} />
+                                    </label>
+
+                                    <input id="detailedRelocationScheme" type="file" placeholder="" className="form-control d-none" {...register("detailedRelocationScheme", { required: "This Document is required" })} onChange={(e) => uploadFile(e.target.files[0], "detailedRelocationScheme")} ></input>
                                     <h3 className="error-message" style={{ color: "red" }}>
                                       {errors?.detailedRelocationScheme && errors?.detailedRelocationScheme?.message}
                                     </h3>
+                                    {watch('detailedRelocationSchemefileUrl') && (
+                                      <a onClick={() => getDocShareholding(watch('detailedRelocationSchemefileUrl'), setLoading)} className="btn btn-sm ">
+                                        <Visibility />
+                                      </a>
+                                    )}
                                   </td>
                                 )
                             }
@@ -1156,30 +1447,50 @@ function SurrenderLic() {
                             {" "}
                             {`${t("GIFT_DEED")}`}
                             <span style={{ color: "red" }}>*</span>
-                            {
+                            {/* {
                               watch("giftDeedfileUrl") &&
                               (
                                 <div>
                                   <small>File Uploaded</small>
                                 </div>
                               )
-                            }
+                            } */}
                           </td>
                           {
                             watch("giftDeedfileUrl") ?
                               (
-                                <td>
-                                  <input type="file" placeholder="" className="form-control" onChange={(e) => uploadFile(e.target.files[0], "giftDeed")} ></input>
+                                <td className="d-flex justify-content-center">
+                                  <label title="Upload Document" for={'giftDeed'}>
+                                      {" "}
+                                      <FileUpload color="primary" for={'giftDeed'} />
+                                    </label>
+
+                                    <input id="giftDeed" type="file" placeholder="" className="form-control d-none" onChange={(e) => uploadFile(e.target.files[0], "giftDeed")} ></input>
                                   <h3 className="error-message" style={{ color: "red" }}>
                                     {errors?.giftDeed && errors?.giftDeed?.message}
                                   </h3>
+                                  {watch('giftDeedfileUrl') && (
+                                      <a onClick={() => getDocShareholding(watch('giftDeedfileUrl'), setLoading)} className="btn btn-sm ">
+                                        <Visibility />
+                                      </a>
+                                    )}
                                 </td>
                               ) : (
-                                <td>
-                                  <input type="file" placeholder="" className="form-control" {...register("giftDeed", { required: "This Document is required" })} onChange={(e) => uploadFile(e.target.files[0], "giftDeed")} ></input>
+                                <td className="d-flex justify-content-center">
+                                  <label title="Upload Document" for={'giftDeed'}>
+                                      {" "}
+                                      <FileUpload color="primary" for={'giftDeed'} />
+                                    </label>
+
+                                    <input id="giftDeed" type="file" placeholder="" className="form-control d-none" {...register("giftDeed", { required: "This Document is required" })} onChange={(e) => uploadFile(e.target.files[0], "giftDeed")} ></input>
                                   <h3 className="error-message" style={{ color: "red" }}>
                                     {errors?.giftDeed && errors?.giftDeed?.message}
                                   </h3>
+                                  {watch('giftDeedfileUrl') && (
+                                      <a onClick={() => getDocShareholding(watch('giftDeedfileUrl'), setLoading)} className="btn btn-sm ">
+                                        <Visibility />
+                                      </a>
+                                    )}
                                 </td>
                               )
                           }
@@ -1191,30 +1502,50 @@ function SurrenderLic() {
                             {" "}
                             {`${t("MUTATION")}`}
                             <span style={{ color: "red" }}>*</span>
-                            {
+                            {/* {
                               watch("mutationfileUrl") &&
                               (
                                 <div>
                                   <small>File Uploaded</small>
                                 </div>
                               )
-                            }
+                            } */}
                           </td>
                           {
                             watch("mutationfileUrl") ?
                               (
-                                <td>
-                                  <input type="file" placeholder="" className="form-control" onChange={(e) => uploadFile(e.target.files[0], "mutation")} ></input>
+                                <td className="d-flex justify-content-center">
+                                  <label title="Upload Document" for={'mutation'}>
+                                      {" "}
+                                      <FileUpload color="primary" for={'mutation'} />
+                                    </label>
+
+                                    <input id="mutation" type="file" placeholder="" className="form-control d-none" onChange={(e) => uploadFile(e.target.files[0], "mutation")} ></input>
                                   <h3 className="error-message" style={{ color: "red" }}>
                                     {errors?.mutation && errors?.mutation?.message}
                                   </h3>
+                                  {watch('mutationfileUrl') && (
+                                      <a onClick={() => getDocShareholding(watch('mutationfileUrl'), setLoading)} className="btn btn-sm ">
+                                        <Visibility />
+                                      </a>
+                                    )}
                                 </td>
                               ) : (
-                                <td>
-                                  <input type="file" placeholder="" className="form-control" {...register("mutation", { required: "This Document is required" })} onChange={(e) => uploadFile(e.target.files[0], "mutation")} ></input>
+                                <td className="d-flex justify-content-center">
+                                  <label title="Upload Document" for={'mutation'}>
+                                      {" "}
+                                      <FileUpload color="primary" for={'mutation'} />
+                                    </label>
+
+                                    <input id="mutation" type="file" placeholder="" className="form-control d-none" {...register("mutation", { required: "This Document is required" })} onChange={(e) => uploadFile(e.target.files[0], "mutation")} ></input>
                                   <h3 className="error-message" style={{ color: "red" }}>
                                     {errors?.mutation && errors?.mutation?.message}
                                   </h3>
+                                  {watch('mutationfileUrl') && (
+                                      <a onClick={() => getDocShareholding(watch('mutationfileUrl'), setLoading)} className="btn btn-sm ">
+                                        <Visibility />
+                                      </a>
+                                    )}
                                 </td>
                               )
                           }
@@ -1225,30 +1556,50 @@ function SurrenderLic() {
                           <td>
                             {" "}
                             {`${t("JAMABANDHI")}`} <span style={{ color: "red" }}>*</span>
-                            {
+                            {/* {
                               watch("jamabandhifileUrl") &&
                               (
                                 <div>
                                   <small>File Uploaded</small>
                                 </div>
                               )
-                            }
+                            } */}
                           </td>
                           {
                             watch("jamabandhifileUrl") ?
                               (
-                                <td>
-                                  <input type="file" placeholder="" className="form-control" onChange={(e) => uploadFile(e.target.files[0], "jamabandhi")} ></input>
+                                <td className="d-flex justify-content-center">
+                                  <label title="Upload Document" for={'jamabandhi'}>
+                                      {" "}
+                                      <FileUpload color="primary" for={'jamabandhi'} />
+                                    </label>
+
+                                    <input id="jamabandhi" type="file" placeholder="" className="form-control d-none" onChange={(e) => uploadFile(e.target.files[0], "jamabandhi")} ></input>
                                   <h3 className="error-message" style={{ color: "red" }}>
                                     {errors?.jamabandhi && errors?.jamabandhi?.message}
                                   </h3>
+                                  {watch('jamabandhifileUrl') && (
+                                      <a onClick={() => getDocShareholding(watch('jamabandhifileUrl'), setLoading)} className="btn btn-sm ">
+                                        <Visibility />
+                                      </a>
+                                    )}
                                 </td>
                               ) : (
-                                <td>
-                                  <input type="file" placeholder="" className="form-control" {...register("jamabandhi", { required: "This Document is required" })} onChange={(e) => uploadFile(e.target.files[0], "jamabandhi")} ></input>
+                                <td className="d-flex justify-content-center">
+                                  <label title="Upload Document" for={'jamabandhi'}>
+                                      {" "}
+                                      <FileUpload color="primary" for={'jamabandhi'} />
+                                    </label>
+
+                                    <input id="jamabandhi" type="file" placeholder="" className="form-control d-none" {...register("jamabandhi", { required: "This Document is required" })} onChange={(e) => uploadFile(e.target.files[0], "jamabandhi")} ></input>
                                   <h3 className="error-message" style={{ color: "red" }}>
                                     {errors?.jamabandhi && errors?.jamabandhi?.message}
                                   </h3>
+                                  {watch('jamabandhifileUrl') && (
+                                      <a onClick={() => getDocShareholding(watch('jamabandhifileUrl'), setLoading)} className="btn btn-sm ">
+                                        <Visibility />
+                                      </a>
+                                    )}
                                 </td>
                               )
                           }

@@ -30,7 +30,7 @@ import TransferScrutiny from "../employee/ScrutinyBasic/AllServiceScrutiny/Trans
 // import FormBank from "../employee/ScrutinyBasic/AllServiceScrutiny/BankGuarantee/FormBankScrutniy/FormBank";
 import ServicePlanInbox from "../employee/ServicePlan/Inbox/index";
 import BankGuaranteePlan from "../employee/BankGuarantee/Inbox/index";
-import ElectricalPlanInbox from "../employee/ElectricPlan/Inbox/index"
+import ElectricalPlanInbox from "../employee/ElectricPlan/Inbox/index";
 import ScrutinyForm from "./ScrutinyBasic/AllServiceScrutiny/BankGuarantee/FormBankScrutniy/cardBank";
 import ExtensionCard from "./ScrutinyBasic/AllServiceScrutiny/BankGuarantee/Extensionbank/Extensioncard";
 import ReplaceCard from "./ScrutinyBasic/AllServiceScrutiny/BankGuarantee/Replacebank/ReplaceCard";
@@ -42,6 +42,7 @@ import LayoutPlanInbox from "./ScrutinyBasic/AllServiceScrutiny/LayoutPlan/Inbox
 import BeneficialInbox from "./ScrutinyBasic/AllServiceScrutiny/BeneficialInterest/Inbox";
 import StandardInbox from "./ScrutinyBasic/AllServiceScrutiny/StandardDesign/Inbox";
 import RenewalInbox from "./ScrutinyBasic/AllServiceScrutiny/Renewal/Inbox";
+import SurrenderLicScrutiny from "../employee/ScrutinyBasic/AllServiceScrutiny/SurrenderLic/SurrenderLic";
 
 const TLBreadCrumb = ({ location }) => {
   const { t } = useTranslation();
@@ -193,7 +194,6 @@ const EmployeeApp = ({ path, url, userType }) => {
   const Response = Digit?.ComponentRegistryService?.getComponent("TLResponse");
   const Search = Digit?.ComponentRegistryService?.getComponent("TLSearch");
 
-
   return (
     <TLContextProvider>
       <Switch>
@@ -249,15 +249,115 @@ const EmployeeApp = ({ path, url, userType }) => {
             <PrivateRoute path={`${path}/ServiceScrutiny/:id`} component={ServiceScrutiny} />
             {/* <PrivateRoute path={`${path}/ScrutinyForm`} component={ScrutinyForm} /> */}
             <PrivateRoute path={`${path}/ScrutinyForm/:id`} component={ScrutinyForm} />
-            <PrivateRoute path={`${path}/SurrenderInbox`} component={(props) => <SurrenderInbox parentRoute={path} businessService={["SURREND_OF_LICENSE"]} filterComponent="TL_INBOX_FILTER" initialStates={{}} isInbox={true} /> } /> 
-            <PrivateRoute path={`${path}/StandardInbox`} component={(props) => <StandardInbox parentRoute={path} businessService={["APPROVAL_OF_STANDARD"]} filterComponent="TL_INBOX_FILTER" initialStates={{}} isInbox={true} /> } /> 
-            <PrivateRoute path={`${path}/RenewalInbox`} component={(props) => <RenewalInbox parentRoute={path} businessService={["RENWAL_OF_LICIENCE"]} filterComponent="TL_INBOX_FILTER" initialStates={{}} isInbox={true} /> } /> 
-            <PrivateRoute path={`${path}/LayoutPlanInbox`} component={(props) => <LayoutPlanInbox parentRoute={path} businessService={["REVISED_LAYOUT_PLAN"]} filterComponent="TL_INBOX_FILTER" initialStates={{}} isInbox={true} /> } /> 
-            <PrivateRoute path={`${path}/BeneficialInbox`} component={(props) => <BeneficialInbox parentRoute={path} businessService={["CHANGE_OF_BENEFICIAL"]} filterComponent="TL_INBOX_FILTER" initialStates={{}} isInbox={true} /> } /> 
-            <PrivateRoute path={`${path}/TranferInbox`} component={(props) => <TranferInbox parentRoute={path} businessService={["TRANSFER_OF_LICIENCE"]} filterComponent="TL_INBOX_FILTER" initialStates={{}} isInbox={true} /> } /> 
-            <PrivateRoute path={`${path}/servicePlanInbox`} component={(props) => <ServicePlanInbox parentRoute={path} businessService={["SERVICE_PLAN_DEMARCATION","SERVICE_PLAN"]} filterComponent="TL_INBOX_FILTER" initialStates={{}} isInbox={true} /> } /> 
-            <PrivateRoute path={`${path}/electricPlanInbox`} component={(props) => <ElectricalPlanInbox parentRoute={path} businessService="ELECTRICAL_PLAN" filterComponent="TL_INBOX_FILTER" initialStates={{}} isInbox={true} /> } /> 
-            <PrivateRoute path={`${path}/bankGuaranteeInbox`} component={(props) => <BankGuaranteePlan parentRoute={path} businessService={["BG_NEW","SERVICE_PLAN"]} filterComponent="TL_INBOX_FILTER" initialStates={{}} isInbox={true} /> } /> 
+            <PrivateRoute
+              path={`${path}/SurrenderInbox`}
+              component={(props) => (
+                <SurrenderInbox
+                  parentRoute={path}
+                  businessService={["SURREND_OF_LICENSE"]}
+                  filterComponent="TL_INBOX_FILTER"
+                  initialStates={{}}
+                  isInbox={true}
+                />
+              )}
+            />
+            <PrivateRoute
+              path={`${path}/StandardInbox`}
+              component={(props) => (
+                <StandardInbox
+                  parentRoute={path}
+                  businessService={["APPROVAL_OF_STANDARD"]}
+                  filterComponent="TL_INBOX_FILTER"
+                  initialStates={{}}
+                  isInbox={true}
+                />
+              )}
+            />
+            <PrivateRoute
+              path={`${path}/RenewalInbox`}
+              component={(props) => (
+                <RenewalInbox
+                  parentRoute={path}
+                  businessService={["RENWAL_OF_LICIENCE"]}
+                  filterComponent="TL_INBOX_FILTER"
+                  initialStates={{}}
+                  isInbox={true}
+                />
+              )}
+            />
+            <PrivateRoute path={`${path}/SurrenderLicScrutiny/:id`} component={SurrenderLicScrutiny} />
+            <PrivateRoute
+              path={`${path}/LayoutPlanInbox`}
+              component={(props) => (
+                <LayoutPlanInbox
+                  parentRoute={path}
+                  businessService={["REVISED_LAYOUT_PLAN"]}
+                  filterComponent="TL_INBOX_FILTER"
+                  initialStates={{}}
+                  isInbox={true}
+                />
+              )}
+            />
+            <PrivateRoute
+              path={`${path}/BeneficialInbox`}
+              component={(props) => (
+                <BeneficialInbox
+                  parentRoute={path}
+                  businessService={["CHANGE_OF_BENEFICIAL"]}
+                  filterComponent="TL_INBOX_FILTER"
+                  initialStates={{}}
+                  isInbox={true}
+                />
+              )}
+            />
+            <PrivateRoute
+              path={`${path}/TranferInbox`}
+              component={(props) => (
+                <TranferInbox
+                  parentRoute={path}
+                  businessService={["TRANSFER_OF_LICIENCE"]}
+                  filterComponent="TL_INBOX_FILTER"
+                  initialStates={{}}
+                  isInbox={true}
+                />
+              )}
+            />
+            <PrivateRoute
+              path={`${path}/servicePlanInbox`}
+              component={(props) => (
+                <ServicePlanInbox
+                  parentRoute={path}
+                  businessService={["SERVICE_PLAN_DEMARCATION", "SERVICE_PLAN"]}
+                  filterComponent="TL_INBOX_FILTER"
+                  initialStates={{}}
+                  isInbox={true}
+                />
+              )}
+            />
+            <PrivateRoute
+              path={`${path}/electricPlanInbox`}
+              component={(props) => (
+                <ElectricalPlanInbox
+                  parentRoute={path}
+                  businessService="ELECTRICAL_PLAN"
+                  filterComponent="TL_INBOX_FILTER"
+                  initialStates={{}}
+                  isInbox={true}
+                />
+              )}
+            />
+            <PrivateRoute
+              path={`${path}/bankGuaranteeInbox`}
+              component={(props) => (
+                <BankGuaranteePlan
+                  parentRoute={path}
+                  businessService={["BG_NEW", "SERVICE_PLAN"]}
+                  filterComponent="TL_INBOX_FILTER"
+                  initialStates={{}}
+                  isInbox={true}
+                />
+              )}
+            />
 
             {/* <PrivateRoute path={`${path}/SubmitNew`} component={SubmitNew} /> */}
             {/* <PrivateRoute path={`${path}/basicScrutiny`} component={basicScrutiny} /> */}
