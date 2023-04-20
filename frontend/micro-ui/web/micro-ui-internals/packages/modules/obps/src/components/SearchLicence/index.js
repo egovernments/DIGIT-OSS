@@ -131,7 +131,7 @@ const SearchLicenceComp = ({ watch, register, control, setLoader, errors, setVal
           </div>
           <div className="col col-3 ">
             <FormControl>
-              <h2>Period of renewal(In Years)</h2>
+              <h2>Period of renewal(In Months)</h2>
               <input type="text" {...register("renewalRequiredUpto")} className="form-control" disabled />
             </FormControl>
           </div>
@@ -194,10 +194,7 @@ const SearchLicenceComp = ({ watch, register, control, setLoader, errors, setVal
           </div>
           <div className="col col-3 ">
             <FormControl>
-              <h2>
-                Revenue estate
-                <span style={{ color: "red" }}>*</span>
-              </h2>
+              <h2>Revenue estate</h2>
 
               <input type="text" className="form-control" placeholder="" {...register("revenueEstate")} />
             </FormControl>
