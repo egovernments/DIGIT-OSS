@@ -56,7 +56,7 @@ function TransferLicense(props) {
   }, [apiData]);
 
   const handlemodaldData = (data) => {
-    // setmodaldData(data.data);
+    
     setSmShow(false);
     console.log("here", openedModal, data);
     if (openedModal && data) {
@@ -120,6 +120,90 @@ function TransferLicense(props) {
     setSelects(getu);
   };
   console.log("apiResponse", apiData);
+  /////////////////////////////////////////////////
+  // const getColorofFieldIcon = () => {
+  //   let tempFieldColorState = fieldIconColors;
+  //   fieldIdList.forEach((item) => {
+  //     if (dataIcons !== null && dataIcons !== undefined) {
+  //       console.log("color method called");
+  //       const fieldPresent = dataIcons.egScrutiny.filter((ele) => ele.fieldIdL === item.label);
+  //       console.log("filteration value111", fieldPresent, fieldPresent[0]?.isApproved);
+  //       if (fieldPresent && fieldPresent.length) {
+  //         console.log("filteration value111", fieldPresent, fieldPresent[0]?.isApproved);
+  //         tempFieldColorState = {
+  //           ...tempFieldColorState,
+  //           [item.key]:
+  //             fieldPresent[0].isApproved === "In Order"
+  //               ? Colors.approved
+  //               : fieldPresent[0].isApproved === "Not In Order"
+  //               ? Colors.disapproved
+  //               : fieldPresent[0].isApproved === "Conditional"
+  //               ? Colors.Conditional
+  //               : Colors.info,
+  //         };
+  //       }
+  //     }
+  //   });
+
+  //   setFieldIconColors(tempFieldColorState);
+  // };
+
+  // useEffect(() => {
+  //   getColorofFieldIcon();
+  //   console.log("repeating1...");
+  // }, [dataIcons]);
+
+  // useEffect(() => {
+  //   if (labelValue) {
+  //     const fieldPresent = dataIcons.egScrutiny.filter((ele) => ele.fieldIdL === labelValue);
+  //     setSelectedFieldData(fieldPresent[0]);
+  //   } else {
+  //     setSelectedFieldData(null);
+  //   }
+  // }, [labelValue]);
+
+  // console.log("Digit123", apiResponse);
+  // let user = Digit.UserService.getUser();
+  // const userInfo = Digit.UserService.getUser()?.info || {};
+  // const userRolesArray = userInfo?.roles.filter((user) => user.code !== "EMPLOYEE");
+  // const filterDataRole = userRolesArray?.[0]?.code;
+  // const userRoles = user?.info?.roles?.map((e) => e.code) || [];
+
+  // console.log("rolelogintime", userRoles);
+  // console.log("afterfilter12", filterDataRole);
+  // const mDMSData = props.mDMSData;
+  // const mDMSDataRole = mDMSData?.map((e) => e.role) || [];
+  // const hideRemarks = mDMSDataRole.includes(filterDataRole);
+  // const applicationStatusMdms = mDMSData?.map((e) => e.applicationStatus) || [];
+  // const hideRemarksPatwari = applicationStatusMdms.some((item) => item === applicationStatus) || [];
+  // const [fileddataName, setFiledDataName] = useState();
+
+  // useEffect(() => {
+  //   if (mDMSData && mDMSData?.length) {
+  //     console.log(
+  //       "filedDataMdms",
+  //       mDMSData,
+  //       mDMSData?.[0]?.field,
+  //       mDMSData?.[0]?.field.map((item, index) => item.fields)
+  //     );
+  //     setFiledDataName(mDMSData?.[0]?.field.map((item, index) => item.fields));
+  //   }
+  // }, [mDMSData]);
+  // const showReportProblemIcon = (filedName) => {
+  //   if (fileddataName && fileddataName.length) {
+  //     let show = fileddataName.includes(filedName);
+  //     return show;
+  //   } else {
+  //     return false;
+  //   }
+  // };
+
+
+  // console.log("happyRole", userRoles);
+  // console.log("happyDate", mDMSData);
+  // console.log("happyROLE", mDMSDataRole);
+  // console.log("happyapplicationStatusMdms", applicationStatusMdms);
+  // console.log("happyDateHIDE", hideRemarksPatwari, showReportProblemIcon("Purpose of colony"), hideRemarks);
 
   return (
     <form onSubmit={handleSubmit(TransferLicense)}>
@@ -147,7 +231,7 @@ function TransferLicense(props) {
       </div>
       <Collapse in={open2}>
         <div id="example-collapse-text">
-          <Card style={{ width: "126%", border: "5px solid #1266af" }}>
+          <Card style={{ width: "126%" }}>
             <h4 style={{ fontSize: "25px", marginLeft: "21px" }} className="text-center">
               Transfer of License
             </h4>
