@@ -41,6 +41,7 @@ const useGetChart = (args) => {
   const indexKeyForEmptyModule = [
     "nssPtCitizenFeedbackScore",
     "nssPtCitizenServiceDeliveryIndex",
+    "sdssPtCitizenFeedbackScore",
   ];
   return useQuery(
     [args],
