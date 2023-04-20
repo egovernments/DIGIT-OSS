@@ -285,7 +285,6 @@ const EmployeeApp = ({ path, url, userType }) => {
                 />
               )}
             />
-            <PrivateRoute path={`${path}/SurrenderLicScrutiny/:id`} component={SurrenderLicScrutiny} />
             <PrivateRoute
               path={`${path}/LayoutPlanInbox`}
               component={(props) => (
