@@ -45,8 +45,11 @@ public class CommonBodyBuilder implements SMSBodyBuilder {
 			        String msgs[]=sms.getMessage().split("\\|"); 
 			        if(msgs.length >1){
 			        	template_id=msgs[1];
-			            if(msgs.length>2)
+					template_id = template_id.trim();
+			            if(msgs.length>2){
 			            	pe_id=msgs[2];
+			            	pe_id = pe_id.trim();
+			            }
 			            log.info("filetered message:"+msgs[0]);
 			            log.info("sms_entity_id:"+template_id);
 			            log.info("sms_template_id:"+pe_id);
