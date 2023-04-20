@@ -40,6 +40,8 @@ import TranferInbox from "./ScrutinyBasic/AllServiceScrutiny/TransferLic/Inbox";
 import SurrenderInbox from "./ScrutinyBasic/AllServiceScrutiny/SurrenderLic/Inbox";
 import LayoutPlanInbox from "./ScrutinyBasic/AllServiceScrutiny/LayoutPlan/Inbox";
 import BeneficialInbox from "./ScrutinyBasic/AllServiceScrutiny/BeneficialInterest/Inbox";
+import StandardInbox from "./ScrutinyBasic/AllServiceScrutiny/StandardDesign/Inbox";
+import RenewalInbox from "./ScrutinyBasic/AllServiceScrutiny/Renewal/Inbox";
 
 const TLBreadCrumb = ({ location }) => {
   const { t } = useTranslation();
@@ -237,17 +239,19 @@ const EmployeeApp = ({ path, url, userType }) => {
             <PrivateRoute path={`${path}/RenewalScrutiny/:id`} component={RenewalScrutiny} />
             <PrivateRoute path={`${path}/Beneficial`} component={Beneficial} />
             <PrivateRoute path={`${path}/TransferScrutiny/:id`} component={TransferScrutiny} />
-            <PrivateRoute path={`${path}/SurrenderLic`} component={SurrenderLic} />
-            <PrivateRoute path={`${path}/ExtensionClu`} component={ExtensionClu} />
-            <PrivateRoute path={`${path}/ExtensionCom`} component={ExtensionCom} />
+            <PrivateRoute path={`${path}/SurrenderLic/:id`} component={SurrenderLic} />
+            <PrivateRoute path={`${path}/ExtensionClu/:id`} component={ExtensionClu} />
+            <PrivateRoute path={`${path}/ExtensionCom/:id`} component={ExtensionCom} />
             <PrivateRoute path={`${path}/LayoutPlanScritny/:id`} component={LayoutPlanScritny} />
-            <PrivateRoute path={`${path}/StandardDesign`} component={StandardDesign} />
-            <PrivateRoute path={`${path}/CompositionClu`} component={CompositionClu} />
-            <PrivateRoute path={`${path}/CompletionLic`} component={CompletionLic} />
+            <PrivateRoute path={`${path}/StandardDesign/:id`} component={StandardDesign} />
+            <PrivateRoute path={`${path}/CompositionClu/:id`} component={CompositionClu} />
+            <PrivateRoute path={`${path}/CompletionLic/:id`} component={CompletionLic} />
             <PrivateRoute path={`${path}/ServiceScrutiny/:id`} component={ServiceScrutiny} />
             {/* <PrivateRoute path={`${path}/ScrutinyForm`} component={ScrutinyForm} /> */}
             <PrivateRoute path={`${path}/ScrutinyForm/:id`} component={ScrutinyForm} />
             <PrivateRoute path={`${path}/SurrenderInbox`} component={(props) => <SurrenderInbox parentRoute={path} businessService={["SURREND_OF_LICENSE"]} filterComponent="TL_INBOX_FILTER" initialStates={{}} isInbox={true} /> } /> 
+            <PrivateRoute path={`${path}/StandardInbox`} component={(props) => <StandardInbox parentRoute={path} businessService={["APPROVAL_OF_STANDARD"]} filterComponent="TL_INBOX_FILTER" initialStates={{}} isInbox={true} /> } /> 
+            <PrivateRoute path={`${path}/RenewalInbox`} component={(props) => <RenewalInbox parentRoute={path} businessService={["RENWAL_OF_LICIENCE"]} filterComponent="TL_INBOX_FILTER" initialStates={{}} isInbox={true} /> } /> 
             <PrivateRoute path={`${path}/LayoutPlanInbox`} component={(props) => <LayoutPlanInbox parentRoute={path} businessService={["REVISED_LAYOUT_PLAN"]} filterComponent="TL_INBOX_FILTER" initialStates={{}} isInbox={true} /> } /> 
             <PrivateRoute path={`${path}/BeneficialInbox`} component={(props) => <BeneficialInbox parentRoute={path} businessService={["CHANGE_OF_BENEFICIAL"]} filterComponent="TL_INBOX_FILTER" initialStates={{}} isInbox={true} /> } /> 
             <PrivateRoute path={`${path}/TranferInbox`} component={(props) => <TranferInbox parentRoute={path} businessService={["TRANSFER_OF_LICIENCE"]} filterComponent="TL_INBOX_FILTER" initialStates={{}} isInbox={true} /> } /> 

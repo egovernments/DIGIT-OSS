@@ -15,6 +15,10 @@ const OBPSCard = () => {
     const SL_Role = ["CTP_HR","AO_HQ", "JD_HQ", "SD_HQ","DTCP_HR", "DTP_HQ", "JE_HQ", "STP_HQ", "ASST_JE_HQ", "EE_HQ", "PUD"]
     const ARLP_Role = ["CTP_HR","AO_HQ", "JD_HQ", "SD_HQ","DTCP_HR", "DTP_HQ", "JE_HQ", "STP_HQ", "ASST_JE_HQ", "EE_HQ", "PUD"]
     const CBI_Role = ["CTP_HR","AO_HQ", "JD_HQ", "SD_HQ","DTCP_HR", "DTP_HQ", "JE_HQ", "STP_HQ", "ASST_JE_HQ", "EE_HQ", "PUD"]
+    const ROL_Role = ["CTP_HR","AO_HQ", "JD_HQ", "SD_HQ","DTCP_HR", "DTP_HQ", "JE_HQ", "STP_HQ", "ASST_JE_HQ", "EE_HQ", "PUD"]
+    const AOSD_Role = ["CTP_HR","AO_HQ", "JD_HQ", "SD_HQ","DTCP_HR", "DTP_HQ", "JE_HQ", "STP_HQ", "ASST_JE_HQ", "EE_HQ", "PUD"]
+    
+    
     function isBankGuarrantee(){
         let isGuarantee = false
         for(let i=0; i<userRoles.length; i++){
@@ -71,6 +75,15 @@ const OBPSCard = () => {
         }
         return isARLP
       }
+      function isRENEWALEmp(){
+        let isROL = false
+        for(let i=0; i<userRoles.length; i++){
+          if(ROL_Role.includes(userRoles[i].code)){
+            isROL = true
+          }
+        }
+        return isROL
+      }
       function isCHANGEEmp(){
         let isCBI = false
         for(let i=0; i<userRoles.length; i++){
@@ -79,6 +92,15 @@ const OBPSCard = () => {
           }
         }
         return isCBI
+      }
+      function isSTANDARDEmp(){
+        let isAOSD = false
+        for(let i=0; i<userRoles.length; i++){
+          if(AOSD_Role.includes(userRoles[i].code)){
+            isAOSD = true
+          }
+        }
+        return isAOSD
       }
         
     const [isStateLocalisation, setIsStateLocalisation] = useState(true);
@@ -218,6 +240,42 @@ const OBPSCard = () => {
           }
         ],
       };
+      const propsForRENEWALModuleCard = {
+        Icon: <DocumentIconSolid />,
+        moduleName: t("RENWAL_OF_LICIENCE_CARD"),
+        kpis: [
+          {
+            count: "-",
+            label: t("RENWAL_OF_LICIENCE_CARD"),
+            link: `/digit-ui/employee/tl/RenewalInbox`,
+          },
+        ],
+        links: [
+          {
+            count: "-",
+            label: t("ES_TITLE_INBOX"),
+            link: `/digit-ui/employee/tl/RenewalInbox`,
+          }
+        ],
+      };
+      const propsForSTANDARDModuleCard = {
+        Icon: <DocumentIconSolid />,
+        moduleName: t("APPROVAL_OF_STANDARD_CARD"),
+        kpis: [
+          {
+            count: "-",
+            label: t("APPROVAL_OF_STANDARD_CARD"),
+            link: `/digit-ui/employee/tl/StandardInbox`,
+          },
+        ],
+        links: [
+          {
+            count: "-",
+            label: t("ES_TITLE_INBOX"),
+            link: `/digit-ui/employee/tl/StandardInbox`,
+          }
+        ],
+      };
       
 
       const obpsSubModuleProps = []
@@ -239,6 +297,8 @@ const OBPSCard = () => {
       obpsSubModuleProps.push(propsForSURRENDModuleCard)
       obpsSubModuleProps.push(propsForREVISEDModuleCard)
       obpsSubModuleProps.push(propsForCHANGEModuleCard)
+      obpsSubModuleProps.push(propsForSTANDARDModuleCard)
+      obpsSubModuleProps.push(propsForRENEWALModuleCard)
         return (
         <React.Fragment>
         {

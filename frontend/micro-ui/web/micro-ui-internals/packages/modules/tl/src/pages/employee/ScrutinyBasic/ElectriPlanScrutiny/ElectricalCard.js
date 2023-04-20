@@ -9,7 +9,7 @@ import { useTranslation } from "react-i18next";
 import { useQueryClient } from "react-query";
 import { useHistory, useParams } from "react-router-dom";
 import ApplicationDetailsActionBar from "../../../../../../templates/ApplicationDetails/components/ApplicationDetailsActionBar";
-import ActionModal from "../../../../../../templates/ApplicationDetails/Modal";
+import ActionModal from "../../../../../../templates/ApplicationDetails/Modal/index";
 // import ScrutitnyForms from "../ScrutinyBasic/ScutinyBasic";
 import ElecticalBase from "./ElectricalscrutinyBase";
 

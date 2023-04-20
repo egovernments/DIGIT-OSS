@@ -249,16 +249,9 @@ const ServiceScrutiny = (props) => {
       setWorkflowDetails(workflowDetailsTemp);
       setBusinessServices(workflowDetailsTemp?.data?.applicationBusinessService);
       console.log("Datapoint1", workflowDetailsTemp?.data?.processInstances)
-      // setDataHistory("Datapoint" , workflowDetailsTemp?.data?.processInstances.map((array) => array.map((object))))
-      //  = (e) => {
-      //   const getshow = e.target.value;
-      //   setShowhide19(getshow);
+     
         console.log("Datapoint", workflowDetailsTemp?.data?.processInstances?.[0])
-      //   DetailsofAppliedLand?.dgpsDetails.map((array) => array.map((object) => `${object.latitude},${object.longitude}`).join(":") ).join("|")
-      //   let query =  DetailsofAppliedLand?.dgpsDetails.map((array) => array.map((object) => `${object.latitude},${object.longitude}`).join(":") ).join("|")
-      //   console.log("Qurey" , query);
-      //   window.open(`/digit-ui/WNS/wmsmap.html?latlngs=${query}`,"popup")
-      // };
+     
     }
   }, [workflowDetailsTemp?.data]);
 
