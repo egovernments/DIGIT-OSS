@@ -14,7 +14,6 @@ import SelectProofIdentity from "./pageComponents/SelectProofIdentity";
 import SelectOwnershipProof from "./pageComponents/SelectOwnershipProof";
 import SelectTradeName from "./pageComponents/SelectTradeName";
 import SelectStructureType from "./pageComponents/SelectStructureType";
-import SelectStreet from "./pageComponents/SelectStreet";
 import SelectVehicleType from "./pageComponents/SelectVehicleType";
 import SelectBuildingType from "./pageComponents/SelectBuildingType";
 import SelectCommencementDate from "./pageComponents/SelectCommencementDate";
@@ -28,6 +27,7 @@ import MyApplications from "./pages/citizen/Applications/Application";
 import TradeLicenseList  from "./pages/citizen/Renewal/TradeLicenseList";
 import TLWFApplicationTimeline from "./pageComponents/TLWFApplicationTimeline";  
 import SelectOtherTradeDetails from "./pageComponents/SelectOtherTradeDetails";
+import TLSelectStreet from "./pageComponents/TLSelectStreet";
 
 import TLOwnerDetailsEmployee from "./pageComponents/TLOwnerDetailsEmployee";
 import TLTradeDetailsEmployee from "./pageComponents/TLTradeDetailsEmployee";
@@ -119,7 +119,7 @@ const componentsToRegister = {
   SelectOwnerAddress,
   SelectProofIdentity,
   SelectOwnershipProof,
-  SelectStreet,
+  TLSelectStreet,
   TLCheckPage,
   TLDocument,
   TLAcknowledgement,
