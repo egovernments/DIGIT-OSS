@@ -96,11 +96,10 @@ class ShowField extends Component {
     const additionalConfig = reportDetails.hasOwnProperty("additionalConfig") && reportDetails.additionalConfig ? reportDetails.additionalConfig: {};
     const reportHeader = reportDetails.hasOwnProperty("reportHeader") ? reportDetails.reportHeader : [];
     const columns = ":visible";
-    const pageSize = (additionalConfig.print && additionalConfig.print.pdfPageSize)? additionalConfig.print.pdfPageSize: "LEGAL"
+    const pageSize = (additionalConfig.print && additionalConfig.print.pdfPageSize)? additionalConfig.print.pdfPageSize: "A3"
     const exportOptions = flag ? { rows: ".selected", columns } : { columns };
     let reportTitle = this.getReportTitle();
     let orientation = reportHeader.length > 6 ? "landscape" : "portrait";
-
     function processDoc(doc) {
       //
       // https://pdfmake.github.io/docs/fonts/custom-fonts-client-side/
@@ -160,6 +159,7 @@ class ShowField extends Component {
     if (get(reportDetails, "additionalConfig.tableConfig")) {
       tableConfig = reportDetails.additionalConfig.tableConfig;
     }
+    console.log(tableConfig,"tableConfig")
     let self = this;
     let displayStart = 0;
     if (rTable && rTable.page && rTable.page.info()) {
