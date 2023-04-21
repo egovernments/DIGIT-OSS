@@ -159,7 +159,6 @@ class ShowField extends Component {
     if (get(reportDetails, "additionalConfig.tableConfig")) {
       tableConfig = reportDetails.additionalConfig.tableConfig;
     }
-    console.log(tableConfig,"tableConfig")
     let self = this;
     let displayStart = 0;
     if (rTable && rTable.page && rTable.page.info()) {
