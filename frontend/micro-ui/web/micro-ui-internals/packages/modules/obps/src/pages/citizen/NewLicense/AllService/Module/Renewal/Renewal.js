@@ -55,6 +55,7 @@ function renewalClu() {
     setValue,
     getValues,
     trigger,
+    resetField,
   } = useForm({
     mode: "onChange",
     reValidateMode: "onChange",
@@ -156,7 +157,15 @@ function renewalClu() {
           <h4 style={{ fontSize: "25px", marginLeft: "21px" }}>Renewal</h4>
           <div className="card">
             <div className="row-12">
-              <SearchLicenceComp watch={watch} register={register} control={control} setLoader={setLoader} errors={errors} setValue={setValue} />
+              <SearchLicenceComp
+                watch={watch}
+                register={register}
+                control={control}
+                setLoader={setLoader}
+                errors={errors}
+                setValue={setValue}
+                resetField={resetField}
+              />
               <div className="row gy-3 mt-3">
                 <div className="col col-6 ">
                   <FormControl>

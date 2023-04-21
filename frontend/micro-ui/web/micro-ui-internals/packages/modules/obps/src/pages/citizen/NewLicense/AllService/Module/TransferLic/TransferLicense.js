@@ -31,6 +31,7 @@ const Transferlicence = () => {
     control,
     watch,
     setValue,
+    resetField,
   } = useForm({});
 
   const transferLic = async (data) => {
@@ -142,7 +143,15 @@ const Transferlicence = () => {
           </h4>
           <div className="card">
             <div className="row gy-3">
-              <SearchLicenceComp watch={watch} register={register} control={control} setLoader={setLoader} errors={errors} setValue={setValue} />
+              <SearchLicenceComp
+                watch={watch}
+                register={register}
+                control={control}
+                setLoader={setLoader}
+                errors={errors}
+                setValue={setValue}
+                resetField={resetField}
+              />
               {/* <div className="col col-3">
                 <h2 className="FormLable">
                   Licence No. <span style={{ color: "red" }}>*</span>

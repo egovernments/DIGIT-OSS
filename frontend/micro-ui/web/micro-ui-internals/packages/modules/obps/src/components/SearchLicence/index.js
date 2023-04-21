@@ -4,7 +4,7 @@ import axios from "axios";
 // import ReactMultiSelect from "../../../../../../../../../react-components/src/atoms/ReactMultiSelect";
 import ReactMultiSelect from "../../../../../react-components/src/atoms/ReactMultiSelect";
 
-const SearchLicenceComp = ({ watch, register, control, setLoader, errors, setValue }) => {
+const SearchLicenceComp = ({ watch, register, control, setLoader, errors, setValue, resetField }) => {
   const [showField, setShowField] = useState({ select: false, other: false });
   const [licenceData, setLicenceData] = useState([]);
 
@@ -52,7 +52,17 @@ const SearchLicenceComp = ({ watch, register, control, setLoader, errors, setVal
             Licence No.<span style={{ color: "red" }}>*</span>
           </h2>
           <div style={{ display: "flex", placeItems: "center" }}>
-            <input type="text" className="form-control" placeholder="LC_XXXXX" {...register("licenceNo")} />
+            <input
+              type="text"
+              className="form-control"
+              placeholder="LC_XXXXX"
+              {...register("licenceNo")}
+              onChange={() => {
+                console.log("here");
+                setShowField({ select: false, other: false });
+                resetField("selectLicence");
+              }}
+            />
             <div
               style={{
                 background: "#024f9d",

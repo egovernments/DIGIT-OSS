@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useForm, useFieldArray } from "react-hook-form";
 import axios from "axios";
 import ReactMultiSelect from "../../../../../../../../../react-components/src/atoms/ReactMultiSelect";
@@ -13,6 +13,7 @@ const AdditionalDocument = () => {
   const [loader, setLoader] = useState(false);
   const [selectedFiles, setSelectedFiles] = useState([]);
   const [showToastError, setShowToastError] = useState({ label: "", error: false, success: false });
+  const [services, setServices] = useState([]);
 
   const {
     watch,
@@ -21,6 +22,8 @@ const AdditionalDocument = () => {
     control,
     setValue,
     formState: { errors },
+    resetField,
+    reset,
   } = useForm({
     mode: "onChange",
     reValidateMode: "onChange",
@@ -43,6 +46,50 @@ const AdditionalDocument = () => {
   const additionalDoc = (data) => {
     console.log("data", data);
   };
+
+  const getAllservices = async (val) => {
+    const payload = {
+      RequestInfo: {
+        apiId: "Rainmaker",
+        ver: "v1",
+        ts: 0,
+        action: "_search",
+        did: "",
+        key: "",
+        msgId: "090909",
+        authToken: "",
+        correlationId: null,
+      },
+      MdmsCriteria: {
+        tenantId: "hr",
+        moduleDetails: [
+          {
+            tenantId: "hr",
+            moduleName: "common-masters",
+            masterDetails: [
+              {
+                name: "services",
+              },
+            ],
+          },
+        ],
+      },
+    };
+    try {
+      const Resp = await axios.post("/egov-mdms-service/v1/_search", payload);
+      // console.log("asdasdasd", Resp?.data?.MdmsRes?.["common-masters"]?.services?.[0]?.businessService?.);
+      const devPlan = Resp?.data?.MdmsRes?.["common-masters"]?.services?.[0]?.businessService?.map(function (data) {
+        return { value: data?.name, label: data?.name };
+      });
+      setServices(devPlan);
+    } catch (error) {
+      return error;
+    }
+  };
+
+  useEffect(() => {
+    getAllservices();
+  }, []);
 
   const getDocumentData = async (file, fieldName) => {
     if (selectedFiles.includes(file.name)) {
@@ -77,21 +124,27 @@ const AdditionalDocument = () => {
           </h4>
           <div className="card">
             <div className="row gy-3">
+              <div className="col col-4">
+                <h2 className="FormLable">
+                  List all services <span style={{ color: "red" }}>*</span>
+                </h2>
+                <ReactMultiSelect control={control} name="allservices" placeholder="Select Service" data={services} labels="" />
+              </div>
               <div className="col col-5">
                 <h2 className="FormLable">
                   Select Application No, LOI No, Licence No <span style={{ color: "red" }}>*</span>
                 </h2>
                 <ReactMultiSelect control={control} name="numberType" placeholder="Select Type" data={selectTypeData} labels="" />
               </div>
-
-              <SearchLicenceComp watch={watch} register={register} control={control} setLoader={setLoader} errors={errors} setValue={setValue} />
-
-              <div className="col col-4">
-                <h2 className="FormLable">
-                  List all services <span style={{ color: "red" }}>*</span>
-                </h2>
-                <ReactMultiSelect control={control} name="allservices" placeholder="Select Service" data={selectTypeData} labels="" />
-              </div>
+              <SearchLicenceComp
+                watch={watch}
+                register={register}
+                control={control}
+                setLoader={setLoader}
+                errors={errors}
+                setValue={setValue}
+                resetField={resetField}
+              />
             </div>
 
             <div style={{ textAlignLast: "right", marginTop: "10px" }}>
@@ -104,7 +157,6 @@ const AdditionalDocument = () => {
                 Add Row
               </button>
             </div>
-
             <div className="card-body">
               <div className="table-bd">
                 <table className="table table-bordered">
