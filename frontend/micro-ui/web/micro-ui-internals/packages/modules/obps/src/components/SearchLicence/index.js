@@ -130,7 +130,7 @@ const SearchLicenceComp = ({ watch, register, control, setLoader, errors, setVal
                   const yearDiff = dateA.getYear() - dateB.getYear();
 
                   const diff = monthDiff + yearDiff * 12;
-                  setValue("renewalRequiredUpto", diff);
+                  setValue("periodOfRenewal", diff);
                   console.log("value", e?.target?.value, diff);
                 }}
               />
@@ -142,7 +142,7 @@ const SearchLicenceComp = ({ watch, register, control, setLoader, errors, setVal
           <div className="col col-3 ">
             <FormControl>
               <h2>Period of renewal(In Months)</h2>
-              <input type="text" {...register("renewalRequiredUpto")} className="form-control" disabled />
+              <input type="text" {...register("periodOfRenewal")} className="form-control" disabled />
             </FormControl>
           </div>
           <div className="col col-3 ">
