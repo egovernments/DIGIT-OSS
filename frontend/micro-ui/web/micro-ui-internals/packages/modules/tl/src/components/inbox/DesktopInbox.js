@@ -45,6 +45,8 @@ const DesktopInbox = ({ tableConfig, filterComponent, columns, isLoading, setSea
               : row.original["businessService"] === 'CHANGE_OF_BENEFICIAL' ? 'Beneficialscrutiny'
               : row.original["businessService"] === 'RENWAL_OF_LICIENCE' ? 'RenewalScrutiny'
               : row.original["businessService"] === 'TRANSFER_OF_LICIENCE' ? 'TransferScrutiny'
+              : row.original["businessService"] === 'CONSTRUCTION_OF_COMMUNITY' ? 'ExtensionCom'
+              : row.original["businessService"] === 'COMPLETION_CERTIFICATE' ? 'Completionscrutiny'
               : row.original["businessService"] === 'SERVICE_PLAN' ? 'ServiceScrutiny' : row.original["businessService"] === 'SERVICE_PLAN_DEMARCATION' ? 'ServiceScrutiny' : row.original["businessService"] === 'ELECTRICAL_PLAN' ? 'ElectricalScrutiny' : row.original["businessService"] === "BG_NEW" ? 'ScrutinyForm' : null  }/` + row.original["applicationId"]}>{row.original["applicationId"]}</Link>
               {/* <Link to={`/digit-ui/employee/tl/${row.original["businessService"] === 'SERVICE_PLAN' ? 'ServiceScrutiny' : row.original["businessService"] === 'ELECTRICAL_PLAN' ? 'ElectricalScrutiny' : row.original["businessService"] === "BG_NEW" ? 'ScrutinyForm' : null }/` + row.original["applicationId"]}>{row.original["applicationId"]}</Link> */}
 
@@ -117,7 +119,9 @@ const DesktopInbox = ({ tableConfig, filterComponent, columns, isLoading, setSea
               : row.original["businessService"] === 'TRANSFER_OF_LICIENCE' ? 'TransferScrutiny'
               : row.original["businessService"] === 'SERVICE_PLAN_DEMARCATION' ? 'ServiceScrutiny'
               : row.original["businessService"] === 'ELECTRICAL_PLAN' ? 'ElectricalScrutiny' 
-              : row.original["businessService"] === 'TRANSFER_OF_LICIENCE' ? 'TransferScrutiny' 
+              : row.original["businessService"] === 'TRANSFER_OF_LICIENCE' ? 'TransferScrutiny'
+              : row.original["businessService"] === 'CONSTRUCTION_OF_COMMUNITY' ? 'ExtensionCom'
+              : row.original["businessService"] === 'COMPLETION_CERTIFICATE' ? 'Completionscrutiny' 
               : row.original["businessService"] === "BG_NEW" ? 'ScrutinyForm' :  null  }/` + row.original["applicationId"]}>
                 <Visibility/>
               </Link>

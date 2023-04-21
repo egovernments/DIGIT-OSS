@@ -43,6 +43,10 @@ import BeneficialInbox from "./ScrutinyBasic/AllServiceScrutiny/BeneficialIntere
 import StandardInbox from "./ScrutinyBasic/AllServiceScrutiny/StandardDesign/Inbox";
 import RenewalInbox from "./ScrutinyBasic/AllServiceScrutiny/Renewal/Inbox";
 import Beneficialscrutiny from "../employee/ScrutinyBasic/AllServiceScrutiny/BeneficialInterest/Beneficial";
+import StandardDesignCard from "./ScrutinyBasic/AllServiceScrutiny/StandardDesign/StandardDesignCard";
+import CompositionInbox from "./ScrutinyBasic/AllServiceScrutiny/CompletionLic/Inbox/index";
+import CommunityInbox from "./ScrutinyBasic/AllServiceScrutiny/ExtensionCommunity/Inbox";
+import Completionscrutiny from "../employee/ScrutinyBasic/AllServiceScrutiny/CompletionLic/CompletionLic";
 
 const TLBreadCrumb = ({ location }) => {
   const { t } = useTranslation();
@@ -243,9 +247,9 @@ const EmployeeApp = ({ path, url, userType }) => {
             <PrivateRoute path={`${path}/ExtensionClu/:id`} component={ExtensionClu} />
             <PrivateRoute path={`${path}/ExtensionCom/:id`} component={ExtensionCom} />
             <PrivateRoute path={`${path}/LayoutPlanScritny/:id`} component={LayoutPlanScritny} />
-            <PrivateRoute path={`${path}/StandardDesign/:id`} component={StandardDesign} />
+            <PrivateRoute path={`${path}/StandardDesign/:id`} component={StandardDesignCard} />
             <PrivateRoute path={`${path}/CompositionClu/:id`} component={CompositionClu} />
-            <PrivateRoute path={`${path}/CompletionLic/:id`} component={CompletionLic} />
+            <PrivateRoute path={`${path}/Completionscrutiny/:id`} component={Completionscrutiny} />
             <PrivateRoute path={`${path}/ServiceScrutiny/:id`} component={ServiceScrutiny} />
             {/* <PrivateRoute path={`${path}/ScrutinyForm`} component={ScrutinyForm} /> */}
             <PrivateRoute path={`${path}/ScrutinyForm/:id`} component={ScrutinyForm} />
@@ -262,11 +266,23 @@ const EmployeeApp = ({ path, url, userType }) => {
               )}
             />
             <PrivateRoute
-              path={`${path}/StandardInbox`}
+              path={`${path}/CommunityInbox`}
               component={(props) => (
-                <StandardInbox
+                <CommunityInbox
                   parentRoute={path}
-                  businessService={["APPROVAL_OF_STANDARD"]}
+                  businessService={["CONSTRUCTION_OF_COMMUNITY"]}
+                  filterComponent="TL_INBOX_FILTER"
+                  initialStates={{}}
+                  isInbox={true}
+                />
+              )}
+            />
+            <PrivateRoute
+              path={`${path}/CompositionInbox`}
+              component={(props) => (
+                <CompositionInbox
+                  parentRoute={path}
+                  businessService={["COMPLETION_CERTIFICATE"]}
                   filterComponent="TL_INBOX_FILTER"
                   initialStates={{}}
                   isInbox={true}

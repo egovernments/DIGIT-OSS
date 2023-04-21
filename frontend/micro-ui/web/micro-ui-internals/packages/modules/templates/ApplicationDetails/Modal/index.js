@@ -11,6 +11,8 @@ import BankGuaranteePlan from "./BankGuaranteePlan";
 import TransferLicModal from "./TransferLicModal";
 import RevisedPlanModal from "./RevisedPlanModal";
 
+import StandardDesignModal from "./StandardDesignActionModal";
+
 const ActionModal = (props) => {
   if (props?.businessService.includes("PT")) {
     return <PTActionModal {...props} />;
@@ -43,6 +45,9 @@ const ActionModal = (props) => {
 
   if (props?.businessService.includes("SERVICE_PLAN")) {
     return <ServicePlanModal {...props} />;
+  }
+  if (props?.businessService.includes("APPROVAL_OF_STANDARD")) {
+    return <StandardDesignModal {...props} />;
   }
   if (props?.businessService.includes("TRANSFER_OF_LICIENCE")) {
     return <TransferLicModal {...props} />;

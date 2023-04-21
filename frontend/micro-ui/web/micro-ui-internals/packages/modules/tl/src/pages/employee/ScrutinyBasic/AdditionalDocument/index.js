@@ -65,20 +65,17 @@ const handleSubmit=(e)=>{
             <div className="row"> */}
                 {/* <div className="col-md-12">                        */}
                     <div className="col-md-12">
-                    <h5 className='mt-3 mb-3' style={{textAlign: "center"}}><b>Compliances</b></h5>                       
-                           
+                    <h5 className='mt-3 mb-3' style={{textAlign: "center"}}><b>AdditionalDocument</b></h5>                       
                     <table className="table table-bordered">
                     <thead>                        
                     <tr>                       
                     <th>Sr. No</th>
-                    <th>Compliances</th>
+                    <th>Document Description</th>
                     <th>
-                    User name ,
-                    Role ,
-                    timestamp
+                   Download Document
                     </th>
                     
-                    <th>Part of LOI</th>
+                    {/* <th>Part of LOI</th> */}
                     <th>Action</th>
                     </tr>
                     </thead>

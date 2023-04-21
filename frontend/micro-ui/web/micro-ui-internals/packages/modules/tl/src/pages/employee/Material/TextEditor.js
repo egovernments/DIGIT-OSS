@@ -27,7 +27,8 @@ function AddPost({modal=false,state , setState}) {
 //  console.log();
 
   return (
-    <div className="text-editorEmp"  style={{border: 1,
+    <div 
+    className="text-editorEmp"  style={{border: 1,
       width:"100%",
       margin:5,
       padding:3}}>
@@ -35,7 +36,7 @@ function AddPost({modal=false,state , setState}) {
       <Editor
         editorState={editorState}
         onEditorStateChange={setEditorState}
-        // wrapperClassName="wrapper-class"
+        wrapperClassName="wrapper-class"
         editorClassName="editor-class"
         toolbarClassName="toolbar-class"
         
