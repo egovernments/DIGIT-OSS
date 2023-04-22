@@ -14,6 +14,7 @@ import ActionModal from "../../../../../../../templates/ApplicationDetails/Modal
 
 import StandardDesignBasic from "./StandardDesignBasic";
 
+
 const StandardDesignCard = (props) => {
 
 

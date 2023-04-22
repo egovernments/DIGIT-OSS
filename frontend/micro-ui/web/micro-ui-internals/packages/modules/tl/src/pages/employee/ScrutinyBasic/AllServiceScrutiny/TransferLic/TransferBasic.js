@@ -7,7 +7,7 @@ import { useForkRef } from "@mui/material";
 import axios from "axios";
 
 
-const TransferBasic = ({apiResponse,applicationNumber,refreshScrutinyData,setAdditionalDetails,histeroyData,idwDataTreade,edcDataTreade }) => {
+const TransferBasic = ({apiResponse,applicationNumber,refreshScrutinyData,applicationStatus,setAdditionalDetails,histeroyData,idwDataTreade,edcDataTreade }) => {
   const [purpose, setPurpose] = useState("");
   const jeLandInfoRef = useRef();
 
@@ -226,6 +226,7 @@ const { remarksData,iconStates,handleGetFiledsStatesById,handleGetRemarkssValues
            passCheckedList={getCheckedGeneralInfoValue}
            onClick={() => setOpen(!open)}
            dataForIcons={iconStates}
+           applicationStatus={applicationStatus}
            ></TransferLicense>
          </div>
     

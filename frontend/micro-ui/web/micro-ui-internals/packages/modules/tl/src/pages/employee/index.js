@@ -254,6 +254,18 @@ const EmployeeApp = ({ path, url, userType }) => {
             {/* <PrivateRoute path={`${path}/ScrutinyForm`} component={ScrutinyForm} /> */}
             <PrivateRoute path={`${path}/ScrutinyForm/:id`} component={ScrutinyForm} />
             <PrivateRoute
+              path={`${path}/StandardInbox`}
+              component={(props) => (
+                <StandardInbox
+                  parentRoute={path}
+                  businessService={["APPROVAL_OF_STANDARD"]}
+                  filterComponent="TL_INBOX_FILTER"
+                  initialStates={{}}
+                  isInbox={true}
+                />
+              )}
+            />
+            <PrivateRoute
               path={`${path}/SurrenderInbox`}
               component={(props) => (
                 <SurrenderInbox
