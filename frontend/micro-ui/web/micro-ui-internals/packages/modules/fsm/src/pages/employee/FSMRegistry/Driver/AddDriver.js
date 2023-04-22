@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { FormComposer, Toast, Header } from "@egovernments/digit-ui-react-components";
+import { FormComposer, Toast, Header, InfoIcon } from "@egovernments/digit-ui-react-components";
 import { useHistory } from "react-router-dom";
 import DriverConfig from "../../configs/DriverConfig";
 import { useQueryClient } from "react-query";
@@ -41,7 +41,7 @@ const AddDriver = ({ parentUrl, heading }) => {
   };
 
   const onFormValueChange = (setValue, formData) => {
-    if (formData?.driverName && formData?.phone && formData?.selectGender) {
+    if (formData?.driverName && formData?.selectGender) {
       setSubmitValve(true);
     } else {
       setSubmitValve(false);
@@ -57,7 +57,7 @@ const AddDriver = ({ parentUrl, heading }) => {
     const license = data?.license;
     const gender = data?.selectGender?.code;
     const emailId = data?.emailId;
-    const phone = data?.phone;
+    // const phone = data?.phone;
     const dob = new Date(`${data.dob}`).getTime() || new Date(`1/1/1970`).getTime();
     const additionalDetails = data?.additionalDetails;
     const formData = {
@@ -75,7 +75,7 @@ const AddDriver = ({ parentUrl, heading }) => {
           gender: gender,
           dob: dob,
           emailId: emailId || "abc@egov.com",
-          mobileNumber: phone,
+          // mobileNumber: phone,
         },
         vendorDriverStatus: "INACTIVE",
       },
@@ -92,7 +92,7 @@ const AddDriver = ({ parentUrl, heading }) => {
         queryClient.invalidateQueries("FSM_DRIVER_SEARCH");
         setTimeout(() => {
           closeToast();
-          history.push(`/digit-ui/employee/fsm/registry`);
+          history.push(`/digit-ui/employee/fsm/registry?selectedTabs=DRIVER`);
         }, 5000);
       },
     });

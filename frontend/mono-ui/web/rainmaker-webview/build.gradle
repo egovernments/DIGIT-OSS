@@ -6,7 +6,7 @@ buildscript {
 		google()
 	}
 	dependencies {
-		classpath 'com.android.tools.build:gradle:3.3.2'
+		classpath 'com.android.tools.build:gradle:7.0.2'
 
 		// NOTE: Do not place your application dependencies here; they belong
 		// in the individual module build.gradle files
@@ -67,16 +67,14 @@ android {
 			minSdkVersion 19
 			applicationId 'org.egovernment.mseva.citizen'
 			targetSdkVersion 26
-			testInstrumentationRunner 'android.support.test.runner.AndroidJUnitRunner'
 			versionCode 14
 			versionName '2.3.0'
-			resValue "string", "app_name", "mSeva-Punjab"
+			resValue "string", "app_name", "mSeva-Citizen-DEV"
 			resValue "string", "launcher_icon", "@mipmap/ic_launcher_citizen"
 			signingConfig signingConfigs.Citizen
 
-			// Production
-			buildConfigField 'String', 'url', '"https://mseva.lgpunjab.gov.in/citizen/user/register"'
-			buildConfigField 'String', 'gatewayHost', '"migs.mastercard.co.in"'
+			buildConfigField 'String', 'url', '"https://dev.digit.org/citizen/user/register"'
+			buildConfigField 'String', 'gatewayHost', '"test.ccavenue.com"'
 		}
 		EmployeeProd {
 			minSdkVersion 19
@@ -104,8 +102,8 @@ android {
 			resValue "string", "launcher_icon", "@mipmap/ic_launcher_citizen"
 			signingConfig signingConfigs.Citizen
 
-			buildConfigField 'String', 'url', '"https://dev.digit.org/citizen/user/register"'
-			buildConfigField 'String', 'gatewayHost', '"migs.mastercard.co.in"'
+			buildConfigField 'String', 'url', '"https://dev.digit.org/digit-ui/citizen"'
+			buildConfigField 'String', 'gatewayHost', '"test.ccavenue.com"'
 		}
 		EmployeeDEV {
 			minSdkVersion 19
@@ -118,7 +116,7 @@ android {
 			resValue "string", "launcher_icon", "@mipmap/ic_launcher_employee"
 			signingConfig signingConfigs.Employee
 
-			buildConfigField 'String', 'url', '"https://dev.digit.org/employee/user/login"'
+			buildConfigField 'String', 'url', '"https://dev.digit.org/digit-ui/employee"'
 			buildConfigField 'String', 'gatewayHost', '"migs.mastercard.co.in"'
 		}
 		CitizenQA{
@@ -132,7 +130,7 @@ android {
 			resValue "string", "launcher_icon", "@mipmap/ic_launcher_citizen"
 			signingConfig signingConfigs.Citizen
 
-			buildConfigField 'String', 'url', '"https://qa.digit.org/citizen/user/register"'
+			buildConfigField 'String', 'url', '"https://qa.digit.org/digit-ui/citizen"'
 			buildConfigField 'String', 'gatewayHost', '"migs.mastercard.co.in"'
 		}
 		EmployeeQA {
@@ -146,7 +144,7 @@ android {
 			resValue "string", "launcher_icon", "@mipmap/ic_launcher_employee"
 			signingConfig signingConfigs.Employee
 
-			buildConfigField 'String', 'url', '"https://qa.digit.org/employee/user/login"'
+			buildConfigField 'String', 'url', '"https://qa.digit.org/digit-ui/employee"'
 			buildConfigField 'String', 'gatewayHost', '"migs.mastercard.co.in"'
 		}
 		CitizenUAT{
@@ -160,7 +158,7 @@ android {
 			resValue "string", "launcher_icon", "@mipmap/ic_launcher_citizen"
 			signingConfig signingConfigs.Citizen
 
-			buildConfigField 'String', 'url', '"https://uat.digit.org/citizen/user/register"'
+			buildConfigField 'String', 'url', '"https://uat.digit.org/digit-ui/citizen"'
 			buildConfigField 'String', 'gatewayHost', '"migs.mastercard.co.in"'
 		}
 		EmployeeUAT {
@@ -174,7 +172,7 @@ android {
 			resValue "string", "launcher_icon", "@mipmap/ic_launcher_employee"
 			signingConfig signingConfigs.Employee
 
-			buildConfigField 'String', 'url', '"https://uat.digit.org/employee/user/login"'
+			buildConfigField 'String', 'url', '"https://uat.digit.org/digit-ui/employee"'
 			buildConfigField 'String', 'gatewayHost', '"migs.mastercard.co.in"'
 		}
 		CitizenSTAGING{
@@ -212,3 +210,4 @@ dependencies {
 	implementation 'com.android.support:appcompat-v7:26.1.0'
 	implementation 'com.google.android.gms:play-services-base:15.0.1'
 }
+

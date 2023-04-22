@@ -1,11 +1,13 @@
-import { Card, CardSubHeader, Header, LinkButton, Loader, Row, StatusTable, MultiLink, SubmitBar } from "@egovernments/digit-ui-react-components";
-import React, { useEffect, useState } from "react";
+import { Card, CardSubHeader, Header, LinkButton, Loader, Row, StatusTable, MultiLink, PopUp, Toast, SubmitBar } from "@egovernments/digit-ui-react-components";
+import React, { useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useHistory, useParams } from "react-router-dom";
 import getPTAcknowledgementData from "../../getPTAcknowledgementData";
 import PropertyDocument from "../../pageComponents/PropertyDocument";
 import PTWFApplicationTimeline from "../../pageComponents/PTWFApplicationTimeline";
 import { getCityLocale, getPropertyTypeLocale, propertyCardBodyStyle, getMohallaLocale, pdfDownloadLink } from "../../utils";
+import PTCitizenFeedbackPopUp from "../../pageComponents/PTCitizenFeedbackPopUp";
+//import PTCitizenFeedback from "@egovernments/digit-ui-module-core/src/components/PTCitizenFeedback";
 
 import get from "lodash/get";
 import { size } from "lodash";
@@ -16,21 +18,43 @@ const PTApplicationDetails = () => {
   const { acknowledgementIds, tenantId } = useParams();
   const [acknowldgementData, setAcknowldgementData] = useState([]);
   const [showOptions, setShowOptions] = useState(false);
+  const [popup, setpopup] = useState(false);
+  const [showToast, setShowToast] = useState(null);
   // const tenantId = Digit.ULBService.getCurrentTenantId();
   const { data: storeData } = Digit.Hooks.useStore.getInitData();
   const { tenants } = storeData || {};
   const { isLoading, isError, error, data } = Digit.Hooks.pt.usePropertySearch(
-    { filters: { acknowledgementIds } },
-    { filters: { acknowledgementIds } }
+    { filters: { acknowledgementIds, tenantId } },
+    { filters: { acknowledgementIds, tenantId } }
   );
   const [billAmount, setBillAmount] = useState(null);
   const [billStatus, setBillStatus] = useState(null);
+
+  let serviceSearchArgs = {
+    tenantId : tenantId,
+    code: [`PT_${data?.Properties?.[0]?.creationReason}`], 
+    module: ["PT"],
+    referenceIds : [data?.Properties?.[0]?.acknowldgementNumber]
+    //removing thid as of now sending ack no in referenceId
+    // attributes: {
+    //         "attributeCode": "referenceId",
+    //         "value": data?.Properties?.[0]?.acknowldgementNumber,
+    //     }
+  }
+
+  const { isLoading:serviceloading, error : serviceerror, data : servicedata} = Digit.Hooks.pt.useServiceSearchCF({ filters: { serviceSearchArgs } },{ filters: { serviceSearchArgs }, enabled : data?.Properties?.[0]?.acknowldgementNumber ?true : false, cacheTime : 0 });
+
 
   const properties = get(data, "Properties", []);
   const propertyId = get(data, "Properties[0].propertyId", []);
   let property = (properties && properties.length > 0 && properties[0]) || {};
   const application = property;
   sessionStorage.setItem("pt-property", JSON.stringify(application));
+
+  useMemo(() => {
+    if(data?.Properties?.[0]?.status === "ACTIVE" && popup == false && servicedata?.Service?.length == 0)
+      setpopup(true);
+  },[data,servicedata])
 
   useEffect(async () => {
     if (acknowledgementIds && tenantId && property) {
@@ -517,7 +541,24 @@ const PTApplicationDetails = () => {
             )}
           </div>
           <PTWFApplicationTimeline application={application} id={acknowledgementIds} userType={"citizen"} />
+          {showToast && (
+          <Toast
+            error={showToast.key}
+            label={t(showToast.label)}
+            style={{bottom:"0px"}}
+            onClose={() => {
+              setShowToast(null);
+            }}
+          />
+        )}
         </Card>
+        {/* <LinkButton style={{marginLeft:"5%",color:"#F47738"}} label={t("CS_RATE_US")} onClick={() => setpopup(true)} /> */}
+        {/* {popup && (<PopUp>
+          <div style={{margin:"0 auto", top:"15%", position:"relative"}}>
+          <PTCitizenFeedback popup={true} onClose={setpopup} setShowToast={setShowToast} data={data}/>
+          </div>
+        </PopUp>)} */}
+        {popup && <PTCitizenFeedbackPopUp setpopup={setpopup} setShowToast={setShowToast} data={data} />}
       </div>
     </React.Fragment>
   );

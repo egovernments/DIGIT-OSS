@@ -48,6 +48,7 @@ import { NOCService } from "./services/elements/NOC";
 import { NOCSearch } from "./services/molecules/NOC/Search";
 import AccessControlService from "./services/elements/Access";
 import BillServices from "./services/elements/Bill";
+import { CFService } from "./services/elements/CF";
 
 import {CustomService} from "./services/elements/CustomService";
 
@@ -73,6 +74,7 @@ const initLibraries = () => {
   setupLibraries("PGRService", PGRService);
   setupLibraries("FSMService", FSMService);
   setupLibraries("PTService", PTService);
+  setupLibraries("CFService", CFService);
   setupLibraries("CustomService", CustomService);
   setupLibraries("TLService", TLService);
   setupLibraries("Surveys", Surveys);

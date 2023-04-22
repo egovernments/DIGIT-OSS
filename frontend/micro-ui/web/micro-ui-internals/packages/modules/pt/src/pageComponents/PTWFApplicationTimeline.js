@@ -79,7 +79,7 @@ const PTWFApplicationTimeline = (props) => {
           ? (
           <div style={{ marginTop: "1em", bottom: "0px", width: "100%", marginBottom: "1.2em" }}>
             <Link
-              to={{ pathname: `/digit-ui/citizen/payment/my-bills/${businessService}/${props.id}`, state: { tenantId: props.application.tenantId } }}
+              to={{ pathname: `/digit-ui/citizen/payment/my-bills/${businessService}/${props.id}`, state: { tenantId: props.application.tenantId, propertyId : props?.application?.propertyId } }}
             >
               <SubmitBar label={t("CS_APPLICATION_DETAILS_MAKE_PAYMENT")} />
             </Link>

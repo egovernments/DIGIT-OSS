@@ -220,8 +220,13 @@ public class UserService {
 
 		if (owner.getRoles() != null) {
 			owner.getRoles().add(getRolObj(config.getDsoRole(), config.getDsoRoleName()));
+			owner.getRoles().add(getRolObj(config.getCitizenRole(), config.getCitizenRoleName()));
 		} else {
-			owner.setRoles(Arrays.asList(getRolObj(config.getDsoRole(), config.getDsoRoleName())));
+			List<Role> roles = new ArrayList<>();
+			roles.add(getRolObj(config.getDsoRole(), config.getDsoRoleName()));
+			roles.add(getRolObj(config.getCitizenRole(), config.getCitizenRoleName()));
+			owner.setRoles(roles);
+
 		}
 
 		addUserDefaultFields(owner.getTenantId(), null, owner);

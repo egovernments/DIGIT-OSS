@@ -69,6 +69,7 @@ import PTRegistrationDocument from "./pageComponents/Mutate/RegistrationDocument
 import TransferProof from "./pageComponents/Mutate/transferReasonDocument";
 import UpdateNumber from "./pages/citizen/MyProperties/updateNumber";
 import EmployeeUpdateOwnerNumber from "./pages/employee/updateNumber";
+//import PTCitizenFeedback from "@egovernments/digit-ui-module-core/src/components/PTCitizenFeedback";
 
 import EmployeeApp from "./pages/employee";
 import PTCard from "./components/PTCard";
@@ -84,6 +85,10 @@ import Response from "./pages/Response";
 import TransferOwnership from "./pages/employee/PropertyMutation";
 import DocsRequired from "./pages/employee/PropertyMutation/docsRequired";
 import SelectOtp from "../../core/src/pages/citizen/Login/SelectOtp";
+import CitizenFeedback from "@egovernments/digit-ui-module-core/src/components/CitizenFeedback";
+import AcknowledgementCF from "@egovernments/digit-ui-module-core/src/components/AcknowledgementCF";
+// PTAcknowledgementCF from "@egovernments/digit-ui-module-core/src/components/PTAcknowledgementCF";
+//import PTCitizenFeedbackPopUp from "./pageComponents/PTCitizenFeedbackPopUp";
 
 const componentsToRegister = {
   PTLandArea,
@@ -159,7 +164,12 @@ const componentsToRegister = {
   PTSearchResultsComponent: SearchResultsComponent,
   PTEditProperty: EditProperty,
   PTMutateProperty: MutateProperty,
+  //PTCitizenFeedbackPopUp,
+  // PTCitizenFeedback,
+  // PTAcknowledgementCF,
   SelectOtp, // To-do: Temp fix, Need to check why not working if selectOtp module is already imported from core module
+  AcknowledgementCF,
+  CitizenFeedback,
 };
 
 const addComponentsToRegistry = () => {

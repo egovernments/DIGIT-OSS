@@ -23,7 +23,7 @@ const SelectPropertyType = ({ config, onSelect, t, userType, formData }) => {
   }, [formData?.propertyType, propertyTypesData.data]);
 
   const goNext = () => {
-    sessionStorage.removeItem("Digit.total_amount");
+    sessionStorage.removeItem("Digit.total_amount")
     onSelect(config.key, propertyType);
   };
   function selectedValue(value) {

@@ -355,20 +355,25 @@ const BillDetails = ({ businessService, consumerCode, _amount, onChange }) => {
             textStyle={{ textAlign: "left" }}
             text={"₹ " + Number(getAmountPerTrip()).toFixed(2)}
           />
-          <Row label={t("ES_PAYMENT_DETAILS_TOTAL_AMOUNT")} textStyle={{ textAlign: "left" }} text={"₹ " + Number(getTotalFSM()).toFixed(2)} />
-          {getAdvanceAmountPaid ? (
-            <Row
-              label={t("ES_PAYMENT_DETAILS_ADV_AMOUNT_PAID")}
-              textStyle={{ fontWeight: "bold", textAlign: "left" }}
-              text={"₹ " + Number(getAdvanceAmount()).toFixed(2)}
-            />
-          ) : (
-            <Row
-              label={t("ES_PAYMENT_DETAILS_ADV_AMOUNT_DUE")}
-              textStyle={{ fontWeight: "bold", textAlign: "left" }}
-              text={"₹ " + Number(getAdvanceAmount()).toFixed(2)}
-            />
-          )}
+          <Row
+            label={t("ES_PAYMENT_DETAILS_TOTAL_AMOUNT")}
+            textStyle={{ textAlign: "left" }}
+            text={!applicationData?.paymentPreference ? "₹ " + Number(getTotalFSM()).toFixed(2) : "₹ " + Number(bill?.totalAmount).toFixed(2)}
+          />
+          {!applicationData?.paymentPreference &&
+            (getAdvanceAmountPaid ? (
+              <Row
+                label={t("ES_PAYMENT_DETAILS_ADV_AMOUNT_PAID")}
+                textStyle={{ fontWeight: "bold", textAlign: "left" }}
+                text={"₹ " + Number(getAdvanceAmount()).toFixed(2)}
+              />
+            ) : (
+              <Row
+                label={t("ES_PAYMENT_DETAILS_ADV_AMOUNT_DUE")}
+                textStyle={{ fontWeight: "bold", textAlign: "left" }}
+                text={"₹ " + Number(getAdvanceAmount()).toFixed(2)}
+              />
+            ))}
 
           {applicationData?.applicationStatus !== "PENDING_APPL_FEE_PAYMENT" ? (
             <Row

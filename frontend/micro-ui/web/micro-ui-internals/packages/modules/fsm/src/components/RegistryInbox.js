@@ -158,7 +158,7 @@ const RegisryInbox = (props) => {
     });
   };
 
-  const onVendorSelect = (row, selectedOption) => {
+  const onVendorDriverSelect = (row, selectedOption) => {
     let driverData = row.original;
     let formDetails = row.original.dsoDetails;
 
@@ -183,6 +183,47 @@ const RegisryInbox = (props) => {
       vendor: {
         ...selectedVendor,
         drivers: selectedVendor.drivers ? [...selectedVendor.drivers, driverData] : [driverData],
+      },
+    };
+
+    mutateVendor(formData, {
+      onError: (error, variables) => {
+        setShowToast({ key: "error", action: error });
+        setTimeout(closeToast, 5000);
+      },
+      onSuccess: (data, variables) => {
+        setShowToast({ key: "success", action: "VENDOR" });
+        queryClient.invalidateQueries("DSO_SEARCH");
+        props.refetchData();
+        setTimeout(closeToast, 3000);
+      },
+    });
+  };
+
+  const onVendorVehicleSelect = (row, selectedOption) => {
+    let vehicleData = row.original;
+    let formDetails = row.original.dsoDetails;
+    let existingVendor = vehicleData?.vendor;
+    let selectedVendor = selectedOption;
+    delete vehicleData.vendor;
+    vehicleData.vendorVehicleStatus = "ACTIVE";
+    if (existingVendor) {
+      const vehicles = existingVendor?.vehicles;
+      vehicles.splice(
+        vehicles.findIndex((ele) => ele.id === vehicleData.id),
+        1
+      );
+      const formData = {
+        vendor: {
+          ...formDetails,
+          vehicles: vehicles,
+        },
+      };
+    }
+    const formData = {
+      vendor: {
+        ...selectedVendor,
+        vehicles: selectedVendor.vehicles ? [...selectedVendor.vehicles, vehicleData] : [vehicleData],
       },
     };
 
@@ -414,7 +455,18 @@ const RegisryInbox = (props) => {
           {
             Header: t("ES_FSM_REGISTRY_INBOX_VENDOR_NAME"),
             disableSortBy: true,
-            Cell: ({ row }) => GetCell(row.original?.vendor?.name || "NA"),
+            Cell: ({ row }) => {
+              return (
+                <Dropdown
+                  className="fsm-registry-dropdown"
+                  selected={row.original.vendor}
+                  option={vendors}
+                  select={(value) => onVendorVehicleSelect(row, value)}
+                  optionKey="name"
+                  t={t}
+                />
+              );
+            },
           },
           {
             Header: t("ES_FSM_REGISTRY_INBOX_ENABLED"),
@@ -466,7 +518,7 @@ const RegisryInbox = (props) => {
                   className="fsm-registry-dropdown"
                   selected={row.original.vendor}
                   option={vendors}
-                  select={(value) => onVendorSelect(row, value)}
+                  select={(value) => onVendorDriverSelect(row, value)}
                   optionKey="name"
                   t={t}
                 />

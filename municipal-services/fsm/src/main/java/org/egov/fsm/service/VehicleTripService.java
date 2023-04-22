@@ -61,13 +61,16 @@ public class VehicleTripService {
 		if (FSMConstants.FSM_PAYMENT_PREFERENCE_POST_PAY.equalsIgnoreCase(fsmRequest.getFsm().getPaymentPreference())
 				&& fsmRequest.getWorkflow().getAction().equalsIgnoreCase(FSMConstants.WF_ACTION_SCHEDULE)) {
 			postPayRequestForTripUpdate(remainingNumberOfTrips, increaseTrip, fsmRequest, fsm);
-		} 
+		}
 
-		 else if (fsmRequest.getWorkflow().getAction().equalsIgnoreCase(FSMConstants.WF_ACTION_UPDATE)) {
+		else if (fsmRequest.getFsm().getAdvanceAmount() == null && fsmRequest.getFsm().getPaymentPreference() != null
+				&& !(FSMConstants.FSM_PAYMENT_PREFERENCE_POST_PAY
+						.equalsIgnoreCase(fsmRequest.getFsm().getPaymentPreference()))
+				|| fsmRequest.getWorkflow().getAction().equalsIgnoreCase(FSMConstants.WF_ACTION_UPDATE)) {
 
-				prePayRequestForTripUpdate(remainingNumberOfTrips, increaseTrip, fsmRequest, fsm, oldNumberOfTrips);
+			prePayRequestForTripUpdate(remainingNumberOfTrips, increaseTrip, fsmRequest, fsm, oldNumberOfTrips);
 
-			}
+		}
 	}
 
 	private void prePayRequestForTripUpdate(Integer remainingNumberOfTrips, boolean increaseTrip, FSMRequest fsmRequest,
@@ -174,14 +177,11 @@ public class VehicleTripService {
 			List<VehicleTrip> vehicleTripsList, StringBuilder createUri) {
 		log.debug("WORKFLOW ACTION==> " + fsmRequest.getWorkflow().getAction());
 
-		if (fsmRequest.getWorkflow().getAction().equalsIgnoreCase(FSMConstants.WF_ACTION_UPDATE)) {
-			log.debug("Vehicle Trip Request call ::" + vehicleTripResponse);
-			VehicleTripRequest tripRequest = VehicleTripRequest.builder().vehicleTrip(vehicleTripsList)
-					.requestInfo(fsmRequest.getRequestInfo())
-					.workflow(Workflow.builder().action(FSMConstants.TRIP_READY_FOR_DISPOSAL).build()).build();
-			serviceRequestRepository.fetchResult(createUri, tripRequest);
-
-		}
+		log.debug("Vehicle Trip Request call ::" + vehicleTripResponse);
+		VehicleTripRequest tripRequest = VehicleTripRequest.builder().vehicleTrip(vehicleTripsList)
+				.requestInfo(fsmRequest.getRequestInfo())
+				.workflow(Workflow.builder().action(FSMConstants.TRIP_READY_FOR_DISPOSAL).build()).build();
+		serviceRequestRepository.fetchResult(createUri, tripRequest);
 
 	}
 

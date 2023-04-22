@@ -460,3 +460,38 @@ export const resetFetchRecords = () => {
     dispatch(fetchResetInboxRecords());
   };
 };
+
+export const setCitizenConsertFormData = (payload) => {
+  return {
+    type: actionTypes.FETCH_CITIZEN_CONSENT_FORM,
+    payload,
+  };
+};
+
+export const fetchCitizenConsentForm = () => {
+  return async (dispatch) => {
+    const requestBody = {
+      MdmsCriteria: {
+        tenantId: commonConfig.tenantId,
+        moduleDetails: [
+          {
+            moduleName: "common-masters",
+            masterDetails: [
+              {
+                name: "CitizenConsentForm",
+              },
+            ],
+          },
+        ],
+      },
+    };
+    try {
+      const payload = await httpRequest(MDMS.GET.URL, MDMS.GET.ACTION, [], requestBody);
+      const { MdmsRes } = payload;
+      const commonMasters = MdmsRes["common-masters"];
+      const citizenConsertFormData = commonMasters["CitizenConsentForm"];
+      dispatch(setCitizenConsertFormData(citizenConsertFormData[0]));
+    } catch (error) {
+    }
+  };
+};

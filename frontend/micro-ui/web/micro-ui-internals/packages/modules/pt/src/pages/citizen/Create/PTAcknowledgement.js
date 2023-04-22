@@ -1,7 +1,7 @@
-import { Banner, Card, CardText, LinkButton, Loader, Row, StatusTable, SubmitBar } from "@egovernments/digit-ui-react-components";
+import { Banner, Card, CardText, LinkButton, LinkLabel, Loader, Row, StatusTable, SubmitBar } from "@egovernments/digit-ui-react-components";
 import React, { useEffect } from "react";
 import { useTranslation } from "react-i18next";
-import { Link } from "react-router-dom";
+import { Link, useRouteMatch } from "react-router-dom";
 import getPTAcknowledgementData from "../../../getPTAcknowledgementData";
 import { convertToProperty, convertToUpdateProperty } from "../../../utils";
 
@@ -41,6 +41,7 @@ const PTAcknowledgement = ({ data, onSuccess }) => {
     !window.location.href.includes("edit-application") && !isPropertyMutation
   );
   const { data: storeData } = Digit.Hooks.useStore.getInitData();
+  const match = useRouteMatch();
   const { tenants } = storeData || {};
 
   useEffect(() => {
@@ -106,8 +107,10 @@ const PTAcknowledgement = ({ data, onSuccess }) => {
           />
         )}
       </StatusTable>
+      {/* {mutation.isSuccess && <Link to={`/digit-ui/citizen/feedback?redirectedFrom=${match.path}&propertyId=${mutation.isSuccess ? mutation?.data?.Properties[0]?.propertyId : ""}&acknowldgementNumber=${mutation.isSuccess ? mutation?.data?.Properties[0]?.acknowldgementNumber : ""}&creationReason=${mutation.isSuccess ? mutation?.data?.Properties[0]?.creationReason : ""}&tenantId=${mutation.isSuccess ? mutation?.data?.Properties[0]?.tenantId : ""}&locality=${mutation.isSuccess ? mutation?.data?.Properties[0]?.address?.locality?.code : ""}`}>
+          <SubmitBar label={t("CS_REVIEW_AND_FEEDBACK")}/>
+      </Link>} */}
       {mutation.isSuccess && <SubmitBar label={t("PT_DOWNLOAD_ACK_FORM")} onSubmit={handleDownloadPdf} />}
-
       <Link to={`/digit-ui/citizen`}>
         <LinkButton label={t("CORE_COMMON_GO_TO_HOME")} />
       </Link>

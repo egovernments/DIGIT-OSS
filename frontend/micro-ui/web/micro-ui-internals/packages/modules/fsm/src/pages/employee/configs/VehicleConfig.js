@@ -1,5 +1,6 @@
 import React from "react";
 const { DatePicker, Dropdown } = require("@egovernments/digit-ui-react-components");
+import { convertEpochToDate } from "../../../utils";
 
 const VehicleConfig = (t, disabled = false) => {
   return [
@@ -87,7 +88,7 @@ const VehicleConfig = (t, disabled = false) => {
           label: "ES_FSM_REGISTRY_NEW_VEHICLE_OWNER_NAME",
           isMandatory: true,
           type: "text",
-          disable: disabled,
+          // disable: disabled,
           populators: {
             name: "ownerName",
             validation: {
@@ -104,7 +105,7 @@ const VehicleConfig = (t, disabled = false) => {
           isMandatory: true,
           type: "mobileNumber",
           key: "phone",
-          disable: disabled,
+          // disable: disabled,
           populators: {
             name: "phone",
             validation: {
@@ -115,6 +116,52 @@ const VehicleConfig = (t, disabled = false) => {
             defaultValue: "",
             className: "payment-form-text-input-correction",
             labelStyle: { border: "1px solid black", borderRight: "none" },
+          },
+        },
+        {
+          label: "ES_FSM_REGISTRY_NEW_GENDER",
+          isMandatory: true,
+          type: "component",
+          route: "select-gender",
+          hideInEmployee: false,
+          key: "selectGender",
+          component: "SelectGender",
+          // disable: disabled,
+        },
+        {
+          label: t("ES_FSM_REGISTRY_NEW_DOB"),
+          isMandatory: false,
+          type: "custom",
+          key: "dob",
+          populators: {
+            name: "dob",
+            validation: {
+              required: true,
+            },
+            component: (props, customProps) => (
+              <DatePicker
+                onChange={props.onChange}
+                date={props.value}
+                {...customProps}
+                max={convertEpochToDate(new Date().setFullYear(new Date().getFullYear()))}
+              />
+            ),
+          },
+        },
+        {
+          label: "ES_FSM_REGISTRY_NEW_EMAIL",
+          isMandatory: false,
+          type: "text",
+          key: "emailId",
+          populators: {
+            name: "emailId",
+            validation: {
+              required: false,
+              pattern: /^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+\.[a-zA-Z0-9.-]+$/,
+            },
+            error: t("FSM_REGISTRY_INVALID_EMAIL"),
+            defaultValue: "",
+            className: "payment-form-text-input-correction",
           },
         },
         {

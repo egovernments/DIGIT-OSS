@@ -846,7 +846,7 @@ class ShowField extends Component {
             <Label className="report-header-row-label" labelStyle={{ wordWrap: "unset", wordBreak: "unset", fontWeight: "bold" }} label={"RT_SNO"} />
           </th>
           {metaData && metaData.reportDetails && metaData.reportDetails.selectiveDownload && (
-            <th key={"testKey"}>
+            <th key={"testKey"} >
               <input type="checkbox" onChange={checkAllRows} />
             </th>
           )}
@@ -1029,7 +1029,7 @@ class ShowField extends Component {
     return (
       <tbody>
         {reportResult.hasOwnProperty("reportData") &&
-          reportResult.reportData.map((dataItem, dataIndex) => {
+          reportResultArray.map((dataItem, dataIndex) => {
             //array of array
             let reportHeaderObj = reportResult.reportHeader;
             return (
@@ -1040,7 +1040,7 @@ class ShowField extends Component {
               >
                 <td>{dataIndex + 1}</td>
                 {metaData && metaData.reportDetails && metaData.reportDetails.selectiveDownload && (
-                  <td>
+                  <td >
                     <input
                       type="checkbox"
                       checked={this.state.ck[dataIndex] ? true : false}

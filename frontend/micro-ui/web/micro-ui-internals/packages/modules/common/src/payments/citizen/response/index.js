@@ -16,7 +16,7 @@ export const SuccessfulPayment = (props)=>{
  const WrapPaymentComponent = (props) => {
   const { t } = useTranslation();
   const queryClient = useQueryClient();
-  const { eg_pg_txnid: egId, workflow: workflw } = Digit.Hooks.useQueryParams();
+  const { eg_pg_txnid: egId, workflow: workflw, propertyId } = Digit.Hooks.useQueryParams();
   const [printing, setPrinting] = useState(false);
   const [allowFetchBill, setallowFetchBill] = useState(false);
   const { businessService: business_service, consumerCode, tenantId } = useParams();
@@ -90,6 +90,7 @@ export const SuccessfulPayment = (props)=>{
 
   const isMobile = window.Digit.Utils.browser.isMobile();
 
+
   if (isError || !payments || !payments.Payments || payments.Payments.length === 0 || data.txnStatus === "FAILURE") {
     return (
       <Card>
@@ -100,7 +101,7 @@ export const SuccessfulPayment = (props)=>{
           successful={false}
         />
         <CardText>{t("CS_PAYMENT_FAILURE_MESSAGE")}</CardText>
-        {business_service !== "PT" ? (
+        {!(business_service?.includes("PT")) ? (
           <Link to={`/digit-ui/citizen`}>
             <SubmitBar label={t("CORE_COMMON_GO_TO_HOME")} />
           </Link>
@@ -109,6 +110,9 @@ export const SuccessfulPayment = (props)=>{
             <Link to={(applicationNo && `/digit-ui/citizen/payment/my-bills/${business_service}/${applicationNo}`) || "/digit-ui/citizen"}>
               <SubmitBar label={t("CS_PAYMENT_TRY_AGAIN")} />
             </Link>
+            {/* {business_service?.includes("PT") &&<div style={{marginTop:"10px"}}><Link to={`/digit-ui/citizen/feedback?redirectedFrom=${"digit-ui/citizen/payment/success"}&propertyId=${consumerCode? consumerCode : ""}&acknowldgementNumber=${egId ? egId : ""}&tenantId=${tenantId}&creationReason=${business_service?.split(".")?.[1]}`}>
+              <SubmitBar label={t("CS_REVIEW_AND_FEEDBACK")} />
+            </Link></div>} */}
             <div className="link" style={isMobile ? { marginTop: "8px", width: "100%", textAlign: "center" } : { marginTop: "8px" }}>
               <Link to={`/digit-ui/citizen`}>{t("CORE_COMMON_GO_TO_HOME")}</Link>
             </div>
@@ -120,7 +124,7 @@ export const SuccessfulPayment = (props)=>{
 
   const paymentData = data?.payments?.Payments[0];
   const amount = reciept_data?.paymentDetails?.[0]?.totalAmountPaid;
-  const transactionDate = paymentData.transactionDate;
+  const transactionDate = paymentData?.transactionDate;
   const printCertificate = async () => {
     //const tenantId = Digit.ULBService.getCurrentTenantId();
     const state = tenantId;
@@ -278,7 +282,7 @@ export const SuccessfulPayment = (props)=>{
     } else if (business_service?.includes("WS") || business_service?.includes("SW")) {
       bannerText = t(`CITIZEN_SUCCESS_${paymentData?.paymentDetails[0].businessService.replace(/\./g, "_")}_WS_PAYMENT_MESSAGE`);
     } else {
-      bannerText = `CITIZEN_SUCCESS_${paymentData?.paymentDetails[0]?.businessService.replace(/\./g, "_")}_PAYMENT_MESSAGE`;
+      bannerText = paymentData?.paymentDetails[0]?.businessService ? `CITIZEN_SUCCESS_${paymentData?.paymentDetails[0]?.businessService.replace(/\./g, "_")}_PAYMENT_MESSAGE` : t("CITIZEN_SUCCESS_UC_PAYMENT_MESSAGE");
     }
   }
 
@@ -329,7 +333,7 @@ export const SuccessfulPayment = (props)=>{
             rowContainerStyle={rowContainerStyle}
             last
             label={t("CS_PAYMENT_AMOUNT_PENDING")}
-            text={`₹ ${reciept_data?.paymentDetails?.[0]?.totalDue - reciept_data?.paymentDetails?.[0]?.totalAmountPaid}`}
+            text={(reciept_data?.paymentDetails?.[0]?.totalDue && reciept_data?.paymentDetails?.[0]?.totalAmountPaid ) ? `₹ ${reciept_data?.paymentDetails?.[0]?.totalDue - reciept_data?.paymentDetails?.[0]?.totalAmountPaid}` : `₹ ${0}`}
           />
         )}
 
@@ -338,7 +342,7 @@ export const SuccessfulPayment = (props)=>{
           rowContainerStyle={rowContainerStyle}
           last
           label={t(ommitRupeeSymbol ? "CS_PAYMENT_AMOUNT_PAID_WITHOUT_SYMBOL" : "CS_PAYMENT_AMOUNT_PAID")}
-          text={"₹ " + reciept_data?.paymentDetails?.[0]?.totalAmountPaid}
+          text={reciept_data?.paymentDetails?.[0]?.totalAmountPaid ? ("₹ " +  reciept_data?.paymentDetails?.[0]?.totalAmountPaid) : `₹ 0` }
         />
         {(business_service !== "PT" || workflw) && (
           <Row
@@ -387,8 +391,16 @@ export const SuccessfulPayment = (props)=>{
           </div>
         ) : null}
       </div>
-      {!(business_service == "TL") && <SubmitBar onSubmit={printReciept} label={t("COMMON_DOWNLOAD_RECEIPT")} />}
-      {!(business_service == "TL") && (
+      {business_service?.includes("PT") &&<div style={{marginTop:"10px"}}><Link to={`/digit-ui/citizen/feedback?redirectedFrom=${"digit-ui/citizen/payment/success"}&propertyId=${consumerCode? consumerCode : ""}&acknowldgementNumber=${egId ? egId : ""}&tenantId=${tenantId}&creationReason=${business_service?.split(".")?.[1]}`}>
+          <SubmitBar label={t("CS_REVIEW_AND_FEEDBACK")} />
+      </Link></div>}
+      {business_service?.includes("PT") ? (
+        <div className="link" style={isMobile ? { marginTop: "8px", width: "100%", textAlign: "center" } : { marginTop: "8px" }} onClick={printReciept}>
+            {t("CS_DOWNLOAD_RECEIPT")}
+          </div>
+      ) : null}
+      {!(business_service == "TL") || !(business_service?.includes("PT")) && <SubmitBar onSubmit={printReciept} label={t("COMMON_DOWNLOAD_RECEIPT")} />}
+      {!(business_service == "TL") || !(business_service?.includes("PT")) && (
         <div className="link" style={isMobile ? { marginTop: "8px", width: "100%", textAlign: "center" } : { marginTop: "8px" }}>
           <Link to={`/digit-ui/citizen`}>{t("CORE_COMMON_GO_TO_HOME")}</Link>
         </div>
