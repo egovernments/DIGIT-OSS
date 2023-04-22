@@ -17,9 +17,10 @@ import Visibility from "@mui/icons-material/Visibility";
 import FileUpload from "@mui/icons-material/FileUpload";
 import { useTranslation } from "react-i18next";
 import { getDocShareholding } from "../../ScrutinyDevelopment/docview.helper";
+import ModalChild from "../../Remarks/ModalChild";
 
 
-function SurrenderLicScrutiny() {
+function SurrenderLicScrutiny({ apiResponse, refreshScrutinyData, applicationNumber, passUncheckedList, passCheckedList, dataForIcons,applicationStatus }) {
 
   const [selects, setSelects] = useState();
   const [showhide, setShowhide] = useState("");
@@ -69,56 +70,80 @@ function SurrenderLicScrutiny() {
     approved: "#09cb3d",
     disapproved: "#ff0000",
     info: "#FFB602",
+    conditional: "#2874A6"
   };
 
-  useEffect(() => {
-    getLicenseData();
-  }, [])
+  // // useEffect(() => {
+  // //   getLicenseData();
+  // // }, [])
 
-  const getLicenseData = async () => {
-    console.log("Request Id1 ====> ", id)
-    // return;
-    try {
-      // let id = params.get('id');
-      setLoading(true);
+  // const getLicenseData = async () => {
+  //   console.log("Request Id1 ====> ", id)
+  //   // return;
+  //   try {
+  //     // let id = params.get('id');
+  //     setLoading(true);
 
-      const requestData = {
-        "RequestInfo": {
-          "apiId": "Rainmaker",
-          "authToken": authToken,
-          "msgId": "1672136660039|en_IN",
-          "userInfo": userInfo
-        }
-      }
-      const response = await axios.post(`/tl-services/SurrendOfLicenseRequest/_search?applicationNumber=${id}`, requestData);
-      console.log("Response ====> ", response);
-      setLicenseData(response?.data?.surrendOfLicense?.[0]);
-      const details = response?.data?.surrendOfLicense?.[0]
-      setValue("licenseNo", details?.licenseNo);
-      setValue("selectType", details?.selectType);
-      setValue("areaFallingUnder", details?.areaFallingUnder);
-      setValue("thirdPartyRights", details?.thirdPartyRights);
-      setValue("reraRegistration", details?.areraRegistration);
-      setValue("zoningLayoutPlanfileUrl", details?.zoningLayoutPlanfileUrl);
-      setValue("licenseCopyfileUrl", details?.licenseCopyfileUrl);
-      setValue("edcaVailedfileUrl", details?.edcaVailedfileUrl);
-      setValue("detailedRelocationSchemefileUrl", details?.detailedRelocationSchemefileUrl);
-      setValue("giftDeedfileUrl", details?.giftDeedfileUrl);
-      setValue("mutationfileUrl", details?.mutationfileUrl);
-      setValue("jamabandhifileUrl", details?.jamabandhifileUrl);
-      setValue("thirdPartyRightsDeclarationfileUrl", details?.thirdPartyRightsDeclarationfileUrl);
-      setValue("areaInAcres", details?.areaInAcres);
-      setValue("declarationIDWWorksfileUrl", details?.declarationIDWWorksfileUrl);
-      setValue("revisedLayoutPlanfileUrl", details?.revisedLayoutPlanfileUrl);
-      setValue("availedEdcfileUrl", details?.availedEdcfileUrl);
-      setValue("areaFallingUnderfileUrl", details?.areaFallingUnderfileUrl);
-      setValue("areaFallingDividing", details?.areaFallingDividing);
-      setLoading(false);
-    } catch (error) {
-      console.log("Get Error ====> ", error.message);
-      setLoading(false);
-      setShowToastError({ label: error.message, error: true, success: false });
-    }
+  //     const requestData = {
+  //       "RequestInfo": {
+  //         "apiId": "Rainmaker",
+  //         "authToken": authToken,
+  //         "msgId": "1672136660039|en_IN",
+  //         "userInfo": userInfo
+  //       }
+  //     }
+  //     const response = await axios.post(`/tl-services/SurrendOfLicenseRequest/_search?applicationNumber=${id}`, requestData);
+  //     console.log("Response ====> ", response);
+  //     setLicenseData(response?.data?.surrendOfLicense?.[0]);
+  //     const details = response?.data?.surrendOfLicense?.[0]
+  //     setValue("licenseNo", details?.licenseNo);
+  //     setValue("selectType", details?.selectType);
+  //     setValue("areaFallingUnder", details?.areaFallingUnder);
+  //     setValue("thirdPartyRights", details?.thirdPartyRights);
+  //     setValue("reraRegistration", details?.areraRegistration);
+  //     setValue("zoningLayoutPlanfileUrl", details?.zoningLayoutPlanfileUrl);
+  //     setValue("licenseCopyfileUrl", details?.licenseCopyfileUrl);
+  //     setValue("edcaVailedfileUrl", details?.edcaVailedfileUrl);
+  //     setValue("detailedRelocationSchemefileUrl", details?.detailedRelocationSchemefileUrl);
+  //     setValue("giftDeedfileUrl", details?.giftDeedfileUrl);
+  //     setValue("mutationfileUrl", details?.mutationfileUrl);
+  //     setValue("jamabandhifileUrl", details?.jamabandhifileUrl);
+  //     setValue("thirdPartyRightsDeclarationfileUrl", details?.thirdPartyRightsDeclarationfileUrl);
+  //     setValue("areaInAcres", details?.areaInAcres);
+  //     setValue("declarationIDWWorksfileUrl", details?.declarationIDWWorksfileUrl);
+  //     setValue("revisedLayoutPlanfileUrl", details?.revisedLayoutPlanfileUrl);
+  //     setValue("availedEdcfileUrl", details?.availedEdcfileUrl);
+  //     setValue("areaFallingUnderfileUrl", details?.areaFallingUnderfileUrl);
+  //     setValue("areaFallingDividing", details?.areaFallingDividing);
+  //     setLoading(false);
+  //   } catch (error) {
+  //     console.log("Get Error ====> ", error.message);
+  //     setLoading(false);
+  //     setShowToastError({ label: error.message, error: true, success: false });
+  //   }
+  // }
+
+  const setSurrenderLicenseData = (details) => {
+    setLicenseData(details);
+    setValue("licenseNo", details?.licenseNo);
+    setValue("selectType", details?.selectType);
+    setValue("areaFallingUnder", details?.areaFallingUnder);
+    setValue("thirdPartyRights", details?.thirdPartyRights);
+    setValue("reraRegistration", details?.areraRegistration);
+    setValue("zoningLayoutPlanfileUrl", details?.zoningLayoutPlanfileUrl);
+    setValue("licenseCopyfileUrl", details?.licenseCopyfileUrl);
+    setValue("edcaVailedfileUrl", details?.edcaVailedfileUrl);
+    setValue("detailedRelocationSchemefileUrl", details?.detailedRelocationSchemefileUrl);
+    setValue("giftDeedfileUrl", details?.giftDeedfileUrl);
+    setValue("mutationfileUrl", details?.mutationfileUrl);
+    setValue("jamabandhifileUrl", details?.jamabandhifileUrl);
+    setValue("thirdPartyRightsDeclarationfileUrl", details?.thirdPartyRightsDeclarationfileUrl);
+    setValue("areaInAcres", details?.areaInAcres);
+    setValue("declarationIDWWorksfileUrl", details?.declarationIDWWorksfileUrl);
+    setValue("revisedLayoutPlanfileUrl", details?.revisedLayoutPlanfileUrl);
+    setValue("availedEdcfileUrl", details?.availedEdcfileUrl);
+    setValue("areaFallingUnderfileUrl", details?.areaFallingUnderfileUrl);
+    setValue("areaFallingDividing", details?.areaFallingDividing);
   }
 
   const handlemodaldData = (data) => {
@@ -204,6 +229,41 @@ function SurrenderLicScrutiny() {
   // const SurrenderLic = (data) => console.log(data);
   // const [open2, setOpen2] = useState(false);
 
+  useEffect(() => {
+    console.log("logger123...",dataForIcons)
+  }, [dataForIcons])
+
+  useEffect(() => {
+    if (apiResponse) {
+      setSurrenderLicenseData(apiResponse);
+    }
+  }, [apiResponse])
+
+  const findfisrtObj = (list=[],label) => {
+    return list?.filter((item,index)=>item.fieldIdL===label)?.[0] || {}
+  }
+
+  const getIconColor = (label) => {
+    if(findfisrtObj(dataForIcons?.egScrutiny,label)?.isApproved === 'In Order'){
+      return Colors.approved;
+    }
+    if(findfisrtObj(dataForIcons?.egScrutiny,label)?.isApproved === 'Not In Order'){
+      return Colors.disapproved;
+    }
+    if(findfisrtObj(dataForIcons?.egScrutiny,label)?.isApproved === "Conditional"){
+      return Colors.conditional;
+    }
+    return Colors.info
+  }
+
+  useEffect(()=>{
+    if(labelValue){
+      setSelectedFieldData(findfisrtObj(dataForIcons?.egScrutiny,labelValue))
+    } else {
+      setSelectedFieldData(null)
+    }
+    console.log("regergerg",labelValue,selectedFieldData)
+  },[labelValue])
 
 
   return (
@@ -226,18 +286,31 @@ function SurrenderLicScrutiny() {
         }}
       >
         <span style={{ color: "#817f7f" }} className="">
-          Approval of Standard Design
+          Surrender of License
         </span>
         {open2 ? <RemoveIcon></RemoveIcon> : <AddIcon></AddIcon>}
       </div>
       <Collapse in={open2}>
-        <div id="example-collapse-text">
+        <div
+        //  id="example-collapse-text"
+         >
           <Card style={{ width: "126%", border: "5px solid #1266af" }}>
             <h4 style={{ fontSize: "25px", marginLeft: "21px" }} className="text-center">
               Surrender of License
             </h4>
 
             <div className="card">
+
+              <ModalChild
+                labelmodal={labelValue}
+                passmodalData={handlemodaldData}
+                displaymodal={smShow}
+                onClose={() => setSmShow(false)}
+                selectedFieldData={selectedFieldData}
+                fieldValue={fieldValue}
+                remarksUpdate={currentRemarks}
+                applicationStatus={applicationStatus}
+              ></ModalChild>
 
               <div className="row-12">
 
@@ -274,10 +347,11 @@ function SurrenderLicScrutiny() {
                     </FormControl>
                     <ReportProblemIcon
                       style={{
-                        color: fieldIconColors.developer,
+                        color: getIconColor(t('LICENSE_NO')),
                       }}
                       className="ml-2"
                       onClick={() => {
+                        setSmShow(true);
                         setOpennedModal(t('LICENSE_NO'));
                         setLabelValue(t('LICENSE_NO')),
                           setFieldValue(watch('licenseNo') || null);
@@ -316,10 +390,11 @@ function SurrenderLicScrutiny() {
 
                     <ReportProblemIcon
                       style={{
-                        color: fieldIconColors.developer,
+                        color: getIconColor(t('SELECT_TYPE_COMPLETE_OR_PARTIAL')),
                       }}
                       className="ml-2"
                       onClick={() => {
+                        setSmShow(true);
                         setOpennedModal(t('SELECT_TYPE_COMPLETE_OR_PARTIAL'));
                         setLabelValue(t('SELECT_TYPE_COMPLETE_OR_PARTIAL')),
                           setFieldValue(watch('selectType') || null);
@@ -373,10 +448,11 @@ function SurrenderLicScrutiny() {
 
                         <ReportProblemIcon
                           style={{
-                            color: fieldIconColors.developer,
+                            color: getIconColor(t('AREA_IN_ACRES')),
                           }}
                           className="ml-2"
                           onClick={() => {
+                            setSmShow(true)
                             setOpennedModal(t('AREA_IN_ACRES'));
                             setLabelValue(t('AREA_IN_ACRES')),
                               setFieldValue(watch('areaInAcres') || null);
@@ -424,10 +500,11 @@ function SurrenderLicScrutiny() {
                     </h6>
                     <ReportProblemIcon
                       style={{
-                        color: fieldIconColors.developer,
+                        color: getIconColor(t('AREA_FALLING_UNDER_24M_ROAD_OR_SECTOR_DIVIDING_ROAD')),
                       }}
                       className="ml-2"
                       onClick={() => {
+                        setSmShow(true);
                         setOpennedModal(t('AREA_FALLING_UNDER_24M_ROAD_OR_SECTOR_DIVIDING_ROAD'));
                         setLabelValue(t('AREA_FALLING_UNDER_24M_ROAD_OR_SECTOR_DIVIDING_ROAD')),
                           setFieldValue(watch('areaFallingUnder') || null);
@@ -472,10 +549,11 @@ function SurrenderLicScrutiny() {
                     </h6>
                     <ReportProblemIcon
                       style={{
-                        color: fieldIconColors.developer,
+                        color: getIconColor(t('THIRD_PARTY_RIGHTS_CREATED')),
                       }}
                       className="ml-2"
                       onClick={() => {
+                        setSmShow(true);
                         setOpennedModal(t('THIRD_PARTY_RIGHTS_CREATED'));
                         setLabelValue(t('THIRD_PARTY_RIGHTS_CREATED')),
                           setFieldValue(watch('thirdPartyRights') || null);
@@ -522,10 +600,11 @@ function SurrenderLicScrutiny() {
                     </h6>
                     <ReportProblemIcon
                       style={{
-                        color: fieldIconColors.developer,
+                        color: getIconColor(t('RERA_REGISTRATION_OF_PROJECT')),
                       }}
                       className="ml-2"
                       onClick={() => {
+                        setSmShow(true);
                         setOpennedModal(t('RERA_REGISTRATION_OF_PROJECT'));
                         setLabelValue(t('RERA_REGISTRATION_OF_PROJECT')),
                           setFieldValue(watch('reraRegistration') || null);
@@ -578,10 +657,11 @@ function SurrenderLicScrutiny() {
 
                               <ReportProblemIcon
                                 style={{
-                                  color: fieldIconColors.developer,
+                                  color: getIconColor(t('APPROVED_COPY_OF_ZONING_PLAN')),
                                 }}
                                 className="ml-2"
                                 onClick={() => {
+                                  setSmShow(true)
                                   setOpennedModal(t('APPROVED_COPY_OF_ZONING_PLAN'));
                                   setLabelValue(t('APPROVED_COPY_OF_ZONING_PLAN')),
                                     setFieldValue(watch('zoningLayoutPlanfileUrl') || null);
@@ -616,10 +696,11 @@ function SurrenderLicScrutiny() {
 
                               <ReportProblemIcon
                                 style={{
-                                  color: fieldIconColors.developer,
+                                  color: getIconColor(t('LICENSE_COPY')),
                                 }}
                                 className="ml-2"
                                 onClick={() => {
+                                  setSmShow(true)
                                   setOpennedModal(t('LICENSE_COPY'));
                                   setLabelValue(t('LICENSE_COPY')),
                                     setFieldValue(watch('licenseCopyfileUrl') || null);
@@ -655,10 +736,11 @@ function SurrenderLicScrutiny() {
 
                               <ReportProblemIcon
                                 style={{
-                                  color: fieldIconColors.developer,
+                                  color: getIconColor(t('EDC_AVAILED')),
                                 }}
                                 className="ml-2"
                                 onClick={() => {
+                                  setSmShow(true)
                                   setOpennedModal(t('EDC_AVAILED'));
                                   setLabelValue(t('EDC_AVAILED')),
                                     setFieldValue(watch('edcaVailedfileUrl') || null);
@@ -695,10 +777,11 @@ function SurrenderLicScrutiny() {
 
                                   <ReportProblemIcon
                                     style={{
-                                      color: fieldIconColors.developer,
+                                      color: getIconColor(t('DECLARATION_OF_THIRD_PARTY_RIGHTS')),
                                     }}
                                     className="ml-2"
                                     onClick={() => {
+                                      setSmShow(true)
                                       setOpennedModal(t('DECLARATION_OF_THIRD_PARTY_RIGHTS'));
                                       setLabelValue(t('DECLARATION_OF_THIRD_PARTY_RIGHTS')),
                                         setFieldValue(watch('thirdPartyRightsDeclarationfileUrl') || null);
@@ -737,10 +820,11 @@ function SurrenderLicScrutiny() {
 
                                   <ReportProblemIcon
                                     style={{
-                                      color: fieldIconColors.developer,
+                                      color: getIconColor(t('DETAILED_SCHEME_OF_RELOCATION')),
                                     }}
                                     className="ml-2"
                                     onClick={() => {
+                                      setSmShow(true)
                                       setOpennedModal(t('DETAILED_SCHEME_OF_RELOCATION'));
                                       setLabelValue(t('DETAILED_SCHEME_OF_RELOCATION')),
                                         setFieldValue(watch('detailedRelocationSchemefileUrl') || null);
@@ -792,17 +876,18 @@ function SurrenderLicScrutiny() {
                                     </h3>
 
                                     <ReportProblemIcon
-                                    style={{
-                                      color: fieldIconColors.developer,
-                                    }}
-                                    className="ml-2"
-                                    onClick={() => {
-                                      setOpennedModal(t('AREA_FALLING_UNDER_24M_ROAD_OR_SECTOR_DIVIDING_ROAD_AND_GREEN_BELT'));
-                                      setLabelValue(t('AREA_FALLING_UNDER_24M_ROAD_OR_SECTOR_DIVIDING_ROAD_AND_GREEN_BELT')),
-                                        setFieldValue(watch('areaFallingDividing') || null);
-                                    }}
-                                  ></ReportProblemIcon>
-                                  
+                                      style={{
+                                        color: getIconColor(t('AREA_FALLING_UNDER_24M_ROAD_OR_SECTOR_DIVIDING_ROAD_AND_GREEN_BELT')),
+                                      }}
+                                      className="ml-2"
+                                      onClick={() => {
+                                        setSmShow(true)
+                                        setOpennedModal(t('AREA_FALLING_UNDER_24M_ROAD_OR_SECTOR_DIVIDING_ROAD_AND_GREEN_BELT'));
+                                        setLabelValue(t('AREA_FALLING_UNDER_24M_ROAD_OR_SECTOR_DIVIDING_ROAD_AND_GREEN_BELT')),
+                                          setFieldValue(watch('areaFallingDividing') || null);
+                                      }}
+                                    ></ReportProblemIcon>
+
                                   </div>
                                 </div>
                               </fieldset>
@@ -840,10 +925,11 @@ function SurrenderLicScrutiny() {
 
                                 <ReportProblemIcon
                                   style={{
-                                    color: fieldIconColors.developer,
+                                    color: getIconColor(t('GIFT_DEED')),
                                   }}
                                   className="ml-2"
                                   onClick={() => {
+                                    setSmShow(true)
                                     setOpennedModal(t('GIFT_DEED'));
                                     setLabelValue(t('GIFT_DEED')),
                                       setFieldValue(watch('giftDeedfileUrl') || null);
@@ -878,10 +964,11 @@ function SurrenderLicScrutiny() {
 
                                 <ReportProblemIcon
                                   style={{
-                                    color: fieldIconColors.developer,
+                                    color: getIconColor(t('MUTATION')),
                                   }}
                                   className="ml-2"
                                   onClick={() => {
+                                    setSmShow(true)
                                     setOpennedModal(t('MUTATION'));
                                     setLabelValue(t('MUTATION')),
                                       setFieldValue(watch('mutationfileUrl') || null);
@@ -915,10 +1002,11 @@ function SurrenderLicScrutiny() {
 
                                 <ReportProblemIcon
                                   style={{
-                                    color: fieldIconColors.developer,
+                                    color: getIconColor(t('JAMABANDHI')),
                                   }}
                                   className="ml-2"
                                   onClick={() => {
+                                    setSmShow(true)
                                     setOpennedModal(t('JAMABANDHI'));
                                     setLabelValue(t('JAMABANDHI')),
                                       setFieldValue(watch('jamabandhifileUrl') || null);
@@ -973,10 +1061,11 @@ function SurrenderLicScrutiny() {
 
                               <ReportProblemIcon
                                 style={{
-                                  color: fieldIconColors.developer,
+                                  color: getIconColor(t('DECLARATION_IDW_WORKS')),
                                 }}
                                 className="ml-2"
                                 onClick={() => {
+                                  setSmShow(true)
                                   setOpennedModal(t('DECLARATION_IDW_WORKS'));
                                   setLabelValue(t('DECLARATION_IDW_WORKS')),
                                     setFieldValue(watch('declarationIDWWorksfileUrl') || null);
@@ -1011,10 +1100,11 @@ function SurrenderLicScrutiny() {
 
                               <ReportProblemIcon
                                 style={{
-                                  color: fieldIconColors.developer,
+                                  color: getIconColor(t('REVISED_LAYOUT_PLAN')),
                                 }}
                                 className="ml-2"
                                 onClick={() => {
+                                  setSmShow(true)
                                   setOpennedModal(t('REVISED_LAYOUT_PLAN'));
                                   setLabelValue(t('REVISED_LAYOUT_PLAN')),
                                     setFieldValue(watch('revisedLayoutPlanfileUrl') || null);
@@ -1048,10 +1138,11 @@ function SurrenderLicScrutiny() {
 
                               <ReportProblemIcon
                                 style={{
-                                  color: fieldIconColors.developer,
+                                  color: getIconColor(t('EDC_AVAILED')),
                                 }}
                                 className="ml-2"
                                 onClick={() => {
+                                  setSmShow(true)
                                   setOpennedModal(t('EDC_AVAILED'));
                                   setLabelValue(t('EDC_AVAILED')),
                                     setFieldValue(watch('availedEdcfileUrl') || null);
@@ -1085,10 +1176,11 @@ function SurrenderLicScrutiny() {
 
                               <ReportProblemIcon
                                 style={{
-                                  color: fieldIconColors.developer,
+                                  color: getIconColor(t('AREA_FALLING_UNDER_24M_ROAD_OR_SECTOR_DIVIDING_ROAD')),
                                 }}
                                 className="ml-2"
                                 onClick={() => {
+                                  setSmShow(true)
                                   setOpennedModal(t('AREA_FALLING_UNDER_24M_ROAD_OR_SECTOR_DIVIDING_ROAD'));
                                   setLabelValue(t('AREA_FALLING_UNDER_24M_ROAD_OR_SECTOR_DIVIDING_ROAD')),
                                     setFieldValue(watch('areaFallingUnderfileUrl') || null);
@@ -1117,24 +1209,25 @@ function SurrenderLicScrutiny() {
 
                                 <td className="d-flex justify-content-center">
 
-                              {watch('thirdPartyRightsDeclarationfileUrl') && (
-                                <a onClick={() => getDocShareholding(watch('thirdPartyRightsDeclarationfileUrl'), setLoading)} className="btn btn-sm ">
-                                  <Visibility />
-                                </a>
-                              )}
+                                  {watch('thirdPartyRightsDeclarationfileUrl') && (
+                                    <a onClick={() => getDocShareholding(watch('thirdPartyRightsDeclarationfileUrl'), setLoading)} className="btn btn-sm ">
+                                      <Visibility />
+                                    </a>
+                                  )}
 
-                              <ReportProblemIcon
-                                style={{
-                                  color: fieldIconColors.developer,
-                                }}
-                                className="ml-2"
-                                onClick={() => {
-                                  setOpennedModal(t('DECLARATION_OF_THIRD_PARTY_RIGHTS'));
-                                  setLabelValue(t('DECLARATION_OF_THIRD_PARTY_RIGHTS')),
-                                    setFieldValue(watch('thirdPartyRightsDeclarationfileUrl') || null);
-                                }}
-                              ></ReportProblemIcon>
-                            </td>
+                                  <ReportProblemIcon
+                                    style={{
+                                      color: getIconColor(t('DECLARATION_OF_THIRD_PARTY_RIGHTS')),
+                                    }}
+                                    className="ml-2"
+                                    onClick={() => {
+                                      setSmShow(true)
+                                      setOpennedModal(t('DECLARATION_OF_THIRD_PARTY_RIGHTS'));
+                                      setLabelValue(t('DECLARATION_OF_THIRD_PARTY_RIGHTS')),
+                                        setFieldValue(watch('thirdPartyRightsDeclarationfileUrl') || null);
+                                    }}
+                                  ></ReportProblemIcon>
+                                </td>
 
                               </tr>
                             )
@@ -1159,24 +1252,25 @@ function SurrenderLicScrutiny() {
 
                                 <td className="d-flex justify-content-center">
 
-                              {watch('detailedRelocationSchemefileUrl') && (
-                                <a onClick={() => getDocShareholding(watch('detailedRelocationSchemefileUrl'), setLoading)} className="btn btn-sm ">
-                                  <Visibility />
-                                </a>
-                              )}
+                                  {watch('detailedRelocationSchemefileUrl') && (
+                                    <a onClick={() => getDocShareholding(watch('detailedRelocationSchemefileUrl'), setLoading)} className="btn btn-sm ">
+                                      <Visibility />
+                                    </a>
+                                  )}
 
-                              <ReportProblemIcon
-                                style={{
-                                  color: fieldIconColors.developer,
-                                }}
-                                className="ml-2"
-                                onClick={() => {
-                                  setOpennedModal(t('DETAILED_SCHEME_OF_RELOCATION'));
-                                  setLabelValue(t('DETAILED_SCHEME_OF_RELOCATION')),
-                                    setFieldValue(watch('detailedRelocationSchemefileUrl') || null);
-                                }}
-                              ></ReportProblemIcon>
-                            </td>
+                                  <ReportProblemIcon
+                                    style={{
+                                      color: getIconColor(t('DETAILED_SCHEME_OF_RELOCATION')),
+                                    }}
+                                    className="ml-2"
+                                    onClick={() => {
+                                      setSmShow(true)
+                                      setOpennedModal(t('DETAILED_SCHEME_OF_RELOCATION'));
+                                      setLabelValue(t('DETAILED_SCHEME_OF_RELOCATION')),
+                                        setFieldValue(watch('detailedRelocationSchemefileUrl') || null);
+                                    }}
+                                  ></ReportProblemIcon>
+                                </td>
 
                               </tr>
                             )
@@ -1223,16 +1317,17 @@ function SurrenderLicScrutiny() {
                                     </h3>
 
                                     <ReportProblemIcon
-                                    style={{
-                                      color: fieldIconColors.developer,
-                                    }}
-                                    className="ml-2"
-                                    onClick={() => {
-                                      setOpennedModal(t('AREA_FALLING_UNDER_24M_ROAD_OR_SECTOR_DIVIDING_ROAD_AND_GREEN_BELT'));
-                                      setLabelValue(t('AREA_FALLING_UNDER_24M_ROAD_OR_SECTOR_DIVIDING_ROAD_AND_GREEN_BELT')),
-                                        setFieldValue(watch('areaFallingDividing') || null);
-                                    }}
-                                  ></ReportProblemIcon>
+                                      style={{
+                                        color: getIconColor(t('AREA_FALLING_UNDER_24M_ROAD_OR_SECTOR_DIVIDING_ROAD_AND_GREEN_BELT')),
+                                      }}
+                                      className="ml-2"
+                                      onClick={() => {
+                                        setSmShow(true)
+                                        setOpennedModal(t('AREA_FALLING_UNDER_24M_ROAD_OR_SECTOR_DIVIDING_ROAD_AND_GREEN_BELT'));
+                                        setLabelValue(t('AREA_FALLING_UNDER_24M_ROAD_OR_SECTOR_DIVIDING_ROAD_AND_GREEN_BELT')),
+                                          setFieldValue(watch('areaFallingDividing') || null);
+                                      }}
+                                    ></ReportProblemIcon>
 
                                   </div>
                                 </div>
@@ -1261,24 +1356,25 @@ function SurrenderLicScrutiny() {
 
                               <td className="d-flex justify-content-center">
 
-                              {watch('giftDeedfileUrl') && (
-                                <a onClick={() => getDocShareholding(watch('giftDeedfileUrl'), setLoading)} className="btn btn-sm ">
-                                  <Visibility />
-                                </a>
-                              )}
+                                {watch('giftDeedfileUrl') && (
+                                  <a onClick={() => getDocShareholding(watch('giftDeedfileUrl'), setLoading)} className="btn btn-sm ">
+                                    <Visibility />
+                                  </a>
+                                )}
 
-                              <ReportProblemIcon
-                                style={{
-                                  color: fieldIconColors.developer,
-                                }}
-                                className="ml-2"
-                                onClick={() => {
-                                  setOpennedModal(t('GIFT_DEED'));
-                                  setLabelValue(t('GIFT_DEED')),
-                                    setFieldValue(watch('giftDeedfileUrl') || null);
-                                }}
-                              ></ReportProblemIcon>
-                            </td>
+                                <ReportProblemIcon
+                                  style={{
+                                    color: getIconColor(t('GIFT_DEED')),
+                                  }}
+                                  className="ml-2"
+                                  onClick={() => {
+                                    setSmShow(true)
+                                    setOpennedModal(t('GIFT_DEED'));
+                                    setLabelValue(t('GIFT_DEED')),
+                                      setFieldValue(watch('giftDeedfileUrl') || null);
+                                  }}
+                                ></ReportProblemIcon>
+                              </td>
 
                             </tr>
                             <tr>
@@ -1299,24 +1395,25 @@ function SurrenderLicScrutiny() {
 
                               <td className="d-flex justify-content-center">
 
-                              {watch('mutationfileUrl') && (
-                                <a onClick={() => getDocShareholding(watch('mutationfileUrl'), setLoading)} className="btn btn-sm ">
-                                  <Visibility />
-                                </a>
-                              )}
+                                {watch('mutationfileUrl') && (
+                                  <a onClick={() => getDocShareholding(watch('mutationfileUrl'), setLoading)} className="btn btn-sm ">
+                                    <Visibility />
+                                  </a>
+                                )}
 
-                              <ReportProblemIcon
-                                style={{
-                                  color: fieldIconColors.developer,
-                                }}
-                                className="ml-2"
-                                onClick={() => {
-                                  setOpennedModal(t('MUTATION'));
-                                  setLabelValue(t('MUTATION')),
-                                    setFieldValue(watch('mutationfileUrl') || null);
-                                }}
-                              ></ReportProblemIcon>
-                            </td>
+                                <ReportProblemIcon
+                                  style={{
+                                    color: getIconColor(t('MUTATION')),
+                                  }}
+                                  className="ml-2"
+                                  onClick={() => {
+                                    setSmShow(true)
+                                    setOpennedModal(t('MUTATION'));
+                                    setLabelValue(t('MUTATION')),
+                                      setFieldValue(watch('mutationfileUrl') || null);
+                                  }}
+                                ></ReportProblemIcon>
+                              </td>
 
                             </tr>
                             <tr>
@@ -1336,24 +1433,25 @@ function SurrenderLicScrutiny() {
 
                               <td className="d-flex justify-content-center">
 
-                              {watch('jamabandhifileUrl') && (
-                                <a onClick={() => getDocShareholding(watch('jamabandhifileUrl'), setLoading)} className="btn btn-sm ">
-                                  <Visibility />
-                                </a>
-                              )}
+                                {watch('jamabandhifileUrl') && (
+                                  <a onClick={() => getDocShareholding(watch('jamabandhifileUrl'), setLoading)} className="btn btn-sm ">
+                                    <Visibility />
+                                  </a>
+                                )}
 
-                              <ReportProblemIcon
-                                style={{
-                                  color: fieldIconColors.developer,
-                                }}
-                                className="ml-2"
-                                onClick={() => {
-                                  setOpennedModal(t('JAMABANDHI'));
-                                  setLabelValue(t('JAMABANDHI')),
-                                    setFieldValue(watch('jamabandhifileUrl') || null);
-                                }}
-                              ></ReportProblemIcon>
-                            </td>
+                                <ReportProblemIcon
+                                  style={{
+                                    color: getIconColor(t('JAMABANDHI')),
+                                  }}
+                                  className="ml-2"
+                                  onClick={() => {
+                                    setSmShow(true)
+                                    setOpennedModal(t('JAMABANDHI'));
+                                    setLabelValue(t('JAMABANDHI')),
+                                      setFieldValue(watch('jamabandhifileUrl') || null);
+                                  }}
+                                ></ReportProblemIcon>
+                              </td>
 
                             </tr>
                           </tbody>

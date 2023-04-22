@@ -41,6 +41,8 @@ import SurrenderInbox from "./ScrutinyBasic/AllServiceScrutiny/SurrenderLic/Inbo
 import LayoutPlanInbox from "./ScrutinyBasic/AllServiceScrutiny/LayoutPlan/Inbox";
 import BeneficialInbox from "./ScrutinyBasic/AllServiceScrutiny/BeneficialInterest/Inbox";
 import SurrenderLicScrutiny from "../employee/ScrutinyBasic/AllServiceScrutiny/SurrenderLic/SurrenderLic";
+import SurrenderScrutiny from "./ScrutinyBasic/AllServiceScrutiny/SurrenderLic/SurrenderCard";
+import BeneficialCard from "./ScrutinyBasic/AllServiceScrutiny/BeneficialInterest/BeneficialCard";
 
 const TLBreadCrumb = ({ location }) => {
   const { t } = useTranslation();
@@ -249,7 +251,8 @@ const EmployeeApp = ({ path, url, userType }) => {
             {/* <PrivateRoute path={`${path}/ScrutinyForm`} component={ScrutinyForm} /> */}
             <PrivateRoute path={`${path}/ScrutinyForm/:id`} component={ScrutinyForm} />
             <PrivateRoute path={`${path}/SurrenderInbox`} component={(props) => <SurrenderInbox parentRoute={path} businessService={["SURREND_OF_LICENSE"]} filterComponent="TL_INBOX_FILTER" initialStates={{}} isInbox={true} /> } /> 
-            <PrivateRoute path={`${path}/SurrenderLicScrutiny/:id`} component={SurrenderLicScrutiny} />
+            <PrivateRoute path={`${path}/SurrenderLicScrutiny/:id`} component={SurrenderScrutiny} />
+            <PrivateRoute path={`${path}/BeneficialScrutiny/:id`} component={BeneficialCard} />
             <PrivateRoute path={`${path}/LayoutPlanInbox`} component={(props) => <LayoutPlanInbox parentRoute={path} businessService={["REVISED_LAYOUT_PLAN"]} filterComponent="TL_INBOX_FILTER" initialStates={{}} isInbox={true} /> } /> 
             <PrivateRoute path={`${path}/BeneficialInbox`} component={(props) => <BeneficialInbox parentRoute={path} businessService={["CHANGE_OF_BENEFICIAL"]} filterComponent="TL_INBOX_FILTER" initialStates={{}} isInbox={true} /> } /> 
             <PrivateRoute path={`${path}/TranferInbox`} component={(props) => <TranferInbox parentRoute={path} businessService={["TRANSFER_OF_LICIENCE"]} filterComponent="TL_INBOX_FILTER" initialStates={{}} isInbox={true} /> } /> 

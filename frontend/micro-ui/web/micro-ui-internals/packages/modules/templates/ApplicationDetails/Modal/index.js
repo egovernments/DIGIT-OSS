@@ -8,6 +8,7 @@ import NOCActionModal from "./NOCActionModal";
 import ElectricalPlanModal from "./ElectricalPlanModal";
 import ServicePlanModal from "./ServicePlanModal";
 import BankGuaranteePlan from "./BankGuaranteePlan";
+import SurrenderActionModal from "./SurrenderActionModal";
 
 const ActionModal = (props) => {
   if (props?.businessService.includes("PT")) {
@@ -47,6 +48,9 @@ const ActionModal = (props) => {
   }
   if (props?.businessService.includes("BG_MORTGAGE")) {
     return <BankGuaranteePlan {...props} />;
+  }
+  if (props?.businessService.includes("SURREND_OF_LICENSE")) {
+    return <SurrenderActionModal {...props} />;
   }
   // return <FSMActionModal {...props} />;
 };
