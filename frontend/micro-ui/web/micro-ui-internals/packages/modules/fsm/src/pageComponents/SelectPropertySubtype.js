@@ -43,7 +43,7 @@ const SelectPropertySubtype = ({ config, onSelect, t, userType, formData }) => {
   };
 
   const goNext = () => {
-    sessionStorage.removeItem("Digit.total_amount");
+    sessionStorage.removeItem("Digit.total_amount")
     onSelect(config.key, subtype);
   };
 

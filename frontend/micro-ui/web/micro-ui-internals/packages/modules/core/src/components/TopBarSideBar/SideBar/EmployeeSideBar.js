@@ -2,6 +2,8 @@ import React, { useRef, useEffect, useState } from "react";
 import SubMenu from "./SubMenu";
 import { Loader, SearchIcon } from "@egovernments/digit-ui-react-components";
 import { useTranslation } from "react-i18next";
+import NavItem from "./NavItem";
+import _, { findIndex } from "lodash";
 
 const EmployeeSideBar = () => {
   const sidebarRef = useRef(null);
@@ -38,6 +40,12 @@ const EmployeeSideBar = () => {
 
   const configEmployeeSideBar = {};
 
+  //creating the object structure from mdms value for easy iteration
+  let configEmployeeSideBar1 = {};
+  data?.actions?.filter((e) => e.url === "url")?.forEach((item) => {
+    _.set(configEmployeeSideBar1,item.path,{...item}) 
+  })
+
   data?.actions
     .filter((e) => e.url === "url")
     .forEach((item) => {
@@ -61,6 +69,23 @@ const EmployeeSideBar = () => {
       }
     });
   let res = [];
+
+  //method is used for restructing of configEmployeeSideBar1 nested object into nested array object
+  function restructuringOfConfig (tempconfig){
+    const result = [];
+    for(const key in tempconfig){
+      const value= tempconfig[key];
+      if(typeof value === "object" && !(value?.id)){
+      const children = restructuringOfConfig(value);
+      result.push({label : key,children, icon:children?.[0]?.icon, to:""});
+      }
+      else{
+        result.push({label: key, value, icon:value?.leftIcon, to: key === "Home" ? "/digit-ui/employee" : value?.navigationURL});
+      }
+    }
+
+    return result
+  }
   const splitKeyValue = () => {
     const keys = Object.keys(configEmployeeSideBar);
     keys.sort((a, b) => a.orderNumber - b.orderNumber);
@@ -104,6 +129,19 @@ const EmployeeSideBar = () => {
     {
       res.sort((a,b) => a.moduleName.localeCompare(b.moduleName));
     }
+    //reverting the newsidebar change for now, in order to solve ndss login issue
+    //let newconfig = restructuringOfConfig(configEmployeeSideBar1);
+    //below lines are used for shifting home object to first place
+    // newconfig.splice(newconfig.findIndex((ob) => ob?.label === ""),1);
+    // newconfig.sort((a,b) => a.label.localeCompare(b.label));
+    // const fndindex = newconfig?.findIndex((el) => el?.label === "Home");
+    // const homeitem = newconfig.splice(fndindex,1);
+    // newconfig.unshift(homeitem?.[0]);
+    // return (
+    //   newconfig.map((item, index) => {
+    //       return <NavItem key={`${item?.label}-${index}`} item={item} />;
+    //     })
+    // );
     return res?.map((item, index) => {
       return <SubMenu item={item} key={index + 1} />;
     });

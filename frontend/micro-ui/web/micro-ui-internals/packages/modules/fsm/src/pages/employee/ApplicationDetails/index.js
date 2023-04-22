@@ -99,7 +99,7 @@ const ApplicationDetails = (props) => {
 
   useEffect(() => {
     switch (selectedAction) {
-      case DSO && "SCHEDULE":
+      case "SCHEDULE":
       case "DSO_ACCEPT":
       case "ACCEPT":
       case "ASSIGN":
@@ -118,7 +118,7 @@ const ApplicationDetails = (props) => {
         return setShowModal(true);
       case "SUBMIT":
       case "FSM_SUBMIT":
-      case !DSO && "SCHEDULE":
+      // case !DSO && "SCHEDULE":
         return history.push("/digit-ui/employee/fsm/modify-application/" + applicationNumber);
       case "PAY":
       case "FSM_PAY":

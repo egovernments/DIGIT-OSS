@@ -7,7 +7,7 @@ import { propertyCardBodyStyle } from "../../../utils";
 
 export const MyProperties = () => {
   const { t } = useTranslation();
-  const tenantId = Digit.ULBService.getCurrentTenantId();
+  const tenantId = Digit.ULBService.getCitizenCurrentTenant(true) || Digit.ULBService.getCurrentTenantId();
   const user = Digit.UserService.getUser().userInfo;
 
   let filter = window.location.href.split("/").pop();
@@ -20,8 +20,8 @@ export const MyProperties = () => {
     t1 = 4;
   }
   let filter1 = !isNaN(parseInt(filter))
-    ? { limit: "50", sortOrder: "ASC", sortBy: "createdTime", offset: off }
-    : { limit: "4", sortOrder: "ASC", sortBy: "createdTime", offset: "0",mobileNumber:user?.mobileNumber };
+    ? { limit: "50", sortOrder: "ASC", sortBy: "createdTime", offset: off, tenantId }
+    : { limit: "4", sortOrder: "ASC", sortBy: "createdTime", offset: "0",mobileNumber:user?.mobileNumber, tenantId };
   const { isLoading, isError, error, data } = Digit.Hooks.pt.usePropertySearchNew({ filters: filter1,searchedFrom:"myPropertyCitizen" }, { filters: filter1 });
 
   if (isLoading) {

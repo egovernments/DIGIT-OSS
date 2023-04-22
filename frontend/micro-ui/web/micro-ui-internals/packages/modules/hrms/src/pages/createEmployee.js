@@ -1,4 +1,4 @@
-import { FormComposer, Toast ,Loader} from "@egovernments/digit-ui-react-components";
+import { FormComposer, Toast ,Loader, Header} from "@egovernments/digit-ui-react-components";
 import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useHistory } from "react-router-dom";
@@ -13,6 +13,7 @@ const CreateEmployee = () => {
   const [checkfield, setcheck] = useState(false)
   const { t } = useTranslation();
   const history = useHistory();
+  const isMobile = window.Digit.Utils.browser.isMobile();
 
  const { data: mdmsData,isLoading } = Digit.Hooks.useCommonMDMS(Digit.ULBService.getStateId(), "egov-hrms", ["CommonFieldsConfig"], {
     select: (data) => {
@@ -195,9 +196,12 @@ const CreateEmployee = () => {
   const config =mdmsData?.config?mdmsData.config: newConfig;
   return (
     <div>
+      <div style={isMobile ? {marginLeft: "-12px", fontFamily: "calibri", color: "#FF0000"} :{ marginLeft: "15px", fontFamily: "calibri", color: "#FF0000" }}>
+        <Header>{t("HR_COMMON_CREATE_EMPLOYEE_HEADER")}</Header>
+      </div>
       <FormComposer
         defaultValues={defaultValues}
-        heading={t("HR_COMMON_CREATE_EMPLOYEE_HEADER")}
+        heading={t("")}
         config={config}
         onSubmit={onSubmit}
         onFormValueChange={onFormValueChange}

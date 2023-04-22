@@ -29,8 +29,8 @@ const OBPSSearchApplication = ({ tenantId, t, onSubmit, data, error, searchData,
   const { register, control, handleSubmit, setValue, getValues, reset, formState } = useForm({
     defaultValues: {
       applicationNo: "",
-      // mobileNumber: window.location.href.includes("/digit-ui/citizen") ? currentUserPhoneNumber : "",
-      mobileNumber: "",
+      mobileNumber: window.location.href.includes("/search/obps-application") ? currentUserPhoneNumber : "",
+      // mobileNumber: "",
       fromDate: "",
       toDate: "",
       status: "",
@@ -38,21 +38,21 @@ const OBPSSearchApplication = ({ tenantId, t, onSubmit, data, error, searchData,
       limit: 10,
       sortBy: "commencementDate",
       sortOrder: "DESC",
-      applicationType: userInformation?.roles?.filter((ob) => ob.code.includes("BPAREG_"))?.length <= 0 && userInformation?.roles?.filter((ob) =>(ob.code.includes("BPA_"))).length > 0 ? {
+      applicationType: userInformation?.roles?.filter((ob) => ob.code.includes("BPAREG_"))?.length <= 0 && userInformation?.roles?.filter((ob) =>(ob.code.includes("BPA_") || ob.code.includes("CITIZEN"))).length > 0 ? {
         code: "BUILDING_PLAN_SCRUTINY",
         i18nKey: "WF_BPA_BUILDING_PLAN_SCRUTINY",
-      } : userInformation?.roles?.filter((ob) => ob.code.includes("BPAREG_"))?.length > 0 && userInformation?.roles?.filter((ob) =>(ob.code.includes("BPA_"))).length <= 0 ? {
+      } : userInformation?.roles?.filter((ob) => ob.code.includes("BPAREG_"))?.length > 0 && userInformation?.roles?.filter((ob) =>(ob.code.includes("BPA_") || ob.code.includes("CITIZEN"))).length <= 0 ? {
         code: "BPA_STAKEHOLDER_REGISTRATION",
         i18nKey: "WF_BPA_BPA_STAKEHOLDER_REGISTRATION",
       } : {
         code: "BUILDING_PLAN_SCRUTINY",
         i18nKey: "WF_BPA_BUILDING_PLAN_SCRUTINY",
       },
-      serviceType: userInformation?.roles?.filter((ob) => ob.code.includes("BPAREG_"))?.length <= 0 && userInformation?.roles?.filter((ob) =>(ob.code.includes("BPA_"))).length > 0 ? {
+      serviceType: userInformation?.roles?.filter((ob) => ob.code.includes("BPAREG_"))?.length <= 0 && userInformation?.roles?.filter((ob) =>(ob.code.includes("BPA_") || ob.code.includes("CITIZEN"))).length > 0 ? {
         applicationType: ["BUILDING_PLAN_SCRUTINY", "BUILDING_OC_PLAN_SCRUTINY"],
         code: "NEW_CONSTRUCTION",
         i18nKey: "BPA_SERVICETYPE_NEW_CONSTRUCTION",
-      } : userInformation?.roles?.filter((ob) => ob.code.includes("BPAREG_"))?.length > 0 && userInformation?.roles?.filter((ob) =>(ob.code.includes("BPA_"))).length <= 0 ? /* {
+      } : userInformation?.roles?.filter((ob) => ob.code.includes("BPAREG_"))?.length > 0 && userInformation?.roles?.filter((ob) =>(ob.code.includes("BPA_") || ob.code.includes("CITIZEN"))).length <= 0 ? /* {
         code: "BPA_STAKEHOLDER_REGISTRATION",
         applicationType:["BPA_STAKEHOLDER_REGISTRATION"],
         roles: ["BPAREG_APPROVER","BPAREG_DOC_VERIFIER"],
@@ -78,8 +78,8 @@ const OBPSSearchApplication = ({ tenantId, t, onSubmit, data, error, searchData,
       //reset({ ...searchData, isSubmitSuccessful: false });
       reset({
         applicationNo: "",
-        mobileNumber: "",
-      //  mobileNumber: window.location.href.includes("/digit-ui/citizen") ? Digit.UserService.getUser()?.info?.mobileNumber : "",
+        // mobileNumber: "",
+       mobileNumber: window.location.href.includes("/search/obps-application") ? Digit.UserService.getUser()?.info?.mobileNumber : "",
         fromDate: "",
         toDate: "",
         status: "",
@@ -87,21 +87,21 @@ const OBPSSearchApplication = ({ tenantId, t, onSubmit, data, error, searchData,
         limit: 10,
         sortBy: "commencementDate",
         sortOrder: "DESC",
-        applicationType: userInformation?.roles?.filter((ob) => ob.code.includes("BPAREG_"))?.length <= 0 && userInformation?.roles?.filter((ob) =>(ob.code.includes("BPA_"))).length > 0 ? {
+        applicationType: userInformation?.roles?.filter((ob) => ob.code.includes("BPAREG_"))?.length <= 0 && userInformation?.roles?.filter((ob) =>(ob.code.includes("BPA_") || ob.code.includes("citizen"))).length > 0 ? {
           code: "BUILDING_PLAN_SCRUTINY",
           i18nKey: "WF_BPA_BUILDING_PLAN_SCRUTINY",
-        } : userInformation?.roles?.filter((ob) => ob.code.includes("BPAREG_"))?.length > 0 && userInformation?.roles?.filter((ob) =>(ob.code.includes("BPA_"))).length <= 0 ? {
+        } : userInformation?.roles?.filter((ob) => ob.code.includes("BPAREG_"))?.length > 0 && userInformation?.roles?.filter((ob) =>(ob.code.includes("BPA_") || ob.code.includes("citizen"))).length <= 0 ? {
           code: "BPA_STAKEHOLDER_REGISTRATION",
           i18nKey: "WF_BPA_BPA_STAKEHOLDER_REGISTRATION",
         } : {
           code: "BUILDING_PLAN_SCRUTINY",
           i18nKey: "WF_BPA_BUILDING_PLAN_SCRUTINY",
         },
-        serviceType: userInformation?.roles?.filter((ob) => ob.code.includes("BPAREG_"))?.length <= 0 && userInformation?.roles?.filter((ob) =>(ob.code.includes("BPA_"))).length > 0 ? {
+        serviceType: userInformation?.roles?.filter((ob) => ob.code.includes("BPAREG_"))?.length <= 0 && userInformation?.roles?.filter((ob) =>(ob.code.includes("BPA_") || ob.code.includes("citizen"))).length > 0 ? {
           applicationType: ["BUILDING_PLAN_SCRUTINY", "BUILDING_OC_PLAN_SCRUTINY"],
           code: "NEW_CONSTRUCTION",
           i18nKey: "BPA_SERVICETYPE_NEW_CONSTRUCTION",
-        } : userInformation?.roles?.filter((ob) => ob.code.includes("BPAREG_"))?.length > 0 && userInformation?.roles?.filter((ob) =>(ob.code.includes("BPA_"))).length <= 0 ? /* {
+        } : userInformation?.roles?.filter((ob) => ob.code.includes("BPAREG_"))?.length > 0 && userInformation?.roles?.filter((ob) =>(ob.code.includes("BPA_") || ob.code.includes("citizen"))).length <= 0 ? /* {
           code: "BPA_STAKEHOLDER_REGISTRATION",
           applicationType:["BPA_STAKEHOLDER_REGISTRATION"],
           roles: ["BPAREG_APPROVER","BPAREG_DOC_VERIFIER"],
@@ -225,7 +225,7 @@ const OBPSSearchApplication = ({ tenantId, t, onSubmit, data, error, searchData,
                 <h2>{t("ES_COMMON_SEARCH_APPLICATION")}:</h2>
               </div>
                 {
-                  window.location.href.includes("/digit-ui/citizen") &&
+                  window.location.href.includes("citizen/obps/search/application") &&
                   <div style={{ background: "#ffffff", padding: "20px 0px", color: "#00000099" }}>
                     <label>{t("BPA_SEARCH_CREATED_BY_STAKEHOLDER_LABEL")}</label>
                   </div>
@@ -305,7 +305,7 @@ const OBPSSearchApplication = ({ tenantId, t, onSubmit, data, error, searchData,
     <React.Fragment>
       <Header>{t("ES_COMMON_SEARCH_APPLICATION")}</Header>
       {
-        window.location.href.includes("/digit-ui/citizen") && 
+        window.location.href.includes("citizen/obps/search/application") && 
         <div style={{background: "#ffffff", paddingLeft: "25px", paddingTop: "10px", color: "#00000099"}}>
           <label>{t("BPA_SEARCH_CREATED_BY_STAKEHOLDER_LABEL")}</label>
         </div>

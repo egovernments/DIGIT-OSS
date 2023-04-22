@@ -1,7 +1,7 @@
 import React, { Fragment, useState, useEffect, useRef } from "react";
 import { useParams, useHistory, useLocation } from "react-router-dom";
 import TimePicker from "react-time-picker";
-import { Dropdown, Header, MultiUploadWrapper, TextArea } from "@egovernments/digit-ui-react-components";
+import { Dropdown, Header, InfoIcon, MultiUploadWrapper, TextArea } from "@egovernments/digit-ui-react-components";
 import {
   Card,
   CardLabel,
@@ -322,7 +322,7 @@ const FstpOperatorDetails = () => {
     setShowToast({ key: "success", action: `ES_FSM_DISPOSE_UPDATE_SUCCESS` });
     setTimeout(() => {
       closeToast();
-      history.push(`/digit-ui/employee/fsm/fstp-operations`);
+      history.push(`/digit-ui/employee`);
     }, 5000);
   };
 
@@ -357,6 +357,17 @@ const FstpOperatorDetails = () => {
       title: `${t("ES_INBOX_VEHICLE_NO")} *`,
       value: vehicle?.vehicle?.registrationNumber || applicationNos || (
         <TextInput onChange={(e) => onChangeVehicleNumber(e.target.value)} value={newVehicleNumber} />
+      ),
+      labelChildren: (
+        <div className="tooltip" style={{ paddingLeft: "10px", marginBottom: "-3px" }}>
+          <InfoIcon />
+          <span
+            className="tooltiptext"
+            style={{ width: "150px", left: "230%", fontSize: "14px", height: "fit-content", top: "20px", display: "flex" }}
+          >
+            {t("ES_FSM_VEHICLE_FORMAT_TIP")}
+          </span>
+        </div>
       ),
     },
     {
@@ -415,7 +426,7 @@ const FstpOperatorDetails = () => {
     <div>
       <Header styles={{ marginLeft: "16px" }}>{t("ES_INBOX_VEHICLE_LOG")}</Header>
       <Card>
-        <StatusTable>
+        <StatusTable styles={{ marginLeft: "16ox" }}>
           {vehicleData?.map((row, index) => (
             <Row
               rowContainerStyle={
@@ -426,7 +437,12 @@ const FstpOperatorDetails = () => {
               label={row.title}
               text={row.value || "N/A"}
               last={false}
-              labelStyle={{ fontWeight: "normal" }}
+              labelStyle={
+                isMobile && history.location.pathname.includes("new-vehicle-entry")
+                  ? { fontWeight: "normal", display: "contents" }
+                  : { fontWeight: "normal" }
+              }
+              labelChildren={history.location.pathname.includes("new-vehicle-entry") ? row.labelChildren : ""}
             />
           ))}
           <div ref={tripStartTimeRef}>

@@ -29,7 +29,7 @@ const CitizenSurveyForm = ({ surveyData, onFormSubmit,submitDisabled,formDisable
     <div className="citizenSurvey-wrapper">
       <Header>{surveyData?.title?.toUpperCase()}</Header>
       <form onSubmit={handleSurveyFormSubmit(onFormSubmit)}>
-        {surveyData?.questions?.length ? surveyData.questions.map((config, index) => <CitizenSurveyQuestion key={index} t={t} question={config} control={controlSurveyForm} register={registerRef} values={getSurveyFormValues} formState={surveyFormState} formDisabled={formDisabled}/>) : null}
+        {surveyData?.questions?.length ? surveyData.questions.map((config, index) => <CitizenSurveyQuestion key={index} t={t} question={config} control={controlSurveyForm} register={registerRef} values={getSurveyFormValues} formState={surveyFormState} formDisabled={formDisabled} index={index}/>) : null}
         {showToast && <Toast error={showToast.key} label={t(showToast.label)} />}
         <ActionBar>
           {!submitDisabled && <SubmitBar disabled={isSubmitDisabled} label={t("CS_SUBMIT_SURVEY")} submit="submit" />}

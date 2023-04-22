@@ -6,7 +6,7 @@ const getResponse = (data, vendorDetils) => {
       title: "ES_FSM_REGISTRY_DETAILS_DRIVER_DETAILS",
       values: [
         { title: "ES_FSM_REGISTRY_DRIVER_NAME", value: data?.name },
-        { title: "ES_FSM_REGISTRY_DRIVER_PHONE", value: data?.owner?.mobileNumber },
+        // { title: "ES_FSM_REGISTRY_DRIVER_PHONE", value: data?.owner?.mobileNumber },
         { title: "ES_FSM_REGISTRY_DRIVER_LICENSE", value: data?.licenseNumber },
         {
           title: "ES_FSM_REGISTRY_DETAILS_VENDOR_NAME",
@@ -22,7 +22,7 @@ const getResponse = (data, vendorDetils) => {
 const DriverDetails = async (tenantId, filters = {}) => {
   const { ids } = filters;
   const driverDetails = await FSMService.driverSearch(tenantId, filters);
-  const vendorDetails = await FSMService.vendorSearch(tenantId, { driverIds: ids, status: "ACTIVE" });
+  const vendorDetails = await FSMService.vendorSearch(tenantId, { driverIds: ids });
 
   const data = driverDetails.driver.map((data) => ({
     driverData: data,
