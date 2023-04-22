@@ -7,7 +7,7 @@ import { useForkRef } from "@mui/material";
 import axios from "axios";
 import StandardDesign from "./StandardDesign";
 
-const StandardDesignBasic = ({apiResponse,applicationNumber,refreshScrutinyData,setAdditionalDetails,histeroyData,idwDataTreade,edcDataTreade }) => {
+const StandardDesignBasic = ({apiResponse,applicationNumber,refreshScrutinyData,setAdditionalDetails,histeroyData,idwDataTreade,edcDataTreade,applicationStatus }) => {
   const [purpose, setPurpose] = useState("");
   const jeLandInfoRef = useRef();
 
@@ -214,8 +214,7 @@ const { remarksData,iconStates,handleGetFiledsStatesById,handleGetRemarkssValues
         <div>
          <div>
          <StandardDesign
-         edcDataTreade={edcDataTreade}
-         idwDataTreade={idwDataTreade}
+       
            apiResponse={apiResponse}
            refreshScrutinyData={refreshScrutinyData}
            applicationNumber={applicationNumber}
@@ -223,6 +222,7 @@ const { remarksData,iconStates,handleGetFiledsStatesById,handleGetRemarkssValues
            passCheckedList={getCheckedGeneralInfoValue}
            onClick={() => setOpen(!open)}
            dataForIcons={iconStates}
+           applicationStatus={applicationStatus}
            ></StandardDesign>
          </div>
         </div>

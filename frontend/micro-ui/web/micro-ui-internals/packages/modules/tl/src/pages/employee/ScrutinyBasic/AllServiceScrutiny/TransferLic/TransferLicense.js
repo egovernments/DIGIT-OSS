@@ -15,12 +15,16 @@ import "../../css/personalInfoChild.style.js";
 import { IconButton } from "@mui/material";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import FileDownloadIcon from "@mui/icons-material/FileDownload";
+import FormControl from "@mui/material/FormControl";
+import { getDocShareholding } from "../../ScrutinyDevelopment/docview.helper";
 
 function TransferLicense(props) {
   const [selects, setSelects] = useState();
   const [showhide, setShowhide] = useState("");
   const [open2, setOpen2] = useState(false);
   const apiData = props.apiResponse;
+  const dataIcons = props.dataForIcons;
+  const applicationStatus = props.applicationStatus;
 
   const handleshowhide = (event) => {
     const getuser = event.target.value;
@@ -32,6 +36,7 @@ function TransferLicense(props) {
     handleSubmit,
     formState: { errors },
     control,
+    watch,
     setValue,
   } = useForm({});
 
@@ -45,13 +50,27 @@ function TransferLicense(props) {
   const [smShow, setSmShow] = useState(false);
   const [labelValue, setLabelValue] = useState("");
   const Colors = {
+    Conditional: "#2874A6",
     approved: "#09cb3d",
     disapproved: "#ff0000",
-    info: "#FFB602",
-  };
+      info: "#FFB602"
+  }
   useEffect(() => {
     if (apiData) {
       setValue("licenseNo", apiData?.licenseNo);
+      setValue("selectType", apiData?.additionalDetails?.selectType);
+      setValue("affidavitFixedChargesForAdm", apiData?.additionalDetails?.affidavitFixedChargesForAdm);
+      setValue("affidavitForLicencedArea", apiData?.additionalDetails?.affidavitForLicencedArea);
+      setValue("affidavitForLicencedArea", apiData?.additionalDetails?.affidavitOfAdmCharges);
+      setValue("amount", apiData?.additionalDetails?.amount);
+      setValue("anyOtherDoc", apiData?.additionalDetails?.anyOtherDoc);
+      setValue("areaInAcres", apiData?.additionalDetails?.areaInAcres);
+      setValue("boardResolutionDoc", apiData?.additionalDetails?.boardResolutionDoc);
+      setValue("changeOfDeveloper", apiData?.additionalDetails?.changeOfDeveloper);
+      setValue("colonizerSeekingTransferLicence", apiData?.additionalDetails?.colonizerSeekingTransferLicence);
+      setValue("consentLetterDoc", apiData?.additionalDetails?.consentLetterDoc);
+      setValue("justificationForRequest", apiData?.additionalDetails?.justificationForRequest);
+      setValue("licenceTransferredFromLandOwn", apiData?.additionalDetails?.licenceTransferredFromLandOwn);
     }
   }, [apiData]);
 
@@ -70,8 +89,21 @@ function TransferLicense(props) {
   const [openedModal, setOpennedModal] = useState("");
   const [fieldIconColors, setFieldIconColors] = useState({
     developer: Colors.info,
-    authPersonName: Colors.info,
-    authMobileNo1: Colors.info,
+    selectLicence: Colors.info,
+    validUpto: Colors.info,
+    renewalRequiredUpto: Colors.info,
+    periodOfRenewal: Colors.info,
+    colonizerName: Colors.info,
+    colonyType: Colors.info,
+    areaAcres: Colors.info,
+    sectorNo: Colors.info,
+    revenueEstate: Colors.info,
+    developmentPlan: Colors.info,
+    tehsil: Colors.info,
+    district: Colors.info,
+    agreementDoc: Colors.info,
+    anyOtherDoc: Colors.info,
+
     authMobileNo2: Colors.info,
     emailId: Colors.info,
     pan: Colors.info,
@@ -92,17 +124,22 @@ function TransferLicense(props) {
 
   const fieldIdList = [
     { label: "Developer", key: "developer" },
-    { label: "Authorized Person Name", key: "authPersonName" },
-    { label: "Autrhoized Mobile No", key: "authMobileNo1" },
-    { label: "Authorized MobileNo. 2 ", key: "authMobileNo2" },
-    { label: "Email ID", key: "emailId" },
-    { label: "PAN No.", key: "pan" },
-    { label: "Address  1", key: "address" },
-    { label: "Village/City", key: "city" },
-    { label: "Pincode", key: "pin" },
-    { label: "Tehsil", key: "tehsil" },
-    { label: "District", key: "district" },
-    { label: "State", key: "state" },
+   
+    { label: "selectLicence", key: "selectLicence" },
+    {label:"Valid Upto",key:"validUpto"},
+    {label:"Renewal required upto",key:"renewalRequiredUpto"},
+    {label:"Period of renewal(In Months)",key:"periodOfRenewal"},
+    {label:"Name of Colonizer",key:"colonizerName"},
+    {label:"Type of Colony",key:"colonyType"},
+    {label:"Area in Acres",key:"areaAcres"},
+    {label:"Sector No",key:"sectorNo"},
+    {label:"Revenue estate",key:"revenueEstate"},
+    {label:"Development Plan",key:"developmentPlan"},
+    {label:"Tehsil",key:"tehsil"},
+    {label:"District",key:"district"},
+    {label:"Standard drawing designs",key:"agreementDoc"},
+    {label:"Any other Document",key:"anyOtherDoc"},
+    
     { label: "Status (Individual/ Company/ Firm/ LLP etc.)", key: "type" },
     { label: "LC-I signed by", key: "lciSignedBy" },
     { label: "If LC-I is not signed by self (in case of an individual) nature of authorization (GPA/SPA)", key: "lciNotSigned" },
@@ -120,47 +157,47 @@ function TransferLicense(props) {
     setSelects(getu);
   };
   console.log("apiResponse", apiData);
-  /////////////////////////////////////////////////
-  // const getColorofFieldIcon = () => {
-  //   let tempFieldColorState = fieldIconColors;
-  //   fieldIdList.forEach((item) => {
-  //     if (dataIcons !== null && dataIcons !== undefined) {
-  //       console.log("color method called");
-  //       const fieldPresent = dataIcons.egScrutiny.filter((ele) => ele.fieldIdL === item.label);
-  //       console.log("filteration value111", fieldPresent, fieldPresent[0]?.isApproved);
-  //       if (fieldPresent && fieldPresent.length) {
-  //         console.log("filteration value111", fieldPresent, fieldPresent[0]?.isApproved);
-  //         tempFieldColorState = {
-  //           ...tempFieldColorState,
-  //           [item.key]:
-  //             fieldPresent[0].isApproved === "In Order"
-  //               ? Colors.approved
-  //               : fieldPresent[0].isApproved === "Not In Order"
-  //               ? Colors.disapproved
-  //               : fieldPresent[0].isApproved === "Conditional"
-  //               ? Colors.Conditional
-  //               : Colors.info,
-  //         };
-  //       }
-  //     }
-  //   });
+  ///////////////////////////////////////////////
+  const getColorofFieldIcon = () => {
+    let tempFieldColorState = fieldIconColors;
+    fieldIdList.forEach((item) => {
+      if (dataIcons !== null && dataIcons !== undefined) {
+        console.log("color method called");
+        const fieldPresent = dataIcons.egScrutiny.filter((ele) => ele.fieldIdL === item.label);
+        console.log("filteration value111", fieldPresent, fieldPresent[0]?.isApproved);
+        if (fieldPresent && fieldPresent.length) {
+          console.log("filteration value111", fieldPresent, fieldPresent[0]?.isApproved);
+          tempFieldColorState = {
+            ...tempFieldColorState,
+            [item.key]:
+              fieldPresent[0].isApproved === "In Order"
+                ? Colors.approved
+                : fieldPresent[0].isApproved === "Not In Order"
+                ? Colors.disapproved
+                : fieldPresent[0].isApproved === "Conditional"
+                ? Colors.Conditional
+                : Colors.info,
+          };
+        }
+      }
+    });
 
-  //   setFieldIconColors(tempFieldColorState);
-  // };
+    setFieldIconColors(tempFieldColorState);
+  };
 
-  // useEffect(() => {
-  //   getColorofFieldIcon();
-  //   console.log("repeating1...");
-  // }, [dataIcons]);
+  useEffect(() => {
+    getColorofFieldIcon();
+    console.log("repeating1...");
+  }, [dataIcons]);
 
-  // useEffect(() => {
-  //   if (labelValue) {
-  //     const fieldPresent = dataIcons.egScrutiny.filter((ele) => ele.fieldIdL === labelValue);
-  //     setSelectedFieldData(fieldPresent[0]);
-  //   } else {
-  //     setSelectedFieldData(null);
-  //   }
-  // }, [labelValue]);
+  useEffect(() => {
+    if (labelValue) {
+      const fieldPresent = dataIcons.egScrutiny.filter((ele) => ele.fieldIdL === labelValue);
+      setSelectedFieldData(fieldPresent[0]);
+    } else {
+      setSelectedFieldData(null);
+    }
+  }, [labelValue]);
 
   // console.log("Digit123", apiResponse);
   // let user = Digit.UserService.getUser();
@@ -236,17 +273,17 @@ function TransferLicense(props) {
               Transfer of License
             </h4>
             <div className="card">
-              {/* <h4 className="text-center">Transfer of License</h4> */}
-              <Row className="col-12">
-                <Col className="col-3">
-                  <Form.Label>
-                    Licence No . <span style={{ color: "red" }}>*</span>
-                  </Form.Label>
 
-                  <div className={classes.fieldContainer}>
-                    {/* <Form.Control className={classes.formControl} placeholder={apiData?.licenseNo} disabled></Form.Control> */}
-                    <input type="number" placeholder="" className="form-control" disabled {...register("licenseNo")} />
-                    <ReportProblemIcon
+            <div>
+      <div className="row gy-3">
+        <div className="col col-3">
+          <h2>
+            Licence No.<span style={{ color: "red" }}>*</span>
+          </h2>
+          <div style={{ display: "flex", placeItems: "center" }}>
+            <input type="text" className="form-control" placeholder="LC_XXXXX" {...register("licenseNo")} disabled />
+            <div>
+              <ReportProblemIcon
                       style={{
                         color: fieldIconColors.developer,
                       }}
@@ -255,7 +292,7 @@ function TransferLicense(props) {
                         setLabelValue("Licence No"),
                           setSmShow(true),
                           console.log("modal open"),
-                          setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
+                          setFieldValue(apiData !== null ? apiData.licenseNo : null);
                       }}
                     ></ReportProblemIcon>
                     <ModalChild
@@ -266,50 +303,409 @@ function TransferLicense(props) {
                       selectedFieldData={selectedFieldData}
                       fieldValue={fieldValue}
                       remarksUpdate={currentRemarks}
+                      applicationStatus={applicationStatus}
                     ></ModalChild>
-                  </div>
-                </Col>
+            </div>
+          </div>
+        
+        </div>
 
-                <Form.Group as={Col} controlId="formGridState">
-                  <Form.Label>
-                    Select Type (Complete or Partial) <span style={{ color: "red" }}>*</span>
-                  </Form.Label>
-                  {/* <Form.Control className={classes.formControl} placeholder="" disabled> */}
-                  {/* <select className="form-control" {...register("selectType")} onChange={(e) => handleshowhide(e)}>
-                    <option value=" 6">----Select value-----</option>
-                    <option value="1">Complete</option>
-                    <option value="2">Partial</option>
-                  </select> */}
-                  <div className={classes.fieldContainer}>
-                    <Form.Control className={classes.formControl} placeholder="" disabled></Form.Control>
-                    <ReportProblemIcon
+          <div className="col col-3 ">
+            <h2>
+              Select Licence<span style={{ color: "red" }}>*</span>
+            </h2>
+            <div style={{ display: "flex", placeItems: "center" }}>
+            <input type="text" className="form-control" placeholder="" {...register("selectLicence")} disabled />
+            <div>
+              <ReportProblemIcon
                       style={{
-                        color: fieldIconColors.developer,
+                        color: fieldIconColors.selectLicence,
                       }}
                       onClick={() => {
-                        setOpennedModal("Licence No");
-                        setLabelValue("Licence No"),
+                        setOpennedModal("selectLicence");
+                        setLabelValue("Select Licence"),
                           setSmShow(true),
                           console.log("modal open"),
-                          setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
+                          setFieldValue(apiData !== null ? apiData.selectLicence : null);
                       }}
                     ></ReportProblemIcon>
+                    
+            </div>
+            </div>
+            
+            
+          </div>
+        {/* )} */}
+      </div>
 
-                    {/* </Form.Control> */}
+      {/* {showField.other && ( */}
+        <div className="row gy-3 mt-3">
+          <div className="col col-3 ">
+            <FormControl>
+              <h2>
+                Valid Upto <span style={{ color: "red" }}>*</span>
+              </h2>
+
+             
+            </FormControl>
+            <div style={{ display: "flex", placeItems: "center" }}>
+            <input type="date" className="form-control" placeholder="" {...register("validUpto")} disabled />
+           <div>
+              <ReportProblemIcon
+                      style={{
+                        color: fieldIconColors.validUpto,
+                      }}
+                      onClick={() => {
+                        setOpennedModal("validUpto");
+                        setLabelValue("Valid Upto"),
+                          setSmShow(true),
+                          console.log("modal open"),
+                          setFieldValue(apiData !== null ? apiData.selectLicence : null);
+                      }}
+                    ></ReportProblemIcon>
+                    
+            </div>
+            </div>
+            
+            <h3 className="error-message" style={{ color: "red" }}>
+              {errors?.validUpto && errors?.validUpto?.message}
+            </h3>
+          </div>
+          <div className="col col-3 ">
+            <FormControl>
+              <h2>
+                Renewal required upto <span style={{ color: "red" }}>*</span>
+              </h2>
+            
+            </FormControl>
+            <div style={{ display: "flex", placeItems: "center" }}>
+            <input type="text" className="form-control" placeholder="" {...register("renewalRequiredUpto")} disabled />
+            <div>
+              <ReportProblemIcon
+                      style={{
+                        color: fieldIconColors.renewalRequiredUpto,
+                      }}
+                      onClick={() => {
+                        setOpennedModal("renewalRequiredUpto");
+                        setLabelValue("Renewal required upto"),
+                          setSmShow(true),
+                          console.log("modal open"),
+                          setFieldValue(apiData !== null ? apiData.selectLicence : null);
+                      }}
+                    ></ReportProblemIcon>
+                    
+            </div>
+            </div>
+            <h3 className="error-message" style={{ color: "red" }}>
+              {errors?.renewalRequiredUpto && errors?.renewalRequiredUpto?.message}
+            </h3>
+          </div>
+          <div className="col col-3 ">
+            <FormControl>
+              <h2>Period of renewal(In Months)</h2>
+            </FormControl>
+            <div style={{ display: "flex", placeItems: "center" }}>
+            <input type="text" {...register("periodOfRenewal")} className="form-control" disabled />
+            <div>
+              <ReportProblemIcon
+                      style={{
+                        color: fieldIconColors.periodOfRenewal,
+                      }}
+                      onClick={() => {
+                        setOpennedModal("periodOfRenewal");
+                        setLabelValue("Period of renewal(In Months)"),
+                          setSmShow(true),
+                          console.log("modal open"),
+                          setFieldValue(apiData !== null ? apiData.periodOfRenewal : null);
+                      }}
+                    ></ReportProblemIcon>
+                    
+            </div>
+            </div>
+
+          </div>
+          <div className="col col-3 ">
+            <FormControl>
+              <h2>
+                Name of Colonizer <span style={{ color: "red" }}>*</span>
+              </h2>
+
+            </FormControl>
+            <div style={{ display: "flex", placeItems: "center" }}>
+            <input type="text" className="form-control" placeholder="" {...register("colonizerName")} disabled />
+            <div>
+              <ReportProblemIcon
+                      style={{
+                        color: fieldIconColors.colonizerName,
+                      }}
+                      onClick={() => {
+                        setOpennedModal("colonizerName");
+                        setLabelValue("Name of Colonizer"),
+                          setSmShow(true),
+                          console.log("modal open"),
+                          setFieldValue(apiData !== null ? apiData.colonizerName : null);
+                      }}
+                    ></ReportProblemIcon>
+                    
+            </div>
+            </div>
+            
+            {/* <h3 className="error-message" style={{ color: "red" }}>
+              {errors?.colonizerName && errors?.colonizerName?.message}
+            </h3> */}
+          </div>
+        </div>
+      {/* )} */}
+
+      {/* {showField.other && ( */}
+        <div className="row gy-3 mt-3">
+          <div className="col col-3 ">
+            <FormControl>
+              <h2>
+                Type of Colony
+                <span style={{ color: "red" }}>*</span>
+              </h2>
+
+              
+            </FormControl>
+            <div style={{ display: "flex", placeItems: "center" }}>
+            <input type="text" className="form-control" placeholder="" {...register("colonyType")} disabled />
+            <div>
+              <ReportProblemIcon
+                      style={{
+                        color: fieldIconColors.colonyType,
+                      }}
+                      onClick={() => {
+                        setOpennedModal("colonyType");
+                        setLabelValue("Type of Colony"),
+                          setSmShow(true),
+                          console.log("modal open"),
+                          setFieldValue(apiData !== null ? apiData.colonyType : null);
+                      }}
+                    ></ReportProblemIcon>
+                    
+            </div>
+            </div>
+            
+
+           
+            {/* <h3 className="error-message" style={{ color: "red" }}>
+              {errors?.colonyType && errors?.colonyType?.message}
+            </h3> */}
+          </div>
+
+          <div className="col col-3 ">
+            <FormControl>
+              <h2>
+                Area in Acres
+                <span style={{ color: "red" }}>*</span>
+              </h2>
+            </FormControl>
+            <div style={{ display: "flex", placeItems: "center" }}>
+            <input type="text" className="form-control" placeholder="" {...register("areaAcres")} disabled />
+            <div>
+              <ReportProblemIcon
+                      style={{
+                        color: fieldIconColors.areaAcres,
+                      }}
+                      onClick={() => {
+                        setOpennedModal("areaAcres");
+                        setLabelValue("Area in Acres"),
+                          setSmShow(true),
+                          console.log("modal open"),
+                          setFieldValue(apiData !== null ? apiData.areaAcres : null);
+                      }}
+                    ></ReportProblemIcon>
+                    
+            </div>
+            </div>
+          
+            <h3 className="error-message" style={{ color: "red" }}>
+              {errors?.areaAcres && errors?.areaAcres?.message}
+            </h3>
+          </div>
+
+          <div className="col col-3 ">
+            <FormControl>
+              <h2>
+                Sector No. <span style={{ color: "red" }}>*</span>
+              </h2>
+
+              
+            </FormControl>
+            <div style={{ display: "flex", placeItems: "center" }}>
+            <input type="text" className="form-control" placeholder="" {...register("sectorNo")} disabled/>
+            <div>
+              <ReportProblemIcon
+                      style={{
+                        color: fieldIconColors.sectorNo,
+                      }}
+                      onClick={() => {
+                        setOpennedModal("sectorNo");
+                        setLabelValue("Sector No"),
+                          setSmShow(true),
+                          console.log("modal open"),
+                          setFieldValue(apiData !== null ? apiData.sectorNo : null);
+                      }}
+                    ></ReportProblemIcon>
+                    
+            </div>
+            </div>
+           
+            <h3 className="error-message" style={{ color: "red" }}>
+              {errors?.sectorNo && errors?.sectorNo?.message}
+            </h3>
+          </div>
+          <div className="col col-3 ">
+            <FormControl>
+              <h2>Revenue estate</h2>
+
+            </FormControl>
+            <div style={{ display: "flex", placeItems: "center" }}>
+            <input type="text" className="form-control" placeholder="" {...register("revenueEstate")} disabled />
+            <div>
+              <ReportProblemIcon
+                      style={{
+                        color: fieldIconColors.revenueEstate,
+                      }}
+                      onClick={() => {
+                        setOpennedModal("selectLicence");
+                        setLabelValue("Revenue estate"),
+                          setSmShow(true),
+                          console.log("modal open"),
+                          setFieldValue(apiData !== null ? apiData.revenueEstate : null);
+                      }}
+                    ></ReportProblemIcon>
+                    
+            </div>
+            </div>
+           
+            <h3 className="error-message" style={{ color: "red" }}>
+              {errors?.revenueEstate && errors?.revenueEstate?.message}
+            </h3>
+          </div>
+          <div className="col col-3 ">
+            Development Plan
+          
+            <div style={{ display: "flex", placeItems: "center" }}>
+            <input type="text" className="form-control" placeholder="" {...register("developmentPlan")} disabled />
+            <div>
+              <ReportProblemIcon
+                      style={{
+                        color: fieldIconColors.developmentPlan,
+                      }}
+                      onClick={() => {
+                        setOpennedModal("developmentPlan");
+                        setLabelValue("Development Plan"),
+                          setSmShow(true),
+                          console.log("modal open"),
+                          setFieldValue(apiData !== null ? apiData.developmentPlan : null);
+                      }}
+                    ></ReportProblemIcon>
+                    
+            </div>
+            </div>
+         
+          </div>
+          
+        </div>
+      {/* )} */}
+
+      <div className="row gy-3 mt-3">
+        <div className="col col-3 ">
+          <FormControl>
+            <h2>Tehsil</h2>
+            
+            
+          </FormControl>
+          <div style={{ display: "flex", placeItems: "center" }}>
+          <input type="text" className="form-control" placeholder="" {...register("tehsil")} disabled />
+            <div>
+              <ReportProblemIcon
+                      style={{
+                        color: fieldIconColors.selectLicence,
+                      }}
+                      onClick={() => {
+                        setOpennedModal("selectLicence");
+                        setLabelValue("Select Licence"),
+                          setSmShow(true),
+                          console.log("modal open"),
+                          setFieldValue(apiData !== null ? apiData.selectLicence : null);
+                      }}
+                    ></ReportProblemIcon>
+                    
+            </div>
+            </div>
+         
+        </div>
+        <div className="col col-3 ">
+          <FormControl>
+            <h2>District</h2>
+            
+          </FormControl>
+          <div style={{ display: "flex", placeItems: "center" }}>
+          <input type="text" className="form-control" placeholder="" {...register("district")} disabled />
+          <div>
+              <ReportProblemIcon
+                      style={{
+                        color: fieldIconColors.tehsil,
+                      }}
+                      onClick={() => {
+                        setOpennedModal("tehsil");
+                        setLabelValue("Tehsil"),
+                          setSmShow(true),
+                          console.log("modal open"),
+                          setFieldValue(apiData !== null ? apiData.tehsil : null);
+                      }}
+                    ></ReportProblemIcon>
+                    
+            </div>
+            </div>
+        </div>
+      </div>
+    </div>
+          
+              <Row className="col-12">
+                <Col className="col-4">
+               <Form.Label>
+                  Select Type (Complete or Partial)  <span style={{ color: "red" }}>*</span>
+              </Form.Label>
+              <div className={classes.fieldContainer}>
+             <input type="type" placeholder="" className="form-control" disabled {...register("selectType")} />
+             <div>
+              <ReportProblemIcon
+                      style={{
+                        color: fieldIconColors.district,
+                      }}
+                      onClick={() => {
+                        setOpennedModal("district");
+                        setLabelValue("District"),
+                          setSmShow(true),
+                          console.log("modal open"),
+                          setFieldValue(apiData !== null ? apiData.district : null);
+                      }}
+                    ></ReportProblemIcon>
+                    
+            </div>
+
+                  
                   </div>
-                </Form.Group>
-
-                <Form.Group as={Col} controlId="formGridArea">
-                  <div>
-                    {showhide === "5" ||
-                      (showhide === "2" && (
+      
+                </Col>
+                { apiData?.additionalDetails?.selectType == "partial" &&
+              <Col className="col-4">
+           
+                  {/* <div>
+                    {showhide === "Partial" ||
+                      (showhide === "Partial" && ( */}
                         <div className="col-md-12 ">
                           <Form.Label className="fw-normal">
                             Area in Acres <span style={{ color: "red" }}>*</span>
                           </Form.Label>
-                          {/* <input type="number" placeholder="" className="form-control" {...register("araeInAcres")} /> */}
+                          
                           <div className={classes.fieldContainer}>
-                            <Form.Control className={classes.formControl} placeholder="" disabled></Form.Control>
+                       
+                            <input type="number" placeholder="" className="form-control" disabled {...register("araeInAcres")} />
                             <ReportProblemIcon
                               style={{
                                 color: fieldIconColors.developer,
@@ -323,70 +719,65 @@ function TransferLicense(props) {
                               }}
                             ></ReportProblemIcon>
 
-                            {/* </Form.Control> */}
                           </div>
                         </div>
-                      ))}
-                  </div>
-                </Form.Group>
+                      {/* ))}
+                  </div> */}
+           
+                </Col>
+}
               </Row>
 
               <fieldset>
-                <Form.Group as={Row} className="mb-4">
-                  <Form.Label>
-                    Do you want to apply for Change of Developer
+              <Row className="col-12">
+                
+                <Col className="col-6">
+                
+               
+                <Form.Label>
+                  Have you transferred licence from licencee land owner in favor of collaborator without prior approval of competent authority
                     <span style={{ color: "red" }}>*</span>
                   </Form.Label>
 
-                  <Row>
-                    {/* <Col className="col-1">
-                      <Form.Check
-                        type="radio"
-                        label="Yes"
-                        name="formHorizontalRadios"
-                        id="formHorizontalRadios1"
-                        value="4"
-                        {...register("formHorizontalRadios")}
-                        onChange={(e) => handleshowhide(e)}
-                      />
-                    </Col>
-                    <Col className="col-1">
-                      <Form.Check
-                        type="radio"
-                        label="No"
-                        name="formHorizontalRadios"
-                        id="formHorizontalRadios2"
-                        {...register("formHorizontalRadios")}
-                        value="5"
-                        onChange={(e) => handleshowhide(e)}
-                      />
-                    </Col> */}
-                    <div className="d-flex flex-row align-items-center ml-2">
-                      <input
-                        type="radio"
-                        name="formHorizontalRadios"
-                        id="formHorizontalRadios1"
-                        value="4"
-                        {...register("formHorizontalRadios")}
-                        onChange={(e) => handleshowhide(e)}
-                        disabled
-                      />
-                      <label className="m-0  mx-1" for="Yes">
-                        Yes
-                      </label>
-                      <input
-                        type="radio"
-                        value="5"
-                        name="formHorizontalRadios"
-                        id="formHorizontalRadios2"
-                        {...register("formHorizontalRadios")}
-                        onChange={(e) => handleshowhide(e)}
-                        disabled
-                      />
-                      <label className="m-0 mx-2" for="No">
-                        No
-                      </label>
-                      <ReportProblemIcon
+                <div className="d-flex flex-row align-items-center my-1 ">
+
+                  <input type="radio" disabled value="Yes" checked={apiData?.additionalDetails?.licenceTransferredFromLandOwn === "yes" ? true : false} />
+                  <label className="m-0  mx-2" for="Yes">Yes</label>&nbsp;&nbsp;
+                  <input type="radio" disabled value="No" checked={apiData?.additionalDetails?.licenceTransferredFromLandOwn === "no" ? true : false} />
+                  <label className="m-0 mx-2" for="No">No</label>
+                  <ReportProblemIcon
+                        style={{
+                          color: fieldIconColors.developer,
+                        }}
+                        onClick={() => {
+                          setOpennedModal("Licence No");
+                          setLabelValue("Licence No"),
+                            setSmShow(true),
+                            console.log("modal open"),
+                            setFieldValue(personalinfo !== null ? personalinfo.licenceTransferredFromLandOwn : null);
+                        }}
+                      ></ReportProblemIcon>
+                </div>
+
+
+                
+               
+                  
+                </Col>
+                <Col className="col-6">
+                
+                 <Form.Label>
+                  Have you transferred title of land requiring amendment in land schedule without prior approval of competent authority
+                    <span style={{ color: "red" }}>*</span>
+                  </Form.Label>
+
+                <div className="d-flex flex-row align-items-center my-1 ">
+
+                  <input type="radio" disabled value="Yes" checked={apiData?.additionalDetails?.transferredTitleOfLand === "yes" ? true : false} />
+                  <label className="m-0  mx-2" for="Yes">Yes</label>&nbsp;&nbsp;
+                  <input type="radio" disabled value="No" checked={apiData?.additionalDetails?.transferredTitleOfLand === "no" ? true : false} />
+                  <label className="m-0 mx-2" for="No">No</label>
+                  <ReportProblemIcon
                         style={{
                           color: fieldIconColors.developer,
                         }}
@@ -398,14 +789,47 @@ function TransferLicense(props) {
                             setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
                         }}
                       ></ReportProblemIcon>
-                    </div>
-                  </Row>
-                </Form.Group>
+                </div>
+                 </Col>
+                 <Col className="col-6">
+                
+               
+                <Form.Label>
+                Do you want to apply for Change of Developer
+                    <span style={{ color: "red" }}>*</span>
+                  </Form.Label>
+
+                <div className="d-flex flex-row align-items-center my-1 ">
+
+                  <input type="radio" disabled value="Yes" checked={apiData?.additionalDetails?.changeOfDeveloper === "yes" ? true : false} />
+                  <label className="m-0  mx-2" for="Yes">Yes</label>&nbsp;&nbsp;
+                  <input type="radio" disabled value="No" checked={apiData?.additionalDetails?.changeOfDeveloper === "no" ? true : false} />
+                  <label className="m-0 mx-2" for="No">No</label>
+                  <ReportProblemIcon
+                        style={{
+                          color: fieldIconColors.developer,
+                        }}
+                        onClick={() => {
+                          setOpennedModal("Licence No");
+                          setLabelValue("Licence No"),
+                            setSmShow(true),
+                            console.log("modal open"),
+                            setFieldValue(personalinfo !== null ? personalinfo.licenceTransferredFromLandOwn : null);
+                        }}
+                      ></ReportProblemIcon>
+                </div>
+
+
+                
+               
+                  
+                </Col>
+
+                </Row>
               </fieldset>
               <Row>
-                <div>
-                  {showhide === "1" ||
-                    (showhide === "4" && (
+                {/* <div>
+                {(watch("selectType")?.value == "partial" || watch("selectType")?.value == "complete" || watch("changeOfDeveloper") == "yes") && (
                       <div className="card">
                         <div class="bordere">
                           <div class="table-responsive">
@@ -451,7 +875,7 @@ function TransferLicense(props) {
                                         ></ReportProblemIcon>
                                       </div>
                                     </div>
-                                    {/* <input type="file" placeholder="" className="form-control" {...register("undertakingThirdParty")}></input> */}
+                                   
                                   </td>
                                 </tr>
                                 <tr>
@@ -489,7 +913,7 @@ function TransferLicense(props) {
                                         ></ReportProblemIcon>
                                       </div>
                                     </div>
-                                    {/* <input type="file" placeholder="" className="form-control" {...register("colonizerSeeking")}></input> */}
+                                   
                                   </td>
                                 </tr>
                                 <tr>
@@ -526,7 +950,7 @@ function TransferLicense(props) {
                                         ></ReportProblemIcon>
                                       </div>
                                     </div>
-                                    {/* <input type="file" placeholder="" className="form-control" {...register("consentLetter")}></input> */}
+                                   
                                   </td>
                                 </tr>
                                 <tr>
@@ -562,7 +986,7 @@ function TransferLicense(props) {
                                         ></ReportProblemIcon>
                                       </div>
                                     </div>
-                                    {/* <input type="file" placeholder="" className="form-control" {...register("boardResolution")}></input> */}
+                                   
                                   </td>
                                 </tr>
                                 <tr>
@@ -600,7 +1024,7 @@ function TransferLicense(props) {
                                         ></ReportProblemIcon>
                                       </div>
                                     </div>
-                                    {/* <input type="file" placeholder="" className="form-control" {...register("objectionCertificate")}></input> */}
+                                   
                                   </td>
                                 </tr>
                                 <tr>
@@ -637,7 +1061,7 @@ function TransferLicense(props) {
                                         ></ReportProblemIcon>
                                       </div>
                                     </div>
-                                    {/* <input type="file" placeholder="" className="form-control" {...register("technicalFinancialCapacity")}></input> */}
+                                    
                                   </td>
                                 </tr>
                                 <tr>
@@ -673,7 +1097,7 @@ function TransferLicense(props) {
                                         ></ReportProblemIcon>
                                       </div>
                                     </div>
-                                    {/* <input type="file" placeholder="" className="form-control" {...register("undertakingBalance")}></input> */}
+                                    
                                   </td>
                                 </tr>
                                 <tr>
@@ -709,7 +1133,7 @@ function TransferLicense(props) {
                                         ></ReportProblemIcon>
                                       </div>
                                     </div>
-                                    {/* <input type="file" placeholder="" className="form-control" {...register("justificationRequest")}></input> */}
+                                   
                                   </td>
                                 </tr>
                                 <tr>
@@ -747,7 +1171,7 @@ function TransferLicense(props) {
                                         ></ReportProblemIcon>
                                       </div>
                                     </div>
-                                    {/* <input type="file" placeholder="" className="form-control" {...register("administrativeCharges")}></input> */}
+                                   
                                   </td>
                                 </tr>
                                 <tr>
@@ -784,7 +1208,7 @@ function TransferLicense(props) {
                                         ></ReportProblemIcon>
                                       </div>
                                     </div>
-                                    {/* <input type="file" placeholder="" className="form-control" {...register("statusRegarding")}></input> */}
+                                  
                                   </td>
                                 </tr>
                                 <tr>
@@ -821,7 +1245,7 @@ function TransferLicense(props) {
                                         ></ReportProblemIcon>
                                       </div>
                                     </div>
-                                    {/* <input type="file" placeholder="" className="form-control" {...register("registrationStatus")}></input> */}
+                                   
                                   </td>
                                 </tr>
                                 <tr>
@@ -857,7 +1281,7 @@ function TransferLicense(props) {
                                         ></ReportProblemIcon>
                                       </div>
                                     </div>
-                                    {/* <input type="file" placeholder="" className="form-control" {...register("otherDocument")}></input> */}
+                                   
                                   </td>
                                 </tr>
                               </tbody>
@@ -865,12 +1289,12 @@ function TransferLicense(props) {
                           </div>
                         </div>
                       </div>
-                    ))}
-                </div>
+                    )}
+                </div> */}
 
-                <div>
-                  {showhide === "1" ||
-                    (showhide === "5" && (
+                {/* <div>
+                {apiData?.additionalDetails?.selectType == "partial" &&
+                    (apiData?.additionalDetails?.changeOfDeveloper == "no" && (
                       <div className="card">
                         <div class="bordere">
                           <div class="table-responsive">
@@ -916,7 +1340,7 @@ function TransferLicense(props) {
                                         ></ReportProblemIcon>
                                       </div>
                                     </div>
-                                    {/* <input type="file" placeholder="" className="form-control" {...register("creationThirdParty")}></input> */}
+                                  
                                   </td>
                                 </tr>
                                 <tr>
@@ -954,7 +1378,7 @@ function TransferLicense(props) {
                                         ></ReportProblemIcon>
                                       </div>
                                     </div>
-                                    {/* <input type="file" placeholder="" className="form-control" {...register("colonizerSeekingTransfer")}></input> */}
+                                   
                                   </td>
                                 </tr>
                                 <tr>
@@ -990,7 +1414,7 @@ function TransferLicense(props) {
                                         ></ReportProblemIcon>
                                       </div>
                                     </div>
-                                    {/* <input type="file" placeholder="" className="form-control" {...register("consentLetterNewEntity")}></input> */}
+                                   
                                   </td>
                                 </tr>
                                 <tr>
@@ -1026,7 +1450,7 @@ function TransferLicense(props) {
                                         ></ReportProblemIcon>
                                       </div>
                                     </div>
-                                    {/* <input type="file" placeholder="" className="form-control" {...register("boardResolutionSignatory")}></input> */}
+                                   
                                   </td>
                                 </tr>
                                 <tr>
@@ -1062,7 +1486,7 @@ function TransferLicense(props) {
                                         ></ReportProblemIcon>
                                       </div>
                                     </div>
-                                    {/* <input type="file" placeholder="" className="form-control" {...register("statusRegistration")}></input> */}
+                                   
                                   </td>
                                 </tr>
                                 <tr>
@@ -1098,7 +1522,7 @@ function TransferLicense(props) {
                                         ></ReportProblemIcon>
                                       </div>
                                     </div>
-                                    {/* <input type="file" placeholder="" className="form-control" {...register("documentOther")}></input> */}
+                                  
                                   </td>
                                 </tr>
                               </tbody>
@@ -1107,7 +1531,7 @@ function TransferLicense(props) {
                         </div>
                       </div>
                     ))}
-                </div>
+                </div> */}
 
                 <div>
                   {showhide === "2" ||
@@ -1534,8 +1958,8 @@ function TransferLicense(props) {
                     ))}
                 </div>
                 <div>
-                  {showhide === "2" ||
-                    (showhide === "5" && (
+                {(watch("selectType")?.value == "partial" || watch("selectType")?.value == "complete" || watch("changeOfDeveloper") == "no") && (
+                    
                       <div className="card">
                         <div class="bordere">
                           <div class="table-responsive">
@@ -1581,7 +2005,7 @@ function TransferLicense(props) {
                                         ></ReportProblemIcon>
                                       </div>
                                     </div>
-                                    {/* <input type="file" placeholder="" className="form-control" {...register("craetionLicensedArea")}></input> */}
+                                   
                                   </td>
                                 </tr>
                                 <tr>
@@ -1617,7 +2041,7 @@ function TransferLicense(props) {
                                         ></ReportProblemIcon>
                                       </div>
                                     </div>
-                                    {/* <input type="file" placeholder="" className="form-control" {...register("justificationEntity")}></input> */}
+                                
                                   </td>
                                 </tr>
                                 <tr>
@@ -1653,7 +2077,7 @@ function TransferLicense(props) {
                                         ></ReportProblemIcon>
                                       </div>
                                     </div>
-                                    {/* <input type="file" placeholder="" className="form-control" {...register("resolutionBoardSignatory")}></input> */}
+                                  
                                   </td>
                                 </tr>
                                 <tr>
@@ -1689,7 +2113,7 @@ function TransferLicense(props) {
                                         ></ReportProblemIcon>
                                       </div>
                                     </div>
-                                    {/* <input type="file" placeholder="" className="form-control" {...register("registrationProjectRera")}></input> */}
+                                 
                                   </td>
                                 </tr>
                                 <tr>
@@ -1733,11 +2157,13 @@ function TransferLicense(props) {
                           </div>
                         </div>
                       </div>
-                    ))}
+                    )}
                 </div>
+                
               </Row>
+              
 
-              <div class="row">
+              {/* <div class="row">
                 <div class="col-sm-12 text-right">
                   <button type="submit" id="btnSearch" class="btn btn-primary btn-md center-block">
                     Submit
@@ -1748,7 +2174,7 @@ function TransferLicense(props) {
                     Save as Draft
                   </button>
                 </div>
-              </div>
+              </div> */}
             </div>
           </Card>
         </div>
