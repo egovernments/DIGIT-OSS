@@ -4,7 +4,7 @@ import axios from "axios";
 // import ReactMultiSelect from "../../../../../../../../../react-components/src/atoms/ReactMultiSelect";
 import ReactMultiSelect from "../../../../../react-components/src/atoms/ReactMultiSelect";
 
-const SearchLicenceComp = ({ watch, register, control, setLoader, errors, setValue }) => {
+const SearchLicenceComp = ({ watch, register, control, setLoader, errors, setValue, resetField }) => {
   const [showField, setShowField] = useState({ select: false, other: false });
   const [licenceData, setLicenceData] = useState([]);
 
@@ -52,7 +52,17 @@ const SearchLicenceComp = ({ watch, register, control, setLoader, errors, setVal
             Licence No.<span style={{ color: "red" }}>*</span>
           </h2>
           <div style={{ display: "flex", placeItems: "center" }}>
-            <input type="text" className="form-control" placeholder="LC_XXXXX" {...register("licenceNo")} />
+            <input
+              type="text"
+              className="form-control"
+              placeholder="LC_XXXXX"
+              {...register("licenceNo")}
+              onChange={() => {
+                console.log("here");
+                setShowField({ select: false, other: false });
+                resetField("selectLicence");
+              }}
+            />
             <div
               style={{
                 background: "#024f9d",
@@ -120,7 +130,7 @@ const SearchLicenceComp = ({ watch, register, control, setLoader, errors, setVal
                   const yearDiff = dateA.getYear() - dateB.getYear();
 
                   const diff = monthDiff + yearDiff * 12;
-                  setValue("renewalRequiredUpto", diff);
+                  setValue("periodOfRenewal", diff);
                   console.log("value", e?.target?.value, diff);
                 }}
               />
@@ -132,7 +142,7 @@ const SearchLicenceComp = ({ watch, register, control, setLoader, errors, setVal
           <div className="col col-3 ">
             <FormControl>
               <h2>Period of renewal(In Months)</h2>
-              <input type="text" {...register("renewalRequiredUpto")} className="form-control" disabled />
+              <input type="text" {...register("periodOfRenewal")} className="form-control" disabled />
             </FormControl>
           </div>
           <div className="col col-3 ">

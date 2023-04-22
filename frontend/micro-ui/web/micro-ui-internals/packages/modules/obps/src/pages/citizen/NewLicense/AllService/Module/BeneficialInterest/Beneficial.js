@@ -32,8 +32,6 @@ function Beneficial() {
     setShowhide(getuser);
   };
 
-
-
   const {
     register,
     handleSubmit,
@@ -41,144 +39,142 @@ function Beneficial() {
     control,
     watch,
     setValue,
+    resetField,
   } = useForm({});
 
   const changeOfDeveloperForm = [
     {
-      label: t('NO_OBJECTION_CERTIFICATE_LABEL'),
+      label: t("NO_OBJECTION_CERTIFICATE_LABEL"),
       fileName: "noObjectionCertificate",
-      selectorKey: "noObjectionCertificateFile"
+      selectorKey: "noObjectionCertificateFile",
     },
     {
-      label: t('CONSENT_LETTER_FROM_NEW_ENTITY_LABEL'),
+      label: t("CONSENT_LETTER_FROM_NEW_ENTITY_LABEL"),
       fileName: "consentLetter",
-      selectorKey: "consentLetterFile"
+      selectorKey: "consentLetterFile",
     },
     {
-      label: t('JUSTIFICATION_FOR_SUCH_REQUEST_LABEL'),
+      label: t("JUSTIFICATION_FOR_SUCH_REQUEST_LABEL"),
       fileName: "justificationCertificate",
-      selectorKey: "justificationCertificateFile"
+      selectorKey: "justificationCertificateFile",
     },
     {
-      label: t('THIRD_PARTY_RIGHTS_CERTIFICATE_LABEL'),
+      label: t("THIRD_PARTY_RIGHTS_CERTIFICATE_LABEL"),
       fileName: "thirdPartyRightsCertificate",
-      selectorKey: "thirdPartyRightsCertificateFile"
+      selectorKey: "thirdPartyRightsCertificateFile",
     },
     {
-      label: t('FINANCIAL_CAPACITY_CERTIFICATE_LABEL'),
+      label: t("FINANCIAL_CAPACITY_CERTIFICATE_LABEL"),
       fileName: "fiancialCapacityCertificate",
-      selectorKey: "fiancialCapacityCertificateFile"
+      selectorKey: "fiancialCapacityCertificateFile",
     },
     {
-      label: t('ADMINISTRATIVE_CHARGE_CERTIFICATE_LABEL'),
+      label: t("ADMINISTRATIVE_CHARGE_CERTIFICATE_LABEL"),
       fileName: "aministrativeChargeCertificate",
-      selectorKey: "aministrativeChargeCertificateFile"
+      selectorKey: "aministrativeChargeCertificateFile",
     },
     {
-      label: t('RERA_REGISTRATION_CERTIFICATION_LABEL'),
+      label: t("RERA_REGISTRATION_CERTIFICATION_LABEL"),
       fileName: "reraRegistrationCertificate",
-      selectorKey: "reraRegistrationCertificateFile"
+      selectorKey: "reraRegistrationCertificateFile",
     },
     {
-      label: t('BOARD_RESOLUTION_EXISTING_LABEL'),
+      label: t("BOARD_RESOLUTION_EXISTING_LABEL"),
       fileName: "boardResolutionExisting",
-      selectorKey: "boardResolutionExistingFile"
+      selectorKey: "boardResolutionExistingFile",
     },
     {
-      label: t('BOARD_RESOLUTION_NEW_LABEL'),
+      label: t("BOARD_RESOLUTION_NEW_LABEL"),
       fileName: "boardResolutionNewEntity",
-      selectorKey: "boardResolutionNewEntityFile"
+      selectorKey: "boardResolutionNewEntityFile",
     },
-
-  ]
+  ];
 
   const joinDevForm = [
     {
-      label: t('NO_OBJECTION_CERTIFICATE_LABEL'),
+      label: t("NO_OBJECTION_CERTIFICATE_LABEL"),
       fileName: "noObjectionCertificate",
-      selectorKey: "noObjectionCertificateFile"
+      selectorKey: "noObjectionCertificateFile",
     },
     {
-      label: ('CONSENT_LETTER_FROM_NEW_ENTITY_LABEL'),
+      label: "CONSENT_LETTER_FROM_NEW_ENTITY_LABEL",
       fileName: "consentLetter",
-      selectorKey: "consentLetterFile"
+      selectorKey: "consentLetterFile",
     },
     {
-      label: t('JUSTIFICATION_FOR_SUCH_REQUEST_LABEL'),
+      label: t("JUSTIFICATION_FOR_SUCH_REQUEST_LABEL"),
       fileName: "justificationCertificate",
-      selectorKey: "justificationCertificateFile"
+      selectorKey: "justificationCertificateFile",
     },
     {
-      label: t('THIRD_PARTY_RIGHTS_CERTIFICATE_LABEL'),
+      label: t("THIRD_PARTY_RIGHTS_CERTIFICATE_LABEL"),
       fileName: "thirdPartyRightsCertificate",
-      selectorKey: "thirdPartyRightsCertificateFile"
+      selectorKey: "thirdPartyRightsCertificateFile",
     },
     {
-      label: t('ADMINISTRATIVE_CHARGE_CERTIFICATE_LABEL'),
+      label: t("ADMINISTRATIVE_CHARGE_CERTIFICATE_LABEL"),
       fileName: "aministrativeChargeCertificate",
-      selectorKey: "aministrativeChargeCertificateFile"
+      selectorKey: "aministrativeChargeCertificateFile",
     },
     {
-      label: t('JOINT_DEVELOPMENT_CERTIFICATE_LABEL'),
+      label: t("JOINT_DEVELOPMENT_CERTIFICATE_LABEL"),
       fileName: "jointDevelopmentCertificate",
-      selectorKey: "jointDevelopmentCertificateFile"
+      selectorKey: "jointDevelopmentCertificateFile",
     },
     {
-      label: t('BOARD_RESOLUTION_EXISTING_LABEL'),
+      label: t("BOARD_RESOLUTION_EXISTING_LABEL"),
       fileName: "boardResolutionExisting",
-      selectorKey: "boardResolutionExistingFile"
+      selectorKey: "boardResolutionExistingFile",
     },
     {
-      label: t('BOARD_RESOLUTION_NEW_LABEL'),
+      label: t("BOARD_RESOLUTION_NEW_LABEL"),
       fileName: "boardResolutionNewEntity",
-      selectorKey: "boardResolutionNewEntityFile"
+      selectorKey: "boardResolutionNewEntityFile",
     },
-
-  ]
+  ];
 
   const changeInShareholding = [
     {
-      label: ('CONSENT_LETTER_FROM_NEW_ENTITY_LABEL'),
+      label: "CONSENT_LETTER_FROM_NEW_ENTITY_LABEL",
       fileName: "consentLetter",
-      selectorKey: "consentLetterFile"
+      selectorKey: "consentLetterFile",
     },
     {
-      label: t('JUSTIFICATION_FOR_SUCH_REQUEST_LABEL'),
+      label: t("JUSTIFICATION_FOR_SUCH_REQUEST_LABEL"),
       fileName: "justificationCertificate",
-      selectorKey: "justificationCertificateFile"
+      selectorKey: "justificationCertificateFile",
     },
     {
-      label: t('THIRD_PARTY_RIGHTS_CERTIFICATE_LABEL'),
+      label: t("THIRD_PARTY_RIGHTS_CERTIFICATE_LABEL"),
       fileName: "thirdPartyRightsCertificate",
-      selectorKey: "thirdPartyRightsCertificateFile"
+      selectorKey: "thirdPartyRightsCertificateFile",
     },
     {
-      label: t('ADMINISTRATIVE_CHARGE_CERTIFICATE_LABEL'),
+      label: t("ADMINISTRATIVE_CHARGE_CERTIFICATE_LABEL"),
       fileName: "aministrativeChargeCertificate",
-      selectorKey: "aministrativeChargeCertificateFile"
+      selectorKey: "aministrativeChargeCertificateFile",
     },
     {
-      label: t('SHAREHOLDING_PATTERN_CERTIFICATE_LABEL'),
+      label: t("SHAREHOLDING_PATTERN_CERTIFICATE_LABEL"),
       fileName: "shareholdingPatternCertificate",
-      selectorKey: "shareholdingPatternCertificateFile"
+      selectorKey: "shareholdingPatternCertificateFile",
     },
     {
-      label: t('RERA_REGISTRATION_CERTIFICATION_LABEL'),
+      label: t("RERA_REGISTRATION_CERTIFICATION_LABEL"),
       fileName: "reraRegistrationCertificate",
-      selectorKey: "reraRegistrationCertificateFile"
+      selectorKey: "reraRegistrationCertificateFile",
     },
     {
-      label: t('BOARD_RESOLUTION_EXISTING_LABEL'),
+      label: t("BOARD_RESOLUTION_EXISTING_LABEL"),
       fileName: "boardResolutionExisting",
-      selectorKey: "boardResolutionExistingFile"
+      selectorKey: "boardResolutionExistingFile",
     },
     {
-      label: t('BOARD_RESOLUTION_NEW_LABEL'),
+      label: t("BOARD_RESOLUTION_NEW_LABEL"),
       fileName: "boardResolutionNewEntity",
-      selectorKey: "boardResolutionNewEntityFile"
+      selectorKey: "boardResolutionNewEntityFile",
     },
-
-  ]
+  ];
   const [fileStoreId, setFileStoreId] = useState({});
   const [selectedFiles, setSelectedFiles] = useState([]);
   // const [loader, setLoader] = useState(false);
@@ -193,73 +189,53 @@ function Beneficial() {
     setLoader(false);
     try {
       const body = {
+        RequestInfo: {
+          apiId: "Rainmaker",
 
-        "RequestInfo": {
+          ver: "v1",
 
-          "apiId": "Rainmaker",
+          ts: 0,
 
-          "ver": "v1",
+          action: "_search",
 
-          "ts": 0,
+          did: "",
 
-          "action": "_search",
+          key: "",
 
-          "did": "",
+          msgId: "090909",
 
-          "key": "",
+          authToken: "",
 
-          "msgId": "090909",
-
-          "authToken": "",
-
-          "correlationId": null
-
-
-
+          correlationId: null,
         },
 
-        "MdmsCriteria": {
+        MdmsCriteria: {
+          tenantId: "hr",
 
-          "tenantId": "hr",
-
-          "moduleDetails": [
-
+          moduleDetails: [
             {
+              tenantId: "hr",
 
-              "tenantId": "hr",
+              moduleName: "common-masters",
 
-              "moduleName": "common-masters",
-
-              "masterDetails": [
-
+              masterDetails: [
                 {
-
-
-
-                  "name": "ChangeBeneficial"
-
-
-
-                }
-
-              ]
-
-            }
-
-          ]
-
-        }
-
-      }
+                  name: "ChangeBeneficial",
+                },
+              ],
+            },
+          ],
+        },
+      };
       const Resp = await axios.post("/egov-mdms-service/v1/_search", body);
-      setDeveloperServices(Resp.data?.MdmsRes?.['common-masters']?.ChangeBeneficial || []);
+      setDeveloperServices(Resp.data?.MdmsRes?.["common-masters"]?.ChangeBeneficial || []);
 
       setLoader(false);
     } catch (err) {
       setLoader(false);
       setShowToastError({ label: err.message, error: true, success: false });
     }
-  }
+  };
 
   // const beneficialNew = (data) => console.log(data);
   const beneficialNew = async (data) => {
@@ -268,22 +244,22 @@ function Beneficial() {
       const postDistrict = {
         changeBeneficial: [
           {
-            "licenseNumber": data?.licenceNo || "",
-            "developerServiceCode": data?.developerServiceCode || "",
-            "paidAmount": data?.paidAmount || "",
-            "areaInAcres": data?.areaInAcres || "",
-            "noObjectionCertificate": data?.noObjectionCertificate || "",
-            "consentLetter": data?.consentLetter || "",
-            "justificationCertificate": data?.justificationCertificate || "",
-            "thirdPartyRightsCertificate": data?.thirdPartyRightsCertificate || "",
-            "jointDevelopmentCertificate": data?.jointDevelopmentCertificate || "",
-            "aministrativeChargeCertificate": data?.aministrativeChargeCertificate || "",
-            "boardResolutionExisting": data?.boardResolutionExisting || "",
-            "boardResolutionNewEntity": data?.boardResolutionNewEntity || "",
-            "shareholdingPatternCertificate": data?.shareholdingPatternCertificate || "",
-            "reraRegistrationCertificate": data?.reraRegistrationCertificate || "",
-            "fiancialCapacityCertificate": data?.fiancialCapacityCertificate || ""
-          }
+            licenseNumber: data?.licenceNo || "",
+            developerServiceCode: data?.developerServiceCode || "",
+            paidAmount: data?.paidAmount || "",
+            areaInAcres: data?.areaInAcres || "",
+            noObjectionCertificate: data?.noObjectionCertificate || "",
+            consentLetter: data?.consentLetter || "",
+            justificationCertificate: data?.justificationCertificate || "",
+            thirdPartyRightsCertificate: data?.thirdPartyRightsCertificate || "",
+            jointDevelopmentCertificate: data?.jointDevelopmentCertificate || "",
+            aministrativeChargeCertificate: data?.aministrativeChargeCertificate || "",
+            boardResolutionExisting: data?.boardResolutionExisting || "",
+            boardResolutionNewEntity: data?.boardResolutionNewEntity || "",
+            shareholdingPatternCertificate: data?.shareholdingPatternCertificate || "",
+            reraRegistrationCertificate: data?.reraRegistrationCertificate || "",
+            fiancialCapacityCertificate: data?.fiancialCapacityCertificate || "",
+          },
         ],
         RequestInfo: {
           apiId: "Rainmaker",
@@ -305,7 +281,6 @@ function Beneficial() {
     }
   };
 
-
   const updateBeneficial = async (data) => {
     setLoader(true);
     try {
@@ -313,22 +288,22 @@ function Beneficial() {
         changeBeneficial: [
           {
             ...beneficialDetails,
-            "licenseNumber": data?.licenceNo || "",
-            "developerServiceCode": data?.developerServiceCode || "",
-            "paidAmount": data?.paidAmount || "",
-            "areaInAcres": data?.areaInAcres || "",
-            "noObjectionCertificate": data?.noObjectionCertificate || "",
-            "consentLetter": data?.consentLetter || "",
-            "justificationCertificate": data?.justificationCertificate || "",
-            "thirdPartyRightsCertificate": data?.thirdPartyRightsCertificate || "",
-            "jointDevelopmentCertificate": data?.jointDevelopmentCertificate || "",
-            "aministrativeChargeCertificate": data?.aministrativeChargeCertificate || "",
-            "boardResolutionExisting": data?.boardResolutionExisting || "",
-            "boardResolutionNewEntity": data?.boardResolutionNewEntity || "",
-            "shareholdingPatternCertificate": data?.shareholdingPatternCertificate || "",
-            "reraRegistrationCertificate": data?.reraRegistrationCertificate || "",
-            "fiancialCapacityCertificate": data?.fiancialCapacityCertificate || ""
-          }
+            licenseNumber: data?.licenceNo || "",
+            developerServiceCode: data?.developerServiceCode || "",
+            paidAmount: data?.paidAmount || "",
+            areaInAcres: data?.areaInAcres || "",
+            noObjectionCertificate: data?.noObjectionCertificate || "",
+            consentLetter: data?.consentLetter || "",
+            justificationCertificate: data?.justificationCertificate || "",
+            thirdPartyRightsCertificate: data?.thirdPartyRightsCertificate || "",
+            jointDevelopmentCertificate: data?.jointDevelopmentCertificate || "",
+            aministrativeChargeCertificate: data?.aministrativeChargeCertificate || "",
+            boardResolutionExisting: data?.boardResolutionExisting || "",
+            boardResolutionNewEntity: data?.boardResolutionNewEntity || "",
+            shareholdingPatternCertificate: data?.shareholdingPatternCertificate || "",
+            reraRegistrationCertificate: data?.reraRegistrationCertificate || "",
+            fiancialCapacityCertificate: data?.fiancialCapacityCertificate || "",
+          },
         ],
         RequestInfo: {
           apiId: "Rainmaker",
@@ -350,25 +325,24 @@ function Beneficial() {
     }
   };
 
-
   const getBeneficiaryDetails = async () => {
     setLoader(true);
     try {
       const reqBody = {
-        "RequestInfo": {
-          "apiId": "Rainmaker",
-          "action": "",
-          "did": 1,
-          "key": "",
-          "msgId": "1662181431469|en_IN",
-          "requesterId": "",
-          "ts": "",
-          "ver": ".01",
-          "authToken": token
-        }
-      }
+        RequestInfo: {
+          apiId: "Rainmaker",
+          action: "",
+          did: 1,
+          key: "",
+          msgId: "1662181431469|en_IN",
+          requesterId: "",
+          ts: "",
+          ver: ".01",
+          authToken: token,
+        },
+      };
 
-      const Resp = await axios.post(`/tl-services/beneficial/_get?licenseNumber=${params.get('id')}`, reqBody);
+      const Resp = await axios.post(`/tl-services/beneficial/_get?licenseNumber=${params.get("id")}`, reqBody);
       console.log("BeneficiaryDetails ====> ", Resp, Resp?.data?.changeBeneficial?.[0], Resp?.data?.changeBeneficial?.[0]?.licenseNumber);
       setBeneficialDetails(Resp?.data?.changeBeneficial?.[0]);
       setValue("licenceNo", Resp?.data?.changeBeneficial?.[0]?.licenseNumber);
@@ -386,29 +360,23 @@ function Beneficial() {
       setValue("reraRegistrationCertificate", Resp?.data?.changeBeneficial?.[0]?.reraRegistrationCertificate);
       setValue("paidAmount", Resp?.data?.changeBeneficial?.[0]?.paidAmount);
       setValue("areaInAcres", Resp?.data?.changeBeneficial?.[0]?.areaInAcres);
-      console.log("scene", Resp?.data?.changeBeneficial?.[0]?.areaInAcres)
-
-
-
+      console.log("scene", Resp?.data?.changeBeneficial?.[0]?.areaInAcres);
       setLoader(false);
-      setShowhide(Resp?.data?.changeBeneficial?.[0]?.developerServiceCode)
-
+      setShowhide(Resp?.data?.changeBeneficial?.[0]?.developerServiceCode);
     } catch (err) {
       console.log("Submit Error ====> ", err.message);
       setLoader(false);
       setShowToastError({ label: err.message, error: true, success: false });
       return error.message;
     }
-  }
+  };
 
   useEffect(() => {
     getDeveloperServices();
-    if (params.get('id')) {
+    if (params.get("id")) {
       getBeneficiaryDetails();
     }
-  }, [])
-
-
+  }, []);
 
   const uploadFile = async (file, fieldName) => {
     if (selectedFiles.includes(file.name)) {
@@ -444,22 +412,18 @@ function Beneficial() {
     }
   };
 
-
   const formSubmitHandler = async (data) => {
-    if (params.get('id')) {
-      updateBeneficial(data)
+    if (params.get("id")) {
+      updateBeneficial(data);
     } else {
       beneficialNew(data);
     }
-  }
+  };
 
   return (
     <div>
       <form onSubmit={handleSubmit(formSubmitHandler)}>
-
-        {
-          loader && <Spinner />
-        }
+        {loader && <Spinner />}
 
         {showToastError && (
           <CusToaster
@@ -473,11 +437,10 @@ function Beneficial() {
         )}
 
         <div className="card" style={{ width: "126%", border: "5px solid #1266af" }}>
-          <h4 style={{ fontSize: "25px", marginLeft: "21px" }}>{t('CHANGE_IN_BENEFICIAL_INTEREST')}</h4>
+          <h4 style={{ fontSize: "25px", marginLeft: "21px" }}>{t("CHANGE_IN_BENEFICIAL_INTEREST")}</h4>
           <div className="card">
             <div className="">
               <div className="row">
-
                 <div className="col-12 p-3">
                   <SearchLicenceComp
                     watch={watch}
@@ -486,6 +449,7 @@ function Beneficial() {
                     setLoader={setLoader}
                     errors={errors}
                     setValue={setValue}
+                    resetField={resetField}
                   />
                 </div>
 
@@ -515,23 +479,26 @@ function Beneficial() {
                 <FormControl className="col col-md-6 col-lg-4 p-3">
                   <h2 className="FormLable">{t("SELECT_SERVICE")}</h2>
 
-                  <select className="Inputcontrol form-control h-auto" style={{ height: "auto", padding: "9px" }} {...register("developerServiceCode", {
-                    required: 'At least one should be selected'
-                  })} onChange={(e) => handleshowhide(e)}>
+                  <select
+                    className="Inputcontrol form-control h-auto"
+                    style={{ height: "auto", padding: "9px" }}
+                    {...register("developerServiceCode", {
+                      required: "At least one should be selected",
+                    })}
+                    onChange={(e) => handleshowhide(e)}
+                  >
                     <option value="">----Select value-----</option>
-                    {
-                      developerServices.map((item, index) => (
-                        <option key={index} value={item.developerServiceCode}>{item?.developerServiceName}</option>
-                      ))
-                    }
+                    {developerServices.map((item, index) => (
+                      <option key={index} value={item.developerServiceCode}>
+                        {item?.developerServiceName}
+                      </option>
+                    ))}
                   </select>
-                  <FormHelperText error={Boolean(errors?.developerServiceCode)}>
-                    {errors?.developerServiceCode?.message}
-                  </FormHelperText>
+                  <FormHelperText error={Boolean(errors?.developerServiceCode)}>{errors?.developerServiceCode?.message}</FormHelperText>
                 </FormControl>
                 {/* &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; */}
                 <FormControl className="col col-md-6 col-lg-4 p-3">
-                  <h2 className="FormLable">{t('Amount')}</h2>
+                  <h2 className="FormLable">{t("Amount")}</h2>
                   <OutlinedInput type="text" className="Inputcontrol" disabled {...register("paidAmount")} />
                 </FormControl>
                 {/* <div className="col md={4} xxl lg-4">
@@ -539,20 +506,22 @@ function Beneficial() {
 
                 {showhide === "JDAMR" && (
                   <FormControl className="col col-md:6 col-lg-4 p-3">
-                    <h2 className="FormLable"> {t('AREA_IN_ACRES')}</h2>
+                    <h2 className="FormLable"> {t("AREA_IN_ACRES")}</h2>
 
-                    <OutlinedInput type="number" className="Inputcontrol" placeholder="" {...register("areaInAcres", {
-                      required: "This field cannot be blank",
-                      validate: {
-                        min: (value) => Number(value) > 0 || 'Area in Acres should be minimum 1',
-                        max: (value) => Number(value) <= 10 || 'Area in Acres should be maximum 10'
-                      }
-                    })}
-                    // error={Boolean(errors?.areaInAcres)}
+                    <OutlinedInput
+                      type="number"
+                      className="Inputcontrol"
+                      placeholder=""
+                      {...register("areaInAcres", {
+                        required: "This field cannot be blank",
+                        validate: {
+                          min: (value) => Number(value) > 0 || "Area in Acres should be minimum 1",
+                          max: (value) => Number(value) <= 10 || "Area in Acres should be maximum 10",
+                        },
+                      })}
+                      // error={Boolean(errors?.areaInAcres)}
                     />
-                    <FormHelperText error={Boolean(errors?.areaInAcres)}>
-                      {errors?.areaInAcres?.message}
-                    </FormHelperText>
+                    <FormHelperText error={Boolean(errors?.areaInAcres)}>{errors?.areaInAcres?.message}</FormHelperText>
                   </FormControl>
                 )}
                 {/* </div>
@@ -566,70 +535,67 @@ function Beneficial() {
                         {/* <caption>List of users</caption> */}
                         <thead>
                           <tr>
-                            <th class="fw-normal">{t('SR_NO')}</th>
-                            <th class="fw-normal">{t('FIELD_NAME')}</th>
+                            <th class="fw-normal">{t("SR_NO")}</th>
+                            <th class="fw-normal">{t("FIELD_NAME")}</th>
                             <th class="fw-normal">{t("UPLOAD_DOCUMENTS")}</th>
                           </tr>
                         </thead>
                         <tbody>
+                          {changeOfDeveloperForm.map((item, index) => (
+                            <tr key={index}>
+                              <th class="fw-normal">{index + 1}</th>
+                              <td>{item.label}</td>
 
-                          {
-                            changeOfDeveloperForm.map((item, index) => (
-
-                              <tr key={index}>
-                                <th class="fw-normal">{index + 1}</th>
+                              {watch(item.fileName) ? (
                                 <td>
-                                  {item.label}
+                                  <div className="d-flex justify-content-center">
+                                    <label title="Upload Document" for={item.selectorKey}>
+                                      {" "}
+                                      <FileUpload color="primary" for={item.selectorKey} />
+                                    </label>
+                                    <input
+                                      id={item.selectorKey}
+                                      type="file"
+                                      placeholder=""
+                                      className="form-control d-none"
+                                      onChange={(e) => uploadFile(e.target.files[0], item.fileName)}
+                                    ></input>
+
+                                    {watch(item.fileName) && (
+                                      <a onClick={() => getDocShareholding(watch(item.fileName), setLoader)} className="btn btn-sm ">
+                                        <Visibility />
+                                      </a>
+                                    )}
+                                  </div>
                                 </td>
+                              ) : (
+                                <td>
+                                  <div>
+                                    <label title="Upload Document" for={item.selectorKey}>
+                                      {" "}
+                                      <FileUpload color="primary" for={item.selectorKey} />
+                                    </label>
+                                    <input
+                                      id={item.selectorKey}
+                                      type="file"
+                                      placeholder=""
+                                      className="form-control d-none"
+                                      {...register(item.selectorKey, { required: "This Document is required" })}
+                                      onChange={(e) => uploadFile(e.target.files[0], item.fileName)}
+                                    ></input>
 
-                                {
-                                  watch(item.fileName) ?
-                                    (
-                                      <td>
-                                        <div className="d-flex justify-content-center">
-                                          <label title="Upload Document" for={item.selectorKey}>
-                                            {" "}
-                                            <FileUpload color="primary" for={item.selectorKey} />
-                                          </label>
-                                          <input id={item.selectorKey} type="file" placeholder="" className="form-control d-none" onChange={(e) => uploadFile(e.target.files[0], item.fileName)}
-                                          ></input>
+                                    {watch(item.fileName) && (
+                                      <a onClick={() => getDocShareholding(watch(item.fileName), setLoader)} className="btn btn-sm "></a>
+                                    )}
+                                  </div>
 
-                                          {watch(item.fileName) && (
-                                            <a onClick={() => getDocShareholding(watch(item.fileName), setLoader)} className="btn btn-sm ">
-                                              <Visibility />
-                                            </a>
-                                          )}
-                                        </div>
-
-                                      </td>
-                                    ) : (
-                                      <td>
-                                        <div>
-                                          <label title="Upload Document" for={item.selectorKey}>
-                                            {" "}
-                                            <FileUpload color="primary" for={item.selectorKey} />
-                                          </label>
-                                          <input id={item.selectorKey} type="file" placeholder="" className="form-control d-none" {...register(item.selectorKey, { required: "This Document is required" })} onChange={(e) => uploadFile(e.target.files[0], item.fileName)} ></input>
-
-                                          {watch(item.fileName) && (
-                                            <a onClick={() => getDocShareholding(watch(item.fileName), setLoader)} className="btn btn-sm "></a>
-                                          )}
-                                        </div>
-
-                                        <h3 className="error-message" style={{ color: "red" }}>
-                                          {errors?.[item.selectorKey] && errors?.[item.selectorKey]?.message}
-                                        </h3>
-
-
-                                      </td>
-                                    )
-                                }
-
-                              </tr>
-
-                            ))
-                          }
-
+                                  <h3 className="error-message" style={{ color: "red" }}>
+                                    {errors?.[item.selectorKey] && errors?.[item.selectorKey]?.message}
+                                  </h3>
+                                </td>
+                              )}
+                            </tr>
+                          ))}
                         </tbody>
                       </div>
                       // </div>
@@ -642,71 +608,67 @@ function Beneficial() {
                         {/* <caption>List of users</caption> */}
                         <thead>
                           <tr>
-                            <th class="fw-normal">{t('SR_NO')}</th>
-                            <th class="fw-normal">{t('FIELD_NAME')}</th>
+                            <th class="fw-normal">{t("SR_NO")}</th>
+                            <th class="fw-normal">{t("FIELD_NAME")}</th>
                             <th class="fw-normal">{t("UPLOAD_DOCUMENTS")}</th>
                           </tr>
                         </thead>
                         <tbody>
+                          {joinDevForm.map((item, index) => (
+                            <tr key={index + "b"}>
+                              <th class="fw-normal">{index + 1}</th>
+                              <td>{item.label}</td>
 
-
-                          {
-                            joinDevForm.map((item, index) => (
-
-                              <tr key={index + "b"}>
-                                <th class="fw-normal">{index + 1}</th>
+                              {watch(item.fileName) ? (
                                 <td>
-                                  {item.label}
+                                  <div className="d-flex justify-content-center">
+                                    <label title="Upload Document" for={item.selectorKey}>
+                                      {" "}
+                                      <FileUpload color="primary" for={item.selectorKey} />
+                                    </label>
+                                    <input
+                                      id={item.selectorKey}
+                                      type="file"
+                                      placeholder=""
+                                      className="form-control d-none"
+                                      onChange={(e) => uploadFile(e.target.files[0], item.fileName)}
+                                    ></input>
+
+                                    {watch(item.fileName) && (
+                                      <a onClick={() => getDocShareholding(watch(item.fileName), setLoader)} className="btn btn-sm ">
+                                        <Visibility />
+                                      </a>
+                                    )}
+                                  </div>
                                 </td>
+                              ) : (
+                                <td>
+                                  <div>
+                                    <label title="Upload Document" for={item.selectorKey}>
+                                      {" "}
+                                      <FileUpload color="primary" for={item.selectorKey} />
+                                    </label>
+                                    <input
+                                      id={item.selectorKey}
+                                      type="file"
+                                      placeholder=""
+                                      className="form-control d-none"
+                                      {...register(item.selectorKey, { required: "This Document is required" })}
+                                      onChange={(e) => uploadFile(e.target.files[0], item.fileName)}
+                                    ></input>
 
-                                {
-                                  watch(item.fileName) ?
-                                    (
-                                      <td>
-                                        <div className="d-flex justify-content-center">
-                                          <label title="Upload Document" for={item.selectorKey}>
-                                            {" "}
-                                            <FileUpload color="primary" for={item.selectorKey} />
-                                          </label>
-                                          <input id={item.selectorKey} type="file" placeholder="" className="form-control d-none" onChange={(e) => uploadFile(e.target.files[0], item.fileName)}
-                                          ></input>
+                                    {watch(item.fileName) && (
+                                      <a onClick={() => getDocShareholding(watch(item.fileName), setLoader)} className="btn btn-sm "></a>
+                                    )}
+                                  </div>
 
-                                          {watch(item.fileName) && (
-                                            <a onClick={() => getDocShareholding(watch(item.fileName), setLoader)} className="btn btn-sm ">
-                                              <Visibility />
-                                            </a>
-                                          )}
-                                        </div>
-
-                                      </td>
-                                    ) : (
-                                      <td>
-                                        <div>
-                                          <label title="Upload Document" for={item.selectorKey}>
-                                            {" "}
-                                            <FileUpload color="primary" for={item.selectorKey} />
-                                          </label>
-                                          <input id={item.selectorKey} type="file" placeholder="" className="form-control d-none" {...register(item.selectorKey, { required: "This Document is required" })} onChange={(e) => uploadFile(e.target.files[0], item.fileName)} ></input>
-
-                                          {watch(item.fileName) && (
-                                            <a onClick={() => getDocShareholding(watch(item.fileName), setLoader)} className="btn btn-sm "></a>
-                                          )}
-                                        </div>
-
-                                        <h3 className="error-message" style={{ color: "red" }}>
-                                          {errors?.[item.selectorKey] && errors?.[item.selectorKey]?.message}
-                                        </h3>
-
-
-                                      </td>
-                                    )
-                                }
-
-                              </tr>
-
-                            ))
-                          }
-
+                                  <h3 className="error-message" style={{ color: "red" }}>
+                                    {errors?.[item.selectorKey] && errors?.[item.selectorKey]?.message}
+                                  </h3>
+                                </td>
+                              )}
+                            </tr>
+                          ))}
                         </tbody>
                       </div>
                       // </div>
@@ -720,70 +682,67 @@ function Beneficial() {
                         {/* <caption>List of users</caption> */}
                         <thead>
                           <tr>
-                            <th class="fw-normal">{t('SR_NO')}</th>
-                            <th class="fw-normal">{t('FIELD_NAME')}</th>
+                            <th class="fw-normal">{t("SR_NO")}</th>
+                            <th class="fw-normal">{t("FIELD_NAME")}</th>
                             <th class="fw-normal">{t("UPLOAD_DOCUMENTS")}</th>
                           </tr>
                         </thead>
                         <tbody>
+                          {changeInShareholding.map((item, index) => (
+                            <tr key={index + "c"}>
+                              <th class="fw-normal">{index + 1}</th>
+                              <td>{item.label}</td>
 
-
-                          {
-                            changeInShareholding.map((item, index) => (
-
-                              <tr key={index + "c"}>
-                                <th class="fw-normal">{index + 1}</th>
+                              {watch(item.fileName) ? (
                                 <td>
-                                  {item.label}
+                                  <div className="d-flex justify-content-center">
+                                    <label title="Upload Document" for={item.selectorKey}>
+                                      {" "}
+                                      <FileUpload color="primary" for={item.selectorKey} />
+                                    </label>
+                                    <input
+                                      id={item.selectorKey}
+                                      type="file"
+                                      placeholder=""
+                                      className="form-control d-none"
+                                      onChange={(e) => uploadFile(e.target.files[0], item.fileName)}
+                                    ></input>
+
+                                    {watch(item.fileName) && (
+                                      <a onClick={() => getDocShareholding(watch(item.fileName), setLoader)} className="btn btn-sm ">
+                                        <Visibility />
+                                      </a>
+                                    )}
+                                  </div>
                                 </td>
+                              ) : (
+                                <td>
+                                  <div>
+                                    <label title="Upload Document" for={item.selectorKey}>
+                                      {" "}
+                                      <FileUpload color="primary" for={item.selectorKey} />
+                                    </label>
+                                    <input
+                                      id={item.selectorKey}
+                                      type="file"
+                                      placeholder=""
+                                      className="form-control d-none"
+                                      {...register(item.selectorKey, { required: "This Document is required" })}
+                                      onChange={(e) => uploadFile(e.target.files[0], item.fileName)}
+                                    ></input>
 
-                                {
-                                  watch(item.fileName) ?
-                                    (
-                                      <td>
-                                        <div className="d-flex justify-content-center">
-                                          <label title="Upload Document" for={item.selectorKey}>
-                                            {" "}
-                                            <FileUpload color="primary" for={item.selectorKey} />
-                                          </label>
-                                          <input id={item.selectorKey} type="file" placeholder="" className="form-control d-none" onChange={(e) => uploadFile(e.target.files[0], item.fileName)}
-                                          ></input>
+                                    {watch(item.fileName) && (
+                                      <a onClick={() => getDocShareholding(watch(item.fileName), setLoader)} className="btn btn-sm "></a>
+                                    )}
+                                  </div>
 
-                                          {watch(item.fileName) && (
-                                            <a onClick={() => getDocShareholding(watch(item.fileName), setLoader)} className="btn btn-sm ">
-                                              <Visibility />
-                                            </a>
-                                          )}
-                                        </div>
-
-                                      </td>
-                                    ) : (
-                                      <td>
-                                        <div>
-                                          <label title="Upload Document" for={item.selectorKey}>
-                                            {" "}
-                                            <FileUpload color="primary" for={item.selectorKey} />
-                                          </label>
-                                          <input id={item.selectorKey} type="file" placeholder="" className="form-control d-none" {...register(item.selectorKey, { required: "This Document is required" })} onChange={(e) => uploadFile(e.target.files[0], item.fileName)} ></input>
-
-                                          {watch(item.fileName) && (
-                                            <a onClick={() => getDocShareholding(watch(item.fileName), setLoader)} className="btn btn-sm "></a>
-                                          )}
-                                        </div>
-
-                                        <h3 className="error-message" style={{ color: "red" }}>
-                                          {errors?.[item.selectorKey] && errors?.[item.selectorKey]?.message}
-                                        </h3>
-
-
-                                      </td>
-                                    )
-                                }
-                              </tr>
-
-                            ))
-                          }
-
+                                  <h3 className="error-message" style={{ color: "red" }}>
+                                    {errors?.[item.selectorKey] && errors?.[item.selectorKey]?.message}
+                                  </h3>
+                                </td>
+                              )}
+                            </tr>
+                          ))}
                         </tbody>
                       </div>
 
@@ -803,7 +762,6 @@ function Beneficial() {
                   <button id="btnSearch" type="submit" class="btn btn-primary btn-md center-block" style={{}}>
                     Submit
                   </button>
-
                 </div>
               </div>
             </div>
