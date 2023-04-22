@@ -101,12 +101,11 @@ const SubMenu = ({ item }) => {
     return (
       <React.Fragment>
         <div className="submenu-container">
-          <div onClick={item.links && showSubnav} className={`sidebar-link`}>
+          <div onClick={item.links && showSubnav} className={`sidebar-link  ${  item?.links?.some(ele=>ele?.url === "url" && pathname?.includes(ele?.navigationURL))  ? "active" : ""}`}>
             <div className="actions">
               {leftIcon}
               <div data-tip="React-tooltip" data-for={`jk-side-${getModuleName}`}>
                 <span> {trimModuleName} </span>
-
                 {trimModuleName?.includes("...") && <ReactTooltip textColor="white" backgroundColor="grey" place="right" type="info" effect="solid" id={`jk-side-${getModuleName}`}>
                   {t(`ACTION_TEST_${getModuleName}`)}
                 </ReactTooltip>}
