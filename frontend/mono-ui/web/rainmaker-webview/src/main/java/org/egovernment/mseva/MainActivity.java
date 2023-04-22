@@ -31,6 +31,7 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.WindowManager;
+import android.webkit.ConsoleMessage;
 import android.webkit.CookieManager;
 import android.webkit.GeolocationPermissions;
 import android.webkit.URLUtil;
@@ -78,7 +79,7 @@ public class MainActivity extends AppCompatActivity {
 
 	final private int REQUEST_CODE_ASK_MULTIPLE_PERMISSIONS = 124;
 	private static String URL   =BuildConfig.url;
-	private String FILE_TYPE    = "image/*";  //to upload any file type using "*/*"; check file type references for more
+	private String FILE_TYPE    = "*/*";  //to upload any file type using "*/*"; check file type references for more
 	public static String HOST	= getHost(URL);
 
 	//Careful with these variable names if altering
@@ -168,8 +169,9 @@ public class MainActivity extends AppCompatActivity {
 		//Move this to Javascript Proxy
 
 		webView = (WebView) findViewById(R.id.webview);
-		webView.getSettings().setJavaScriptEnabled(false);
+		webView.getSettings().setJavaScriptEnabled(true);
 		webView.addJavascriptInterface(proxy, "mSewaApp");
+
 
 		String versionName = "";
 		int versionCode = 0;
@@ -185,7 +187,7 @@ public class MainActivity extends AppCompatActivity {
 		WebSettings webSettings = webView.getSettings();
 
 		webSettings.setUserAgentString(webSettings.getUserAgentString() + " mSewa V." + versionName + "." + versionCode);
-		webSettings.setJavaScriptEnabled(false);
+		webSettings.setJavaScriptEnabled(true);
 		webSettings.setGeolocationEnabled(true);
 		webSettings.setAllowFileAccess(true);
 		webSettings.setAllowFileAccessFromFileURLs(true);
@@ -270,7 +272,11 @@ public class MainActivity extends AppCompatActivity {
 
 		webView.setWebChromeClient(new WebChromeClient() {
 			// handling geolocation
-
+			@Override
+			public boolean onConsoleMessage(ConsoleMessage consoleMessage) {
+				android.util.Log.d("WebView", consoleMessage.message());
+				return true;
+			}
 			@Override
 			public void onGeolocationPermissionsShowPrompt(final String origin, final GeolocationPermissions.Callback callback) {
 
@@ -423,7 +429,7 @@ public class MainActivity extends AppCompatActivity {
 		boolean returnValue = true;
 		//Show toast error if not connected to the network
 		if (!DetectConnection.isInternetAvailable(MainActivity.this)) {
-			Toast.makeText(getApplicationContext(), "Please check your Network Connection!", Toast.LENGTH_SHORT).show();
+//			Toast.makeText(getApplicationContext(), "Please check your Network Connection!", Toast.LENGTH_SHORT).show();
 
 			//Use this in a hyperlink to redirect back to default URL :: href="refresh:android"
 		} else if (url.startsWith("refresh:")) {
@@ -553,6 +559,7 @@ public class MainActivity extends AppCompatActivity {
 		return false;
 	}
 
+
 	private void showFileDialog(){
 		Intent contentSelectionIntent = new Intent(Intent.ACTION_GET_CONTENT);
 		contentSelectionIntent.addCategory(Intent.CATEGORY_OPENABLE);
@@ -594,8 +601,10 @@ public class MainActivity extends AppCompatActivity {
 		@SuppressLint("SimpleDateFormat")
 		String file_name    = new SimpleDateFormat("yyyy_mm_ss").format(new Date());
 		String new_name     = "file_"+file_name+"_";
-		File sd_directory   = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
-		return File.createTempFile(new_name, ".jpg", sd_directory);
+		final File root = new File(Environment.getExternalStorageDirectory() + File.separator + "MyDir" + File.separator);
+		root.mkdirs();
+		//File sd_directory   =  Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
+		return File.createTempFile(new_name, ".jpg", root);
 	}
 
 
