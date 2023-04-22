@@ -36,6 +36,7 @@ const Transferlicence = () => {
 
   const transferLic = async (data) => {
     console.log("data", data);
+    data["selectLicence"] = data?.selectLicence?.label;
     data["selectType"] = data?.selectType?.value;
     const numberLic = data?.licenceNo;
     delete data?.licenceNo;

@@ -45,6 +45,7 @@ const AdditionalDocument = () => {
 
   const additionalDoc = (data) => {
     console.log("data", data);
+    data["selectLicence"] = data?.selectLicence?.label;
   };
 
   const getAllservices = async (val) => {
