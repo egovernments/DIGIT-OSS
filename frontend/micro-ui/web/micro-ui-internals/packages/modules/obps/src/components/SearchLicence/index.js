@@ -4,15 +4,16 @@ import axios from "axios";
 // import ReactMultiSelect from "../../../../../../../../../react-components/src/atoms/ReactMultiSelect";
 import ReactMultiSelect from "../../../../../react-components/src/atoms/ReactMultiSelect";
 
-const SearchLicenceComp = ({ watch, register, control, setLoader, errors, setValue, resetField }) => {
+const SearchLicenceComp = ({ watch, register, control, setLoader, errors, setValue, resetField, apiData }) => {
   const [showField, setShowField] = useState({ select: false, other: false });
   const [licenceData, setLicenceData] = useState([]);
 
   const getLicenceDetails = async () => {
     setLoader(true);
+    console.log("watch", watch("numberType"));
     const data = {
-      Flag: 1,
-      SearchParam: watch("licenceNo"),
+      Flag: watch("numberType")?.value == "LICENCENUMBER" ? 3 : 1,
+      SearchParam: apiData?.length ? watch("licenceNo")?.value : watch("licenceNo"),
     };
     try {
       const Resp = await axios.post("/api/cis/GetLicenceDetails", data);
@@ -47,22 +48,25 @@ const SearchLicenceComp = ({ watch, register, control, setLoader, errors, setVal
   return (
     <div>
       <div className="row gy-3">
-        <div className="col col-3">
+        <div className="col col-4">
           <h2>
             Licence No.<span style={{ color: "red" }}>*</span>
           </h2>
           <div style={{ display: "flex", placeItems: "center" }}>
-            <input
-              type="text"
-              className="form-control"
-              placeholder="LC_XXXXX"
-              {...register("licenceNo")}
-              onChange={() => {
-                console.log("here");
-                setShowField({ select: false, other: false });
-                resetField("selectLicence");
-              }}
-            />
+            {apiData?.length ? (
+              <ReactMultiSelect control={control} name="licenceNo" placeholder="Select number" data={apiData} labels="" />
+            ) : (
+              <input
+                type="text"
+                className="form-control"
+                placeholder="LC_XXXXX"
+                {...register("licenceNo")}
+                onChange={() => {
+                  setShowField({ select: false, other: false });
+                  resetField("selectLicence");
+                }}
+              />
+            )}
             <div
               style={{
                 background: "#024f9d",

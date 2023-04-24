@@ -4,7 +4,7 @@ import { Controller } from "react-hook-form";
 
 const MultiSelectField = (props) => {
   return (
-    <div className="app-input-text">
+    <div className="app-input-text" style={{ width: "100%" }}>
       <Controller
         name={props?.name}
         control={props?.control}

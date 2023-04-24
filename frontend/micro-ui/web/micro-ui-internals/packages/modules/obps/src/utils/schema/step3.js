@@ -23,6 +23,7 @@ const VALIDATION_SCHEMA = Yup.object().shape({
   migrationLic: Yup.string().nullable().required("This field is required."),
 
   encumburance: Yup.string().nullable().required("This field is required."),
+  rewardDate: Yup.string().nullable().required("This field is required."),
   // rehanRemark: Yup.string().nullable().required("This field is required."),
   // pattaRemark: Yup.string().nullable(true).required("This field is required."),
   // gairRemark: Yup.string().nullable(true).required("This field is required."),
@@ -45,6 +46,10 @@ const VALIDATION_SCHEMA = Yup.object().shape({
   acquistion: Yup.string().nullable().required("This field is required."),
   // orderUpload: Yup.string().nullable().required("This field is required."),
   siteApproachable: Yup.string().nullable().required("This field is required."),
+  northSurroundings: Yup.string().nullable().required("This field is required."),
+  southSurroundings: Yup.string().nullable().required("This field is required."),
+  eastSurroundings: Yup.string().nullable().required("This field is required."),
+  westSurroundings: Yup.string().nullable().required("This field is required."),
   // minimumApproachFour: Yup.string().nullable().required("This field is required."),
   // minimumApproachEleven: Yup.string().nullable().required("This field is required."),
   // alreadyConstructedSector: Yup.string().nullable().required("This field is required."),

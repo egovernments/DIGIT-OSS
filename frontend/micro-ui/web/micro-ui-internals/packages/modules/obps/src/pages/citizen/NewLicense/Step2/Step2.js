@@ -209,7 +209,7 @@ const ApllicantPuropseForm = (props) => {
               const arrB = JSON.parse(JSON.stringify(obj));
               const length = modalData?.length + 1;
               arrB["rowid"] = length.toString();
-              setModalData([arrB, ...modalData]);
+              setModalData([...modalData, arrB]);
             }}
             style={{ cursor: "pointer" }}
           />
@@ -322,6 +322,11 @@ const ApllicantPuropseForm = (props) => {
       const tehsilValue = tehsilDataLabels?.data?.filter((item) => item?.value === specificTableData?.tehsil);
       setNameRevenueState(tehsilValue?.[0]?.value);
       setValue("tehsil", { label: tehsilValue?.[0]?.label, value: tehsilValue?.[0]?.value });
+      // dev plan
+      const devPlanValue = devPlanOptons?.data?.filter((item) => item?.value === specificTableData?.developmentPlan);
+      setDevPlanVal(devPlanValue?.[0]?.value);
+      setValue("developmentPlan", { label: devPlanValue?.[0]?.label, value: devPlanValue?.[0]?.value });
+      // revenue
       const revenueValue = revenueDataLabels?.data?.filter((item) => item?.value === specificTableData?.revenueEstate);
       setMustil(revenueValue?.[0]?.value);
       setValue("revenueEstate", { label: revenueValue?.[0]?.label, value: revenueValue?.[0]?.value });
@@ -331,7 +336,7 @@ const ApllicantPuropseForm = (props) => {
       setValue("typeLand", { label: typeOfLandValue?.[0]?.label, value: typeOfLandValue?.[0]?.value });
       setValue("isChange", JSON.parse(specificTableData?.isChange));
     }
-  }, [devPlanOptons, specificTableData, districtOptons, tehsilDataLabels, revenueDataLabels, mustilDataLabels, typeOfLand]);
+  }, [devPlanOptons, specificTableData, districtOptons, tehsilDataLabels, revenueDataLabels, mustilDataLabels, typeOfLand, devPlanOptons]);
 
   useEffect(() => {
     if (getDTCP) {
@@ -384,7 +389,7 @@ const ApllicantPuropseForm = (props) => {
   } = useForm({
     mode: "onChange",
     reValidateMode: "onChange",
-    resolver: yupResolver(VALIDATION_SCHEMA),
+    // resolver: yupResolver(VALIDATION_SCHEMA),
     resolver: yupResolver(modal ? MODAL_VALIDATION_SCHEMA : VALIDATION_SCHEMA),
     shouldFocusError: true,
   });
@@ -753,6 +758,10 @@ const ApllicantPuropseForm = (props) => {
     DistrictApiCall();
   }, []);
 
+  useEffect(() => {
+    console.log("modalData", modalData);
+  }, [modalData]);
+
   const ApplicantPurposeModalData = (modaldata) => {
     modaldata["district"] = modaldata?.district?.value;
     modaldata["potential"] = modaldata?.potential?.label;
@@ -777,8 +786,12 @@ const ApllicantPuropseForm = (props) => {
       delete modaldata?.kanal;
       delete modaldata?.sarsai;
     }
-    const length = modalData?.length + 1;
-    modaldata["rowid"] = length.toString();
+    if (!specificTableData?.rowid) {
+      const length = modalData?.length + 1;
+      modaldata["rowid"] = length.toString();
+    } else {
+      modaldata["rowid"] = specificTableData?.rowid;
+    }
     if (specificTableData?.rowid) {
       const filteredRowData = modalData?.filter((item) => item?.rowid !== specificTableData?.rowid);
       setModalData([...filteredRowData, modaldata]);
@@ -1842,28 +1855,6 @@ const ApllicantPuropseForm = (props) => {
         </ModalBody>
         <ModalFooter toggle={() => setmodal(!modal)}></ModalFooter>
       </Modal>
-      {/* {showToast && (
-        <Toast
-          success={showToast?.key === "success" ? true : false}
-          label="Document Uploaded Successfully"
-          isDleteBtn={true}
-          onClose={() => {
-            setShowToast(null);
-            setError(null);
-          }}
-        />
-      )}
-      {showToastError && (
-        <Toast
-          error={showToastError?.key === "error" ? true : false}
-          label="Duplicate file Selected"
-          isDleteBtn={true}
-          onClose={() => {
-            setShowToastError(null);
-            setError(null);
-          }}
-        />
-      )} */}
       {showToastError && (
         <CusToaster
           label={showToastError?.label}
