@@ -197,7 +197,7 @@ function Assignment({
         </LabelFieldPair>
 
         <LabelFieldPair>
-          <CardLabel className={assignment?.id ? "card-label-smaller disabled" : "card-label-smaller"}> {`${t("HR_ASMT_FROM_DATE_LABEL")} * `} </CardLabel>
+          <CardLabel className={assignment?.id ? "card-label-smaller" : "card-label-smaller"}> {`${t("HR_ASMT_FROM_DATE_LABEL")} * `} </CardLabel>
           <div className="field">
             <DatePicker
               type="date"
@@ -215,7 +215,7 @@ function Assignment({
           </div>
         </LabelFieldPair>
         <LabelFieldPair>
-          <CardLabel className={assignment?.isCurrentAssignment ? "card-label-smaller disabled" : "card-label-smaller"}>
+          <CardLabel className={assignment?.isCurrentAssignment ? "card-label-smaller" : "card-label-smaller"}>
             {t("HR_ASMT_TO_DATE_LABEL")}
             {assignment?.isCurrentAssignment ? "" : " * "}{" "}
           </CardLabel>
@@ -249,7 +249,7 @@ function Assignment({
           </div>
         </LabelFieldPair>
         <LabelFieldPair>
-          <CardLabel className={assignment?.id ? "card-label-smaller disabled" : "card-label-smaller"}> {`${t("HR_DEPT_LABEL")} * `}</CardLabel>
+          <CardLabel className={assignment?.id ? "card-label-smaller" : "card-label-smaller"}> {`${t("HR_DEPT_LABEL")} * `}</CardLabel>
           <Dropdown
             className="form-field"
             selected={assignment?.department}
@@ -262,7 +262,7 @@ function Assignment({
         </LabelFieldPair>
 
         <LabelFieldPair>
-          <CardLabel className={assignment?.id ? "card-label-smaller disabled" : "card-label-smaller"}>{`${t("HR_DESG_LABEL")} * `}</CardLabel>
+          <CardLabel className={assignment?.id ? "card-label-smaller" : "card-label-smaller"}>{`${t("HR_DESG_LABEL")} * `}</CardLabel>
           <Dropdown
             className="form-field"
             selected={assignment?.designation}
