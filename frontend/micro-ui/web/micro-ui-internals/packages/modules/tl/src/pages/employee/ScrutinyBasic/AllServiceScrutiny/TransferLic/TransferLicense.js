@@ -89,6 +89,8 @@ function TransferLicense(props) {
   const [openedModal, setOpennedModal] = useState("");
   const [fieldIconColors, setFieldIconColors] = useState({
     developer: Colors.info,
+    licenseNo: Colors.info,
+
     selectLicence: Colors.info,
     validUpto: Colors.info,
     renewalRequiredUpto: Colors.info,
@@ -104,16 +106,16 @@ function TransferLicense(props) {
     agreementDoc: Colors.info,
     anyOtherDoc: Colors.info,
 
-    authMobileNo2: Colors.info,
-    emailId: Colors.info,
-    pan: Colors.info,
-    address: Colors.info,
-    city: Colors.info,
-    pin: Colors.info,
-    tehsil: Colors.info,
-    district: Colors.info,
-    state: Colors.info,
-    type: Colors.info,
+    affidavitForLicencedArea: Colors.info,
+    colonizerSeekingTransferLicence: Colors.info,
+    consentLetterDoc: Colors.info,
+    boardResolutionDoc: Colors.info,
+    noObjectionCertificate: Colors.info,
+    technicalAndFinancialCapacityDoc: Colors.info,
+    justificationForRequest: Colors.info,
+    thirdPartyCreationStatus: Colors.info,
+    registrationProjectRera: Colors.info,
+    anyOtherDoc: Colors.info,
     lciSignedBy: Colors.info,
     lciNotSigned: Colors.info,
     parmanentAddress: Colors.info,
@@ -123,8 +125,9 @@ function TransferLicense(props) {
   });
 
   const fieldIdList = [
-    { label: "Developer", key: "developer" },
+    { label: "Licence No", key: "licenseNo" },
    
+    { label: "selectLicence", key: "selectLicence" },
     { label: "selectLicence", key: "selectLicence" },
     {label:"Valid Upto",key:"validUpto"},
     {label:"Renewal required upto",key:"renewalRequiredUpto"},
@@ -140,12 +143,17 @@ function TransferLicense(props) {
     {label:"Standard drawing designs",key:"agreementDoc"},
     {label:"Any other Document",key:"anyOtherDoc"},
     
-    { label: "Status (Individual/ Company/ Firm/ LLP etc.)", key: "type" },
-    { label: "LC-I signed by", key: "lciSignedBy" },
-    { label: "If LC-I is not signed by self (in case of an individual) nature of authorization (GPA/SPA)", key: "lciNotSigned" },
-    { label: "Permanent address in case of individual/ registered office address in case other than individual", key: "parmanentAddress" },
-    { label: "Address for communication", key: "addressForCommunication" },
-    { label: "Name of the authorized person to sign the application", key: "authPerson" },
+    { label: "Affidavit regarding the creation of 3rd party right on the licenced area", key: "affidavitForLicencedArea" },
+    { label: "The colonizer seeking transfer of whole license/part license shall submit self-certification along with a certificate of the Chartered Accountant that a 15% profit margin is not exceeded from the project cost at the time of submission of application for transfer of license", key: "colonizerSeekingTransferLicence" },
+    { label: "A consent letter from the ‘new entity for the proposed change along with justification", key: "consentLetterDoc" },
+    { label: "Board resolution of authorized signatory", key: "boardResolutionDoc" },
+    { label: "No objection certificate from the existing ‘Developer, filed through its authorized signatory, specifically designated for the purpose; as well as from the ‘land owner licensees’, in person (not through GPA/SPA assignees), to the proposed change/assignment.", key: "noObjectionCertificate" },
+    { label: "Documents about the Technical and Financial Capacity of the ‘new entity’ proposed to be inducted as a ‘Developer’ or ‘shareholder(s)’ as per prescribed policy parameters for grant of a license", key: "technicalAndFinancialCapacityDoc" },
+    { label: "Justification for request", key: "justificationForRequest" },
+    { label: "The status regarding the creation of third-party rights in the colony. In case no third-party rights are claimed to have been created in the colony, an affidavit to the said effect be also submitted by the existing developer", key: "thirdPartyCreationStatus" },
+    { label: "Status regarding registration of project in RERA", key: "registrationProjectRera" },
+    { label: "Any Other Document", key: "anyOtherDoc" },
+    { label: "Email ID for communication", key: "emailForCommunication" },
     { label: "Email ID for communication", key: "emailForCommunication" },
   ];
 
@@ -285,10 +293,10 @@ function TransferLicense(props) {
             <div>
               <ReportProblemIcon
                       style={{
-                        color: fieldIconColors.developer,
+                        color: fieldIconColors.licenseNo,
                       }}
                       onClick={() => {
-                        setOpennedModal("Licence No");
+                        setOpennedModal("licenseNo");
                         setLabelValue("Licence No"),
                           setSmShow(true),
                           console.log("modal open"),
@@ -828,8 +836,9 @@ function TransferLicense(props) {
                 </Row>
               </fieldset>
               <Row>
-                {/* <div>
-                {(watch("selectType")?.value == "partial" || watch("selectType")?.value == "complete" || watch("changeOfDeveloper") == "yes") && (
+                <div>
+                {
+                    apiData?.additionalDetails?.changeOfDeveloper === "yes" &&
                       <div className="card">
                         <div class="bordere">
                           <div class="table-responsive">
@@ -845,32 +854,32 @@ function TransferLicense(props) {
                                 <tr>
                                   <th class="fw-normal">1</th>
                                   <td>
-                                    Undertaking regarding the creation of 3rd party right on the licensed area
+                                  Affidavit regarding the creation of 3rd party right on the licenced area
                                     <span style={{ color: "red" }}>*</span>
                                   </td>
                                   <td>
                                     <div className="row">
                                       <div className="btn btn-sm col-md-4">
-                                        <IconButton onClick={() => getDocShareholding(item?.agreementDoc)}>
+                                        <IconButton onClick={() => getDocShareholding(apiData?.additionalDetails?.affidavitForLicencedArea)}>
                                           <VisibilityIcon color="info" className="icon" />
                                         </IconButton>
                                       </div>
                                       <div className="btn btn-sm col-md-4">
-                                        <IconButton onClick={() => getDocShareholding(item?.agreementDoc)}>
+                                        <IconButton onClick={() => getDocShareholding(apiData?.additionalDetails?.affidavitForLicencedArea)}>
                                           <FileDownloadIcon color="info" className="icon" />
                                         </IconButton>
                                       </div>
                                       <div className="btn btn-sm col-md-4">
                                         <ReportProblemIcon
                                           style={{
-                                            color: fieldIconColors.developer,
+                                            color: fieldIconColors.affidavitForLicencedArea,
                                           }}
                                           onClick={() => {
-                                            setOpennedModal("Amount");
-                                            setLabelValue("Amount"),
+                                            setOpennedModal("affidavitForLicencedArea");
+                                            setLabelValue("Affidavit regarding the creation of 3rd party right on the licenced area"),
                                               setSmShow(true),
                                               console.log("modal open"),
-                                              setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
+                                              setFieldValue(personalinfo !== null ? personalinfo.affidavitForLicencedArea : null);
                                           }}
                                         ></ReportProblemIcon>
                                       </div>
@@ -889,26 +898,26 @@ function TransferLicense(props) {
                                   <td>
                                     <div className="row">
                                       <div className="btn btn-sm col-md-4">
-                                        <IconButton onClick={() => getDocShareholding(item?.agreementDoc)}>
+                                        <IconButton onClick={() => getDocShareholding(apiData?.additionalDetails?.colonizerSeekingTransferLicence)}>
                                           <VisibilityIcon color="info" className="icon" />
                                         </IconButton>
                                       </div>
                                       <div className="btn btn-sm col-md-4">
-                                        <IconButton onClick={() => getDocShareholding(item?.agreementDoc)}>
+                                        <IconButton onClick={() => getDocShareholding(apiData?.additionalDetails?.colonizerSeekingTransferLicence)}>
                                           <FileDownloadIcon color="info" className="icon" />
                                         </IconButton>
                                       </div>
                                       <div className="btn btn-sm col-md-4">
                                         <ReportProblemIcon
                                           style={{
-                                            color: fieldIconColors.developer,
+                                            color: fieldIconColors.colonizerSeekingTransferLicence,
                                           }}
                                           onClick={() => {
-                                            setOpennedModal("Amount");
-                                            setLabelValue("Amount"),
+                                            setOpennedModal("colonizerSeekingTransferLicence");
+                                            setLabelValue("The colonizer seeking transfer of whole license/part license shall submit self-certification along with a certificate of the Chartered Accountant that a 15% profit margin is not exceeded from the project cost at the time of submission of application for transfer of license"),
                                               setSmShow(true),
                                               console.log("modal open"),
-                                              setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
+                                              setFieldValue(personalinfo !== null ? personalinfo.colonizerSeekingTransferLicence : null);
                                           }}
                                         ></ReportProblemIcon>
                                       </div>
@@ -926,26 +935,26 @@ function TransferLicense(props) {
                                   <td>
                                     <div className="row">
                                       <div className="btn btn-sm col-md-4">
-                                        <IconButton onClick={() => getDocShareholding(item?.agreementDoc)}>
+                                        <IconButton onClick={() => getDocShareholding(apiData?.additionalDetails?.consentLetterDoc)}>
                                           <VisibilityIcon color="info" className="icon" />
                                         </IconButton>
                                       </div>
                                       <div className="btn btn-sm col-md-4">
-                                        <IconButton onClick={() => getDocShareholding(item?.agreementDoc)}>
+                                        <IconButton onClick={() => getDocShareholding(apiData?.additionalDetails?.consentLetterDoc)}>
                                           <FileDownloadIcon color="info" className="icon" />
                                         </IconButton>
                                       </div>
                                       <div className="btn btn-sm col-md-4">
                                         <ReportProblemIcon
                                           style={{
-                                            color: fieldIconColors.developer,
+                                            color: fieldIconColors.consentLetterDoc,
                                           }}
                                           onClick={() => {
-                                            setOpennedModal("Amount");
-                                            setLabelValue("Amount"),
+                                            setOpennedModal("consentLetterDoc");
+                                            setLabelValue("A consent letter from the ‘new entity for the proposed change along with justification"),
                                               setSmShow(true),
                                               console.log("modal open"),
-                                              setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
+                                              setFieldValue(personalinfo !== null ? personalinfo.consentLetterDoc : null);
                                           }}
                                         ></ReportProblemIcon>
                                       </div>
@@ -962,26 +971,26 @@ function TransferLicense(props) {
                                   <td>
                                     <div className="row">
                                       <div className="btn btn-sm col-md-4">
-                                        <IconButton onClick={() => getDocShareholding(item?.agreementDoc)}>
+                                        <IconButton onClick={() => getDocShareholding(apiData?.additionalDetails?.boardResolutionDoc)}>
                                           <VisibilityIcon color="info" className="icon" />
                                         </IconButton>
                                       </div>
                                       <div className="btn btn-sm col-md-4">
-                                        <IconButton onClick={() => getDocShareholding(item?.agreementDoc)}>
+                                        <IconButton onClick={() => getDocShareholding(apiData?.additionalDetails?.boardResolutionDoc)}>
                                           <FileDownloadIcon color="info" className="icon" />
                                         </IconButton>
                                       </div>
                                       <div className="btn btn-sm col-md-4">
                                         <ReportProblemIcon
                                           style={{
-                                            color: fieldIconColors.developer,
+                                            color: fieldIconColors.boardResolutionDoc,
                                           }}
                                           onClick={() => {
-                                            setOpennedModal("Amount");
-                                            setLabelValue("Amount"),
+                                            setOpennedModal("boardResolutionDoc");
+                                            setLabelValue("Board resolution of authorized signatory"),
                                               setSmShow(true),
                                               console.log("modal open"),
-                                              setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
+                                              setFieldValue(personalinfo !== null ? personalinfo.boardResolutionDoc : null);
                                           }}
                                         ></ReportProblemIcon>
                                       </div>
@@ -1000,26 +1009,26 @@ function TransferLicense(props) {
                                   <td>
                                     <div className="row">
                                       <div className="btn btn-sm col-md-4">
-                                        <IconButton onClick={() => getDocShareholding(item?.agreementDoc)}>
+                                        <IconButton onClick={() => getDocShareholding(apiData?.additionalDetails?.noObjectionCertificate)}>
                                           <VisibilityIcon color="info" className="icon" />
                                         </IconButton>
                                       </div>
                                       <div className="btn btn-sm col-md-4">
-                                        <IconButton onClick={() => getDocShareholding(item?.agreementDoc)}>
+                                        <IconButton onClick={() => getDocShareholding(apiData?.additionalDetails?.noObjectionCertificate)}>
                                           <FileDownloadIcon color="info" className="icon" />
                                         </IconButton>
                                       </div>
                                       <div className="btn btn-sm col-md-4">
                                         <ReportProblemIcon
                                           style={{
-                                            color: fieldIconColors.developer,
+                                            color: fieldIconColors.noObjectionCertificate,
                                           }}
                                           onClick={() => {
-                                            setOpennedModal("Amount");
-                                            setLabelValue("Amount"),
+                                            setOpennedModal("noObjectionCertificate");
+                                            setLabelValue("No objection certificate from the existing ‘Developer, filed through its authorized signatory, specifically designated for the purpose; as well as from the ‘land owner licensees’, in person (not through GPA/SPA assignees), to the proposed change/assignment."),
                                               setSmShow(true),
                                               console.log("modal open"),
-                                              setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
+                                              setFieldValue(personalinfo !== null ? personalinfo.noObjectionCertificate : null);
                                           }}
                                         ></ReportProblemIcon>
                                       </div>
@@ -1031,32 +1040,32 @@ function TransferLicense(props) {
                                   <th class="fw-normal">6</th>
                                   <td>
                                     Documents about the Technical and Financial Capacity of the ‘new entity’ proposed to be inducted as a ‘Developer’
-                                    or ‘shareholder(s)’ as per prescribed policy parameters for grant of a license l
+                                    or ‘shareholder(s)’ as per prescribed policy parameters for grant of a license
                                     <span style={{ color: "red" }}>*</span>
                                   </td>
                                   <td>
                                     <div className="row">
                                       <div className="btn btn-sm col-md-4">
-                                        <IconButton onClick={() => getDocShareholding(item?.agreementDoc)}>
+                                        <IconButton onClick={() => getDocShareholding(apiData?.additionalDetails?.technicalAndFinancialCapacityDoc)}>
                                           <VisibilityIcon color="info" className="icon" />
                                         </IconButton>
                                       </div>
                                       <div className="btn btn-sm col-md-4">
-                                        <IconButton onClick={() => getDocShareholding(item?.agreementDoc)}>
+                                        <IconButton onClick={() => getDocShareholding(apiData?.additionalDetails?.technicalAndFinancialCapacityDoc)}>
                                           <FileDownloadIcon color="info" className="icon" />
                                         </IconButton>
                                       </div>
                                       <div className="btn btn-sm col-md-4">
                                         <ReportProblemIcon
                                           style={{
-                                            color: fieldIconColors.developer,
+                                            color: fieldIconColors.technicalAndFinancialCapacityDoc,
                                           }}
                                           onClick={() => {
-                                            setOpennedModal("Amount");
-                                            setLabelValue("Amount"),
+                                            setOpennedModal("technicalAndFinancialCapacityDoc");
+                                            setLabelValue("Documents about the Technical and Financial Capacity of the ‘new entity’ proposed to be inducted as a ‘Developer’ or ‘shareholder(s)’ as per prescribed policy parameters for grant of a license"),
                                               setSmShow(true),
                                               console.log("modal open"),
-                                              setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
+                                              setFieldValue(personalinfo !== null ? personalinfo.technicalAndFinancialCapacityDoc : null);
                                           }}
                                         ></ReportProblemIcon>
                                       </div>
@@ -1073,12 +1082,12 @@ function TransferLicense(props) {
                                   <td>
                                     <div className="row">
                                       <div className="btn btn-sm col-md-4">
-                                        <IconButton onClick={() => getDocShareholding(item?.agreementDoc)}>
+                                        <IconButton onClick={() => getDocShareholding(apiData?.additionalDetails?.agreementDoc)}>
                                           <VisibilityIcon color="info" className="icon" />
                                         </IconButton>
                                       </div>
                                       <div className="btn btn-sm col-md-4">
-                                        <IconButton onClick={() => getDocShareholding(item?.agreementDoc)}>
+                                        <IconButton onClick={() => getDocShareholding(apiData?.additionalDetails?.agreementDoc)}>
                                           <FileDownloadIcon color="info" className="icon" />
                                         </IconButton>
                                       </div>
@@ -1109,26 +1118,26 @@ function TransferLicense(props) {
                                   <td>
                                     <div className="row">
                                       <div className="btn btn-sm col-md-4">
-                                        <IconButton onClick={() => getDocShareholding(item?.agreementDoc)}>
+                                        <IconButton onClick={() => getDocShareholding(apiData?.additionalDetails?.justificationForRequest)}>
                                           <VisibilityIcon color="info" className="icon" />
                                         </IconButton>
                                       </div>
                                       <div className="btn btn-sm col-md-4">
-                                        <IconButton onClick={() => getDocShareholding(item?.agreementDoc)}>
+                                        <IconButton onClick={() => getDocShareholding(apiData?.additionalDetails?.justificationForRequest)}>
                                           <FileDownloadIcon color="info" className="icon" />
                                         </IconButton>
                                       </div>
                                       <div className="btn btn-sm col-md-4">
                                         <ReportProblemIcon
                                           style={{
-                                            color: fieldIconColors.developer,
+                                            color: fieldIconColors.justificationForRequest,
                                           }}
                                           onClick={() => {
-                                            setOpennedModal("Amount");
-                                            setLabelValue("Amount"),
+                                            setOpennedModal("justificationForRequest");
+                                            setLabelValue("Justification for request"),
                                               setSmShow(true),
                                               console.log("modal open"),
-                                              setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
+                                              setFieldValue(personalinfo !== null ? personalinfo.justificationForRequest : null);
                                           }}
                                         ></ReportProblemIcon>
                                       </div>
@@ -1147,12 +1156,12 @@ function TransferLicense(props) {
                                   <td>
                                     <div className="row">
                                       <div className="btn btn-sm col-md-4">
-                                        <IconButton onClick={() => getDocShareholding(item?.agreementDoc)}>
+                                        <IconButton onClick={() => getDocShareholding(apiData?.additionalDetails?.agreementDoc)}>
                                           <VisibilityIcon color="info" className="icon" />
                                         </IconButton>
                                       </div>
                                       <div className="btn btn-sm col-md-4">
-                                        <IconButton onClick={() => getDocShareholding(item?.agreementDoc)}>
+                                        <IconButton onClick={() => getDocShareholding(apiData?.additionalDetails?.agreementDoc)}>
                                           <FileDownloadIcon color="info" className="icon" />
                                         </IconButton>
                                       </div>
@@ -1184,26 +1193,26 @@ function TransferLicense(props) {
                                   <td>
                                     <div className="row">
                                       <div className="btn btn-sm col-md-4">
-                                        <IconButton onClick={() => getDocShareholding(item?.agreementDoc)}>
+                                        <IconButton onClick={() => getDocShareholding(apiData?.additionalDetails?.thirdPartyCreationStatus)}>
                                           <VisibilityIcon color="info" className="icon" />
                                         </IconButton>
                                       </div>
                                       <div className="btn btn-sm col-md-4">
-                                        <IconButton onClick={() => getDocShareholding(item?.agreementDoc)}>
+                                        <IconButton onClick={() => getDocShareholding(apiData?.additionalDetails?.thirdPartyCreationStatus)}>
                                           <FileDownloadIcon color="info" className="icon" />
                                         </IconButton>
                                       </div>
                                       <div className="btn btn-sm col-md-4">
                                         <ReportProblemIcon
                                           style={{
-                                            color: fieldIconColors.developer,
+                                            color: fieldIconColors.thirdPartyCreationStatus,
                                           }}
                                           onClick={() => {
-                                            setOpennedModal("Amount");
-                                            setLabelValue("Amount"),
+                                            setOpennedModal("thirdPartyCreationStatus");
+                                            setLabelValue("The status regarding the creation of third-party rights in the colony. In case no third-party rights are claimed to have been created in the colony, an affidavit to the said effect be also submitted by the existing developer"),
                                               setSmShow(true),
                                               console.log("modal open"),
-                                              setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
+                                              setFieldValue(personalinfo !== null ? personalinfo.thirdPartyCreationStatus : null);
                                           }}
                                         ></ReportProblemIcon>
                                       </div>
@@ -1221,26 +1230,26 @@ function TransferLicense(props) {
                                   <td>
                                     <div className="row">
                                       <div className="btn btn-sm col-md-4">
-                                        <IconButton onClick={() => getDocShareholding(item?.agreementDoc)}>
+                                        <IconButton onClick={() => getDocShareholding(apiData?.additionalDetails?.registrationProjectRera)}>
                                           <VisibilityIcon color="info" className="icon" />
                                         </IconButton>
                                       </div>
                                       <div className="btn btn-sm col-md-4">
-                                        <IconButton onClick={() => getDocShareholding(item?.agreementDoc)}>
+                                        <IconButton onClick={() => getDocShareholding(apiData?.additionalDetails?.registrationProjectRera)}>
                                           <FileDownloadIcon color="info" className="icon" />
                                         </IconButton>
                                       </div>
                                       <div className="btn btn-sm col-md-4">
                                         <ReportProblemIcon
                                           style={{
-                                            color: fieldIconColors.developer,
+                                            color: fieldIconColors.registrationProjectRera,
                                           }}
                                           onClick={() => {
-                                            setOpennedModal("Amount");
-                                            setLabelValue("Amount"),
+                                            setOpennedModal("registrationProjectRera");
+                                            setLabelValue("Status regarding registration of project in RERA"),
                                               setSmShow(true),
                                               console.log("modal open"),
-                                              setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
+                                              setFieldValue(personalinfo !== null ? personalinfo.registrationProjectRera : null);
                                           }}
                                         ></ReportProblemIcon>
                                       </div>
@@ -1257,26 +1266,26 @@ function TransferLicense(props) {
                                   <td>
                                     <div className="row">
                                       <div className="btn btn-sm col-md-4">
-                                        <IconButton onClick={() => getDocShareholding(item?.agreementDoc)}>
+                                        <IconButton onClick={() => getDocShareholding(apiData?.additionalDetails?.anyOtherDoc)}>
                                           <VisibilityIcon color="info" className="icon" />
                                         </IconButton>
                                       </div>
                                       <div className="btn btn-sm col-md-4">
-                                        <IconButton onClick={() => getDocShareholding(item?.agreementDoc)}>
+                                        <IconButton onClick={() => getDocShareholding(apiData?.additionalDetails?.anyOtherDoc)}>
                                           <FileDownloadIcon color="info" className="icon" />
                                         </IconButton>
                                       </div>
                                       <div className="btn btn-sm col-md-4">
                                         <ReportProblemIcon
                                           style={{
-                                            color: fieldIconColors.developer,
+                                            color: fieldIconColors.anyOtherDoc,
                                           }}
                                           onClick={() => {
-                                            setOpennedModal("Amount");
-                                            setLabelValue("Amount"),
+                                            setOpennedModal("anyOtherDoc");
+                                            setLabelValue("Any Other Document"),
                                               setSmShow(true),
                                               console.log("modal open"),
-                                              setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
+                                              setFieldValue(personalinfo !== null ? personalinfo.anyOtherDoc : null);
                                           }}
                                         ></ReportProblemIcon>
                                       </div>
@@ -1289,12 +1298,12 @@ function TransferLicense(props) {
                           </div>
                         </div>
                       </div>
-                    )}
-                </div> */}
+                    }
+                </div>
 
-                {/* <div>
-                {apiData?.additionalDetails?.selectType == "partial" &&
-                    (apiData?.additionalDetails?.changeOfDeveloper == "no" && (
+                <div>
+                { apiData?.additionalDetails?.selectType === "partial" &&
+                    apiData?.additionalDetails?.changeOfDeveloper === "no" &&
                       <div className="card">
                         <div class="bordere">
                           <div class="table-responsive">
@@ -1310,39 +1319,40 @@ function TransferLicense(props) {
                                 <tr>
                                   <th class="fw-normal">1</th>
                                   <td>
-                                    Undertaking regarding the creation of 3rd party right on the licensed area
+                                  Affidavit regarding the creation of 3rd party right on the licensed area
                                     <span style={{ color: "red" }}>*</span>
                                   </td>
                                   <td>
                                     <div className="row">
                                       <div className="btn btn-sm col-md-4">
-                                        <IconButton onClick={() => getDocShareholding(item?.agreementDoc)}>
+                                        <IconButton onClick={() => getDocShareholding(apiData?.additionalDetails?.affidavitForLicencedArea)}>
                                           <VisibilityIcon color="info" className="icon" />
                                         </IconButton>
                                       </div>
                                       <div className="btn btn-sm col-md-4">
-                                        <IconButton onClick={() => getDocShareholding(item?.agreementDoc)}>
+                                        <IconButton onClick={() => getDocShareholding(apiData?.additionalDetails?.affidavitForLicencedArea)}>
                                           <FileDownloadIcon color="info" className="icon" />
                                         </IconButton>
                                       </div>
                                       <div className="btn btn-sm col-md-4">
                                         <ReportProblemIcon
                                           style={{
-                                            color: fieldIconColors.developer,
+                                            color: fieldIconColors.affidavitForLicencedArea,
                                           }}
                                           onClick={() => {
-                                            setOpennedModal("Amount");
-                                            setLabelValue("Amount"),
+                                            setOpennedModal("affidavitForLicencedArea");
+                                            setLabelValue("Affidavit regarding the creation of 3rd party right on the licenced area"),
                                               setSmShow(true),
                                               console.log("modal open"),
-                                              setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
+                                              setFieldValue(personalinfo !== null ? personalinfo.affidavitForLicencedArea : null);
                                           }}
                                         ></ReportProblemIcon>
                                       </div>
                                     </div>
-                                  
+                                   
                                   </td>
                                 </tr>
+                               
                                 <tr>
                                   <th class="fw-normal">2</th>
                                   <td>
@@ -1354,26 +1364,26 @@ function TransferLicense(props) {
                                   <td>
                                     <div className="row">
                                       <div className="btn btn-sm col-md-4">
-                                        <IconButton onClick={() => getDocShareholding(item?.agreementDoc)}>
+                                        <IconButton onClick={() => getDocShareholding(apiData?.additionalDetails?.colonizerSeekingTransferLicence)}>
                                           <VisibilityIcon color="info" className="icon" />
                                         </IconButton>
                                       </div>
                                       <div className="btn btn-sm col-md-4">
-                                        <IconButton onClick={() => getDocShareholding(item?.agreementDoc)}>
+                                        <IconButton onClick={() => getDocShareholding(apiData?.additionalDetails?.colonizerSeekingTransferLicence)}>
                                           <FileDownloadIcon color="info" className="icon" />
                                         </IconButton>
                                       </div>
                                       <div className="btn btn-sm col-md-4">
                                         <ReportProblemIcon
                                           style={{
-                                            color: fieldIconColors.developer,
+                                            color: fieldIconColors.colonizerSeekingTransferLicence,
                                           }}
                                           onClick={() => {
-                                            setOpennedModal("Amount");
-                                            setLabelValue("Amount"),
+                                            setOpennedModal("colonizerSeekingTransferLicence");
+                                            setLabelValue("The colonizer seeking transfer of whole license/part license shall submit self-certification along with a certificate of the Chartered Accountant that a 15% profit margin is not exceeded from the project cost at the time of submission of application for transfer of license"),
                                               setSmShow(true),
                                               console.log("modal open"),
-                                              setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
+                                              setFieldValue(personalinfo !== null ? personalinfo.colonizerSeekingTransferLicence : null);
                                           }}
                                         ></ReportProblemIcon>
                                       </div>
@@ -1381,279 +1391,41 @@ function TransferLicense(props) {
                                    
                                   </td>
                                 </tr>
-                                <tr>
-                                  <th class="fw-normal">3</th>
-                                  <td>
-                                    A consent letter from the ‘new entity for the proposed change along with justification
-                                    <span style={{ color: "red" }}>*</span>
-                                  </td>
-                                  <td>
-                                    <div className="row">
-                                      <div className="btn btn-sm col-md-4">
-                                        <IconButton onClick={() => getDocShareholding(item?.agreementDoc)}>
-                                          <VisibilityIcon color="info" className="icon" />
-                                        </IconButton>
-                                      </div>
-                                      <div className="btn btn-sm col-md-4">
-                                        <IconButton onClick={() => getDocShareholding(item?.agreementDoc)}>
-                                          <FileDownloadIcon color="info" className="icon" />
-                                        </IconButton>
-                                      </div>
-                                      <div className="btn btn-sm col-md-4">
-                                        <ReportProblemIcon
-                                          style={{
-                                            color: fieldIconColors.developer,
-                                          }}
-                                          onClick={() => {
-                                            setOpennedModal("Amount");
-                                            setLabelValue("Amount"),
-                                              setSmShow(true),
-                                              console.log("modal open"),
-                                              setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
-                                          }}
-                                        ></ReportProblemIcon>
-                                      </div>
-                                    </div>
-                                   
-                                  </td>
-                                </tr>
-                                <tr>
-                                  <th class="fw-normal">4</th>
-                                  <td>
-                                    Board resolution of authorized signatory
-                                    <span style={{ color: "red" }}>*</span>
-                                  </td>
-                                  <td>
-                                    <div className="row">
-                                      <div className="btn btn-sm col-md-4">
-                                        <IconButton onClick={() => getDocShareholding(item?.agreementDoc)}>
-                                          <VisibilityIcon color="info" className="icon" />
-                                        </IconButton>
-                                      </div>
-                                      <div className="btn btn-sm col-md-4">
-                                        <IconButton onClick={() => getDocShareholding(item?.agreementDoc)}>
-                                          <FileDownloadIcon color="info" className="icon" />
-                                        </IconButton>
-                                      </div>
-                                      <div className="btn btn-sm col-md-4">
-                                        <ReportProblemIcon
-                                          style={{
-                                            color: fieldIconColors.developer,
-                                          }}
-                                          onClick={() => {
-                                            setOpennedModal("Amount");
-                                            setLabelValue("Amount"),
-                                              setSmShow(true),
-                                              console.log("modal open"),
-                                              setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
-                                          }}
-                                        ></ReportProblemIcon>
-                                      </div>
-                                    </div>
-                                   
-                                  </td>
-                                </tr>
-                                <tr>
-                                  <th class="fw-normal">5</th>
-                                  <td>
-                                    Status regarding registration of project in RERA
-                                    <span style={{ color: "red" }}>*</span>
-                                  </td>
-                                  <td>
-                                    <div className="row">
-                                      <div className="btn btn-sm col-md-4">
-                                        <IconButton onClick={() => getDocShareholding(item?.agreementDoc)}>
-                                          <VisibilityIcon color="info" className="icon" />
-                                        </IconButton>
-                                      </div>
-                                      <div className="btn btn-sm col-md-4">
-                                        <IconButton onClick={() => getDocShareholding(item?.agreementDoc)}>
-                                          <FileDownloadIcon color="info" className="icon" />
-                                        </IconButton>
-                                      </div>
-                                      <div className="btn btn-sm col-md-4">
-                                        <ReportProblemIcon
-                                          style={{
-                                            color: fieldIconColors.developer,
-                                          }}
-                                          onClick={() => {
-                                            setOpennedModal("Amount");
-                                            setLabelValue("Amount"),
-                                              setSmShow(true),
-                                              console.log("modal open"),
-                                              setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
-                                          }}
-                                        ></ReportProblemIcon>
-                                      </div>
-                                    </div>
-                                   
-                                  </td>
-                                </tr>
-                                <tr>
-                                  <th class="fw-normal">6</th>
-                                  <td>
-                                    Any Other Document
-                                    <span style={{ color: "red" }}>*</span>
-                                  </td>
-                                  <td>
-                                    <div className="row">
-                                      <div className="btn btn-sm col-md-4">
-                                        <IconButton onClick={() => getDocShareholding(item?.agreementDoc)}>
-                                          <VisibilityIcon color="info" className="icon" />
-                                        </IconButton>
-                                      </div>
-                                      <div className="btn btn-sm col-md-4">
-                                        <IconButton onClick={() => getDocShareholding(item?.agreementDoc)}>
-                                          <FileDownloadIcon color="info" className="icon" />
-                                        </IconButton>
-                                      </div>
-                                      <div className="btn btn-sm col-md-4">
-                                        <ReportProblemIcon
-                                          style={{
-                                            color: fieldIconColors.developer,
-                                          }}
-                                          onClick={() => {
-                                            setOpennedModal("Amount");
-                                            setLabelValue("Amount"),
-                                              setSmShow(true),
-                                              console.log("modal open"),
-                                              setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
-                                          }}
-                                        ></ReportProblemIcon>
-                                      </div>
-                                    </div>
-                                  
-                                  </td>
-                                </tr>
-                              </tbody>
-                            </table>
-                          </div>
-                        </div>
-                      </div>
-                    ))}
-                </div> */}
 
-                <div>
-                  {showhide === "2" ||
-                    (showhide === "4" && (
-                      <div className="card">
-                        <div class="bordere">
-                          <div class="table-responsive">
-                            <table class="table">
-                              <thead>
-                                <tr>
-                                  <th scope="col">Sr.No</th>
-                                  <th scope="col">Field Name</th>
-                                  <th scope="col">Upload Documents</th>
-                                </tr>
-                              </thead>
-                              <tbody>
-                                <tr>
-                                  <th class="fw-normal">1</th>
-                                  <td>
-                                    Undertaking regarding the creation of 3rd party right on the licensed area
-                                    <span style={{ color: "red" }}>*</span>
-                                  </td>
-                                  <td>
-                                    <div className="row">
-                                      <div className="btn btn-sm col-md-4">
-                                        <IconButton onClick={() => getDocShareholding(item?.agreementDoc)}>
-                                          <VisibilityIcon color="info" className="icon" />
-                                        </IconButton>
-                                      </div>
-                                      <div className="btn btn-sm col-md-4">
-                                        <IconButton onClick={() => getDocShareholding(item?.agreementDoc)}>
-                                          <FileDownloadIcon color="info" className="icon" />
-                                        </IconButton>
-                                      </div>
-                                      <div className="btn btn-sm col-md-4">
-                                        <ReportProblemIcon
-                                          style={{
-                                            color: fieldIconColors.developer,
-                                          }}
-                                          onClick={() => {
-                                            setOpennedModal("Amount");
-                                            setLabelValue("Amount"),
-                                              setSmShow(true),
-                                              console.log("modal open"),
-                                              setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
-                                          }}
-                                        ></ReportProblemIcon>
-                                      </div>
-                                    </div>
-                                    {/* <input type="file" placeholder="" className="form-control" {...register("thirdPartyLicensedArea")}></input> */}
-                                  </td>
-                                </tr>
-                                <tr>
-                                  <th class="fw-normal">2</th>
-                                  <td>
-                                    A consent letter from the ‘new entity for the proposed change along with justification
-                                    <span style={{ color: "red" }}>*</span>
-                                  </td>
-                                  <td>
-                                    <div className="row">
-                                      <div className="btn btn-sm col-md-4">
-                                        <IconButton onClick={() => getDocShareholding(item?.agreementDoc)}>
-                                          <VisibilityIcon color="info" className="icon" />
-                                        </IconButton>
-                                      </div>
-                                      <div className="btn btn-sm col-md-4">
-                                        <IconButton onClick={() => getDocShareholding(item?.agreementDoc)}>
-                                          <FileDownloadIcon color="info" className="icon" />
-                                        </IconButton>
-                                      </div>
-                                      <div className="btn btn-sm col-md-4">
-                                        <ReportProblemIcon
-                                          style={{
-                                            color: fieldIconColors.developer,
-                                          }}
-                                          onClick={() => {
-                                            setOpennedModal("Amount");
-                                            setLabelValue("Amount"),
-                                              setSmShow(true),
-                                              console.log("modal open"),
-                                              setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
-                                          }}
-                                        ></ReportProblemIcon>
-                                      </div>
-                                    </div>
-                                    {/* <input type="file" placeholder="" className="form-control" {...register("newEntityChange")}></input> */}
-                                  </td>
-                                </tr>
                                 <tr>
                                   <th class="fw-normal">3</th>
                                   <td>
                                     {" "}
-                                    Board resolution of authorized signatory<span style={{ color: "red" }}>*</span>
+                                    Board resolution of authorized signatory <span style={{ color: "red" }}>*</span>
                                   </td>
                                   <td>
                                     <div className="row">
                                       <div className="btn btn-sm col-md-4">
-                                        <IconButton onClick={() => getDocShareholding(item?.agreementDoc)}>
+                                        <IconButton onClick={() => getDocShareholding(apiData?.additionalDetails?.boardResolutionDoc)}>
                                           <VisibilityIcon color="info" className="icon" />
                                         </IconButton>
                                       </div>
                                       <div className="btn btn-sm col-md-4">
-                                        <IconButton onClick={() => getDocShareholding(item?.agreementDoc)}>
+                                        <IconButton onClick={() => getDocShareholding(apiData?.additionalDetails?.boardResolutionDoc)}>
                                           <FileDownloadIcon color="info" className="icon" />
                                         </IconButton>
                                       </div>
                                       <div className="btn btn-sm col-md-4">
                                         <ReportProblemIcon
                                           style={{
-                                            color: fieldIconColors.developer,
+                                            color: fieldIconColors.boardResolutionDoc,
                                           }}
                                           onClick={() => {
-                                            setOpennedModal("Amount");
-                                            setLabelValue("Amount"),
+                                            setOpennedModal("boardResolutionDoc");
+                                            setLabelValue("Board resolution of authorized signatory"),
                                               setSmShow(true),
                                               console.log("modal open"),
-                                              setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
+                                              setFieldValue(personalinfo !== null ? personalinfo.boardResolutionDoc : null);
                                           }}
                                         ></ReportProblemIcon>
                                       </div>
                                     </div>
-                                    {/* <input type="file" placeholder="" className="form-control" {...register("authorizedSignatory")}></input> */}
+                                   
                                   </td>
                                 </tr>
                                 <tr>
@@ -1667,218 +1439,73 @@ function TransferLicense(props) {
                                   <td>
                                     <div className="row">
                                       <div className="btn btn-sm col-md-4">
-                                        <IconButton onClick={() => getDocShareholding(item?.agreementDoc)}>
+                                        <IconButton onClick={() => getDocShareholding(apiData?.additionalDetails?.noObjectionCertificate)}>
                                           <VisibilityIcon color="info" className="icon" />
                                         </IconButton>
                                       </div>
                                       <div className="btn btn-sm col-md-4">
-                                        <IconButton onClick={() => getDocShareholding(item?.agreementDoc)}>
+                                        <IconButton onClick={() => getDocShareholding(apiData?.additionalDetails?.noObjectionCertificate)}>
                                           <FileDownloadIcon color="info" className="icon" />
                                         </IconButton>
                                       </div>
                                       <div className="btn btn-sm col-md-4">
                                         <ReportProblemIcon
                                           style={{
-                                            color: fieldIconColors.developer,
+                                            color: fieldIconColors.noObjectionCertificate,
                                           }}
                                           onClick={() => {
-                                            setOpennedModal("Amount");
-                                            setLabelValue("Amount"),
+                                            setOpennedModal("noObjectionCertificate");
+                                            setLabelValue("No objection certificate from the existing ‘Developer, filed through its authorized signatory, specifically designated for the purpose; as well as from the ‘land owner licensees’, in person (not through GPA/SPA assignees), to the proposed change/assignment."),
                                               setSmShow(true),
                                               console.log("modal open"),
-                                              setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
+                                              setFieldValue(personalinfo !== null ? personalinfo.noObjectionCertificate : null);
                                           }}
                                         ></ReportProblemIcon>
                                       </div>
                                     </div>
-                                    {/* <input type="file" placeholder="" className="form-control" {...register("noObjection")}></input> */}
+                                   
                                   </td>
                                 </tr>
+                                
                                 <tr>
                                   <th class="fw-normal">5</th>
                                   <td>
-                                    Documents about the Technical and Financial Capacity of the ‘new entity’ proposed to be inducted as a ‘Developer’
-                                    or ‘shareholder(s)’ as per prescribed policy parameters for grant of a license
+                                    The status regarding the creation of third-party rights in the colony. In case no third-party rights are claimed
+                                    to have been created in the colony, an affidavit to the said effect be also submitted by the existing developer
                                     <span style={{ color: "red" }}>*</span>
                                   </td>
                                   <td>
                                     <div className="row">
                                       <div className="btn btn-sm col-md-4">
-                                        <IconButton onClick={() => getDocShareholding(item?.agreementDoc)}>
+                                        <IconButton onClick={() => getDocShareholding(apiData?.additionalDetails?.thirdPartyCreationStatus)}>
                                           <VisibilityIcon color="info" className="icon" />
                                         </IconButton>
                                       </div>
                                       <div className="btn btn-sm col-md-4">
-                                        <IconButton onClick={() => getDocShareholding(item?.agreementDoc)}>
+                                        <IconButton onClick={() => getDocShareholding(apiData?.additionalDetails?.thirdPartyCreationStatus)}>
                                           <FileDownloadIcon color="info" className="icon" />
                                         </IconButton>
                                       </div>
                                       <div className="btn btn-sm col-md-4">
                                         <ReportProblemIcon
                                           style={{
-                                            color: fieldIconColors.developer,
+                                            color: fieldIconColors.thirdPartyCreationStatus,
                                           }}
                                           onClick={() => {
-                                            setOpennedModal("Amount");
-                                            setLabelValue("Amount"),
+                                            setOpennedModal("thirdPartyCreationStatus");
+                                            setLabelValue("The status regarding the creation of third-party rights in the colony. In case no third-party rights are claimed to have been created in the colony, an affidavit to the said effect be also submitted by the existing developer"),
                                               setSmShow(true),
                                               console.log("modal open"),
-                                              setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
+                                              setFieldValue(personalinfo !== null ? personalinfo.thirdPartyCreationStatus : null);
                                           }}
                                         ></ReportProblemIcon>
                                       </div>
                                     </div>
-                                    {/* <input type="file" placeholder="" className="form-control" {...register("documentsTechnicalFianncial")}></input> */}
+                                  
                                   </td>
                                 </tr>
                                 <tr>
                                   <th class="fw-normal">6</th>
-                                  <td>
-                                    An undertaking to pay the balance administrative charges before final approval
-                                    <span style={{ color: "red" }}>*</span>
-                                  </td>
-                                  <td>
-                                    <div className="row">
-                                      <div className="btn btn-sm col-md-4">
-                                        <IconButton onClick={() => getDocShareholding(item?.agreementDoc)}>
-                                          <VisibilityIcon color="info" className="icon" />
-                                        </IconButton>
-                                      </div>
-                                      <div className="btn btn-sm col-md-4">
-                                        <IconButton onClick={() => getDocShareholding(item?.agreementDoc)}>
-                                          <FileDownloadIcon color="info" className="icon" />
-                                        </IconButton>
-                                      </div>
-                                      <div className="btn btn-sm col-md-4">
-                                        <ReportProblemIcon
-                                          style={{
-                                            color: fieldIconColors.developer,
-                                          }}
-                                          onClick={() => {
-                                            setOpennedModal("Amount");
-                                            setLabelValue("Amount"),
-                                              setSmShow(true),
-                                              console.log("modal open"),
-                                              setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
-                                          }}
-                                        ></ReportProblemIcon>
-                                      </div>
-                                    </div>
-                                    {/* <input type="file" placeholder="" className="form-control" {...register("undertakingPay")}></input> */}
-                                  </td>
-                                </tr>
-                                <tr>
-                                  <th class="fw-normal">7</th>
-                                  <td>
-                                    A consent letter from the ‘new entity for the proposed change along with justification
-                                    <span style={{ color: "red" }}>*</span>
-                                  </td>
-                                  <td>
-                                    <div className="row">
-                                      <div className="btn btn-sm col-md-4">
-                                        <IconButton onClick={() => getDocShareholding(item?.agreementDoc)}>
-                                          <VisibilityIcon color="info" className="icon" />
-                                        </IconButton>
-                                      </div>
-                                      <div className="btn btn-sm col-md-4">
-                                        <IconButton onClick={() => getDocShareholding(item?.agreementDoc)}>
-                                          <FileDownloadIcon color="info" className="icon" />
-                                        </IconButton>
-                                      </div>
-                                      <div className="btn btn-sm col-md-4">
-                                        <ReportProblemIcon
-                                          style={{
-                                            color: fieldIconColors.developer,
-                                          }}
-                                          onClick={() => {
-                                            setOpennedModal("Amount");
-                                            setLabelValue("Amount"),
-                                              setSmShow(true),
-                                              console.log("modal open"),
-                                              setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
-                                          }}
-                                        ></ReportProblemIcon>
-                                      </div>
-                                    </div>
-                                    {/* <input type="file" placeholder="" className="form-control" {...register("justificationChange")}></input> */}
-                                  </td>
-                                </tr>
-                                <tr>
-                                  <th class="fw-normal">8</th>
-                                  <td>
-                                    Justification for request
-                                    <span style={{ color: "red" }}>*</span>
-                                  </td>
-                                  <td>
-                                    <div className="row">
-                                      <div className="btn btn-sm col-md-4">
-                                        <IconButton onClick={() => getDocShareholding(item?.agreementDoc)}>
-                                          <VisibilityIcon color="info" className="icon" />
-                                        </IconButton>
-                                      </div>
-                                      <div className="btn btn-sm col-md-4">
-                                        <IconButton onClick={() => getDocShareholding(item?.agreementDoc)}>
-                                          <FileDownloadIcon color="info" className="icon" />
-                                        </IconButton>
-                                      </div>
-                                      <div className="btn btn-sm col-md-4">
-                                        <ReportProblemIcon
-                                          style={{
-                                            color: fieldIconColors.developer,
-                                          }}
-                                          onClick={() => {
-                                            setOpennedModal("Amount");
-                                            setLabelValue("Amount"),
-                                              setSmShow(true),
-                                              console.log("modal open"),
-                                              setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
-                                          }}
-                                        ></ReportProblemIcon>
-                                      </div>
-                                    </div>
-                                    {/* <input type="file" placeholder="" className="form-control" {...register("requestJustification")}></input> */}
-                                  </td>
-                                </tr>
-                                <tr>
-                                  <th class="fw-normal">9</th>
-                                  <td>
-                                    An undertaking to the effect that in case the administrative charges for such cases are fixed in act and rules at
-                                    a rate higher than that been recovered, the applicant shall be liable to pay the difference as and when demanded
-                                    by TCP
-                                    <span style={{ color: "red" }}>*</span>
-                                  </td>
-                                  <td>
-                                    <div className="row">
-                                      <div className="btn btn-sm col-md-4">
-                                        <IconButton onClick={() => getDocShareholding(item?.agreementDoc)}>
-                                          <VisibilityIcon color="info" className="icon" />
-                                        </IconButton>
-                                      </div>
-                                      <div className="btn btn-sm col-md-4">
-                                        <IconButton onClick={() => getDocShareholding(item?.agreementDoc)}>
-                                          <FileDownloadIcon color="info" className="icon" />
-                                        </IconButton>
-                                      </div>
-                                      <div className="btn btn-sm col-md-4">
-                                        <ReportProblemIcon
-                                          style={{
-                                            color: fieldIconColors.developer,
-                                          }}
-                                          onClick={() => {
-                                            setOpennedModal("Amount");
-                                            setLabelValue("Amount"),
-                                              setSmShow(true),
-                                              console.log("modal open"),
-                                              setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
-                                          }}
-                                        ></ReportProblemIcon>
-                                      </div>
-                                    </div>
-                                    {/* <input type="file" placeholder="" className="form-control" {...register("administrativeChargesCases")}></input> */}
-                                  </td>
-                                </tr>
-                                <tr>
-                                  <th class="fw-normal">10</th>
                                   <td>
                                     {" "}
                                     Status regarding registration of project in RERA
@@ -1887,35 +1514,35 @@ function TransferLicense(props) {
                                   <td>
                                     <div className="row">
                                       <div className="btn btn-sm col-md-4">
-                                        <IconButton onClick={() => getDocShareholding(item?.agreementDoc)}>
+                                        <IconButton onClick={() => getDocShareholding(apiData?.additionalDetails?.registrationProjectRera)}>
                                           <VisibilityIcon color="info" className="icon" />
                                         </IconButton>
                                       </div>
                                       <div className="btn btn-sm col-md-4">
-                                        <IconButton onClick={() => getDocShareholding(item?.agreementDoc)}>
+                                        <IconButton onClick={() => getDocShareholding(apiData?.additionalDetails?.registrationProjectRera)}>
                                           <FileDownloadIcon color="info" className="icon" />
                                         </IconButton>
                                       </div>
                                       <div className="btn btn-sm col-md-4">
                                         <ReportProblemIcon
                                           style={{
-                                            color: fieldIconColors.developer,
+                                            color: fieldIconColors.registrationProjectRera,
                                           }}
                                           onClick={() => {
-                                            setOpennedModal("Amount");
-                                            setLabelValue("Amount"),
+                                            setOpennedModal("registrationProjectRera");
+                                            setLabelValue("Status regarding registration of project in RERA"),
                                               setSmShow(true),
                                               console.log("modal open"),
-                                              setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
+                                              setFieldValue(personalinfo !== null ? personalinfo.registrationProjectRera : null);
                                           }}
                                         ></ReportProblemIcon>
                                       </div>
                                     </div>
-                                    {/* <input type="file" placeholder="" className="form-control" {...register("registrationRera")}></input> */}
+                                   
                                   </td>
                                 </tr>
                                 <tr>
-                                  <th class="fw-normal">11</th>
+                                  <th class="fw-normal">7</th>
                                   <td>
                                     {" "}
                                     Any Other Document <span style={{ color: "red" }}>*</span>
@@ -1923,31 +1550,31 @@ function TransferLicense(props) {
                                   <td>
                                     <div className="row">
                                       <div className="btn btn-sm col-md-4">
-                                        <IconButton onClick={() => getDocShareholding(item?.agreementDoc)}>
+                                        <IconButton onClick={() => getDocShareholding(apiData?.additionalDetails?.anyOtherDoc)}>
                                           <VisibilityIcon color="info" className="icon" />
                                         </IconButton>
                                       </div>
                                       <div className="btn btn-sm col-md-4">
-                                        <IconButton onClick={() => getDocShareholding(item?.agreementDoc)}>
+                                        <IconButton onClick={() => getDocShareholding(apiData?.additionalDetails?.anyOtherDoc)}>
                                           <FileDownloadIcon color="info" className="icon" />
                                         </IconButton>
                                       </div>
                                       <div className="btn btn-sm col-md-4">
                                         <ReportProblemIcon
                                           style={{
-                                            color: fieldIconColors.developer,
+                                            color: fieldIconColors.anyOtherDoc,
                                           }}
                                           onClick={() => {
-                                            setOpennedModal("Amount");
-                                            setLabelValue("Amount"),
+                                            setOpennedModal("anyOtherDoc");
+                                            setLabelValue("Any Other Document"),
                                               setSmShow(true),
                                               console.log("modal open"),
-                                              setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
+                                              setFieldValue(personalinfo !== null ? personalinfo.anyOtherDoc : null);
                                           }}
                                         ></ReportProblemIcon>
                                       </div>
                                     </div>
-                                    {/* <input type="file" placeholder="" className="form-control" {...register("document")}></input> */}
+                                   
                                   </td>
                                 </tr>
                               </tbody>
@@ -1955,11 +1582,12 @@ function TransferLicense(props) {
                           </div>
                         </div>
                       </div>
-                    ))}
+                    }
                 </div>
+
                 <div>
-                {(watch("selectType")?.value == "partial" || watch("selectType")?.value == "complete" || watch("changeOfDeveloper") == "no") && (
-                    
+                {apiData?.additionalDetails?.selectType === "complete"  &&
+                  apiData?.additionalDetails?.changeOfDeveloper === "no" && 
                       <div className="card">
                         <div class="bordere">
                           <div class="table-responsive">
@@ -1975,32 +1603,70 @@ function TransferLicense(props) {
                                 <tr>
                                   <th class="fw-normal">1</th>
                                   <td>
-                                    Undertaking regarding the creation of 3rd party right on the licensed area
+                                  Affidavit regarding the creation of 3rd party right on the licensed area
                                     <span style={{ color: "red" }}>*</span>
                                   </td>
                                   <td>
                                     <div className="row">
                                       <div className="btn btn-sm col-md-4">
-                                        <IconButton onClick={() => getDocShareholding(item?.agreementDoc)}>
+                                        <IconButton onClick={() => getDocShareholding(apiData?.additionalDetails?.affidavitForLicencedArea)}>
                                           <VisibilityIcon color="info" className="icon" />
                                         </IconButton>
                                       </div>
                                       <div className="btn btn-sm col-md-4">
-                                        <IconButton onClick={() => getDocShareholding(item?.agreementDoc)}>
+                                        <IconButton onClick={() => getDocShareholding(apiData?.additionalDetails?.affidavitForLicencedArea)}>
                                           <FileDownloadIcon color="info" className="icon" />
                                         </IconButton>
                                       </div>
                                       <div className="btn btn-sm col-md-4">
                                         <ReportProblemIcon
                                           style={{
-                                            color: fieldIconColors.developer,
+                                            color: fieldIconColors.affidavitForLicencedArea,
                                           }}
                                           onClick={() => {
-                                            setOpennedModal("Amount");
-                                            setLabelValue("Amount"),
+                                            setOpennedModal("affidavitForLicencedArea");
+                                            setLabelValue("Affidavit regarding the creation of 3rd party right on the licenced area"),
                                               setSmShow(true),
                                               console.log("modal open"),
-                                              setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
+                                              setFieldValue(personalinfo !== null ? personalinfo.affidavitForLicencedArea : null);
+                                          }}
+                                        ></ReportProblemIcon>
+                                      </div>
+                                    </div>
+                                   
+                                  </td>
+                                </tr>
+                               <tr>
+                                  <th class="fw-normal">2</th>
+                                  <td>
+                                    {" "}
+                                    The colonizer seeking transfer of whole license/part license shall submit self-certification along with a
+                                    certificate of the Chartered Accountant that a 15% profit margin is not exceeded from the project cost at the time
+                                    of submission of application for transfer of license <span style={{ color: "red" }}>*</span>
+                                  </td>
+                                  <td>
+                                    <div className="row">
+                                      <div className="btn btn-sm col-md-4">
+                                        <IconButton onClick={() => getDocShareholding(apiData?.additionalDetails?.colonizerSeekingTransferLicence)}>
+                                          <VisibilityIcon color="info" className="icon" />
+                                        </IconButton>
+                                      </div>
+                                      <div className="btn btn-sm col-md-4">
+                                        <IconButton onClick={() => getDocShareholding(apiData?.additionalDetails?.colonizerSeekingTransferLicence)}>
+                                          <FileDownloadIcon color="info" className="icon" />
+                                        </IconButton>
+                                      </div>
+                                      <div className="btn btn-sm col-md-4">
+                                        <ReportProblemIcon
+                                          style={{
+                                            color: fieldIconColors.colonizerSeekingTransferLicence,
+                                          }}
+                                          onClick={() => {
+                                            setOpennedModal("colonizerSeekingTransferLicence");
+                                            setLabelValue("The colonizer seeking transfer of whole license/part license shall submit self-certification along with a certificate of the Chartered Accountant that a 15% profit margin is not exceeded from the project cost at the time of submission of application for transfer of license"),
+                                              setSmShow(true),
+                                              console.log("modal open"),
+                                              setFieldValue(personalinfo !== null ? personalinfo.colonizerSeekingTransferLicence : null);
                                           }}
                                         ></ReportProblemIcon>
                                       </div>
@@ -2009,70 +1675,109 @@ function TransferLicense(props) {
                                   </td>
                                 </tr>
                                 <tr>
-                                  <th class="fw-normal">2</th>
+                                  <th class="fw-normal">3</th>
                                   <td>
-                                    A consent letter from the ‘new entity for the proposed change along with justification
-                                    <span style={{ color: "red" }}>*</span>
+                                    {" "}
+                                    Board resolution of authorized signatory <span style={{ color: "red" }}>*</span>
                                   </td>
                                   <td>
                                     <div className="row">
                                       <div className="btn btn-sm col-md-4">
-                                        <IconButton onClick={() => getDocShareholding(item?.agreementDoc)}>
+                                        <IconButton onClick={() => getDocShareholding(apiData?.additionalDetails?.boardResolutionDoc)}>
                                           <VisibilityIcon color="info" className="icon" />
                                         </IconButton>
                                       </div>
                                       <div className="btn btn-sm col-md-4">
-                                        <IconButton onClick={() => getDocShareholding(item?.agreementDoc)}>
+                                        <IconButton onClick={() => getDocShareholding(apiData?.additionalDetails?.boardResolutionDoc)}>
                                           <FileDownloadIcon color="info" className="icon" />
                                         </IconButton>
                                       </div>
                                       <div className="btn btn-sm col-md-4">
                                         <ReportProblemIcon
                                           style={{
-                                            color: fieldIconColors.developer,
+                                            color: fieldIconColors.boardResolutionDoc,
                                           }}
                                           onClick={() => {
-                                            setOpennedModal("Amount");
-                                            setLabelValue("Amount"),
+                                            setOpennedModal("boardResolutionDoc");
+                                            setLabelValue("Board resolution of authorized signatory"),
                                               setSmShow(true),
                                               console.log("modal open"),
-                                              setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
+                                              setFieldValue(personalinfo !== null ? personalinfo.boardResolutionDoc : null);
                                           }}
                                         ></ReportProblemIcon>
                                       </div>
                                     </div>
-                                
+                                   
                                   </td>
                                 </tr>
                                 <tr>
-                                  <th class="fw-normal">3</th>
+                                  <th class="fw-normal">4</th>
                                   <td>
-                                    Board resolution of authorized signatory
+                                    No objection certificate from the existing ‘Developer, filed through its authorized signatory, specifically
+                                    designated for the purpose; as well as from the ‘land owner licensees’, in person (not through GPA/SPA assignees),
+                                    to the proposed change/assignment.
                                     <span style={{ color: "red" }}>*</span>
                                   </td>
                                   <td>
                                     <div className="row">
                                       <div className="btn btn-sm col-md-4">
-                                        <IconButton onClick={() => getDocShareholding(item?.agreementDoc)}>
+                                        <IconButton onClick={() => getDocShareholding(apiData?.additionalDetails?.noObjectionCertificate)}>
                                           <VisibilityIcon color="info" className="icon" />
                                         </IconButton>
                                       </div>
                                       <div className="btn btn-sm col-md-4">
-                                        <IconButton onClick={() => getDocShareholding(item?.agreementDoc)}>
+                                        <IconButton onClick={() => getDocShareholding(apiData?.additionalDetails?.noObjectionCertificate)}>
                                           <FileDownloadIcon color="info" className="icon" />
                                         </IconButton>
                                       </div>
                                       <div className="btn btn-sm col-md-4">
                                         <ReportProblemIcon
                                           style={{
-                                            color: fieldIconColors.developer,
+                                            color: fieldIconColors.noObjectionCertificate,
                                           }}
                                           onClick={() => {
-                                            setOpennedModal("Amount");
-                                            setLabelValue("Amount"),
+                                            setOpennedModal("noObjectionCertificate");
+                                            setLabelValue("No objection certificate from the existing ‘Developer, filed through its authorized signatory, specifically designated for the purpose; as well as from the ‘land owner licensees’, in person (not through GPA/SPA assignees), to the proposed change/assignment."),
                                               setSmShow(true),
                                               console.log("modal open"),
-                                              setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
+                                              setFieldValue(personalinfo !== null ? personalinfo.noObjectionCertificate : null);
+                                          }}
+                                        ></ReportProblemIcon>
+                                      </div>
+                                    </div>
+                                   
+                                  </td>
+                                </tr>
+                                <tr>
+                                  <th class="fw-normal">5</th>
+                                  <td>
+                                    The status regarding the creation of third-party rights in the colony. In case no third-party rights are claimed
+                                    to have been created in the colony, an affidavit to the said effect be also submitted by the existing developer
+                                    <span style={{ color: "red" }}>*</span>
+                                  </td>
+                                  <td>
+                                    <div className="row">
+                                      <div className="btn btn-sm col-md-4">
+                                        <IconButton onClick={() => getDocShareholding(apiData?.additionalDetails?.thirdPartyCreationStatus)}>
+                                          <VisibilityIcon color="info" className="icon" />
+                                        </IconButton>
+                                      </div>
+                                      <div className="btn btn-sm col-md-4">
+                                        <IconButton onClick={() => getDocShareholding(apiData?.additionalDetails?.thirdPartyCreationStatus)}>
+                                          <FileDownloadIcon color="info" className="icon" />
+                                        </IconButton>
+                                      </div>
+                                      <div className="btn btn-sm col-md-4">
+                                        <ReportProblemIcon
+                                          style={{
+                                            color: fieldIconColors.thirdPartyCreationStatus,
+                                          }}
+                                          onClick={() => {
+                                            setOpennedModal("thirdPartyCreationStatus");
+                                            setLabelValue("The status regarding the creation of third-party rights in the colony. In case no third-party rights are claimed to have been created in the colony, an affidavit to the said effect be also submitted by the existing developer"),
+                                              setSmShow(true),
+                                              console.log("modal open"),
+                                              setFieldValue(personalinfo !== null ? personalinfo.thirdPartyCreationStatus : null);
                                           }}
                                         ></ReportProblemIcon>
                                       </div>
@@ -2081,75 +1786,76 @@ function TransferLicense(props) {
                                   </td>
                                 </tr>
                                 <tr>
-                                  <th class="fw-normal">4</th>
+                                  <th class="fw-normal">6</th>
                                   <td>
+                                    {" "}
                                     Status regarding registration of project in RERA
                                     <span style={{ color: "red" }}>*</span>
                                   </td>
                                   <td>
                                     <div className="row">
                                       <div className="btn btn-sm col-md-4">
-                                        <IconButton onClick={() => getDocShareholding(item?.agreementDoc)}>
+                                        <IconButton onClick={() => getDocShareholding(apiData?.additionalDetails?.registrationProjectRera)}>
                                           <VisibilityIcon color="info" className="icon" />
                                         </IconButton>
                                       </div>
                                       <div className="btn btn-sm col-md-4">
-                                        <IconButton onClick={() => getDocShareholding(item?.agreementDoc)}>
+                                        <IconButton onClick={() => getDocShareholding(apiData?.additionalDetails?.registrationProjectRera)}>
                                           <FileDownloadIcon color="info" className="icon" />
                                         </IconButton>
                                       </div>
                                       <div className="btn btn-sm col-md-4">
                                         <ReportProblemIcon
                                           style={{
-                                            color: fieldIconColors.developer,
+                                            color: fieldIconColors.registrationProjectRera,
                                           }}
                                           onClick={() => {
-                                            setOpennedModal("Amount");
-                                            setLabelValue("Amount"),
+                                            setOpennedModal("registrationProjectRera");
+                                            setLabelValue("Status regarding registration of project in RERA"),
                                               setSmShow(true),
                                               console.log("modal open"),
-                                              setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
+                                              setFieldValue(personalinfo !== null ? personalinfo.registrationProjectRera : null);
                                           }}
                                         ></ReportProblemIcon>
                                       </div>
                                     </div>
-                                 
+                                   
                                   </td>
                                 </tr>
                                 <tr>
-                                  <th class="fw-normal">5</th>
+                                  <th class="fw-normal">7</th>
                                   <td>
-                                    Any Other Document
-                                    <span style={{ color: "red" }}>*</span>
+                                    {" "}
+                                    Any Other Document <span style={{ color: "red" }}>*</span>
                                   </td>
                                   <td>
                                     <div className="row">
                                       <div className="btn btn-sm col-md-4">
-                                        <IconButton onClick={() => getDocShareholding(item?.agreementDoc)}>
+                                        <IconButton onClick={() => getDocShareholding(apiData?.additionalDetails?.anyOtherDoc)}>
                                           <VisibilityIcon color="info" className="icon" />
                                         </IconButton>
                                       </div>
                                       <div className="btn btn-sm col-md-4">
-                                        <IconButton onClick={() => getDocShareholding(item?.agreementDoc)}>
+                                        <IconButton onClick={() => getDocShareholding(apiData?.additionalDetails?.anyOtherDoc)}>
                                           <FileDownloadIcon color="info" className="icon" />
                                         </IconButton>
                                       </div>
                                       <div className="btn btn-sm col-md-4">
                                         <ReportProblemIcon
                                           style={{
-                                            color: fieldIconColors.developer,
+                                            color: fieldIconColors.anyOtherDoc,
                                           }}
                                           onClick={() => {
-                                            setOpennedModal("Amount");
-                                            setLabelValue("Amount"),
+                                            setOpennedModal("anyOtherDoc");
+                                            setLabelValue("Any Other Document"),
                                               setSmShow(true),
                                               console.log("modal open"),
-                                              setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
+                                              setFieldValue(personalinfo !== null ? personalinfo.anyOtherDoc : null);
                                           }}
                                         ></ReportProblemIcon>
                                       </div>
                                     </div>
-                                    {/* <input type="file" placeholder="" className="form-control" {...register("anyOtherDoc")}></input> */}
+                                   
                                   </td>
                                 </tr>
                               </tbody>
@@ -2157,8 +1863,10 @@ function TransferLicense(props) {
                           </div>
                         </div>
                       </div>
-                    )}
+                    }
                 </div>
+                
+               
                 
               </Row>
               

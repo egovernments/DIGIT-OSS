@@ -294,7 +294,7 @@ function SurrenderLicScrutiny({ apiResponse, refreshScrutinyData, applicationNum
         <div
         //  id="example-collapse-text"
          >
-          <Card style={{ width: "126%", border: "5px solid #1266af" }}>
+          <Card style={{ width: "126%" }}>
             <h4 style={{ fontSize: "25px", marginLeft: "21px" }} className="text-center">
               Surrender of License
             </h4>

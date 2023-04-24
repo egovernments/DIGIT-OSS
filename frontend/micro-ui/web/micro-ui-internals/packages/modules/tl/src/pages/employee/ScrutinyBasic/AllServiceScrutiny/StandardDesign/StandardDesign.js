@@ -650,11 +650,11 @@ const handlemodaldData = (data) => {
                                   
                                   
                                   <div className="btn btn-sm col-md-4">
-                                    <IconButton onClick={()=>getDocShareholding(item?.agreementDoc)}>
+                                    <IconButton onClick={()=>getDocShareholding(apiData?.standardDrawingDesigns)}>
                                        <VisibilityIcon color="info" className="icon" /></IconButton>
                                        </div>
                                   <div className="btn btn-sm col-md-4">
-                                   <IconButton onClick={()=>getDocShareholding(item?.agreementDoc)}>
+                                   <IconButton onClick={()=>getDocShareholding(apiData?.standardDrawingDesigns)}>
                                        <FileDownloadIcon color="info" className="icon" /></IconButton>
                                        </div>
                                        <div className="btn btn-sm col-md-4">
