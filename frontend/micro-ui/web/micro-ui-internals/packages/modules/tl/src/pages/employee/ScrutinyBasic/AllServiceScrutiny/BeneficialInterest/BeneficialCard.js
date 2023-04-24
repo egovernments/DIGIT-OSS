@@ -168,11 +168,11 @@ const BeneficialCard = (props) => {
   // };
 
   const closeModal = () => {
-    setTimeout(() => {
+    // setTimeout(() => {
       setSelectedAction(null);
       setShowModal(false);
-      window.location.href = `/digit-ui/employee/tl/servicePlanInbox`;
-    }, 3000);
+    //   window.location.href = `/digit-ui/employee/tl/servicePlanInbox`;
+    // }, 3000);
   };
 
   const closeWarningPopup = () => {
@@ -181,8 +181,8 @@ const BeneficialCard = (props) => {
 
   const submitAction = async (data = {}, nocData = false, isOBPS = {}) => {
     let tempdata = data || {};
-    tempdata.ServicePlanRequest[0].additionalDetails = additionalDetails;
-    console.log("logger log1223", tempdata);
+    tempdata.changeBeneficial[0].additionalDetails = additionalDetails;
+    console.log("logger log1223", tempdata,additionalDetails);
 
     try {
       let body = {
@@ -203,15 +203,16 @@ const BeneficialCard = (props) => {
       console.log("logger log1223 body", body);
       const response = await axios.post("/tl-services/beneficial/_update", body);
       console.log("Update API Response ====> ", response.data);
+      closeModal();
     } catch (error) {
       console.log("Update Error ===> ", error.message);
+      closeModal();
     }
     // closeModal();
     // setTimeout(() => {
     //   setShowToast();
     //   window.location.href = `/digit-ui/employee/tl/servicePlanInbox`
     // }, 3000);
-    closeModal();
   };
 
   useEffect(() => {

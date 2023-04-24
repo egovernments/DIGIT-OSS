@@ -64,6 +64,9 @@ const ActionModal = (props) => {
   if (props?.businessService.includes("SURREND_OF_LICENSE")) {
     return <SurrenderActionModal {...props} />;
   }
+  if (props?.businessService.includes("CHANGE_OF_BENEFICIAL")) {
+    return <BeneficialModal {...props} />;
+  }
   // return <FSMActionModal {...props} />;
 };
 
