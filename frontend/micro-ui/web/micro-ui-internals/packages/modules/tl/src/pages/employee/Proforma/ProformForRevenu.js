@@ -193,10 +193,10 @@ function ProformForRevenu() {
                                             </FormControl>
 
                                         </TableCell>
-                                        <TableCell align="left" style={{width: "750"}}>
-                                            <Card style={{width: "700"}}>
+                                        <TableCell align="left" style={{width: "60%"}}>
+                                            {/* <Card style={{width: "60%"}}> */}
                                        < AddPost></AddPost>
-                                       </Card>
+                                       {/* </Card> */}
                                         </TableCell>
 
                                     </TableRow>

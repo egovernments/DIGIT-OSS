@@ -4,15 +4,16 @@ import axios from "axios";
 // import ReactMultiSelect from "../../../../../../../../../react-components/src/atoms/ReactMultiSelect";
 import ReactMultiSelect from "../../../../../react-components/src/atoms/ReactMultiSelect";
 
-const SearchLicenceComp = ({ watch, register, control, setLoader, errors, setValue }) => {
+const SearchLicenceComp = ({ watch, register, control, setLoader, errors, setValue, resetField, apiData }) => {
   const [showField, setShowField] = useState({ select: false, other: false });
   const [licenceData, setLicenceData] = useState([]);
 
   const getLicenceDetails = async () => {
     setLoader(true);
+    console.log("watch", watch("numberType"));
     const data = {
-      Flag: 1,
-      SearchParam: watch("licenceNo"),
+      Flag: watch("numberType")?.value == "LICENCENUMBER" ? 3 : 1,
+      SearchParam: apiData?.length ? watch("licenceNo")?.value : watch("licenceNo"),
     };
     try {
       const Resp = await axios.post("/api/cis/GetLicenceDetails", data);
@@ -47,12 +48,25 @@ const SearchLicenceComp = ({ watch, register, control, setLoader, errors, setVal
   return (
     <div>
       <div className="row gy-3">
-        <div className="col col-3">
+        <div className="col col-4">
           <h2>
             Licence No.<span style={{ color: "red" }}>*</span>
           </h2>
           <div style={{ display: "flex", placeItems: "center" }}>
-            <input type="text" className="form-control" placeholder="LC_XXXXX" {...register("licenceNo")} />
+            {apiData?.length ? (
+              <ReactMultiSelect control={control} name="licenceNo" placeholder="Select number" data={apiData} labels="" />
+            ) : (
+              <input
+                type="text"
+                className="form-control"
+                placeholder="LC_XXXXX"
+                {...register("licenceNo")}
+                onChange={() => {
+                  setShowField({ select: false, other: false });
+                  resetField("selectLicence");
+                }}
+              />
+            )}
             <div
               style={{
                 background: "#024f9d",
@@ -120,7 +134,7 @@ const SearchLicenceComp = ({ watch, register, control, setLoader, errors, setVal
                   const yearDiff = dateA.getYear() - dateB.getYear();
 
                   const diff = monthDiff + yearDiff * 12;
-                  setValue("renewalRequiredUpto", diff);
+                  setValue("periodOfRenewal", diff);
                   console.log("value", e?.target?.value, diff);
                 }}
               />
@@ -131,8 +145,8 @@ const SearchLicenceComp = ({ watch, register, control, setLoader, errors, setVal
           </div>
           <div className="col col-3 ">
             <FormControl>
-              <h2>Period of renewal(In Years)</h2>
-              <input type="text" {...register("renewalRequiredUpto")} className="form-control" disabled />
+              <h2>Period of renewal(In Months)</h2>
+              <input type="text" {...register("periodOfRenewal")} className="form-control" disabled />
             </FormControl>
           </div>
           <div className="col col-3 ">
@@ -194,10 +208,7 @@ const SearchLicenceComp = ({ watch, register, control, setLoader, errors, setVal
           </div>
           <div className="col col-3 ">
             <FormControl>
-              <h2>
-                Revenue estate
-                <span style={{ color: "red" }}>*</span>
-              </h2>
+              <h2>Revenue estate</h2>
 
               <input type="text" className="form-control" placeholder="" {...register("revenueEstate")} />
             </FormControl>

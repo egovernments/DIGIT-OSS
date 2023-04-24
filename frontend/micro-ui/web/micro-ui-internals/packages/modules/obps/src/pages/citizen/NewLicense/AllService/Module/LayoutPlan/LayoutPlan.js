@@ -57,6 +57,7 @@ function LayoutPlanClu() {
     control,
     watch,
     setValue,
+    resetField,
   } = useForm({});
   // const { register, handleSubmit, setValue, getValues, watch } = useForm();
   const [layOutPlanData, setLayOutPlanData] = useState([]);
@@ -86,7 +87,6 @@ function LayoutPlanClu() {
   const [getTotalArea, setTotlArea] = useState();
   const handleshowhide = (event) => {
     const getuser = event.target.value;
-
     setShowhide(getuser);
   };
 
@@ -400,7 +400,15 @@ function LayoutPlanClu() {
               {/* <FormLabel id="lic_no" sx={{ fontWeight: "bold" }}>
                   {`${t("REV_LAYOUT_LICENSE_NO")}`} <span style={{ color: "red" }}>*</span>
                 </FormLabel> */}
-              <SearchLicenceComp watch={watch} register={register} control={control} setLoader={setLoader} errors={errors} setValue={setValue} />
+              <SearchLicenceComp
+                watch={watch}
+                register={register}
+                control={control}
+                setLoader={setLoader}
+                errors={errors}
+                setValue={setValue}
+                resetField={resetField}
+              />
               {/* <OutlinedInput
                   aria-labelledby="lic_no"
                   type="number"

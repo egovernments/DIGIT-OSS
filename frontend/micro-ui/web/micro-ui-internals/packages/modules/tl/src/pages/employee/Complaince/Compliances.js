@@ -49,7 +49,7 @@ const handleSubmit=(e)=>{
                     timestamp
                     </th>
                     
-                    <th>Part of LOI</th>
+                    <th>Proposed Condition Of LOI</th>
                     <th>Action</th>
                     </tr>
                     </thead>

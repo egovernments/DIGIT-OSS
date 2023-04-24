@@ -30,6 +30,14 @@ import { Toast } from "@egovernments/digit-ui-react-components";
 import WorkingTable from "../../../../components/Table";
 import CusToaster from "../../../../components/Toaster";
 
+const compactBlock = [
+  { label: "Private Road", value: "privateRoad" },
+  { label: "Street", value: "street" },
+  { label: "Lane footway/footpath", value: "laneFootpath" },
+  { label: "Passage/Drain (Natural/Artificial)", value: "passage/drain/natural/atrificial" },
+  { label: "None of the above", value: "none" },
+];
+
 const test = {
   area: null,
   code: "RPL",
@@ -1284,10 +1292,17 @@ const LandScheduleForm = (props) => {
                     </div>
 
                     <div className="col col-3 ">
-                      <h2>
+                      {/* <h2>
                         (d) &nbsp;Whether in Compact Block.<span style={{ color: "red" }}>*</span>
-                      </h2>{" "}
-                      &nbsp;&nbsp;&nbsp;&nbsp;
+                      </h2> */}
+                      <label>
+                        <h2>
+                          Whether in Compact Block.<span style={{ color: "red" }}>*</span>
+                        </h2>
+                      </label>
+
+                      <ReactMultiSelect control={control} name="compactBlock" placeholder="compact block" data={compactBlock} labels="Potential" />
+                      {/* &nbsp;&nbsp;&nbsp;&nbsp;
                       <label htmlFor="compactBlock">
                         <input {...register("compactBlock")} type="radio" value="Y" id="compactBlock" />
                         &nbsp; Yes &nbsp;&nbsp;
@@ -1295,11 +1310,11 @@ const LandScheduleForm = (props) => {
                       <label htmlFor="compactBlock">
                         <input {...register("compactBlock")} type="radio" value="N" id="compactBlock" />
                         &nbsp; No &nbsp;&nbsp;
-                      </label>
-                      <h3 className="error-message" style={{ color: "red" }}>
+                      </label> */}
+                      {/* <h3 className="error-message" style={{ color: "red" }}>
                         {errors?.compactBlock && errors?.compactBlock?.message}
-                      </h3>
-                      {watch("compactBlock") === "Y" && (
+                      </h3> */}
+                      {/* {watch("compactBlock") === "Y" && (
                         <div className="row ">
                           <div className="col col">
                             <label>
@@ -1313,12 +1328,12 @@ const LandScheduleForm = (props) => {
                             </h3>
                           </div>
                         </div>
-                      )}
+                      )} */}
                     </div>
                   </div>
                   <br></br>
                   <div className="row">
-                    <div className="col col-3 ">
+                    {/* <div className="col col-3 ">
                       <h2>
                         (e)&nbsp;Whether Others Land fall <span style={{ color: "red" }}>*</span>
                         <Tooltip title="Whether Others Land fall within Applied Land">
@@ -1352,7 +1367,7 @@ const LandScheduleForm = (props) => {
                           </div>
                         </div>
                       )}
-                    </div>
+                    </div> */}
                     <div className="col col-3 ">
                       <h2>
                         (f)&nbsp;Acquisition status <span style={{ color: "red" }}>*</span>
@@ -1401,7 +1416,9 @@ const LandScheduleForm = (props) => {
                           </div>
                           <div className="col col-12">
                             <label>
-                              <h2>Date of Award</h2>
+                              <h2>
+                                Date of Award<span style={{ color: "red" }}>*</span>
+                              </h2>
                             </label>
                             <input
                               type="date"
@@ -1608,9 +1625,9 @@ const LandScheduleForm = (props) => {
                         <div className="row">
                           <div class="col-sm-6 text-left">
                             <h2>
-                              (c)&nbsp;&nbsp;Applied site abouts already constructed sector road or internal circulation road of approved sectoral
-                              plan (of min. 18m/24m width as the case may be) provided its entire stretch required for approach is licenced and is
-                              further leading upto atleast 4 karam wide revenue rasta.<span style={{ color: "red" }}>*</span>
+                              (c)&nbsp;&nbsp;Applied site Abuts already constructed sector road or internal circulation road of approved sectoral plan
+                              (of min. 18m/24m width as the case may be) provided its entire stretch required for approach is licenced and is further
+                              leading upto atleast 4 karam wide revenue rasta.<span style={{ color: "red" }}>*</span>
                             </h2>
                           </div>
                           <div class="col-sm-6 text-right">
@@ -2089,7 +2106,7 @@ const LandScheduleForm = (props) => {
                   <div className="row">
                     <div className="col col-3">
                       <h2>
-                        (a) &nbsp;Vacant: (Yes/No) <span style={{ color: "red" }}>*</span>{" "}
+                        (a) &nbsp;Vacant<span style={{ color: "red" }}>*</span>{" "}
                       </h2>
                       &nbsp;&nbsp;&nbsp;&nbsp;
                       <label htmlFor="vacant">
@@ -2135,7 +2152,7 @@ const LandScheduleForm = (props) => {
 
                     <div className="col col-3">
                       <h2>
-                        (b) &nbsp;HT line:(Yes/No) <span style={{ color: "red" }}>*</span>
+                        (b) &nbsp;HT line <span style={{ color: "red" }}>*</span>
                       </h2>{" "}
                       &nbsp;&nbsp;&nbsp;&nbsp;
                       <label htmlFor="HTLine">
@@ -2178,7 +2195,7 @@ const LandScheduleForm = (props) => {
 
                     <div className="col col-3">
                       <h2>
-                        (c)&nbsp;IOC Gas Pipeline:(Yes/No) <span style={{ color: "red" }}>*</span>
+                        (c)&nbsp;IOC Gas Pipeline <span style={{ color: "red" }}>*</span>
                       </h2>
                       &nbsp;&nbsp;&nbsp;&nbsp;
                       <label htmlFor="IOCGasPipeline">
@@ -2216,7 +2233,7 @@ const LandScheduleForm = (props) => {
                     </div>
                     <div className="col col-3">
                       <h2>
-                        (d) &nbsp;Nallah:(Yes/No) <span style={{ color: "red" }}>*</span>
+                        (d) &nbsp;Nallah/drain <span style={{ color: "red" }}>*</span>
                       </h2>
                       &nbsp;&nbsp;&nbsp;&nbsp;
                       <label htmlFor="nallah">
@@ -2481,7 +2498,9 @@ const LandScheduleForm = (props) => {
                     </div>
 
                     <div className="col col-6 mt-3">
-                      <h2>(i)&nbsp;Surroundings</h2>
+                      <h2>
+                        (i)&nbsp;Surroundings <span style={{ color: "red" }}>*</span>
+                      </h2>
 
                       <div className="row ">
                         <div className="col col-3">
@@ -2489,24 +2508,36 @@ const LandScheduleForm = (props) => {
                             <h2>North</h2>
                           </label>
                           <input type="text" className="form-control" {...register("northSurroundings")} />
+                          <h3 className="error-message" style={{ color: "red" }}>
+                            {errors?.northSurroundings && errors?.northSurroundings?.message}
+                          </h3>
                         </div>
                         <div className="col col-3">
                           <label>
                             <h2>South</h2>
                           </label>
                           <input type="text" className="form-control" {...register("southSurroundings")} />
+                          <h3 className="error-message" style={{ color: "red" }}>
+                            {errors?.southSurroundings && errors?.southSurroundings?.message}
+                          </h3>
                         </div>
                         <div className="col col-3">
                           <label>
                             <h2>East</h2>
                           </label>
                           <input type="text" className="form-control" {...register("eastSurroundings")} />
+                          <h3 className="error-message" style={{ color: "red" }}>
+                            {errors?.eastSurroundings && errors?.eastSurroundings?.message}
+                          </h3>
                         </div>
                         <div className="col col-3">
                           <label>
                             <h2>West</h2>
                           </label>
                           <input type="text" className="form-control" {...register("westSurroundings")} />
+                          <h3 className="error-message" style={{ color: "red" }}>
+                            {errors?.westSurroundings && errors?.westSurroundings?.message}
+                          </h3>
                         </div>
                       </div>
                     </div>
@@ -2526,17 +2557,7 @@ const LandScheduleForm = (props) => {
                         <div className="row ">
                           <div className="col col-12">
                             <label>
-                              <h2>Details thereof</h2>
-                            </label>
-                            <input type="text" className="form-control" {...register("detailsThereof")} />
-                          </div>
-                        </div>
-                      )}
-                      {watch("passingOtherFeature") === "N" && (
-                        <div className="row ">
-                          <div className="col col">
-                            <label>
-                              <h2>Details thereof</h2>
+                              <h2>Remarks</h2>
                             </label>
                             <input type="text" className="form-control" {...register("detailsThereof")} />
                           </div>
@@ -2676,7 +2697,7 @@ const LandScheduleForm = (props) => {
                     <div className="col col-3">
                       <label>
                         <h2 style={{ display: "flex" }}>
-                          Copy of spa/GPA/board. <span style={{ color: "red" }}>*</span>
+                          Copy of spa/GPA <span style={{ color: "red" }}>*</span>
                           <Tooltip title="Copy of spa/GPA/board resolution to sign collaboration agrrement">
                             <InfoIcon style={{ cursor: "pointer" }} color="primary"></InfoIcon>
                           </Tooltip>

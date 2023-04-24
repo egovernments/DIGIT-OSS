@@ -10,6 +10,9 @@ import CusToaster from "../../../../../../components/Toaster";
 import { useTranslation } from "react-i18next";
 import { useLocation, useParams } from "react-router-dom";
 import SearchLicenceComp from "../../../../../../components/SearchLicence";
+import Visibility from "@mui/icons-material/Visibility";
+import FileUpload from "@mui/icons-material/FileUpload";
+import { getDocShareholding } from "../../../docView/docView.help";
 
 function SurrenderLic() {
   const [selects, setSelects] = useState();
@@ -24,7 +27,6 @@ function SurrenderLic() {
   const params = new URLSearchParams(location.search);
   const [licenseData, setLicenseData] = useState();
 
-
   const handleshowhide = (event) => {
     const getuser = event.target.value;
 
@@ -36,24 +38,24 @@ function SurrenderLic() {
   };
 
   const getLicenseData = async () => {
-    console.log("Request Id1 ====> ", params, params?.get('id'))
+    console.log("Request Id1 ====> ", params, params?.get("id"));
     // return;
     try {
-      let id = params.get('id');
+      let id = params.get("id");
       setLoading(true);
 
       const requestData = {
-        "RequestInfo": {
-          "apiId": "Rainmaker",
-          "authToken": authToken,
-          "msgId": "1672136660039|en_IN",
-          "userInfo": userInfo
-        }
-      }
+        RequestInfo: {
+          apiId: "Rainmaker",
+          authToken: authToken,
+          msgId: "1672136660039|en_IN",
+          userInfo: userInfo,
+        },
+      };
       const response = await axios.post(`/tl-services/SurrendOfLicenseRequest/_search?applicationNumber=${id}`, requestData);
       console.log("Response ====> ", response);
       setLicenseData(response?.data?.surrendOfLicense?.[0]);
-      const details = response?.data?.surrendOfLicense?.[0]
+      const details = response?.data?.surrendOfLicense?.[0];
       setValue("licenceNo", details?.licenseNo);
       setValue("selectType", details?.selectType);
       setValue("areaFallingUnder", details?.areaFallingUnder);
@@ -72,17 +74,16 @@ function SurrenderLic() {
       setValue("revisedLayoutPlanfileUrl", details?.revisedLayoutPlanfileUrl);
       setValue("availedEdcfileUrl", details?.availedEdcfileUrl);
       setValue("areaFallingUnderfileUrl", details?.areaFallingUnderfileUrl);
-      setValue("areaFallingDividing",details?.areaFallingDividing);
+      setValue("areaFallingDividing", details?.areaFallingDividing);
       setLoading(false);
     } catch (error) {
       console.log("Get Error ====> ", error.message);
       setLoading(false);
       setShowToastError({ label: error.message, error: true, success: false });
     }
-  }
+  };
 
   const uploadFile = async (file, fieldName) => {
-
     const formData = new FormData();
     formData.append("file", file);
     formData.append("tenantId", "hr");
@@ -100,7 +101,6 @@ function SurrenderLic() {
       setValue(fieldName + "fileUrl", Resp?.data?.files?.[0]?.fileStoreId);
       // setValue(fieldName, Resp?.data?.files?.[0]?.fileStoreId);
 
-
       setLoading(false);
     } catch (error) {
       setLoading(false);
@@ -115,7 +115,8 @@ function SurrenderLic() {
     control,
     setValue,
     watch,
-    getValues
+    getValues,
+    resetField,
   } = useForm({ reValidateMode: "onChange", mode: "onChange" });
 
   const SurrenderLic = async (data) => {
@@ -123,44 +124,43 @@ function SurrenderLic() {
     try {
       setLoading(true);
       const body = {
-        "RequestInfo": {
-          "apiId": "Rainmaker",
-          "ver": ".01",
-          "ts": null,
-          "action": "_update",
-          "did": "1",
-          "key": "",
-          "msgId": "20170310130900|en_IN",
-          "authToken": authToken,
-          "userInfo": userInfo
+        RequestInfo: {
+          apiId: "Rainmaker",
+          ver: ".01",
+          ts: null,
+          action: "_update",
+          did: "1",
+          key: "",
+          msgId: "20170310130900|en_IN",
+          authToken: authToken,
+          userInfo: userInfo,
         },
-        "SurrendOfLicense": [
+        SurrendOfLicense: [
           {
-            "tenantId": "hr",
-            "action": "",
-            "licenseNo": data?.licenceNo,
-            "selectType": data?.selectType,
-            "areaFallingUnder": data?.areaFallingUnder,
-            "thirdPartyRights": data?.thirdPartyRights,
-            "areraRegistration": data?.reraRegistration,
-            "zoningLayoutPlanfileUrl": data?.zoningLayoutPlanfileUrl,
-            "licenseCopyfileUrl": data?.licenseCopyfileUrl,
-            "edcaVailedfileUrl": data?.edcaVailedfileUrl,
-            "detailedRelocationSchemefileUrl": data?.detailedRelocationSchemefileUrl,
-            "giftDeedfileUrl": data?.giftDeedfileUrl,
-            "mutationfileUrl": data?.mutationfileUrl,
-            "jamabandhifileUrl": data?.jamabandhifileUrl,
-            "thirdPartyRightsDeclarationfileUrl": data?.thirdPartyRightsDeclarationfileUrl,
-            "areaInAcres": data?.areaInAcres,
-            "declarationIDWWorksfileUrl": data?.declarationIDWWorksfileUrl,
-            "revisedLayoutPlanfileUrl": data?.revisedLayoutPlanfileUrl,
-            "availedEdcfileUrl": data?.availedEdcfileUrl,
-            "areaFallingUnderfileUrl": data?.areaFallingUnderfileUrl,
-            "areaFallingDividing": data?.areaFallingDividing
-          }
-
-        ]
-      }
+            tenantId: "hr",
+            action: "",
+            licenseNo: data?.licenceNo,
+            selectType: data?.selectType,
+            areaFallingUnder: data?.areaFallingUnder,
+            thirdPartyRights: data?.thirdPartyRights,
+            areraRegistration: data?.reraRegistration,
+            zoningLayoutPlanfileUrl: data?.zoningLayoutPlanfileUrl,
+            licenseCopyfileUrl: data?.licenseCopyfileUrl,
+            edcaVailedfileUrl: data?.edcaVailedfileUrl,
+            detailedRelocationSchemefileUrl: data?.detailedRelocationSchemefileUrl,
+            giftDeedfileUrl: data?.giftDeedfileUrl,
+            mutationfileUrl: data?.mutationfileUrl,
+            jamabandhifileUrl: data?.jamabandhifileUrl,
+            thirdPartyRightsDeclarationfileUrl: data?.thirdPartyRightsDeclarationfileUrl,
+            areaInAcres: data?.areaInAcres,
+            declarationIDWWorksfileUrl: data?.declarationIDWWorksfileUrl,
+            revisedLayoutPlanfileUrl: data?.revisedLayoutPlanfileUrl,
+            availedEdcfileUrl: data?.availedEdcfileUrl,
+            areaFallingUnderfileUrl: data?.areaFallingUnderfileUrl,
+            areaFallingDividing: data?.areaFallingDividing,
+          },
+        ],
+      };
 
       const response = await axios.post("/tl-services/SurrendOfLicenseRequest/_create", body);
 
@@ -168,7 +168,6 @@ function SurrenderLic() {
 
       setLoading(false);
       setShowToastError({ label: "Surrender of License submitted successfully", error: false, success: true });
-
     } catch (err) {
       console.log("Submit Error ====> ", err.message);
       setLoading(false);
@@ -181,45 +180,44 @@ function SurrenderLic() {
     try {
       setLoading(true);
       const body = {
-        "RequestInfo": {
-          "apiId": "Rainmaker",
-          "ver": ".01",
-          "ts": null,
-          "action": "_update",
-          "did": "1",
-          "key": "",
-          "msgId": "20170310130900|en_IN",
-          "authToken": authToken,
-          "userInfo": userInfo
+        RequestInfo: {
+          apiId: "Rainmaker",
+          ver: ".01",
+          ts: null,
+          action: "_update",
+          did: "1",
+          key: "",
+          msgId: "20170310130900|en_IN",
+          authToken: authToken,
+          userInfo: userInfo,
         },
-        "SurrendOfLicense": [
+        SurrendOfLicense: [
           {
             ...licenseData,
-            "tenantId": "hr",
-            "action": "",
-            "licenseNo": data?.licenceNo,
-            "selectType": data?.selectType,
-            "areaFallingUnder": data?.areaFallingUnder,
-            "thirdPartyRights": data?.thirdPartyRights,
-            "areraRegistration": data?.reraRegistration,
-            "zoningLayoutPlanfileUrl": data?.zoningLayoutPlanfileUrl,
-            "licenseCopyfileUrl": data?.licenseCopyfileUrl,
-            "edcaVailedfileUrl": data?.edcaVailedfileUrl,
-            "detailedRelocationSchemefileUrl": data?.detailedRelocationSchemefileUrl,
-            "giftDeedfileUrl": data?.giftDeedfileUrl,
-            "mutationfileUrl": data?.mutationfileUrl,
-            "jamabandhifileUrl": data?.jamabandhifileUrl,
-            "thirdPartyRightsDeclarationfileUrl": data?.thirdPartyRightsDeclarationfileUrl,
-            "areaInAcres": data?.areaInAcres,
-            "declarationIDWWorksfileUrl": data?.declarationIDWWorksfileUrl,
-            "revisedLayoutPlanfileUrl": data?.revisedLayoutPlanfileUrl,
-            "availedEdcfileUrl": data?.availedEdcfileUrl,
-            "areaFallingUnderfileUrl": data?.areaFallingUnderfileUrl,
-            "areaFallingDividing": data?.areaFallingDividing,
-            
-          }
-        ]
-      }
+            tenantId: "hr",
+            action: "",
+            licenseNo: data?.licenceNo,
+            selectType: data?.selectType,
+            areaFallingUnder: data?.areaFallingUnder,
+            thirdPartyRights: data?.thirdPartyRights,
+            areraRegistration: data?.reraRegistration,
+            zoningLayoutPlanfileUrl: data?.zoningLayoutPlanfileUrl,
+            licenseCopyfileUrl: data?.licenseCopyfileUrl,
+            edcaVailedfileUrl: data?.edcaVailedfileUrl,
+            detailedRelocationSchemefileUrl: data?.detailedRelocationSchemefileUrl,
+            giftDeedfileUrl: data?.giftDeedfileUrl,
+            mutationfileUrl: data?.mutationfileUrl,
+            jamabandhifileUrl: data?.jamabandhifileUrl,
+            thirdPartyRightsDeclarationfileUrl: data?.thirdPartyRightsDeclarationfileUrl,
+            areaInAcres: data?.areaInAcres,
+            declarationIDWWorksfileUrl: data?.declarationIDWWorksfileUrl,
+            revisedLayoutPlanfileUrl: data?.revisedLayoutPlanfileUrl,
+            availedEdcfileUrl: data?.availedEdcfileUrl,
+            areaFallingUnderfileUrl: data?.areaFallingUnderfileUrl,
+            areaFallingDividing: data?.areaFallingDividing,
+          },
+        ],
+      };
 
       const response = await axios.post("/tl-services/SurrendOfLicenseRequest/_update", body);
 
@@ -227,7 +225,6 @@ function SurrenderLic() {
 
       setLoading(false);
       setShowToastError({ label: "Surrender of License updated successfully", error: false, success: true });
-
     } catch (err) {
       console.log("Update Error ====> ", err.message);
       setLoading(false);
@@ -236,24 +233,22 @@ function SurrenderLic() {
   };
 
   const submitForm = (data) => {
-    if (params.get('id')) {
-      UpdateSurrenderLic(data)
+    if (params.get("id")) {
+      UpdateSurrenderLic(data);
     } else {
-      SurrenderLic(data)
+      SurrenderLic(data);
     }
-  }
+  };
 
   useEffect(() => {
     // if(id){
     getLicenseData();
     // }
-  }, [])
+  }, []);
 
   return (
     <form onSubmit={handleSubmit(submitForm)}>
-      {
-        loader && <Spinner />
-      }
+      {loader && <Spinner />}
 
       {showToastError && (
         <CusToaster
@@ -272,23 +267,23 @@ function SurrenderLic() {
         <div className="card">
           <br></br>
           <div className="row-12">
-
-          <div className="col-12 p-3">
-                  <SearchLicenceComp
-                    watch={watch}
-                    register={register}
-                    control={control}
-                    setLoader={setLoading}
-                    errors={errors}
-                    setValue={setValue}
-                  />
-                </div> 
+            <div className="col-12 p-3">
+              <SearchLicenceComp
+                watch={watch}
+                register={register}
+                control={control}
+                setLoader={setLoading}
+                errors={errors}
+                setValue={setValue}
+                resetField={resetField}
+              />
+            </div>
             <div className="col md={4} xxl lg-4">
               {/* <FormControl> */}
-                {/* <h2 className="FormLable">
+              {/* <h2 className="FormLable">
                   Licence No . <span style={{ color: "red" }}>*</span>
                 </h2> */}
-                {/* <InputLabel id="select-label" >
+              {/* <InputLabel id="select-label" >
                   {`${t("LICENSE_NO")}`} <span style={{ color: "red" }}>*</span>
                 </InputLabel>
 
@@ -315,8 +310,8 @@ function SurrenderLic() {
               </FormControl>
               &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; */}
 
-              <FormControl  >
-                <InputLabel id="select-label" >
+              <FormControl>
+                <InputLabel id="select-label">
                   {`${t("SELECT_TYPE_COMPLETE_OR_PARTIAL")}`} <span style={{ color: "red" }}>*</span>
                 </InputLabel>
                 <Select
@@ -325,20 +320,17 @@ function SurrenderLic() {
                   labelId="select-label"
                   id="select-field"
                   {...register("selectType", {
-                    required: "At least one should be selected"
+                    required: "At least one should be selected",
                   })}
                   value={watch("selectType") || ""}
-                  
                   // onChange={(e) => handleshowhide(e)}
                   error={errors.selectType !== undefined}
-                // input ={<TextField label="Select Type (Complete or Partial) *" variant="standard" value={"COMPLETE"} />}
+                  // input ={<TextField label="Select Type (Complete or Partial) *" variant="standard" value={"COMPLETE"} />}
                 >
-                  <MenuItem style={{ padding: '12px' }} value="COMPLETE">{`${t("COMPLETE")}`}</MenuItem>
-                  <MenuItem style={{ padding: '12px' }} value="PARTIAL">{`${t("PARTIAL")}`}</MenuItem>
+                  <MenuItem style={{ padding: "12px" }} value="COMPLETE">{`${t("COMPLETE")}`}</MenuItem>
+                  <MenuItem style={{ padding: "12px" }} value="PARTIAL">{`${t("PARTIAL")}`}</MenuItem>
                 </Select>
-                <FormHelperText error={Boolean(errors?.selectType)}>
-                  {errors?.selectType?.message}
-                </FormHelperText>
+                <FormHelperText error={Boolean(errors?.selectType)}>{errors?.selectType?.message}</FormHelperText>
               </FormControl>
               {/* <FormControl>
                 <h2 className="FormLable">
@@ -361,27 +353,28 @@ function SurrenderLic() {
               </FormControl> */}
             </div>
             <div>
-              {watch('selectType') === "PARTIAL" && (
+              {watch("selectType") === "PARTIAL" && (
                 <div className="row-12">
                   <div className="col col-4 ">
                     <FormControl>
-
-                      <InputLabel id="select-label" >
+                      <InputLabel id="select-label">
                         {`${t("AREA_IN_ACRES")}`} <span style={{ color: "red" }}>*</span>
                       </InputLabel>
 
-                      <TextField variant="standard" placeholder="" className="Inputcontrol" {...register("areaInAcres", {
-                        required: "This field cannot be blank",
-                        validate: {
-                          min: (value) => Number(value) > 0 || 'Area in Acres should be minimum 1',
-                          max: (value) => Number(value) <= 10 || 'Area in Acres should be maximum 10'
-                        }
-                      })}
+                      <TextField
+                        variant="standard"
+                        placeholder=""
+                        className="Inputcontrol"
+                        {...register("areaInAcres", {
+                          required: "This field cannot be blank",
+                          validate: {
+                            min: (value) => Number(value) > 0 || "Area in Acres should be minimum 1",
+                            max: (value) => Number(value) <= 10 || "Area in Acres should be maximum 10",
+                          },
+                        })}
                         error={Boolean(errors?.areaInAcres)}
                       />
-                      <FormHelperText error={Boolean(errors?.areaInAcres)}>
-                        {errors?.areaInAcres?.message}
-                      </FormHelperText>
+                      <FormHelperText error={Boolean(errors?.areaInAcres)}>{errors?.areaInAcres?.message}</FormHelperText>
                     </FormControl>
                   </div>
                 </div>
@@ -399,7 +392,7 @@ function SurrenderLic() {
                       name="areaFallingUnder"
                       id="areaFallingUnder"
                       {...register("areaFallingUnder", {
-                        required: "Please Select (Yes/No)"
+                        required: "Please Select (Yes/No)",
                       })}
                       onChange={(e) => handleselects(e)}
                     />
@@ -413,7 +406,7 @@ function SurrenderLic() {
                       name="areaFallingUnder"
                       id="areaFallingUnder"
                       {...register("areaFallingUnder", {
-                        required: "Please Select (Yes/No)"
+                        required: "Please Select (Yes/No)",
                       })}
                       onChange={(e) => handleselects(e)}
                     />
@@ -438,7 +431,7 @@ function SurrenderLic() {
                       name="thirdPartyRights"
                       id="thirdPartyRights"
                       {...register("thirdPartyRights", {
-                        required: "Please Select (Yes/No)"
+                        required: "Please Select (Yes/No)",
                       })}
                     />
                     &nbsp; {`${t("YES")}`} &nbsp;&nbsp;
@@ -451,7 +444,7 @@ function SurrenderLic() {
                       name="thirdPartyRights"
                       id="thirdPartyRights"
                       {...register("thirdPartyRights", {
-                        required: "Please Select (Yes/No)"
+                        required: "Please Select (Yes/No)",
                       })}
                     />
                     &nbsp; {`${t("NO")}`} &nbsp;&nbsp;
@@ -475,7 +468,7 @@ function SurrenderLic() {
                       id="reraRegistration"
                       value="yes"
                       {...register("reraRegistration", {
-                        required: "Please Select (Yes/No)"
+                        required: "Please Select (Yes/No)",
                       })}
                       onChange={(e) => handleselects(e)}
                     />
@@ -489,7 +482,7 @@ function SurrenderLic() {
                       id="reraRegistration"
                       value="no"
                       {...register("reraRegistration", {
-                        required: "Please Select (Yes/No)"
+                        required: "Please Select (Yes/No)",
                       })}
                       onChange={(e) => handleselects(e)}
                     />
@@ -504,7 +497,7 @@ function SurrenderLic() {
 
             <div className="row-12">
               <div>
-                {watch('selectType') === "COMPLETE" && (
+                {watch("selectType") === "COMPLETE" && (
                   //  <div className="card">
                   <div className="table table-bordered table-responsive">
                     <thead>
@@ -526,195 +519,211 @@ function SurrenderLic() {
                         <td>
                           {" "}
                           {`${t("APPROVED_COPY_OF_ZONING_PLAN")}`} <span style={{ color: "red" }}>*</span>
-                          {
-                            watch("zoningLayoutPlanfileUrl") &&
-                            (
-                              <div>
-                                <small>File Uploaded</small>
-                              </div>
-                            )
-                          }
+                          {watch("zoningLayoutPlanfileUrl") && (
+                            <div>
+                              <small>File Uploaded</small>
+                            </div>
+                          )}
                         </td>
-                        {
-                          watch("zoningLayoutPlanfileUrl") ?
-                            (
-                              <td>
-                                <input type="file" placeholder="" className="form-control" onChange={(e) => uploadFile(e.target.files[0], "zoningLayoutPlan")} ></input>
-                                <h3 className="error-message" style={{ color: "red" }}>
-                                  {errors?.zoningLayoutPlan && errors?.zoningLayoutPlan?.message}
-                                </h3>
-                                {/* <input type="file" placeholder="" className="form-control" {...register("oning/LayoutPlan")}></input> */}
-                              </td>
-                            ) : (
-                              <td>
-                                <input type="file" placeholder="" className="form-control" {...register("zoningLayoutPlan", { required: "This Document is required" })} onChange={(e) => uploadFile(e.target.files[0], "zoningLayoutPlan")} ></input>
-                                <h3 className="error-message" style={{ color: "red" }}>
-                                  {errors?.zoningLayoutPlan && errors?.zoningLayoutPlan?.message}
-                                </h3>
-                                {/* <input type="file" placeholder="" className="form-control" {...register("oning/LayoutPlan")}></input> */}
-                              </td>
-                            )
-                        }
-
+                        {watch("zoningLayoutPlanfileUrl") ? (
+                          <td>
+                            <input
+                              type="file"
+                              placeholder=""
+                              className="form-control"
+                              onChange={(e) => uploadFile(e.target.files[0], "zoningLayoutPlan")}
+                            ></input>
+                            <h3 className="error-message" style={{ color: "red" }}>
+                              {errors?.zoningLayoutPlan && errors?.zoningLayoutPlan?.message}
+                            </h3>
+                            {/* <input type="file" placeholder="" className="form-control" {...register("oning/LayoutPlan")}></input> */}
+                          </td>
+                        ) : (
+                          <td>
+                            <input
+                              type="file"
+                              placeholder=""
+                              className="form-control"
+                              {...register("zoningLayoutPlan", { required: "This Document is required" })}
+                              onChange={(e) => uploadFile(e.target.files[0], "zoningLayoutPlan")}
+                            ></input>
+                            <h3 className="error-message" style={{ color: "red" }}>
+                              {errors?.zoningLayoutPlan && errors?.zoningLayoutPlan?.message}
+                            </h3>
+                            {/* <input type="file" placeholder="" className="form-control" {...register("oning/LayoutPlan")}></input> */}
+                          </td>
+                        )}
                       </tr>
                       <tr>
                         <th className="fw-normal">2</th>
                         <td>
                           {" "}
                           {`${t("LICENSE_COPY")}`} <span style={{ color: "red" }}>*</span>
-                          {
-                            watch("licenseCopyfileUrl") &&
-                            (
-                              <div>
-                                <small>File Uploaded</small>
-                              </div>
-                            )
-                          }
+                          {watch("licenseCopyfileUrl") && (
+                            <div>
+                              <small>File Uploaded</small>
+                            </div>
+                          )}
                         </td>
 
-                        {
-                          watch("licenseCopyfileUrl") ?
-                            (
-                              <td>
-                                <input type="file" placeholder="" className="form-control" onChange={(e) => uploadFile(e.target.files[0], "licenseCopy")} ></input>
-                                <h3 className="error-message" style={{ color: "red" }}>
-                                  {errors?.licenseCopy && errors?.licenseCopy?.message}
-                                </h3>
-                              </td>
-                            ) : (
-                              <td>
-                                <input type="file" placeholder="" className="form-control" {...register("licenseCopy", { required: "This Document is required" })} onChange={(e) => uploadFile(e.target.files[0], "licenseCopy")} ></input>
-                                <h3 className="error-message" style={{ color: "red" }}>
-                                  {errors?.licenseCopy && errors?.licenseCopy?.message}
-                                </h3>
-                              </td>
-                            )
-                        }
-
+                        {watch("licenseCopyfileUrl") ? (
+                          <td>
+                            <input
+                              type="file"
+                              placeholder=""
+                              className="form-control"
+                              onChange={(e) => uploadFile(e.target.files[0], "licenseCopy")}
+                            ></input>
+                            <h3 className="error-message" style={{ color: "red" }}>
+                              {errors?.licenseCopy && errors?.licenseCopy?.message}
+                            </h3>
+                          </td>
+                        ) : (
+                          <td>
+                            <input
+                              type="file"
+                              placeholder=""
+                              className="form-control"
+                              {...register("licenseCopy", { required: "This Document is required" })}
+                              onChange={(e) => uploadFile(e.target.files[0], "licenseCopy")}
+                            ></input>
+                            <h3 className="error-message" style={{ color: "red" }}>
+                              {errors?.licenseCopy && errors?.licenseCopy?.message}
+                            </h3>
+                          </td>
+                        )}
                       </tr>
                       <tr>
                         <th className="fw-normal">3</th>
                         <td>
                           {" "}
-                          {`${t("EDC_AVAILED")}`}<span style={{ color: "red" }}>*</span>
-                          {
-                            watch("edcaVailedfileUrl") &&
-                            (
+                          {`${t("EDC_AVAILED")}`}
+                          <span style={{ color: "red" }}>*</span>
+                          {watch("edcaVailedfileUrl") && (
+                            <div>
+                              <small>File Uploaded</small>
+                            </div>
+                          )}
+                        </td>
+                        {watch("edcaVailedfileUrl") ? (
+                          <td>
+                            <input
+                              type="file"
+                              placeholder=""
+                              className="form-control"
+                              onChange={(e) => uploadFile(e.target.files[0], "edcaVailed")}
+                            ></input>
+                            <h3 className="error-message" style={{ color: "red" }}>
+                              {errors?.edcaVailed && errors?.edcaVailed?.message}
+                            </h3>
+                          </td>
+                        ) : (
+                          <td>
+                            <input
+                              type="file"
+                              placeholder=""
+                              className="form-control"
+                              {...register("edcaVailed", { required: "This Document is required" })}
+                              onChange={(e) => uploadFile(e.target.files[0], "edcaVailed")}
+                            ></input>
+                            <h3 className="error-message" style={{ color: "red" }}>
+                              {errors?.edcaVailed && errors?.edcaVailed?.message}
+                            </h3>
+                          </td>
+                        )}
+                      </tr>
+
+                      {watch("thirdPartyRights") === "no" && (
+                        <tr>
+                          <th className="fw-normal">4</th>
+                          <td>
+                            {`${t("DECLARATION_OF_THIRD_PARTY_RIGHTS")}`}
+                            <span style={{ color: "red" }}>*</span>
+                            {watch("thirdPartyRightsDeclarationfileUrl") && (
                               <div>
                                 <small>File Uploaded</small>
                               </div>
-                            )
-                          }
-                        </td>
-                        {
-                          watch("edcaVailedfileUrl") ?
-                            (
-                              <td>
-                                <input type="file" placeholder="" className="form-control" onChange={(e) => uploadFile(e.target.files[0], "edcaVailed")} ></input>
-                                <h3 className="error-message" style={{ color: "red" }}>
-                                  {errors?.edcaVailed && errors?.edcaVailed?.message}
-                                </h3>
-                              </td>
-                            ) : (
-                              <td>
-                                <input type="file" placeholder="" className="form-control" {...register("edcaVailed", { required: "This Document is required" })} onChange={(e) => uploadFile(e.target.files[0], "edcaVailed")} ></input>
-                                <h3 className="error-message" style={{ color: "red" }}>
-                                  {errors?.edcaVailed && errors?.edcaVailed?.message}
-                                </h3>
-                              </td>
-                            )
-                        }
-
-                      </tr>
-
-                      {
-                        (watch('thirdPartyRights') === 'no') && (
-                          <tr>
-                            <th className="fw-normal">4</th>
+                            )}
+                          </td>
+                          {watch("thirdPartyRightsDeclarationfileUrl") ? (
                             <td>
-                              {`${t("DECLARATION_OF_THIRD_PARTY_RIGHTS")}`}
-                              <span style={{ color: "red" }}>*</span>
-                              {
-                                watch("thirdPartyRightsDeclarationfileUrl") &&
-                                (
-                                  <div>
-                                    <small>File Uploaded</small>
-                                  </div>
-                                )
-                              }
+                              {/* <input type="file" placeholder="" className="form-control" {...register("oning/LayoutPlan")}></input> */}
+                              <input
+                                type="file"
+                                placeholder=""
+                                className="form-control"
+                                onChange={(e) => uploadFile(e.target.files[0], "thirdPartyRightsDeclaration")}
+                              ></input>
+                              <h3 className="error-message" style={{ color: "red" }}>
+                                {errors?.thirdPartyRightsDeclaration && errors?.thirdPartyRightsDeclaration?.message}
+                              </h3>
                             </td>
-                            {
-                              watch("thirdPartyRightsDeclarationfileUrl") ?
-                                (
-                                  <td>
-                                    {/* <input type="file" placeholder="" className="form-control" {...register("oning/LayoutPlan")}></input> */}
-                                    <input type="file" placeholder="" className="form-control" onChange={(e) => uploadFile(e.target.files[0], "thirdPartyRightsDeclaration")} ></input>
-                                    <h3 className="error-message" style={{ color: "red" }}>
-                                      {errors?.thirdPartyRightsDeclaration && errors?.thirdPartyRightsDeclaration?.message}
-                                    </h3>
-                                  </td>
-                                ) : (
-                                  <td>
-                                    {/* <input type="file" placeholder="" className="form-control" {...register("oning/LayoutPlan")}></input> */}
-                                    <input type="file" placeholder="" className="form-control" {...register("thirdPartyRightsDeclaration", { required: "This Document is required" })} onChange={(e) => uploadFile(e.target.files[0], "thirdPartyRightsDeclaration")} ></input>
-                                    <h3 className="error-message" style={{ color: "red" }}>
-                                      {errors?.thirdPartyRightsDeclaration && errors?.thirdPartyRightsDeclaration?.message}
-                                    </h3>
-                                  </td>
-                                )
-                            }
-
-                          </tr>
-                        )
-                      }
-
-                      {
-                        (watch('thirdPartyRights') === 'yes') && (
-                          <tr>
-                            <th className="fw-normal">4</th>
+                          ) : (
                             <td>
-                              {`${t("DETAILED_SCHEME_OF_RELOCATION")}`}
-                              <span style={{ color: "red" }}>*</span>
-                              {
-                                watch("detailedRelocationSchemefileUrl") &&
-                                (
-                                  <div>
-                                    <small>File Uploaded</small>
-                                  </div>
-                                )
-                              }
+                              {/* <input type="file" placeholder="" className="form-control" {...register("oning/LayoutPlan")}></input> */}
+                              <input
+                                type="file"
+                                placeholder=""
+                                className="form-control"
+                                {...register("thirdPartyRightsDeclaration", { required: "This Document is required" })}
+                                onChange={(e) => uploadFile(e.target.files[0], "thirdPartyRightsDeclaration")}
+                              ></input>
+                              <h3 className="error-message" style={{ color: "red" }}>
+                                {errors?.thirdPartyRightsDeclaration && errors?.thirdPartyRightsDeclaration?.message}
+                              </h3>
                             </td>
-                            {
-                              watch("detailedRelocationSchemefileUrl") ?
-                                (
-                                  <td>
-                                    {/* <input type="file" placeholder="" className="form-control" {...register("oning/LayoutPlan")}></input> */}
-                                    <input type="file" placeholder="" className="form-control" onChange={(e) => uploadFile(e.target.files[0], "detailedRelocationScheme")} ></input>
-                                    <h3 className="error-message" style={{ color: "red" }}>
-                                      {errors?.detailedRelocationScheme && errors?.detailedRelocationScheme?.message}
-                                    </h3>
-                                  </td>
-                                ) : (
-                                  <td>
-                                    {/* <input type="file" placeholder="" className="form-control" {...register("oning/LayoutPlan")}></input> */}
-                                    <input type="file" placeholder="" className="form-control" {...register("detailedRelocationScheme", { required: "This Document is required" })} onChange={(e) => uploadFile(e.target.files[0], "detailedRelocationScheme")} ></input>
-                                    <h3 className="error-message" style={{ color: "red" }}>
-                                      {errors?.detailedRelocationScheme && errors?.detailedRelocationScheme?.message}
-                                    </h3>
-                                  </td>
-                                )
-                            }
+                          )}
+                        </tr>
+                      )}
 
-                          </tr>
-                        )
-                      }
+                      {watch("thirdPartyRights") === "yes" && (
+                        <tr>
+                          <th className="fw-normal">4</th>
+                          <td>
+                            {`${t("DETAILED_SCHEME_OF_RELOCATION")}`}
+                            <span style={{ color: "red" }}>*</span>
+                            {watch("detailedRelocationSchemefileUrl") && (
+                              <div>
+                                <small>File Uploaded</small>
+                              </div>
+                            )}
+                          </td>
+                          {watch("detailedRelocationSchemefileUrl") ? (
+                            <td>
+                              {/* <input type="file" placeholder="" className="form-control" {...register("oning/LayoutPlan")}></input> */}
+                              <input
+                                type="file"
+                                placeholder=""
+                                className="form-control"
+                                onChange={(e) => uploadFile(e.target.files[0], "detailedRelocationScheme")}
+                              ></input>
+                              <h3 className="error-message" style={{ color: "red" }}>
+                                {errors?.detailedRelocationScheme && errors?.detailedRelocationScheme?.message}
+                              </h3>
+                            </td>
+                          ) : (
+                            <td>
+                              {/* <input type="file" placeholder="" className="form-control" {...register("oning/LayoutPlan")}></input> */}
+                              <input
+                                type="file"
+                                placeholder=""
+                                className="form-control"
+                                {...register("detailedRelocationScheme", { required: "This Document is required" })}
+                                onChange={(e) => uploadFile(e.target.files[0], "detailedRelocationScheme")}
+                              ></input>
+                              <h3 className="error-message" style={{ color: "red" }}>
+                                {errors?.detailedRelocationScheme && errors?.detailedRelocationScheme?.message}
+                              </h3>
+                            </td>
+                          )}
+                        </tr>
+                      )}
 
                       <tr>
-                        <th className="fw-normal">{watch('thirdPartyRights') ? '5' : '4'}</th>
+                        <th className="fw-normal">{watch("thirdPartyRights") ? "5" : "4"}</th>
                         <td>
                           {" "}
-                          {`${t("AREA_FALLING_UNDER_24M_ROAD_OR_SECTOR_DIVIDING_ROAD_AND_GREEN_BELT")}`}{" "}
-                          <span style={{ color: "red" }}>*</span>
+                          {`${t("AREA_FALLING_UNDER_24M_ROAD_OR_SECTOR_DIVIDING_ROAD_AND_GREEN_BELT")}`} <span style={{ color: "red" }}>*</span>
                         </td>
                         <td>
                           <fieldset>
@@ -752,115 +761,127 @@ function SurrenderLic() {
                           </fieldset>
                         </td>
                       </tr>
-
                     </tbody>
                     {/* {selects}efewfwefwef */}
-                    {watch('areaFallingDividing') === "yes" && (
+                    {watch("areaFallingDividing") === "yes" && (
                       // <table class="table">
                       <tbody>
                         <tr>
-                          <th className="fw-normal">{watch('thirdPartyRights') ? '6' : '5'}</th>
+                          <th className="fw-normal">{watch("thirdPartyRights") ? "6" : "5"}</th>
                           <td>
                             {" "}
                             {`${t("GIFT_DEED")}`}
                             <span style={{ color: "red" }}>*</span>
-                            {
-                              watch("giftDeedfileUrl") &&
-                              (
-                                <div>
-                                  <small>File Uploaded</small>
-                                </div>
-                              )
-                            }
+                            {watch("giftDeedfileUrl") && (
+                              <div>
+                                <small>File Uploaded</small>
+                              </div>
+                            )}
                           </td>
-                          {
-                            watch("giftDeedfileUrl") ?
-                              (
-                                <td>
-                                  <input type="file" placeholder="" className="form-control" onChange={(e) => uploadFile(e.target.files[0], "giftDeed")} ></input>
-                                  <h3 className="error-message" style={{ color: "red" }}>
-                                    {errors?.giftDeed && errors?.giftDeed?.message}
-                                  </h3>
-                                </td>
-                              ) : (
-                                <td>
-                                  <input type="file" placeholder="" className="form-control" {...register("giftDeed", { required: "This Document is required" })} onChange={(e) => uploadFile(e.target.files[0], "giftDeed")} ></input>
-                                  <h3 className="error-message" style={{ color: "red" }}>
-                                    {errors?.giftDeed && errors?.giftDeed?.message}
-                                  </h3>
-                                </td>
-                              )
-                          }
-
+                          {watch("giftDeedfileUrl") ? (
+                            <td>
+                              <input
+                                type="file"
+                                placeholder=""
+                                className="form-control"
+                                onChange={(e) => uploadFile(e.target.files[0], "giftDeed")}
+                              ></input>
+                              <h3 className="error-message" style={{ color: "red" }}>
+                                {errors?.giftDeed && errors?.giftDeed?.message}
+                              </h3>
+                            </td>
+                          ) : (
+                            <td>
+                              <input
+                                type="file"
+                                placeholder=""
+                                className="form-control"
+                                {...register("giftDeed", { required: "This Document is required" })}
+                                onChange={(e) => uploadFile(e.target.files[0], "giftDeed")}
+                              ></input>
+                              <h3 className="error-message" style={{ color: "red" }}>
+                                {errors?.giftDeed && errors?.giftDeed?.message}
+                              </h3>
+                            </td>
+                          )}
                         </tr>
                         <tr>
-                          <th className="fw-normal">{watch('thirdPartyRights') ? '7' : '6'}</th>
+                          <th className="fw-normal">{watch("thirdPartyRights") ? "7" : "6"}</th>
                           <td>
                             {" "}
                             {`${t("MUTATION")}`}
                             <span style={{ color: "red" }}>*</span>
-                            {
-                              watch("mutationfileUrl") &&
-                              (
-                                <div>
-                                  <small>File Uploaded</small>
-                                </div>
-                              )
-                            }
+                            {watch("mutationfileUrl") && (
+                              <div>
+                                <small>File Uploaded</small>
+                              </div>
+                            )}
                           </td>
-                          {
-                            watch("mutationfileUrl") ?
-                              (
-                                <td>
-                                  <input type="file" placeholder="" className="form-control" onChange={(e) => uploadFile(e.target.files[0], "mutation")} ></input>
-                                  <h3 className="error-message" style={{ color: "red" }}>
-                                    {errors?.mutation && errors?.mutation?.message}
-                                  </h3>
-                                </td>
-                              ) : (
-                                <td>
-                                  <input type="file" placeholder="" className="form-control" {...register("mutation", { required: "This Document is required" })} onChange={(e) => uploadFile(e.target.files[0], "mutation")} ></input>
-                                  <h3 className="error-message" style={{ color: "red" }}>
-                                    {errors?.mutation && errors?.mutation?.message}
-                                  </h3>
-                                </td>
-                              )
-                          }
-
+                          {watch("mutationfileUrl") ? (
+                            <td>
+                              <input
+                                type="file"
+                                placeholder=""
+                                className="form-control"
+                                onChange={(e) => uploadFile(e.target.files[0], "mutation")}
+                              ></input>
+                              <h3 className="error-message" style={{ color: "red" }}>
+                                {errors?.mutation && errors?.mutation?.message}
+                              </h3>
+                            </td>
+                          ) : (
+                            <td>
+                              <input
+                                type="file"
+                                placeholder=""
+                                className="form-control"
+                                {...register("mutation", { required: "This Document is required" })}
+                                onChange={(e) => uploadFile(e.target.files[0], "mutation")}
+                              ></input>
+                              <h3 className="error-message" style={{ color: "red" }}>
+                                {errors?.mutation && errors?.mutation?.message}
+                              </h3>
+                            </td>
+                          )}
                         </tr>
                         <tr>
-                          <th className="fw-normal">{watch('thirdPartyRights') ? '8' : '7'}</th>
+                          <th className="fw-normal">{watch("thirdPartyRights") ? "8" : "7"}</th>
                           <td>
                             {" "}
-                            {`${t("JAMABANDHI")}`}<span style={{ color: "red" }}>*</span>
-                            {
-                              watch("jamabandhifileUrl") &&
-                              (
-                                <div>
-                                  <small>File Uploaded</small>
-                                </div>
-                              )
-                            }
+                            {`${t("JAMABANDHI")}`}
+                            <span style={{ color: "red" }}>*</span>
+                            {watch("jamabandhifileUrl") && (
+                              <div>
+                                <small>File Uploaded</small>
+                              </div>
+                            )}
                           </td>
-                          {
-                            watch("jamabandhifileUrl") ?
-                              (
-                                <td>
-                                  <input type="file" placeholder="" className="form-control" onChange={(e) => uploadFile(e.target.files[0], "jamabandhi")} ></input>
-                                  <h3 className="error-message" style={{ color: "red" }}>
-                                    {errors?.jamabandhi && errors?.jamabandhi?.message}
-                                  </h3>
-                                </td>
-                              ) : (
-                                <td>
-                                  <input type="file" placeholder="" className="form-control" {...register("jamabandhi", { required: "This Document is required" })} onChange={(e) => uploadFile(e.target.files[0], "jamabandhi")} ></input>
-                                  <h3 className="error-message" style={{ color: "red" }}>
-                                    {errors?.jamabandhi && errors?.jamabandhi?.message}
-                                  </h3>
-                                </td>
-                              )
-                          }
-
+                          {watch("jamabandhifileUrl") ? (
+                            <td>
+                              <input
+                                type="file"
+                                placeholder=""
+                                className="form-control"
+                                onChange={(e) => uploadFile(e.target.files[0], "jamabandhi")}
+                              ></input>
+                              <h3 className="error-message" style={{ color: "red" }}>
+                                {errors?.jamabandhi && errors?.jamabandhi?.message}
+                              </h3>
+                            </td>
+                          ) : (
+                            <td>
+                              <input
+                                type="file"
+                                placeholder=""
+                                className="form-control"
+                                {...register("jamabandhi", { required: "This Document is required" })}
+                                onChange={(e) => uploadFile(e.target.files[0], "jamabandhi")}
+                              ></input>
+                              <h3 className="error-message" style={{ color: "red" }}>
+                                {errors?.jamabandhi && errors?.jamabandhi?.message}
+                              </h3>
+                            </td>
+                          )}
                         </tr>
                       </tbody>
                       // </table>
@@ -871,7 +892,7 @@ function SurrenderLic() {
               </div>
 
               <div>
-                {watch('selectType') === "PARTIAL" && (
+                {watch("selectType") === "PARTIAL" && (
                   // <div className="card">
                   <div className="table table-bordered table-responsive">
                     {/* <caption>List of users</caption> */}
@@ -887,35 +908,40 @@ function SurrenderLic() {
                         <th className="fw-normal">1</th>
                         <td>
                           {" "}
-                          {`${t("DECLARATION_IDW_WORKS")}`}<span style={{ color: "red" }}>*</span>
-                          {
-                            watch("declarationIDWWorksfileUrl") &&
-                            (
-                              <div>
-                                <small>File Uploaded</small>
-                              </div>
-                            )
-                          }
+                          {`${t("DECLARATION_IDW_WORKS")}`}
+                          <span style={{ color: "red" }}>*</span>
+                          {watch("declarationIDWWorksfileUrl") && (
+                            <div>
+                              <small>File Uploaded</small>
+                            </div>
+                          )}
                         </td>
-                        {
-                          watch("declarationIDWWorksfileUrl") ?
-                            (
-                              <td>
-                                <input type="file" placeholder="" className="form-control" onChange={(e) => uploadFile(e.target.files[0], "declarationIDWWorks")} ></input>
-                                <h3 className="error-message" style={{ color: "red" }}>
-                                  {errors?.declarationIDWWorks && errors?.declarationIDWWorks?.message}
-                                </h3>
-                              </td>
-                            ) : (
-                              <td>
-                                <input type="file" placeholder="" className="form-control" {...register("declarationIDWWorks", { required: "This Document is required" })} onChange={(e) => uploadFile(e.target.files[0], "declarationIDWWorks")} ></input>
-                                <h3 className="error-message" style={{ color: "red" }}>
-                                  {errors?.declarationIDWWorks && errors?.declarationIDWWorks?.message}
-                                </h3>
-                              </td>
-                            )
-                        }
-
+                        {watch("declarationIDWWorksfileUrl") ? (
+                          <td>
+                            <input
+                              type="file"
+                              placeholder=""
+                              className="form-control"
+                              onChange={(e) => uploadFile(e.target.files[0], "declarationIDWWorks")}
+                            ></input>
+                            <h3 className="error-message" style={{ color: "red" }}>
+                              {errors?.declarationIDWWorks && errors?.declarationIDWWorks?.message}
+                            </h3>
+                          </td>
+                        ) : (
+                          <td>
+                            <input
+                              type="file"
+                              placeholder=""
+                              className="form-control"
+                              {...register("declarationIDWWorks", { required: "This Document is required" })}
+                              onChange={(e) => uploadFile(e.target.files[0], "declarationIDWWorks")}
+                            ></input>
+                            <h3 className="error-message" style={{ color: "red" }}>
+                              {errors?.declarationIDWWorks && errors?.declarationIDWWorks?.message}
+                            </h3>
+                          </td>
+                        )}
                       </tr>
                       <tr>
                         <th className="fw-normal">2</th>
@@ -923,192 +949,208 @@ function SurrenderLic() {
                           {" "}
                           {`${t("REVISED_LAYOUT_PLAN")}`}
                           <span style={{ color: "red" }}>*</span>
-                          {
-                            watch("revisedLayoutPlanfileUrl") &&
-                            (
-                              <div>
-                                <small>File Uploaded</small>
-                              </div>
-                            )
-                          }
+                          {watch("revisedLayoutPlanfileUrl") && (
+                            <div>
+                              <small>File Uploaded</small>
+                            </div>
+                          )}
                         </td>
-                        {
-                          watch("revisedLayoutPlanfileUrl") ?
-                            (
-                              <td>
-                                <input type="file" placeholder="" className="form-control" onChange={(e) => uploadFile(e.target.files[0], "revisedLayoutPlan")} ></input>
-                                <h3 className="error-message" style={{ color: "red" }}>
-                                  {errors?.revisedLayoutPlan && errors?.revisedLayoutPlan?.message}
-                                </h3>
-                              </td>
-                            ) : (
-                              <td>
-                                <input type="file" placeholder="" className="form-control" {...register("revisedLayoutPlan", { required: "This Document is required" })} onChange={(e) => uploadFile(e.target.files[0], "revisedLayoutPlan")} ></input>
-                                <h3 className="error-message" style={{ color: "red" }}>
-                                  {errors?.revisedLayoutPlan && errors?.revisedLayoutPlan?.message}
-                                </h3>
-                              </td>
-                            )
-                        }
-
+                        {watch("revisedLayoutPlanfileUrl") ? (
+                          <td>
+                            <input
+                              type="file"
+                              placeholder=""
+                              className="form-control"
+                              onChange={(e) => uploadFile(e.target.files[0], "revisedLayoutPlan")}
+                            ></input>
+                            <h3 className="error-message" style={{ color: "red" }}>
+                              {errors?.revisedLayoutPlan && errors?.revisedLayoutPlan?.message}
+                            </h3>
+                          </td>
+                        ) : (
+                          <td>
+                            <input
+                              type="file"
+                              placeholder=""
+                              className="form-control"
+                              {...register("revisedLayoutPlan", { required: "This Document is required" })}
+                              onChange={(e) => uploadFile(e.target.files[0], "revisedLayoutPlan")}
+                            ></input>
+                            <h3 className="error-message" style={{ color: "red" }}>
+                              {errors?.revisedLayoutPlan && errors?.revisedLayoutPlan?.message}
+                            </h3>
+                          </td>
+                        )}
                       </tr>
                       <tr>
                         <th className="fw-normal">3</th>
                         <td>
                           {" "}
-                          {`${t("EDC_AVAILED")}`}<span style={{ color: "red" }}>*</span>
-                          {
-                            watch("availedEdcfileUrl") &&
-                            (
-                              <div>
-                                <small>File Uploaded</small>
-                              </div>
-                            )
-                          }
+                          {`${t("EDC_AVAILED")}`}
+                          <span style={{ color: "red" }}>*</span>
+                          {watch("availedEdcfileUrl") && (
+                            <div>
+                              <small>File Uploaded</small>
+                            </div>
+                          )}
                         </td>
-                        {
-                          watch("availedEdcfileUrl") ?
-                            (
-                              <td>
-                                <input type="file" placeholder="" className="form-control" onChange={(e) => uploadFile(e.target.files[0], "availedEdc")} ></input>
-                                <h3 className="error-message" style={{ color: "red" }}>
-                                  {errors?.availedEdc && errors?.availedEdc?.message}
-                                </h3>
-                              </td>
-                            ) : (
-                              <td>
-                                <input type="file" placeholder="" className="form-control" {...register("availedEdc", { required: "This Document is required" })} onChange={(e) => uploadFile(e.target.files[0], "availedEdc")} ></input>
-                                <h3 className="error-message" style={{ color: "red" }}>
-                                  {errors?.availedEdc && errors?.availedEdc?.message}
-                                </h3>
-                              </td>
-                            )
-                        }
-
+                        {watch("availedEdcfileUrl") ? (
+                          <td>
+                            <input
+                              type="file"
+                              placeholder=""
+                              className="form-control"
+                              onChange={(e) => uploadFile(e.target.files[0], "availedEdc")}
+                            ></input>
+                            <h3 className="error-message" style={{ color: "red" }}>
+                              {errors?.availedEdc && errors?.availedEdc?.message}
+                            </h3>
+                          </td>
+                        ) : (
+                          <td>
+                            <input
+                              type="file"
+                              placeholder=""
+                              className="form-control"
+                              {...register("availedEdc", { required: "This Document is required" })}
+                              onChange={(e) => uploadFile(e.target.files[0], "availedEdc")}
+                            ></input>
+                            <h3 className="error-message" style={{ color: "red" }}>
+                              {errors?.availedEdc && errors?.availedEdc?.message}
+                            </h3>
+                          </td>
+                        )}
                       </tr>
                       <tr>
                         <th className="fw-normal">4</th>
                         <td>
                           {" "}
                           {`${t("AREA_FALLING_UNDER_24M_ROAD_OR_SECTOR_DIVIDING_ROAD")}`} <span style={{ color: "red" }}>*</span>
-                          {
-                            watch("areaFallingUnderfileUrl") &&
-                            (
+                          {watch("areaFallingUnderfileUrl") && (
+                            <div>
+                              <small>File Uploaded</small>
+                            </div>
+                          )}
+                        </td>
+                        {watch("areaFallingUnderfileUrl") ? (
+                          <td>
+                            <input
+                              type="file"
+                              placeholder=""
+                              className="form-control"
+                              onChange={(e) => uploadFile(e.target.files[0], "areaFallingUnder")}
+                            ></input>
+                            <h3 className="error-message" style={{ color: "red" }}>
+                              {errors?.areaFallingUnderfile && errors?.areaFallingUnderfile?.message}
+                            </h3>
+                          </td>
+                        ) : (
+                          <td>
+                            <input
+                              type="file"
+                              placeholder=""
+                              className="form-control"
+                              {...register("areaFallingUnderfile", { required: "This Document is required" })}
+                              onChange={(e) => uploadFile(e.target.files[0], "areaFallingUnder")}
+                            ></input>
+                            <h3 className="error-message" style={{ color: "red" }}>
+                              {errors?.areaFallingUnderfile && errors?.areaFallingUnderfile?.message}
+                            </h3>
+                          </td>
+                        )}
+                      </tr>
+
+                      {watch("thirdPartyRights") === "no" && (
+                        <tr>
+                          <th className="fw-normal">5</th>
+                          <td>
+                            {`${t("DECLARATION_OF_THIRD_PARTY_RIGHTS")}`}
+                            <span style={{ color: "red" }}>*</span>
+                            {watch("thirdPartyRightsDeclarationfileUrl") && (
                               <div>
                                 <small>File Uploaded</small>
                               </div>
-                            )
-                          }
-                        </td>
-                        {
-                          watch("areaFallingUnderfileUrl") ?
-                            (
-                              <td>
-                                <input type="file" placeholder="" className="form-control" onChange={(e) => uploadFile(e.target.files[0], "areaFallingUnder")} ></input>
-                                <h3 className="error-message" style={{ color: "red" }}>
-                                  {errors?.areaFallingUnderfile && errors?.areaFallingUnderfile?.message}
-                                </h3>
-                              </td>
-                            ) : (
-                              <td>
-                                <input type="file" placeholder="" className="form-control" {...register("areaFallingUnderfile", { required: "This Document is required" })} onChange={(e) => uploadFile(e.target.files[0], "areaFallingUnder")} ></input>
-                                <h3 className="error-message" style={{ color: "red" }}>
-                                  {errors?.areaFallingUnderfile && errors?.areaFallingUnderfile?.message}
-                                </h3>
-                              </td>
-                            )
-                        }
-                      </tr>
-
-                      {
-                        (watch('thirdPartyRights') === 'no') && (
-                          <tr>
-                            <th className="fw-normal">5</th>
+                            )}
+                          </td>
+                          {watch("thirdPartyRightsDeclarationfileUrl") ? (
                             <td>
-                              {`${t("DECLARATION_OF_THIRD_PARTY_RIGHTS")}`}
-                              <span style={{ color: "red" }}>*</span>
-                              {
-                                watch("thirdPartyRightsDeclarationfileUrl") &&
-                                (
-                                  <div>
-                                    <small>File Uploaded</small>
-                                  </div>
-                                )
-                              }
+                              {/* <input type="file" placeholder="" className="form-control" {...register("oning/LayoutPlan")}></input> */}
+                              <input
+                                type="file"
+                                placeholder=""
+                                className="form-control"
+                                onChange={(e) => uploadFile(e.target.files[0], "thirdPartyRightsDeclaration")}
+                              ></input>
+                              <h3 className="error-message" style={{ color: "red" }}>
+                                {errors?.thirdPartyRightsDeclaration && errors?.thirdPartyRightsDeclaration?.message}
+                              </h3>
                             </td>
-                            {
-                              watch("thirdPartyRightsDeclarationfileUrl") ?
-                                (
-                                  <td>
-                                    {/* <input type="file" placeholder="" className="form-control" {...register("oning/LayoutPlan")}></input> */}
-                                    <input type="file" placeholder="" className="form-control" onChange={(e) => uploadFile(e.target.files[0], "thirdPartyRightsDeclaration")} ></input>
-                                    <h3 className="error-message" style={{ color: "red" }}>
-                                      {errors?.thirdPartyRightsDeclaration && errors?.thirdPartyRightsDeclaration?.message}
-                                    </h3>
-                                  </td>
-                                ) : (
-                                  <td>
-                                    {/* <input type="file" placeholder="" className="form-control" {...register("oning/LayoutPlan")}></input> */}
-                                    <input type="file" placeholder="" className="form-control" {...register("thirdPartyRightsDeclaration", { required: "This Document is required" })} onChange={(e) => uploadFile(e.target.files[0], "thirdPartyRightsDeclaration")} ></input>
-                                    <h3 className="error-message" style={{ color: "red" }}>
-                                      {errors?.thirdPartyRightsDeclaration && errors?.thirdPartyRightsDeclaration?.message}
-                                    </h3>
-                                  </td>
-                                )
-                            }
-
-                          </tr>
-                        )
-                      }
-
-                      {
-                        (watch('thirdPartyRights') === 'yes') && (
-                          <tr>
-                            <th className="fw-normal">5</th>
+                          ) : (
                             <td>
-                              {`${t("DETAILED_SCHEME_OF_RELOCATION")}`}
-                              <span style={{ color: "red" }}>*</span>
-                              {
-                                watch("detailedRelocationSchemefileUrl") &&
-                                (
-                                  <div>
-                                    <small>File Uploaded</small>
-                                  </div>
-                                )
-                              }
+                              {/* <input type="file" placeholder="" className="form-control" {...register("oning/LayoutPlan")}></input> */}
+                              <input
+                                type="file"
+                                placeholder=""
+                                className="form-control"
+                                {...register("thirdPartyRightsDeclaration", { required: "This Document is required" })}
+                                onChange={(e) => uploadFile(e.target.files[0], "thirdPartyRightsDeclaration")}
+                              ></input>
+                              <h3 className="error-message" style={{ color: "red" }}>
+                                {errors?.thirdPartyRightsDeclaration && errors?.thirdPartyRightsDeclaration?.message}
+                              </h3>
                             </td>
-                            {
-                              watch("detailedRelocationSchemefileUrl") ?
-                                (
-                                  <td>
-                                    {/* <input type="file" placeholder="" className="form-control" {...register("oning/LayoutPlan")}></input> */}
-                                    <input type="file" placeholder="" className="form-control" onChange={(e) => uploadFile(e.target.files[0], "detailedRelocationScheme")} ></input>
-                                    <h3 className="error-message" style={{ color: "red" }}>
-                                      {errors?.detailedRelocationScheme && errors?.detailedRelocationScheme?.message}
-                                    </h3>
-                                  </td>
-                                ) : (
-                                  <td>
-                                    {/* <input type="file" placeholder="" className="form-control" {...register("oning/LayoutPlan")}></input> */}
-                                    <input type="file" placeholder="" className="form-control" {...register("detailedRelocationScheme", { required: "This Document is required" })} onChange={(e) => uploadFile(e.target.files[0], "detailedRelocationScheme")} ></input>
-                                    <h3 className="error-message" style={{ color: "red" }}>
-                                      {errors?.detailedRelocationScheme && errors?.detailedRelocationScheme?.message}
-                                    </h3>
-                                  </td>
-                                )
-                            }
+                          )}
+                        </tr>
+                      )}
 
-                          </tr>
-                        )
-                      }
-
+                      {watch("thirdPartyRights") === "yes" && (
+                        <tr>
+                          <th className="fw-normal">5</th>
+                          <td>
+                            {`${t("DETAILED_SCHEME_OF_RELOCATION")}`}
+                            <span style={{ color: "red" }}>*</span>
+                            {watch("detailedRelocationSchemefileUrl") && (
+                              <div>
+                                <small>File Uploaded</small>
+                              </div>
+                            )}
+                          </td>
+                          {watch("detailedRelocationSchemefileUrl") ? (
+                            <td>
+                              {/* <input type="file" placeholder="" className="form-control" {...register("oning/LayoutPlan")}></input> */}
+                              <input
+                                type="file"
+                                placeholder=""
+                                className="form-control"
+                                onChange={(e) => uploadFile(e.target.files[0], "detailedRelocationScheme")}
+                              ></input>
+                              <h3 className="error-message" style={{ color: "red" }}>
+                                {errors?.detailedRelocationScheme && errors?.detailedRelocationScheme?.message}
+                              </h3>
+                            </td>
+                          ) : (
+                            <td>
+                              {/* <input type="file" placeholder="" className="form-control" {...register("oning/LayoutPlan")}></input> */}
+                              <input
+                                type="file"
+                                placeholder=""
+                                className="form-control"
+                                {...register("detailedRelocationScheme", { required: "This Document is required" })}
+                                onChange={(e) => uploadFile(e.target.files[0], "detailedRelocationScheme")}
+                              ></input>
+                              <h3 className="error-message" style={{ color: "red" }}>
+                                {errors?.detailedRelocationScheme && errors?.detailedRelocationScheme?.message}
+                              </h3>
+                            </td>
+                          )}
+                        </tr>
+                      )}
 
                       <tr>
-                        <th className="fw-normal">{watch('thirdPartyRights') ? '6' : '5'}</th>
+                        <th className="fw-normal">{watch("thirdPartyRights") ? "6" : "5"}</th>
                         <td>
                           {" "}
-                          {`${t("AREA_FALLING_UNDER_24M_ROAD_OR_SECTOR_DIVIDING_ROAD_AND_GREEN_BELT")}`}{" "}
-                          <span style={{ color: "red" }}>*</span>
+                          {`${t("AREA_FALLING_UNDER_24M_ROAD_OR_SECTOR_DIVIDING_ROAD_AND_GREEN_BELT")}`} <span style={{ color: "red" }}>*</span>
                         </td>
                         <td>
                           <fieldset>
@@ -1148,111 +1190,123 @@ function SurrenderLic() {
                       </tr>
                     </tbody>
 
-                    {watch('areaFallingDividing') === "yes" && (
+                    {watch("areaFallingDividing") === "yes" && (
                       <tbody>
                         <tr>
-                          <th className="fw-normal">{watch('thirdPartyRights') ? '7' : '6'}</th>
+                          <th className="fw-normal">{watch("thirdPartyRights") ? "7" : "6"}</th>
                           <td>
                             {" "}
                             {`${t("GIFT_DEED")}`}
                             <span style={{ color: "red" }}>*</span>
-                            {
-                              watch("giftDeedfileUrl") &&
-                              (
-                                <div>
-                                  <small>File Uploaded</small>
-                                </div>
-                              )
-                            }
+                            {watch("giftDeedfileUrl") && (
+                              <div>
+                                <small>File Uploaded</small>
+                              </div>
+                            )}
                           </td>
-                          {
-                            watch("giftDeedfileUrl") ?
-                              (
-                                <td>
-                                  <input type="file" placeholder="" className="form-control" onChange={(e) => uploadFile(e.target.files[0], "giftDeed")} ></input>
-                                  <h3 className="error-message" style={{ color: "red" }}>
-                                    {errors?.giftDeed && errors?.giftDeed?.message}
-                                  </h3>
-                                </td>
-                              ) : (
-                                <td>
-                                  <input type="file" placeholder="" className="form-control" {...register("giftDeed", { required: "This Document is required" })} onChange={(e) => uploadFile(e.target.files[0], "giftDeed")} ></input>
-                                  <h3 className="error-message" style={{ color: "red" }}>
-                                    {errors?.giftDeed && errors?.giftDeed?.message}
-                                  </h3>
-                                </td>
-                              )
-                          }
-
+                          {watch("giftDeedfileUrl") ? (
+                            <td>
+                              <input
+                                type="file"
+                                placeholder=""
+                                className="form-control"
+                                onChange={(e) => uploadFile(e.target.files[0], "giftDeed")}
+                              ></input>
+                              <h3 className="error-message" style={{ color: "red" }}>
+                                {errors?.giftDeed && errors?.giftDeed?.message}
+                              </h3>
+                            </td>
+                          ) : (
+                            <td>
+                              <input
+                                type="file"
+                                placeholder=""
+                                className="form-control"
+                                {...register("giftDeed", { required: "This Document is required" })}
+                                onChange={(e) => uploadFile(e.target.files[0], "giftDeed")}
+                              ></input>
+                              <h3 className="error-message" style={{ color: "red" }}>
+                                {errors?.giftDeed && errors?.giftDeed?.message}
+                              </h3>
+                            </td>
+                          )}
                         </tr>
                         <tr>
-                          <th className="fw-normal">{watch('thirdPartyRights') ? '8' : '7'}</th>
+                          <th className="fw-normal">{watch("thirdPartyRights") ? "8" : "7"}</th>
                           <td>
                             {" "}
                             {`${t("MUTATION")}`}
                             <span style={{ color: "red" }}>*</span>
-                            {
-                              watch("mutationfileUrl") &&
-                              (
-                                <div>
-                                  <small>File Uploaded</small>
-                                </div>
-                              )
-                            }
+                            {watch("mutationfileUrl") && (
+                              <div>
+                                <small>File Uploaded</small>
+                              </div>
+                            )}
                           </td>
-                          {
-                            watch("mutationfileUrl") ?
-                              (
-                                <td>
-                                  <input type="file" placeholder="" className="form-control" onChange={(e) => uploadFile(e.target.files[0], "mutation")} ></input>
-                                  <h3 className="error-message" style={{ color: "red" }}>
-                                    {errors?.mutation && errors?.mutation?.message}
-                                  </h3>
-                                </td>
-                              ) : (
-                                <td>
-                                  <input type="file" placeholder="" className="form-control" {...register("mutation", { required: "This Document is required" })} onChange={(e) => uploadFile(e.target.files[0], "mutation")} ></input>
-                                  <h3 className="error-message" style={{ color: "red" }}>
-                                    {errors?.mutation && errors?.mutation?.message}
-                                  </h3>
-                                </td>
-                              )
-                          }
-
+                          {watch("mutationfileUrl") ? (
+                            <td>
+                              <input
+                                type="file"
+                                placeholder=""
+                                className="form-control"
+                                onChange={(e) => uploadFile(e.target.files[0], "mutation")}
+                              ></input>
+                              <h3 className="error-message" style={{ color: "red" }}>
+                                {errors?.mutation && errors?.mutation?.message}
+                              </h3>
+                            </td>
+                          ) : (
+                            <td>
+                              <input
+                                type="file"
+                                placeholder=""
+                                className="form-control"
+                                {...register("mutation", { required: "This Document is required" })}
+                                onChange={(e) => uploadFile(e.target.files[0], "mutation")}
+                              ></input>
+                              <h3 className="error-message" style={{ color: "red" }}>
+                                {errors?.mutation && errors?.mutation?.message}
+                              </h3>
+                            </td>
+                          )}
                         </tr>
                         <tr>
-                          <th className="fw-normal">{watch('thirdPartyRights') ? '9' : '8'}</th>
+                          <th className="fw-normal">{watch("thirdPartyRights") ? "9" : "8"}</th>
                           <td>
                             {" "}
                             {`${t("JAMABANDHI")}`} <span style={{ color: "red" }}>*</span>
-                            {
-                              watch("jamabandhifileUrl") &&
-                              (
-                                <div>
-                                  <small>File Uploaded</small>
-                                </div>
-                              )
-                            }
+                            {watch("jamabandhifileUrl") && (
+                              <div>
+                                <small>File Uploaded</small>
+                              </div>
+                            )}
                           </td>
-                          {
-                            watch("jamabandhifileUrl") ?
-                              (
-                                <td>
-                                  <input type="file" placeholder="" className="form-control" onChange={(e) => uploadFile(e.target.files[0], "jamabandhi")} ></input>
-                                  <h3 className="error-message" style={{ color: "red" }}>
-                                    {errors?.jamabandhi && errors?.jamabandhi?.message}
-                                  </h3>
-                                </td>
-                              ) : (
-                                <td>
-                                  <input type="file" placeholder="" className="form-control" {...register("jamabandhi", { required: "This Document is required" })} onChange={(e) => uploadFile(e.target.files[0], "jamabandhi")} ></input>
-                                  <h3 className="error-message" style={{ color: "red" }}>
-                                    {errors?.jamabandhi && errors?.jamabandhi?.message}
-                                  </h3>
-                                </td>
-                              )
-                          }
-
+                          {watch("jamabandhifileUrl") ? (
+                            <td>
+                              <input
+                                type="file"
+                                placeholder=""
+                                className="form-control"
+                                onChange={(e) => uploadFile(e.target.files[0], "jamabandhi")}
+                              ></input>
+                              <h3 className="error-message" style={{ color: "red" }}>
+                                {errors?.jamabandhi && errors?.jamabandhi?.message}
+                              </h3>
+                            </td>
+                          ) : (
+                            <td>
+                              <input
+                                type="file"
+                                placeholder=""
+                                className="form-control"
+                                {...register("jamabandhi", { required: "This Document is required" })}
+                                onChange={(e) => uploadFile(e.target.files[0], "jamabandhi")}
+                              ></input>
+                              <h3 className="error-message" style={{ color: "red" }}>
+                                {errors?.jamabandhi && errors?.jamabandhi?.message}
+                              </h3>
+                            </td>
+                          )}
                         </tr>
                       </tbody>
                     )}

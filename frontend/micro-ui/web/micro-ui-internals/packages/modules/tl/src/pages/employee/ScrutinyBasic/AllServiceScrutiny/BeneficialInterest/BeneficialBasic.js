@@ -1,13 +1,22 @@
 import React, { useState, useRef, useEffect, useContext } from "react";
+
+// import ServicePlanCivil from "./ServicePlanCivilEng";
+// import ServicePlanExternal from "./ServicePlanExternal";
+// import ServicePlanService from "./ServicePlan";
+// import JeLandinfo from "./Scrutiny LOI/JE/JE";
+// import DisApprovalList from "./DisApprovalList";
+// import HistoryList from "./History";
 import ScrutinyDevelopment from "../../ScrutinyDevelopment/ScrutinyDevelopment";
 import { ScrutinyRemarksContext } from "../../../../../../context/remarks-data-context/index";
-import TransferLicense from "./TransferLicense"
+
 import { Button, Row, Col } from "react-bootstrap";
 import { useForkRef } from "@mui/material";
 import axios from "axios";
+import BeneficialScrutitny from "./Beneficial";
 
+// import AddIcon from "@mui/icons-material/Add";
 
-const TransferBasic = ({apiResponse,applicationNumber,refreshScrutinyData,applicationStatus,setAdditionalDetails,histeroyData,idwDataTreade,edcDataTreade }) => {
+const BeneficialBasic = ({apiResponse,applicationNumber,refreshScrutinyData,setAdditionalDetails,histeroyData,idwDataTreade,edcDataTreade,applicationStatus }) => {
   const [purpose, setPurpose] = useState("");
   const jeLandInfoRef = useRef();
 
@@ -21,7 +30,7 @@ const TransferBasic = ({apiResponse,applicationNumber,refreshScrutinyData,applic
   const [displayAppliedLand, setDisplayAppliedLandInfo] = useState([]);
   const [displayFeeandCharges, setDisplayFeeandChargesInfo] = useState([]);
 
-const { remarksData,iconStates,handleGetFiledsStatesById,handleGetRemarkssValues } = useContext(ScrutinyRemarksContext);
+const { remarksData,iconStates,handleGetFiledsStatesById,handleGetRemarkssValues,setBusinessService } = useContext(ScrutinyRemarksContext);
   const [displayJeLand, setDisplayJeLand] = useState([]);
   const [ActiveKey, setActiveKey] = useState(1);
   const [defaultHeightPersonal, setDefaultHeightPersonal] = useState(0);
@@ -51,12 +60,21 @@ const { remarksData,iconStates,handleGetFiledsStatesById,handleGetRemarkssValues
     setDisplayCheckedPersonalList(data.data);
     console.log("checked parent personal info data", data);
   };
-  
+  // g
+
+  // const getUncheckedLicenseDetailsInfo = (data) => {
+  //   setDisplayLicenseDetailsInfo(data.data);
+  //   console.log("data parent label", data);
+  // };
+  // const getCheckedLicenseDetailsInfoValue = (data) => {
+  //   setDisplayCheckedLicenseDetailsList(data.data);
+  //   console.log("checked parent personal info data", data);
+  // };
 
   const getUncheckedGeneralinfos = (data) => {
     setPurpose(data.purpose);
     setDisplayGeneralInfo(data.data);
-   
+    // console.log("abc", data);
     console.log(data);
   };
   const getCheckedGeneralInfoValue = (data) => {
@@ -121,15 +139,18 @@ const { remarksData,iconStates,handleGetFiledsStatesById,handleGetRemarkssValues
     }
   }, [remarksChanges,apiResponse]);
 
- 
+  // useEffect(() => {
+  //   handleGetInputFieldsValues();
+  // }, []);
   useEffect(() => {
     if(applicationNumber){
-     
+      // console.log("log123...",userInfo)
       handleGetRemarkssValues(applicationNumber);
     }
   }, [applicationNumber]);
 
   useEffect(()=>{
+    setBusinessService("CHANGE_OF_BENEFICIAL");
     if(applicationNumber){
       handleGetFiledsStatesById(applicationNumber);
     }
@@ -156,7 +177,7 @@ const { remarksData,iconStates,handleGetFiledsStatesById,handleGetRemarkssValues
   };
 
   const handleScrolltoPersonal = () => {
-   
+    // personalInfoRef.current.scrollIntoView({ behavior: "smooth" });
     if (defaultHeightPersonal === 0) {
       setDefaultHeightPersonal("auto");
     } else {
@@ -165,7 +186,7 @@ const { remarksData,iconStates,handleGetFiledsStatesById,handleGetRemarkssValues
   };
 
   const handleScrolltOGeneral = () => {
-    
+    // generalInfoRef.current.scrollIntoView({ behavior: "smooth" });
     if (defaultHeightGen === 0) {
       setDefaultHeightGen("auto");
     } else {
@@ -173,7 +194,7 @@ const { remarksData,iconStates,handleGetFiledsStatesById,handleGetRemarkssValues
     }
   };
   const handleScrolltoDeveloper = () => {
- 
+    // developerInfoRef.current.scrollIntoView({ behavior: "smooth" });
     if (defaultheightDevelper === 0) {
       setDefaultheightDevelper("auto");
     } else {
@@ -182,7 +203,7 @@ const { remarksData,iconStates,handleGetFiledsStatesById,handleGetRemarkssValues
   };
 
   const handleScrolltoAppliedLandInfo = () => {
- 
+    // appliedInfoRef.current.scrollIntoView({ behavior: "smooth" });
     if (defaultheightApplied === 0) {
       setDefaultheightApplied("auto");
     } else {
@@ -190,22 +211,22 @@ const { remarksData,iconStates,handleGetFiledsStatesById,handleGetRemarkssValues
     }
   };
   const handleScrolltoFeeandChargesInfo = () => {
-  
+    // feeandchargesInfoRef.current.scrollIntoView({ behavior: "smooth" });
     if (defaultheightFee === 0) {
       setDefaultheightFee("auto");
     } else {
       setDefaultheightFee(0);
     }
   };
-  console.log("scrutiny form api get", apiResponse !== undefined ? apiResponse?.ApplicantInfo : apiResponse);
-  console.log(
-    "scrutiny form api get1",
-    apiResponse !== undefined ? apiResponse?.ApplicantPurpose : apiResponse
-  );
-  
-  console.log("remarks api", remarksData.egScrutiny !== undefined ? remarksData.egScrutiny : null);
+//   console.log("scrutiny form api get", apiResponse !== undefined ? apiResponse?.ApplicantInfo : apiResponse);
+//   console.log(
+//     "scrutiny form api get1",
+//     apiResponse !== undefined ? apiResponse?.ApplicantPurpose : apiResponse
+//   );
+//   // console.log("scrutiny form api get2", apiResponse !== undefined ? apiResponse?.LandSchedule : apiResponse);
+//   console.log("remarks api", remarksData.egScrutiny !== undefined ? remarksData.egScrutiny : null);
 
-  console.log("remakes data parsnalinfo", remarksChanges);
+//   console.log("remakes data parsnalinfo", remarksChanges);
 
 
 
@@ -216,9 +237,7 @@ const { remarksData,iconStates,handleGetFiledsStatesById,handleGetRemarkssValues
       <div style={{ position: "relative", maxWidth: "100%", padding: 2 }}>
         <div>
          <div>
-         <TransferLicense
-        //  edcDataTreade={edcDataTreade}
-        //  idwDataTreade={idwDataTreade}
+         <BeneficialScrutitny
            apiResponse={apiResponse}
            refreshScrutinyData={refreshScrutinyData}
            applicationNumber={applicationNumber}
@@ -227,9 +246,9 @@ const { remarksData,iconStates,handleGetFiledsStatesById,handleGetRemarkssValues
            onClick={() => setOpen(!open)}
            dataForIcons={iconStates}
            applicationStatus={applicationStatus}
-           ></TransferLicense>
+           ></BeneficialScrutitny>
          </div>
-    
+        
         </div>
       </div>
       <div style={{ position: "relative", width: "100%", display: "flex", marginBottom: 2 }}>
@@ -239,7 +258,7 @@ const { remarksData,iconStates,handleGetFiledsStatesById,handleGetRemarkssValues
       <div style={{ position: "relative", width: "100%", height: "100%", display: "flex" }}>
         <ScrutinyDevelopment
           remarkData={remarksData.egScrutiny !== undefined ? remarksData.egScrutiny : null}
-      
+          // remarksum={sumrol.egScrutiny !== undefined ? sumrol.egScrutiny : null}
           histeroyData={histeroyData}
         ></ScrutinyDevelopment>
       </div>
@@ -248,4 +267,4 @@ const { remarksData,iconStates,handleGetFiledsStatesById,handleGetRemarkssValues
   );
 };
 
-export default TransferBasic;
+export default BeneficialBasic;
