@@ -83,7 +83,7 @@ function LayoutPlanClu() {
   const [statusCreationAffidavitDocVal, setStatusCreationAffidavitDocVal] = useState("");
   const [boardResolutionAuthSignatoryDocVal, setBoardResolutionAuthSignatoryDocVal] = useState("");
   const [anyOtherDocVal, setAnyOtherDocVal] = useState("");
-
+  const [getTotalArea, setTotlArea] = useState();
   const handleshowhide = (event) => {
     const getuser = event.target.value;
 
@@ -206,6 +206,23 @@ function LayoutPlanClu() {
           ? data?.boardResolutionAuthSignatoryDoc
           : layOutPlanData.additionalDetails?.boardResolutionAuthSignatoryDoc;
         layOutPlanData.additionalDetails.anyOther = data?.anyOther ? data?.anyOther : layOutPlanData.additionalDetails?.anyOther;
+
+  //  useEffect(() => {
+  //   var nameArray = modalValue?.map(function (itm) {
+  //     if (isNaN(itm?.areaModal)) return 0;
+  //     return itm?.areaModal;
+  //   });
+  //     const mixedSum = (nameArray = []) => {
+  //     let sum = 0;
+  //     for (let i = 0; i < nameArray.length; i++) {
+  //       const el = nameArray[i];
+  //       sum += +el;
+  //     }
+  //     return sum;
+  //   };
+  //    const totalVal = mixedSum(nameArray) + mixedSumB(nameArrayB);
+  //   setTotlArea(totalVal?.toFixed(3));
+  // }, [modalValue]);
 
         const updateRequest = {
           RequestInfo: {
@@ -344,13 +361,39 @@ function LayoutPlanClu() {
     }
   };
 
+  
+
+  //  const [showhide19, setShowhide19] = useState("true");
+  // const handleshow19 = (e) => {
+  
+  //  console.log("modalValue1234", modalValue?.[0]?.areaModalPop);
+  //  const query = modalValue?.map((elementInArray) => 
+  //  {elementInArray.areaModalPop} );
+    // let query = DetailsofAppliedLand?.dgpsDetails.map((array) => array.map((object) => `${object.latitude},${object.longitude}`).join(":")).join("|")
+    // console.log("Qurey", query);
+    
+  // };
+ 
+
+
+// const users = []
+
+//   const getAverageAge = (users) => {
+//     let sum = 0
+//     for (let i = 0; i < users.length; i++) {
+//       sum += users[i].age
+//     }
+//     return sum / users.length
+//   }
+
+
   return (
     <div className="w-100">
       {loader && <Spinner />}
       <form onSubmit={handleSubmit(layoutPlan)}>
         <div className="card">
           <h4 className="my-2">
-            <b>APPROVAL OF REVISED LAYOUT PLAN OF LICENSE</b>
+            <b>{`${t("REV_LAYOUT_APPROVAL_OF_REVISED_LAYOUT_PLAN_OF_LICENCE")}`}</b>
           </h4>
           <div className="card">
             <div className="row gy-3">
@@ -371,7 +414,7 @@ function LayoutPlanClu() {
               <Col md={4} lg={4} mb={3}>
                 <FormControl>
                   <FormLabel id="existing_area" sx={{ fontWeight: "bold" }}>
-                    {`${t("REV_LAYOUT_EXISTING_AREA")}`} <span style={{ color: "red" }}>*</span>
+                    {`${t("REV_LAYOUT_EXISTING_AREAS")}`} <span style={{ color: "red" }}>*</span>
                   </FormLabel>
                   {/* <OutlinedInput
                     aria-labelledby="existing_area"
@@ -391,10 +434,18 @@ function LayoutPlanClu() {
                   <Table stickyHeader aria-label="sticky table">
                     <TableHead>
                       <TableRow>
-                        <StyledTableCell>Sr No.</StyledTableCell>
-                        <StyledTableCell>License No.</StyledTableCell>
-                        <StyledTableCell>Area</StyledTableCell>
-                        <StyledTableCell>Action</StyledTableCell>
+                        <StyledTableCell> {`${t("REV_LAYOUT_SR_NO")}`}
+                        {/* Sr No. */}
+                        </StyledTableCell>
+                        <StyledTableCell>{`${t("REV_LAYOUT_LICENCE_NO")}`}
+                        {/* License No. */}
+                        </StyledTableCell>
+                        <StyledTableCell>{`${t("REV_LAYOUT_AREA")}`}
+                        {/* Area */}
+                        </StyledTableCell>
+                        <StyledTableCell>{`${t("REV_LAYOUT_ACTION")}`}
+                         {/* Action */}
+                        </StyledTableCell>
                       </TableRow>
                     </TableHead>
                     <TableBody>
@@ -407,6 +458,8 @@ function LayoutPlanClu() {
                               </StyledTableCell>
                               <StyledTableCell>{elementInArray.licenseNoPop}</StyledTableCell>
                               <StyledTableCell>{elementInArray.areaModalPop}</StyledTableCell>
+                              
+                              
 
                               <StyledTableCell >
                                 <a href="javascript:void(0)" title="Delete record" onClick={() => deleteTableRows(-1)}>
@@ -445,13 +498,16 @@ function LayoutPlanClu() {
                   // onClick={() => setNoOfRows(noofRows + 1)}
                   onClick={handleShowAuthuser}
                 >
-                  Add More
+                  {`${t("REV_LAYOUT_ADD_MORES")}`}
+                  {/* Add More */}
                 </button>
               </Col>
                <Col md={4} lg={4} mb={3}>
                 <FormControl>
-                  <FormLabel id="existing_area" sx={{ fontWeight: "bold" }}>
-                    Total Area <span style={{ color: "red" }}>*</span>
+                  <FormLabel id="existing_area" sx={{ fontWeight: "bold" }}>{`${t("REV_LAYOUT_TOTAL_AREAS")}`}
+                    {/* Total Area:{getTotalArea}  */}
+                    <span style={{ color: "red" }}>*</span>
+                    
                 
                   <OutlinedInput
                     aria-labelledby="existing_area"
@@ -472,24 +528,28 @@ function LayoutPlanClu() {
                         <thead>
                           <tr>
                              <th class="fw-normal"></th>
-                            <th class="fw-normal" style={{ textAlign: "center" }}>In Acres</th>
-                            <th class="fw-normal"style={{ textAlign: "center" }}>In sq.m</th>
+                            <th class="fw-normal" style={{ textAlign: "center" }}>{`${t("REV_LAYOUT_AREA_IN_ACRES")}`}
+                              {/* In Acres */}
+                              </th>
+                            <th class="fw-normal"style={{ textAlign: "center" }}>{`${t("REV_LAYOUT_AREA_IN_SQ_M")}`}
+                              {/* In sq.m */}
+                              </th>
                            
                           </tr>
                         </thead>
                       <tbody>
                          <tr>
-                            <td>Area proposed in revision</td>
+                            <td>{`${t("REV_LAYOUT_AREA_PROPOSED_REVISION")}`}</td>
                             <td><input type="number"className="form-control" {...register("areaProposedRevision")} id="areaProposedRevision" /></td>
                             <td style={{ textAlign: "center" }}>{(watch("areaProposedRevision") * 4046.86)?.toFixed(3)}</td>
                           </tr>
                           <tr>
-                            <td>Commercial area</td>
+                            <td> {`${t("REV_LAYOUT_AREA_COMMERCIAL")}`}</td>
                             <td><input type="number"className="form-control"  {...register("areaCommercial")} id="areaCommercial"/></td>
                             <td style={{ textAlign: "center" }}>{(watch("areaCommercial") * 4046.86)?.toFixed(3)}</td>
                           </tr>
                           <tr>
-                            <td>Residential area</td>
+                            <td>{`${t("REV_LAYOUT_AREA_RESIDENTIAL")}`}</td>
                             <td><input type="number"className="form-control" {...register("areaResidential")} id="areaResidential"/></td>
                             <td style={{ textAlign: "center" }}>{(watch("areaResidential") * 4046.86)?.toFixed(3)}</td>
                           </tr>
@@ -631,9 +691,15 @@ function LayoutPlanClu() {
                 <table>
                   <thead>
                     <tr>
-                      <th style={{ textAlign: "center" }}>Sr.No</th>
-                      <th style={{ textAlign: "center" }}>Field Name</th>
-                      <th style={{ textAlign: "center" }}>Upload Documents</th>
+                      <th style={{ textAlign: "center" }}>{`${t("REV_LAYOUT_S_No")}`}
+                        {/* Sr.No */}
+                        </th>
+                      <th style={{ textAlign: "center" }}>{`${t("REV_LAYOUT_FIELD_NAME")}`}
+                      {/* Field Name */}
+                      </th>
+                      <th style={{ textAlign: "center" }}>{`${t("REV_LAYOUT_UPLOAD_DOC")}`}
+                      {/* Upload Documents */}
+                      </th>
                     </tr>
                   </thead>
                   <tbody>
@@ -887,12 +953,23 @@ function LayoutPlanClu() {
                 </table>
               </div>
             </div>
-
-            <div className="col-sm-12 text-right">
-              <Button variant="contained" className="btn btn-primary btn-md center-block text-white" type="submit">
+  <div class="row">
+                <div class="col-sm-12 text-right">
+                  <button type="submit"  class="btn btn-primary btn-md center-block">
+                    Submit
+                  </button>
+                </div>
+                <div class="col-sm-12 text-right">
+                  <button id="btnSearch" class="btn btn-primary btn-md center-block" style={{ marginTop: "-63px", marginRight: "97px" }}>
+                   Cancel
+                  </button>
+                </div>
+              </div>
+            {/* <div className="col-sm-12 text-right">
+              <Button variant="contained" className="btn btn-primary " type="submit">
                 Submit
               </Button>
-            </div>
+            </div> */}
           </div>
         </div>
       </form>
