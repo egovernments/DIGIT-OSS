@@ -99,7 +99,7 @@ function Beneficial() {
       selectorKey: "noObjectionCertificateFile"
     },
     {
-      label: ('CONSENT_LETTER_FROM_NEW_ENTITY_LABEL'),
+      label: t('CONSENT_LETTER_FROM_NEW_ENTITY_LABEL'),
       fileName: "consentLetter",
       selectorKey: "consentLetterFile"
     },
@@ -138,7 +138,7 @@ function Beneficial() {
 
   const changeInShareholding = [
     {
-      label: ('CONSENT_LETTER_FROM_NEW_ENTITY_LABEL'),
+      label: t('CONSENT_LETTER_FROM_NEW_ENTITY_LABEL'),
       fileName: "consentLetter",
       selectorKey: "consentLetterFile"
     },
@@ -796,10 +796,10 @@ function Beneficial() {
                     Pay
                   </button>{" "}
                   &nbsp;
-                  <button id="btnSearch" type="save" class="btn btn-primary btn-md center-block" style={{ marginRight: "5px" }}>
+                  {/* <button id="btnSearch" type="save" class="btn btn-primary btn-md center-block" style={{ marginRight: "5px" }}>
                     Save as Draft
                   </button>{" "}
-                  &nbsp;
+                  &nbsp; */}
                   <button id="btnSearch" type="submit" class="btn btn-primary btn-md center-block" style={{}}>
                     Submit
                   </button>
