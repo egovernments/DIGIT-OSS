@@ -47,6 +47,8 @@ import StandardDesignCard from "./ScrutinyBasic/AllServiceScrutiny/StandardDesig
 import CompositionInbox from "./ScrutinyBasic/AllServiceScrutiny/CompletionLic/Inbox/index";
 import CommunityInbox from "./ScrutinyBasic/AllServiceScrutiny/ExtensionCommunity/Inbox";
 import Completionscrutiny from "../employee/ScrutinyBasic/AllServiceScrutiny/CompletionLic/CompletionLic";
+import SurrenderLicScrutiny from "../employee/ScrutinyBasic/AllServiceScrutiny/SurrenderLic/SurrenderLic";
+import SurrenderScrutiny from "./ScrutinyBasic/AllServiceScrutiny/SurrenderLic/SurrenderCard";
 
 const TLBreadCrumb = ({ location }) => {
   const { t } = useTranslation();
@@ -243,7 +245,7 @@ const EmployeeApp = ({ path, url, userType }) => {
             <PrivateRoute path={`${path}/RenewalScrutiny/:id`} component={RenewalScrutiny} />
             <PrivateRoute path={`${path}/Beneficialscrutiny/:id`} component={Beneficialscrutiny} />
             <PrivateRoute path={`${path}/TransferScrutiny/:id`} component={TransferScrutiny} />
-            <PrivateRoute path={`${path}/SurrenderLic/:id`} component={SurrenderLic} />
+            <PrivateRoute path={`${path}/SurrenderScrutiny/:id`} component={SurrenderScrutiny} />
             <PrivateRoute path={`${path}/ExtensionClu/:id`} component={ExtensionClu} />
             <PrivateRoute path={`${path}/ExtensionCom/:id`} component={ExtensionCom} />
             <PrivateRoute path={`${path}/LayoutPlanScritny/:id`} component={LayoutPlanScritny} />
