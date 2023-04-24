@@ -445,6 +445,7 @@ function BeneficialScrutitny({ apiResponse, refreshScrutinyData, applicationNumb
                       selectedFieldData={selectedFieldData}
                       fieldValue={fieldValue}
                       remarksUpdate={currentRemarks}
+                      applicationStatus={applicationStatus}
                     ></ModalChild>
                   </div>
                   {/* </Form.Group> */}
