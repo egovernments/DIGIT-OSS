@@ -7,13 +7,19 @@ import SearchLicenceComp from "../../../../../../components/SearchLicence";
 import FileUpload from "@mui/icons-material/FileUpload";
 import CusToaster from "../../../../../../components/Toaster";
 
-const selectTypeData = [{ label: "test", value: "test" }];
+const selectTypeData = [
+  { label: "Application Number", value: "APPLICATIONNUMBER" },
+  { label: "LOI Number", value: "LOINUMBER" },
+  { label: "Licence Number", value: "LICENCENUMBER" },
+];
 
 const AdditionalDocument = () => {
+  const userInfo = Digit.UserService.getUser()?.info || {};
   const [loader, setLoader] = useState(false);
   const [selectedFiles, setSelectedFiles] = useState([]);
   const [showToastError, setShowToastError] = useState({ label: "", error: false, success: false });
   const [services, setServices] = useState([]);
+  const [getData, setData] = useState([]);
 
   const {
     watch,
@@ -115,6 +121,41 @@ const AdditionalDocument = () => {
     }
   };
 
+  const getNumbers = async () => {
+    const token = window?.localStorage?.getItem("token");
+    const type = watch("numberType")?.value;
+    const businessService = watch("allservices")?.value;
+    setLoader(true);
+    const payload = {
+      RequestInfo: {
+        apiId: "Rainmaker",
+        ver: "v1",
+        ts: 0,
+        action: "_search",
+        did: "",
+        key: "",
+        msgId: "090909",
+        requesterId: "",
+        authToken: token,
+        userInfo: userInfo,
+      },
+    };
+    try {
+      const Resp = await axios.post(`/tl-services/_getServices/_search?type=${type}&businessService=${businessService}`, payload);
+      // console.log("setData", Resp);
+      setLoader(false);
+      const selectData = Resp?.data?.map((it) => {
+        return { value: it, label: it };
+      });
+      if (Resp?.data?.length) setValue("licenceNo", { label: "", value: "" });
+      else setValue("licenceNo", "");
+      setData(selectData);
+    } catch (error) {
+      setLoader(false);
+      return error;
+    }
+  };
+
   return (
     <div>
       {loader && <Spinner />}
@@ -129,23 +170,42 @@ const AdditionalDocument = () => {
                 <h2 className="FormLable">
                   List all services <span style={{ color: "red" }}>*</span>
                 </h2>
-                <ReactMultiSelect control={control} name="allservices" placeholder="Select Service" data={services} labels="" />
+                <ReactMultiSelect
+                  control={control}
+                  name="allservices"
+                  placeholder="Select Service"
+                  data={services}
+                  labels=""
+                  onChange={() => setValue("numberType", { label: "", value: "" })}
+                />
               </div>
-              <div className="col col-5">
-                <h2 className="FormLable">
-                  Select Application No, LOI No, Licence No <span style={{ color: "red" }}>*</span>
-                </h2>
-                <ReactMultiSelect control={control} name="numberType" placeholder="Select Type" data={selectTypeData} labels="" />
-              </div>
-              <SearchLicenceComp
-                watch={watch}
-                register={register}
-                control={control}
-                setLoader={setLoader}
-                errors={errors}
-                setValue={setValue}
-                resetField={resetField}
-              />
+              {watch("allservices") && (
+                <div className="col col-5">
+                  <h2 className="FormLable">
+                    Select Application No, LOI No, Licence No <span style={{ color: "red" }}>*</span>
+                  </h2>
+                  <ReactMultiSelect
+                    control={control}
+                    name="numberType"
+                    placeholder="Select Type"
+                    data={selectTypeData}
+                    labels=""
+                    onChange={getNumbers}
+                  />
+                </div>
+              )}
+              {watch("numberType")?.value && (
+                <SearchLicenceComp
+                  apiData={getData}
+                  watch={watch}
+                  register={register}
+                  control={control}
+                  setLoader={setLoader}
+                  errors={errors}
+                  setValue={setValue}
+                  resetField={resetField}
+                />
+              )}
             </div>
 
             <div style={{ textAlignLast: "right", marginTop: "10px" }}>
