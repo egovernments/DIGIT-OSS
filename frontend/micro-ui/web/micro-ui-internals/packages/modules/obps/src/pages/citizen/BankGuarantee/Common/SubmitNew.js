@@ -25,6 +25,8 @@ import ReleaseNew from "./Release";
 import { getDocShareholding } from "../../NewLicense/docView/docView.help";
 import NumberInput from "../../../../components/NumberInput";
 import TextField from "@mui/material/TextField";
+import ReactMultiSelect from "../../../../../../../react-components/src/atoms/ReactMultiSelect"
+
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   "& .MuiDialogContent-root": {
     padding: theme.spacing(2),
@@ -67,7 +69,13 @@ function SubmitNew() {
     getValues,
   } = useForm({});
   const tenantId = Digit.ULBService.getCurrentTenantId();
-
+//   const selectTypeData = [{ label: "IDW", value: "IDW" },
+// {
+//   label: "EDC", value: "EDC"
+// },
+// {
+//   label: "SPE", value: "SPE"
+// }];
   const bankSubmitNew = async (data) => {
     const token = window?.localStorage?.getItem("token");
     console.log("token", token);
@@ -340,7 +348,7 @@ function SubmitNew() {
                   <h2 className="FormLable">
                     Type of fee<span style={{ color: "red" }}>*</span>
                   </h2>
-
+ {/* <ReactMultiSelect control={control} name="numberType" placeholder="Select Type" data={selectTypeData} labels="" /> */}
                   <select
                     className="Inputcontrol"
                     class="form-control"
@@ -391,106 +399,73 @@ function SubmitNew() {
             {showhide === "BG_NEW" && (
               <div>
                 {watch("typeOfBg") === "SPE" && (
-                  <div className="col-12">
-                    <FormControl>
-                      <h2 className="FormLable">
-                        Amount (in fig)<span style={{ color: "red" }}>*</span>
-                      </h2>
-
-                      <OutlinedInput type="text" className="Inputcontrol" placeholder="" {...register("amountInFig")} />
-                    </FormControl>
-                    &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
-                    <FormControl>
-                      <h2 className="FormLable">
-                        Amount (in words)<span style={{ color: "red" }}>*</span>
-                      </h2>
-
-                      <OutlinedInput type="text" className="Inputcontrol" placeholder="" {...register("amountInWords")} />
-                    </FormControl>
-                  </div>
+                   <div className="row-12">
+ <div className="col md={4} xxl lg-3">
+              <FormControl>
+                <h2 className="FormLable"> Amount (in fig)<span style={{ color: "red" }}>*</span></h2>
+                <OutlinedInput type="text" className="Inputcontrol" placeholder="" {...register("amountInFig")}  />
+              </FormControl>
+              &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
+              <FormControl>
+                <h2 className="FormLable"> Amount (in words)<span style={{ color: "red" }}>*</span></h2>
+                <OutlinedInput type="text" className="Inputcontrol" placeholder="" {...register("amountInFig")}  />
+              </FormControl>
+            
+            </div>
+            </div>
+//                    <div className="row gy-3">
+//                   <div className="col col-6">
+                   
+//                       <h2 className="FormLable">
+//                         Amount (in fig)<span style={{ color: "red" }}>*</span>
+//                       </h2>
+//  <input type="text" className="form-control" placeholder="" {...register("amountInFig")} disabled></input>
+//                       {/* <OutlinedInput type="text" className="Inputcontrol" placeholder="" {...register("amountInFig")} /> */}
+                   
+//                     &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
+//                     <div className="col col-6">
+//                       <h2 className="FormLable">
+//                         Amount (in words)<span style={{ color: "red" }}>*</span>
+//                       </h2>
+//  <input type="text" className="Inputcontrol" placeholder="" {...register("amountInWords")} disabled></input>
+//                       {/* <OutlinedInput type="text" className="Inputcontrol" placeholder="" {...register("amountInWords")} /> */}
+//                    </div>
+//                   </div>
+//                   </div>
                 )}
                 &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
                 {watch("typeOfBg") === "IDW" && (
                   <div className="row-12">
-                    <div className="col-12">
-                      <FormControl>
-                        <h2 className="FormLable">
-                          Amount (in fig)<span style={{ color: "red" }}>*</span>
-                        </h2>
-                        <TextField
-                          disabled
-                          readOnly={existingBgNumber?.length > 0 ? true : false}
-                          id="outlined-disabled"
-                          {...register("amountInFig")}
-                        />
-
-                        {/* <OutlinedInput
-                        type="text"
-                        className="Inputcontrol"
-                        id="standard-disabled"
-                        label="Disabled"
-                        {...register("amountInFig")}
-                        readOnly
-                        disabled={existingBgNumber?.length > 0 ? true : false}
-                      /> */}
-                      </FormControl>
-                      &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
-                      <FormControl>
-                        <h2 className="FormLable">
-                          Amount (in words)<span style={{ color: "red" }}>*</span>
-                        </h2>
-
-                        <OutlinedInput
-                          type="text"
-                          className="Inputcontrol"
-                          placeholder=""
-                          {...register("amountInWords")}
-                          disabled={existingBgNumber?.length > 0 ? true : false}
-                        />
-                      </FormControl>
-                    </div>
-                  </div>
+ <div className="col md={4} xxl lg-3">
+              <FormControl>
+                <h2 className="FormLable"> Amount (in fig)<span style={{ color: "red" }}>*</span></h2>
+                <OutlinedInput type="text" className="Inputcontrol" placeholder="" {...register("amountInFig")} disabled />
+              </FormControl>
+              &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
+              <FormControl>
+                <h2 className="FormLable"> Amount (in words)<span style={{ color: "red" }}>*</span></h2>
+                <OutlinedInput type="text" className="Inputcontrol" placeholder="" {...register("amountInFig")} disabled />
+              </FormControl>
+            
+            </div>
+            </div>
                 )}
                 &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
                 {watch("typeOfBg") === "EDC" && (
-                  <div className="row-12">
-                    <div className="col-12">
-                      <FormControl>
-                        <h2 className="FormLable">
-                          Amount (in fig)<span style={{ color: "red" }}>*</span>
-                        </h2>
-                        <TextField
-                          disabled
-                          readOnly={existingBgNumber?.length > 0 ? true : false}
-                          id="outlined-disabled"
-                          {...register("amountInFig")}
-                        />
-                        {/* <OutlinedInput
-                        type="text"
-                        className="Inputcontrol"
-                        id="standard-disabled"
-                        label="Disabled"
-                        {...register("amountInFig")}
-                        readOnly
-                        disabled={existingBgNumber?.length > 0 ? true : false}
-                      /> */}
-                      </FormControl>
-                      &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
-                      <FormControl>
-                        <h2 className="FormLable">
-                          Amount (in words)<span style={{ color: "red" }}>*</span>
-                        </h2>
-
-                        <OutlinedInput
-                          type="text"
-                          className="Inputcontrol"
-                          placeholder=""
-                          {...register("amountInWords")}
-                          disabled={existingBgNumber?.length > 0 ? true : false}
-                        />
-                      </FormControl>
-                    </div>
-                  </div>
+                    <div className="row-12">
+ <div className="col md={4} xxl lg-3">
+              <FormControl>
+                <h2 className="FormLable"> Amount (in fig)<span style={{ color: "red" }}>*</span></h2>
+                <OutlinedInput type="text" className="Inputcontrol" placeholder="" {...register("amountInFig")} disabled />
+              </FormControl>
+              &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
+              <FormControl>
+                <h2 className="FormLable"> Amount (in words)<span style={{ color: "red" }}>*</span></h2>
+                <OutlinedInput type="text" className="Inputcontrol" placeholder="" {...register("amountInFig")} disabled />
+              </FormControl>
+            
+            </div>
+            </div>
                 )}
                 &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
                 <div className="col-12">
