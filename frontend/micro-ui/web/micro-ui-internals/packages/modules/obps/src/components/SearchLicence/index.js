@@ -5,8 +5,43 @@ import axios from "axios";
 import ReactMultiSelect from "../../../../../react-components/src/atoms/ReactMultiSelect";
 
 const SearchLicenceComp = ({ watch, register, control, setLoader, errors, setValue, resetField, apiData }) => {
+  const userInfo = Digit.UserService.getUser()?.info || {};
   const [showField, setShowField] = useState({ select: false, other: false });
   const [licenceData, setLicenceData] = useState([]);
+
+  const getLicenceInternalApi = async () => {
+    const token = window?.localStorage?.getItem("token");
+    const licenceNumber = apiData?.length ? watch("licenceNo")?.value : watch("licenceNo");
+    const loiNumber = apiData?.length ? watch("licenceNo")?.value : watch("licenceNo");
+    const applicationNumber = apiData?.length ? watch("licenceNo")?.value : watch("licenceNo");
+    // const  applicationNumber = watch("numberType")?.value == "LICENCENUMBER"
+    setLoader(true);
+    const data = {
+      RequestInfo: {
+        apiId: "Rainmaker",
+        ver: "v1",
+        ts: 0,
+        action: "_search",
+        did: "",
+        key: "",
+        msgId: "090909",
+        requesterId: "",
+        authToken: token,
+        userInfo: userInfo,
+      },
+    };
+    try {
+      const Resp = await axios.post(
+        `/tl-services/_additionalDocuments/_search?licenceNumber=${licenceNumber}&loiNumber=${loiNumber}&applicationNumber=${applicationNumber}`,
+        data
+      );
+
+      console.log("resp===", Resp?.data);
+    } catch (error) {
+      setLoader(false);
+      return error.message;
+    }
+  };
 
   const getLicenceDetails = async () => {
     setLoader(true);
@@ -76,7 +111,10 @@ const SearchLicenceComp = ({ watch, register, control, setLoader, errors, setVal
                 marginLeft: "10px",
                 cursor: "pointer",
               }}
-              onClick={getLicenceDetails}
+              onClick={() => {
+                getLicenceDetails();
+                getLicenceInternalApi();
+              }}
             >
               Go
             </div>

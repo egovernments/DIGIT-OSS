@@ -6,6 +6,7 @@ import Spinner from "../../../../../../components/Loader";
 import SearchLicenceComp from "../../../../../../components/SearchLicence";
 import FileUpload from "@mui/icons-material/FileUpload";
 import CusToaster from "../../../../../../components/Toaster";
+import VisibilityIcon from "@mui/icons-material/Visibility";
 
 const selectTypeData = [
   { label: "Application Number", value: "APPLICATIONNUMBER" },
@@ -36,9 +37,9 @@ const AdditionalDocument = () => {
     resolver: "",
     shouldFocusError: true,
     defaultValues: {
-      services: [
+      DocumentsDetails: [
         {
-          description: "",
+          documentName: "",
           document: "",
         },
       ],
@@ -46,7 +47,7 @@ const AdditionalDocument = () => {
   });
   const { fields, append, remove } = useFieldArray({
     control,
-    name: "services",
+    name: "DocumentsDetails",
   });
 
   const additionalDoc = (data) => {
@@ -213,7 +214,7 @@ const AdditionalDocument = () => {
                 type="button"
                 style={{ width: "100px", marginRight: 15 }}
                 className="btn btn-primary"
-                onClick={() => append({ description: "", document: "" })}
+                onClick={() => append({ documentName: "", document: "" })}
               >
                 Add Row
               </button>
@@ -236,7 +237,7 @@ const AdditionalDocument = () => {
                         <td>
                           <div>
                             {/* <label>Document Description</label> */}
-                            <input type="text" className="form-control" {...register(`services.${index}.description`)} />
+                            <input type="text" className="form-control" {...register(`DocumentsDetails.${index}.documentName`)} />
                           </div>
                         </td>
                         <td style={{ textAlignLast: "center" }}>
@@ -245,15 +246,15 @@ const AdditionalDocument = () => {
                             <input
                               type="file"
                               style={{ display: "none" }}
-                              onChange={(e) => getDocumentData(e?.target?.files[0], `services.${index}.document`)}
+                              onChange={(e) => getDocumentData(e?.target?.files[0], `DocumentsDetails.${index}.document`)}
                               accept="application/pdf"
                             />
                           </label>
-                          {/* {watch("layoutPlanPdf") && (
-                        <a onClick={() => getDocShareholding(watch("layoutPlanPdf"), setLoader)} className="btn btn-sm ">
-                          <VisibilityIcon color="info" className="icon" />
-                        </a>
-                      )} */}
+                          {watch(`DocumentsDetails.${index}.document`) && (
+                            <a onClick={() => getDocShareholding(watch(`DocumentsDetails.${index}.document`), setLoader)} className="btn btn-sm ">
+                              <VisibilityIcon color="info" className="icon" />
+                            </a>
+                          )}
                         </td>
                         <td>
                           <div style={{ width: "100%", height: "100%", display: "flex", justifyContent: "center" }}>
