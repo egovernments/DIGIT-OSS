@@ -37,7 +37,7 @@ public class SmsNotificationListener {
 		this.emailService = emailService;
 	}
 
-	@KafkaListener(topics = "${kafka.topics.notification.sms.topic.name}")
+	//@KafkaListener(topics = "${kafka.topics.notification.sms.topic.name}")
 	public void process(final HashMap<String, Object> record) {
 		List<String> emails = userRepository.getEmailsByMobileNo(config.getStateTenantId(),
 				(String) record.get(Constants.SMS_REQ_MOBILE_NO_KEY_NAME));

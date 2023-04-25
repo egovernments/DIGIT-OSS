@@ -31,7 +31,8 @@ public class HolySMSSMSServiceImpl implements SMSService {
 
 	@Autowired
 	private SMSProperties smsProperties;
-
+	
+	@Autowired
 	private SMSBodyBuilder bodyBuilder;
 	
 	@Autowired
