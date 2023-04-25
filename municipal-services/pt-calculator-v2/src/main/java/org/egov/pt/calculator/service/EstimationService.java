@@ -633,7 +633,6 @@ public class EstimationService {
 		BigDecimal rebate = BigDecimal.ZERO;
 		BigDecimal roundOff = BigDecimal.ZERO;
 		BigDecimal ptTax = BigDecimal.ZERO;
-		BigDecimal  getswachhatataxrebate = BigDecimal.Zero;
 
 		for (TaxHeadEstimate estimate : estimates) {
 
@@ -658,10 +657,7 @@ public class EstimationService {
 			case EXEMPTION:
 				exemption = exemption.add(estimate.getEstimateAmount());
 				break;
-			
-			case SWACHHATATAXREBATE:
-					swachhatataxrebate = swachhatataxrebate.add(extimate.getEstimateAmount());
-
+					
 			default:
 				taxAmt = taxAmt.add(estimate.getEstimateAmount());
 				break;
