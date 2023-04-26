@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Button, InputLabel, MenuItem, Select } from "@material-ui/core";
+import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, InputLabel, MenuItem, Select } from "@material-ui/core";
 import FormControl from "@mui/material/FormControl";
 import { useForm } from "react-hook-form";
 import OutlinedInput from "@mui/material/OutlinedInput";
@@ -13,6 +13,8 @@ import SearchLicenceComp from "../../../../../../components/SearchLicence";
 import Visibility from "@mui/icons-material/Visibility";
 import FileUpload from "@mui/icons-material/FileUpload";
 import { getDocShareholding } from "../../../docView/docView.help";
+import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
+
 
 function SurrenderLic() {
   const [selects, setSelects] = useState();
@@ -26,6 +28,8 @@ function SurrenderLic() {
   const location = useLocation();
   const params = new URLSearchParams(location.search);
   const [licenseData, setLicenseData] = useState();
+  const [successDialog,setSuccessDialog] = useState(false);
+  const [applicationNumber,setApplicationNumber] = useState("");
 
 
   const handleshowhide = (event) => {
@@ -36,6 +40,11 @@ function SurrenderLic() {
   const handleselects = (event) => {
     const getu = event.target.value;
     setSelects(getu);
+  };
+
+  const handleClose = () => {
+    setSuccessDialog(false);
+    window.location.href = `/digit-ui/citizen`;
   };
 
   const getLicenseData = async () => {
@@ -170,7 +179,14 @@ function SurrenderLic() {
       console.log("Submit Response ====> ", response);
 
       setLoading(false);
-      setShowToastError({ label: "Surrender of License submitted successfully", error: false, success: true });
+
+      if(response?.data?.surrendOfLicense?.length){
+        setShowToastError({ label: "Surrender of License submitted successfully", error: false, success: true });
+        setSuccessDialog(true);
+        setApplicationNumber(response?.data?.surrendOfLicense?.[0]?.applicationNumber || "")
+      } else {
+        setShowToastError({ label: response?.data?.message, error: true, success: false });
+      }
 
     } catch (err) {
       console.log("Submit Error ====> ", err.message);
@@ -230,6 +246,7 @@ function SurrenderLic() {
 
       setLoading(false);
       setShowToastError({ label: "Surrender of License updated successfully", error: false, success: true });
+      handleClose();
 
     } catch (err) {
       console.log("Update Error ====> ", err.message);
@@ -1629,6 +1646,31 @@ function SurrenderLic() {
           </div>
         </div>
       </div>
+
+
+      <Dialog open={successDialog} onClose={handleClose} aria-labelledby="alert-dialog-title" aria-describedby="alert-dialog-description">
+          <DialogTitle id="alert-dialog-title">Surrender of License Submission</DialogTitle>
+          <DialogContent>
+            <DialogContentText id="alert-dialog-description">
+              <p>
+                Your Surrender of License is submitted successfully{" "}
+                <span>
+                  <CheckCircleOutlineIcon style={{ color: "blue", variant: "filled" }} />
+                </span>
+              </p>
+              <p>
+                Please Note down your Application Number <span style={{ padding: "5px", color: "blue" }}>{applicationNumber}</span> for further
+                assistance
+              </p>
+            </DialogContentText>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={handleClose} autoFocus>
+              Ok
+            </Button>
+          </DialogActions>
+        </Dialog>
+
     </form>
   );
 }
