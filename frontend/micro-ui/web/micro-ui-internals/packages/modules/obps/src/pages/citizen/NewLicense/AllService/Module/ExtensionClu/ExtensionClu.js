@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { Button } from "@material-ui/core";
+import React, { useEffect, useState } from "react";
+import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from "@material-ui/core";
 import FormControl from "@mui/material/FormControl";
 import { useForm } from "react-hook-form";
 import OutlinedInput from "@mui/material/OutlinedInput";
@@ -9,7 +9,11 @@ import axios from "axios";
 import Spinner from "../../../../../../components/Loader";
 import CusToaster from "../../../../../../components/Toaster";
 import { useTranslation } from "react-i18next";
-import { useLocation } from "react-router-dom";
+import { useLocation, useParams } from "react-router-dom";
+import Visibility from "@mui/icons-material/Visibility";
+import FileUpload from "@mui/icons-material/FileUpload";
+import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
+
 
 function ExtensionClu() {
   const {
@@ -23,17 +27,219 @@ function ExtensionClu() {
   } = useForm({});
   const [loader, setLoading] = useState(false);
   const [showToastError, setShowToastError] = useState({ label: "", error: false, success: false });
-  const {t} = useTranslation();
-  const {pathname:url} = useLocation();
+  const { t } = useTranslation();
+  const { pathname: url } = useLocation();
   const authToken = Digit.UserService.getUser()?.access_token || null;
   const userInfo = Digit.UserService.getUser()?.info || {};
-  const extensionClu = (data) => {
-    console.log(data);
-    console.log("data stringified", JSON.stringify(data));
-  };
   const location = useLocation();
   const params = new URLSearchParams(location.search);
+  // const { id } = useParams();
+  const [cluPermissionDetails, setCLUpermissionDetails] = useState({});
+  const [successDialog,setSuccessDialog] = useState(false);
+  const [applicationNumber,setApplicationNumber] = useState("");
+
+  const extensionClu = async (data) => {
+    console.log(data);
+    console.log("data stringified", JSON.stringify(data));
+
+    if (params.get('id')) {
+      updateExtensionClu(data);
+    } else {
+      createExtensionClu(data);
+    }
+
+
+  };
+
+  const handleClose = () => {
+    setSuccessDialog(false);
+    window.location.href = `/digit-ui/citizen`;
+  };
+
+  const updateExtensionClu = async (data) => {
+    console.log("data stringified", JSON.stringify(data));
+    setLoading(true);
+    try {
+      const body = {
+        RequestInfo: {
+          apiId: "Rainmaker",
+          ver: ".01",
+          ts: null,
+          action: "_update",
+          did: "1",
+          key: "",
+          msgId: "20170310130900|en_IN",
+          authToken: authToken,
+          userInfo: userInfo
+        },
+        ExtensionOfCLUPermission: [
+          {
+            ...cluPermissionDetails,
+            tenantId: "hr",
+            action: "INITIATE",
+            applicationNo: data?.applicationNo,
+            caseNo: data?.caseNo,
+            naturePurpose: data?.naturePurpose,
+            totalAreaSq: data?.totalAreaSq,
+            cluDate: data?.cluDate,
+            expiryClu: data?.expiryClu,
+            stageConstruction: data?.stageConstruction,
+            applicantName: data?.applicantName,
+            mobile: data?.mobile,
+            emailAddress: data?.emailAddress,
+            address: data?.address,
+            village: data?.village,
+            tehsil: data?.tehsil,
+            pinCode: data?.pinCode,
+            reasonDelay: data?.reasonDelay,
+            buildingPlanApprovalStatus: data?.buildingPlanApprovalStatus,
+            zoningPlanApprovalDate: data?.zoningPlanApprovalDate,
+            dateOfSanctionBuildingPlan: data?.dateOfSanctionBuildingPlan,
+            appliedFirstTime: data?.appliedFirstTime,
+            uploadbrIIIfileUrl: data?.uploadbrIIIfileUrl,
+            cluPermissionLetterfileUrl: data?.cluPermissionLetterfileUrl,
+            uploadPhotographsfileUrl: data?.uploadPhotographsfileUrl,
+            receiptApplicationfileUrl: data?.receiptApplicationfileUrl,
+            uploadBuildingPlanfileUrl: data?.uploadBuildingPlanfileUrl,
+            indemnityBondfileUrl: data?.indemnityBondfileUrl,
+          }
+        ]
+      }
+      console.log(body);
+      const response = await axios.post('/tl-services/ExtensionOfCLUPermissionRequest/_update', body);
+      setLoading(false);
+      setShowToastError({ label: "Extension of CLU permission updated successfully", error: false, success: true });
+      handleClose();
+
+    } catch (err) {
+      setLoading(false);
+      setShowToastError({ label: err.message, error: true, success: false });
+    }
+
+
+  };
+
+  const createExtensionClu = async (data) => {
+    console.log(data);
+    console.log("data stringified", JSON.stringify(data));
+    setLoading(true);
+    try {
+      const body = {
+        RequestInfo: {
+          apiId: "Rainmaker",
+          ver: ".01",
+          ts: null,
+          action: "_create",
+          did: "1",
+          key: "",
+          msgId: "20170310130900|en_IN",
+          authToken: authToken,
+          userInfo: userInfo
+        },
+        ExtensionOfCLUPermission: [
+          {
+            tenantId: "hr",
+            action: "INITIATE",
+            applicationNo: data?.applicationNo,
+            caseNo: data?.caseNo,
+            naturePurpose: data?.naturePurpose,
+            totalAreaSq: data?.totalAreaSq,
+            cluDate: data?.cluDate,
+            expiryClu: data?.expiryClu,
+            stageConstruction: data?.stageConstruction,
+            applicantName: data?.applicantName,
+            mobile: data?.mobile,
+            emailAddress: data?.emailAddress,
+            address: data?.address,
+            village: data?.village,
+            tehsil: data?.tehsil,
+            pinCode: data?.pinCode,
+            reasonDelay: data?.reasonDelay,
+            buildingPlanApprovalStatus: data?.buildingPlanApprovalStatus,
+            zoningPlanApprovalDate: data?.zoningPlanApprovalDate,
+            dateOfSanctionBuildingPlan: data?.dateOfSanctionBuildingPlan,
+            appliedFirstTime: data?.appliedFirstTime,
+            uploadbrIIIfileUrl: data?.uploadbrIIIfileUrl,
+            cluPermissionLetterfileUrl: data?.cluPermissionLetterfileUrl,
+            uploadPhotographsfileUrl: data?.uploadPhotographsfileUrl,
+            receiptApplicationfileUrl: data?.receiptApplicationfileUrl,
+            uploadBuildingPlanfileUrl: data?.uploadBuildingPlanfileUrl,
+            indemnityBondfileUrl: data?.indemnityBondfileUrl,
+          }
+        ]
+      }
+      
+      const response = await axios.post('/tl-services/ExtensionOfCLUPermissionRequest/_create', body);
+      setLoading(false);
+      
+      if(response?.data?.extensionOfCLUPermission?.length){
+        setShowToastError({ label: "Extension of CLU permission submitted successfully", error: false, success: true });
   
+        setSuccessDialog(true);
+        setApplicationNumber(response?.data?.extensionOfCLUPermission?.[0]?.applicationNo || "");
+
+      } else {
+        setShowToastError({ label: response?.data?.message, error: true, success: false });
+      }
+
+    } catch (err) {
+      setLoading(false);
+      setShowToastError({ label: err.message, error: true, success: false });
+    }
+
+
+  };
+
+  const getCLUdata = async () => {
+    try {
+      let body = {
+        RequestInfo: {
+          apiId: "Rainmaker",
+          ver: ".01",
+          ts: null,
+          action: "_update",
+          did: "1",
+          key: "",
+          msgId: "20170310130900|en_IN",
+          authToken: authToken,
+          userInfo: userInfo
+        }
+      }
+
+      const response = await axios.post(`/tl-services/ExtensionOfCLUPermissionRequest/_search?applicationNumber=${params.get('id')}`, body);
+      const details = response?.data?.extensionOfCLUPermission?.[0];
+      setCLUpermissionDetails(details || {});
+      setValue("applicationNo", details?.applicationNo);
+      setValue("caseNo", details?.caseNo);
+      setValue("naturePurpose", details?.naturePurpose);
+      setValue("totalAreaSq", details?.totalAreaSq);
+      setValue("cluDate", details?.cluDate);
+      setValue("applicantName", details?.applicantName);
+      setValue("expiryClu", details?.expiryClu);
+      setValue("stageConstruction", details?.stageConstruction);
+      setValue("mobile", details?.mobile);
+      setValue("emailAddress", details?.emailAddress);
+      setValue("address", details?.address);
+      setValue("village", details?.village);
+      setValue("pinCode", details?.pinCode);
+      setValue("tehsil", details?.tehsil);
+      setValue("reasonDelay", details?.reasonDelay);
+      setValue("buildingPlanApprovalStatus", details?.buildingPlanApprovalStatus);
+      setValue("zoningPlanApprovalDate", details?.zoningPlanApprovalDate);
+      setValue("dateOfSanctionBuildingPlan", details?.dateOfSanctionBuildingPlan);
+      setValue("appliedFirstTime", details?.appliedFirstTime);
+      setValue("uploadbrIIIfileUrl", details?.uploadbrIIIfileUrl);
+      setValue("cluPermissionLetterfileUrl", details?.cluPermissionLetterfileUrl);
+      setValue("uploadPhotographsfileUrl", details?.uploadPhotographsfileUrl);
+      setValue("receiptApplicationfileUrl", details?.receiptApplicationfileUrl);
+      setValue("uploadBuildingPlanfileUrl", details?.uploadBuildingPlanfileUrl);
+      setValue("indemnityBondfileUrl", details?.indemnityBondfileUrl);
+
+
+    } catch (err) {
+
+    }
+  }
 
   const getData = async () => {
     setLoading(true);
@@ -70,6 +276,13 @@ function ExtensionClu() {
 
     }
   }
+
+  useEffect(() => {
+    console.log("REgergergreg", params.get('id'))
+    if (params.get('id')) {
+      getCLUdata();
+    }
+  }, [params.get('id')])
 
 
   const uploadFile = async (file, fieldName) => {
@@ -117,13 +330,13 @@ function ExtensionClu() {
 
       <div className="card" style={{ width: "126%", border: "5px solid #1266af" }}>
         <h4 style={{ fontSize: "25px", marginLeft: "21px" }}>
-        {`${t("EXTENSION_CLU_PERMISSION")}`}</h4>
+          {`${t("EXTENSION_CLU_PERMISSION")}`}</h4>
         <div className="card">
           <Row className="col-12">
             <Form.Group className="col-4" as={Col} controlId="formGridCase">
               <Form.Label>
                 <h2>
-                {`${t("CASE_NO")}`}<span style={{ color: "red" }}>*</span>
+                  {`${t("CASE_NO")}`}<span style={{ color: "red" }}>*</span>
                 </h2>
               </Form.Label>
               <input className="form-control" placeholder="" {...register("caseNo", {
@@ -168,7 +381,7 @@ function ExtensionClu() {
               <Form.Label>
                 <h2>
                   {" "}
-                   {`${t("NATURE_PURPOSE")}`} <span style={{ color: "red" }}>*</span>
+                  {`${t("NATURE_PURPOSE")}`} <span style={{ color: "red" }}>*</span>
                 </h2>
               </Form.Label>
               <input type="text" className="form-control" placeholder="" {...register("naturePurpose", {
@@ -195,10 +408,10 @@ function ExtensionClu() {
               <Form.Label>
                 <h2>
                   {" "}
-                   {`${t("TOTAL_AREA_IN_SQ_METER")}`} <span style={{ color: "red" }}>*</span>
+                  {`${t("TOTAL_AREA_IN_SQ_METER")}`} <span style={{ color: "red" }}>*</span>
                 </h2>
               </Form.Label>
-              <input type="number" className="form-control" placeholder="" {...register("totalAreaSq", {
+              <input className="form-control" placeholder="" {...register("totalAreaSq", {
                 required: "This field cannot be blank",
                 minLength: {
                   value: 2,
@@ -208,7 +421,7 @@ function ExtensionClu() {
                   message: "Invalid Area in sq. meter."
                 },
                 pattern: {
-                  value: /^[0-9\b]+$/,
+                  value: /^[0-9]+(\.[0-9]+)?$/,
                   message: "Invalid Area in sq. meter."
                 }
               })} />
@@ -221,7 +434,7 @@ function ExtensionClu() {
               <Form.Label>
                 <h2>
                   {" "}
-                   {`${t("DATE_OF_CLU")}`}
+                  {`${t("DATE_OF_CLU")}`}
                   <span style={{ color: "red" }}>*</span>
                 </h2>
               </Form.Label>
@@ -236,7 +449,7 @@ function ExtensionClu() {
               <Form.Label>
                 <h2>
                   {" "}
-                   {`${t("DATE_OF_EXPIRY_OF_CLU")}`}
+                  {`${t("DATE_OF_EXPIRY_OF_CLU")}`}
                   <span style={{ color: "red" }}>*</span>
                 </h2>
               </Form.Label>
@@ -259,7 +472,7 @@ function ExtensionClu() {
               <Form.Label>
                 <h2>
                   {" "}
-                   {`${t("STAGE_OF_CONSTRUCTION")}`} <span style={{ color: "red" }}>*</span>
+                  {`${t("STAGE_OF_CONSTRUCTION")}`} <span style={{ color: "red" }}>*</span>
                 </h2>
               </Form.Label>
               <input type="text" className="form-control" placeholder="" {...register("stageConstruction", {
@@ -273,8 +486,7 @@ function ExtensionClu() {
                   message: "Invalid Stage of Construction."
                 },
                 pattern: {
-                  value: /^[a-zA-Z0-9]*$/,
-                  message: "Invalid Stage of Construction."
+                  value: /^[a-zA-Z0-9 ]*$/
                 }
               })} />
               <FormHelperText error={Boolean(errors?.stageConstruction)}>
@@ -286,7 +498,7 @@ function ExtensionClu() {
               <Form.Label>
                 <h2>
                   {" "}
-                   {`${t("NAME_OF_APPLICANT")}`}
+                  {`${t("NAME_OF_APPLICANT")}`}
                   <span style={{ color: "red" }}>*</span>{" "}
                 </h2>
               </Form.Label>
@@ -301,7 +513,7 @@ function ExtensionClu() {
                   message: "Invalid Application Name."
                 },
                 pattern: {
-                  value: /^[a-zA-Z0-9]*$/,
+                  value: /^[a-zA-Z0-9 ]*$/,
                   message: "Invalid Application Name."
                 }
               })} />
@@ -313,7 +525,7 @@ function ExtensionClu() {
               <Form.Label>
                 <h2>
                   {" "}
-                   {`${t("MOBILE")}`}
+                  {`${t("MOBILE")}`}
                   <span style={{ color: "red" }}>*</span>
                 </h2>
               </Form.Label>
@@ -369,7 +581,7 @@ function ExtensionClu() {
               <Form.Label>
                 <h2>
                   {" "}
-                   {`${t("ADDRESS")}`}
+                  {`${t("ADDRESS")}`}
                   <span style={{ color: "red" }}>*</span>
                 </h2>
               </Form.Label>
@@ -396,7 +608,7 @@ function ExtensionClu() {
               <Form.Label>
                 <h2>
                   {" "}
-                   {`${t("VILLAGE")}`} <span style={{ color: "red" }}>*</span>
+                  {`${t("VILLAGE")}`} <span style={{ color: "red" }}>*</span>
                 </h2>
               </Form.Label>
               <input type="text" className="form-control" placeholder="" {...register("village", {
@@ -477,7 +689,7 @@ function ExtensionClu() {
               <Form.Label>
                 <h2>
                   {" "}
-                   {`${t("REASON_FOR_DELAY")}`}
+                  {`${t("REASON_FOR_DELAY")}`}
                   <span style={{ color: "red" }}>*</span>
                 </h2>
               </Form.Label>
@@ -527,13 +739,13 @@ function ExtensionClu() {
               </FormHelperText>
             </Form.Group>
 
-            
+
 
             <Form.Group className="col-6" as={Col} controlId="formGridState">
               <Form.Label>
                 <h2>
                   {" "}
-                   {`${t("DATE_OF_APPROVAL_OF_ZONING_PLAN")}`}
+                  {`${t("DATE_OF_APPROVAL_OF_ZONING_PLAN")}`}
                   <span style={{ color: "red" }}>*</span>
                 </h2>
               </Form.Label>
@@ -549,7 +761,7 @@ function ExtensionClu() {
               <Form.Label>
                 <h2>
                   {" "}
-                   {`${t("DATE_OF_SANCTION_OF_BUILDING_PLAN")}`}
+                  {`${t("DATE_OF_SANCTION_OF_BUILDING_PLAN")}`}
                   <span style={{ color: "red" }}>*</span>
                 </h2>
               </Form.Label>
@@ -563,7 +775,7 @@ function ExtensionClu() {
 
             <div className="col col-12  mt-3">
               <h6>
-                 {`${t("WHETHER_APPLIED_FOR_FIRST_TIME")}`}   <span style={{ color: "red" }}>*</span> &nbsp;&nbsp;
+                {`${t("WHETHER_APPLIED_FOR_FIRST_TIME")}`}   <span style={{ color: "red" }}>*</span> &nbsp;&nbsp;
                 <label htmlFor="appliedFirstTime">
                   <input
                     type="radio"
@@ -587,7 +799,7 @@ function ExtensionClu() {
                     {...register("appliedFirstTime", {
                       required: "Please Select (Yes/No)"
                     })}
-                    onChange={(e) => handleselects(e)}
+                    // onChange={(e) => handleselects(e)}
                   />
                   &nbsp; {`${t("NO")}`} &nbsp;&nbsp;
 
@@ -612,29 +824,108 @@ function ExtensionClu() {
               <tr>
                 <th scope="row">1</th>
                 <td>
-                   {`${t("UPLOAD_BR_III")}`}<span style={{ color: "red" }}>*</span>
+                  {`${t("UPLOAD_BR_III")}`}<span style={{ color: "red" }}>*</span>
                 </td>
+
                 <td>
-                  <input type="file" className="form-control" placeholder="" {...register("uploadbrIII", {
-                    required: "This Document is required"
-                  })} onChange={(e) => uploadFile(e.target.files[0], "uploadbrIII")}></input>
-                  <FormHelperText error={Boolean(errors?.uploadbrIII)}>
-                    {errors?.uploadbrIII?.message}
-                  </FormHelperText>
+                  {
+                    watch("uploadbrIII") ?
+                      (
+                        <div className="d-flex justify-content-center">
+
+                          <label title="Upload Document" for={'uploadbrIII'}>
+                            {" "}
+                            <FileUpload color="primary" for={'uploadbrIII'} />
+                          </label>
+
+                          <input id="uploadbrIII" type="file" placeholder="" className="form-control d-none" onChange={(e) => uploadFile(e.target.files[0], "uploadbrIII")} ></input>
+
+                          <h3 className="error-message" style={{ color: "red" }}>
+                            {errors?.zoningLayoutPlan && errors?.zoningLayoutPlan?.message}
+                          </h3>
+
+                          {watch('uploadbrIIIfileUrl') && (
+                            <a onClick={() => getDocShareholding(watch('uploadbrIIIfileUrl'), setLoading)} className="btn btn-sm ">
+                              <Visibility />
+                            </a>
+                          )}
+
+                        </div>
+                      ) : (
+                        <div className="d-flex justify-content-center">
+
+                          <label title="Upload Document" for={'uploadbrIII'}>
+                            {" "}
+                            <FileUpload color="primary" for={'uploadbrIII'} />
+                          </label>
+
+                          <input id="uploadbrIII" type="file" placeholder="" className="form-control d-none" {...register("uploadbrIII", { required: "This Document is required" })} onChange={(e) => uploadFile(e.target.files[0], "uploadbrIII")} ></input>
+                          <h3 className="error-message" style={{ color: "red" }}>
+                            {errors?.uploadbrIII && errors?.uploadbrIII?.message}
+                          </h3>
+
+                          {watch('uploadbrIIIfileUrl') && (
+                            <a onClick={() => getDocShareholding(watch('uploadbrIIIfileUrl'), setLoading)} className="btn btn-sm ">
+                              <Visibility />
+                            </a>
+                          )}
+                        </div>
+                      )
+                  }
                 </td>
+
               </tr>
               <tr>
                 <th scope="row">2</th>
                 <td>
-                   {`${t("UPLOAD_CLU_PERMISSION_LETTER")}`}<span style={{ color: "red" }}>*</span>
+                  {`${t("UPLOAD_CLU_PERMISSION_LETTER")}`}<span style={{ color: "red" }}>*</span>
                 </td>
+
                 <td>
-                  <input type="file" className="form-control" placeholder="" {...register("cluPermissionLetter", {
-                    required: "This Document is required"
-                  })} onChange={(e) => uploadFile(e.target.files[0], "cluPermissionLetter")}></input>
-                  <FormHelperText error={Boolean(errors?.cluPermissionLetter)}>
-                    {errors?.cluPermissionLetter?.message}
-                  </FormHelperText>
+                  {
+                    watch("cluPermissionLetter") ?
+                      (
+                        <div className="d-flex justify-content-center">
+
+                          <label title="Upload Document" for={'cluPermissionLetter'}>
+                            {" "}
+                            <FileUpload color="primary" for={'cluPermissionLetter'} />
+                          </label>
+
+                          <input id="cluPermissionLetter" type="file" placeholder="" className="form-control d-none" onChange={(e) => uploadFile(e.target.files[0], "cluPermissionLetter")} ></input>
+
+                          <h3 className="error-message" style={{ color: "red" }}>
+                            {errors?.zoningLayoutPlan && errors?.zoningLayoutPlan?.message}
+                          </h3>
+
+                          {watch('cluPermissionLetterfileUrl') && (
+                            <a onClick={() => getDocShareholding(watch('cluPermissionLetterfileUrl'), setLoading)} className="btn btn-sm ">
+                              <Visibility />
+                            </a>
+                          )}
+
+                        </div>
+                      ) : (
+                        <div className="d-flex justify-content-center">
+
+                          <label title="Upload Document" for={'cluPermissionLetter'}>
+                            {" "}
+                            <FileUpload color="primary" for={'cluPermissionLetter'} />
+                          </label>
+
+                          <input id="cluPermissionLetter" type="file" placeholder="" className="form-control d-none" {...register("cluPermissionLetter", { required: "This Document is required" })} onChange={(e) => uploadFile(e.target.files[0], "cluPermissionLetter")} ></input>
+                          <h3 className="error-message" style={{ color: "red" }}>
+                            {errors?.cluPermissionLetter && errors?.cluPermissionLetter?.message}
+                          </h3>
+
+                          {watch('cluPermissionLetterfileUrl') && (
+                            <a onClick={() => getDocShareholding(watch('cluPermissionLetterfileUrl'), setLoading)} className="btn btn-sm ">
+                              <Visibility />
+                            </a>
+                          )}
+                        </div>
+                      )
+                  }
                 </td>
               </tr>
               <tr>
@@ -643,59 +934,221 @@ function ExtensionClu() {
                   {" "}
                   {`${t("UPLOAD_UNDER_CONSTRUCTION_BUILDING_PHOTO")}`}{" "}<span style={{ color: "red" }}>*</span>
                 </td>
+
                 <td>
-                  <input type="file" className="form-control" placeholder="" {...register("uploadPhotographs", {
-                    required: "This Document is required"
-                  })} onChange={(e) => uploadFile(e.target.files[0], "uploadPhotographs")}></input>
-                  <FormHelperText error={Boolean(errors?.uploadPhotographs)}>
-                    {errors?.uploadPhotographs?.message}
-                  </FormHelperText>
+                  {
+                    watch("uploadPhotographs") ?
+                      (
+                        <div className="d-flex justify-content-center">
+
+                          <label title="Upload Document" for={'uploadPhotographs'}>
+                            {" "}
+                            <FileUpload color="primary" for={'uploadPhotographs'} />
+                          </label>
+
+                          <input id="uploadPhotographs" type="file" placeholder="" className="form-control d-none" onChange={(e) => uploadFile(e.target.files[0], "uploadPhotographs")} ></input>
+
+                          <h3 className="error-message" style={{ color: "red" }}>
+                            {errors?.uploadPhotographs && errors?.uploadPhotographs?.message}
+                          </h3>
+
+                          {watch('uploadPhotographsfileUrl') && (
+                            <a onClick={() => getDocShareholding(watch('uploadPhotographsfileUrl'), setLoading)} className="btn btn-sm ">
+                              <Visibility />
+                            </a>
+                          )}
+
+                        </div>
+                      ) : (
+                        <div className="d-flex justify-content-center">
+
+                          <label title="Upload Document" for={'uploadPhotographs'}>
+                            {" "}
+                            <FileUpload color="primary" for={'uploadPhotographs'} />
+                          </label>
+
+                          <input id="uploadPhotographs" type="file" placeholder="" className="form-control d-none" {...register("uploadPhotographs", { required: "This Document is required" })} onChange={(e) => uploadFile(e.target.files[0], "uploadPhotographs")} ></input>
+                          <h3 className="error-message" style={{ color: "red" }}>
+                            {errors?.uploadPhotographs && errors?.uploadPhotographs?.message}
+                          </h3>
+
+                          {watch('uploadPhotographsfileUrl') && (
+                            <a onClick={() => getDocShareholding(watch('uploadPhotographsfileUrl'), setLoading)} className="btn btn-sm ">
+                              <Visibility />
+                            </a>
+                          )}
+                        </div>
+                      )
+                  }
                 </td>
+
               </tr>
               <tr>
                 <th scope="row">4</th>
                 <td>
                   {" "}
-                   {`${t("RECEIPT_OF_APPLICATION_IF_ANY_SUBMITTED_FOR_TAKING_CERTIFICATE")}`}<span style={{ color: "red" }}>*</span>
+                  {`${t("RECEIPT_OF_APPLICATION_IF_ANY_SUBMITTED_FOR_TAKING_CERTIFICATE")}`}<span style={{ color: "red" }}>*</span>
                 </td>
+
                 <td>
-                  <input type="file" className="form-control" placeholder="" {...register("receiptApplication", {
-                    required: "This Document is required"
-                  })} onChange={(e) => uploadFile(e.target.files[0], "receiptApplication")}></input>
-                  <FormHelperText error={Boolean(errors?.receiptApplication)}>
-                    {errors?.receiptApplication?.message}
-                  </FormHelperText>
+                  {
+                    watch("receiptApplication") ?
+                      (
+                        <div className="d-flex justify-content-center">
+
+                          <label title="Upload Document" for={'receiptApplication'}>
+                            {" "}
+                            <FileUpload color="primary" for={'receiptApplication'} />
+                          </label>
+
+                          <input id="receiptApplication" type="file" placeholder="" className="form-control d-none" onChange={(e) => uploadFile(e.target.files[0], "receiptApplication")} ></input>
+
+                          <h3 className="error-message" style={{ color: "red" }}>
+                            {errors?.receiptApplication && errors?.receiptApplication?.message}
+                          </h3>
+
+                          {watch('receiptApplicationfileUrl') && (
+                            <a onClick={() => getDocShareholding(watch('receiptApplicationfileUrl'), setLoading)} className="btn btn-sm ">
+                              <Visibility />
+                            </a>
+                          )}
+
+                        </div>
+                      ) : (
+                        <div className="d-flex justify-content-center">
+
+                          <label title="Upload Document" for={'receiptApplication'}>
+                            {" "}
+                            <FileUpload color="primary" for={'receiptApplication'} />
+                          </label>
+
+                          <input id="receiptApplication" type="file" placeholder="" className="form-control d-none" {...register("receiptApplication", { required: "This Document is required" })} onChange={(e) => uploadFile(e.target.files[0], "receiptApplication")} ></input>
+                          <h3 className="error-message" style={{ color: "red" }}>
+                            {errors?.receiptApplication && errors?.receiptApplication?.message}
+                          </h3>
+
+                          {watch('receiptApplicationfileUrl') && (
+                            <a onClick={() => getDocShareholding(watch('receiptApplicationfileUrl'), setLoading)} className="btn btn-sm ">
+                              <Visibility />
+                            </a>
+                          )}
+                        </div>
+                      )
+                  }
                 </td>
+
               </tr>
               <tr>
                 <th scope="row">5</th>
                 <td>
                   {" "}
-                   {`${t("UPLOAD_APPROVED_BUILDING_PLAN")}`} <span style={{ color: "red" }}>*</span>
+                  {`${t("UPLOAD_APPROVED_BUILDING_PLAN")}`} <span style={{ color: "red" }}>*</span>
                 </td>
+
                 <td>
-                  <input type="file" className="form-control" placeholder="" {...register("uploadBuildingPlan", {
-                    required: "This Document is required"
-                  })} onChange={(e) => uploadFile(e.target.files[0], "uploadBuildingPlan")}></input>
-                  <FormHelperText error={Boolean(errors?.uploadBuildingPlan)}>
-                    {errors?.uploadBuildingPlan?.message}
-                  </FormHelperText>
+                  {
+                    watch("uploadBuildingPlan") ?
+                      (
+                        <div className="d-flex justify-content-center">
+
+                          <label title="Upload Document" for={'uploadBuildingPlan'}>
+                            {" "}
+                            <FileUpload color="primary" for={'uploadBuildingPlan'} />
+                          </label>
+
+                          <input id="uploadBuildingPlan" type="file" placeholder="" className="form-control d-none" onChange={(e) => uploadFile(e.target.files[0], "uploadBuildingPlan")} ></input>
+
+                          <h3 className="error-message" style={{ color: "red" }}>
+                            {errors?.uploadBuildingPlan && errors?.uploadBuildingPlan?.message}
+                          </h3>
+
+                          {watch('uploadBuildingPlanfileUrl') && (
+                            <a onClick={() => getDocShareholding(watch('uploadBuildingPlanfileUrl'), setLoading)} className="btn btn-sm ">
+                              <Visibility />
+                            </a>
+                          )}
+
+                        </div>
+                      ) : (
+                        <div className="d-flex justify-content-center">
+
+                          <label title="Upload Document" for={'uploadBuildingPlan'}>
+                            {" "}
+                            <FileUpload color="primary" for={'uploadBuildingPlan'} />
+                          </label>
+
+                          <input id="uploadBuildingPlan" type="file" placeholder="" className="form-control d-none" {...register("uploadBuildingPlan", { required: "This Document is required" })} onChange={(e) => uploadFile(e.target.files[0], "uploadBuildingPlan")} ></input>
+                          <h3 className="error-message" style={{ color: "red" }}>
+                            {errors?.uploadBuildingPlan && errors?.uploadBuildingPlan?.message}
+                          </h3>
+
+                          {watch('uploadBuildingPlanfileUrl') && (
+                            <a onClick={() => getDocShareholding(watch('uploadBuildingPlanfileUrl'), setLoading)} className="btn btn-sm ">
+                              <Visibility />
+                            </a>
+                          )}
+                        </div>
+                      )
+                  }
                 </td>
+
+
               </tr>
               <tr>
                 <th scope="row">6</th>
                 <td>
                   {" "}
-                   {`${t("INDEMNITY_BOND")}`} <span style={{ color: "red" }}>*</span>
+                  {`${t("INDEMNITY_BOND")}`} <span style={{ color: "red" }}>*</span>
                 </td>
+
                 <td>
-                  <input type="file" className="form-control" placeholder="" {...register("indemnityBond", {
-                    required: "This Document is required"
-                  })} onChange={(e) => uploadFile(e.target.files[0], "indemnityBond")}></input>
-                  <FormHelperText error={Boolean(errors?.indemnityBond)}>
-                    {errors?.indemnityBond?.message}
-                  </FormHelperText>
+                  {
+                    watch("indemnityBond") ?
+                      (
+                        <div className="d-flex justify-content-center">
+
+                          <label title="Upload Document" for={'indemnityBond'}>
+                            {" "}
+                            <FileUpload color="primary" for={'indemnityBond'} />
+                          </label>
+
+                          <input id="indemnityBond" type="file" placeholder="" className="form-control d-none" onChange={(e) => uploadFile(e.target.files[0], "indemnityBond")} ></input>
+
+                          <h3 className="error-message" style={{ color: "red" }}>
+                            {errors?.indemnityBond && errors?.indemnityBond?.message}
+                          </h3>
+
+                          {watch('indemnityBondfileUrl') && (
+                            <a onClick={() => getDocShareholding(watch('indemnityBondfileUrl'), setLoading)} className="btn btn-sm ">
+                              <Visibility />
+                            </a>
+                          )}
+
+                        </div>
+                      ) : (
+                        <div className="d-flex justify-content-center">
+
+                          <label title="Upload Document" for={'indemnityBond'}>
+                            {" "}
+                            <FileUpload color="primary" for={'indemnityBond'} />
+                          </label>
+
+                          <input id="indemnityBond" type="file" placeholder="" className="form-control d-none" {...register("indemnityBond", { required: "This Document is required" })} onChange={(e) => uploadFile(e.target.files[0], "indemnityBond")} ></input>
+                          <h3 className="error-message" style={{ color: "red" }}>
+                            {errors?.indemnityBond && errors?.indemnityBond?.message}
+                          </h3>
+
+                          {watch('indemnityBondfileUrl') && (
+                            <a onClick={() => getDocShareholding(watch('indemnityBondfileUrl'), setLoading)} className="btn btn-sm ">
+                              <Visibility />
+                            </a>
+                          )}
+                        </div>
+                      )
+                  }
+
                 </td>
+
               </tr>
             </tbody>
           </div>
@@ -705,14 +1158,33 @@ function ExtensionClu() {
                 Submit
               </button>
             </div>
-            <div class="col-sm-12 text-right">
-              <button id="btnSearch" class="btn btn-primary btn-md center-block" style={{ marginTop: "-58px", marginRight: "97px" }}>
-                Save as Draft
-              </button>
-            </div>
           </div>
         </div>
       </div>
+
+      <Dialog open={successDialog} onClose={handleClose} aria-labelledby="alert-dialog-title" aria-describedby="alert-dialog-description">
+          <DialogTitle id="alert-dialog-title">Extension of CLU Permission Submission</DialogTitle>
+          <DialogContent>
+            <DialogContentText id="alert-dialog-description">
+              <p>
+                Your Extension of CLU Permission is submitted successfully{" "}
+                <span>
+                  <CheckCircleOutlineIcon style={{ color: "blue", variant: "filled" }} />
+                </span>
+              </p>
+              <p>
+                Please Note down your Application Number <span style={{ padding: "5px", color: "blue" }}>{applicationNumber}</span> for further
+                assistance
+              </p>
+            </DialogContentText>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={handleClose} autoFocus>
+              Ok
+            </Button>
+          </DialogActions>
+        </Dialog>
+
     </form>
   );
 }

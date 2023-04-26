@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Button } from "@material-ui/core";
+import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from "@material-ui/core";
 import FormControl from "@mui/material/FormControl";
 import { useForm } from "react-hook-form";
 import OutlinedInput from "@mui/material/OutlinedInput";
@@ -16,6 +16,7 @@ import { useLocation } from "react-router-dom";
 import Spinner from "../../../../../../components/Loader";
 import Visibility from "@mui/icons-material/Visibility";
 import { useTranslation } from "react-i18next";
+import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
 
 function Beneficial() {
   const [applicantId, setApplicantId] = useState("");
@@ -24,12 +25,19 @@ function Beneficial() {
   const [showToastError, setShowToastError] = useState({ label: "", error: false, success: false });
   const [beneficialInterestLabel, setBeneficialInterestLabel] = useState([]);
   const [loader, setLoader] = useState(false);
+  const [successDialog, setSuccessDialog] = useState(false);
+  const [applicationNumber, setApplicationNumber] = useState("");
   const { t } = useTranslation();
   const { pathname: url } = useLocation();
   const handleshowhide = (event) => {
     const getuser = event.target.value;
 
     setShowhide(getuser);
+  };
+
+  const handleClose = () => {
+    setSuccessDialog(false);
+    window.location.href = `/digit-ui/citizen`;
   };
 
   const {
@@ -39,7 +47,6 @@ function Beneficial() {
     control,
     watch,
     setValue,
-    resetField,
   } = useForm({});
 
   const changeOfDeveloperForm = [
@@ -271,7 +278,16 @@ function Beneficial() {
       const Resp = await axios.post("/tl-services/beneficial/_create", postDistrict);
       setBeneficialInterestLabel(Resp.data);
       setLoader(false);
-      setShowToastError({ label: "Beneficial Created Successfully", error: false, success: true });
+
+      if (Resp?.data?.changeBeneficial?.length) {
+        setShowToastError({ label: "Beneficial Created Successfully", error: false, success: true });
+
+        setSuccessDialog(true);
+        setApplicationNumber(Resp?.data?.changeBeneficial?.[0]?.applicationNumber || "");
+      } else {
+        setShowToastError({ label: Resp?.data?.message, error: true, success: false });
+      }
+
       // setApplicationNumber(Resp.data.changeBeneficial.applicationNumber);
     } catch (error) {
       console.log("Submit Error ====> ", err.message);
@@ -317,6 +333,7 @@ function Beneficial() {
       setLoader(false);
       setShowToastError({ label: "Beneficial Interest Updated Successfully", error: false, success: true });
       // setApplicationNumber(Resp.data.changeBeneficial.applicationNumber);
+      handleClose();
     } catch (error) {
       console.log("Submit Error ====> ", err.message);
       setLoader(false);
@@ -361,6 +378,7 @@ function Beneficial() {
       setValue("paidAmount", Resp?.data?.changeBeneficial?.[0]?.paidAmount);
       setValue("areaInAcres", Resp?.data?.changeBeneficial?.[0]?.areaInAcres);
       console.log("scene", Resp?.data?.changeBeneficial?.[0]?.areaInAcres);
+
       setLoader(false);
       setShowhide(Resp?.data?.changeBeneficial?.[0]?.developerServiceCode);
     } catch (err) {
@@ -442,15 +460,7 @@ function Beneficial() {
             <div className="">
               <div className="row">
                 <div className="col-12 p-3">
-                  <SearchLicenceComp
-                    watch={watch}
-                    register={register}
-                    control={control}
-                    setLoader={setLoader}
-                    errors={errors}
-                    setValue={setValue}
-                    resetField={resetField}
-                  />
+                  <SearchLicenceComp watch={watch} register={register} control={control} setLoader={setLoader} errors={errors} setValue={setValue} />
                 </div>
 
                 {/* <FormControl>
@@ -778,6 +788,29 @@ function Beneficial() {
           }}
         />
       )} */}
+
+      <Dialog open={successDialog} onClose={handleClose} aria-labelledby="alert-dialog-title" aria-describedby="alert-dialog-description">
+        <DialogTitle id="alert-dialog-title">Change In Beneficial Interest Submission</DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+            <p>
+              Your change in beneficial interest is submitted successfully{" "}
+              <span>
+                <CheckCircleOutlineIcon style={{ color: "blue", variant: "filled" }} />
+              </span>
+            </p>
+            <p>
+              Please Note down your Application Number <span style={{ padding: "5px", color: "blue" }}>{applicationNumber}</span> for further
+              assistance
+            </p>
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose} autoFocus>
+            Ok
+          </Button>
+        </DialogActions>
+      </Dialog>
     </div>
   );
 }
