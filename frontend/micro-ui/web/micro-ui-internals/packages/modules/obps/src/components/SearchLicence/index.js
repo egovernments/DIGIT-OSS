@@ -1,6 +1,8 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import FormControl from "@mui/material/FormControl";
 import axios from "axios";
+import moment from "moment";
+
 // import ReactMultiSelect from "../../../../../../../../../react-components/src/atoms/ReactMultiSelect";
 import ReactMultiSelect from "../../../../../react-components/src/atoms/ReactMultiSelect";
 
@@ -71,6 +73,8 @@ const SearchLicenceComp = ({ watch, register, control, setLoader, errors, setVal
   };
 
   const setTextValues = (val) => {
+    const grantDate = val.value?.split("|")?.[10];
+    const validDate = val.value?.split("|")?.[11];
     setShowField({ select: true, other: true });
     setValue("district", val.value?.split("|")?.[3]);
     setValue("colonyType", val.value?.split("|")?.[4]);
@@ -78,8 +82,9 @@ const SearchLicenceComp = ({ watch, register, control, setLoader, errors, setVal
     setValue("developmentPlan", val.value?.split("|")?.[6]);
     setValue("sectorNo", val.value?.split("|")?.[7]);
     setValue("areaAcres", val.value?.split("|")?.[9]);
+    setValue("licenceGrantDate", moment(grantDate).format("YYYY-MM-DD"));
+    setValue("validUpto", moment(validDate).format("YYYY-MM-DD"));
   };
-
   return (
     <div>
       <div className="row gy-3">
@@ -146,9 +151,19 @@ const SearchLicenceComp = ({ watch, register, control, setLoader, errors, setVal
           <div className="col col-3 ">
             <FormControl>
               <h2>
+                Licence Grant Date <span style={{ color: "red" }}>*</span>
+              </h2>
+              <input type="date" className="form-control" placeholder="" {...register("licenceGrantDate")} />
+            </FormControl>
+            <h3 className="error-message" style={{ color: "red" }}>
+              {errors?.licenceGrantDate && errors?.licenceGrantDate?.message}
+            </h3>
+          </div>
+          <div className="col col-3 ">
+            <FormControl>
+              <h2>
                 Valid Upto <span style={{ color: "red" }}>*</span>
               </h2>
-
               <input type="date" className="form-control" placeholder="" {...register("validUpto")} />
             </FormControl>
             <h3 className="error-message" style={{ color: "red" }}>
