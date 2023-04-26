@@ -1,6 +1,13 @@
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import axios from "axios";
+import { Button } from "react-bootstrap";
+import { Dialog } from "@mui/material";
+import DialogActions from "@mui/material/DialogActions";
+import DialogContent from "@mui/material/DialogContent";
+import DialogContentText from "@mui/material/DialogContentText";
+import DialogTitle from "@mui/material/DialogTitle";
+import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
 import { getDocShareholding } from "../../../docView/docView.help";
 import ReactMultiSelect from "../../../../../../../../../react-components/src/atoms/ReactMultiSelect";
 import FileUpload from "@mui/icons-material/FileUpload";
@@ -23,6 +30,8 @@ const Transferlicence = () => {
   const [showToastError, setShowToastError] = useState({ label: "", error: false, success: false });
   const [showField, setShowField] = useState(false);
   const [getError, setError] = useState("");
+  const [applicationNumber, setApplicationNumber] = useState("");
+  const [open, setOpen] = useState(false);
 
   const {
     register,
@@ -71,12 +80,20 @@ const Transferlicence = () => {
     try {
       const Resp = await axios.post("/tl-services/_TransferOfLicenseRequest/_create", postDistrict);
       setLoader(false);
-      history.push("/digit-ui/citizen");
+      setApplicationNumber(Resp?.data?.transfer?.[0]?.applicationNumber);
+      console.log("Resp=====", Resp?.data?.transfer?.[0]?.applicationNumber);
+      setOpen(true);
+      // history.push("/digit-ui/citizen");
       // setApplicationNumber(Resp.data.changeBeneficial.applicationNumber);
     } catch (error) {
       setError(error?.response?.data?.Errors[0]?.message);
       setLoader(false);
     }
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+    history.push("/digit-ui/citizen");
   };
 
   const getDocumentData = async (file, fieldName) => {
@@ -397,7 +414,7 @@ const Transferlicence = () => {
                                         type="file"
                                         style={{ display: "none" }}
                                         accept="application/pdf/jpeg/png"
-                                        onChange={(e) => getDocumentData(e?.target?.files[0], " noObjectionCertificate")}
+                                        onChange={(e) => getDocumentData(e?.target?.files[0], "noObjectionCertificate")}
                                       />
                                     </label>
                                     {watch("noObjectionCertificate") && (
@@ -594,10 +611,7 @@ const Transferlicence = () => {
                               watch("changeOfDeveloper") == "yes") && (
                               <tr>
                                 {/* <th class="fw-normal">12</th> */}
-                                <td>
-                                  {" "}
-                                  Any Other Document <span style={{ color: "red" }}>*</span>
-                                </td>
+                                <td> Any Other document</td>
                                 <td>
                                   <div>
                                     <label>
@@ -659,6 +673,28 @@ const Transferlicence = () => {
           }}
         />
       )}
+      <Dialog open={open} onClose={handleClose} aria-labelledby="alert-dialog-title" aria-describedby="alert-dialog-description">
+        <DialogTitle id="alert-dialog-title">Service Plan Submission</DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+            <p>
+              Your Service Plan is submitted successfully{" "}
+              <span>
+                <CheckCircleOutlineIcon style={{ color: "blue", variant: "filled" }} />
+              </span>
+            </p>
+            <p>
+              Please Note down your Application Number <span style={{ padding: "5px", color: "blue" }}>{applicationNumber}</span> for further
+              assistance
+            </p>
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose} autoFocus>
+            Ok
+          </Button>
+        </DialogActions>
+      </Dialog>
     </div>
   );
 };

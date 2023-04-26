@@ -4,7 +4,7 @@ import axios from "axios";
 // import ReactMultiSelect from "../../../../../../../../../react-components/src/atoms/ReactMultiSelect";
 import ReactMultiSelect from "../../../../../react-components/src/atoms/ReactMultiSelect";
 
-const SearchLicenceComp = ({ watch, register, control, setLoader, errors, setValue, resetField, apiData }) => {
+const SearchLicenceComp = ({ watch, register, control, setLoader, errors, setValue, resetField, apiData, comp }) => {
   const userInfo = Digit.UserService.getUser()?.info || {};
   const [showField, setShowField] = useState({ select: false, other: false });
   const [licenceData, setLicenceData] = useState([]);
@@ -155,38 +155,42 @@ const SearchLicenceComp = ({ watch, register, control, setLoader, errors, setVal
               {errors?.validUpto && errors?.validUpto?.message}
             </h3>
           </div>
-          <div className="col col-3 ">
-            <FormControl>
-              <h2>
-                Renewal required upto <span style={{ color: "red" }}>*</span>
-              </h2>
-              <input
-                type="date"
-                {...register("renewalRequiredUpto")}
-                className="form-control"
-                onChange={(e) => {
-                  const dateA = new Date(e?.target?.value);
-                  const dateB = new Date(watch("validUpto"));
+          {comp == "renewal" && (
+            <div className="col col-3 ">
+              <FormControl>
+                <h2>
+                  Renewal required upto <span style={{ color: "red" }}>*</span>
+                </h2>
+                <input
+                  type="date"
+                  {...register("renewalRequiredUpto")}
+                  className="form-control"
+                  onChange={(e) => {
+                    const dateA = new Date(e?.target?.value);
+                    const dateB = new Date(watch("validUpto"));
 
-                  const monthDiff = dateA.getMonth() - dateB.getMonth();
-                  const yearDiff = dateA.getYear() - dateB.getYear();
+                    const monthDiff = dateA.getMonth() - dateB.getMonth();
+                    const yearDiff = dateA.getYear() - dateB.getYear();
 
-                  const diff = monthDiff + yearDiff * 12;
-                  setValue("periodOfRenewal", diff);
-                  console.log("value", e?.target?.value, diff);
-                }}
-              />
-            </FormControl>
-            <h3 className="error-message" style={{ color: "red" }}>
-              {errors?.renewalRequiredUpto && errors?.renewalRequiredUpto?.message}
-            </h3>
-          </div>
-          <div className="col col-3 ">
-            <FormControl>
-              <h2>Period of renewal(In Months)</h2>
-              <input type="text" {...register("periodOfRenewal")} className="form-control" disabled />
-            </FormControl>
-          </div>
+                    const diff = monthDiff + yearDiff * 12;
+                    setValue("periodOfRenewal", diff);
+                    console.log("value", e?.target?.value, diff);
+                  }}
+                />
+              </FormControl>
+              <h3 className="error-message" style={{ color: "red" }}>
+                {errors?.renewalRequiredUpto && errors?.renewalRequiredUpto?.message}
+              </h3>
+            </div>
+          )}
+          {comp == "renewal" && (
+            <div className="col col-3 ">
+              <FormControl>
+                <h2>Period of renewal(In Months)</h2>
+                <input type="text" {...register("periodOfRenewal")} className="form-control" disabled />
+              </FormControl>
+            </div>
+          )}
           <div className="col col-3 ">
             <FormControl>
               <h2>
