@@ -1,4 +1,4 @@
-import React, { useState , useEffect  } from 'react';
+import React, { useState , useEffect, useContext  } from 'react';
 import AddPost from '../Material/TextEditor';
 import axios from "axios";
 import { useForm } from "react-hook-form";
@@ -6,10 +6,11 @@ import Checkbox from '@mui/material/Checkbox';
 import { useTranslation } from 'react-i18next';
 import ReportProblemIcon from "@mui/icons-material/ReportProblem";
 import CompliancesModal from './compliancesModal';
+import { ComplicesRemarksContext } from '../../../../context/Complices-remarks-context';
 
 const Addmoreinput = ({applicationimp}) =>
 {
-    // const  applicationimp = props.applicationimp;
+    const {compliceGetRemarkssValues,remarksData}=useContext(ComplicesRemarksContext)
   const[formValues, setFormValues]= useState([{name:'', email:'', address:''}]);
   const [checked, setChecked] = useState(true);
   const {t} = useTranslation();
@@ -48,90 +49,10 @@ const {
   const userRolesArray = userInfo?.roles.filter((user) => user.code !=="EMPLOYEE" );
   const filterDataRole = userRolesArray?.[0]?.code;
   const designation = userRolesArray?.[0]?.name;
-  const [isChecked, setIsChecked] = useState(false);
-
-  const handleChange = event => {
-    setIsChecked(event.target.checked);
-
-    // 👇️ this is the checkbox itself
-    console.log("falsenon" , event.target);
-
-    // 👇️ this is the checked value of the field
-    console.log("truecheck" ,event.target.checked);
-  };
-
-// const tcpApplicationNumber = applicationimp?.tcpApplicationNumber
-// const businessService = applicationimp?.businessService
-// const Compliance = async (data , index, value) => {
-//     console.log("REQUEST LOG1 ====> ", data, JSON.stringify(data));
-//     try {
-//       setLoading(true);
-//       const body = {
-//         RequestInfo: {
-//           apiId: "Rainmaker",
-//           ver: ".01",
-//           ts: null,
-//           action: "_update",
-//           did: "1",
-//           key: "",
-//           msgId: "20170310130900|en_IN",
-//           authToken: authToken,
-//           userInfo: userInfo,
-//         },
-//         ComplianceRequest:[{
-
-//             tcpApplicationNumber: tcpApplicationNumber,
-    
-//             businessService: businessService,
-    
-//             Compliance:{
-    
-//                 compliance:RemarksDeveloper.data,
-    
-//                 isPartOfLoi:isChecked,
-    
-//                 userName:userInfo?.name || null,
-    
-//                 userid:userInfo?.id || null,
-
-//                 created_On:dateTime.toUTCString(),
-    
-//                 designation:designation
-    
-//       }
-    
-     
-    
-//         }]
-//       };
-
-//       const response = await axios.post("/tl-services/_compliance/_create", body);
-
-//       console.log("Submit Response ====> ", response);
-      
-
-//       setLoading(false);
-//       setShowToastError({ label: "Surrender of License submitted successfully", error: false, success: true });
-//     } catch (err) {
-//       console.log("Submit Error ====> ", err.message);
-//       setLoading(false);
-//       setShowToastError({ label: err.message, error: true, success: false });
-//     }
-//   };
-//   useEffect(() => {
-//     if (props.selectedFieldData) {
-    
-//       setDeveloperRemarks({ data: props.selectedFieldData?.comment ? props.selectedFieldData?.comment : "" });
-    
-//     } else {
-  
-//       setDeveloperRemarks({ data: "" });
-//     }
-//   }, [props.selectedFieldData]);
 
 
+  const tcpApplicationNumber = applicationimp?.tcpApplicationNumber
 
-console.log("applicationimp" ,applicationimp); 
 
   const submitForm = (data) => {
    
@@ -146,7 +67,22 @@ console.log("applicationimp" ,applicationimp);
       setIsOpened(wasOpened => !wasOpened);
     }
     const [smShow, setSmShow] = useState(false);
+    const handlemodaldData = (data) => {
     
+        setSmShow(false);
+        console.log("here",openedModal,data);
+        
+      };
+      useEffect(() => {
+       
+        if(tcpApplicationNumber){
+          
+            compliceGetRemarkssValues(tcpApplicationNumber);
+        }
+      }, [tcpApplicationNumber])
+      useEffect(() =>{
+        console.log("remarksDataComplice",remarksData);
+      }, [remarksData])
 
     return(
         <React.Fragment>
@@ -164,25 +100,18 @@ console.log("applicationimp" ,applicationimp);
          
       }}
     >
-        happy
+        Add Compliances
     </button>
     <CompliancesModal
      displaymodal={smShow}
     onClose={() => setSmShow(false)}
     applicationdata={applicationimp}
+    passmodalData={handlemodaldData}
     >
  </CompliancesModal>
     </div>
    
-      {/* <div className="boxTitle" onClick={toggle}>
-      <button id="btnSearch" class="btn btn-primary btn-md center-block" style={{ marginTop: "-58px", marginRight: "97px" }}>
-      Compliances
-                </button>
-      </div>
-      {isOpened && (
-        <div className="boxContent">
-        */}
-     
+    
 
 
             <form onSubmit={handleSubmit(submitForm)}>
@@ -203,7 +132,7 @@ console.log("applicationimp" ,applicationimp);
                      Compliances
                         </th>
                     <th>
-                    Proposed Condition Of LOI gefheghevwnhrfgewugrhjegwuyrjgrjhe
+                    Proposed Condition Of LOI
 
                     {/* {`${t("NWL_APPLICANT_PROPOSED_CONDITION_OF_LOI_TABLE")}`} */}
                     </th>
@@ -222,48 +151,34 @@ console.log("applicationimp" ,applicationimp);
                     </tr>
                     </thead>
                     <tbody>
+                    {/* {DetailsofAppliedLand?.dgpsDetails?.map((item, index) => ( */}
                         {
-                            formValues.map( (input, index)=>
+                    remarksData?.ComplianceRequest?.map((input, index) =>
                             <tr key={index}>                        
                     <td>{index+1} </td>
                     <td>
-                        {/* <input type="text"  className="form-control" name="name" value={formValues.name} onChange={ event=>handleInputChange(index,event)} placeholder="Enter Username"/>  */}
-                       <AddPost
-                       modal={true}
-                       setState={(e) => {
-                        setDeveloperRemarks({ data: e });
-                        
-                      }}
-                      state={RemarksDeveloper?.data}
-                       ></AddPost>
+                        {/* {} */}
+                        <i>{<div dangerouslySetInnerHTML={{__html: input?.Compliance?.compliance}}/>}</i>
                          </td>
                     <td>
-                    {/* <Checkbox
-                      checked={isLOIPart}
-                      onChange={(e) => onAction( i, e.target.checked)}
-                      
-                   defaultChecked /> */}
-                 {/* <input type="checkbox" checked={this.state.chkbox} onChange={this.handleChangeChk} /> */}
-                 <Checkbox
-        type="checkbox"
-        id="checkbox-id"
-        name="checkbox-name"
-        onChange={handleChange}
-        checked={isChecked}
-        defaultChecked
-      />
+                    {input?.Compliance?.isPartOfLoi}
+                   
                          </td>
                     <td>
-                        {/* <input type="text" className="form-control" name="address" value={formValues.address} onChange={ event=>handleInputChange(index,event)} placeholder="Enter Address"/> */}
-                        </td>
+                  
+                    {input?.Compliance?.designation}
+                    {input?.Compliance?.created_On}
+                    {input?.Compliance?.userName}
+                    
+                           </td>
                     <td>  
-                    <button className="btn btn-success btn-lg mb-3" onClick={ addFields}>Add More </button>
+                    {/* <button className="btn btn-success btn-lg mb-3" onClick={ addFields}>Add More </button>
                         {
                           index!==0 &&(
                             <button className="btn btn-danger mx-2" onClick={ ()=>removeFields(index)}>Remove </button>
                           )  
                           
-                        }                                       
+                        }                                        */}
                                           
                     </td>
                     </tr> 
@@ -272,29 +187,20 @@ console.log("applicationimp" ,applicationimp);
                                           
                     </tbody>
                     </table>
-                    <div class="row">
+                    {/* <div class="row">
               <div class="col-sm-12 text-right">
                 <button type="submit" id="btnSearch" class="btn btn-primary btn-md center-block">
                   Submit
                 </button>
               </div>
-              {/* <div class="col-sm-12 text-right">
-                <button id="btnSearch" class="btn btn-primary btn-md center-block" style={{ marginTop: "-58px", marginRight: "97px" }}>
-                  Save as Draft
-                </button>
-              </div> */}
-            </div>
+             
+            </div> */}
                 </div>
             
-                {/* </div> */}
-                {/* </div>
-                </div> */}
+               
 </form>
 </div>
-{/* <ReportProblemIcon
-    ></ReportProblemIcon> */}
-      {/* )}
-    </div> */}
+
         </React.Fragment>
     );
 }
