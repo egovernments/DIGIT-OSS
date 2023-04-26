@@ -21,6 +21,7 @@ function AddPost({ modal = false, state, setState }) {
   // }, [editorState]);
   console.log("DATAEDITOR", editorState);
   console.log("DATAEDITOR", setState);
+  console.log("DATAEDITOR", convertedContent);
   //  console.log();
   //  console.log();
 
@@ -55,6 +56,7 @@ function AddPost({ modal = false, state, setState }) {
       }}
     >
       {/* <header className="App-header">Rich Text Editor Example</header> */}
+      
       <Editor
         editorState={editorState}
         onEditorStateChange={handleEditorStateChange}

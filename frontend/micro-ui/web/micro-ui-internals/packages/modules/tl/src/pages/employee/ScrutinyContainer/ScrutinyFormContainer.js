@@ -502,6 +502,7 @@ const ScrutinyFormcontainer = (props) => {
             applicationStatus={status}
             refreshScrutinyData={getScrutinyData}
             mDMSData={mDMSData}
+            applicationimp={applicationData}
           ></ScrutitnyForms>
         </div>
 

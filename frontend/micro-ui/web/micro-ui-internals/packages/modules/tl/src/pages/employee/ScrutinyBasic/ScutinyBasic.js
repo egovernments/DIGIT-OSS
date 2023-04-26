@@ -26,7 +26,7 @@ import ProformForRevenu from "../Proforma/ProformForRevenu";
 import AdditionalDocument from "./AdditionalDocument";
 // import AddPost from "../Material/TextEditor";
 
-const ScrutitnyForms = ({ apiResponse, applicationNumber, refreshScrutinyData , histeroyData, feeandcharges , applicationStatus ,mDMSData }) => {
+const ScrutitnyForms = ({ apiResponse, applicationNumber, refreshScrutinyData , histeroyData, feeandcharges , applicationStatus ,mDMSData ,applicationimp }) => {
   const personalInfoRef = useRef();
   const generalInfoRef = useRef();
   const developerInfoRef = useRef();
@@ -436,7 +436,9 @@ console.log("roleData",rolesDate )
       </div> */}
       
       <div style={{ position: "relative", width: "100%", height: "100%", display: "flex" }}>
-      <Addmoreinput>
+      <Addmoreinput
+      applicationimp={applicationimp}
+      >
       </Addmoreinput>
       </div>
       
