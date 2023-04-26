@@ -4,10 +4,12 @@ import axios from "axios";
 import { useForm } from "react-hook-form";
 import Checkbox from '@mui/material/Checkbox';
 import { useTranslation } from 'react-i18next';
+import ReportProblemIcon from "@mui/icons-material/ReportProblem";
+import CompliancesModal from './compliancesModal';
 
-const Addmoreinput = (props) =>
+const Addmoreinput = ({applicationimp}) =>
 {
-    const  applicationimp = props.applicationimp;
+    // const  applicationimp = props.applicationimp;
   const[formValues, setFormValues]= useState([{name:'', email:'', address:''}]);
   const [checked, setChecked] = useState(true);
   const {t} = useTranslation();
@@ -58,78 +60,78 @@ const {
     console.log("truecheck" ,event.target.checked);
   };
 
-const tcpApplicationNumber = applicationimp?.tcpApplicationNumber
-const businessService = applicationimp?.businessService
-const Compliance = async (data , index, value) => {
-    console.log("REQUEST LOG1 ====> ", data, JSON.stringify(data));
-    try {
-      setLoading(true);
-      const body = {
-        RequestInfo: {
-          apiId: "Rainmaker",
-          ver: ".01",
-          ts: null,
-          action: "_update",
-          did: "1",
-          key: "",
-          msgId: "20170310130900|en_IN",
-          authToken: authToken,
-          userInfo: userInfo,
-        },
-        ComplianceRequest:[{
+// const tcpApplicationNumber = applicationimp?.tcpApplicationNumber
+// const businessService = applicationimp?.businessService
+// const Compliance = async (data , index, value) => {
+//     console.log("REQUEST LOG1 ====> ", data, JSON.stringify(data));
+//     try {
+//       setLoading(true);
+//       const body = {
+//         RequestInfo: {
+//           apiId: "Rainmaker",
+//           ver: ".01",
+//           ts: null,
+//           action: "_update",
+//           did: "1",
+//           key: "",
+//           msgId: "20170310130900|en_IN",
+//           authToken: authToken,
+//           userInfo: userInfo,
+//         },
+//         ComplianceRequest:[{
 
-            tcpApplicationNumber: tcpApplicationNumber,
+//             tcpApplicationNumber: tcpApplicationNumber,
     
-            businessService: businessService,
+//             businessService: businessService,
     
-            Compliance:{
+//             Compliance:{
     
-                compliance:RemarksDeveloper.data,
+//                 compliance:RemarksDeveloper.data,
     
-                isPartOfLoi:isChecked,
+//                 isPartOfLoi:isChecked,
     
-                userName:userInfo?.name || null,
+//                 userName:userInfo?.name || null,
     
-                userid:userInfo?.id || null,
+//                 userid:userInfo?.id || null,
 
-                created_On:dateTime.toUTCString(),
+//                 created_On:dateTime.toUTCString(),
     
-                designation:designation
+//                 designation:designation
     
-      }
+//       }
     
      
     
-        }]
-      };
+//         }]
+//       };
 
-      const response = await axios.post("/tl-services/_compliance/_create", body);
+//       const response = await axios.post("/tl-services/_compliance/_create", body);
 
-      console.log("Submit Response ====> ", response);
+//       console.log("Submit Response ====> ", response);
       
 
-      setLoading(false);
-      setShowToastError({ label: "Surrender of License submitted successfully", error: false, success: true });
-    } catch (err) {
-      console.log("Submit Error ====> ", err.message);
-      setLoading(false);
-      setShowToastError({ label: err.message, error: true, success: false });
-    }
-  };
-  useEffect(() => {
-    if (props.selectedFieldData) {
-    //   setStatus(props.selectedFieldData.isApproved);
-      setDeveloperRemarks({ data: props.selectedFieldData?.comment ? props.selectedFieldData?.comment : "" });
+//       setLoading(false);
+//       setShowToastError({ label: "Surrender of License submitted successfully", error: false, success: true });
+//     } catch (err) {
+//       console.log("Submit Error ====> ", err.message);
+//       setLoading(false);
+//       setShowToastError({ label: err.message, error: true, success: false });
+//     }
+//   };
+//   useEffect(() => {
+//     if (props.selectedFieldData) {
     
-    } else {
-    //   setStatus(null);
-      setDeveloperRemarks({ data: "" });
-    }
-  }, [props.selectedFieldData]);
+//       setDeveloperRemarks({ data: props.selectedFieldData?.comment ? props.selectedFieldData?.comment : "" });
+    
+//     } else {
+  
+//       setDeveloperRemarks({ data: "" });
+//     }
+//   }, [props.selectedFieldData]);
 
 
 
-
+console.log("applicationimp" ,applicationimp); 
 
   const submitForm = (data) => {
    
@@ -143,20 +145,43 @@ const Compliance = async (data , index, value) => {
     function toggle() {
       setIsOpened(wasOpened => !wasOpened);
     }
+    const [smShow, setSmShow] = useState(false);
     
+
     return(
         <React.Fragment>
 
             
 <div className="box">
-      <div className="boxTitle" onClick={toggle}>
+
+<div>
+    <button id="btnSearch" class="btn btn-primary btn-md center-block" style={{ marginTop: "-58px", marginRight: "97px" }}
+      
+      onClick={() => {
+        
+          setSmShow(true),
+          console.log("modal open")
+         
+      }}
+    >
+        happy
+    </button>
+    <CompliancesModal
+     displaymodal={smShow}
+    onClose={() => setSmShow(false)}
+    applicationdata={applicationimp}
+    >
+ </CompliancesModal>
+    </div>
+   
+      {/* <div className="boxTitle" onClick={toggle}>
       <button id="btnSearch" class="btn btn-primary btn-md center-block" style={{ marginTop: "-58px", marginRight: "97px" }}>
       Compliances
                 </button>
       </div>
       {isOpened && (
         <div className="boxContent">
-       
+        */}
      
 
 
@@ -178,7 +203,7 @@ const Compliance = async (data , index, value) => {
                      Compliances
                         </th>
                     <th>
-                    Proposed Condition Of LOI 
+                    Proposed Condition Of LOI gefheghevwnhrfgewugrhjegwuyrjgrjhe
 
                     {/* {`${t("NWL_APPLICANT_PROPOSED_CONDITION_OF_LOI_TABLE")}`} */}
                     </th>
@@ -266,8 +291,10 @@ const Compliance = async (data , index, value) => {
                 </div> */}
 </form>
 </div>
-      )}
-    </div>
+{/* <ReportProblemIcon
+    ></ReportProblemIcon> */}
+      {/* )}
+    </div> */}
         </React.Fragment>
     );
 }
