@@ -32,3 +32,16 @@
     }
   }
 }
+
+.popup-module-main {
+  iframe #page-container div {
+    width: 99% !important;
+    margin: 5px !important;
+  }
+
+  iframe #page-container {
+    ::-webkit-scrollbar {
+      width: 0px !important;
+    }
+  }
+}

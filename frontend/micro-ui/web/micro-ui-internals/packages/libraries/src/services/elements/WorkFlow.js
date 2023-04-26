@@ -261,8 +261,12 @@ export const WorkflowService = {
           } catch (err) { }
         }
 
-      // HANDLING ACTION FOR NEW VEHICLE LOG FROM UI SIDE
-        const nextActions = location.pathname.includes("new-vehicle-entry") ? action_newVehicle : actionRolePair;
+      //Added the condition so that following filter can happen only for fsm and does not affect other module
+      let nextActions = [];
+      if(window.location.href?.includes("fsm")){
+        // TAKING OUT CURRENT APPL STATUS
+        nextActions = location.pathname.includes("new-vehicle-entry") ? action_newVehicle : location.pathname.includes("dso") ? actionRolePair.filter((i)=> i.action !== "PAY") : actionRolePair;
+      }
 
         if (role !== "CITIZEN" && moduleCode === "PGR") {
           const onlyPendingForAssignmentStatusArray = timeline?.filter(e => e?.status === "PENDINGFORASSIGNMENT")

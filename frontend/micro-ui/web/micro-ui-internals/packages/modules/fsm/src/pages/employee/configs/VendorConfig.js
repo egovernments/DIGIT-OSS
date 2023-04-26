@@ -1,6 +1,6 @@
 import React from "react";
-import { convertEpochToDate } from "../../../utils";
 const { DatePicker, Dropdown } = require("@egovernments/digit-ui-react-components");
+import { convertEpochToDate } from "../../../utils";
 
 const VendorConfig = (t, disabled = false) => {
   return [
@@ -36,7 +36,7 @@ const VendorConfig = (t, disabled = false) => {
           hideInEmployee: false,
           key: "selectGender",
           component: "SelectGender",
-          disable: disabled,
+          // disable: disabled,
           texts: {
             headerCaption: "",
             header: "CS_COMMON_CHOOSE_GENDER",
@@ -86,7 +86,7 @@ const VendorConfig = (t, disabled = false) => {
           isMandatory: true,
           type: "mobileNumber",
           key: "phone",
-          disable: disabled,
+          // disable: disabled,
           populators: {
             name: "phone",
             validation: {

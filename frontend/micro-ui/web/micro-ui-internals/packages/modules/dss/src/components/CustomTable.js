@@ -10,14 +10,16 @@ import ReactTooltip from "react-tooltip";
 
 const rowNamesToBeLocalised = ["Department", "", "Usage Type", "Ward", "Wards", "City Name"];
 
-const InsightView = ({ rowValue, insight, t }) => {
+const InsightView = ({ rowValue, insight, t, isFinance }) => {
   return (
     <span>
       {rowValue}
+      {!(isFinance) && <div>
       {` `}
       {insight >= 0 ? ArrowUpwardElement() : ArrowDownwardElement()}
       {` `}
       {isNaN(insight) ? `0%` : `${Digit.Utils.dss.formatter(Math.abs(insight), "number", "Lac", true, t)}%`}
+      </div>}
     </span>
   );
 };
@@ -35,6 +37,7 @@ const CustomTable = ({ data = {}, onSearch, setChartData, setChartDenomination, 
   const { value, setValue, ulbTenants, fstpMdmsData } = useContext(FilterContext);
   const tenantId = Digit.ULBService.getCurrentTenantId();
   const dssTenants = Digit.SessionStorage.get("DSS_TENANTS");
+  let isFinance = window.location.href.includes("/employee/dss/dashboard/finance");
   const lastYearDate = {
     startDate: subYears(value?.range?.startDate, 1).getTime(),
     endDate: subYears(value?.range?.endDate, 1).getTime(),
@@ -239,8 +242,8 @@ const CustomTable = ({ data = {}, onSearch, setChartData, setChartDenomination, 
       const cellValue = originalRow?.[name];
       if (plot?.symbol === "amount") {
         return typeof cellValue === "object"
-          ? { value: Digit.Utils.dss.formatter(convertDenomination(cellValue?.value), "number", "Lac", true, t), insight: cellValue?.insight }
-          : String(Digit.Utils.dss.formatter(convertDenomination(cellValue), "number", "Lac", true, t));
+          ? { value: Digit.Utils.dss.formatter(convertDenomination(cellValue?.value), "number", "Lac", true, t, isFinance ? true : false), insight: cellValue?.insight }
+          : String(Digit.Utils.dss.formatter(convertDenomination(cellValue), "number", "Lac", true, t, isFinance ? true : false));
       } else if (plot?.symbol === "number" || plot?.symbol === "percentage") {
         return typeof cellValue === "object"
           ? { value: Digit.Utils.dss.formatter(cellValue?.value, "number", "Lac", true, t), insight: cellValue?.insight }
@@ -314,7 +317,7 @@ const CustomTable = ({ data = {}, onSearch, setChartData, setChartDenomination, 
         Cell: (args) => {
           const { value: cellValue, column, row } = args;
           if (typeof cellValue === "object") {
-            return <InsightView insight={cellValue?.insight} rowValue={cellValue?.value} t={t} />;
+            return <InsightView insight={cellValue?.insight} rowValue={cellValue?.value} t={t} isFinance={isFinance} />;
           }
           const filter = response?.responseData?.filter?.find((elem) => elem?.column === column?.id);
           if (response?.responseData?.drillDownChartId !== "none" && filter !== undefined) {
@@ -374,9 +377,9 @@ const CustomTable = ({ data = {}, onSearch, setChartData, setChartDenomination, 
   }
   return (
     <div style={{ width: "100%" }}>
-      <span className={"dss-table-subheader"} style={{ position: "sticky", left: 0 }}>
+      { !(isFinance) && <span className={"dss-table-subheader"} style={{ position: "sticky", left: 0 }}>
         {t("DSS_CMN_TABLE_INFO")}
-      </span>
+      </span> }
       {filterStack?.length > 1 && (
         <div className="tag-container">
           <span style={{ marginTop: "20px" }}>{t("DSS_FILTERS_APPLIED")}: </span>

@@ -140,7 +140,9 @@ public class PropertyConfiguration {
     
     @Value("${egov.notif.view.mutation}")
     private String viewMutationLink;
-    
+
+    @Value("${egov.notif.citizen.feedback}")
+    private String citizenFeedbackLink;
 
     @Value("${egov.usr.events.view.history.link}")
     private String userEventViewPropertyLink;

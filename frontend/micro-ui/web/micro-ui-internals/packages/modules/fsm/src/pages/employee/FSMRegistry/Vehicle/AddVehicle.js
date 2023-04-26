@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { FormComposer, Toast, Header } from "@egovernments/digit-ui-react-components";
+import { FormComposer, Toast, Header, InfoIcon } from "@egovernments/digit-ui-react-components";
 import { useHistory } from "react-router-dom";
 import VehicleConfig from "../../configs/VehicleConfig";
 import { useQueryClient } from "react-query";
@@ -30,6 +30,19 @@ const AddVehicle = ({ parentUrl, heading }) => {
 
   const Config = VehicleConfig(t);
 
+  Config[0].body.forEach((item) => {
+    if (item.label === "ES_FSM_REGISTRY_VEHICLE_NUMBER") {
+      item.labelChildren = (
+        <div className="tooltip" style={{ paddingLeft: "10px", marginBottom: "-3px" }}>
+          <InfoIcon />
+          <span className="tooltiptext" style={{ width: "150px", left: "230%", fontSize: "14px" }}>
+            {t(item.populators.validation.title)}
+          </span>
+        </div>
+      );
+    }
+  });
+
   const [canSubmit, setSubmitValve] = useState(false);
 
   const defaultValues = {
@@ -41,7 +54,14 @@ const AddVehicle = ({ parentUrl, heading }) => {
   };
 
   const onFormValueChange = (setValue, formData) => {
-    if (formData?.registrationNumber && formData?.ownerName && formData?.phone && formData?.vehicle?.modal && formData?.vehicle?.type) {
+    if (
+      formData?.registrationNumber &&
+      formData?.ownerName &&
+      formData?.phone &&
+      formData?.vehicle?.modal &&
+      formData?.vehicle?.type &&
+      formData?.selectGender
+    ) {
       setSubmitValve(true);
     } else {
       setSubmitValve(false);
@@ -64,6 +84,10 @@ const AddVehicle = ({ parentUrl, heading }) => {
     const ownerName = data?.ownerName;
     const phone = data?.phone;
     const additionalDetails = data?.additionalDetails;
+    const gender = data?.selectGender?.code;
+    const emailId = data?.emailId;
+    const dob = new Date(`${data.dob}`).getTime() || new Date(`1/1/1970`).getTime();
+
     const formData = {
       vehicle: {
         tenantId: tenantId,
@@ -84,10 +108,13 @@ const AddVehicle = ({ parentUrl, heading }) => {
           fatherOrHusbandName: ownerName,
           relationship: "OTHER",
           gender: "OTHERS",
-          dob: new Date(`1/1/1970`).getTime(),
+          dob: dob,
           emailId: "abc@egov.com",
           correspondenceAddress: "",
           mobileNumber: phone,
+          gender: gender,
+          dob: dob,
+          emailId: emailId || "abc@egov.com",
         },
         additionalDetails: {
           description: additionalDetails,
@@ -106,7 +133,7 @@ const AddVehicle = ({ parentUrl, heading }) => {
         queryClient.invalidateQueries("FSM_VEICLES_SEARCH");
         setTimeout(() => {
           closeToast();
-          history.push(`/digit-ui/employee/fsm/registry`);
+          history.push(`/digit-ui/employee/fsm/registry?selectedTabs=VEHICLE`);
         }, 5000);
       },
     });

@@ -165,8 +165,8 @@ const TradeUnitForm = (_props) => {
             let tradeType = cloneDeep(filteredTradeDetails);
             let tradeCatogoryList = [];
             tradeType.map(data => {
-                data.code = data?.code?.split('.')[0];
-                data.i18nKey = t(`TRADELICENSE_TRADETYPE_${data?.code?.split('.')[0]}`);
+                data.code = data?.tradeType?.split('.')[0];
+                data.i18nKey = t(`TRADELICENSE_TRADETYPE_${data?.tradeType?.split('.')[0]}`);
                 tradeCatogoryList.push(data);
             });
             const filterTradeCategoryList = getUniqueItemsFromArray(tradeCatogoryList, "code");

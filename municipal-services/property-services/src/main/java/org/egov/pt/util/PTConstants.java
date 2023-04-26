@@ -247,6 +247,11 @@ public class PTConstants {
     
     public static final String UPDATED_STRING = "Updated";
 
+    public static final String MUTATED_STRING = "MUTATED";
+
+    public static final String PAYMENT_STRING = "PAYMENT";
+
+
     public static final String PT_BUSINESSSERVICE = "PT";
 
     public static final String MUTATION_BUSINESSSERVICE = "PT.MUTATION";
@@ -423,6 +428,35 @@ public class PTConstants {
     public static final String PROPERTY_MODEL = "Property";
 
     public static final String PROPERTY_DECRYPT_MODEL = "PropertyDecrypDisabled";
+
+    //Citizen Feedback Notifications
+
+    public static final String FEEDBACK_URL = "{FeedbackURL}";
+
+    public static final String PT_NOTIF_CF_CREATED = "PT_NOTIF_CF_CREATED";
+
+    public static final String PT_NOTIF_CF_UPDATED = "PT_NOTIF_CF_UPDATED";
+
+    public static final String PT_NOTIF_CF_MUTATED = "PT_NOTIF_CF_MUTATED";
+
+    public static final String PT_NOTIF_CF_PAYMENT_ONLINE = "PT_NOTIF_CF_PAYMENT_ONLINE";
+
+    public static final String CF_REDIRECT_REPLACE_CREATE = "pt/property/new-application/acknowledgement";
+    public static final String CF_REDIRECT_REPLACE_UPDATE = "pt/property/edit-application/acknowledgement";
+    public static final String CF_REDIRECT_REPLACE_MUTATE = "pt/property/property-mutation/acknowledgement";
+    public static final String CF_REDIRECT_REPLACE_PAYMENT = "digit-ui/citizen/payment/success";
+
+    public static final String TENANTID_REPLACE = "$tenantId";
+
+    public static final String PROPERTYID_REPLACE = "$propertyId";
+
+    public static final String ACKNOWLEDGEMENT_REPLACE = "$acknowldgementNumber";
+
+    public static final String REDIRECTLINK_REPLACE = "$redirectedFrom";
+
+    public static final String CREATIONREASON_REPLACE = "$creationReason";
+
+    public static final String TRANSACTIONID_REPLACE = "{TRANSACTION_ID}";
 
 }
 

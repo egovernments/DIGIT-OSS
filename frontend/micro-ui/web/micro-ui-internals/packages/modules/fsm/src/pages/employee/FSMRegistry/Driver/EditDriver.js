@@ -73,6 +73,7 @@ const EditDriver = ({ parentUrl, heading }) => {
     const license = data?.license;
     const gender = data?.selectGender?.code;
     const emailId = data?.emailId;
+    // const mobileNumber = data?.phone;
     const dob = new Date(`${data.dob}`).getTime();
     const additionalDetails = data?.additionalDetails;
     const formData = {
@@ -86,6 +87,7 @@ const EditDriver = ({ parentUrl, heading }) => {
           gender: gender || driverDetails.owner.gender || "OTHER",
           dob: dob,
           emailId: emailId || "abc@egov.com",
+          // mobileNumber: mobileNumber,
         },
       },
     };
