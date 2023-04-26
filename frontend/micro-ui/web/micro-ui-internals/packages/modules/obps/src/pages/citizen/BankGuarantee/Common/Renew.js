@@ -1,4 +1,15 @@
 import React, { useState, useEffect } from "react";
+import {
+  FormStep,
+  TextInput,
+  MobileNumber,
+  CardLabel,
+  CardLabelError,
+  Dropdown,
+  Toast,
+  DeleteIcon,
+  MuiTables,
+} from "@egovernments/digit-ui-react-components";
 import { Card, Row, Col } from "react-bootstrap";
 import { Button, Form } from "react-bootstrap";
 import FormControl from "@mui/material/FormControl";
@@ -7,8 +18,14 @@ import { useForm } from "react-hook-form";
 import Collapse from "react-bootstrap/Collapse";
 import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
+import FileUpload from "@mui/icons-material/FileUpload";
+import VisibilityIcon from "@mui/icons-material/Visibility";
+import axios from "axios";
+import { getDocShareholding } from "../../../../../../tl/src/pages/employee/ScrutinyBasic/ScrutinyDevelopment/docview.helper";
+import CusToaster from "../../../../components/Toaster";
 import { Modal, ModalHeader, ModalBody, ModalFooter, Label } from "reactstrap";
 import { Input } from "antd";
+import ReactMultiSelect from "../../../../../../../react-components/src/atoms/ReactMultiSelect"
 function RenewNew() {
   const [selects, setSelects] = useState();
   const [showhide, setShowhide] = useState("");
@@ -16,6 +33,7 @@ function RenewNew() {
   const [modal1, setmodal1] = useState(false);
   const [open4, setOpen4] = useState(false);
   const [open3, setOpen3] = useState(false);
+   const [showToastError, setShowToastError] = useState({ label: "", error: false, success: false });
   const handleshowhide = (event) => {
     const getuser = event.target.value;
 
@@ -29,9 +47,39 @@ function RenewNew() {
     setValue,
     watch,
   } = useForm({});
-
+  const selectTypeData = [{ label: "Indian", value: "indian" },
+{
+  label: "Foreign", value: "foreign"
+}];
+  const [fileStoreId, setFileStoreId] = useState({});
+  const [selectedFiles, setSelectedFiles] = useState([]);
+  const [loader, setLoader] = useState(false);
+  const getDocumentData = async (file, fieldName) => {
+    if (selectedFiles.includes(file.name)) {
+      setShowToastError({ label: "Duplicate file Selected", error: true, success: false });
+      return;
+    }
+    const formData = new FormData();
+    formData.append("file", file);
+    formData.append("tenantId", "hr");
+    formData.append("module", "property-upload");
+    formData.append("tag", "tag-property");
+    setLoader(true);
+    try {
+      const Resp = await axios.post("/filestore/v1/files", formData, {});
+      setValue(fieldName, Resp?.data?.files?.[0]?.fileStoreId);
+      setFileStoreId({ ...fileStoreId, [fieldName]: Resp?.data?.files?.[0]?.fileStoreId });
+      setSelectedFiles([...selectedFiles, file.name]);
+      setLoader(false);
+      setShowToastError({ label: "File Uploaded Successfully", error: false, success: true });
+    } catch (error) {
+      setLoader(false);
+      return error.message;
+    }
+  };
   const bankRenew = (data) => console.log(data);
   return (
+    <div>
     <form onSubmit={handleSubmit(bankRenew)}>
          <div className="card" style={{ width: "126%", border: "5px solid #1266af" }}>
         <h4 style={{ fontSize: "25px", marginLeft: "21px" }}>Extension of Bank Guarantee</h4>
@@ -97,7 +145,7 @@ function RenewNew() {
               &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
               <FormControl>
                 <h2 className="FormLable">Country of origin</h2>
-                <OutlinedInput type="date" className="Inputcontrol" placeholder="" {...register("bgNumber")} disabled />
+                <OutlinedInput type="text" className="Inputcontrol" placeholder="" {...register("bgNumber")} disabled />
               </FormControl>
             
             </div>
@@ -168,16 +216,19 @@ function RenewNew() {
  <div className="col md={4} xxl lg-3">
     <FormControl>
                 <h2 className="FormLable">Amount </h2>
-                <OutlinedInput type="text" className="Inputcontrol" placeholder="" {...register("bgNumber")}  disabled/>
+                <OutlinedInput type="text" className="Inputcontrol" placeholder="" {...register("bgNumber")}  />
               </FormControl>
+               &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
               <FormControl>
                 <h2 className="FormLable">Issuing Bank </h2>
-                <OutlinedInput type="text" className="Inputcontrol" placeholder="" {...register("bgNumber")} disabled />
+                <OutlinedInput type="text" className="Inputcontrol" placeholder="" {...register("bgNumber")}  />
               </FormControl>
               &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
               <FormControl>
                 <h2 className="FormLable">Country of origin</h2>
-                <OutlinedInput type="date" className="Inputcontrol" placeholder="" {...register("bgNumber")} disabled />
+                 <ReactMultiSelect control={control} name="numberType" placeholder="Select Type" data={selectTypeData} labels="" />
+
+                
               </FormControl>
             
             </div>
@@ -188,7 +239,7 @@ function RenewNew() {
                            <h2 className="FormLable">
                                Amount in words<span style={{ color: "red" }}>*</span>
                               </h2>
-                              <input type="text" className="form-control" disabled></input>
+                              <input type="text" className="form-control" ></input>
                         </div>
             </div>
             </div>
@@ -223,7 +274,7 @@ function RenewNew() {
                             <th class="fw-normal">Sr. No.</th>
                             <th class="fw-normal">Type</th>
                             <th class="fw-normal">Attachment description</th>
-                             <th class="fw-normal"></th>
+                             <th class="fw-normal">Upload document</th>
                               <th class="fw-normal">Action</th>
                           </tr>
                         </thead>
@@ -232,33 +283,74 @@ function RenewNew() {
                             <td>1</td>
                              <td>Bank Guarantee(pdf)</td>
                               <td><input type="text" className="form-control"></input></td>
-                               <td><input type="file" className="form-control"></input></td>
-                               <td></td>
+                               <td>  <div>
+                                    <label>
+                                      <FileUpload style={{ cursor: "pointer" }} color="primary" />
+                                      <input
+                                        type="file"
+                                        style={{ display: "none" }}
+                                        accept="application/pdf/jpeg/png"
+                                        onChange={(e) => getDocumentData(e?.target?.files[0], "bankGuaranteePdf")}
+                                      />
+                                    </label>
+                                    {watch("bankGuaranteePdf") && (
+                                      <a onClick={() => getDocShareholding(watch("bankGuaranteePdf"), setLoader)} className="btn btn-sm ">
+                                        <VisibilityIcon color="info" className="icon" />
+                                      </a>
+                                    )}
+                                  </div></td>
+                               <td><DeleteIcon style={{ fill: "#ff1a1a" }} /></td>
                           </tr>
                            <tr>
                             <td>2</td>
                              <td>Any other document (pdf)</td>
                               <td><input type="text" className="form-control"></input></td>
-                               <td><input type="file" className="form-control"></input></td>
-                               <td></td>
+                               <td> <div>
+                                    <label>
+                                      <FileUpload style={{ cursor: "pointer" }} color="primary" />
+                                      <input
+                                        type="file"
+                                        style={{ display: "none" }}
+                                        accept="application/pdf/jpeg/png"
+                                        onChange={(e) => getDocumentData(e?.target?.files[0], "otherDocPdf")}
+                                      />
+                                    </label>
+                                    {watch("otherDocPdf") && (
+                                      <a onClick={() => getDocShareholding(watch("otherDocPdf"), setLoader)} className="btn btn-sm ">
+                                        <VisibilityIcon color="info" className="icon" />
+                                      </a>
+                                    )}
+                                  </div></td>
+                               <td><DeleteIcon style={{ fill: "#ff1a1a" }} /></td>
                           </tr>
                         </tbody>
                         </div>
            
-            <div class="row-12" className="align-right">
+           <div class="row-12" className="align-right">
               <div className="col-4">
-                <Button variant="contained" class="btn btn-primary btn-md center-block">
+               <button type="submit"  class="btn btn-primary btn-md center-block">
                   Cancel
-                </Button>
+               </button>
                 &nbsp;
-                <Button variant="contained" type="submit" class="btn btn-primary btn-md center-block">
+                 <button type="submit"  class="btn btn-primary btn-md center-block">
                   Submit
-                </Button>
+               </button>
               </div>
             </div>
           </div>
        
     </form>
+    {showToastError && (
+        <CusToaster
+          label={showToastError?.label}
+          success={showToastError?.success}
+          error={showToastError?.error}
+          onClose={() => {
+            setShowToastError({ label: "", success: false, error: false });
+          }}
+        />
+      )}
+      </div>
   );
 }
 

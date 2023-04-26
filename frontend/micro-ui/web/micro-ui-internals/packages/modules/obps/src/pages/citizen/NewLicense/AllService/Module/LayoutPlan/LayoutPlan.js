@@ -57,6 +57,7 @@ function LayoutPlanClu() {
     control,
     watch,
     setValue,
+    resetField,
   } = useForm({});
   // const { register, handleSubmit, setValue, getValues, watch } = useForm();
   const [layOutPlanData, setLayOutPlanData] = useState([]);
@@ -86,7 +87,6 @@ function LayoutPlanClu() {
   const [getTotalArea, setTotlArea] = useState();
   const handleshowhide = (event) => {
     const getuser = event.target.value;
-
     setShowhide(getuser);
   };
 
@@ -207,22 +207,22 @@ function LayoutPlanClu() {
           : layOutPlanData.additionalDetails?.boardResolutionAuthSignatoryDoc;
         layOutPlanData.additionalDetails.anyOther = data?.anyOther ? data?.anyOther : layOutPlanData.additionalDetails?.anyOther;
 
-   useEffect(() => {
-    var nameArray = modalValue?.map(function (itm) {
-      if (isNaN(itm?.areaModal)) return 0;
-      return itm?.areaModal;
-    });
-      const mixedSum = (nameArray = []) => {
-      let sum = 0;
-      for (let i = 0; i < nameArray.length; i++) {
-        const el = nameArray[i];
-        sum += +el;
-      }
-      return sum;
-    };
-     const totalVal = mixedSum(nameArray) + mixedSumB(nameArrayB);
-    setTotlArea(totalVal?.toFixed(3));
-  }, [modalValue]);
+  //  useEffect(() => {
+  //   var nameArray = modalValue?.map(function (itm) {
+  //     if (isNaN(itm?.areaModal)) return 0;
+  //     return itm?.areaModal;
+  //   });
+  //     const mixedSum = (nameArray = []) => {
+  //     let sum = 0;
+  //     for (let i = 0; i < nameArray.length; i++) {
+  //       const el = nameArray[i];
+  //       sum += +el;
+  //     }
+  //     return sum;
+  //   };
+  //    const totalVal = mixedSum(nameArray) + mixedSumB(nameArrayB);
+  //   setTotlArea(totalVal?.toFixed(3));
+  // }, [modalValue]);
 
         const updateRequest = {
           RequestInfo: {
@@ -366,11 +366,11 @@ function LayoutPlanClu() {
   //  const [showhide19, setShowhide19] = useState("true");
   // const handleshow19 = (e) => {
   
-   console.log("modalValue1234", modalValue?.[0]?.areaModalPop);
-   const query = modalValue?.map((elementInArray) => 
-   {elementInArray.areaModalPop} );
+  //  console.log("modalValue1234", modalValue?.[0]?.areaModalPop);
+  //  const query = modalValue?.map((elementInArray) => 
+  //  {elementInArray.areaModalPop} );
     // let query = DetailsofAppliedLand?.dgpsDetails.map((array) => array.map((object) => `${object.latitude},${object.longitude}`).join(":")).join("|")
-    console.log("Qurey", query);
+    // console.log("Qurey", query);
     
   // };
  
@@ -400,7 +400,15 @@ function LayoutPlanClu() {
               {/* <FormLabel id="lic_no" sx={{ fontWeight: "bold" }}>
                   {`${t("REV_LAYOUT_LICENSE_NO")}`} <span style={{ color: "red" }}>*</span>
                 </FormLabel> */}
-              <SearchLicenceComp watch={watch} register={register} control={control} setLoader={setLoader} errors={errors} setValue={setValue} />
+              <SearchLicenceComp
+                watch={watch}
+                register={register}
+                control={control}
+                setLoader={setLoader}
+                errors={errors}
+                setValue={setValue}
+                resetField={resetField}
+              />
               {/* <OutlinedInput
                   aria-labelledby="lic_no"
                   type="number"
@@ -444,7 +452,7 @@ function LayoutPlanClu() {
                         {/* Area */}
                         </StyledTableCell>
                         <StyledTableCell>{`${t("REV_LAYOUT_ACTION")}`}
-                        // Action
+                         {/* Action */}
                         </StyledTableCell>
                       </TableRow>
                     </TableHead>
@@ -498,13 +506,13 @@ function LayoutPlanClu() {
                   // onClick={() => setNoOfRows(noofRows + 1)}
                   onClick={handleShowAuthuser}
                 >
-                  {`${t("REV_LAYOUT_ADD_MORE")}`}
+                  {`${t("REV_LAYOUT_ADD_MORES")}`}
                   {/* Add More */}
                 </button>
               </Col>
                <Col md={4} lg={4} mb={3}>
                 <FormControl>
-                  <FormLabel id="existing_area" sx={{ fontWeight: "bold" }}>{`${t("REV_LAYOUT_TOTAL_AREA")}`}
+                  <FormLabel id="existing_area" sx={{ fontWeight: "bold" }}>{`${t("REV_LAYOUT_TOTAL_AREAS")}`}
                     {/* Total Area:{getTotalArea}  */}
                     <span style={{ color: "red" }}>*</span>
                     
@@ -531,7 +539,7 @@ function LayoutPlanClu() {
                             <th class="fw-normal" style={{ textAlign: "center" }}>{`${t("REV_LAYOUT_AREA_IN_ACRES")}`}
                               {/* In Acres */}
                               </th>
-                            <th class="fw-normal"style={{ textAlign: "center" }}>{`${t("REV_LAYOUT_AREA_IN_Sq")}`}
+                            <th class="fw-normal"style={{ textAlign: "center" }}>{`${t("REV_LAYOUT_AREA_IN_SQ_M")}`}
                               {/* In sq.m */}
                               </th>
                            
@@ -691,9 +699,15 @@ function LayoutPlanClu() {
                 <table>
                   <thead>
                     <tr>
-                      <th style={{ textAlign: "center" }}>Sr.No</th>
-                      <th style={{ textAlign: "center" }}>Field Name</th>
-                      <th style={{ textAlign: "center" }}>Upload Documents</th>
+                      <th style={{ textAlign: "center" }}>{`${t("REV_LAYOUT_S_No")}`}
+                        {/* Sr.No */}
+                        </th>
+                      <th style={{ textAlign: "center" }}>{`${t("REV_LAYOUT_FIELD_NAME")}`}
+                      {/* Field Name */}
+                      </th>
+                      <th style={{ textAlign: "center" }}>{`${t("REV_LAYOUT_UPLOAD_DOC")}`}
+                      {/* Upload Documents */}
+                      </th>
                     </tr>
                   </thead>
                   <tbody>
@@ -955,7 +969,7 @@ function LayoutPlanClu() {
                 </div>
                 <div class="col-sm-12 text-right">
                   <button id="btnSearch" class="btn btn-primary btn-md center-block" style={{ marginTop: "-63px", marginRight: "97px" }}>
-                   Pay
+                   Cancel
                   </button>
                 </div>
               </div>
