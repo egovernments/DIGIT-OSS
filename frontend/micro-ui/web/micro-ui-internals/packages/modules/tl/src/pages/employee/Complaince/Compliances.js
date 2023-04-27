@@ -7,12 +7,12 @@ import { useTranslation } from 'react-i18next';
 import ReportProblemIcon from "@mui/icons-material/ReportProblem";
 
 import { ComplicesRemarksContext } from '../../../../context/Complices-remarks-context';
-import CompliancesModal from './compliancesModal';
+
 
 const Addmoreinput = ({applicationimp}) =>
 {
     const {compliceGetRemarkssValues,remarksData}=useContext(ComplicesRemarksContext)
-  const[formValues, setFormValues]= useState([{name:'', email:'', address:''}]);
+//   const[formValues, setFormValues]= useState([{name:'', email:'', address:''}]);
   const [checked, setChecked] = useState(true);
   const {t} = useTranslation();
   const[msg, setMsg]= useState('');
@@ -71,7 +71,7 @@ const {
     const handlemodaldData = (data) => {
     
         setSmShow(false);
-        console.log("here",openedModal,data);
+        // console.log("here",openedModal,data);
         
       };
       useEffect(() => {
@@ -82,7 +82,7 @@ const {
         }
       }, [tcpApplicationNumber])
       useEffect(() =>{
-        console.log("remarksDataComplice",remarksData);
+        // console.log("remarksDataComplice",remarksData);
       }, [remarksData])
 
     return(
