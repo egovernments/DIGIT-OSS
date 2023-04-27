@@ -73,6 +73,8 @@ const DesktopInbox = ({
                       ? "ServiceScrutiny"
                       : row.original["businessService"] === "ELECTRICAL_PLAN"
                       ? "ElectricalScrutiny"
+                      : row.original["businessService"] === "EXTENTION_OF_CLU_PERMISSION"
+                      ? "ElectricalScrutiny"
                       : row.original["businessService"] === "BG_NEW"
                       ? "ScrutinyForm"
                       : null
