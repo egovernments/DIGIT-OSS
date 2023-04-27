@@ -775,7 +775,7 @@ const ApllicantFormStep1 = (props) => {
               )}
             </div>
             <div className="col col-4">
-              <h2 style={{ display: "flex" }}>Consent degree certificate of Architect </h2>
+              <h2 style={{ display: "flex" }}>Consent of Architect along with Qualification documents</h2>
               <label>
                 <FileUpload style={{ cursor: "pointer" }} color="primary" />
                 <input
@@ -793,7 +793,7 @@ const ApllicantFormStep1 = (props) => {
               )}
             </div>
             <div className="col col-4">
-              <h2 style={{ display: "flex" }}>Consent degree certificate of Engineer</h2>
+              <h2 style={{ display: "flex" }}>Consent of Engineer along with Qualification documents</h2>
               <label>
                 <FileUpload style={{ cursor: "pointer" }} color="primary" />
                 <input

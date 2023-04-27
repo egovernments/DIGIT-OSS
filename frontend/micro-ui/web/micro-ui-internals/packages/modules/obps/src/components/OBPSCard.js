@@ -15,6 +15,12 @@ const OBPSCard = () => {
     const SL_Role = ["CTP_HR","AO_HQ", "JD_HQ", "SD_HQ","DTCP_HR", "DTP_HQ", "JE_HQ", "STP_HQ", "ASST_JE_HQ", "EE_HQ", "PUD"]
     const ARLP_Role = ["CTP_HR","AO_HQ", "JD_HQ", "SD_HQ","DTCP_HR", "DTP_HQ", "JE_HQ", "STP_HQ", "ASST_JE_HQ", "EE_HQ", "PUD"]
     const CBI_Role = ["CTP_HR","AO_HQ", "JD_HQ", "SD_HQ","DTCP_HR", "DTP_HQ", "JE_HQ", "STP_HQ", "ASST_JE_HQ", "EE_HQ", "PUD"]
+    const ROL_Role = ["CTP_HR","AO_HQ", "JD_HQ", "SD_HQ","DTCP_HR", "DTP_HQ", "JE_HQ", "STP_HQ", "ASST_JE_HQ", "EE_HQ", "PUD"]
+    const AOSD_Role = ["CTP_HR","AO_HQ", "JD_HQ", "SD_HQ","DTCP_HR", "DTP_HQ", "JE_HQ", "STP_HQ", "ASST_JE_HQ", "EE_HQ", "PUD"]
+    const CC_Role = ["CTP_HR","AO_HQ", "JD_HQ", "SD_HQ","DTCP_HR", "DTP_HQ", "JE_HQ", "STP_HQ", "ASST_JE_HQ", "EE_HQ", "PUD"]
+    const CICS_Role = ["CTP_HR","AO_HQ", "JD_HQ", "SD_HQ","DTCP_HR", "DTP_HQ", "JE_HQ", "STP_HQ", "ASST_JE_HQ", "EE_HQ", "PUD"]
+    
+    
     function isBankGuarrantee(){
         let isGuarantee = false
         for(let i=0; i<userRoles.length; i++){
@@ -71,6 +77,15 @@ const OBPSCard = () => {
         }
         return isARLP
       }
+      function isRENEWALEmp(){
+        let isROL = false
+        for(let i=0; i<userRoles.length; i++){
+          if(ROL_Role.includes(userRoles[i].code)){
+            isROL = true
+          }
+        }
+        return isROL
+      }
       function isCHANGEEmp(){
         let isCBI = false
         for(let i=0; i<userRoles.length; i++){
@@ -79,6 +94,33 @@ const OBPSCard = () => {
           }
         }
         return isCBI
+      }
+      function isSTANDARDEmp(){
+        let isAOSD = false
+        for(let i=0; i<userRoles.length; i++){
+          if(AOSD_Role.includes(userRoles[i].code)){
+            isAOSD = true
+          }
+        }
+        return isAOSD
+      }
+      function isCopletionEmp(){
+        let isCC = false
+        for(let i=0; i<userRoles.length; i++){
+          if(CC_Role.includes(userRoles[i].code)){
+            isCC = true
+          }
+        }
+        return isCC
+      }
+      function isCommiunitySiteEmp(){
+        let isCICS= false
+        for(let i=0; i<userRoles.length; i++){
+          if(CICS_Role.includes(userRoles[i].code)){
+            isCICS = true
+          }
+        }
+        return isCICS
       }
         
     const [isStateLocalisation, setIsStateLocalisation] = useState(true);
@@ -218,6 +260,79 @@ const OBPSCard = () => {
           }
         ],
       };
+      const propsForRENEWALModuleCard = {
+        Icon: <DocumentIconSolid />,
+        moduleName: t("RENWAL_OF_LICIENCE_CARD"),
+        kpis: [
+          {
+            count: "-",
+            label: t("RENWAL_OF_LICIENCE_CARD"),
+            link: `/digit-ui/employee/tl/RenewalInbox`,
+          },
+        ],
+        links: [
+          {
+            count: "-",
+            label: t("ES_TITLE_INBOX"),
+            link: `/digit-ui/employee/tl/RenewalInbox`,
+          }
+        ],
+      };
+      
+      const propsForSTANDARDModuleCard = {
+        Icon: <DocumentIconSolid />,
+        moduleName: t("APPROVAL_OF_STANDARD_CARD"),
+        kpis: [
+          {
+            count: "-",
+            label: t("APPROVAL_OF_STANDARD_CARD"),
+            link: `/digit-ui/employee/tl/StandardInbox`,
+          },
+        ],
+        links: [
+          {
+            count: "-",
+            label: t("ES_TITLE_INBOX"),
+            link: `/digit-ui/employee/tl/StandardInbox`,
+          }
+        ],
+      };
+      const propsForCommiunitySiteoduleCard = {
+        Icon: <DocumentIconSolid />,
+        moduleName: t("CONSTRUCTION_OF_COMMUNITY_CARD"),
+        kpis: [
+          {
+            count: "-",
+            label: t("CONSTRUCTION_OF_COMMUNITY_CARD"),
+            link: `/digit-ui/employee/tl/CommunityInbox`,
+          },
+        ],
+        links: [
+          {
+            count: "-",
+            label: t("ES_TITLE_INBOX"),
+            link: `/digit-ui/employee/tl/CommunityInbox`,
+          }
+        ],
+      };
+      const propsForCopletionModuleCard = {
+        Icon: <DocumentIconSolid />,
+        moduleName: t("COMPLETION_CERTIFICATE_CARD"),
+        kpis: [
+          {
+            count: "-",
+            label: t("COMPLETION_CERTIFICATE_CARD"),
+            link: `/digit-ui/employee/tl/CompositionInbox`,
+          },
+        ],
+        links: [
+          {
+            count: "-",
+            label: t("ES_TITLE_INBOX"),
+            link: `/digit-ui/employee/tl/CompositionInbox`,
+          }
+        ],
+      };
       
 
       const obpsSubModuleProps = []
@@ -239,6 +354,10 @@ const OBPSCard = () => {
       obpsSubModuleProps.push(propsForSURRENDModuleCard)
       obpsSubModuleProps.push(propsForREVISEDModuleCard)
       obpsSubModuleProps.push(propsForCHANGEModuleCard)
+      obpsSubModuleProps.push(propsForSTANDARDModuleCard)
+      obpsSubModuleProps.push(propsForRENEWALModuleCard)
+      obpsSubModuleProps.push(propsForCommiunitySiteoduleCard)
+      obpsSubModuleProps.push(propsForCopletionModuleCard)
         return (
         <React.Fragment>
         {

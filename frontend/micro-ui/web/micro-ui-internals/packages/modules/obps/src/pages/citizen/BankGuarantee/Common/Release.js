@@ -5,14 +5,34 @@ import OutlinedInput from "@mui/material/OutlinedInput";
 import Box from "@mui/material/Box";
 import axios from "axios";
 import { useForm } from "react-hook-form";
+import Collapse from "react-bootstrap/Collapse";
+import AddIcon from "@mui/icons-material/Add";
+import RemoveIcon from "@mui/icons-material/Remove";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import FileUpload from "@mui/icons-material/FileUpload";
+import ReactMultiSelect from "../../../../../../../react-components/src/atoms/ReactMultiSelect";
+import { getDocShareholding } from "../../../../../../tl/src/pages/employee/ScrutinyBasic/ScrutinyDevelopment/docview.helper";
+import CusToaster from "../../../../components/Toaster";
+import {
+  FormStep,
+  TextInput,
+  MobileNumber,
+  CardLabel,
+  CardLabelError,
+  Dropdown,
+  Toast,
+  DeleteIcon,
+  MuiTables,
+} from "@egovernments/digit-ui-react-components";
 
 function ReleaseNew(props) {
   const [selects, setSelects] = useState();
   const [showhide, setShowhide] = useState("");
   const [modal, setmodal] = useState(false);
   const [modal1, setmodal1] = useState(false);
+   const [open4, setOpen4] = useState(false);
+  const [applicantId, setApplicantId] = useState("");
+ const [showToastError, setShowToastError] = useState({ label: "", error: false, success: false });
   const [ServicePlanDataLabel, setServicePlanDataLabel] = useState([]);
   const handleshowhide = (event) => {
     const getuser = event.target.value;
@@ -30,7 +50,20 @@ function ReleaseNew(props) {
   } = useForm({});
   const tenantId = Digit.ULBService.getCurrentTenantId();
   const [searchExistingBg, setSearchExistingBg] = useState({});
-
+  const selectTypeData = [{ label: "Complete", value: "complete" },
+{
+  label: "Partial", value: "partial"
+},
+{
+  label: "Replace", value: "replace"
+}];
+  const selectBankGuarantee = [{ label: "BG-1", value: "bg1" },
+{
+  label: "BG-2", value: "bg2"
+},
+{
+  label: "BG-N", value: "bgn"
+}];
   const bankRelease = async (data) => {
     const token = window?.localStorage?.getItem("token");
     const userInfo = Digit.UserService.getUser()?.info || {};
@@ -94,206 +127,233 @@ function ReleaseNew(props) {
   useEffect(() => {
     existingBgFormSubmitHandler();
   }, []);
-  const [fileStoreId, setFileStoreId] = useState({});
+  const [loader, setLoader] = useState(false);
+   const [fileStoreId, setFileStoreId] = useState({});
+  const [selectedFiles, setSelectedFiles] = useState([]);
   const getDocumentData = async (file, fieldName) => {
+    if (selectedFiles.includes(file.name)) {
+      setShowToastError({ label: "Duplicate file Selected", error: true, success: false });
+      return;
+    }
     const formData = new FormData();
     formData.append("file", file);
     formData.append("tenantId", "hr");
     formData.append("module", "property-upload");
     formData.append("tag", "tag-property");
-    // setLoader(true);
+    setLoader(true);
     try {
       const Resp = await axios.post("/filestore/v1/files", formData, {});
       setValue(fieldName, Resp?.data?.files?.[0]?.fileStoreId);
       setFileStoreId({ ...fileStoreId, [fieldName]: Resp?.data?.files?.[0]?.fileStoreId });
-      if (fieldName === "uploadBg") {
-        setValue("uploadBgFileName", file.name);
-      }
-      if (fieldName === "fullCertificate") {
-        setValue("fullCertificateFileName", file.name);
-      }
-      if (fieldName === "partialCertificate") {
-        setValue("partialCertificateFileName", file.name);
-      }
+      setSelectedFiles([...selectedFiles, file.name]);
+      setLoader(false);
+      setShowToastError({ label: "File Uploaded Successfully", error: false, success: true });
     } catch (error) {
       setLoader(false);
-      return error;
+      return error.message;
+    }
+  };
+
+  const viewDocument = async (documentId) => {
+    try {
+      const response = await axios.get(`/filestore/v1/files/url?tenantId=hr&fileStoreIds=${documentId}`, {});
+      const FILDATA = response.data?.fileStoreIds[0]?.url;
+      window.open(FILDATA);
+    } catch (error) {
+      console.log(error);
     }
   };
 
   return (
+    <div>
     <form onSubmit={handleSubmit(bankRelease)}>
       <div className="card" style={{ width: "126%", border: "5px solid #1266af" }}>
         <h4 style={{ fontSize: "25px", marginLeft: "21px" }}>Release of Bank Guarantee</h4>
+        <br></br>
+           <div
+        className="collapse-header"
+        onClick={() => setOpen4(!open4)}
+        aria-controls="example-collapse-text"
+        aria-expanded={open4}
+        style={{
+          background: "#f1f1f1",
+          padding: "0.25rem 1.25rem",
+          borderRadius: "0.25rem",
+          fontWeight: "600",
+          display: "flex",
+          cursor: "pointer",
+          color: "#817f7f",
+          justifyContent: "space-between",
+          alignContent: "center",
+        }}
+      >
+        <span style={{ color: "#817f7f", fontSize: 14 }} className="">
+          - BG Detail
+        </span>
+        {open4 ? <RemoveIcon></RemoveIcon> : <AddIcon></AddIcon>}
+      </div>
+       <Collapse in={open4}>
         <div className="card">
           <div className="row-12">
-            <div className="col md={4} xxl lg-4">
+            <div className="col md={4} xxl lg-3">
               <FormControl>
-                <h6 className="FormLable">
-                  Do you want to Replace B.G.?
-                  <span style={{ color: "red" }}>*</span> &nbsp;&nbsp;
-                  <label htmlFor="releaseBankGuarantee">
-                    <input {...register("releaseBankGuarantee")} type="radio" value="Y" id="releaseBankGuarantee" />
-                    &nbsp; Yes &nbsp;&nbsp;
-                  </label>
-                  <label htmlFor="releaseBankGuarantee">
-                    <input {...register("releaseBankGuarantee")} type="radio" value="N" id="releaseBankGuarantee" />
-                    &nbsp; No &nbsp;&nbsp;
-                  </label>
-                  <h3 className="error-message" style={{ color: "red" }}>
-                    {errors?.releaseBankGuarantee && errors?.releaseBankGuarantee?.message}
-                  </h3>
-                </h6>
+                <h2 className="FormLable">Bank Guarantee No. </h2>
+                <OutlinedInput type="text" className="Inputcontrol" placeholder="" {...register("bgNumber")}  disabled/>
               </FormControl>
               &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
               <FormControl>
-                <h2 className="FormLable">Enter Bank Guarantee No. </h2>
-                <OutlinedInput type="text" className="Inputcontrol" placeholder="" {...register("bgNumber")} onClick={existingBgFormSubmitHandler} />
+                <h2 className="FormLable">Bank Guarantee Issue date </h2>
+                <OutlinedInput type="date" className="Inputcontrol" placeholder="" {...register("bgNumber")}  disabled/>
               </FormControl>
               &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
               <FormControl>
-                <h2 className="FormLable">Type of B.G. </h2>
-                <select className="Inputcontrol" class="form-control" placeholder="" {...register("typeOfBg")}>
-                  <option value="1"> IDW</option>
-                  <option value="2">EDC</option>
-                </select>
+                <h2 className="FormLable">Expiry date </h2>
+                <OutlinedInput type="date" className="Inputcontrol" placeholder="" {...register("bgNumber")}  disabled/>
+              </FormControl>
+               &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
+              <FormControl>
+                <h2 className="FormLable">Claim expiry date </h2>
+                <OutlinedInput type="date" className="Inputcontrol" placeholder="" {...register("bgNumber")}  disabled/>
+              </FormControl>
+               &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
+              <FormControl>
+                <h2 className="FormLable">Amount </h2>
+                <OutlinedInput type="text" className="Inputcontrol" placeholder="" {...register("bgNumber")}  disabled/>
               </FormControl>
             </div>
-            <div className="row-12">
-              <div className="col md={4} xxl lg-4">
-                {watch("releaseBankGuarantee") === "Y" && (
-                  <div className="row-12">
-                    <div className="col md={4} xxl lg-4">
-                      <div>
-                        <label>
-                          <h2>Upload B.G. softcopy </h2>
-                          <FileUpload color="primary" />
-                          <input
-                            type="file"
-                            accept="application/pdf/jpeg/png"
-                            style={{ display: "none" }}
-                            onChange={(e) => getDocumentData(e?.target?.files[0], "uploadBg")}
-                          />
-                          {fileStoreId?.uploadBg ? (
-                            <a onClick={() => getDocShareholding(fileStoreId?.uploadBg)} className="btn btn-sm ">
-                              <VisibilityIcon color="info" className="icon" />
-                            </a>
-                          ) : (
-                            <p></p>
-                          )}
-                          <h3 style={{}}>{watch("uploadBgFileName") ? watch("uploadBgFileName") : null}</h3>{" "}
-                        </label>
-                      </div>
-                      {/* <input type="file" className="form-control" onChange={(e) => getDocumentData(e?.target?.files[0], "uploadBg")} /> */}
-                    </div>
-                  </div>
-                )}
-              </div>
-            </div>
-            <div className="row-12">
-              <div className="col-12">
-                {watch("releaseBankGuarantee") === "N" && (
-                  <div className="row ">
-                    {/* <col md={4} xxl lg="3">
-                        <div>
-                          <Form.Label>
-                            <h2>Enter B.G. No. </h2>
-                          </Form.Label>
-                        </div>
-                        <input type="text" className="form-control" placeholder="" {...register("bgNo")} />
-                      </col> */}
-                    {/* <col md={4} xxl lg="3">
-                      <div>
-                        <Form.Label>
-                          <h2>Type of B.G. </h2>
-                        </Form.Label>
-                      </div>
-                      <select className="form-control" placeholder="" {...register("typesOfBg")}>
-                        <option value="1"> IDW</option>
-                        <option value="2">EDC</option>
-                      </select>
-                    </col> */}
-                    {watch("typeOfBg") === "1" && (
-                      <div>
-                        <div className="row-12">
-                          <div className="col md={4} xxl lg-3">
-                            <div>
-                              <label>
-                                <h2>Full Completion Certificate. </h2>
-                                <FileUpload color="primary" />
-                                <input
-                                  type="file"
-                                  accept="application/pdf/jpeg/png"
-                                  style={{ display: "none" }}
-                                  onChange={(e) => getDocumentData(e?.target?.files[0], "fullCertificate")}
-                                />
-                                {fileStoreId?.fullCertificate ? (
-                                  <a onClick={() => getDocShareholding(fileStoreId?.fullCertificate)} className="btn btn-sm ">
-                                    <VisibilityIcon color="info" className="icon" />
-                                  </a>
-                                ) : (
-                                  <p></p>
-                                )}
-                                <h3 style={{}}>{watch("fullCertificateFileName") ? watch("fullCertificateFileName") : null}</h3>{" "}
-                              </label>
-                            </div>
-                            {/* <input type="file" className="form-control" onChange={(e) => getDocumentData(e?.target?.files[0], "uploadBg")} /> */}
-                          </div>
-                        </div>
-                      </div>
-                    )}
-                    {watch("typeOfBg") === "2" && (
-                      <div>
-                        <div className="row-12">
-                          <div className="col md={4} xxl lg-4">
-                            <FormControl>
-                              <h2>
-                                Amount.
-                                <span style={{ color: "red" }}>*</span>
+            <br></br>
+             <div className="row gy-3">
+                        <div className="col col-12">
+                           <h2 className="FormLable">
+                               Amount in words<span style={{ color: "red" }}>*</span>
                               </h2>
-
-                              <input type="text" className="form-control" placeholder="" {...register("tcpSubmissionReceived")} />
-                            </FormControl>
-                            &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
-                            <label>
-                              <h2> Partial Completion Certificate. </h2>
-                              <FileUpload color="primary" />
-                              <input
-                                type="file"
-                                accept="application/pdf/jpeg/png"
-                                style={{ display: "none" }}
-                                onChange={(e) => getDocumentData(e?.target?.files[0], "partialCertificate")}
-                              />
-                              {fileStoreId?.partialCertificate ? (
-                                <a onClick={() => getDocShareholding(fileStoreId?.partialCertificate)} className="btn btn-sm ">
-                                  <VisibilityIcon color="info" className="icon" />
-                                </a>
-                              ) : (
-                                <p></p>
-                              )}
-                              <h3 style={{}}>{watch("partialCertificateFileName") ? watch("partialCertificateFileName") : null}</h3>{" "}
-                            </label>
-                          </div>
-                          {/* <input type="file" className="form-control" onChange={(e) => getDocumentData(e?.target?.files[0], "uploadBg")} /> */}
+                              <input type="text" className="form-control" disabled></input>
                         </div>
-                      </div>
-                    )}
-                  </div>
-                )}
-              </div>
             </div>
+            <br></br>
+              <div className="row-12">
+             <div className="col md={4} xxl lg-4">
+              <FormControl>
+                <h2 className="FormLable">Release </h2>
+                  <ReactMultiSelect control={control} name="numberType" placeholder="Select Type" data={selectTypeData} labels="" />
+                {/* <select
+                    className="Inputcontrol"
+                    class="form-control"
+                    placeholder=""
+                    {...register("typeOfBg")}
+                  >
+                    <option value="Complete"> Complete</option>
+                    <option value="Partial">Partial</option>
+                    <option value="Replace">Replace</option>
+                  </select> */}
+              </FormControl>
+              &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
+              <FormControl>
+                <h2 className="FormLable">Bank Guarantee to be replaced with </h2>
+                <ReactMultiSelect control={control} name="numberType" placeholder="Select Type" data={selectBankGuarantee} labels="" />
+               {/* <select
+                    className="Inputcontrol"
+                    class="form-control"
+                    placeholder=""
+                    {...register("typeOfBg")}
+                  >
+                    <option value="BG-1"> BG-1</option>
+                    <option value="BG-2">BG-2</option>
+                    <option value="BG-N">BG-N</option>
+                  </select> */}
+              </FormControl>
+              &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
+              <FormControl>
+                <h2 className="FormLable">Reason for replacement </h2>
+               <textarea className="Inputcontrol" class="form-control" placeholder="" {...register("bgNumber")} />
+              </FormControl>
+            </div>
+            </div>
+            </div>
+            </div>
+          </Collapse>
             &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
-            {/* <div className="row-12">
-              <button
-               
-                type="button"
-                class="btn btn-primary btn-md center-block"
-                onClick={existingBgFormSubmitHandler}
-              >
-                Search
-              </button>
-            </div>
-            <br></br> */}
+ <div className="table table-bordered table-responsive">
+                        {/* <caption>List of users</caption> */}
+                        <thead>
+                          <tr>
+                            <th class="fw-normal">Sr. No.</th>
+                            <th class="fw-normal">Type</th>
+                            <th class="fw-normal">Attachment description</th>
+                             <th class="fw-normal">Upload document</th>
+                              <th class="fw-normal">Action</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr>
+                            <td>1</td>
+                             <td>Application (pdf)</td>
+                              <td><input type="text" className="form-control"></input></td>
+                               <td> <div>
+                                    <label>
+                                      <FileUpload style={{ cursor: "pointer" }} color="primary" />
+                                      <input
+                                        type="file"
+                                        style={{ display: "none" }}
+                                        accept="application/pdf/jpeg/png"
+                                        onChange={(e) => getDocumentData(e?.target?.files[0], "applicationPdf")}
+                                      />
+                                    </label>
+                                    {watch("applicationPdf") && (
+                                      <a onClick={() => getDocShareholding(watch("applicationPdf"), setLoader)} className="btn btn-sm ">
+                                        <VisibilityIcon color="info" className="icon" />
+                                      </a>
+                                    )}
+                                  </div></td>
+                              <td><DeleteIcon style={{ fill: "#ff1a1a" }} /></td>
+                          </tr>
+                           <tr>
+                            <td>2</td>
+                             <td>Completion Certificate (pdf)</td>
+                              <td><input type="text" className="form-control"></input></td>
+                               <td> <div>
+                                    <label>
+                                      <FileUpload style={{ cursor: "pointer" }} color="primary" />
+                                      <input
+                                        type="file"
+                                        style={{ display: "none" }}
+                                        accept="application/pdf/jpeg/png"
+                                        onChange={(e) => getDocumentData(e?.target?.files[0], "completionCertificatePdf")}
+                                      />
+                                    </label>
+                                    {watch("completionCertificatePdf") && (
+                                      <a onClick={() => getDocShareholding(watch("completionCertificatePdf"), setLoader)} className="btn btn-sm ">
+                                        <VisibilityIcon color="info" className="icon" />
+                                      </a>
+                                    )}
+                                  </div></td>
+                               <td><DeleteIcon style={{ fill: "#ff1a1a" }} /></td>
+                          </tr>
+                           <tr>
+                            <td>3</td>
+                             <td>Any other document (pdf)</td>
+                              <td><input type="text" className="form-control"></input></td>
+                               <td> <div>
+                                    <label>
+                                      <FileUpload style={{ cursor: "pointer" }} color="primary" />
+                                      <input
+                                        type="file"
+                                        style={{ display: "none" }}
+                                        accept="application/pdf/jpeg/png"
+                                        onChange={(e) => getDocumentData(e?.target?.files[0], "otherDocumentPdf")}
+                                      />
+                                    </label>
+                                    {watch("otherDocumentPdf") && (
+                                      <a onClick={() => getDocShareholding(watch("otherDocumentPdf"), setLoader)} className="btn btn-sm ">
+                                        <VisibilityIcon color="info" className="icon" />
+                                      </a>
+                                    )}
+                                  </div></td>
+                              <td><DeleteIcon style={{ fill: "#ff1a1a" }} /></td>
+                          </tr>
+                        </tbody>
+                        </div>
+           
             <div class="row-12" className="align-right">
               <div className="col-4">
                 <Button variant="contained" class="btn btn-primary btn-md center-block">
@@ -306,9 +366,19 @@ function ReleaseNew(props) {
               </div>
             </div>
           </div>
-        </div>
-      </div>
+    
     </form>
+     {showToastError && (
+        <CusToaster
+          label={showToastError?.label}
+          success={showToastError?.success}
+          error={showToastError?.error}
+          onClose={() => {
+            setShowToastError({ label: "", success: false, error: false });
+          }}
+        />
+      )}
+      </div>
   );
 }
 

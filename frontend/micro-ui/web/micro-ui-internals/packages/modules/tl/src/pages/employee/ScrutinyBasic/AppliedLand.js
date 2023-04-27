@@ -577,7 +577,7 @@ let Tree = ({ data }) => {
 
                   <ReportProblemIcon
                     style={{
-                     display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("X:Longitude") ? "block" : "none",
+                     display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_DGPS_POINTS_DOCUMENT") ? "block" : "none",
                       color: fieldIconColors.detailsOfPlots
                     }}
                     onClick={() => {
@@ -1739,7 +1739,7 @@ let Tree = ({ data }) => {
                         </IconButton>
                         <ReportProblemIcon
                           style={{
-                            display: hideRemarks || hideRemarksPatwari ?"none":"block",
+                           display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_DGPS_POINTS_DOCUMENT") ? "block" : "none",
                             color: fieldIconColors.demarcationPlan
                           }}
                           onClick={() => {
@@ -1765,7 +1765,8 @@ let Tree = ({ data }) => {
                         </IconButton>
                         <ReportProblemIcon
                           style={{
-                            display: hideRemarks || hideRemarksPatwari ?"none":"block",
+                          
+                            display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_DGPS_DOCUMENTS_LAYOUT_PLAN_PDF") ? "block" : "none",
                             color: fieldIconColors.democraticPlan
                           }}
                           onClick={() => {
@@ -1792,7 +1793,8 @@ let Tree = ({ data }) => {
                         </IconButton>
                         <ReportProblemIcon
                           style={{
-                            display: hideRemarks || hideRemarksPatwari ?"none":"block",
+                            display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_DGPS_DOCUMENTS_UNDERTAKING") ? "block" : "none",
+                            
                             color: fieldIconColors.sectoralPlan
                           }}
                           onClick={() => {
@@ -1822,7 +1824,7 @@ let Tree = ({ data }) => {
                         </IconButton>
                             <ReportProblemIcon
                               style={{
-                                display: hideRemarks || hideRemarksPatwari ?"none":"block",
+                                display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_DGPS_DOCUMENTS_DEVELOPMENT_PLAN") ? "block" : "none",
                                 color: fieldIconColors.uploadLayoutPlan
                               }}
                               onClick={() => {
@@ -1853,7 +1855,7 @@ let Tree = ({ data }) => {
                         </IconButton>
                           <ReportProblemIcon
                             style={{
-                              display: hideRemarks || hideRemarksPatwari ?"none":"block",
+                              display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_DGPS_DOCUMENTS_SECTORAL_PLAN") ? "block" : "none",
                               color: fieldIconColors.planCrossSection
                             }}
                             onClick={() => {
@@ -1880,7 +1882,7 @@ let Tree = ({ data }) => {
                         </IconButton>
                           <ReportProblemIcon
                             style={{
-                              display: hideRemarks || hideRemarksPatwari ?"none":"block",
+                              display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_DGPS_DOCUMENTS_EXPLANATORY_NOTE") ? "block" : "none",
                               color: fieldIconColors.publicHealthServices
                             }}
                             onClick={() => {
@@ -1909,7 +1911,7 @@ let Tree = ({ data }) => {
                         </IconButton>
                           <ReportProblemIcon
                             style={{
-                              display: hideRemarks || hideRemarksPatwari ?"none":"block",
+                              display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_DGPS_DOCUMENTS_GUIDE_MAP") ? "block" : "none",
                               color: fieldIconColors.designRoad
                             }}
                             onClick={() => {
@@ -1936,7 +1938,7 @@ let Tree = ({ data }) => {
                         </IconButton>
                           <ReportProblemIcon
                             style={{
-                              display: hideRemarks || hideRemarksPatwari ?"none":"block",
+                              display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_DGPS_DOCUMENTS_INDEMNITY_BOND") ? "block" : "none",
                               color: fieldIconColors.designSewarage
                             }}
                             onClick={() => {
@@ -1966,7 +1968,7 @@ let Tree = ({ data }) => {
                         </IconButton>
                           <ReportProblemIcon
                             style={{
-                              display: hideRemarks || hideRemarksPatwari ?"none":"block",
+                              display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_DGPS_DOCUMENTS_ANY_OTHER_RELEVANT_DOCUMENT") ? "block" : "none",
                               color: fieldIconColors.designDisposal
                             }}
                             onClick={() => {

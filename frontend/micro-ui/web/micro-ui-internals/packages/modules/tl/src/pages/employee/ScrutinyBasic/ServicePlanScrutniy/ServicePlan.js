@@ -265,7 +265,7 @@ const ServicePlanService = (props) => {
 
                     <ReportProblemIcon
                       style={{
-                        display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("SP_SCRUTINY_LOI_NUMBER") ? "block" : "none",
+                        // display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("SP_SCRUTINY_LOI_NUMBER") ? "block" : "none",
                         color: fieldIconColors.loiNumber,
                       }}
                       onClick={() => {
@@ -398,7 +398,7 @@ const ServicePlanService = (props) => {
 
                     <ReportProblemIcon
                       style={{
-                        display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("SP_SCRUTINY_NAME") ? "block" : "none",
+                        // display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("SP_SCRUTINY_NAME") ? "block" : "none",
                         color: fieldIconColors.devName,
                       }}
                       onClick={() => {
@@ -430,7 +430,7 @@ const ServicePlanService = (props) => {
 
                     <ReportProblemIcon
                       style={{
-                        display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("SP_SCRUTINY_DEVELOPMENT_PLAN") ? "block" : "none",
+                        // display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("SP_SCRUTINY_DEVELOPMENT_PLAN") ? "block" : "none",
                         color: fieldIconColors.developmentPlan,
                       }}
                       onClick={() => {
@@ -462,7 +462,7 @@ const ServicePlanService = (props) => {
 
                     <ReportProblemIcon
                       style={{
-                        display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("SP_SCRUTINY_PURPOSE_LICENCE") ? "block" : "none",
+                        // display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("SP_SCRUTINY_PURPOSE_LICENCE") ? "block" : "none",
                         color: fieldIconColors.purpose,
                       }}
                       onClick={() => {
@@ -494,7 +494,7 @@ const ServicePlanService = (props) => {
 
                     <ReportProblemIcon
                       style={{
-                        display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("SP_SCRUTINY_TOTAL_AREA") ? "block" : "none",
+                        // display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("SP_SCRUTINY_TOTAL_AREA") ? "block" : "none",
                         color: fieldIconColors.totalArea,
                       }}
                       onClick={() => {
@@ -565,10 +565,10 @@ const ServicePlanService = (props) => {
                       <div className="btn btn-sm col-md-4">
                         <ReportProblemIcon
                           style={{
-                            display:
-                              hideRemarks && hideRemarksPatwari && showReportProblemIcon("SP_SCRUTINY_SELF_CERTIFIED_DRAWING_CERTIFIED_ARCHITECT")
-                                ? "block"
-                                : "none",
+                            // display:
+                            //   hideRemarks && hideRemarksPatwari && showReportProblemIcon("SP_SCRUTINY_SELF_CERTIFIED_DRAWING_CERTIFIED_ARCHITECT")
+                            //     ? "block"
+                            //     : "none",
                             color: fieldIconColors.Selfcertified,
                           }}
                           onClick={() => {
@@ -608,8 +608,8 @@ const ServicePlanService = (props) => {
                       <div className="btn btn-sm col-md-4">
                         <ReportProblemIcon
                           style={{
-                            display:
-                              hideRemarks && hideRemarksPatwari && showReportProblemIcon("SP_SCRUTINY_ENVIRONMENT_CLEARANCE") ? "block" : "none",
+                            // display:
+                            //   hideRemarks && hideRemarksPatwari && showReportProblemIcon("SP_SCRUTINY_ENVIRONMENT_CLEARANCE") ? "block" : "none",
                             color: fieldIconColors.environmental,
                           }}
                           onClick={() => {
@@ -653,7 +653,7 @@ const ServicePlanService = (props) => {
                       <div className="btn btn-sm col-md-4">
                         <ReportProblemIcon
                           style={{
-                            display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("SP_SCRUTINY_AUTOCAD_FILE") ? "block" : "none",
+                            // display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("SP_SCRUTINY_AUTOCAD_FILE") ? "block" : "none",
                             color: fieldIconColors.template,
                           }}
                           onClick={() => {
@@ -805,10 +805,10 @@ const ServicePlanService = (props) => {
                         <div className="btn btn-sm col-md-4">
                           <ReportProblemIcon
                             style={{
-                              display:
-                                hideRemarks && hideRemarksPatwari && showReportProblemIcon("SP_SCRUTINY_PREVIOUSLY_UPDATED_LAYOUT_PLAN")
-                                  ? "block"
-                                  : "none",
+                              // display:
+                              //   hideRemarks && hideRemarksPatwari && showReportProblemIcon("SP_SCRUTINY_PREVIOUSLY_UPDATED_LAYOUT_PLAN")
+                              //     ? "block"
+                              //     : "none",
                               color: fieldIconColors.certified,
                             }}
                             onClick={() => {
@@ -877,10 +877,10 @@ const ServicePlanService = (props) => {
                         <div className="btn btn-sm col-md-4">
                           <ReportProblemIcon
                             style={{
-                              display:
-                                hideRemarks && hideRemarksPatwari && showReportProblemIcon("SP_SCRUTINY_UPLOAD_REVISED_LAYOUT_PLAN")
-                                  ? "block"
-                                  : "none",
+                              // display:
+                              //   hideRemarks && hideRemarksPatwari && showReportProblemIcon("SP_SCRUTINY_UPLOAD_REVISED_LAYOUT_PLAN")
+                              //     ? "block"
+                              //     : "none",
                               color: fieldIconColors.certified,
                             }}
                             onClick={() => {
@@ -949,10 +949,10 @@ const ServicePlanService = (props) => {
                         <div className="btn btn-sm col-md-4">
                           <ReportProblemIcon
                             style={{
-                              display:
-                                hideRemarks && hideRemarksPatwari && showReportProblemIcon("SP_SCRUTINY_UPLOAD_DEMARCATION_PLAN_AUTOAD")
-                                  ? "block"
-                                  : "none",
+                              // display:
+                              //   hideRemarks && hideRemarksPatwari && showReportProblemIcon("SP_SCRUTINY_UPLOAD_DEMARCATION_PLAN_AUTOAD")
+                              //     ? "block"
+                              //     : "none",
                               color: fieldIconColors.certified,
                             }}
                             onClick={() => {
@@ -1021,10 +1021,10 @@ const ServicePlanService = (props) => {
                         <div className="btn btn-sm col-md-4">
                           <ReportProblemIcon
                             style={{
-                              display:
-                                hideRemarks && hideRemarksPatwari && showReportProblemIcon("SP_SCRUTINY_UPLOAD_DEMARCATION_PLAN_PDF")
-                                  ? "block"
-                                  : "none",
+                              // display:
+                              //   hideRemarks && hideRemarksPatwari && showReportProblemIcon("SP_SCRUTINY_UPLOAD_DEMARCATION_PLAN_PDF")
+                              //     ? "block"
+                              //     : "none",
                               color: fieldIconColors.certified,
                             }}
                             onClick={() => {
@@ -1063,10 +1063,10 @@ const ServicePlanService = (props) => {
                         <div className="btn btn-sm col-md-4">
                           <ReportProblemIcon
                             style={{
-                              display:
-                                hideRemarks && hideRemarksPatwari && showReportProblemIcon("SP_SCRUTINY_UPLOAD_EXCEL_LAYOUT_STRUCTURE")
-                                  ? "block"
-                                  : "none",
+                              // display:
+                              //   hideRemarks && hideRemarksPatwari && showReportProblemIcon("SP_SCRUTINY_UPLOAD_EXCEL_LAYOUT_STRUCTURE")
+                              //     ? "block"
+                              //     : "none",
                               color: fieldIconColors.certified,
                             }}
                             onClick={() => {
@@ -1105,8 +1105,8 @@ const ServicePlanService = (props) => {
                         <div className="btn btn-sm col-md-4">
                           <ReportProblemIcon
                             style={{
-                              display:
-                                hideRemarks && hideRemarksPatwari && showReportProblemIcon("SP_SCRUTINY_OTHER_RELEVANT_DOCUMENT") ? "block" : "none",
+                              // display:
+                              //   hideRemarks && hideRemarksPatwari && showReportProblemIcon("SP_SCRUTINY_OTHER_RELEVANT_DOCUMENT") ? "block" : "none",
                               color: fieldIconColors.certified,
                             }}
                             onClick={() => {

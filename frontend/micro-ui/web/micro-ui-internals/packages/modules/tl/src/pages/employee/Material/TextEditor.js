@@ -5,9 +5,7 @@ import { convertFromHTML, convertToHTML } from "draft-convert";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 
 function AddPost({ modal = false, state, setState }) {
-  const [editorState, setEditorState] = useState(() =>
-    EditorState.createEmpty()
-  );
+  const [editorState, setEditorState] = useState(() => EditorState.createEmpty());
   const [convertedContent, setConvertedContent] = useState(null);
 
   // useEffect(() => {
@@ -23,20 +21,19 @@ function AddPost({ modal = false, state, setState }) {
   // }, [editorState]);
   console.log("DATAEDITOR", editorState);
   console.log("DATAEDITOR", setState);
+  console.log("DATAEDITOR", convertedContent);
   //  console.log();
   //  console.log();
 
   const handleEditorStateChange = (state) => {
-    setEditorState(state)
-      let html = convertToHTML(state?.getCurrentContent());
+    setEditorState(state);
+    let html = convertToHTML(state?.getCurrentContent());
     if (modal) {
       setState(html);
-
-    }
-    else {
+    } else {
       setConvertedContent(html);
     }
-  }
+  };
 
   // useEffect(() => {
   //   if (state) {
@@ -49,29 +46,27 @@ function AddPost({ modal = false, state, setState }) {
   // }, [state]);
 
   return (
-    <div className="text-editorEmp" style={{
-      border: 1,
-      width: "100%",
-      margin: 5,
-      padding: 3
-    }}>
+    <div
+      className="text-editorEmp"
+      style={{
+        border: 1,
+        width: "100%",
+        margin: 5,
+        padding: 3,
+      }}
+    >
       {/* <header className="App-header">Rich Text Editor Example</header> */}
+      
       <Editor
         editorState={editorState}
         onEditorStateChange={handleEditorStateChange}
         // wrapperClassName="wrapper-class"
         editorClassName="editor-class"
         toolbarClassName="toolbar-class"
-
       />
-      {
-        !modal &&
-        <button onClick={() => console.log(convertedContent)}>Submit</button>
-      }
+      {!modal && <button onClick={() => console.log(convertedContent)}>Submit</button>}
     </div>
-
   );
-
 }
 
 export default AddPost;

@@ -759,7 +759,7 @@ const AppliedDetailForm = (props) => {
                 <div>
                   <div className="mt-3 mb-3">
                     <h4>
-                      <b>Bifurcation Of Purpose</b>
+                      <b>Bifurcation Of Component</b>
                     </h4>
                     <h4 className="mt-3">
                       <b>Total Applied Area: </b> {stepData?.ApplicantPurpose?.totalArea}

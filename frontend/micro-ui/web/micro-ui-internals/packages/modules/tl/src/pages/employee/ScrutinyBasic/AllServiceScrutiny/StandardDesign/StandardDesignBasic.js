@@ -1,13 +1,13 @@
 import React, { useState, useRef, useEffect, useContext } from "react";
 import ScrutinyDevelopment from "../../ScrutinyDevelopment/ScrutinyDevelopment";
 import { ScrutinyRemarksContext } from "../../../../../../context/remarks-data-context/index";
-import TransferLicense from "./TransferLicense"
+
 import { Button, Row, Col } from "react-bootstrap";
 import { useForkRef } from "@mui/material";
 import axios from "axios";
+import StandardDesign from "./StandardDesign";
 
-
-const TransferBasic = ({apiResponse,applicationNumber,refreshScrutinyData,applicationStatus,setAdditionalDetails,histeroyData,idwDataTreade,edcDataTreade }) => {
+const StandardDesignBasic = ({apiResponse,applicationNumber,refreshScrutinyData,setAdditionalDetails,histeroyData,idwDataTreade,edcDataTreade,applicationStatus }) => {
   const [purpose, setPurpose] = useState("");
   const jeLandInfoRef = useRef();
 
@@ -36,7 +36,7 @@ const { remarksData,iconStates,handleGetFiledsStatesById,handleGetRemarkssValues
   const [remarksChanges, setRemarksChanges] = useState("");
   const [disapprovalData, setDisapprovalData] = useState({});
   const [applictaionNo, setApplicationNO] = useState(null);
-  // const [iconStates,setIconState]= useState(null)
+  
   const [urlGetShareHoldingDoc,setDocShareHoldingUrl] = useState("")
 
   const userInfo = Digit.UserService.getUser()?.info || {};
@@ -52,11 +52,10 @@ const { remarksData,iconStates,handleGetFiledsStatesById,handleGetRemarkssValues
     console.log("checked parent personal info data", data);
   };
   
-
   const getUncheckedGeneralinfos = (data) => {
     setPurpose(data.purpose);
     setDisplayGeneralInfo(data.data);
-   
+  
     console.log(data);
   };
   const getCheckedGeneralInfoValue = (data) => {
@@ -98,7 +97,7 @@ const { remarksData,iconStates,handleGetFiledsStatesById,handleGetRemarkssValues
         msg_id: "",
         requester_id: "",
         auth_token: authToken,
-        // authToken: authToken
+      
       },
     };
     try {
@@ -108,7 +107,7 @@ const { remarksData,iconStates,handleGetFiledsStatesById,handleGetRemarkssValues
 
       console.log("Response From API", Resp);
       setDisapprovalData(Resp);
-      // setApiResponse(Resp);
+    
     } catch (error) {
       console.log(error);
     }
@@ -121,10 +120,9 @@ const { remarksData,iconStates,handleGetFiledsStatesById,handleGetRemarkssValues
     }
   }, [remarksChanges,apiResponse]);
 
- 
   useEffect(() => {
     if(applicationNumber){
-     
+    
       handleGetRemarkssValues(applicationNumber);
     }
   }, [applicationNumber]);
@@ -156,7 +154,7 @@ const { remarksData,iconStates,handleGetFiledsStatesById,handleGetRemarkssValues
   };
 
   const handleScrolltoPersonal = () => {
-   
+    
     if (defaultHeightPersonal === 0) {
       setDefaultHeightPersonal("auto");
     } else {
@@ -165,7 +163,7 @@ const { remarksData,iconStates,handleGetFiledsStatesById,handleGetRemarkssValues
   };
 
   const handleScrolltOGeneral = () => {
-    
+  
     if (defaultHeightGen === 0) {
       setDefaultHeightGen("auto");
     } else {
@@ -173,7 +171,7 @@ const { remarksData,iconStates,handleGetFiledsStatesById,handleGetRemarkssValues
     }
   };
   const handleScrolltoDeveloper = () => {
- 
+  
     if (defaultheightDevelper === 0) {
       setDefaultheightDevelper("auto");
     } else {
@@ -182,7 +180,7 @@ const { remarksData,iconStates,handleGetFiledsStatesById,handleGetRemarkssValues
   };
 
   const handleScrolltoAppliedLandInfo = () => {
- 
+  
     if (defaultheightApplied === 0) {
       setDefaultheightApplied("auto");
     } else {
@@ -190,7 +188,7 @@ const { remarksData,iconStates,handleGetFiledsStatesById,handleGetRemarkssValues
     }
   };
   const handleScrolltoFeeandChargesInfo = () => {
-  
+   
     if (defaultheightFee === 0) {
       setDefaultheightFee("auto");
     } else {
@@ -202,7 +200,6 @@ const { remarksData,iconStates,handleGetFiledsStatesById,handleGetRemarkssValues
     "scrutiny form api get1",
     apiResponse !== undefined ? apiResponse?.ApplicantPurpose : apiResponse
   );
-  
   console.log("remarks api", remarksData.egScrutiny !== undefined ? remarksData.egScrutiny : null);
 
   console.log("remakes data parsnalinfo", remarksChanges);
@@ -216,9 +213,8 @@ const { remarksData,iconStates,handleGetFiledsStatesById,handleGetRemarkssValues
       <div style={{ position: "relative", maxWidth: "100%", padding: 2 }}>
         <div>
          <div>
-         <TransferLicense
-        //  edcDataTreade={edcDataTreade}
-        //  idwDataTreade={idwDataTreade}
+         <StandardDesign
+       
            apiResponse={apiResponse}
            refreshScrutinyData={refreshScrutinyData}
            applicationNumber={applicationNumber}
@@ -227,19 +223,16 @@ const { remarksData,iconStates,handleGetFiledsStatesById,handleGetRemarkssValues
            onClick={() => setOpen(!open)}
            dataForIcons={iconStates}
            applicationStatus={applicationStatus}
-           ></TransferLicense>
+           ></StandardDesign>
          </div>
-    
         </div>
       </div>
-      <div style={{ position: "relative", width: "100%", display: "flex", marginBottom: 2 }}>
-        
-      </div>
+      
 
       <div style={{ position: "relative", width: "100%", height: "100%", display: "flex" }}>
         <ScrutinyDevelopment
           remarkData={remarksData.egScrutiny !== undefined ? remarksData.egScrutiny : null}
-      
+    
           histeroyData={histeroyData}
         ></ScrutinyDevelopment>
       </div>
@@ -248,4 +241,4 @@ const { remarksData,iconStates,handleGetFiledsStatesById,handleGetRemarkssValues
   );
 };
 
-export default TransferBasic;
+export default StandardDesignBasic;

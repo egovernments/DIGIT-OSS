@@ -53,11 +53,18 @@ const ScrutinyFormcontainer = (props) => {
 
   const authToken = Digit.UserService.getUser()?.access_token || null;
   const userInfo = Digit.UserService.getUser()?.info || {};
-  const userRolesArray = userInfo?.roles.filter((user) => user.code !== "EMPLOYEE");
-  const filterDataRole = userRolesArray?.[0]?.code;
+  const userRolesArray = userInfo?.roles.filter((user) => user.code);
+  const filterDataRole = userRolesArray?.map((e) => e.code)
   let user = Digit.UserService.getUser();
   const userRoles = user?.info?.roles?.map((e) => e.code);
   const showRemarksSection = userRoles.includes("DTCP_HR")
+
+  console.log("rolename" , filterDataRole);
+  console.log("rolename" , userRolesArray);
+
+  let query = userRolesArray.map((object) => `@.role=='${object.code}'`).join("|| ")
+  console.log("Qurey", query);
+
  
 
   const handleshow19 = async (e) => {
@@ -148,7 +155,8 @@ const ScrutinyFormcontainer = (props) => {
               masterDetails: [
                 {
                   "name": "rolesaccess",
-                  "filter": `[?(@.role=='${filterDataRole}'|| @.role=='${userRolesArray}')]`
+                  "filter":`[?(${query})]`,
+                  // `[?(@.role=='${filterDataRole}'|| @.role=='${userRolesArray}')]`
                 },
                 {
                   "name": "rolesaccess",
@@ -502,6 +510,7 @@ const ScrutinyFormcontainer = (props) => {
             applicationStatus={status}
             refreshScrutinyData={getScrutinyData}
             mDMSData={mDMSData}
+            applicationimp={applicationData}
           ></ScrutitnyForms>
         </div>
 

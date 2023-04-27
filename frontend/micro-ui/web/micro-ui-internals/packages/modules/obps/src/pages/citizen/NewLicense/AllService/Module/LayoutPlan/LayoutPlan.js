@@ -57,6 +57,7 @@ function LayoutPlanClu() {
     control,
     watch,
     setValue,
+    resetField,
   } = useForm({});
   // const { register, handleSubmit, setValue, getValues, watch } = useForm();
   const [layOutPlanData, setLayOutPlanData] = useState([]);
@@ -83,10 +84,9 @@ function LayoutPlanClu() {
   const [statusCreationAffidavitDocVal, setStatusCreationAffidavitDocVal] = useState("");
   const [boardResolutionAuthSignatoryDocVal, setBoardResolutionAuthSignatoryDocVal] = useState("");
   const [anyOtherDocVal, setAnyOtherDocVal] = useState("");
-
+  const [getTotalArea, setTotlArea] = useState();
   const handleshowhide = (event) => {
     const getuser = event.target.value;
-
     setShowhide(getuser);
   };
 
@@ -206,6 +206,23 @@ function LayoutPlanClu() {
           ? data?.boardResolutionAuthSignatoryDoc
           : layOutPlanData.additionalDetails?.boardResolutionAuthSignatoryDoc;
         layOutPlanData.additionalDetails.anyOther = data?.anyOther ? data?.anyOther : layOutPlanData.additionalDetails?.anyOther;
+
+  //  useEffect(() => {
+  //   var nameArray = modalValue?.map(function (itm) {
+  //     if (isNaN(itm?.areaModal)) return 0;
+  //     return itm?.areaModal;
+  //   });
+  //     const mixedSum = (nameArray = []) => {
+  //     let sum = 0;
+  //     for (let i = 0; i < nameArray.length; i++) {
+  //       const el = nameArray[i];
+  //       sum += +el;
+  //     }
+  //     return sum;
+  //   };
+  //    const totalVal = mixedSum(nameArray) + mixedSumB(nameArrayB);
+  //   setTotlArea(totalVal?.toFixed(3));
+  // }, [modalValue]);
 
         const updateRequest = {
           RequestInfo: {
@@ -344,20 +361,54 @@ function LayoutPlanClu() {
     }
   };
 
+  
+
+  //  const [showhide19, setShowhide19] = useState("true");
+  // const handleshow19 = (e) => {
+  
+  //  console.log("modalValue1234", modalValue?.[0]?.areaModalPop);
+  //  const query = modalValue?.map((elementInArray) => 
+  //  {elementInArray.areaModalPop} );
+    // let query = DetailsofAppliedLand?.dgpsDetails.map((array) => array.map((object) => `${object.latitude},${object.longitude}`).join(":")).join("|")
+    // console.log("Qurey", query);
+    
+  // };
+ 
+
+
+// const users = []
+
+//   const getAverageAge = (users) => {
+//     let sum = 0
+//     for (let i = 0; i < users.length; i++) {
+//       sum += users[i].age
+//     }
+//     return sum / users.length
+//   }
+
+
   return (
     <div className="w-100">
       {loader && <Spinner />}
       <form onSubmit={handleSubmit(layoutPlan)}>
         <div className="card">
           <h4 className="my-2">
-            <b>APPROVAL OF REVISED LAYOUT PLAN OF LICENSE</b>
+            <b>{`${t("REV_LAYOUT_APPROVAL_OF_REVISED_LAYOUT_PLAN_OF_LICENCE")}`}</b>
           </h4>
           <div className="card">
             <div className="row gy-3">
               {/* <FormLabel id="lic_no" sx={{ fontWeight: "bold" }}>
                   {`${t("REV_LAYOUT_LICENSE_NO")}`} <span style={{ color: "red" }}>*</span>
                 </FormLabel> */}
-              <SearchLicenceComp watch={watch} register={register} control={control} setLoader={setLoader} errors={errors} setValue={setValue} />
+              <SearchLicenceComp
+                watch={watch}
+                register={register}
+                control={control}
+                setLoader={setLoader}
+                errors={errors}
+                setValue={setValue}
+                resetField={resetField}
+              />
               {/* <OutlinedInput
                   aria-labelledby="lic_no"
                   type="number"
@@ -371,9 +422,9 @@ function LayoutPlanClu() {
               <Col md={4} lg={4} mb={3}>
                 <FormControl>
                   <FormLabel id="existing_area" sx={{ fontWeight: "bold" }}>
-                    {`${t("REV_LAYOUT_EXISTING_AREA")}`} <span style={{ color: "red" }}>*</span>
+                    {`${t("REV_LAYOUT_EXISTING_AREAS")}`} <span style={{ color: "red" }}>*</span>
                   </FormLabel>
-                  <OutlinedInput
+                  {/* <OutlinedInput
                     aria-labelledby="existing_area"
                     type="text"
                     placeholder=""
@@ -381,7 +432,7 @@ function LayoutPlanClu() {
                     {...register("existingArea")}
                     onChange={(e) => setExistingArea(e.target.value)}
                     value={existingAreaVal}
-                  />
+                  /> */}
                 </FormControl>
               </Col>
             </div>
@@ -391,10 +442,18 @@ function LayoutPlanClu() {
                   <Table stickyHeader aria-label="sticky table">
                     <TableHead>
                       <TableRow>
-                        <StyledTableCell>Sr No.</StyledTableCell>
-                        <StyledTableCell>License No.</StyledTableCell>
-                        <StyledTableCell>Area</StyledTableCell>
-                        <StyledTableCell>Action</StyledTableCell>
+                        <StyledTableCell> {`${t("REV_LAYOUT_SR_NO")}`}
+                        {/* Sr No. */}
+                        </StyledTableCell>
+                        <StyledTableCell>{`${t("REV_LAYOUT_LICENCE_NO")}`}
+                        {/* License No. */}
+                        </StyledTableCell>
+                        <StyledTableCell>{`${t("REV_LAYOUT_AREA")}`}
+                        {/* Area */}
+                        </StyledTableCell>
+                        <StyledTableCell>{`${t("REV_LAYOUT_ACTION")}`}
+                         {/* Action */}
+                        </StyledTableCell>
                       </TableRow>
                     </TableHead>
                     <TableBody>
@@ -407,8 +466,10 @@ function LayoutPlanClu() {
                               </StyledTableCell>
                               <StyledTableCell>{elementInArray.licenseNoPop}</StyledTableCell>
                               <StyledTableCell>{elementInArray.areaModalPop}</StyledTableCell>
+                              
+                              
 
-                              <StyledTableCell align="center">
+                              <StyledTableCell >
                                 <a href="javascript:void(0)" title="Delete record" onClick={() => deleteTableRows(-1)}>
                                   <DeleteIcon style={{ fill: "#ff1a1a" }} />
                                 </a>
@@ -432,6 +493,7 @@ function LayoutPlanClu() {
                   onRowsPerPageChange={handleChangeRowsPerPage}
                 />
               </Paper>
+              <div className="row">
               <Col sx={{ marginY: 2 }}>
                 <button
                   type="button"
@@ -444,15 +506,71 @@ function LayoutPlanClu() {
                   // onClick={() => setNoOfRows(noofRows + 1)}
                   onClick={handleShowAuthuser}
                 >
-                  Add More
+                  {`${t("REV_LAYOUT_ADD_MORES")}`}
+                  {/* Add More */}
                 </button>
               </Col>
+               <Col md={4} lg={4} mb={3}>
+                <FormControl>
+                  <FormLabel id="existing_area" sx={{ fontWeight: "bold" }}>{`${t("REV_LAYOUT_TOTAL_AREAS")}`}
+                    {/* Total Area:{getTotalArea}  */}
+                    <span style={{ color: "red" }}>*</span>
+                    
+                
+                  <OutlinedInput
+                    aria-labelledby="existing_area"
+                    type="text"
+                    placeholder=""
+                    className="Inputcontrol"
+                    {...register("existingArea")}
+                  
+                  />
+                    </FormLabel>
+                </FormControl>
+              </Col>
+               
+                </div>
             </Col>
-            <div className="row">
+             <div className="table table-bordered table-responsive">
+                        {/* <caption>List of users</caption> */}
+                        <thead>
+                          <tr>
+                             <th class="fw-normal"></th>
+                            <th class="fw-normal" style={{ textAlign: "center" }}>{`${t("REV_LAYOUT_AREA_IN_ACRES")}`}
+                              {/* In Acres */}
+                              </th>
+                            <th class="fw-normal"style={{ textAlign: "center" }}>{`${t("REV_LAYOUT_AREA_IN_SQ_M")}`}
+                              {/* In sq.m */}
+                              </th>
+                           
+                          </tr>
+                        </thead>
+                      <tbody>
+                         <tr>
+                            <td>{`${t("REV_LAYOUT_AREA_PROPOSED_REVISION")}`}</td>
+                            <td><input type="number"className="form-control" {...register("areaProposedRevision")} id="areaProposedRevision" /></td>
+                            <td style={{ textAlign: "center" }}>{(watch("areaProposedRevision") * 4046.86)?.toFixed(3)}</td>
+                          </tr>
+                          <tr>
+                            <td> {`${t("REV_LAYOUT_AREA_COMMERCIAL")}`}</td>
+                            <td><input type="number"className="form-control"  {...register("areaCommercial")} id="areaCommercial"/></td>
+                            <td style={{ textAlign: "center" }}>{(watch("areaCommercial") * 4046.86)?.toFixed(3)}</td>
+                          </tr>
+                          <tr>
+                            <td>{`${t("REV_LAYOUT_AREA_RESIDENTIAL")}`}</td>
+                            <td><input type="number"className="form-control" {...register("areaResidential")} id="areaResidential"/></td>
+                            <td style={{ textAlign: "center" }}>{(watch("areaResidential") * 4046.86)?.toFixed(3)}</td>
+                          </tr>
+                       
+                      </tbody>
+                      </div>
+            {/* <div className="row">
+
               <Col md={4} lg={4} mb={3}>
                 <FormControl>
                   <FormLabel id="propesed_revision" sx={{ fontWeight: "bold" }}>
-                    {`${t("REV_LAYOUT_AREA_PROPOSED_REVISION")}`} <span style={{ color: "red" }}>*</span>
+                    {`${t("REV_LAYOUT_AREA_PROPOSED_REVISION")}`}
+                     <span style={{ color: "red" }}>*</span>
                   </FormLabel>
                   <OutlinedInput
                     type="text"
@@ -464,7 +582,8 @@ function LayoutPlanClu() {
                     value={proposedAreaRevisionVal}
                   />
                 </FormControl>
-              </Col>
+                </Col>
+        
               <Col md={4} lg={4} mb={3}>
                 <FormControl>
                   <FormLabel id="commercial_area" sx={{ fontWeight: "bold" }}>
@@ -497,10 +616,40 @@ function LayoutPlanClu() {
                   />
                 </FormControl>
               </Col>
-            </div>
+            </div> */}
 
             <br></br>
-            <div className="row-12">
+              <div className="col col-12">
+                                    <h2>
+                                      {`${t("REV_LAYOUT_ANY_OTHER_REMARK")}`}<span style={{ color: "red" }}>*</span>&nbsp; &nbsp;&nbsp;
+                                    </h2>
+
+                                    <label htmlFor="anyOtherFeature">
+                                      <input {...register("anyOtherFeature")} type="radio" value="Y" id="anyOtherFeature" />
+                                      &nbsp; Yes &nbsp;&nbsp;
+                                    </label>
+                                    <label htmlFor="anyOtherFeature">
+                                      <input {...register("anyOtherFeature")} type="radio" value="N" id="anyOtherFeature" />
+                                      &nbsp; No &nbsp;&nbsp;
+                                    </label>
+                                     {watch("anyOtherFeature") === "Y" && (
+                                      <div className="row ">
+                                        <Col md={4} lg={4}>
+                  <FormControl>
+                    {/* <FormLabel id="any_remarks">Any other remark</FormLabel> */}
+                    <textarea
+                      className="form-control"
+                      aria-labelledby="any_remarks"
+                      {...register("anyOtherRemarks")}
+                      onChange={(e) => setAnyOtherRemarkTextVal(e.target.value)}
+                      value={anyOtherRemarkTextVal}
+                    ></textarea>
+                  </FormControl>
+                </Col>
+                                      </div>
+                                    )}
+                                    </div>
+            {/* <div className="row-12">
               <Col md={4} lg={4}>
                 <FormControl>
                   <FormLabel id="demo-row-radio-buttons-group-label" sx={{ fontWeight: "bold" }}>
@@ -529,7 +678,7 @@ function LayoutPlanClu() {
               {watch("anyOtherFeature") == "Y" || anyOtherRemarkVal == "Y" ? (
                 <Col md={4} lg={4}>
                   <FormControl>
-                    {/* <FormLabel id="any_remarks">Any other remark</FormLabel> */}
+                   
                     <textarea
                       className="form-control"
                       aria-labelledby="any_remarks"
@@ -542,7 +691,7 @@ function LayoutPlanClu() {
               ) : (
                 <p></p>
               )}
-            </div>
+            </div> */}
           </div>
           <div className=" col-12 m-auto">
             <div className="card">
@@ -550,9 +699,15 @@ function LayoutPlanClu() {
                 <table>
                   <thead>
                     <tr>
-                      <th style={{ textAlign: "center" }}>Sr.No</th>
-                      <th style={{ textAlign: "center" }}>Field Name</th>
-                      <th style={{ textAlign: "center" }}>Upload Documents</th>
+                      <th style={{ textAlign: "center" }}>{`${t("REV_LAYOUT_S_No")}`}
+                        {/* Sr.No */}
+                        </th>
+                      <th style={{ textAlign: "center" }}>{`${t("REV_LAYOUT_FIELD_NAME")}`}
+                      {/* Field Name */}
+                      </th>
+                      <th style={{ textAlign: "center" }}>{`${t("REV_LAYOUT_UPLOAD_DOC")}`}
+                      {/* Upload Documents */}
+                      </th>
                     </tr>
                   </thead>
                   <tbody>
@@ -806,12 +961,23 @@ function LayoutPlanClu() {
                 </table>
               </div>
             </div>
-
-            <div className="col-sm-12 text-right">
-              <Button variant="contained" className="btn btn-primary btn-md center-block text-white" type="submit">
+  <div class="row">
+                <div class="col-sm-12 text-right">
+                  <button type="submit"  class="btn btn-primary btn-md center-block">
+                    Submit
+                  </button>
+                </div>
+                <div class="col-sm-12 text-right">
+                  <button id="btnSearch" class="btn btn-primary btn-md center-block" style={{ marginTop: "-63px", marginRight: "97px" }}>
+                   Cancel
+                  </button>
+                </div>
+              </div>
+            {/* <div className="col-sm-12 text-right">
+              <Button variant="contained" className="btn btn-primary " type="submit">
                 Submit
               </Button>
-            </div>
+            </div> */}
           </div>
         </div>
       </form>

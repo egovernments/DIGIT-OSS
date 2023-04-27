@@ -8,7 +8,7 @@ const VALIDATION_SCHEMA = Yup.object().shape({
   colonyType: Yup.string().required("This field is required."),
   areaAcres: Yup.string().required("This field is required."),
   sectorNo: Yup.string().required("This field is required."),
-  revenueEstate: Yup.string().required("This field is required."),
+  // revenueEstate: Yup.string().required("This field is required."),
   transferredPortion: Yup.string().nullable().required("This field is required."),
   imposedSpecificCondition: Yup.string().nullable().required("This field is required."),
   courtCases: Yup.string().nullable().required("This field is required."),
