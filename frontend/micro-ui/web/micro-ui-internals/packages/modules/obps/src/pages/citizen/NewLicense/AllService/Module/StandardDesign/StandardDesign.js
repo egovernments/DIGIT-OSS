@@ -117,9 +117,7 @@ const Standard = () => {
                 )}
               </div>
               <div className="col col-4">
-                <h6 style={{ display: "flex" }}>
-                  Any other Document<span style={{ color: "red" }}>*</span>
-                </h6>
+                <h6 style={{ display: "flex" }}>Any other Document</h6>
                 <label>
                   <FileUpload style={{ cursor: "pointer" }} color="primary" />
                   <input
