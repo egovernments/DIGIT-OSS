@@ -1637,11 +1637,11 @@ function SurrenderLic() {
                   Submit
                 </button>
               </div>
-              <div class="col-sm-12 text-right">
+              {/* <div class="col-sm-12 text-right">
                 <button id="btnSearch" class="btn btn-primary btn-md center-block" style={{ marginTop: "-58px", marginRight: "97px" }}>
                   Save as Draft
                 </button>
-              </div>
+              </div> */}
             </div>
           </div>
         </div>

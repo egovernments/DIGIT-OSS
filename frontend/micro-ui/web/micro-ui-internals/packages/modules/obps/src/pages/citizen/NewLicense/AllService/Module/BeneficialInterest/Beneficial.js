@@ -769,7 +769,7 @@ function Beneficial() {
 
                                           {watch(item.fileName) && (
                                             <a onClick={() => getDocShareholding(watch(item.fileName), setLoader)} className="btn btn-sm ">
-                                              <Visibility />
+                                              <Visibility color="info" className="icon" />
                                             </a>
                                           )}
                                         </div>

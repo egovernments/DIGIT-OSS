@@ -43,6 +43,7 @@ import BeneficialInbox from "./ScrutinyBasic/AllServiceScrutiny/BeneficialIntere
 import SurrenderLicScrutiny from "../employee/ScrutinyBasic/AllServiceScrutiny/SurrenderLic/SurrenderLic";
 import SurrenderScrutiny from "./ScrutinyBasic/AllServiceScrutiny/SurrenderLic/SurrenderCard";
 import BeneficialCard from "./ScrutinyBasic/AllServiceScrutiny/BeneficialInterest/BeneficialCard";
+import ExtensionCluCard from "./ScrutinyBasic/AllServiceScrutiny/ExtensionClu/ExtensionCluCard";
 
 const TLBreadCrumb = ({ location }) => {
   const { t } = useTranslation();
@@ -241,7 +242,7 @@ const EmployeeApp = ({ path, url, userType }) => {
             <PrivateRoute path={`${path}/Beneficial`} component={Beneficial} />
             <PrivateRoute path={`${path}/TransferScrutiny/:id`} component={TransferScrutiny} />
             <PrivateRoute path={`${path}/SurrenderLic`} component={SurrenderLic} />
-            <PrivateRoute path={`${path}/ExtensionClu`} component={ExtensionClu} />
+            <PrivateRoute path={`${path}/ExtensionClu/:id`} component={ExtensionCluCard} />
             <PrivateRoute path={`${path}/ExtensionCom`} component={ExtensionCom} />
             <PrivateRoute path={`${path}/LayoutPlanScritny/:id`} component={LayoutPlanScritny} />
             <PrivateRoute path={`${path}/StandardDesign`} component={StandardDesign} />

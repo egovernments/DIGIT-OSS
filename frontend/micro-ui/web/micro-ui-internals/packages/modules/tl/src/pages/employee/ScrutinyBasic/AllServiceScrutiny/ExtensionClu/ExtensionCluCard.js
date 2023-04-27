@@ -9,9 +9,9 @@ import { useQueryClient } from "react-query";
 import { useHistory, useParams } from "react-router-dom";
 import ApplicationDetailsActionBar from "../../../../../../../templates/ApplicationDetails/components/ApplicationDetailsActionBar";
 import ActionModal from "../../../../../../../templates/ApplicationDetails/Modal/index";
-import SurrenderBasic from "./SurrenderBasic";
+import ExtensionCluBasic from "./ExtensionCluBasic";
 
-const SurrenderScrutiny = (props) => {
+const ExtensionCluCard = (props) => {
   const { id } = useParams();
 
   const userInfo = Digit.UserService.getUser()?.info || {};
@@ -30,7 +30,7 @@ const SurrenderScrutiny = (props) => {
   const [isEnableLoader, setIsEnableLoader] = useState(false);
   const [isWarningPop, setWarningPopUp] = useState(false);
   const [showhide19, setShowhide19] = useState("true");
-  const [businessService, setBusinessService] = useState("SURREND_OF_LICENSE");
+  const [businessService, setBusinessService] = useState("EXTENTION_OF_CLU_PERMISSION");
   const [moduleCode, setModuleCode] = useState("TL");
   const [scrutinyDetails, setScrutinyDetails] = useState();
   // const [applicationNumber,setApplicationNumber] = useState("");
@@ -71,19 +71,19 @@ const SurrenderScrutiny = (props) => {
       },
     };
     try {
-      const Resp = await axios.post(`/tl-services/SurrendOfLicenseRequest/_search?applicationNumber=${id}`, requestInfo).then((response) => {
+      const Resp = await axios.post(`/tl-services/ExtensionOfCLUPermissionRequest/_search?applicationNumber=${id}`, requestInfo).then((response) => {
         return response?.data;
       });
-        console.log("Response From API1", Resp, Resp?.surrendOfLicense);
-      setScrutinyDetails(Resp?.surrendOfLicense?.[0]);
+        console.log("Response From API1", Resp, Resp?.extensionOfCLUPermission);
+      setScrutinyDetails(Resp?.extensionOfCLUPermission?.[0]);
 
-      console.log("devDel1234", Resp?.surrendOfLicense?.[0]);
-      const loiNumber = Resp?.surrendOfLicense?.[0]?.loiNumber;
-      setApplicationData(Resp?.surrendOfLicense?.[0]);
-      setApplicationStatus(Resp?.surrendOfLicense?.[0]?.status);
+      console.log("devDel1234", Resp?.extensionOfCLUPermission?.[0]);
+      const loiNumber = Resp?.extensionOfCLUPermission?.[0]?.loiNumber;
+      setApplicationData(Resp?.extensionOfCLUPermission?.[0]);
+      setApplicationStatus(Resp?.extensionOfCLUPermission?.[0]?.status);
       setApplicationDetails({
-        applicationData: Resp?.surrendOfLicense?.[0],
-        workflowCode: Resp?.surrendOfLicense?.[0].businessService,
+        applicationData: Resp?.extensionOfCLUPermission?.[0],
+        workflowCode: Resp?.extensionOfCLUPermission?.[0].businessService,
       });
       // console.log("Loi1234787", userInfo );
       // console.log("Loi1234", loiNumber );
@@ -108,10 +108,10 @@ const SurrenderScrutiny = (props) => {
       setEdcDataTreade(Resploi?.data?.Licenses?.[0]?.tradeLicenseDetail?.EDC);
       setIdwDataTreade(Resploi?.data?.Licenses?.[0]?.tradeLicenseDetail?.IDW);
 
-      // setScrutinyDetails(Resp?.surrendOfLicense?.[0]);
+      // setScrutinyDetails(Resp?.extensionOfCLUPermission?.[0]);
 
       console.log(setIdwDataTreade);
-      // setApplicationData(Resp?.surrendOfLicense?.[0]);
+      // setApplicationData(Resp?.extensionOfCLUPermission?.[0]);
     } catch (error) {
       console.log(error);
     }
@@ -181,7 +181,7 @@ const SurrenderScrutiny = (props) => {
 
   const submitAction = async (data = {}, nocData = false, isOBPS = {}) => {
     let tempdata = data || {};
-    tempdata.surrendOfLicense[0].additionalDetails = additionalDetails;
+    tempdata.extensionOfCLUPermission[0].additionalDetails = additionalDetails;
     console.log("logger log1223", tempdata);
 
     try {
@@ -201,7 +201,7 @@ const SurrenderScrutiny = (props) => {
         },
       };
       console.log("logger log1223 body", body);
-      const response = await axios.post("/tl-services/SurrendOfLicenseRequest/_update", body);
+      const response = await axios.post("/tl-services/ExtensionOfCLUPermissionRequest/_update", body);
       console.log("Update API Response ====> ", response.data);
       closeModal();
     } catch (error) {
@@ -268,14 +268,14 @@ const SurrenderScrutiny = (props) => {
         </div>
       </Card.Header>
       <Row style={{ top: 10, padding: 10 }}>
-        <SurrenderBasic
+        <ExtensionCluBasic
           apiResponse={scrutinyDetails}
           histeroyData={workflowDetailsTemp}
           applicationNumber={id}
           refreshScrutinyData={getScrutinyData}
           setAdditionalDetails={setAdditionalDetails}
           applicationStatus={applicationStatus}
-        ></SurrenderBasic>
+        ></ExtensionCluBasic>
       </Row>
       {/* <Row style={{ top: 10, padding: "10px 22px" }}> */}
       <Row style={{ top: 10, padding: "10px 22px" }}>
@@ -299,7 +299,7 @@ const SurrenderScrutiny = (props) => {
               applicationDetails={applicationDetails}
               applicationData={{
                 ...applicationDetails?.applicationData,
-                workflowCode: applicationDetails?.applicationData?.workflowCode || "SURREND_OF_LICENSE",
+                workflowCode: applicationDetails?.applicationData?.workflowCode || "EXTENTION_OF_CLU_PERMISSION",
               }}
               closeModal={closeModal}
               submitAction={submitAction}
@@ -351,4 +351,4 @@ const SurrenderScrutiny = (props) => {
   );
 };
 
-export default SurrenderScrutiny;
+export default ExtensionCluCard;
