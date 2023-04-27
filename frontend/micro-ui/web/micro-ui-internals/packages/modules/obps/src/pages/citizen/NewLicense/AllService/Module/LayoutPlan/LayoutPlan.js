@@ -19,6 +19,12 @@ import Radio from "@mui/material/Radio";
 import RadioGroup from "@mui/material/RadioGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import FormLabel from "@mui/material/FormLabel";
+import { Dialog } from "@mui/material";
+import DialogActions from "@mui/material/DialogActions";
+import DialogContent from "@mui/material/DialogContent";
+import DialogContentText from "@mui/material/DialogContentText";
+import DialogTitle from "@mui/material/DialogTitle";
+import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
 import { Modal, ModalHeader, ModalFooter, ModalBody } from "react-bootstrap";
 import { styled } from "@mui/material/styles";
 import Paper from "@mui/material/Paper";
@@ -42,7 +48,31 @@ import FileUpload from "@mui/icons-material/FileUpload";
 import { useLocation } from "react-router-dom";
 import { IconButton } from "@mui/material";
 import SearchLicenceComp from "../../../../../../components/SearchLicence";
+
+const BootstrapDialog = styled(Dialog)(({ theme }) => ({
+  "& .MuiDialogContent-root": {
+    padding: theme.spacing(2),
+  },
+  "& .MuiDialogActions-root": {
+    padding: theme.spacing(1),
+  },
+}));
+
 function LayoutPlanClu() {
+    const [open, setOpen] = React.useState(false);
+  const [open1, setOpen1] = React.useState(false);
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+  const handleClickOpen1 = () => {
+    setOpen1(true);
+  };
+  const handleClose = () => {
+    setOpen(false);
+  };
+  const handleClose1 = () => {
+    setOpen1(false);
+  };
   const { t } = useTranslation();
   const location = useLocation();
   const tenantId = Digit.ULBService.getCurrentTenantId();
@@ -50,6 +80,7 @@ function LayoutPlanClu() {
   const [loader, setLoader] = useState(false);
   const [selects, setSelects] = useState();
   const [showhide, setShowhide] = useState("");
+    const [applicationNumber, setApplicationNumber] = useState();
   const {
     register,
     handleSubmit,
@@ -168,6 +199,7 @@ function LayoutPlanClu() {
         console.log("LAY", postLayoutPlan);
         const Resp = await axios.post("/tl-services/revisedPlan/_create", postLayoutPlan);
         setLoader(false);
+         setApplicationNumber(Resp.data.revisedPlan[0].applicationNumber);
         // const useData = Resp?.data?.RevisedPlan?.[0];
       } else {
         // layOutPlanData.licenseNo = data?.licenseNo ? data?.licenseNo : layOutPlanData.additionalDetails?.licenseNo;
@@ -388,6 +420,7 @@ function LayoutPlanClu() {
 
 
   return (
+    <React.Fragment>
     <div className="w-100">
       {loader && <Spinner />}
       <form onSubmit={handleSubmit(layoutPlan)}>
@@ -963,7 +996,7 @@ function LayoutPlanClu() {
             </div>
   <div class="row">
                 <div class="col-sm-12 text-right">
-                  <button type="submit"  class="btn btn-primary btn-md center-block">
+                  <button type="submit" onClick={handleClickOpen1}  class="btn btn-primary btn-md center-block">
                     Submit
                   </button>
                 </div>
@@ -1030,6 +1063,29 @@ function LayoutPlanClu() {
         </Modal.Footer>
       </Modal>
 
+        <Dialog open={open1} onClose={handleClose1} aria-labelledby="alert-dialog-title" aria-describedby="alert-dialog-description">
+        <DialogTitle id="alert-dialog-title">Approval of Revised Layout Plan Submission</DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+            <p>
+              Your Approval of Revised Layout Plan is submitted successfully{" "}
+              <span>
+                <CheckCircleOutlineIcon style={{ color: "blue", variant: "filled" }} />
+              </span>
+            </p>
+            <p>
+              Please Note down your Application Number <span style={{ padding: "5px", color: "blue" }}>{applicationNumber}</span> for further
+              assistance
+            </p>
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose1} autoFocus>
+            Ok
+          </Button>
+        </DialogActions>
+      </Dialog>
+
       {showToastError && (
         <CusToaster
           label={showToastError?.label}
@@ -1041,6 +1097,7 @@ function LayoutPlanClu() {
         />
       )}
     </div>
+    </React.Fragment>
   );
 }
 
