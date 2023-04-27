@@ -8,6 +8,8 @@ import ReportProblemIcon from "@mui/icons-material/ReportProblem";
 
 import { ComplicesRemarksContext } from '../../../../context/Complices-remarks-context';
 
+import Modalcompliances from './Modalcompliances';
+
 
 const Addmoreinput = ({applicationimp}) =>
 {
@@ -103,13 +105,13 @@ const {
     >
         Add Compliances
     </button>
-    <CompliancesModal
+    <Modalcompliances
      displaymodal={smShow}
     onClose={() => setSmShow(false)}
     applicationdata={applicationimp}
     passmodalData={handlemodaldData}
     >
- </CompliancesModal>
+ </Modalcompliances>
     </div>
    
     
