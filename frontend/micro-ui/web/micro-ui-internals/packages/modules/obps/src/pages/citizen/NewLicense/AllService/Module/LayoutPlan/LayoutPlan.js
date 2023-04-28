@@ -9,6 +9,7 @@ import {
   RemoveIcon,
   DeleteIcon,
   MuiTables,
+  typeOf,
 } from "@egovernments/digit-ui-react-components";
 import React, { useState, useEffect } from "react";
 import { Button } from "@material-ui/core";
@@ -48,6 +49,7 @@ import FileUpload from "@mui/icons-material/FileUpload";
 import { useLocation } from "react-router-dom";
 import { IconButton } from "@mui/material";
 import SearchLicenceComp from "../../../../../../components/SearchLicence";
+import Item from "antd/lib/list/Item";
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   "& .MuiDialogContent-root": {
@@ -72,6 +74,7 @@ function LayoutPlanClu() {
   };
   const handleClose1 = () => {
     setOpen1(false);
+    
   };
   const { t } = useTranslation();
   const location = useLocation();
@@ -101,7 +104,7 @@ function LayoutPlanClu() {
   const [Documents, setDocumentsData] = useState();
   const [fileStoreId, setFileStoreId] = useState({});
   const [selectedFiles, setSelectedFiles] = useState([]);
-
+  const[totalArea,setTotalArea]=useState(0);
   const [licenseNoVal, setLicNumber] = useState("");
   const [existingAreaVal, setExistingArea] = useState("");
   const [proposedAreaRevisionVal, setProposedAreaRevision] = useState("");
@@ -164,26 +167,51 @@ function LayoutPlanClu() {
     if (id) getApplicantUserData(id);
   }, []);
 
+  useEffect(()=>{
+    console.log("totalarea1")
+    if(modalValue?.length){
+      let totalArea1 = 0
+      modalValue.forEach((item,index)=>{
+         totalArea1 += Number(item?.areaModalPop)
+      }
+      )
+       setValue("existingArea",totalArea1)
+       console.log("totalarea1",totalArea1)
+    }
+  },[modalValue]
+  )
   const layoutPlan = async (data) => {
     const numberLic = data?.licenceNo;
     const token = window?.localStorage?.getItem("token");
-    // console.log(data);
+    console.log(data);
 
     try {
       if (!applicantId) {
         const postLayoutPlan = {
-          RevisedPlan: [
+          RevisedPlan: 
             {
               action: "APPLY",
               tenantId: tenantId,
               licenseNo: numberLic,
-             
+              newAdditionalDetails: {
+              selectLicence: data?.selectLicence?.label,
+              validUpto: data?.validUpto,
+              colonizerName: data?.colonizerName,
+              // periodOfRenewal: "",
+              colonyType: data?.colonyType,
+              areaAcres: data?.areaAcres,
+              sectorNo: data?.sectorNo,
+              revenueEstate: data?.revenueEstate,
+              developmentPlan: data?.developmentPlan,
+              tehsil: data?.tehsil,
+              district: data?.district,
+            },
               ReviseLayoutPlan: {
                 ...data,
                 existingAreaDetails: modalValue,
               },
             },
-          ],
+          
           RequestInfo: {
             apiId: "Rainmaker",
             ver: "v1",
@@ -270,7 +298,7 @@ function LayoutPlanClu() {
             authToken: token,
             userInfo: userInfo,
           },
-          RevisedPlan: [
+          revisedPlan: [
             {
               ...layOutPlanData,
 
@@ -1019,15 +1047,15 @@ function LayoutPlanClu() {
 
       <Modal show={showAuthuser} onHide={handleCloseAuthuser} animation={false}>
         <Modal.Header closeButton>
-          <Modal.Title>Add Authorised User</Modal.Title>
+          <Modal.Title>{`${t("REV_LAYOUT_ADD_AUTHORIZED_USER")}`}</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <form className="text1">
             <Row>
               <Col md={3} xxl lg="3">
                 <FormControl>
-                  <label htmlFor="licenseNoModal" className="text">
-                    License No. <span className="text-danger font-weight-bold">*</span>
+                  <label htmlFor="licenseNoModal" className="text">{`${t("REV_LAYOUT_LICENCE_NO")}`}
+                    <span className="text-danger font-weight-bold">*</span>
                   </label>
                   <OutlinedInput
                     type="number"
@@ -1041,7 +1069,7 @@ function LayoutPlanClu() {
               <Col md={3} xxl lg="3">
                 <FormControl>
                   <label htmlFor="areaModal" className="text">
-                    Area <span className="text-danger font-weight-bold">*</span>
+                    {`${t("REV_LAYOUT_AREA")}`} <span className="text-danger font-weight-bold">*</span>
                   </label>
                   <OutlinedInput
                     type="text"
