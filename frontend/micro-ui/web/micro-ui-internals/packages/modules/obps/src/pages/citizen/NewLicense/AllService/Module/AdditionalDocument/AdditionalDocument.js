@@ -6,6 +6,7 @@ import Spinner from "../../../../../../components/Loader";
 import SearchLicenceComp from "../../../../../../components/SearchLicence";
 import FileUpload from "@mui/icons-material/FileUpload";
 import CusToaster from "../../../../../../components/Toaster";
+import VisibilityIcon from "@mui/icons-material/Visibility";
 
 const selectTypeData = [
   { label: "Application Number", value: "APPLICATIONNUMBER" },
@@ -36,9 +37,9 @@ const AdditionalDocument = () => {
     resolver: "",
     shouldFocusError: true,
     defaultValues: {
-      services: [
+      DocumentsDetails: [
         {
-          description: "",
+          documentName: "",
           document: "",
         },
       ],
@@ -46,7 +47,7 @@ const AdditionalDocument = () => {
   });
   const { fields, append, remove } = useFieldArray({
     control,
-    name: "services",
+    name: "DocumentsDetails",
   });
 
   const additionalDoc = (data) => {
@@ -121,40 +122,40 @@ const AdditionalDocument = () => {
     }
   };
 
-  const getNumbers = async () => {
-    const token = window?.localStorage?.getItem("token");
-    const type = watch("numberType")?.value;
-    const businessService = watch("allservices")?.value;
-    setLoader(true);
-    const payload = {
-      RequestInfo: {
-        apiId: "Rainmaker",
-        ver: "v1",
-        ts: 0,
-        action: "_search",
-        did: "",
-        key: "",
-        msgId: "090909",
-        requesterId: "",
-        authToken: token,
-        userInfo: userInfo,
-      },
-    };
-    try {
-      const Resp = await axios.post(`/tl-services/_getServices/_search?type=${type}&businessService=${businessService}`, payload);
-      // console.log("setData", Resp);
-      setLoader(false);
-      const selectData = Resp?.data?.map((it) => {
-        return { value: it, label: it };
-      });
-      if (Resp?.data?.length) setValue("licenceNo", { label: "", value: "" });
-      else setValue("licenceNo", "");
-      setData(selectData);
-    } catch (error) {
-      setLoader(false);
-      return error;
-    }
-  };
+  // const getNumbers = async () => {
+  //   const token = window?.localStorage?.getItem("token");
+  //   const type = watch("numberType")?.value;
+  //   const businessService = watch("allservices")?.value;
+  //   setLoader(true);
+  //   const payload = {
+  //     RequestInfo: {
+  //       apiId: "Rainmaker",
+  //       ver: "v1",
+  //       ts: 0,
+  //       action: "_search",
+  //       did: "",
+  //       key: "",
+  //       msgId: "090909",
+  //       requesterId: "",
+  //       authToken: token,
+  //       userInfo: userInfo,
+  //     },
+  //   };
+  //   try {
+  //     const Resp = await axios.post(`/tl-services/_getServices/_search?type=${type}&businessService=${businessService}`, payload);
+  //     // console.log("setData", Resp);
+  //     setLoader(false);
+  //     const selectData = Resp?.data?.map((it) => {
+  //       return { value: it, label: it };
+  //     });
+  //     if (Resp?.data?.length) setValue("licenceNo", { label: "", value: "" });
+  //     else setValue("licenceNo", "");
+  //     setData(selectData);
+  //   } catch (error) {
+  //     setLoader(false);
+  //     return error;
+  //   }
+  // };
 
   return (
     <div>
@@ -190,11 +191,17 @@ const AdditionalDocument = () => {
                     placeholder="Select Type"
                     data={selectTypeData}
                     labels=""
-                    onChange={getNumbers}
+                    // onChange={getNumbers}
                   />
                 </div>
               )}
               {watch("numberType")?.value && (
+                <div className="col col-5">
+                  <h2 className="FormLable">Select {watch("numberType")?.label}</h2>
+                  <input type="text" className="form-control" {...register("number")} />
+                </div>
+              )}
+              {/* {watch("numberType")?.value && (
                 <SearchLicenceComp
                   apiData={getData}
                   watch={watch}
@@ -205,7 +212,7 @@ const AdditionalDocument = () => {
                   setValue={setValue}
                   resetField={resetField}
                 />
-              )}
+              )} */}
             </div>
 
             <div style={{ textAlignLast: "right", marginTop: "10px" }}>
@@ -213,7 +220,7 @@ const AdditionalDocument = () => {
                 type="button"
                 style={{ width: "100px", marginRight: 15 }}
                 className="btn btn-primary"
-                onClick={() => append({ description: "", document: "" })}
+                onClick={() => append({ documentName: "", document: "" })}
               >
                 Add Row
               </button>
@@ -236,7 +243,7 @@ const AdditionalDocument = () => {
                         <td>
                           <div>
                             {/* <label>Document Description</label> */}
-                            <input type="text" className="form-control" {...register(`services.${index}.description`)} />
+                            <input type="text" className="form-control" {...register(`DocumentsDetails.${index}.documentName`)} />
                           </div>
                         </td>
                         <td style={{ textAlignLast: "center" }}>
@@ -245,15 +252,15 @@ const AdditionalDocument = () => {
                             <input
                               type="file"
                               style={{ display: "none" }}
-                              onChange={(e) => getDocumentData(e?.target?.files[0], `services.${index}.document`)}
+                              onChange={(e) => getDocumentData(e?.target?.files[0], `DocumentsDetails.${index}.document`)}
                               accept="application/pdf"
                             />
                           </label>
-                          {/* {watch("layoutPlanPdf") && (
-                        <a onClick={() => getDocShareholding(watch("layoutPlanPdf"), setLoader)} className="btn btn-sm ">
-                          <VisibilityIcon color="info" className="icon" />
-                        </a>
-                      )} */}
+                          {watch(`DocumentsDetails.${index}.document`) && (
+                            <a onClick={() => getDocShareholding(watch(`DocumentsDetails.${index}.document`), setLoader)} className="btn btn-sm ">
+                              <VisibilityIcon color="info" className="icon" />
+                            </a>
+                          )}
                         </td>
                         <td>
                           <div style={{ width: "100%", height: "100%", display: "flex", justifyContent: "center" }}>
