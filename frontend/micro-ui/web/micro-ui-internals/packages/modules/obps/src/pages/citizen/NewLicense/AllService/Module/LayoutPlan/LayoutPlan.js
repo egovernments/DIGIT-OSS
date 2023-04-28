@@ -177,6 +177,7 @@ function LayoutPlanClu() {
               action: "APPLY",
               tenantId: tenantId,
               licenseNo: numberLic,
+             
               ReviseLayoutPlan: {
                 ...data,
                 existingAreaDetails: modalValue,
@@ -490,6 +491,7 @@ function LayoutPlanClu() {
                       </TableRow>
                     </TableHead>
                     <TableBody>
+                      
                       {modalValue?.length > 0 ? (
                         modalValue.map((elementInArray, input) => {
                           return (

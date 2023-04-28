@@ -1023,7 +1023,9 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
           >
             <div className="happy">
               <div className="card mb-3">
-                <h5 className="card-title fw-bold">Developer's type</h5>
+                <h5 className="card-title fw-bold"> {`${t("BPA_LICENSE_TYPE_DEVELOPER_TYPE")}`}
+                  {/* Developer's type */}
+                  </h5>
                 <div className="card-body">
                   <div className="row">
                     <div className="col-sm-12">
@@ -1063,7 +1065,9 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
                 showDevTypeFields == "Proprietorship Firm" ||
                 showDevTypeFields == "Hindu Undivided Family") && (
                 <div className="card mb-3">
-                  <h5 className="card-title fw-bold">Developer Details</h5>
+                  <h5 className="card-title fw-bold">{`${t("BPA_LICENSE_TYPES_DEVELOPER_TYPES")}`}
+                    {/* Developer Details */}
+                    </h5>
                   <div className="card-body">
                     <div className="row">
                       <div className="col col-4">
@@ -1244,7 +1248,7 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
                   {/* <div className="card-header">
               <h5 className="card-title"> Developer</h5>
             </div> */}
-                  <h5 className="card-title fw-bold">Developer Details</h5>
+                  <h5 className="card-title fw-bold">{`${t("BPA_LICENSE_TYPES_DEVELOPER_TYPES")}`}</h5>
                   <div className="card-body">
                     <div className="table-bd">
                       <table className="table table-bordered">
@@ -1524,7 +1528,7 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
                     {/* <div className="card-header">
               <h5 className="card-title"> Developer</h5>
             </div> */}
-                    <h5 className="card-title fw-bold">Developer Details</h5>
+                    <h5 className="card-title fw-bold">{`${t("BPA_LICENSE_TYPES_DEVELOPER_TYPES")}`}</h5>
                     <div className="card-body">
                       <div className="row">
                         {showDevTypeFields !== "Hindu Undivided Family" && (
@@ -1762,12 +1766,24 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
                             <Table stickyHeader aria-label="sticky table">
                               <TableHead>
                                 <TableRow>
-                                  <StyledTableCell>Sr No.</StyledTableCell>
-                                  <StyledTableCell>Name</StyledTableCell>
-                                  <StyledTableCell>Designition</StyledTableCell>
-                                  <StyledTableCell>Percentage</StyledTableCell>
-                                  <StyledTableCell>View Document</StyledTableCell>
-                                  <StyledTableCell>Action</StyledTableCell>
+                                  <StyledTableCell> {t("BPA_SHAREHOLDING_SR_NO")}
+                                    {/* Sr No. */}
+                                    </StyledTableCell>
+                                  <StyledTableCell>{t("BPA_SHAREHOLDING_NAME")}
+                                    {/* Name */}
+                                    </StyledTableCell>
+                                  <StyledTableCell>{t("BPA_SHAREHOLDING_DEGISNITION")}
+                                  {/* Designition */}
+                                  </StyledTableCell>
+                                  <StyledTableCell>{t("BPA_SHAREHOLDING_PERCENTAGE_TEXT")}
+                                  {/* Percentage */}
+                                  </StyledTableCell>
+                                  <StyledTableCell>{t("BPA_SHAREHOLDING_VIEW_DOCUMENT")}
+                                  {/* View Document */}
+                                  </StyledTableCell>
+                                  <StyledTableCell>{t("BPA_SHAREHOLDING_ACTION")}
+                                  {/* Action */}
+                                  </StyledTableCell>
                                 </TableRow>
                               </TableHead>
                               <TableBody>
@@ -1848,7 +1864,9 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
                         </button>
                         <Modal show={showStake} onHide={handleCloseStakeholder} animation={false}>
                           <Modal.Header closeButton>
-                            <Modal.Title>Add Stakeholders</Modal.Title>
+                            <Modal.Title>{t("BPA_ADD_STAKEHOLDERS")}
+                            {/* Add Stakeholders */}
+                            </Modal.Title>
                           </Modal.Header>
                           <Modal.Body>
                             <form className="text1" id="myForm">
@@ -1972,7 +1990,9 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
                 showDevTypeFields !== "Firm" &&
                 showDevTypeFields !== "Limited Liability Partnership" && (
                   <div className="card mb-3">
-                    <h5 className="card-title fw-bold">Directors Information</h5>
+                    <h5 className="card-title fw-bold">{t("BPA_DIRECTORS_INFORMATION")}
+                      {/* Directors Information */}
+                      </h5>
                     <div className="card-body">
                       <div className="table-bd">
                         <Paper sx={{ width: "100%", overflow: "hidden" }}>
@@ -1980,10 +2000,18 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
                             <Table stickyHeader aria-label="sticky table">
                               <TableHead>
                                 <TableRow>
-                                  <StyledTableCell>Sr No.</StyledTableCell>
-                                  <StyledTableCell>DIN Number</StyledTableCell>
-                                  <StyledTableCell>Name</StyledTableCell>
-                                  <StyledTableCell>Contact Number</StyledTableCell>
+                                  <StyledTableCell>{t("BPA_DIRECTORS_SR_NO")}
+                                    {/* Sr No. */}
+                                    </StyledTableCell>
+                                  <StyledTableCell>{t("BPA_DIRECTORS_DIN_NO")}
+                                  {/* DIN Number */}
+                                  </StyledTableCell>
+                                  <StyledTableCell>{t("BPA_NAME_TEXT")}
+                                  {/* Name */}
+                                  </StyledTableCell>
+                                  <StyledTableCell>{t("BPA_DIRECTORS_CONTACT_NO")}
+                                  {/* Contact Number */}
+                                  </StyledTableCell>
                                 </TableRow>
                               </TableHead>
                               <TableBody>
@@ -2057,7 +2085,9 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
                               </button>
                               <Modal show={show} onHide={handleClose} animation={false}>
                                 <Modal.Header closeButton>
-                                  <Modal.Title>Add Directors Info</Modal.Title>
+                                  <Modal.Title>{t("BPA_ADD_DIRECTORS_INFO")}
+                                  {/* Add Directors Info */}
+                                  </Modal.Title>
                                 </Modal.Header>
                                 <Modal.Body>
                                   <form className="text1">
@@ -2188,12 +2218,12 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
                                   <Table stickyHeader aria-label="sticky table">
                                     <TableHead>
                                       <TableRow>
-                                        <StyledTableCell>Sr No.</StyledTableCell>
-                                        <StyledTableCell>DIN Number</StyledTableCell>
-                                        <StyledTableCell>Name</StyledTableCell>
-                                        <StyledTableCell>Contact Number</StyledTableCell>
-                                        <StyledTableCell>Upload/View Document</StyledTableCell>
-                                        <StyledTableCell>Action</StyledTableCell>
+                                        <StyledTableCell>{t("BPA_DIRECTORS_SR_NO")}</StyledTableCell>
+                                        <StyledTableCell>{t("BPA_DIRECTORS_DIN_NO")}</StyledTableCell>
+                                        <StyledTableCell>{t("BPA_NAME_TEXT")}</StyledTableCell>
+                                        <StyledTableCell>{t("BPA_CONTACT_NUMBER")}</StyledTableCell>
+                                        <StyledTableCell>{t("BPA_UPLOAD_DOCUMENT")}</StyledTableCell>
+                                        <StyledTableCell>{t("BPA_ACTION")}</StyledTableCell>
                                       </TableRow>
                                     </TableHead>
                                     <TableBody>
