@@ -122,40 +122,40 @@ const AdditionalDocument = () => {
     }
   };
 
-  const getNumbers = async () => {
-    const token = window?.localStorage?.getItem("token");
-    const type = watch("numberType")?.value;
-    const businessService = watch("allservices")?.value;
-    setLoader(true);
-    const payload = {
-      RequestInfo: {
-        apiId: "Rainmaker",
-        ver: "v1",
-        ts: 0,
-        action: "_search",
-        did: "",
-        key: "",
-        msgId: "090909",
-        requesterId: "",
-        authToken: token,
-        userInfo: userInfo,
-      },
-    };
-    try {
-      const Resp = await axios.post(`/tl-services/_getServices/_search?type=${type}&businessService=${businessService}`, payload);
-      // console.log("setData", Resp);
-      setLoader(false);
-      const selectData = Resp?.data?.map((it) => {
-        return { value: it, label: it };
-      });
-      if (Resp?.data?.length) setValue("licenceNo", { label: "", value: "" });
-      else setValue("licenceNo", "");
-      setData(selectData);
-    } catch (error) {
-      setLoader(false);
-      return error;
-    }
-  };
+  // const getNumbers = async () => {
+  //   const token = window?.localStorage?.getItem("token");
+  //   const type = watch("numberType")?.value;
+  //   const businessService = watch("allservices")?.value;
+  //   setLoader(true);
+  //   const payload = {
+  //     RequestInfo: {
+  //       apiId: "Rainmaker",
+  //       ver: "v1",
+  //       ts: 0,
+  //       action: "_search",
+  //       did: "",
+  //       key: "",
+  //       msgId: "090909",
+  //       requesterId: "",
+  //       authToken: token,
+  //       userInfo: userInfo,
+  //     },
+  //   };
+  //   try {
+  //     const Resp = await axios.post(`/tl-services/_getServices/_search?type=${type}&businessService=${businessService}`, payload);
+  //     // console.log("setData", Resp);
+  //     setLoader(false);
+  //     const selectData = Resp?.data?.map((it) => {
+  //       return { value: it, label: it };
+  //     });
+  //     if (Resp?.data?.length) setValue("licenceNo", { label: "", value: "" });
+  //     else setValue("licenceNo", "");
+  //     setData(selectData);
+  //   } catch (error) {
+  //     setLoader(false);
+  //     return error;
+  //   }
+  // };
 
   return (
     <div>
@@ -191,11 +191,17 @@ const AdditionalDocument = () => {
                     placeholder="Select Type"
                     data={selectTypeData}
                     labels=""
-                    onChange={getNumbers}
+                    // onChange={getNumbers}
                   />
                 </div>
               )}
               {watch("numberType")?.value && (
+                <div className="col col-5">
+                  <h2 className="FormLable">Select {watch("numberType")?.label}</h2>
+                  <input type="text" className="form-control" {...register("number")} />
+                </div>
+              )}
+              {/* {watch("numberType")?.value && (
                 <SearchLicenceComp
                   apiData={getData}
                   watch={watch}
@@ -206,7 +212,7 @@ const AdditionalDocument = () => {
                   setValue={setValue}
                   resetField={resetField}
                 />
-              )}
+              )} */}
             </div>
 
             <div style={{ textAlignLast: "right", marginTop: "10px" }}>
