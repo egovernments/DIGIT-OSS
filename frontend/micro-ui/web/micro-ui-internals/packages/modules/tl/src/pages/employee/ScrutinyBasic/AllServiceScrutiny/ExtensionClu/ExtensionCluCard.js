@@ -198,6 +198,7 @@ const ExtensionCluCard = (props) => {
           msg_id: "",
           requester_id: "",
           authToken: authToken,
+          userInfo: userInfo,
         },
       };
       console.log("logger log1223 body", body);

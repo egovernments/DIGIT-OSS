@@ -933,7 +933,7 @@ function ExtensionClu({ apiResponse, dataForIcons, refreshScrutinyData, applicat
 
                         {watch('uploadbrIIIfileUrl') && (
                           <a onClick={() => getDocShareholding(watch('uploadbrIIIfileUrl'), setLoading)} className="btn btn-sm ">
-                            <Visibility />
+                            <Visibility color="info" className="icon" />
                           </a>
                         )}
 
@@ -963,7 +963,7 @@ function ExtensionClu({ apiResponse, dataForIcons, refreshScrutinyData, applicat
 
                       {watch('cluPermissionLetterfileUrl') && (
                         <a onClick={() => getDocShareholding(watch('cluPermissionLetterfileUrl'), setLoading)} className="btn btn-sm ">
-                          <Visibility />
+                          <Visibility color="info" className="icon" />
                         </a>
                       )}
 
@@ -994,7 +994,7 @@ function ExtensionClu({ apiResponse, dataForIcons, refreshScrutinyData, applicat
 
                       {watch('uploadPhotographsfileUrl') && (
                         <a onClick={() => getDocShareholding(watch('uploadPhotographsfileUrl'), setLoading)} className="btn btn-sm ">
-                          <Visibility />
+                          <Visibility color="info" className="icon" />
                         </a>
                       )}
 
@@ -1025,7 +1025,7 @@ function ExtensionClu({ apiResponse, dataForIcons, refreshScrutinyData, applicat
 
                       {watch('receiptApplicationfileUrl') && (
                         <a onClick={() => getDocShareholding(watch('receiptApplicationfileUrl'), setLoading)} className="btn btn-sm ">
-                          <Visibility />
+                          <Visibility color="info" className="icon" />
                         </a>
                       )}
 
@@ -1055,7 +1055,7 @@ function ExtensionClu({ apiResponse, dataForIcons, refreshScrutinyData, applicat
 
                       {watch('receiptApplicationfileUrl') && (
                         <a onClick={() => getDocShareholding(watch('receiptApplicationfileUrl'), setLoading)} className="btn btn-sm ">
-                          <Visibility />
+                          <Visibility color="info" className="icon" />
                         </a>
                       )}
 
@@ -1086,7 +1086,7 @@ function ExtensionClu({ apiResponse, dataForIcons, refreshScrutinyData, applicat
 
                       {watch('indemnityBondfileUrl') && (
                         <a onClick={() => getDocShareholding(watch('indemnityBondfileUrl'), setLoading)} className="btn btn-sm ">
-                          <Visibility />
+                          <Visibility color="info" className="icon" />
                         </a>
                       )}
 
@@ -1121,6 +1121,7 @@ function ExtensionClu({ apiResponse, dataForIcons, refreshScrutinyData, applicat
         selectedFieldData={selectedFieldData}
         fieldValue={fieldValue}
         remarksUpdate={currentRemarks}
+        applicationStatus={applicationStatus}
       />
     </form>
   );
