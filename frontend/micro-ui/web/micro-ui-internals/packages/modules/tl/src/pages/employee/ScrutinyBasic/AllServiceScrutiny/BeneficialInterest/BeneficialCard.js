@@ -171,7 +171,7 @@ const BeneficialCard = (props) => {
     // setTimeout(() => {
       setSelectedAction(null);
       setShowModal(false);
-    //   window.location.href = `/digit-ui/employee/tl/servicePlanInbox`;
+      window.location.href = `/digit-ui/employee/tl/BeneficialInbox`;
     // }, 3000);
   };
 
