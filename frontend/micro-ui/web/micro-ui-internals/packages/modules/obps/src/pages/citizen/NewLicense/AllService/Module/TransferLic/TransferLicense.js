@@ -45,7 +45,7 @@ const Transferlicence = () => {
 
   const transferLic = async (data) => {
     console.log("data", data);
-    data["selectLicence"] = data?.selectLicence?.label;
+    // data["selectLicence"] = data?.selectLicence?.label;
     data["selectType"] = data?.selectType?.value;
     const numberLic = data?.licenceNo;
     delete data?.licenceNo;
@@ -65,16 +65,27 @@ const Transferlicence = () => {
         authToken: token,
         userInfo: userInfo,
       },
-      Transfer: [
-        {
-          licenseNo: numberLic,
-          action: "APPLY",
-          tenantId: "hr",
-          TransferOfLicence: {
-            ...data,
-          },
+      Transfer: {
+        licenseNo: numberLic,
+        action: "APPLY",
+        tenantId: "hr",
+        newAdditionalDetails: {
+          selectLicence: data?.selectLicence?.label,
+          validUpto: data?.validUpto,
+          colonizerName: data?.colonizerName,
+          // periodOfRenewal: "",
+          colonyType: data?.colonyType,
+          areaAcres: data?.areaAcres,
+          sectorNo: data?.sectorNo,
+          revenueEstate: data?.revenueEstate,
+          developmentPlan: data?.developmentPlan,
+          tehsil: data?.tehsil,
+          district: data?.district,
         },
-      ],
+        TransferOfLicence: {
+          ...data,
+        },
+      },
     };
 
     try {
@@ -678,7 +689,7 @@ const Transferlicence = () => {
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
             <p>
-              Your Service Plan is submitted successfully{" "}
+              Your Transfer of License is submitted successfully{" "}
               <span>
                 <CheckCircleOutlineIcon style={{ color: "blue", variant: "filled" }} />
               </span>
