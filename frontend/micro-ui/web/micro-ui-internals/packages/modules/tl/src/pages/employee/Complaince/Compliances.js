@@ -4,6 +4,7 @@ import axios from "axios";
 import { useForm } from "react-hook-form";
 import Checkbox from '@mui/material/Checkbox';
 import { useTranslation } from 'react-i18next';
+import { Button, Form } from "react-bootstrap";
 import ReportProblemIcon from "@mui/icons-material/ReportProblem";
 
 import { ComplicesRemarksContext } from '../../../../context/Complices-remarks-context';
@@ -52,9 +53,21 @@ const {
   const userRolesArray = userInfo?.roles.filter((user) => user.code !=="EMPLOYEE" );
   const filterDataRole = userRolesArray?.[0]?.code;
   const designation = userRolesArray?.[0]?.name;
+  const [isChecked, setIsChecked] = useState(false);
+
+  const handleChange = event => {
+    setIsChecked(event.target.checked);
+
+    // 👇️ this is the checkbox itself
+    console.log("falsenon" , event.target);
+
+    // 👇️ this is the checked value of the field
+    console.log("truecheck" ,event.target.checked);
+  };
 
 
   const tcpApplicationNumber = applicationimp?.tcpApplicationNumber
+  const ApplicationNumber = applicationimp?.applicationNumber
 
 
   const submitForm = (data) => {
@@ -87,13 +100,98 @@ const {
         // console.log("remarksDataComplice",remarksData);
       }, [remarksData])
 
+
+      
+      const handleshow19 = async (e) => {
+        const payload = {
+    
+            "RequestInfo": {
+
+                "apiId": "Rainmaker",
+      
+                "ver": ".01",
+      
+                "ts": null,
+      
+                "action": "_update",
+      
+                "did": "1",
+      
+                "key": "",
+      
+                "msgId": "20170310130900|en_IN",
+      
+                "authToken": authToken
+      
+              }
+        }
+        const Resp = await axios.post(`/tl-services/loi/report/_create?applicationNumber=${ApplicationNumber}`, payload, { responseType: "arraybuffer" })
+    
+        console.log("loggerNew...", Resp.data, userInfo)
+    
+        const pdfBlob = new Blob([Resp.data], { type: 'application/pdf' });
+        const pdfUrl = URL.createObjectURL(pdfBlob);
+        window.open(pdfUrl);
+    
+        console.log("logger123456...", pdfBlob, pdfUrl);
+    
+      };
+
+  const handleChanges = (e) => {
+    this.setState({ isRadioSelected: true });
+  };
+
+//   const handleChangetrue = async (e) => {
+//     const payload = {
+
+//         "RequestInfo": {
+
+//             "apiId": "Rainmaker",
+  
+//             "ver": ".01",
+  
+//             "ts": null,
+  
+//             "action": "_update",
+  
+//             "did": "1",
+  
+//             "key": "",
+  
+//             "msgId": "20170310130900|en_IN",
+  
+//             "authToken": authToken
+  
+//           }
+//     }
+//     const Resp = await axios.post(`/tl-services/loi/report/_create?applicationNumber=${ApplicationNumber}`, payload, { responseType: "arraybuffer" })
+
+//     console.log("loggerNew...", Resp.data, userInfo)
+
+//     const pdfBlob = new Blob([Resp.data], { type: 'application/pdf' });
+//     const pdfUrl = URL.createObjectURL(pdfBlob);
+//     window.open(pdfUrl);
+
+//     console.log("logger123456...", pdfBlob, pdfUrl);
+
+//   };
+
+// const handleChanges = (e) => {
+// this.setState({ isRadioSelected: true });
+// };
+
+
     return(
         <React.Fragment>
 
             
 <div className="box">
+<div className="row">
+<div className="col col-6">
+    <Button style={{ textAlign: "right" }} value="Submit" id="Submit" onChange1={handleChanges} name="Submit" onClick={handleshow19}>Views PDF With Compliances</Button>
+          </div>
 
-<div>
+<div className="col col-3">
     <button id="btnSearch" class="btn btn-primary btn-md center-block" style={{ marginTop: "-58px", marginRight: "97px" }}
       
       onClick={() => {
@@ -105,6 +203,7 @@ const {
     >
         Add Compliances
     </button>
+    </div>
     <Modalcompliances
      displaymodal={smShow}
     onClose={() => setSmShow(false)}
@@ -112,11 +211,16 @@ const {
     passmodalData={handlemodaldData}
     >
  </Modalcompliances>
+
+
+
+
+
     </div>
+
+   
    
     
-
-
             <form onSubmit={handleSubmit(submitForm)}>
                  <div className="col-md-12">
                     <h5 className='mt-3 mb-3' style={{textAlign: "center"}}><b>
@@ -173,8 +277,16 @@ const {
                     
                            </td>
                            <td>
-                    {input?.Compliance?.isPartOfLoi}
-                   
+                    {/* {input?.Compliance?.isPartOfLoi} */}
+                    <Checkbox
+        type="checkbox"
+        id="checkbox-id"
+        name="checkbox-name"
+        onChange={handleChange}
+        checked={isChecked}
+        value={input?.Compliance?.isPartOfLoi}
+        
+      />
                          </td>
                     {/* <td>  
                     <button className="btn btn-success btn-lg mb-3" onClick={ addFields}>Add More </button>
@@ -204,6 +316,8 @@ const {
             
                
 </form>
+
+
 </div>
 
         </React.Fragment>
