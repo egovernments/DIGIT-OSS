@@ -136,7 +136,7 @@ function ExtensionClu() {
           authToken: authToken,
           userInfo: userInfo
         },
-        ExtensionOfCLUPermission: [
+        ExtensionOfCLUPermission: 
           {
             tenantId: "hr",
             action: "INITIATE",
@@ -166,7 +166,7 @@ function ExtensionClu() {
             uploadBuildingPlanfileUrl: data?.uploadBuildingPlanfileUrl,
             indemnityBondfileUrl: data?.indemnityBondfileUrl,
           }
-        ]
+        
       }
       
       const response = await axios.post('/tl-services/ExtensionOfCLUPermissionRequest/_create', body);
@@ -835,7 +835,7 @@ function ExtensionClu() {
 
                           <label title="Upload Document" for={'uploadbrIII'}>
                             {" "}
-                            <FileUpload color="primary" for={'uploadbrIII'} />
+                            <FileUpload style={{ cursor: "pointer" }} color="info" className="icon" for={'uploadbrIII'} />
                           </label>
 
                           <input id="uploadbrIII" type="file" placeholder="" className="form-control d-none" onChange={(e) => uploadFile(e.target.files[0], "uploadbrIII")} ></input>
@@ -846,7 +846,7 @@ function ExtensionClu() {
 
                           {watch('uploadbrIIIfileUrl') && (
                             <a onClick={() => getDocShareholding(watch('uploadbrIIIfileUrl'), setLoading)} className="btn btn-sm ">
-                              <Visibility />
+                              <Visibility color="info" className="icon" />
                             </a>
                           )}
 
@@ -856,7 +856,7 @@ function ExtensionClu() {
 
                           <label title="Upload Document" for={'uploadbrIII'}>
                             {" "}
-                            <FileUpload color="primary" for={'uploadbrIII'} />
+                            <FileUpload style={{ cursor: "pointer" }} color="info" className="icon" for={'uploadbrIII'} />
                           </label>
 
                           <input id="uploadbrIII" type="file" placeholder="" className="form-control d-none" {...register("uploadbrIII", { required: "This Document is required" })} onChange={(e) => uploadFile(e.target.files[0], "uploadbrIII")} ></input>
@@ -866,7 +866,7 @@ function ExtensionClu() {
 
                           {watch('uploadbrIIIfileUrl') && (
                             <a onClick={() => getDocShareholding(watch('uploadbrIIIfileUrl'), setLoading)} className="btn btn-sm ">
-                              <Visibility />
+                              <Visibility color="info" className="icon" />
                             </a>
                           )}
                         </div>
@@ -889,7 +889,7 @@ function ExtensionClu() {
 
                           <label title="Upload Document" for={'cluPermissionLetter'}>
                             {" "}
-                            <FileUpload color="primary" for={'cluPermissionLetter'} />
+                            <FileUpload style={{ cursor: "pointer" }} color="info" className="icon" for={'cluPermissionLetter'} />
                           </label>
 
                           <input id="cluPermissionLetter" type="file" placeholder="" className="form-control d-none" onChange={(e) => uploadFile(e.target.files[0], "cluPermissionLetter")} ></input>
@@ -900,7 +900,7 @@ function ExtensionClu() {
 
                           {watch('cluPermissionLetterfileUrl') && (
                             <a onClick={() => getDocShareholding(watch('cluPermissionLetterfileUrl'), setLoading)} className="btn btn-sm ">
-                              <Visibility />
+                              <Visibility color="info" className="icon" />
                             </a>
                           )}
 
@@ -910,7 +910,7 @@ function ExtensionClu() {
 
                           <label title="Upload Document" for={'cluPermissionLetter'}>
                             {" "}
-                            <FileUpload color="primary" for={'cluPermissionLetter'} />
+                            <FileUpload style={{ cursor: "pointer" }} color="info" className="icon" for={'cluPermissionLetter'} />
                           </label>
 
                           <input id="cluPermissionLetter" type="file" placeholder="" className="form-control d-none" {...register("cluPermissionLetter", { required: "This Document is required" })} onChange={(e) => uploadFile(e.target.files[0], "cluPermissionLetter")} ></input>
@@ -920,7 +920,7 @@ function ExtensionClu() {
 
                           {watch('cluPermissionLetterfileUrl') && (
                             <a onClick={() => getDocShareholding(watch('cluPermissionLetterfileUrl'), setLoading)} className="btn btn-sm ">
-                              <Visibility />
+                              <Visibility color="info" className="icon" />
                             </a>
                           )}
                         </div>
@@ -943,7 +943,7 @@ function ExtensionClu() {
 
                           <label title="Upload Document" for={'uploadPhotographs'}>
                             {" "}
-                            <FileUpload color="primary" for={'uploadPhotographs'} />
+                            <FileUpload style={{ cursor: "pointer" }} color="info" className="icon" for={'uploadPhotographs'} />
                           </label>
 
                           <input id="uploadPhotographs" type="file" placeholder="" className="form-control d-none" onChange={(e) => uploadFile(e.target.files[0], "uploadPhotographs")} ></input>
@@ -954,7 +954,7 @@ function ExtensionClu() {
 
                           {watch('uploadPhotographsfileUrl') && (
                             <a onClick={() => getDocShareholding(watch('uploadPhotographsfileUrl'), setLoading)} className="btn btn-sm ">
-                              <Visibility />
+                              <Visibility color="info" className="icon" />
                             </a>
                           )}
 
@@ -964,7 +964,7 @@ function ExtensionClu() {
 
                           <label title="Upload Document" for={'uploadPhotographs'}>
                             {" "}
-                            <FileUpload color="primary" for={'uploadPhotographs'} />
+                            <FileUpload style={{ cursor: "pointer" }} color="info" className="icon" for={'uploadPhotographs'} />
                           </label>
 
                           <input id="uploadPhotographs" type="file" placeholder="" className="form-control d-none" {...register("uploadPhotographs", { required: "This Document is required" })} onChange={(e) => uploadFile(e.target.files[0], "uploadPhotographs")} ></input>
@@ -974,7 +974,7 @@ function ExtensionClu() {
 
                           {watch('uploadPhotographsfileUrl') && (
                             <a onClick={() => getDocShareholding(watch('uploadPhotographsfileUrl'), setLoading)} className="btn btn-sm ">
-                              <Visibility />
+                              <Visibility color="info" className="icon" />
                             </a>
                           )}
                         </div>
@@ -998,7 +998,7 @@ function ExtensionClu() {
 
                           <label title="Upload Document" for={'receiptApplication'}>
                             {" "}
-                            <FileUpload color="primary" for={'receiptApplication'} />
+                            <FileUpload style={{ cursor: "pointer" }} color="info" className="icon" for={'receiptApplication'} />
                           </label>
 
                           <input id="receiptApplication" type="file" placeholder="" className="form-control d-none" onChange={(e) => uploadFile(e.target.files[0], "receiptApplication")} ></input>
@@ -1009,7 +1009,7 @@ function ExtensionClu() {
 
                           {watch('receiptApplicationfileUrl') && (
                             <a onClick={() => getDocShareholding(watch('receiptApplicationfileUrl'), setLoading)} className="btn btn-sm ">
-                              <Visibility />
+                              <Visibility color="info" className="icon" />
                             </a>
                           )}
 
@@ -1019,7 +1019,7 @@ function ExtensionClu() {
 
                           <label title="Upload Document" for={'receiptApplication'}>
                             {" "}
-                            <FileUpload color="primary" for={'receiptApplication'} />
+                            <FileUpload style={{ cursor: "pointer" }} color="info" className="icon" for={'receiptApplication'} />
                           </label>
 
                           <input id="receiptApplication" type="file" placeholder="" className="form-control d-none" {...register("receiptApplication", { required: "This Document is required" })} onChange={(e) => uploadFile(e.target.files[0], "receiptApplication")} ></input>
@@ -1029,7 +1029,7 @@ function ExtensionClu() {
 
                           {watch('receiptApplicationfileUrl') && (
                             <a onClick={() => getDocShareholding(watch('receiptApplicationfileUrl'), setLoading)} className="btn btn-sm ">
-                              <Visibility />
+                              <Visibility color="info" className="icon" />
                             </a>
                           )}
                         </div>
@@ -1053,7 +1053,7 @@ function ExtensionClu() {
 
                           <label title="Upload Document" for={'uploadBuildingPlan'}>
                             {" "}
-                            <FileUpload color="primary" for={'uploadBuildingPlan'} />
+                            <FileUpload style={{ cursor: "pointer" }} color="info" className="icon" for={'uploadBuildingPlan'} />
                           </label>
 
                           <input id="uploadBuildingPlan" type="file" placeholder="" className="form-control d-none" onChange={(e) => uploadFile(e.target.files[0], "uploadBuildingPlan")} ></input>
@@ -1064,7 +1064,7 @@ function ExtensionClu() {
 
                           {watch('uploadBuildingPlanfileUrl') && (
                             <a onClick={() => getDocShareholding(watch('uploadBuildingPlanfileUrl'), setLoading)} className="btn btn-sm ">
-                              <Visibility />
+                              <Visibility color="info" className="icon" />
                             </a>
                           )}
 
@@ -1074,7 +1074,7 @@ function ExtensionClu() {
 
                           <label title="Upload Document" for={'uploadBuildingPlan'}>
                             {" "}
-                            <FileUpload color="primary" for={'uploadBuildingPlan'} />
+                            <FileUpload style={{ cursor: "pointer" }} color="info" className="icon" for={'uploadBuildingPlan'} />
                           </label>
 
                           <input id="uploadBuildingPlan" type="file" placeholder="" className="form-control d-none" {...register("uploadBuildingPlan", { required: "This Document is required" })} onChange={(e) => uploadFile(e.target.files[0], "uploadBuildingPlan")} ></input>
@@ -1084,7 +1084,7 @@ function ExtensionClu() {
 
                           {watch('uploadBuildingPlanfileUrl') && (
                             <a onClick={() => getDocShareholding(watch('uploadBuildingPlanfileUrl'), setLoading)} className="btn btn-sm ">
-                              <Visibility />
+                              <Visibility color="info" className="icon" />
                             </a>
                           )}
                         </div>
@@ -1109,7 +1109,7 @@ function ExtensionClu() {
 
                           <label title="Upload Document" for={'indemnityBond'}>
                             {" "}
-                            <FileUpload color="primary" for={'indemnityBond'} />
+                            <FileUpload style={{ cursor: "pointer" }} color="info" className="icon" for={'indemnityBond'} />
                           </label>
 
                           <input id="indemnityBond" type="file" placeholder="" className="form-control d-none" onChange={(e) => uploadFile(e.target.files[0], "indemnityBond")} ></input>
@@ -1120,7 +1120,7 @@ function ExtensionClu() {
 
                           {watch('indemnityBondfileUrl') && (
                             <a onClick={() => getDocShareholding(watch('indemnityBondfileUrl'), setLoading)} className="btn btn-sm ">
-                              <Visibility />
+                              <Visibility color="info" className="icon" />
                             </a>
                           )}
 
@@ -1130,7 +1130,7 @@ function ExtensionClu() {
 
                           <label title="Upload Document" for={'indemnityBond'}>
                             {" "}
-                            <FileUpload color="primary" for={'indemnityBond'} />
+                            <FileUpload style={{ cursor: "pointer" }} color="info" className="icon" for={'indemnityBond'} />
                           </label>
 
                           <input id="indemnityBond" type="file" placeholder="" className="form-control d-none" {...register("indemnityBond", { required: "This Document is required" })} onChange={(e) => uploadFile(e.target.files[0], "indemnityBond")} ></input>
@@ -1140,7 +1140,7 @@ function ExtensionClu() {
 
                           {watch('indemnityBondfileUrl') && (
                             <a onClick={() => getDocShareholding(watch('indemnityBondfileUrl'), setLoading)} className="btn btn-sm ">
-                              <Visibility />
+                              <Visibility color="info" className="icon" />
                             </a>
                           )}
                         </div>

@@ -160,7 +160,7 @@ function SurrenderLicScrutiny({ apiResponse, refreshScrutinyData, applicationNum
   const [fieldValue, setFieldValue] = useState("");
   const [openedModal, setOpennedModal] = useState("");
 
-  
+
 
   useEffect(() => {
     console.log("logger123...",dataForIcons)
@@ -584,7 +584,7 @@ function SurrenderLicScrutiny({ apiResponse, refreshScrutinyData, applicationNum
 
                               {watch('zoningLayoutPlanfileUrl') && (
                                 <a onClick={() => getDocShareholding(watch('zoningLayoutPlanfileUrl'), setLoading)} className="btn btn-sm ">
-                                  <Visibility />
+                                  <Visibility color="info" className="icon" />
                                 </a>
                               )}
 
@@ -623,7 +623,7 @@ function SurrenderLicScrutiny({ apiResponse, refreshScrutinyData, applicationNum
 
                               {watch('licenseCopyfileUrl') && (
                                 <a onClick={() => getDocShareholding(watch('licenseCopyfileUrl'), setLoading)} className="btn btn-sm ">
-                                  <Visibility />
+                                  <Visibility color="info" className="icon" />
                                 </a>
                               )}
 
@@ -663,7 +663,7 @@ function SurrenderLicScrutiny({ apiResponse, refreshScrutinyData, applicationNum
 
                               {watch('edcaVailedfileUrl') && (
                                 <a onClick={() => getDocShareholding(watch('edcaVailedfileUrl'), setLoading)} className="btn btn-sm ">
-                                  <Visibility />
+                                  <Visibility color="info" className="icon" />
                                 </a>
                               )}
 
@@ -704,7 +704,7 @@ function SurrenderLicScrutiny({ apiResponse, refreshScrutinyData, applicationNum
 
                                   {watch('thirdPartyRightsDeclarationfileUrl') && (
                                     <a onClick={() => getDocShareholding(watch('thirdPartyRightsDeclarationfileUrl'), setLoading)} className="btn btn-sm ">
-                                      <Visibility />
+                                      <Visibility color="info" className="icon" />
                                     </a>
                                   )}
 
@@ -747,7 +747,7 @@ function SurrenderLicScrutiny({ apiResponse, refreshScrutinyData, applicationNum
 
                                   {watch('detailedRelocationSchemefileUrl') && (
                                     <a onClick={() => getDocShareholding(watch('detailedRelocationSchemefileUrl'), setLoading)} className="btn btn-sm ">
-                                      <Visibility />
+                                      <Visibility color="info" className="icon" />
                                     </a>
                                   )}
 
@@ -852,7 +852,7 @@ function SurrenderLicScrutiny({ apiResponse, refreshScrutinyData, applicationNum
 
                                 {watch('giftDeedfileUrl') && (
                                   <a onClick={() => getDocShareholding(watch('giftDeedfileUrl'), setLoading)} className="btn btn-sm ">
-                                    <Visibility />
+                                    <Visibility color="info" className="icon" />
                                   </a>
                                 )}
 
@@ -891,7 +891,7 @@ function SurrenderLicScrutiny({ apiResponse, refreshScrutinyData, applicationNum
 
                                 {watch('mutationfileUrl') && (
                                   <a onClick={() => getDocShareholding(watch('mutationfileUrl'), setLoading)} className="btn btn-sm ">
-                                    <Visibility />
+                                    <Visibility color="info" className="icon" />
                                   </a>
                                 )}
 
@@ -929,7 +929,7 @@ function SurrenderLicScrutiny({ apiResponse, refreshScrutinyData, applicationNum
 
                                 {watch('jamabandhifileUrl') && (
                                   <a onClick={() => getDocShareholding(watch('jamabandhifileUrl'), setLoading)} className="btn btn-sm ">
-                                    <Visibility />
+                                    <Visibility color="info" className="icon" />
                                   </a>
                                 )}
 
@@ -988,7 +988,7 @@ function SurrenderLicScrutiny({ apiResponse, refreshScrutinyData, applicationNum
 
                               {watch('declarationIDWWorksfileUrl') && (
                                 <a onClick={() => getDocShareholding(watch('declarationIDWWorksfileUrl'), setLoading)} className="btn btn-sm ">
-                                  <Visibility />
+                                  <Visibility color="info" className="icon" />
                                 </a>
                               )}
 
@@ -1027,7 +1027,7 @@ function SurrenderLicScrutiny({ apiResponse, refreshScrutinyData, applicationNum
 
                               {watch('revisedLayoutPlanfileUrl') && (
                                 <a onClick={() => getDocShareholding(watch('revisedLayoutPlanfileUrl'), setLoading)} className="btn btn-sm ">
-                                  <Visibility />
+                                  <Visibility color="info" className="icon" />
                                 </a>
                               )}
 
@@ -1065,7 +1065,7 @@ function SurrenderLicScrutiny({ apiResponse, refreshScrutinyData, applicationNum
 
                               {watch('availedEdcfileUrl') && (
                                 <a onClick={() => getDocShareholding(watch('availedEdcfileUrl'), setLoading)} className="btn btn-sm ">
-                                  <Visibility />
+                                  <Visibility color="info" className="icon" />
                                 </a>
                               )}
 
@@ -1103,7 +1103,7 @@ function SurrenderLicScrutiny({ apiResponse, refreshScrutinyData, applicationNum
 
                               {watch('areaFallingUnderfileUrl') && (
                                 <a onClick={() => getDocShareholding(watch('areaFallingUnderfileUrl'), setLoading)} className="btn btn-sm ">
-                                  <Visibility />
+                                  <Visibility color="info" className="icon" />
                                 </a>
                               )}
 
@@ -1144,7 +1144,7 @@ function SurrenderLicScrutiny({ apiResponse, refreshScrutinyData, applicationNum
 
                                   {watch('thirdPartyRightsDeclarationfileUrl') && (
                                     <a onClick={() => getDocShareholding(watch('thirdPartyRightsDeclarationfileUrl'), setLoading)} className="btn btn-sm ">
-                                      <Visibility />
+                                      <Visibility color="info" className="icon" />
                                     </a>
                                   )}
 
@@ -1187,7 +1187,7 @@ function SurrenderLicScrutiny({ apiResponse, refreshScrutinyData, applicationNum
 
                                   {watch('detailedRelocationSchemefileUrl') && (
                                     <a onClick={() => getDocShareholding(watch('detailedRelocationSchemefileUrl'), setLoading)} className="btn btn-sm ">
-                                      <Visibility />
+                                      <Visibility color="info" className="icon" />
                                     </a>
                                   )}
 
@@ -1291,7 +1291,7 @@ function SurrenderLicScrutiny({ apiResponse, refreshScrutinyData, applicationNum
 
                                 {watch('giftDeedfileUrl') && (
                                   <a onClick={() => getDocShareholding(watch('giftDeedfileUrl'), setLoading)} className="btn btn-sm ">
-                                    <Visibility />
+                                    <Visibility color="info" className="icon" />
                                   </a>
                                 )}
 
@@ -1330,7 +1330,7 @@ function SurrenderLicScrutiny({ apiResponse, refreshScrutinyData, applicationNum
 
                                 {watch('mutationfileUrl') && (
                                   <a onClick={() => getDocShareholding(watch('mutationfileUrl'), setLoading)} className="btn btn-sm ">
-                                    <Visibility />
+                                    <Visibility color="info" className="icon" />
                                   </a>
                                 )}
 
@@ -1368,7 +1368,7 @@ function SurrenderLicScrutiny({ apiResponse, refreshScrutinyData, applicationNum
 
                                 {watch('jamabandhifileUrl') && (
                                   <a onClick={() => getDocShareholding(watch('jamabandhifileUrl'), setLoading)} className="btn btn-sm ">
-                                    <Visibility />
+                                    <Visibility color="info" className="icon" />
                                   </a>
                                 )}
 

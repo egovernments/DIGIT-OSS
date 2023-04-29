@@ -3,10 +3,14 @@ import { Button } from "@material-ui/core";
 import FormControl from "@mui/material/FormControl";
 import { useForm } from "react-hook-form";
 import OutlinedInput from "@mui/material/OutlinedInput";
+import SearchLicenceComp from "../../../../../../components/SearchLicence";
+import { useTranslation } from "react-i18next";
 
 function CompletionLic() {
   const [selects, setSelects] = useState();
   const [showhide, setShowhide] = useState("");
+  const [loader, setLoader] = useState(false);
+  const { t } = useTranslation();
 
   const handleshowhide = (event) => {
     const getuser = event.target.value;
@@ -19,6 +23,8 @@ function CompletionLic() {
     formState: { errors },
     control,
     setValue,
+    watch,
+
   } = useForm({});
 
   const completionLic = (data) => console.log(data);
@@ -27,14 +33,109 @@ function CompletionLic() {
       <div className="card" style={{ width: "126%", border: "5px solid #1266af" }}>
         <h4 style={{ fontSize: "25px", marginLeft: "21px" }}>Completion Certificate In Licence Colony</h4>
         <div className="card">
+          <div className="col-12 p-3">
+            <SearchLicenceComp watch={watch} register={register} control={control} setLoader={setLoader} errors={errors} setValue={setValue} />
+          </div>
           <div className="row-12">
-            <div className="col md={4} xxl lg-4">
-              <FormControl>
-                <h2 className="FormLable">License No </h2>
 
-                <OutlinedInput type="number" className="Inputcontrol" placeholder="" {...register("licNo")} />
+            <div className="col cols-4">
+              <FormControl>
+                <h2>
+                  {t('IS_LICENSE_NO_VALID_TILL_COMPLETION_CERTIFICATE')}  <span style={{ color: "red" }}>*</span>
+                </h2>
+
+                <input className="form-control" placeholder="" {...register("licenseValidTill", {
+                  required: "This field can not be blank",
+                  minLength: {
+                    value: 2,
+                    message: "Invalid Value"
+                  },
+                  maxLength: {
+                    value: 3,
+                    message: "Invalid Value"
+                  }
+                })} />
               </FormControl>
-              &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
+              <h3 className="error-message" style={{ color: "red" }}>
+                {Boolean(errors?.licenseValidTill) && errors?.licenseValidTill?.message}
+              </h3>
+            </div>
+
+            <div className="col cols-4">
+              <FormControl>
+                <h2>
+                  {t('DEPOSIT_APPLICABLE')}  <span style={{ color: "red" }}>*</span>
+                </h2>
+
+                <input className="form-control" placeholder="" {...register("iacAplicable", {
+                  required: "This field cannot be blank",
+                  pattern: {
+                    value: /^[0-9]+(\.[0-9]+)?$/,
+                    message: "Invalid Value."
+                  }
+                })} />
+              </FormControl>
+              <h3 className="error-message" style={{ color: "red" }}>
+                {Boolean(errors?.iacAplicable) && errors?.iacAplicable?.message}
+              </h3>
+            </div>
+
+            <div className="col cols-4">
+              <FormControl>
+                <h2>
+                  {t('COMPLIANCE_STATUS_WITH_RULES')}  <span style={{ color: "red" }}>*</span>
+                </h2>
+
+                <input className="form-control" placeholder="" {...register("statusOfComplainsForRules", {
+                  required: "This field cannot be blank",
+                  minLength: {
+                    value: 2,
+                    message: "Invalid Value"
+                  },
+                  maxLength: {
+                    value: 3,
+                    message: "Invalid Value"
+                  }
+                })} />
+              </FormControl>
+              <h3 className="error-message" style={{ color: "red" }}>
+                {Boolean(errors?.statusOfComplainsForRules) && errors?.statusOfComplainsForRules?.message}
+              </h3>
+            </div>
+
+            <div className="col cols-4">
+              <FormControl>
+                <h2>
+                  {t('STATUS_OF_EDC')}  <span style={{ color: "red" }}>*</span>
+                </h2>
+
+                <input className="form-control" placeholder="" {...register("statusOfEDCisFullyPaid", {
+                  required: "This field cannot be blank",
+                  minLength: {
+                    value: 2,
+                    message: "Invalid Value"
+                  },
+                  maxLength: {
+                    value: 3,
+                    message: "Invalid Value"
+                  }
+                })} />
+              </FormControl>
+              <h3 className="error-message" style={{ color: "red" }}>
+                {Boolean(errors?.statusOfEDCisFullyPaid) && errors?.statusOfEDCisFullyPaid?.message}
+              </h3>
+            </div>
+
+
+
+
+
+
+
+
+            {/* </div> */}
+
+            {/* <div className="col md={4} xxl lg-4">
               <FormControl>
                 <h2
                   className="FormLable"
@@ -67,7 +168,7 @@ function CompletionLic() {
 
                 <OutlinedInput type="number" className="Inputcontrol" placeholder="" {...register("statusOfComplaint")} />
               </FormControl>
-            </div>
+            </div> */}
           </div>
           <br></br>
           <div className="row-12">
@@ -300,13 +401,13 @@ function CompletionLic() {
           </div>
 
           <div class="col-sm-12 text-right">
-            <Button variant="contained" class="btn btn-primary btn-md center-block" aria-label="right-end">
+            {/* <Button variant="contained" class="btn btn-primary btn-md center-block" aria-label="right-end">
               Save as Draft{" "}
             </Button>
-            &nbsp;
-            <Button variant="contained" class="btn btn-primary btn-md center-block" type="submit">
+            &nbsp; */}
+            <button id="btnSearch" type="submit" class="btn btn-primary btn-md center-block" style={{}}>
               Submit
-            </Button>
+            </button>
           </div>
         </div>
       </div>

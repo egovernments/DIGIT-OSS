@@ -8,15 +8,15 @@ import React, { useState, useRef, useEffect, useContext } from "react";
 // import HistoryList from "./History";
 import ScrutinyDevelopment from "../../ScrutinyDevelopment/ScrutinyDevelopment";
 import { ScrutinyRemarksContext } from "../../../../../../context/remarks-data-context/index";
-import SurrenderLicScrutiny from "./SurrenderLic";
 
 import { Button, Row, Col } from "react-bootstrap";
 import { useForkRef } from "@mui/material";
 import axios from "axios";
+import ExtensionClu from "./ExtensionClu";
 
 // import AddIcon from "@mui/icons-material/Add";
 
-const SurrenderBasic = ({apiResponse,applicationNumber,refreshScrutinyData,setAdditionalDetails,histeroyData,idwDataTreade,edcDataTreade,applicationStatus }) => {
+const ExtensionCluBasic = ({apiResponse,applicationNumber,refreshScrutinyData,setAdditionalDetails,histeroyData,idwDataTreade,edcDataTreade,applicationStatus }) => {
   const [purpose, setPurpose] = useState("");
   const jeLandInfoRef = useRef();
 
@@ -150,7 +150,7 @@ const { remarksData,iconStates,handleGetFiledsStatesById,handleGetRemarkssValues
   }, [applicationNumber]);
 
   useEffect(()=>{
-    setBusinessService("SURREND_OF_LICENSE");
+    setBusinessService("EXTENTION_OF_CLU_PERMISSION");
     if(applicationNumber){
       handleGetFiledsStatesById(applicationNumber);
     }
@@ -237,7 +237,7 @@ const { remarksData,iconStates,handleGetFiledsStatesById,handleGetRemarkssValues
       <div style={{ position: "relative", maxWidth: "100%", padding: 2 }}>
         <div>
          <div>
-         <SurrenderLicScrutiny
+         <ExtensionClu
            apiResponse={apiResponse}
            refreshScrutinyData={refreshScrutinyData}
            applicationNumber={applicationNumber}
@@ -246,7 +246,7 @@ const { remarksData,iconStates,handleGetFiledsStatesById,handleGetRemarkssValues
            onClick={() => setOpen(!open)}
            dataForIcons={iconStates}
            applicationStatus={applicationStatus}
-           ></SurrenderLicScrutiny>
+           ></ExtensionClu>
          </div>
         
         </div>
@@ -267,4 +267,4 @@ const { remarksData,iconStates,handleGetFiledsStatesById,handleGetRemarkssValues
   );
 };
 
-export default SurrenderBasic;
+export default ExtensionCluBasic;
