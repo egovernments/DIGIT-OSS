@@ -2,11 +2,13 @@ import React, { useEffect, useState } from "react";
 import FormControl from "@mui/material/FormControl";
 import axios from "axios";
 import moment from "moment";
+import { useTranslation } from "react-i18next";
 
 // import ReactMultiSelect from "../../../../../../../../../react-components/src/atoms/ReactMultiSelect";
 import ReactMultiSelect from "../../../../../react-components/src/atoms/ReactMultiSelect";
 
 const SearchLicenceComp = ({ watch, register, control, setLoader, errors, setValue, resetField, apiData, comp }) => {
+  const { t } = useTranslation();
   const userInfo = Digit.UserService.getUser()?.info || {};
   const [showField, setShowField] = useState({ select: false, other: false });
   const [licenceData, setLicenceData] = useState([]);
@@ -90,7 +92,9 @@ const SearchLicenceComp = ({ watch, register, control, setLoader, errors, setVal
       <div className="row gy-3">
         <div className="col col-4">
           <h2>
-            Licence No.<span style={{ color: "red" }}>*</span>
+            {`${t("LC_LICENCE_NO")}`}
+            {/* Licence No. */}
+            <span style={{ color: "red" }}>*</span>
           </h2>
           <div style={{ display: "flex", placeItems: "center" }}>
             {apiData?.length ? (
@@ -121,7 +125,8 @@ const SearchLicenceComp = ({ watch, register, control, setLoader, errors, setVal
                 getLicenceInternalApi();
               }}
             >
-              Go
+              {`${t("LC_GO")}`}
+              {/* Go */}
             </div>
           </div>
           <h3 className="error-message" style={{ color: "red" }}>
@@ -132,7 +137,9 @@ const SearchLicenceComp = ({ watch, register, control, setLoader, errors, setVal
         {showField?.select && (
           <div className="col col-3 ">
             <h2>
-              Select Licence<span style={{ color: "red" }}>*</span>
+              {`${t("LC_SELECT_LICENCE")}`}
+              {/* Select Licence */}
+              <span style={{ color: "red" }}>*</span>
             </h2>
             <ReactMultiSelect
               control={control}
@@ -151,7 +158,9 @@ const SearchLicenceComp = ({ watch, register, control, setLoader, errors, setVal
           <div className="col col-3 ">
             <FormControl>
               <h2>
-                Licence Grant Date <span style={{ color: "red" }}>*</span>
+                {`${t("LC_LICENCE_GRANT_DATE")}`}
+                {/* Licence Grant Date  */}
+                <span style={{ color: "red" }}>*</span>
               </h2>
               <input type="date" className="form-control" placeholder="" {...register("licenceGrantDate")} />
             </FormControl>
@@ -162,7 +171,9 @@ const SearchLicenceComp = ({ watch, register, control, setLoader, errors, setVal
           <div className="col col-3 ">
             <FormControl>
               <h2>
-                Valid Upto <span style={{ color: "red" }}>*</span>
+                {`${t("LC_VALID_UPTO")}`}
+                {/* Valid Upto  */}
+                <span style={{ color: "red" }}>*</span>
               </h2>
               <input type="date" className="form-control" placeholder="" {...register("validUpto")} />
             </FormControl>
@@ -174,7 +185,9 @@ const SearchLicenceComp = ({ watch, register, control, setLoader, errors, setVal
             <div className="col col-3 ">
               <FormControl>
                 <h2>
-                  Renewal required upto <span style={{ color: "red" }}>*</span>
+                  {`${t("LC_RENEWAL_REQUIRED_UPTO ")}`}
+                  {/* Renewal required upto  */}
+                  <span style={{ color: "red" }}>*</span>
                 </h2>
                 <input
                   type="date"
@@ -201,7 +214,10 @@ const SearchLicenceComp = ({ watch, register, control, setLoader, errors, setVal
           {comp == "renewal" && (
             <div className="col col-3 ">
               <FormControl>
-                <h2>Period of renewal(In Months)</h2>
+                <h2>
+                  {`${t("LC_PERIOD_OF_RENEWAL_IN_MONTHS")}`}
+                  {/* Period of renewal(In Months) */}
+                </h2>
                 <input type="text" {...register("periodOfRenewal")} className="form-control" disabled />
               </FormControl>
             </div>
@@ -209,7 +225,9 @@ const SearchLicenceComp = ({ watch, register, control, setLoader, errors, setVal
           <div className="col col-3 ">
             <FormControl>
               <h2>
-                Name of Colonizer <span style={{ color: "red" }}>*</span>
+                {`${t("LC_NAME_OF_COLONIZER")}`}
+                {/* Name of Colonizer  */}
+                <span style={{ color: "red" }}>*</span>
               </h2>
 
               <input type="text" className="form-control" placeholder="" {...register("colonizerName")} />
@@ -226,7 +244,8 @@ const SearchLicenceComp = ({ watch, register, control, setLoader, errors, setVal
           <div className="col col-3 ">
             <FormControl>
               <h2>
-                Type of Colony
+                {`${t("LC_TYPE_OF_COLONY")}`}
+                {/* Type of Colony */}
                 <span style={{ color: "red" }}>*</span>
               </h2>
 
@@ -240,7 +259,8 @@ const SearchLicenceComp = ({ watch, register, control, setLoader, errors, setVal
           <div className="col col-3 ">
             <FormControl>
               <h2>
-                Area in Acres
+                {`${t("LC_AREA_IN_ACRES")}`}
+                {/* Area in Acres */}
                 <span style={{ color: "red" }}>*</span>
               </h2>
 
@@ -254,7 +274,9 @@ const SearchLicenceComp = ({ watch, register, control, setLoader, errors, setVal
           <div className="col col-3 ">
             <FormControl>
               <h2>
-                Sector No. <span style={{ color: "red" }}>*</span>
+                {`${t("LC_SECTOR_NO")}`}
+                {/* Sector No.  */}
+                <span style={{ color: "red" }}>*</span>
               </h2>
 
               <input type="text" className="form-control" placeholder="" {...register("sectorNo")} />
@@ -265,7 +287,10 @@ const SearchLicenceComp = ({ watch, register, control, setLoader, errors, setVal
           </div>
           <div className="col col-3 ">
             <FormControl>
-              <h2>Revenue estate</h2>
+              <h2>
+                {`${t("LC_REVENUE_ESTATE")}`}
+                Revenue estate
+              </h2>
 
               <input type="text" className="form-control" placeholder="" {...register("revenueEstate")} />
             </FormControl>
@@ -274,7 +299,8 @@ const SearchLicenceComp = ({ watch, register, control, setLoader, errors, setVal
             </h3>
           </div>
           <div className="col col-3 ">
-            Development Plan
+            {`${t("LC_DEVELOPMENT_PLAN")}`}
+            {/* Development Plan */}
             <input type="text" className="form-control" placeholder="" {...register("developmentPlan")} />
             {/* auto pull land schedule table from new licence here */}
           </div>
@@ -284,13 +310,19 @@ const SearchLicenceComp = ({ watch, register, control, setLoader, errors, setVal
       <div className="row gy-3 mt-3">
         <div className="col col-3 ">
           <FormControl>
-            <h2>Tehsil</h2>
+            <h2>
+              {`${t("LC_TEHSIL")}`}
+              Tehsil
+            </h2>
             <input type="text" className="form-control" placeholder="" {...register("tehsil")} />
           </FormControl>
         </div>
         <div className="col col-3 ">
           <FormControl>
-            <h2>District</h2>
+            <h2>
+              {`${t("LC_DISTRICT")}`}
+              District
+            </h2>
             <input type="text" className="form-control" placeholder="" {...register("district")} />
           </FormControl>
         </div>

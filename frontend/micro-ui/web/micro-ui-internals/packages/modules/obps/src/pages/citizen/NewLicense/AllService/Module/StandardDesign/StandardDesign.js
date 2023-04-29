@@ -15,8 +15,10 @@ import Spinner from "../../../../../../components/Loader";
 import { getDocShareholding } from "../../../docView/docView.help";
 import SearchLicenceComp from "../../../../../../components/SearchLicence";
 import CusToaster from "../../../../../../components/Toaster";
+import { useTranslation } from "react-i18next";
 
 const Standard = () => {
+  const { t } = useTranslation();
   const history = useHistory();
   const userInfo = Digit.UserService.getUser()?.info || {};
   const [showToastError, setShowToastError] = useState({ label: "", error: false, success: false });
@@ -136,7 +138,9 @@ const Standard = () => {
             <div className="row gy-3 mt-5">
               <div className="col col-4">
                 <h6 style={{ display: "flex" }}>
-                  Standard drawing designs<span style={{ color: "red" }}>*</span>
+                  {`${t("SD_STANDARD_DRAWING_DESIGNS")}`}
+                  {/* Standard drawing designs */}
+                  <span style={{ color: "red" }}>*</span>
                 </h6>
                 <label>
                   <FileUpload style={{ cursor: "pointer" }} color="primary" />
@@ -154,7 +158,10 @@ const Standard = () => {
                 )}
               </div>
               <div className="col col-4">
-                <h6 style={{ display: "flex" }}>Any other Document</h6>
+                <h6 style={{ display: "flex" }}>
+                  {`${t("SD_ANY_OTHER_DOCUMENT")}`}
+                  {/* Any other Document */}
+                </h6>
                 <label>
                   <FileUpload style={{ cursor: "pointer" }} color="primary" />
                   <input
