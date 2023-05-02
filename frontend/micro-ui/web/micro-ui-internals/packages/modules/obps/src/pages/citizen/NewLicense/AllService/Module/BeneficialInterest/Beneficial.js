@@ -249,8 +249,8 @@ function Beneficial() {
     setLoader(true);
     try {
       const postDistrict = {
-        changeBeneficial: [
-          {
+        changeBeneficial:
+          [{
             licenseNumber: data?.licenceNo || "",
             developerServiceCode: data?.developerServiceCode || "",
             paidAmount: data?.paidAmount || "",
@@ -266,8 +266,21 @@ function Beneficial() {
             shareholdingPatternCertificate: data?.shareholdingPatternCertificate || "",
             reraRegistrationCertificate: data?.reraRegistrationCertificate || "",
             fiancialCapacityCertificate: data?.fiancialCapacityCertificate || "",
-          },
-        ],
+            newAdditionalDetails: {
+              selectLicence: data?.selectLicence,
+              validUpto: data?.validUpto,
+              renewalRequiredUpto: data?.renewalRequiredUpto,
+              colonizerName: data?.colonizerName,
+              periodOfRenewal: data?.periodOfRenewal,
+              colonyType: data?.colonyType,
+              areaAcres: data?.areaAcres,
+              sectorNo: data?.sectorNo,
+              revenueEstate: data?.revenueEstate,
+              developmentPlan: data?.developmentPlan,
+              tehsil: data?.tehsil,
+              district: data?.district
+          }
+          }],
         RequestInfo: {
           apiId: "Rainmaker",
           msgId: "1669293303096|en_IN",
@@ -438,6 +451,48 @@ function Beneficial() {
     }
   };
 
+
+  const pay = async () => {
+  
+    try{
+      const body = {
+        "RequestInfo":{
+          "apiId": "Rainmaker",
+          "ver": ".01",
+          "ts": 0,
+          "action": "_update",
+          "did": "1",
+          "key": "",
+          "msgId": "20170310130900|en_IN",
+          "authToken": token,
+          "correlationId": null,
+           "userInfo": userInfo
+        }
+      }
+  
+      const response = await axios.post(`/tl-services/beneficial/_pay?licenseNumber=${watch('licenceNo')}`,body);
+
+      console.log("log...",response);
+
+      if (response?.data?.changeBeneficial?.length) {
+        if(response?.data?.changeBeneficial?.redirectUrl){
+          window.open(response?.data?.changeBeneficial?.redirectUrl);
+        }
+      } else {
+        setShowToastError({ label: response?.data?.message, error: true, success: false });
+      }
+
+      // setLoader(false);
+      // setShowToastError({ label: "Beneficial Interest Updated Successfully", error: false, success: true });
+
+    } catch (err) {
+      console.log("Submit Error ====> ", err.message);
+      setLoader(false);
+      setShowToastError({ label: err.message, error: true, success: false });
+    }
+
+  }
+
   return (
     <div>
       <form onSubmit={handleSubmit(formSubmitHandler)}>
@@ -561,7 +616,7 @@ function Beneficial() {
                                   <div className="d-flex justify-content-center">
                                     <label title="Upload Document" for={item.selectorKey}>
                                       {" "}
-                                      <FileUpload color="primary" for={item.selectorKey} />
+                                      <FileUpload style={{ cursor: "pointer" }} color="info" className="icon" for={item.selectorKey} />
                                     </label>
                                     <input
                                       id={item.selectorKey}
@@ -573,7 +628,7 @@ function Beneficial() {
 
                                     {watch(item.fileName) && (
                                       <a onClick={() => getDocShareholding(watch(item.fileName), setLoader)} className="btn btn-sm ">
-                                        <Visibility />
+                                        <Visibility color="info" className="icon" />
                                       </a>
                                     )}
                                   </div>
@@ -583,7 +638,7 @@ function Beneficial() {
                                   <div>
                                     <label title="Upload Document" for={item.selectorKey}>
                                       {" "}
-                                      <FileUpload color="primary" for={item.selectorKey} />
+                                      <FileUpload style={{ cursor: "pointer" }} color="info" className="icon" for={item.selectorKey} />
                                     </label>
                                     <input
                                       id={item.selectorKey}
@@ -634,7 +689,7 @@ function Beneficial() {
                                   <div className="d-flex justify-content-center">
                                     <label title="Upload Document" for={item.selectorKey}>
                                       {" "}
-                                      <FileUpload color="primary" for={item.selectorKey} />
+                                      <FileUpload style={{ cursor: "pointer" }} color="info" className="icon" for={item.selectorKey} />
                                     </label>
                                     <input
                                       id={item.selectorKey}
@@ -646,7 +701,7 @@ function Beneficial() {
 
                                     {watch(item.fileName) && (
                                       <a onClick={() => getDocShareholding(watch(item.fileName), setLoader)} className="btn btn-sm ">
-                                        <Visibility />
+                                        <Visibility color="info" className="icon" />
                                       </a>
                                     )}
                                   </div>
@@ -656,7 +711,7 @@ function Beneficial() {
                                   <div>
                                     <label title="Upload Document" for={item.selectorKey}>
                                       {" "}
-                                      <FileUpload color="primary" for={item.selectorKey} />
+                                      <FileUpload style={{ cursor: "pointer" }} color="info" className="icon" for={item.selectorKey} />
                                     </label>
                                     <input
                                       id={item.selectorKey}
@@ -708,7 +763,7 @@ function Beneficial() {
                                   <div className="d-flex justify-content-center">
                                     <label title="Upload Document" for={item.selectorKey}>
                                       {" "}
-                                      <FileUpload color="primary" for={item.selectorKey} />
+                                      <FileUpload style={{ cursor: "pointer" }} color="info" className="icon" for={item.selectorKey} />
                                     </label>
                                     <input
                                       id={item.selectorKey}
@@ -720,7 +775,7 @@ function Beneficial() {
 
                                     {watch(item.fileName) && (
                                       <a onClick={() => getDocShareholding(watch(item.fileName), setLoader)} className="btn btn-sm ">
-                                        <Visibility />
+                                        <Visibility color="info" className="icon" />
                                       </a>
                                     )}
                                   </div>
@@ -730,7 +785,7 @@ function Beneficial() {
                                   <div>
                                     <label title="Upload Document" for={item.selectorKey}>
                                       {" "}
-                                      <FileUpload color="primary" for={item.selectorKey} />
+                                      <FileUpload style={{ cursor: "pointer" }} color="info" className="icon" for={item.selectorKey} />
                                     </label>
                                     <input
                                       id={item.selectorKey}
@@ -761,7 +816,7 @@ function Beneficial() {
                   </div>
                 </div>
                 <div class="col-sm-12 text-right mt-3">
-                  <button id="btnSearch" type="submit" class="btn btn-primary btn-md center-block" style={{ marginRight: "5px" }}>
+                  <button onClick={pay} id="btnSearch" type="button" class="btn btn-primary btn-md center-block" style={{ marginRight: "5px" }}>
                     Pay
                   </button>{" "}
                   &nbsp;

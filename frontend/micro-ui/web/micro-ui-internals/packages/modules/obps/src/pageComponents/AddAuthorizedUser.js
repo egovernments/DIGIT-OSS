@@ -604,28 +604,32 @@ const AddAuthorizeduser = ({ t, config, onSelect, formData, isUserRegistered = t
                   <Table stickyHeader aria-label="sticky table">
                     <TableHead>
                       <TableRow>
-                        <StyledTableCell>Sr No.</StyledTableCell>
-                        <StyledTableCell>Name</StyledTableCell>
-                        <StyledTableCell>Mobile Number</StyledTableCell>
-                        <StyledTableCell>Email</StyledTableCell>
-                        <StyledTableCell>Gender</StyledTableCell>
-                        <StyledTableCell>PAN No.</StyledTableCell>
+                        <StyledTableCell>{`${t("BPA_AUTH_SR_NO")}`}
+                        {/* Sr No. */}
+                        </StyledTableCell>
+                        <StyledTableCell>{`${t("BPA_AUTH_NAME")}`}</StyledTableCell>
+                        <StyledTableCell>{`${t("BPA_MOBILE_NO_TEXT")}`}</StyledTableCell>
+                        <StyledTableCell>{`${t("BPA_EMAIL_TEXT")}`}</StyledTableCell>
+                        <StyledTableCell>{`${t("BPA_GENDER_TEXT")}`}</StyledTableCell>
+                        <StyledTableCell>{`${t("BPA_APPLICANT_PAN_NO")}`}</StyledTableCell>
                         <StyledTableCell>
                           {data?.devDetail[0]?.addInfo?.showDevTypeFields === "Individual" ||
                           data?.devDetail[0]?.addInfo?.showDevTypeFields === "Proprietorship Firm" ||
                           data?.devDetail[0]?.addInfo?.showDevTypeFields === "Hindu Undivided Family" ? (
-                            <label htmlFor="name" className="text">
-                              Upload/View Power of Attorney{" "}
+                            <label htmlFor="name" className="text">{`${t("BPA_AUTH_UPLOAD_VIEW_POWER_OF_ATTORNEY")}`}
+                              {/* Upload/View Power of Attorney{" "} */}
                             </label>
                           ) : (
-                            <label htmlFor="name" className="text">
+                            <label htmlFor="name" className="text">{`${t("BPA_AUTH_UPLOAD_VIEW_BOARD_RESOLUTION")}`}
                               {" "}
-                              Upload/View Board Resolution
+                              {/* Upload/View Board Resolution */}
                             </label>
                           )}
                         </StyledTableCell>
-                        <StyledTableCell>Upload/View Digital Signature PDF</StyledTableCell>
-                        <StyledTableCell>Action</StyledTableCell>
+                        <StyledTableCell>{`${t("BPA_AUTH_UPLOAD_VIEW__DIGITAL_SIGN")}`}
+                        {/* Upload/View Digital Signature PDF */}
+                        </StyledTableCell>
+                        <StyledTableCell>{`${t("BPA_AUTH_ACTION")}`}</StyledTableCell>
                       </TableRow>
                     </TableHead>
                     <TableBody>
@@ -823,7 +827,9 @@ const AddAuthorizeduser = ({ t, config, onSelect, formData, isUserRegistered = t
                         </Col>
                         <Col md={3} xxl lg="3">
                           <label htmlFor="name" className="text">
-                            Gender <span className="text-danger font-weight-bold">*</span>
+                           {t("BPA_GENDER_TEXT")} 
+                           {/* Gender */}
+                            <span className="text-danger font-weight-bold">*</span>
                           </label>
                           <Dropdown
                             style={{ width: "100%" }}

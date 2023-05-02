@@ -184,7 +184,8 @@ const ElectricalScrutiny = (props) => {
 
   return (
     <Card>
-      <Card.Header class="fw-normal" style={{ top: 5, padding: 5, fontSize: 14, height: 90, lineHeight: 2 }}>
+      {/* <Card.Header class="fw-normal" style={{ top: 5, padding: 5 , fontSize: 14 ,height:90, lineHeight:2 }}>
+
         <div className="row">
           <div className="col-md-3">
             <p>Application Number:</p>
@@ -207,7 +208,7 @@ const ElectricalScrutiny = (props) => {
             <p class="fw-normal">{applicationData?.tcpDairyNumber}</p>
           </div>
         </div>
-      </Card.Header>{" "}
+  </Card.Header>{" "}*/}
       <Card.Header className="head-application">
         <div className="row fw-normal">
           <div className="col-sm-2">

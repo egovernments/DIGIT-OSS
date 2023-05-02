@@ -171,7 +171,7 @@ const SurrenderScrutiny = (props) => {
     // setTimeout(() => {
       setSelectedAction(null);
       setShowModal(false);
-    //   window.location.href = `/digit-ui/employee/tl/servicePlanInbox`;
+      window.location.href = `/digit-ui/employee/tl/SurrenderInbox`;
     // }, 3000);
   };
 
@@ -198,6 +198,7 @@ const SurrenderScrutiny = (props) => {
           msg_id: "",
           requester_id: "",
           authToken: authToken,
+          userInfo: userInfo,
         },
       };
       console.log("logger log1223 body", body);

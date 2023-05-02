@@ -907,9 +907,15 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
                           <Table stickyHeader aria-label="sticky table">
                             <TableHead>
                               <TableRow>
-                                <StyledTableCell>Sr No.</StyledTableCell>
-                                <StyledTableCell>Particulars of document</StyledTableCell>
-                                <StyledTableCell>Annexure</StyledTableCell>
+                                <StyledTableCell>{`${t("BPA_DEV_CAPACITY_SR_NO")}`}
+                                {/* Sr No. */}
+                                </StyledTableCell>
+                                <StyledTableCell>{`${t("BPA_DEV_CAPACITY_PARTICULARS_DOC")}`}
+                                  {/* Particulars of document */}
+                                  </StyledTableCell>
+                                <StyledTableCell>{`${t("BPA_DEV_CAPACITY_ANNEXURE")}`}
+                                  {/* Annexure */}
+                                  </StyledTableCell>
                               </TableRow>
                             </TableHead>
                             <TableBody>
@@ -1010,9 +1016,9 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
                           <Table stickyHeader aria-label="sticky table">
                             <TableHead>
                               <TableRow>
-                                <StyledTableCell>Sr No.</StyledTableCell>
-                                <StyledTableCell>Particulars of document</StyledTableCell>
-                                <StyledTableCell>Annexure</StyledTableCell>
+                                <StyledTableCell> {`${t("BPA_DEV_CAPACITY_SR_NO")}`}</StyledTableCell>
+                                <StyledTableCell> {`${t("BPA_DEV_CAPACITY_PARTICULARS_DOC")}`}</StyledTableCell>
+                                <StyledTableCell> {`${t("BPA_DEV_CAPACITY_ANNEXURE")}`}</StyledTableCell>
                               </TableRow>
                             </TableHead>
                             <TableBody>
@@ -1213,9 +1219,9 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
                           <Table stickyHeader aria-label="sticky table">
                             <TableHead>
                               <TableRow>
-                                <StyledTableCell>Sr No.</StyledTableCell>
-                                <StyledTableCell>Particulars of document</StyledTableCell>
-                                <StyledTableCell>Annexure</StyledTableCell>
+                                 <StyledTableCell> {`${t("BPA_DEV_CAPACITY_SR_NO")}`}</StyledTableCell>
+                                <StyledTableCell> {`${t("BPA_DEV_CAPACITY_PARTICULARS_DOC")}`}</StyledTableCell>
+                                <StyledTableCell> {`${t("BPA_DEV_CAPACITY_ANNEXURE")}`}</StyledTableCell>
                               </TableRow>
                             </TableHead>
                             <TableBody>
@@ -1402,12 +1408,12 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
                             <Table stickyHeader aria-label="sticky table">
                               <TableHead>
                                 <TableRow>
-                                  <StyledTableCell>Sr No.</StyledTableCell>
-                                  <StyledTableCell>Licence No.</StyledTableCell>
-                                  <StyledTableCell>Date of grant of license</StyledTableCell>
-                                  <StyledTableCell>Purpose of colony</StyledTableCell>
-                                  <StyledTableCell>Validity of Licence</StyledTableCell>
-                                  <StyledTableCell>Action</StyledTableCell>
+                                  <StyledTableCell> {`${t("BPA_DEV_CAPACITY_SR_NO")}`}</StyledTableCell>
+                                  <StyledTableCell>{`${t("BPA_DEV_CAPACITY_LICENCE_NO")}`}</StyledTableCell>
+                                  <StyledTableCell>{`${t("BPA_DEV_CAPACITY_DATE_OF_GRANT")}`}</StyledTableCell>
+                                  <StyledTableCell>{`${t("BPA_DEV_CAPACITY_PURPOSE_COLONY")}`}</StyledTableCell>
+                                  <StyledTableCell>{`${t("BPA_DEV_CAPACITY_VALIDITY_LICENCE")}`}</StyledTableCell>
+                                  <StyledTableCell>{`${t("BPA_DEV_CAPACITY_ACTION")}`}</StyledTableCell>
                                 </TableRow>
                               </TableHead>
                               <TableBody>
@@ -1778,9 +1784,9 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
                 {(data?.devDetail[0]?.addInfo?.showDevTypeFields === "Individual NOT USES" ||
                   data?.devDetail[0]?.addInfo?.showDevTypeFields === "Proprietorship Firm NOT USES") && (
                   <div>
-                    <p>
-                      (iii). In case of technical capacity sought from another company/firm who has already obtained license(s) under act of 1975
-                      Haryana:
+                    <p> {`${t("BPA_DEV_CAPACITY_TECHNICAL_COMPANY_FIRM_LICENCE")}`}
+                      {/* (iii). In case of technical capacity sought from another company/firm who has already obtained license(s) under act of 1975
+                      Haryana: */}
                       <span className="text-danger font-weight-bold">*</span>
                     </p>
 
@@ -1817,18 +1823,18 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
                                     <Table className="table table-bordered" size="sm">
                                       <thead>
                                         <tr>
-                                          <th>S.No.</th>
-                                          <th>Agreement </th>
-                                          <th>Upload Document </th>
-                                          <th>Annexure </th>
+                                          <th>{`${t("BPA_DEV_CAPACITY_SR_NO")}`}</th>
+                                          <th>{`${t("BPA_DEV_CAPACITY_AGREEMENT")}`} </th>
+                                          <th>{`${t("BPA_DEV_CAPACITY_UPLOAD_DOC")}`} </th>
+                                          <th>{`${t("BPA_DEV_CAPACITY_ANNEXURE")}`}</th>
                                         </tr>
                                       </thead>
                                       <tbody>
                                         <tr>
                                           <td> 1 </td>
 
-                                          <td>
-                                            Agreement between the proposed developer and existing colonizer{" "}
+                                          <td>{`${t("BPA_DEV_CAPACITY_AGREEMENT_PROPOSED_DEVELOPER_COLONIZER")}`}
+                                            {/* Agreement between the proposed developer and existing colonizer{" "} */}
                                             <span className="text-danger font-weight-bold">*</span>
                                           </td>
                                           <td align="center" size="large" style={{ textAlign: "center" }}>
@@ -1864,8 +1870,8 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
                                         <tr>
                                           <td> 2 </td>
 
-                                          <td>
-                                            Board resolution of authorised signatory of the existing colonizer{" "}
+                                          <td>{`${t("BPA_DEV_CAPACITY_BOARD_RESOLUTION_SIGNATORY_COLONIZER")}`}
+                                            {/* Board resolution of authorised signatory of the existing colonizer{" "} */}
                                             <span className="text-danger font-weight-bold">*</span>
                                           </td>
                                           <td align="center" size="large" style={{ textAlign: "center" }}>
@@ -1900,9 +1906,10 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
                                         </tr>
                                         <tr>
                                           <td> 3 </td>
-                                          <td>
+                                          <td>{`${t("BPA_DEV_CAPACITY_IRREVOCABLE_AGREEMENT")}`}
                                             {" "}
-                                            Registered and Irrevocable Agreement <span className="text-danger font-weight-bold">*</span>
+                                            {/* Registered and Irrevocable Agreement  */}
+                                            <span className="text-danger font-weight-bold">*</span>
                                           </td>
                                           <td align="center" size="large" style={{ textAlign: "center" }}>
                                             <label for="registeredDocId">
@@ -1937,8 +1944,8 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
 
                                         <tr>
                                           <td> 4 </td>
-                                          <td>
-                                            Board resolutions of authorized signatory of firm/company provided technical assistance{" "}
+                                          <td>{`${t("BPA_DEV_CAPACITY_AUTHORIZED_SIGNATORY_TECHNICAL_ASSISTANCE")}`}
+                                            {/* Board resolutions of authorized signatory of firm/company provided technical assistance{" "} */}
                                             <span className="text-danger font-weight-bold">*</span>
                                           </td>
                                           <td align="center" size="large" style={{ textAlign: "center" }}>
@@ -1981,8 +1988,9 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
                           <div className="row mx-1">
                             <div className="col col-4">
                               <div className="form-group">
-                                <label htmlFor="licNo">
-                                  License No. <span className="text-danger font-weight-bold">*</span>
+                                <label htmlFor="licNo">{`${t("BPA_DEV_CAPACITY_LICENCE_NO")}`}
+                                  {/* License No.  */}
+                                  <span className="text-danger font-weight-bold">*</span>
                                 </label>
                                 <input
                                   type="text"
@@ -2011,8 +2019,9 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
 
                             <div className="col col-4">
                               <div className="form-group">
-                                <label htmlFor="licDate">
-                                  Date <span className="text-danger font-weight-bold">*</span>
+                                <label htmlFor="licDate">{`${t("BPA_DEV_CAPACITY_DATE")}`}
+                                  {/* Date  */}
+                                  <span className="text-danger font-weight-bold">*</span>
                                 </label>
                                 <input
                                   type="date"
@@ -2033,8 +2042,9 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
 
                             <div className="col col-4">
                               <div className="form-group">
-                                <label htmlFor="licValidity">
-                                  Validity <span className="text-danger font-weight-bold">*</span>
+                                <label htmlFor="licValidity">{`${t("BPA_DEV_CAPACITY_VALIDITY")}`}
+                                  {/* Validity  */}
+                                  <span className="text-danger font-weight-bold">*</span>
                                 </label>
                                 <input
                                   type="date"
@@ -2055,8 +2065,9 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
 
                             <div className="col col-4">
                               <div className="form-group">
-                                <label htmlFor="licValidity">
-                                  Purpose <span className="text-danger font-weight-bold">*</span>
+                                <label htmlFor="licValidity">{`${t("BPA_DEV_CAPACITY_PURPOSE")}`}
+                                  {/* Purpose  */}
+                                  <span className="text-danger font-weight-bold">*</span>
                                 </label>
                                 <Select
                                   value={technicalCapacitySoughtFromAnyColonizer.purpose}
@@ -2085,12 +2096,14 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
                 <div className="mb-3"></div>
                 {data?.devDetail[0]?.addInfo?.showDevTypeFields === "Individual NOT USES" ||
                 data?.devDetail[0]?.addInfo?.showDevTypeFields === "Proprietorship Firm NOT USES" ? (
-                  <p>
-                    (iii) Whether any technical expert(s) engaged <span className="text-danger font-weight-bold">*</span>
+                  <p>{`${t("BPA_DEV_CAPACITY_TECHNICAL_EXPERT_ENGAGED")}`}
+                    {/* (iii) Whether any technical expert(s) engaged  */}
+                    <span className="text-danger font-weight-bold">*</span>
                   </p>
                 ) : (
-                  <p className="d-none">
-                    (iv) Whether any technical expert(s) engaged <span className="text-danger font-weight-bold">*</span>
+                  <p className="d-none">{`${t("BPA_DEV_CAPACITY_TECHNICAL_EXPERTS_ENGAGED")}`}
+                    {/* (iv) Whether any technical expert(s) engaged */}
+                     <span className="text-danger font-weight-bold">*</span>
                   </p>
                 )}
 
@@ -2124,18 +2137,18 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
                             <Table className="table table-bordered">
                               <thead>
                                 <tr>
-                                  <th>S.No</th>
+                                  <th>{`${t("BPA_DEV_CAPACITY_SR_NO")}`}</th>
                                   <th>
-                                    Professional <span className="text-danger font-weight-bold">*</span>{" "}
+                                   {`${t("BPA_DEV_CAPACITY_PROFESSIONAL")}`} <span className="text-danger font-weight-bold">*</span>{" "}
                                   </th>
                                   <th>
-                                    Qualification <span className="text-danger font-weight-bold">*</span>
+                                   {`${t("BPA_DEV_CAPACITY_QUALIFICATION")}`} <span className="text-danger font-weight-bold">*</span>
                                   </th>
                                   <th>
-                                    Signature <span className="text-danger font-weight-bold">*</span>
+                                   {`${t("BPA_DEV_CAPACITY_SIGNATURE")}`}  <span className="text-danger font-weight-bold">*</span>
                                   </th>
                                   <th>
-                                    Annexure <span className="text-danger font-weight-bold">*</span>
+                                   {`${t("BPA_DEV_CAPACITY_ANNEXURE")}`}<span className="text-danger font-weight-bold">*</span>
                                   </th>
                                 </tr>
                               </thead>
