@@ -295,22 +295,22 @@ function SurrenderLic() {
         </h4>
         <div className="card">
           <br></br>
-            <div className="col-12 p-3">
-              <SearchLicenceComp
-                watch={watch}
-                register={register}
-                control={control}
-                setLoader={setLoading}
-                errors={errors}
-                setValue={setValue}
-                resetField={resetField}
-              />
-            </div>
+          <div className="col-12 p-3">
+            <SearchLicenceComp
+              watch={watch}
+              register={register}
+              control={control}
+              setLoader={setLoading}
+              errors={errors}
+              setValue={setValue}
+              resetField={resetField}
+            />
+          </div>
           <div className="row-12 gy-3">
 
             <div className="col col-3 ">
               <h2>
-              {`${t("SELECT_TYPE_COMPLETE_OR_PARTIAL")}`} <span style={{ color: "red" }}>*</span>
+                {`${t("SELECT_TYPE_COMPLETE_OR_PARTIAL")}`} <span style={{ color: "red" }}>*</span>
               </h2>
               <select className="form-control"
                 name="selectType"
@@ -320,6 +320,7 @@ function SurrenderLic() {
                   required: "At least one should be selected",
                 })}
                 value={watch("selectType") || ""}>
+                <option value=" ">----Select value-----</option>
                 <option value="COMPLETE" >COMPLETE</option>
                 <option value="PARTIAL" >PARTIAL</option>
               </select>
@@ -814,8 +815,8 @@ function SurrenderLic() {
                                       {errors?.detailedRelocationScheme && errors?.detailedRelocationScheme?.message}
                                     </h3>
 
-                                    {watch('thirdPartyRightsDeclarationfileUrl') && (
-                                      <a onClick={() => getDocShareholding(watch('thirdPartyRightsDeclarationfileUrl'), setLoading)} className="btn btn-sm ">
+                                    {watch('detailedRelocationSchemefileUrl') && (
+                                      <a onClick={() => getDocShareholding(watch('detailedRelocationSchemefileUrl'), setLoading)} className="btn btn-sm ">
                                         <Visibility color="info" className="icon" />
                                       </a>
                                     )}
