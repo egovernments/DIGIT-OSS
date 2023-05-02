@@ -144,6 +144,20 @@ function SurrenderLicScrutiny({ apiResponse, refreshScrutinyData, applicationNum
     setValue("availedEdcfileUrl", details?.availedEdcfileUrl);
     setValue("areaFallingUnderfileUrl", details?.areaFallingUnderfileUrl);
     setValue("areaFallingDividing", details?.areaFallingDividing);
+
+    setValue("areaAcres", details?.newAdditionalDetails?.areaAcres);
+    setValue("colonizerName", details?.newAdditionalDetails?.colonizerName);
+    setValue("colonyType", details?.newAdditionalDetails?.colonyType);
+    setValue("developmentPlan", details?.newAdditionalDetails?.developmentPlan);
+    setValue("district", details?.newAdditionalDetails?.district);
+    setValue("periodOfRenewal", details?.newAdditionalDetails?.periodOfRenewal);
+    setValue("renewalRequiredUpto", details?.newAdditionalDetails?.renewalRequiredUpto);
+    setValue("revenueEstate", details?.newAdditionalDetails?.revenueEstate);
+    setValue("sectorNo", details?.newAdditionalDetails?.sectorNo);
+    setValue("selectLicence", details?.newAdditionalDetails?.selectLicence);
+    setValue("tehsil", details?.newAdditionalDetails?.tehsil);
+    setValue("validUpto", details?.newAdditionalDetails?.validUpto);
+
   }
 
   const handlemodaldData = (data) => {
@@ -247,81 +261,348 @@ function SurrenderLicScrutiny({ apiResponse, refreshScrutinyData, applicationNum
 
               <div className="row-12">
 
-                <div className="row row-cols-1 row-cols-md-2 row-cols-lg-4 mx-3 mt-5">
+                <div className="row row-12 row-cols-sm-3 row-cols-md-6 mx-2 my-3">
 
-                  <div className="col d-flex align-items-center">
+                  <div className="col col-3">
                     <FormControl className="w-100">
                       <h2 className="FormLable">
                         {`${t("LICENSE_NO")}`} <span style={{ color: "red" }}>*</span>
                       </h2>
-                      {/* <InputLabel id="select-label" >
-                      {`${t("LICENSE_NO")}`} <span style={{ color: "red" }}>*</span>
-                    </InputLabel> */}
-                      <TextField variant="standard" placeholder="" className="Inputcontrol" disabled {...register("licenseNo",
-                        {
-                          required: "This field cannot be blank",
-                          minLength: {
-                            value: 4,
-                            message: "Invalid Licence No."
-                          }, maxLength: {
-                            value: 19,
-                            message: "Invalid Licence No."
-                          },
-                          pattern: {
-                            value: /^[a-zA-Z0-9]*$/,
-                            message: "Invalid Licence No."
-                          }
-                        })}
-                        error={Boolean(errors?.licenseNo)}
-                      />
+                      <div className="d-flex align-items-center">
+
+                      <input className="form-control"  disabled {...register("licenseNo")}/>
+                        <ReportProblemIcon
+                          style={{
+                            color: getIconColor(t('LICENSE_NO')),
+                          }}
+                          className="ml-2"
+                          onClick={() => {
+                            setSmShow(true);
+                            setOpennedModal(t('LICENSE_NO'));
+                            setLabelValue(t('LICENSE_NO')),
+                              setFieldValue(watch('licenseNo') || null);
+                          }}
+                        ></ReportProblemIcon>
+                      </div>
+
                       <FormHelperText error={Boolean(errors?.licenseNo)}>
                         {errors?.licenseNo?.message}
                       </FormHelperText>
                     </FormControl>
-                    <ReportProblemIcon
-                      style={{
-                        color: getIconColor(t('LICENSE_NO')),
-                      }}
-                      className="ml-2"
-                      onClick={() => {
-                        setSmShow(true);
-                        setOpennedModal(t('LICENSE_NO'));
-                        setLabelValue(t('LICENSE_NO')),
-                          setFieldValue(watch('licenseNo') || null);
-                      }}
-                    ></ReportProblemIcon>
                   </div>
-                  &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
 
-                  <div className="col d-flex align-items-center">
-                    <FormControl className="w-100" >
-                      <InputLabel id="select-label" >
-                        {`${t("SELECT_TYPE_COMPLETE_OR_PARTIAL")}`} <span style={{ color: "red" }}>*</span>
-                      </InputLabel>
-                      <Select
-                        disabled
-                        variant="standard"
-                        name="selectType"
-                        labelId="select-label"
-                        id="select-field"
-                        {...register("selectType", {
-                          required: "At least one should be selected"
-                        })}
-                        value={watch("selectType") || ""}
 
-                        // onChange={(e) => handleshowhide(e)}
-                        error={errors.selectType !== undefined}
-                      // input ={<TextField label="Select Type (Complete or Partial) *" variant="standard" value={"COMPLETE"} />}
-                      >
-                        <MenuItem style={{ padding: '12px' }} value="COMPLETE">{`${t("COMPLETE")}`}</MenuItem>
-                        <MenuItem style={{ padding: '12px' }} value="PARTIAL">{`${t("PARTIAL")}`}</MenuItem>
-                      </Select>
-                      <FormHelperText error={Boolean(errors?.selectType)}>
-                        {errors?.selectType?.message}
-                      </FormHelperText>
+                  <div className="col col-3">
+                    <FormControl className="w-100">
+                      <h2 className="FormLable">
+                        {`${t("Area in Acres (License)")}`} <span style={{ color: "red" }}>*</span>
+                      </h2>
+                      <div className="d-flex align-items-center">
+
+                      <input className="form-control"  disabled {...register("areaAcres")}/>
+                        <ReportProblemIcon
+                          style={{
+                            color: getIconColor(t('Area in Acres (License)')),
+                          }}
+                          className="ml-2"
+                          onClick={() => {
+                            setSmShow(true);
+                            setOpennedModal(t('Area in Acres (License)'));
+                            setLabelValue(t('Area in Acres (License)')),
+                              setFieldValue(watch('areaAcres') || null);
+                          }}
+                        ></ReportProblemIcon>
+                      </div>
                     </FormControl>
+                  </div>
 
-                    <ReportProblemIcon
+
+                  <div className="col col-3">
+                    <FormControl className="w-100">
+                      <h2 className="FormLable">
+                        {`${t("Colonizer Name")}`} <span style={{ color: "red" }}>*</span>
+                      </h2>
+                      <div className="d-flex align-items-center">
+
+                      <input className="form-control"  disabled {...register("colonizerName")}/>
+                        <ReportProblemIcon
+                          style={{
+                            color: getIconColor(t('Colonizer Name')),
+                          }}
+                          className="ml-2"
+                          onClick={() => {
+                            setSmShow(true);
+                            setOpennedModal(t('Colonizer Name'));
+                            setLabelValue(t('Colonizer Name')),
+                              setFieldValue(watch('colonizerName') || null);
+                          }}
+                        ></ReportProblemIcon>
+                      </div>
+                    </FormControl>
+                  </div>
+
+
+                  <div className="col col-3">
+                    <FormControl className="w-100">
+                      <h2 className="FormLable">
+                        {`${t("Colony Type")}`} <span style={{ color: "red" }}>*</span>
+                      </h2>
+                      <div className="d-flex align-items-center">
+
+                      <input className="form-control"  disabled {...register("colonyType")}/>
+                        <ReportProblemIcon
+                          style={{
+                            color: getIconColor(t('Colony Type')),
+                          }}
+                          className="ml-2"
+                          onClick={() => {
+                            setSmShow(true);
+                            setOpennedModal(t('Colony Type'));
+                            setLabelValue(t('Colony Type')),
+                              setFieldValue(watch('colonyType') || null);
+                          }}
+                        ></ReportProblemIcon>
+                      </div>
+                    </FormControl>
+                  </div>
+
+
+                  <div className="col col-3">
+                    <FormControl className="w-100">
+                      <h2 className="FormLable">
+                        {`${t("Development Plan")}`} <span style={{ color: "red" }}>*</span>
+                      </h2>
+                      <div className="d-flex align-items-center">
+
+                      <input className="form-control"  disabled {...register("developmentPlan")}/>
+                        <ReportProblemIcon
+                          style={{
+                            color: getIconColor(t('Development Plan')),
+                          }}
+                          className="ml-2"
+                          onClick={() => {
+                            setSmShow(true);
+                            setOpennedModal(t('Development Plan'));
+                            setLabelValue(t('Development Plan')),
+                              setFieldValue(watch('developmentPlan') || null);
+                          }}
+                        ></ReportProblemIcon>
+                      </div>
+                    </FormControl>
+                  </div>
+
+
+                  <div className="col col-3">
+                    <FormControl className="w-100">
+                      <h2 className="FormLable">
+                        {`${t("District")}`} <span style={{ color: "red" }}>*</span>
+                      </h2>
+                      <div className="d-flex align-items-center">
+
+                      <input className="form-control"  disabled {...register("district")}/>
+                        <ReportProblemIcon
+                          style={{
+                            color: getIconColor(t('District')),
+                          }}
+                          className="ml-2"
+                          onClick={() => {
+                            setSmShow(true);
+                            setOpennedModal(t('District'));
+                            setLabelValue(t('District')),
+                              setFieldValue(watch('district') || null);
+                          }}
+                        ></ReportProblemIcon>
+                      </div>
+                    </FormControl>
+                  </div>
+
+
+                  <div className="col col-3">
+                    <FormControl className="w-100">
+                      <h2 className="FormLable">
+                        {`${t("Period of Renewal")}`} <span style={{ color: "red" }}>*</span>
+                      </h2>
+                      <div className="d-flex align-items-center">
+
+                      <input className="form-control"  disabled {...register("periodOfRenewal")}/>
+                        <ReportProblemIcon
+                          style={{
+                            color: getIconColor(t('Period of Renewal')),
+                          }}
+                          className="ml-2"
+                          onClick={() => {
+                            setSmShow(true);
+                            setOpennedModal(t('Period of Renewal'));
+                            setLabelValue(t('Period of Renewal')),
+                              setFieldValue(watch('periodOfRenewal') || null);
+                          }}
+                        ></ReportProblemIcon>
+                      </div>
+                    </FormControl>
+                  </div>
+
+
+                  <div className="col col-3">
+                    <FormControl className="w-100">
+                      <h2 className="FormLable">
+                        {`${t("Renewal required upto")}`} <span style={{ color: "red" }}>*</span>
+                      </h2>
+                      <div className="d-flex align-items-center">
+
+                      <input className="form-control"  disabled {...register("renewalRequiredUpto")}/>
+                        <ReportProblemIcon
+                          style={{
+                            color: getIconColor(t('Renewal required upto')),
+                          }}
+                          className="ml-2"
+                          onClick={() => {
+                            setSmShow(true);
+                            setOpennedModal(t('Renewal required upto'));
+                            setLabelValue(t('Renewal required upto')),
+                              setFieldValue(watch('renewalRequiredUpto') || null);
+                          }}
+                        ></ReportProblemIcon>
+                      </div>
+                    </FormControl>
+                  </div>
+
+
+                  <div className="col col-3">
+                    <FormControl className="w-100">
+                      <h2 className="FormLable">
+                        {`${t("Revenue Estate")}`} <span style={{ color: "red" }}>*</span>
+                      </h2>
+                      <div className="d-flex align-items-center">
+
+                      <input className="form-control"  disabled {...register("revenueEstate")}/>
+                        <ReportProblemIcon
+                          style={{
+                            color: getIconColor(t('Revenue Estate')),
+                          }}
+                          className="ml-2"
+                          onClick={() => {
+                            setSmShow(true);
+                            setOpennedModal(t('Revenue Estate'));
+                            setLabelValue(t('Revenue Estate')),
+                              setFieldValue(watch('revenueEstate') || null);
+                          }}
+                        ></ReportProblemIcon>
+                      </div>
+                    </FormControl>
+                  </div>
+
+
+                  <div className="col col-3">
+                    <FormControl className="w-100">
+                      <h2 className="FormLable">
+                        {`${t("Sector No.")}`} <span style={{ color: "red" }}>*</span>
+                      </h2>
+                      <div className="d-flex align-items-center">
+
+                      <input className="form-control"  disabled {...register("sectorNo")}/>
+                        <ReportProblemIcon
+                          style={{
+                            color: getIconColor(t('Sector No.')),
+                          }}
+                          className="ml-2"
+                          onClick={() => {
+                            setSmShow(true);
+                            setOpennedModal(t('Sector No.'));
+                            setLabelValue(t('Sector No.')),
+                              setFieldValue(watch('sectorNo') || null);
+                          }}
+                        ></ReportProblemIcon>
+                      </div>
+                    </FormControl>
+                  </div>
+
+
+                  <div className="col col-3">
+                    <FormControl className="w-100">
+                      <h2 className="FormLable">
+                        {`${t("Select License")}`} <span style={{ color: "red" }}>*</span>
+                      </h2>
+                      <div className="d-flex align-items-center">
+
+                      <input className="form-control"  disabled {...register("selectLicence")}/>
+                        <ReportProblemIcon
+                          style={{
+                            color: getIconColor(t('Select License')),
+                          }}
+                          className="ml-2"
+                          onClick={() => {
+                            setSmShow(true);
+                            setOpennedModal(t('Select License'));
+                            setLabelValue(t('Select License')),
+                              setFieldValue(watch('selectLicence') || null);
+                          }}
+                        ></ReportProblemIcon>
+                      </div>
+                    </FormControl>
+                  </div>
+
+
+                  <div className="col col-3">
+                    <FormControl className="w-100">
+                      <h2 className="FormLable">
+                        {`${t("Tehsil")}`} <span style={{ color: "red" }}>*</span>
+                      </h2>
+                      <div className="d-flex align-items-center">
+
+                      <input className="form-control"  disabled {...register("tehsil")}/>
+                        <ReportProblemIcon
+                          style={{
+                            color: getIconColor(t('Tehsil')),
+                          }}
+                          className="ml-2"
+                          onClick={() => {
+                            setSmShow(true);
+                            setOpennedModal(t('Tehsil'));
+                            setLabelValue(t('Tehsil')),
+                              setFieldValue(watch('tehsil') || null);
+                          }}
+                        ></ReportProblemIcon>
+                      </div>
+                    </FormControl>
+                  </div>
+
+
+                  <div className="col col-3">
+                    <FormControl className="w-100">
+                      <h2 className="FormLable">
+                        {`${t("Valid Upto")}`} <span style={{ color: "red" }}>*</span>
+                      </h2>
+                      <div className="d-flex align-items-center">
+
+                      <input className="form-control"  disabled {...register("validUpto")}/>
+                        <ReportProblemIcon
+                          style={{
+                            color: getIconColor(t('Valid Upto')),
+                          }}
+                          className="ml-2"
+                          onClick={() => {
+                            setSmShow(true);
+                            setOpennedModal(t('Valid Upto'));
+                            setLabelValue(t('Valid Upto')),
+                              setFieldValue(watch('validUpto') || null);
+                          }}
+                        ></ReportProblemIcon>
+                      </div>
+                    </FormControl>
+                  </div>
+                  
+                  
+                  <div className="col col-3">
+                    <FormControl className="w-100">
+                      <h2 className="FormLable">
+                      {`${t("SELECT_TYPE_COMPLETE_OR_PARTIAL")}`} <span style={{ color: "red" }}>*</span>
+                      </h2>
+                      <div className="d-flex align-items-center">
+
+                      <input className="form-control"  disabled {...register("selectType", {
+                          required: "At least one should be selected"
+                        })}/>
+                         <ReportProblemIcon
                       style={{
                         color: getIconColor(t('SELECT_TYPE_COMPLETE_OR_PARTIAL')),
                       }}
@@ -333,7 +614,42 @@ function SurrenderLicScrutiny({ apiResponse, refreshScrutinyData, applicationNum
                           setFieldValue(watch('selectType') || null);
                       }}
                     ></ReportProblemIcon>
+                      </div>
+
+                      <FormHelperText error={Boolean(errors?.licenseNo)}>
+                        {errors?.licenseNo?.message}
+                      </FormHelperText>
+                    </FormControl>
                   </div>
+
+                      {
+                        watch('selectType') === "PARTIAL" && (
+                  <div className="col col-3">
+                    <FormControl className="w-100">
+                      <h2 className="FormLable">
+                        {`${t("AREA_IN_ACRES")}`} <span style={{ color: "red" }}>*</span>
+                      </h2>
+                      <div className="d-flex align-items-center">
+
+                      <input className="form-control"  disabled {...register("areaInAcres")}/>
+                        <ReportProblemIcon
+                          style={{
+                            color: getIconColor(t('AREA_IN_ACRES')),
+                          }}
+                          className="ml-2"
+                          onClick={() => {
+                            setSmShow(true);
+                            setOpennedModal(t('AREA_IN_ACRES'));
+                            setLabelValue(t('AREA_IN_ACRES')),
+                              setFieldValue(watch('areaInAcres') || null);
+                          }}
+                        ></ReportProblemIcon>
+                      </div>
+                    </FormControl>
+                  </div>
+                        )
+                      }
+
 
                   {/* <FormControl>
     <h2 className="FormLable">
@@ -356,9 +672,9 @@ function SurrenderLicScrutiny({ apiResponse, refreshScrutinyData, applicationNum
   </FormControl> */}
                 </div>
                 <div>
-                  {watch('selectType') === "PARTIAL" && (
+                  {/* {watch('selectType') === "PARTIAL" && (
                     <div className="row-12">
-                      <div className="col col-4 d-flex align-items-center">
+                      <div className="col col-3 d-flex align-items-center">
                         <FormControl>
 
                           <InputLabel id="select-label" >
@@ -393,7 +709,7 @@ function SurrenderLicScrutiny({ apiResponse, refreshScrutinyData, applicationNum
                         ></ReportProblemIcon>
                       </div>
                     </div>
-                  )}
+                  )} */}
                 </div>
                 <div className="row-12">
                   <div className="col col-12 d-flex align-items-center">

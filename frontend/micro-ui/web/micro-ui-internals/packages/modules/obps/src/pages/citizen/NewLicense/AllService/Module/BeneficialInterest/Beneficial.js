@@ -250,7 +250,7 @@ function Beneficial() {
     try {
       const postDistrict = {
         changeBeneficial:
-          {
+          [{
             licenseNumber: data?.licenceNo || "",
             developerServiceCode: data?.developerServiceCode || "",
             paidAmount: data?.paidAmount || "",
@@ -280,7 +280,7 @@ function Beneficial() {
               tehsil: data?.tehsil,
               district: data?.district
           }
-          },
+          }],
         RequestInfo: {
           apiId: "Rainmaker",
           msgId: "1669293303096|en_IN",
