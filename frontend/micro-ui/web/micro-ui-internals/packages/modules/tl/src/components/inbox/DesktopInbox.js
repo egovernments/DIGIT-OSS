@@ -74,7 +74,7 @@ const DesktopInbox = ({
                       : row.original["businessService"] === "ELECTRICAL_PLAN"
                       ? "ElectricalScrutiny"
                       : row.original["businessService"] === "EXTENTION_OF_CLU_PERMISSION"
-                      ? "ElectricalScrutiny"
+                      ? "ExtensionCluCard"
                       : row.original["businessService"] === "BG_NEW"
                       ? "ScrutinyForm"
                       : null
@@ -179,6 +179,8 @@ const DesktopInbox = ({
                       ? "Completionscrutiny"
                       : row.original["businessService"] === "BG_NEW"
                       ? "ScrutinyForm"
+                      : row.original["businessService"] === "EXTENTION_OF_CLU_PERMISSION"
+                      ? "ExtensionCluCard"
                       : null
                   }/` + row.original["applicationId"]
                 }

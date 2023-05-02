@@ -443,7 +443,7 @@ console.log("roleData",rolesDate )
       </div>
       
 
-      <div style={{ position: "relative", width: "100%", height: "100%", display: "flex" }}>
+      {/* <div style={{ position: "relative", width: "100%", height: "100%", display: "flex" }}>
       <DataGridDemo
           
           applicationNumber={applicationNumber}
@@ -451,7 +451,7 @@ console.log("roleData",rolesDate )
           applicationStatus={applicationStatus}
           >
           </DataGridDemo>
-      </div>
+      </div> */}
     </div>
   );
 };
