@@ -160,7 +160,7 @@ public class PayService {
 		//Assumtion: Partial payment is not allowed 
 		for (DemandDetail demandDetail : demand.getDemandDetails()) {
 			if (demandDetail.getTaxHeadMasterCode().equalsIgnoreCase("PT_TAX")) {
-					taxAmt = demandDetail.getTaxAmount();
+				taxAmt = demandDetail.getTaxAmount();
 			}
 		}
 
@@ -196,14 +196,21 @@ public class PayService {
 
 		BigDecimal rebateAmt = BigDecimal.ZERO;
 		BigDecimal taxAmt = BigDecimal.ZERO;
+		BigDecimal swTaxAmt = BigDecimal.ZERO;
 		//BigDecimal taxAmt = getTaxAmountToCalculateRebateOnApplicables(demand, payments);
 		//Assumtion: Partial payment is not allowed 
 		for (DemandDetail demandDetail : demand.getDemandDetails()) {
-			if (demandDetail.getTaxHeadMasterCode().equalsIgnoreCase("PT_TAX")) {
-					taxAmt = demandDetail.getTaxAmount();
+			if (demandDetail.getTaxHeadMasterCode().equalsIgnoreCase("SWATCHATHA_TAX")) {
+				swTaxAmt = demandDetail.getTaxAmount();
+			}
+			else if (demandDetail.getTaxHeadMasterCode().equalsIgnoreCase("PT_TAX")) {
+				taxAmt = demandDetail.getTaxAmount();
 			}
 		}
-		if(taxAmt.compareTo(BigDecimal.ZERO)>0 && rebate2.compareTo(BigDecimal.ZERO)>0 )
+		if(swTaxAmt.compareTo(BigDecimal.ZERO)>0) {
+			taxAmt = swTaxAmt;
+		}
+		else if(taxAmt.compareTo(BigDecimal.ZERO)>0 && rebate2.compareTo(BigDecimal.ZERO)>0 )
 		{
 			taxAmt=taxAmt.subtract(rebate2);
 		}
