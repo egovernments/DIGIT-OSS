@@ -165,6 +165,7 @@ function renewalClu() {
                 errors={errors}
                 setValue={setValue}
                 resetField={resetField}
+                comp="renewal"
               />
               <div className="row gy-3 mt-3">
                 <div className="col col-6 ">

@@ -49,6 +49,7 @@ import CommunityInbox from "./ScrutinyBasic/AllServiceScrutiny/ExtensionCommunit
 import Completionscrutiny from "../employee/ScrutinyBasic/AllServiceScrutiny/CompletionLic/CompletionLic";
 import SurrenderLicScrutiny from "../employee/ScrutinyBasic/AllServiceScrutiny/SurrenderLic/SurrenderLic";
 import SurrenderScrutiny from "./ScrutinyBasic/AllServiceScrutiny/SurrenderLic/SurrenderCard";
+import ExtensionInbox from "./ScrutinyBasic/AllServiceScrutiny/ExtensionClu/Inbox";
 import BeneficialCard from "./ScrutinyBasic/AllServiceScrutiny/BeneficialInterest/BeneficialCard";
 import ExtensionCluCard from "./ScrutinyBasic/AllServiceScrutiny/ExtensionClu/ExtensionCluCard";
 
@@ -263,6 +264,18 @@ const EmployeeApp = ({ path, url, userType }) => {
                 <StandardInbox
                   parentRoute={path}
                   businessService={["APPROVAL_OF_STANDARD"]}
+                  filterComponent="TL_INBOX_FILTER"
+                  initialStates={{}}
+                  isInbox={true}
+                />
+              )}
+            />
+            <PrivateRoute
+              path={`${path}/ExtensionInbox`}
+              component={(props) => (
+                <ExtensionInbox
+                  parentRoute={path}
+                  businessService={["EXTENTION_OF_CLU_PERMISSION"]}
                   filterComponent="TL_INBOX_FILTER"
                   initialStates={{}}
                   isInbox={true}

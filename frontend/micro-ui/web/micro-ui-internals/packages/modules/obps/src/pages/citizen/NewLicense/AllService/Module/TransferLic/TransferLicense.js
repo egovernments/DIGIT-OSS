@@ -1,6 +1,13 @@
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import axios from "axios";
+import { Button } from "react-bootstrap";
+import { Dialog } from "@mui/material";
+import DialogActions from "@mui/material/DialogActions";
+import DialogContent from "@mui/material/DialogContent";
+import DialogContentText from "@mui/material/DialogContentText";
+import DialogTitle from "@mui/material/DialogTitle";
+import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
 import { getDocShareholding } from "../../../docView/docView.help";
 import ReactMultiSelect from "../../../../../../../../../react-components/src/atoms/ReactMultiSelect";
 import FileUpload from "@mui/icons-material/FileUpload";
@@ -9,6 +16,7 @@ import CusToaster from "../../../../../../components/Toaster";
 import Spinner from "../../../../../../components/Loader";
 import { useHistory } from "react-router-dom";
 import SearchLicenceComp from "../../../../../../components/SearchLicence";
+import { useTranslation } from "react-i18next";
 
 const selectTypeData = [
   { label: "Complete", value: "complete" },
@@ -16,6 +24,7 @@ const selectTypeData = [
 ];
 
 const Transferlicence = () => {
+  const { t } = useTranslation();
   const history = useHistory();
   const [fileStoreId, setFileStoreId] = useState({});
   const [selectedFiles, setSelectedFiles] = useState([]);
@@ -23,6 +32,8 @@ const Transferlicence = () => {
   const [showToastError, setShowToastError] = useState({ label: "", error: false, success: false });
   const [showField, setShowField] = useState(false);
   const [getError, setError] = useState("");
+  const [applicationNumber, setApplicationNumber] = useState("");
+  const [open, setOpen] = useState(false);
 
   const {
     register,
@@ -36,7 +47,7 @@ const Transferlicence = () => {
 
   const transferLic = async (data) => {
     console.log("data", data);
-    data["selectLicence"] = data?.selectLicence?.label;
+    // data["selectLicence"] = data?.selectLicence?.label;
     data["selectType"] = data?.selectType?.value;
     const numberLic = data?.licenceNo;
     delete data?.licenceNo;
@@ -56,27 +67,46 @@ const Transferlicence = () => {
         authToken: token,
         userInfo: userInfo,
       },
-      Transfer: [
-        {
-          licenseNo: numberLic,
-          action: "APPLY",
-          tenantId: "hr",
-          TransferOfLicence: {
-            ...data,
-          },
+      Transfer: {
+        licenseNo: numberLic,
+        action: "APPLY",
+        tenantId: "hr",
+        newAdditionalDetails: {
+          selectLicence: data?.selectLicence?.label,
+          validUpto: data?.validUpto,
+          colonizerName: data?.colonizerName,
+          // periodOfRenewal: "",
+          colonyType: data?.colonyType,
+          areaAcres: data?.areaAcres,
+          sectorNo: data?.sectorNo,
+          revenueEstate: data?.revenueEstate,
+          developmentPlan: data?.developmentPlan,
+          tehsil: data?.tehsil,
+          district: data?.district,
         },
-      ],
+        TransferOfLicence: {
+          ...data,
+        },
+      },
     };
 
     try {
       const Resp = await axios.post("/tl-services/_TransferOfLicenseRequest/_create", postDistrict);
       setLoader(false);
-      history.push("/digit-ui/citizen");
+      setApplicationNumber(Resp?.data?.transfer?.[0]?.applicationNumber);
+      console.log("Resp=====", Resp?.data?.transfer?.[0]?.applicationNumber);
+      setOpen(true);
+      // history.push("/digit-ui/citizen");
       // setApplicationNumber(Resp.data.changeBeneficial.applicationNumber);
     } catch (error) {
       setError(error?.response?.data?.Errors[0]?.message);
       setLoader(false);
     }
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+    history.push("/digit-ui/citizen");
   };
 
   const getDocumentData = async (file, fieldName) => {
@@ -140,7 +170,8 @@ const Transferlicence = () => {
       <form onSubmit={handleSubmit(transferLic)}>
         <div className="card" style={{ width: "126%", border: "5px solid #1266af" }}>
           <h4 style={{ fontSize: "25px", marginLeft: "21px" }} className="text-center">
-            Transfer of Licence
+            {`${t("TL_TRANSFER_OF_LICENCE")}`}
+            {/* Transfer of Licence */}
           </h4>
           <div className="card">
             <div className="row gy-3">
@@ -176,7 +207,9 @@ const Transferlicence = () => {
               </div> */}
               <div className="col col-4">
                 <h2 className="FormLable">
-                  Select Type (Complete or Partial) <span style={{ color: "red" }}>*</span>
+                  {`${t("TL_SELECT_TYPE")}`}
+                  {/* Select Type (Complete or Partial) */}
+                  <span style={{ color: "red" }}>*</span>
                 </h2>
                 <ReactMultiSelect control={control} name="selectType" placeholder="Select Type" data={selectTypeData} labels="" />
               </div>
@@ -184,7 +217,9 @@ const Transferlicence = () => {
                 <div className="col col-3">
                   <div className="">
                     <h2 className="FormLable">
-                      Area in Acres <span style={{ color: "red" }}>*</span>
+                      {`${t("TL_AREA_IN_ACRES")}`}
+                      {/* Area in Acres */}
+                      <span style={{ color: "red" }}>*</span>
                     </h2>
                     <input type="number" placeholder="" className="form-control" {...register("areaInAcres")} />
                   </div>
@@ -192,7 +227,8 @@ const Transferlicence = () => {
               )}
               <div className="col col-7">
                 <h2>
-                  Have you transferred licence from licencee land owner in favor of collaborator without prior approval of competent authority
+                  {`${t("TL_LICENCE_TRANSFERRED_FROM_LAND_OWN")}`}
+                  {/* Have you transferred licence from licencee land owner in favor of collaborator without prior approval of competent authority */}
                   <span style={{ color: "red" }}>*</span>
                 </h2>
                 <label htmlFor="licenceTransferredFromLandOwnyes">
@@ -206,7 +242,8 @@ const Transferlicence = () => {
               </div>
               <div className="col col-5">
                 <h2>
-                  Have you transferred title of land requiring amendment in land schedule without prior approval of competent authority
+                  {`${t("TL_TRANSFERRED_TITLE_OF_LAND")}`}
+                  {/* Have you transferred title of land requiring amendment in land schedule without prior approval of competent authority */}
                   <span style={{ color: "red" }}>*</span>
                 </h2>
                 <label htmlFor="transferredTitleOfLandyes">
@@ -221,7 +258,8 @@ const Transferlicence = () => {
 
               <div className="col col-5">
                 <h2>
-                  Do you want to apply for Change of Developer
+                  {`${t("TL_CHANGE_OF_DEVELOPER")}`}
+                  {/* Do you want to apply for Change of Developer */}
                   <span style={{ color: "red" }}>*</span>
                 </h2>
                 <label htmlFor="changeOfDeveloperyes">
@@ -237,7 +275,9 @@ const Transferlicence = () => {
               {showField && (
                 <div className="col col-3">
                   <h2 className="FormLable">
-                    Amount <span style={{ color: "red" }}>*</span>
+                    {`${t("TL_AMOUNT")}`}
+                    {/* Amount */}
+                    <span style={{ color: "red" }}>*</span>
                   </h2>
                   <input type="text" className="Inputcontrol" {...register("amount")} disabled />
                 </div>
@@ -254,8 +294,14 @@ const Transferlicence = () => {
                           <thead>
                             <tr>
                               {/* <th scope="col">Sr.No</th> */}
-                              <th scope="col">Field Name</th>
-                              <th scope="col">Upload Documents</th>
+                              <th scope="col">
+                                {`${t("TL_FIELD_NAME")}`}
+                                {/* Field Name */}
+                              </th>
+                              <th scope="col">
+                                {`${t("TL_UPLOAD_DOCUMENTS")}`}
+                                {/* Upload Documents */}
+                              </th>
                             </tr>
                           </thead>
                           <tbody>
@@ -264,7 +310,8 @@ const Transferlicence = () => {
                               <tr>
                                 {/* <th class="fw-normal">1</th> */}
                                 <td>
-                                  Affidavit regarding the creation of 3rd party right on the licenced area
+                                  {`${t("TL_AFFIDAVIT_FOR_LICENCED_AREA")}`}
+                                  {/* Affidavit regarding the creation of 3rd party right on the licenced area */}
                                   <span style={{ color: "red" }}>*</span>
                                 </td>
                                 <td>
@@ -292,9 +339,11 @@ const Transferlicence = () => {
                               <tr>
                                 {/* <th class="fw-normal">2</th> */}
                                 <td>
-                                  The colonizer seeking transfer of whole licence/part licence shall submit self-certification along with a
+                                  {`${t("TL_COLONIZER_SEEKING_TRANSFER_LICENCE")}`}
+                                  {/* The colonizer seeking transfer of whole licence/part licence shall submit self-certification along with a
                                   certificate of the Chartered Accountant that a 15% profit margin is not exceeded from the project cost at the time
-                                  of submission of application for transfer of licence <span style={{ color: "red" }}>*</span>
+                                  of submission of application for transfer of licence */}
+                                  <span style={{ color: "red" }}>*</span>
                                 </td>
                                 <td>
                                   <div>
@@ -324,7 +373,9 @@ const Transferlicence = () => {
                               <tr>
                                 {/* <th class="fw-normal">3</th> */}
                                 <td>
-                                  A consent letter from the ‘new entity for the proposed change along with a justification
+                                  {`${t("TL_CONSENT_LETTER_DOC")}`}
+                                  {/* A consent letter from the ‘new entity for the proposed change along with a
+                                  justification */}
                                   <span style={{ color: "red" }}>*</span>
                                 </td>
                                 <td>
@@ -354,8 +405,9 @@ const Transferlicence = () => {
                               <tr>
                                 {/* <th class="fw-normal">4</th> */}
                                 <td>
-                                  {" "}
-                                  Board resolution of authorized signatory <span style={{ color: "red" }}>*</span>
+                                  {`${t("TL_BOARD_RESOLUTION_DOC")}`}
+                                  {/* Board resolution of authorized signatory */}
+                                  <span style={{ color: "red" }}>*</span>
                                 </td>
                                 <td>
                                   <div>
@@ -384,9 +436,10 @@ const Transferlicence = () => {
                               <tr>
                                 {/* <th class="fw-normal">5</th> */}
                                 <td>
-                                  No objection certificate from the existing ‘Developer, filed through its authorized signatory, specifically
+                                  {`${t("TL_NO_OBJECTION_CERTIFICATE_FROM_THE_EXISTING")}`}
+                                  {/* No objection certificate from the existing ‘Developer, filed through its authorized signatory, specifically
                                   designated for the purpose; as well as from the ‘land owner licencees’, in person (not through GPA/SPA assignees),
-                                  to the proposed change/assignment.
+                                  to the proposed change/assignment. */}
                                   <span style={{ color: "red" }}>*</span>
                                 </td>
                                 <td>
@@ -397,7 +450,7 @@ const Transferlicence = () => {
                                         type="file"
                                         style={{ display: "none" }}
                                         accept="application/pdf/jpeg/png"
-                                        onChange={(e) => getDocumentData(e?.target?.files[0], " noObjectionCertificate")}
+                                        onChange={(e) => getDocumentData(e?.target?.files[0], "noObjectionCertificate")}
                                       />
                                     </label>
                                     {watch("noObjectionCertificate") && (
@@ -414,8 +467,10 @@ const Transferlicence = () => {
                               <tr>
                                 {/* <th class="fw-normal">6</th> */}
                                 <td>
-                                  Documents about the Technical and Financial Capacity of the ‘new entity’ proposed to be inducted as a ‘Developer’ or
-                                  ‘shareholder(s)’ as per prescribed policy parameters for grant of a licence<span style={{ color: "red" }}>*</span>
+                                  {`${t("TL_TECHNICAL_AND_FINANCIAL_CAPACITY_DOC")}`}
+                                  {/* Documents about the Technical and Financial Capacity of the ‘new entity’ proposed to be inducted as a ‘Developer’ or
+                                  ‘shareholder(s)’ as per prescribed policy parameters for grant of a licence */}
+                                  <span style={{ color: "red" }}>*</span>
                                 </td>
                                 <td>
                                   <div>
@@ -445,7 +500,8 @@ const Transferlicence = () => {
                               <tr>
                                 {/* <th class="fw-normal">7</th> */}
                                 <td>
-                                  An affidavit to pay the balance of administrative charges before final approval
+                                  {`${t("TL_AFFIDAVIT_OF_ADM_CHARGES")}`}
+                                  {/* An affidavit to pay the balance of administrative charges before final approval */}
                                   <span style={{ color: "red" }}>*</span>
                                 </td>
                                 <td>
@@ -473,7 +529,8 @@ const Transferlicence = () => {
                               <tr>
                                 {/* <th class="fw-normal">8</th> */}
                                 <td>
-                                  Justification for request
+                                  {`${t("TL_JUSTIFICATION_FOR_REQUEST")}`}
+                                  {/* Justification for request */}
                                   <span style={{ color: "red" }}>*</span>
                                 </td>
                                 <td>
@@ -501,9 +558,10 @@ const Transferlicence = () => {
                               <tr>
                                 {/* <th class="fw-normal">9</th> */}
                                 <td>
-                                  An affidavit to the effect that in case the administrative charges for such cases are fixed in act and rules at a
+                                  {`${t("TL_AFFIDAVIT_FIXED_CHARGES_FOR_ADMINISTRATIVE")}`}
+                                  {/* An affidavit to the effect that in case the administrative charges for such cases are fixed in act and rules at a
                                   rate higher than that been recovered, the applicant shall be liable to pay the difference as and when demanded by
-                                  TCP
+                                  TCP */}
                                   <span style={{ color: "red" }}>*</span>
                                 </td>
                                 <td>
@@ -533,8 +591,9 @@ const Transferlicence = () => {
                               <tr>
                                 {/* <th class="fw-normal">10</th> */}
                                 <td>
-                                  The status regarding the creation of third-party rights in the colony. In case no third-party rights are claimed to
-                                  have been created in the colony, an affidavit to the said effect be also submitted by the existing developer
+                                  {`${t("TL_THIRD_PARTY_CREATION_STATUS")}`}
+                                  {/* The status regarding the creation of third-party rights in the colony. In case no third-party rights are claimed to
+                                  have been created in the colony, an affidavit to the said effect be also submitted by the existing developer */}
                                   <span style={{ color: "red" }}>*</span>
                                 </td>
                                 <td>
@@ -564,8 +623,8 @@ const Transferlicence = () => {
                               <tr>
                                 {/* <th class="fw-normal">11</th> */}
                                 <td>
-                                  {" "}
-                                  Status regarding registration of project in RERA
+                                  {`${t("TL_STATUS_REGARDING_REGISTRATION")}`}
+                                  {/* Status regarding registration of project in RERA */}
                                   <span style={{ color: "red" }}>*</span>
                                 </td>
                                 <td>
@@ -595,8 +654,8 @@ const Transferlicence = () => {
                               <tr>
                                 {/* <th class="fw-normal">12</th> */}
                                 <td>
-                                  {" "}
-                                  Any Other Document <span style={{ color: "red" }}>*</span>
+                                  {`${t("TL_ANY_OTHER_DOCUMENT")}`}
+                                  {/* Any Other document */}
                                 </td>
                                 <td>
                                   <div>
@@ -642,7 +701,8 @@ const Transferlicence = () => {
                 id="btnSearch"
                 class=""
               >
-                Submit
+                {`${t("TL_SUBMIT")}`}
+                {/* Submit */}
               </button>
             </div>
             <span style={{ color: "red" }}>{getError}</span>
@@ -659,6 +719,30 @@ const Transferlicence = () => {
           }}
         />
       )}
+      <Dialog open={open} onClose={handleClose} aria-labelledby="alert-dialog-title" aria-describedby="alert-dialog-description">
+        <DialogTitle id="alert-dialog-title">Service Plan Submission</DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+            <p>
+              {`${t("TL_YOUR_TRANSFER_OF_LICENSE_IS_SUBMITTED_SUCCESSFULLY")}`}
+              {/* Your Transfer of License is submitted successfully */}
+              <span>
+                <CheckCircleOutlineIcon style={{ color: "blue", variant: "filled" }} />
+              </span>
+            </p>
+            <p>
+              Please Note down your Application Number <span style={{ padding: "5px", color: "blue" }}>{applicationNumber}</span> for further
+              assistance
+            </p>
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose} autoFocus>
+            {`${t("TL_OK")}`}
+            {/* Ok */}
+          </Button>
+        </DialogActions>
+      </Dialog>
     </div>
   );
 };

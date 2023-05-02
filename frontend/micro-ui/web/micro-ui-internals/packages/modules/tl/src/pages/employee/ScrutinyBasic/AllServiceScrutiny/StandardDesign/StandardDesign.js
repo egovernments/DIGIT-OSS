@@ -56,6 +56,34 @@ function StandardDesign(props) {
     if (apiData) {
       setValue("licenseNo", apiData?.licenseNo);
       setValue("anyOtherDoc", apiData?.anyOtherDoc);
+      // setValue("anyOtherDoc", apiData?.newAdditionalDetails?.anyOtherDoc);
+      // setValue("anyOtherDoc", apiData?.newAdditionalDetails?.anyOtherDoc);
+      setValue("licenseNo", apiData?.licenseNo);
+      setValue("selectType", apiData?.additionalDetails?.selectType);
+      setValue("affidavitFixedChargesForAdm", apiData?.additionalDetails?.affidavitFixedChargesForAdm);
+      setValue("affidavitForLicencedArea", apiData?.additionalDetails?.affidavitForLicencedArea);
+      setValue("affidavitForLicencedArea", apiData?.additionalDetails?.affidavitOfAdmCharges);
+      setValue("amount", apiData?.newAdditionalDetails?.amount);
+      setValue("validUpto", apiData?.newAdditionalDetails?.validUpto);
+      setValue("renewalRequiredUpto", apiData?.newAdditionalDetails?.renewalRequiredUpto);
+      setValue("renewalRequiredUpto", apiData?.newAdditionalDetails?.renewalRequiredUpto);
+      setValue("colonizerName", apiData?.newAdditionalDetails?.colonizerName);
+      setValue("sectorNo", apiData?.newAdditionalDetails?.sectorNo);
+      setValue("colonyType", apiData?.newAdditionalDetails?.colonyType);
+      setValue("tehsil", apiData?.newAdditionalDetails?.tehsil);
+      setValue("district", apiData?.newAdditionalDetails?.district);
+      setValue("selectLicence", apiData?.newAdditionalDetails?.selectLicence);
+      setValue("revenueEstate", apiData?.newAdditionalDetails?.revenueEstate);
+      setValue("developmentPlan", apiData?.newAdditionalDetails?.developmentPlan);
+      setValue("anyOtherDoc", apiData?.additionalDetails?.anyOtherDoc);
+      setValue("areaInAcres", apiData?.additionalDetails?.areaInAcres);
+      setValue("areaAcres", apiData?.newAdditionalDetails?.areaAcres);
+      setValue("boardResolutionDoc", apiData?.additionalDetails?.boardResolutionDoc);
+      setValue("changeOfDeveloper", apiData?.additionalDetails?.changeOfDeveloper);
+      setValue("colonizerSeekingTransferLicence", apiData?.additionalDetails?.colonizerSeekingTransferLicence);
+      setValue("consentLetterDoc", apiData?.additionalDetails?.consentLetterDoc);
+      setValue("justificationForRequest", apiData?.additionalDetails?.justificationForRequest);
+      setValue("licenceTransferredFromLandOwn", apiData?.additionalDetails?.licenceTransferredFromLandOwn);
       
     }
   }, [apiData]);
@@ -298,7 +326,7 @@ const handlemodaldData = (data) => {
                         setLabelValue("Select Licence"),
                           setSmShow(true),
                           console.log("modal open"),
-                          setFieldValue(apiData !== null ? apiData.selectLicence : null);
+                          setFieldValue(apiData !== null ? apiData?.newAdditionalDetails?.selectLicence : null);
                       }}
                     ></ReportProblemIcon>
                     
@@ -332,7 +360,7 @@ const handlemodaldData = (data) => {
                         setLabelValue("Valid Upto"),
                           setSmShow(true),
                           console.log("modal open"),
-                          setFieldValue(apiData !== null ? apiData.selectLicence : null);
+                          setFieldValue(apiData !== null ? apiData?.newAdditionalDetails?.selectLicence : null);
                       }}
                     ></ReportProblemIcon>
                     
@@ -343,7 +371,7 @@ const handlemodaldData = (data) => {
               {errors?.validUpto && errors?.validUpto?.message}
             </h3> */}
           </div>
-          <div className="col col-3 ">
+          {/* <div className="col col-3 ">
             <FormControl>
               <h2>
                 Renewal required upto <span style={{ color: "red" }}>*</span>
@@ -362,17 +390,15 @@ const handlemodaldData = (data) => {
                         setLabelValue("Renewal required upto"),
                           setSmShow(true),
                           console.log("modal open"),
-                          setFieldValue(apiData !== null ? apiData.selectLicence : null);
+                          setFieldValue(apiData !== null ? apiData?.newAdditionalDetails?.selectLicence : null);
                       }}
                     ></ReportProblemIcon>
                     
             </div>
             </div>
-            {/* <h3 className="error-message" style={{ color: "red" }}>
-              {errors?.renewalRequiredUpto && errors?.renewalRequiredUpto?.message}
-            </h3> */}
-          </div>
-          <div className="col col-3 ">
+           
+          </div> */}
+          {/* <div className="col col-3 ">
             <FormControl>
               <h2>Period of renewal(In Months)</h2>
             </FormControl>
@@ -388,14 +414,14 @@ const handlemodaldData = (data) => {
                         setLabelValue("Period of renewal(In Months)"),
                           setSmShow(true),
                           console.log("modal open"),
-                          setFieldValue(apiData !== null ? apiData.periodOfRenewal : null);
+                          setFieldValue(apiData !== null ? apiData?.newAdditionalDetails?.periodOfRenewal : null);
                       }}
                     ></ReportProblemIcon>
                     
             </div>
             </div>
 
-          </div>
+          </div> */}
           <div className="col col-3 ">
             <FormControl>
               <h2>
@@ -415,7 +441,7 @@ const handlemodaldData = (data) => {
                         setLabelValue("Name of Colonizer"),
                           setSmShow(true),
                           console.log("modal open"),
-                          setFieldValue(apiData !== null ? apiData.colonizerName : null);
+                          setFieldValue(apiData !== null ? apiData?.newAdditionalDetails?.colonizerName : null);
                       }}
                     ></ReportProblemIcon>
                     
@@ -426,9 +452,9 @@ const handlemodaldData = (data) => {
               {errors?.colonizerName && errors?.colonizerName?.message}
             </h3> */}
           </div>
-        </div>
+        {/* </div> */}
      
-        <div className="row gy-3 mt-3">
+        
           <div className="col col-3 ">
             <FormControl>
               <h2>
@@ -450,7 +476,7 @@ const handlemodaldData = (data) => {
                         setLabelValue("Type of Colony"),
                           setSmShow(true),
                           console.log("modal open"),
-                          setFieldValue(apiData !== null ? apiData.colonyType : null);
+                          setFieldValue(apiData !== null ? apiData?.newAdditionalDetails?.colonyType : null);
                       }}
                     ></ReportProblemIcon>
                     
@@ -483,7 +509,7 @@ const handlemodaldData = (data) => {
                         setLabelValue("Area in Acres"),
                           setSmShow(true),
                           console.log("modal open"),
-                          setFieldValue(apiData !== null ? apiData.areaAcres : null);
+                          setFieldValue(apiData !== null ? apiData?.newAdditionalDetails?.areaAcres : null);
                       }}
                     ></ReportProblemIcon>
                     
@@ -494,7 +520,9 @@ const handlemodaldData = (data) => {
               {errors?.areaAcres && errors?.areaAcres?.message}
             </h3> */}
           </div>
+          </div>
 
+          <div className="row gy-3 mt-3">
           <div className="col col-3 ">
             <FormControl>
               <h2>
@@ -515,7 +543,7 @@ const handlemodaldData = (data) => {
                         setLabelValue("Sector No"),
                           setSmShow(true),
                           console.log("modal open"),
-                          setFieldValue(apiData !== null ? apiData.sectorNo : null);
+                          setFieldValue(apiData !== null ? apiData?.newAdditionalDetails?.sectorNo : null);
                       }}
                     ></ReportProblemIcon>
                     
@@ -543,7 +571,7 @@ const handlemodaldData = (data) => {
                         setLabelValue("Revenue estate"),
                           setSmShow(true),
                           console.log("modal open"),
-                          setFieldValue(apiData !== null ? apiData.revenueEstate : null);
+                          setFieldValue(apiData !== null ? apiData?.newAdditionalDetails?.revenueEstate : null);
                       }}
                     ></ReportProblemIcon>
                     
@@ -569,7 +597,7 @@ const handlemodaldData = (data) => {
                         setLabelValue("Development Plan"),
                           setSmShow(true),
                           console.log("modal open"),
-                          setFieldValue(apiData !== null ? apiData.developmentPlan : null);
+                          setFieldValue(apiData !== null ? apiData?.newAdditionalDetails?.developmentPlan : null);
                       }}
                     ></ReportProblemIcon>
                     
@@ -578,10 +606,10 @@ const handlemodaldData = (data) => {
          
           </div>
           
-        </div>
+        {/* </div>
 
 
-      <div className="row gy-3 mt-3">
+      <div className="row gy-3 mt-3"> */}
         <div className="col col-3 ">
           <FormControl>
             <h2>Tehsil</h2>
@@ -600,7 +628,7 @@ const handlemodaldData = (data) => {
                         setLabelValue("Tehsil"),
                           setSmShow(true),
                           console.log("modal open"),
-                          setFieldValue(apiData !== null ? apiData.tehsil : null);
+                          setFieldValue(apiData !== null ? apiData?.newAdditionalDetails?.tehsil : null);
                       }}
                     ></ReportProblemIcon>
                     
@@ -608,6 +636,8 @@ const handlemodaldData = (data) => {
             </div>
          
         </div>
+        </div>
+        <div className="row gy-3 mt-3"> 
         <div className="col col-3 ">
           <FormControl>
             <h2>District</h2>
@@ -625,7 +655,7 @@ const handlemodaldData = (data) => {
                         setLabelValue("District"),
                           setSmShow(true),
                           console.log("modal open"),
-                          setFieldValue(apiData !== null ? apiData.district : null);
+                          setFieldValue(apiData !== null ? apiData?.newAdditionalDetails?.district : null);
                       }}
                     ></ReportProblemIcon>
                     

@@ -12,7 +12,7 @@ import { ComplicesRemarksContext } from "../../../../context/Complices-remarks-c
 
 
 
-function CompliancesModal(props) {
+function Modalcompliances(props) {
 
     const {compliceGetRemarkssValues}=useContext(ComplicesRemarksContext)
   const classes = useStyles();
@@ -192,4 +192,4 @@ const businessService = applicationimp?.businessService
   );
 }
 
-export default CompliancesModal;
+export default Modalcompliances;

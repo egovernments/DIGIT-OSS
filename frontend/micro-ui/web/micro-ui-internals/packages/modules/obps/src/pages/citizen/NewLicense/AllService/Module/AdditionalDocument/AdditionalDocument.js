@@ -7,6 +7,7 @@ import SearchLicenceComp from "../../../../../../components/SearchLicence";
 import FileUpload from "@mui/icons-material/FileUpload";
 import CusToaster from "../../../../../../components/Toaster";
 import VisibilityIcon from "@mui/icons-material/Visibility";
+import { useTranslation } from "react-i18next";
 
 const selectTypeData = [
   { label: "Application Number", value: "APPLICATIONNUMBER" },
@@ -15,6 +16,7 @@ const selectTypeData = [
 ];
 
 const AdditionalDocument = () => {
+  const { t } = useTranslation();
   const userInfo = Digit.UserService.getUser()?.info || {};
   const [loader, setLoader] = useState(false);
   const [selectedFiles, setSelectedFiles] = useState([]);
@@ -122,40 +124,40 @@ const AdditionalDocument = () => {
     }
   };
 
-  const getNumbers = async () => {
-    const token = window?.localStorage?.getItem("token");
-    const type = watch("numberType")?.value;
-    const businessService = watch("allservices")?.value;
-    setLoader(true);
-    const payload = {
-      RequestInfo: {
-        apiId: "Rainmaker",
-        ver: "v1",
-        ts: 0,
-        action: "_search",
-        did: "",
-        key: "",
-        msgId: "090909",
-        requesterId: "",
-        authToken: token,
-        userInfo: userInfo,
-      },
-    };
-    try {
-      const Resp = await axios.post(`/tl-services/_getServices/_search?type=${type}&businessService=${businessService}`, payload);
-      // console.log("setData", Resp);
-      setLoader(false);
-      const selectData = Resp?.data?.map((it) => {
-        return { value: it, label: it };
-      });
-      if (Resp?.data?.length) setValue("licenceNo", { label: "", value: "" });
-      else setValue("licenceNo", "");
-      setData(selectData);
-    } catch (error) {
-      setLoader(false);
-      return error;
-    }
-  };
+  // const getNumbers = async () => {
+  //   const token = window?.localStorage?.getItem("token");
+  //   const type = watch("numberType")?.value;
+  //   const businessService = watch("allservices")?.value;
+  //   setLoader(true);
+  //   const payload = {
+  //     RequestInfo: {
+  //       apiId: "Rainmaker",
+  //       ver: "v1",
+  //       ts: 0,
+  //       action: "_search",
+  //       did: "",
+  //       key: "",
+  //       msgId: "090909",
+  //       requesterId: "",
+  //       authToken: token,
+  //       userInfo: userInfo,
+  //     },
+  //   };
+  //   try {
+  //     const Resp = await axios.post(`/tl-services/_getServices/_search?type=${type}&businessService=${businessService}`, payload);
+  //     // console.log("setData", Resp);
+  //     setLoader(false);
+  //     const selectData = Resp?.data?.map((it) => {
+  //       return { value: it, label: it };
+  //     });
+  //     if (Resp?.data?.length) setValue("licenceNo", { label: "", value: "" });
+  //     else setValue("licenceNo", "");
+  //     setData(selectData);
+  //   } catch (error) {
+  //     setLoader(false);
+  //     return error;
+  //   }
+  // };
 
   return (
     <div>
@@ -163,13 +165,16 @@ const AdditionalDocument = () => {
       <form onSubmit={handleSubmit(additionalDoc)}>
         <div className="card" style={{ width: "126%", border: "5px solid #1266af" }}>
           <h4 style={{ fontSize: "25px", marginLeft: "21px" }} className="text-center">
-            Additional Documents
+            {`${t("AD_ADDITIONAL_DOCUMENTS")}`}
+            {/* Additional Documents */}
           </h4>
           <div className="card">
             <div className="row gy-3">
               <div className="col col-4">
                 <h2 className="FormLable">
-                  List all services <span style={{ color: "red" }}>*</span>
+                  {`${t("AD_LIST_ALL_SERVICES")}`}
+                  {/* List all services  */}
+                  <span style={{ color: "red" }}>*</span>
                 </h2>
                 <ReactMultiSelect
                   control={control}
@@ -183,7 +188,9 @@ const AdditionalDocument = () => {
               {watch("allservices") && (
                 <div className="col col-5">
                   <h2 className="FormLable">
-                    Select Application No, LOI No, Licence No <span style={{ color: "red" }}>*</span>
+                    {`${t("AD_SELECT_APPLICATION_NO_LOI_NO_LICENCE_NO ")}`}
+                    {/* Select Application No, LOI No, Licence No  */}
+                    <span style={{ color: "red" }}>*</span>
                   </h2>
                   <ReactMultiSelect
                     control={control}
@@ -191,11 +198,17 @@ const AdditionalDocument = () => {
                     placeholder="Select Type"
                     data={selectTypeData}
                     labels=""
-                    onChange={getNumbers}
+                    // onChange={getNumbers}
                   />
                 </div>
               )}
               {watch("numberType")?.value && (
+                <div className="col col-5">
+                  <h2 className="FormLable">Select {watch("numberType")?.label}</h2>
+                  <input type="text" className="form-control" {...register("number")} />
+                </div>
+              )}
+              {/* {watch("numberType")?.value && (
                 <SearchLicenceComp
                   apiData={getData}
                   watch={watch}
@@ -206,7 +219,7 @@ const AdditionalDocument = () => {
                   setValue={setValue}
                   resetField={resetField}
                 />
-              )}
+              )} */}
             </div>
 
             <div style={{ textAlignLast: "right", marginTop: "10px" }}>
@@ -216,7 +229,8 @@ const AdditionalDocument = () => {
                 className="btn btn-primary"
                 onClick={() => append({ documentName: "", document: "" })}
               >
-                Add Row
+                {`${t("AD_ADD_ROW")}`}
+                {/* Add Row */}
               </button>
             </div>
             <div className="card-body">
@@ -224,10 +238,22 @@ const AdditionalDocument = () => {
                 <table className="table table-bordered">
                   <thead>
                     <tr>
-                      <th>Sr. No</th>
-                      <th>Document Description</th>
-                      <th>Upload Document</th>
-                      <th>Remove</th>
+                      <th>
+                        {`${t("AD_SR_NO")}`}
+                        {/* Sr. No */}
+                      </th>
+                      <th>
+                        {`${t("AD_DOCUMENT_DESCRIPTION")}`}
+                        {/* Document Description */}
+                      </th>
+                      <th>
+                        {`${t("AD_UPLOAD_DOCUMENT")}`}
+                        {/* Upload Document */}
+                      </th>
+                      <th>
+                        {`${t("AD_ACTION")}`}
+                        {/* Action */}
+                      </th>
                     </tr>
                   </thead>
                   <tbody>
@@ -260,6 +286,7 @@ const AdditionalDocument = () => {
                           <div style={{ width: "100%", height: "100%", display: "flex", justifyContent: "center" }}>
                             {index > 0 && (
                               <button type="button" style={{ float: "right" }} className="btn btn-primary" onClick={() => remove(index)}>
+                                {`${t("AD_REMOVE")}`}
                                 Remove
                               </button>
                             )}
