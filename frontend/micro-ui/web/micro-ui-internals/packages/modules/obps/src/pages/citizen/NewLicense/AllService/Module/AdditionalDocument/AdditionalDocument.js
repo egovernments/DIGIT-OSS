@@ -354,7 +354,8 @@ const AdditionalDocument = () => {
                 id="btnSearch"
                 class=""
               >
-                Submit
+                {`${t("AD_SUBMIT")}`}
+                {/* Submit */}
               </button>
             </div>
           </div>

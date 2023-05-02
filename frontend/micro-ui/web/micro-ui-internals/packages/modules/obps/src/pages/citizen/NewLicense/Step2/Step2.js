@@ -22,6 +22,8 @@ import _ from "lodash";
 import CusToaster from "../../../../components/Toaster";
 import InfoIcon from "@mui/icons-material/Info";
 import Tooltip from "@mui/material/Tooltip";
+import { useTranslation } from "react-i18next";
+
 const ApllicantPuropseForm = (props) => {
   const datapost = {
     RequestInfo: {
@@ -217,7 +219,7 @@ const ApllicantPuropseForm = (props) => {
       ),
     },
   ];
-
+  const { t } = useTranslation();
   const location = useLocation();
   const userInfo = Digit.UserService.getUser()?.info || {};
   const [district, setDistrict] = useState("");
@@ -1099,7 +1101,9 @@ const ApllicantPuropseForm = (props) => {
                   <div>
                     <Form.Label>
                       <h2>
-                        Purpose Of Licence<span style={{ color: "red" }}>*</span>
+                        {`${t("NWL_APPLICANT_PURPOSE_OF_LICENCE")}`}
+                        {/* Purpose Of Licence */}
+                        <span style={{ color: "red" }}>*</span>
                       </h2>
                     </Form.Label>
                   </div>
@@ -1189,7 +1193,9 @@ const ApllicantPuropseForm = (props) => {
                 <div>
                   <Form.Label>
                     <h2>
-                      District<span style={{ color: "red" }}>*</span>
+                      {`${t("NWL_APPLICANT_DISTRICT_LAND_SCHEDULE")}`}
+                      {/* District */}
+                      <span style={{ color: "red" }}>*</span>
                     </h2>
                   </Form.Label>
                 </div>
@@ -1216,7 +1222,9 @@ const ApllicantPuropseForm = (props) => {
                   <div>
                     <Form.Label>
                       <h2>
-                        Development Plan<span style={{ color: "red" }}>*</span>
+                        {`${t("NWL_APPLICANT_DEVELOPMENT_PLAN_LAND_SCHEDULE")}`}
+                        {/* Development Plan */}
+                        <span style={{ color: "red" }}>*</span>
                       </h2>
                     </Form.Label>
                   </div>
@@ -1241,7 +1249,9 @@ const ApllicantPuropseForm = (props) => {
                   <div>
                     <Form.Label>
                       <h2>
-                        Zone<span style={{ color: "red" }}>*</span>
+                        {`${t("NWL_APPLICANT_ZONE_LAND_SCHEDULE")}`}
+                        {/* Zone */}
+                        <span style={{ color: "red" }}>*</span>
                       </h2>
                     </Form.Label>
                   </div>
@@ -1266,7 +1276,9 @@ const ApllicantPuropseForm = (props) => {
                   <div>
                     <Form.Label>
                       <h2>
-                        Sector<span style={{ color: "red" }}>*</span>
+                        {`${t("NWL_APPLICANT_SECTOR_LAND_SCHEDULE")}`}
+                        {/* Sector */}
+                        <span style={{ color: "red" }}>*</span>
                       </h2>
                     </Form.Label>
                   </div>
@@ -1289,7 +1301,9 @@ const ApllicantPuropseForm = (props) => {
                 <div>
                   <Form.Label>
                     <h2>
-                      Tehsil <span style={{ color: "red" }}>*</span>
+                      {`${t("NWL_APPLICANT_TEHSIL_LAND_SCHEDULE")}`}
+                      {/* Tehsil  */}
+                      <span style={{ color: "red" }}>*</span>
                     </h2>
                   </Form.Label>
                 </div>
@@ -1313,7 +1327,9 @@ const ApllicantPuropseForm = (props) => {
                 <div>
                   <Form.Label>
                     <h2>
-                      Name of Revenue Estate <span style={{ color: "red" }}>*</span>
+                      {`${t("NWL_APPLICANT_REVENUE_ESTATE_LAND_SCHEDULE")}`}
+                      {/* Name of Revenue Estate */}
+                      <span style={{ color: "red" }}>*</span>
                     </h2>
                   </Form.Label>
                 </div>
@@ -1335,7 +1351,9 @@ const ApllicantPuropseForm = (props) => {
                 <div>
                   <Form.Label>
                     <h2>
-                      Hadbast No. <span style={{ color: "red" }}>*</span>
+                      {`${t(" NWL_APPLICANT_HADBAST_NUMBER_LAND_SCHEDULE")}`}
+                      {/* Hadbast No. */}
+                      <span style={{ color: "red" }}>*</span>
                     </h2>
                   </Form.Label>
                 </div>
@@ -1351,7 +1369,9 @@ const ApllicantPuropseForm = (props) => {
                 <div>
                   <Form.Label>
                     <h2>
-                      Rectangle No./Mustil <span style={{ color: "red" }}>*</span>
+                      {`${t("NWL_APPLICANT_RECTANGLE_NUMBER_LAND_SCHEDULE")}`}
+                      {/* Rectangle No./Mustil */}
+                      <span style={{ color: "red" }}>*</span>
                     </h2>
                   </Form.Label>
                 </div>
@@ -1372,7 +1392,9 @@ const ApllicantPuropseForm = (props) => {
                 <div>
                   <label>
                     <h2>
-                      Khasra Number <span style={{ color: "red" }}>*</span>
+                      {`${t("NWL_APPLICANT_KHEWATS_NUMBER_LAND_SCHEDULE")}`}
+                      {/* Khasra Number */}
+                      <span style={{ color: "red" }}>*</span>
                     </h2>
                   </label>
                 </div>
@@ -1392,7 +1414,9 @@ const ApllicantPuropseForm = (props) => {
                 <div>
                   <label>
                     <h2>
-                      Name of Land Owner<span style={{ color: "red" }}>*</span>
+                      {`${t("NWL_APPLICANT_NAME_OF_LAND_OWNER_LAND_SCHEDULE")}`}
+                      {/* Name of Land Owner */}
+                      <span style={{ color: "red" }}>*</span>
                     </h2>
                   </label>
                 </div>
@@ -1404,7 +1428,9 @@ const ApllicantPuropseForm = (props) => {
               <div className="col col-12 mt-3">
                 <h2>
                   <b>
-                    Whether Khasra been developed in collaboration<span style={{ color: "red" }}>*</span>
+                    {`${t("NWL_APPLICANT_DEVELOPED_IN_COLLABORATION_LAND_SCHEDULE")}`}
+                    {/* Whether Khasra been developed in collaboration */}
+                    <span style={{ color: "red" }}>*</span>
                   </b>
                   &nbsp;&nbsp;
                   <label htmlFor="collaboration">
@@ -1429,7 +1455,9 @@ const ApllicantPuropseForm = (props) => {
                       <div className="col col-4">
                         <label>
                           <h2>
-                            Name of the developer company .<span style={{ color: "red" }}>*</span>
+                            {`${t("NWL_APPLICANT_NAME_OF_THE_DEVELOPER_COMPANY_LAND_SCHEDULE")}`}
+                            {/* Name of the developer company */}
+                            <span style={{ color: "red" }}>*</span>
                             <Tooltip title=" Name of the developer company / Firm/ LLP etc. with whom collaboration agreement entered.">
                               <InfoIcon style={{ cursor: "pointer" }} color="primary"></InfoIcon>
                             </Tooltip>
@@ -1443,7 +1471,9 @@ const ApllicantPuropseForm = (props) => {
                       <div className="col col-4">
                         <label>
                           <h2>
-                            Date of registering collaboration agreement<span style={{ color: "red" }}>*</span>
+                            {`${t("NWL_APPLICANT_DATA_OF_REGISTERING_COLLOABORATION_AGREEMENT_LAND_SCHEDULE")}`}
+                            {/* Date of registering collaboration agreement */}
+                            <span style={{ color: "red" }}>*</span>
                           </h2>
                         </label>
                         <Form.Control
@@ -1457,7 +1487,9 @@ const ApllicantPuropseForm = (props) => {
                       </div>
                       <div className="col col-4">
                         <h2>
-                          Whether collaboration agreement irrevocable (Yes/No)<span style={{ color: "red" }}>*</span>
+                          {`${t("NWL_APPLICANT_WHETER_COLLABORATION_AGREEMENT_IRREVOCABLE_LAND_SCHEDULE")}`}
+                          {/* Whether collaboration agreement irrevocable (Yes/No) */}
+                          <span style={{ color: "red" }}>*</span>
                         </h2>
                         <br></br>
                         <label htmlFor="agreementIrrevocialble">
@@ -1476,7 +1508,9 @@ const ApllicantPuropseForm = (props) => {
                       <div className="col col-4">
                         <label>
                           <h2>
-                            Name of authorized signatory on behalf of land owner(s)<span style={{ color: "red" }}>*</span>
+                            {`${t("NWL_APPLICANT_NAME_OF_AUTHORIZED_SIGNATORY_ON_BEHALF_OF_LAND_OWNER")}`}
+                            {/* Name of authorized signatory on behalf of land owner(s) */}
+                            <span style={{ color: "red" }}>*</span>
                           </h2>
                         </label>
                         <Form.Control type="text" className="form-control" placeholder="" {...register("authSignature")} />
@@ -1487,7 +1521,9 @@ const ApllicantPuropseForm = (props) => {
                       <div className="col col-4">
                         <label>
                           <h2>
-                            Name of authorized signatory on behalf of developer.<span style={{ color: "red" }}>*</span>
+                            {`${t("NWL_APPLICANT_NAME_OF_AUTHORIZED_SIGNATORY_ON_BEHALF_OF_DEVELOPER")}`}
+                            {/* Name of authorized signatory on behalf of developer */}
+                            <span style={{ color: "red" }}>*</span>
                             <Tooltip title="  Name of authorized signatory on behalf of developer to sign Collaboration agreement.">
                               <InfoIcon style={{ cursor: "pointer" }} color="primary"></InfoIcon>
                             </Tooltip>
@@ -1501,7 +1537,9 @@ const ApllicantPuropseForm = (props) => {
                       <div className="col col-4">
                         <label>
                           <h2>
-                            Registering Authority<span style={{ color: "red" }}>*</span>
+                            {`${t("NWL_APPLICANT_REGISTERING_AUTHORITY_LAND_SCHEDULE")}`}
+                            {/* Registering Authority */}
+                            <span style={{ color: "red" }}>*</span>
                           </h2>
                         </label>
                         <Form.Control type="text" className="form-control" placeholder="" {...register("registeringAuthority")} />
@@ -1515,7 +1553,9 @@ const ApllicantPuropseForm = (props) => {
                     <div className="row ">
                       <div className="col col-3">
                         <h6 style={{ display: "flex" }}>
-                          Collaboration document <span style={{ color: "red" }}>*</span>
+                          {`${t("NWL_APPLICANT_REGISTERING_AUTHORITY_DOCUMENT_LAND_SCHEDULE")}`}
+                          {/* Collaboration document */}
+                          <span style={{ color: "red" }}>*</span>
                         </h6>
                         <label>
                           <FileUpload style={{ cursor: "pointer" }} color="primary" />
@@ -1575,7 +1615,9 @@ const ApllicantPuropseForm = (props) => {
               <Col className="mt-3" md={4} xxl lg="4">
                 <label>
                   <h2>
-                    Type of land<span style={{ color: "red" }}>*</span>
+                    {`${t("NWL_APPLICANT_TYPE_OF_LAND_SCHEDULE")}`}
+                    {/* Type of land */}
+                    <span style={{ color: "red" }}>*</span>
                   </h2>
                 </label>
                 <ReactMultiSelect control={control} name="typeLand" data={typeOfLand?.data} labels="typeland" />
@@ -1588,7 +1630,11 @@ const ApllicantPuropseForm = (props) => {
             <Row className="ml-auto mb-3">
               <div className="form-check">
                 <label style={{ marginRight: "23px" }} className="checkbox" for="flexCheckDefault">
-                  <b>If there is a change in information auto-populated, then the information be provided in the following format.</b>
+                  <b>
+                    {`${t("NWL_APPLICANT_CHANGE_IN_INFORMATION_LAND_SCHEDULE")}`}
+
+                    {/* If there is a change in information auto-populated, then the information be provided in the following format. */}
+                  </b>
                 </label>
                 <input
                   onClick={(e) => setShowFields(e.target.checked)}
@@ -1606,7 +1652,9 @@ const ApllicantPuropseForm = (props) => {
                     <div>
                       <Form.Label>
                         <h2>
-                          Rectangle No./Mustil <span style={{ color: "red" }}>*</span>
+                          {`${t("NWL_APPLICANT_RECTANGLE_NO_MUSTIL_LAND_SCHEDULE")}`}
+                          {/* Rectangle No./Mustil */}
+                          <span style={{ color: "red" }}>*</span>
                         </h2>
                       </Form.Label>
                     </div>
@@ -1623,7 +1671,9 @@ const ApllicantPuropseForm = (props) => {
                     <div>
                       <label>
                         <h2>
-                          Khasra Number <span style={{ color: "red" }}>*</span>
+                          {`${t("NWL_APPLICANT_KHEWATS_NUMBER_CHANGED_LAND_SCHEDULE")}`}
+                          {/* Khasra Number */}
+                          <span style={{ color: "red" }}>*</span>
                         </h2>
                       </label>
                     </div>
@@ -1636,7 +1686,10 @@ const ApllicantPuropseForm = (props) => {
                   <Col md={4} xxl lg="4">
                     <div>
                       <label>
-                        <h2>Name of the Land Ower as per Mutation/Jamabandi</h2>
+                        <h2>
+                          {`${t("NWL_APPLICANT_NAME_OF_THE_LAND_OWNER_AS_PER_MUTATION_LAND_SCHEDULE")}`}
+                          {/* Name of the Land Ower as per Mutation/Jamabandi */}
+                        </h2>
                       </label>
                     </div>
                     <input autoComplete="off" type="text" className="form-control" placeholder="" {...register("landOwnerRegistry")} />
@@ -1652,7 +1705,9 @@ const ApllicantPuropseForm = (props) => {
                   <h2>
                     <b>
                       {" "}
-                      Consolidation Type<span style={{ color: "red" }}>*</span>{" "}
+                      {`${t("NWL_APPLICANT_CONSLIDATION_TYPE_LAND_SCHEDULE")}`}
+                      {/* Consolidation Type */}
+                      <span style={{ color: "red" }}>*</span>{" "}
                     </b>
                     &nbsp;&nbsp;&nbsp;&nbsp;
                     <label htmlFor="consolidated">
@@ -1697,22 +1752,30 @@ const ApllicantPuropseForm = (props) => {
                       <tr>
                         <th>
                           <h2>
-                            Kanal <span style={{ color: "red" }}>*</span>
+                            {`${t("NWL_APPLICANT_KANAL_LAND_SCHEDULE")}`}
+                            {/* Kanal  */}
+                            <span style={{ color: "red" }}>*</span>
                           </h2>
                         </th>
                         <th>
                           <h2>
-                            Marla <span style={{ color: "red" }}>*</span>
+                            {`${t("NWL_APPLICANT_MARLA_LAND_SCHEDULE")}`}
+                            {/* Marla  */}
+                            <span style={{ color: "red" }}>*</span>
                           </h2>
                         </th>
                         <th>
                           <h2>
-                            Sarsai <span style={{ color: "red" }}>*</span>
+                            {`${t("NWL_APPLICANT_SARSAI_LAND_SCHEDULE")}`}
+                            {/* Sarsai */}
+                            <span style={{ color: "red" }}>*</span>
                           </h2>
                         </th>
                         <th>
                           <h2>
-                            Total Area (in acres) <span style={{ color: "red" }}>*</span>
+                            {`${t("NWL_APPLICANT_TOTAL_AREA_LAND_SCHEDULE")}`}
+                            {/* Total Area (in acres)  */}
+                            <span style={{ color: "red" }}>*</span>
                           </h2>
                         </th>
                       </tr>
@@ -1745,23 +1808,31 @@ const ApllicantPuropseForm = (props) => {
                       <tr>
                         <th>
                           <h2>
-                            Bigha (sq. yard) <span style={{ color: "red" }}>*</span>
+                            {`${t("NWL_APPLICANT_BIGHA_LAND_SCHEDULE")}`}
+                            {/* Bigha (sq. yard) */}
+                            <span style={{ color: "red" }}>*</span>
                           </h2>
                         </th>
                         <th>
                           <h2>
-                            Biswa (sq. yard) <span style={{ color: "red" }}>*</span>
+                            {`${t("NWL_APPLICANT_BISWA_LAND_SCHEDULE")}`}
+                            {/* Biswa (sq. yard)  */}
+                            <span style={{ color: "red" }}>*</span>
                           </h2>
                         </th>
                         <th>
                           <h2>
-                            Biswansi (sq. yard) <span style={{ color: "red" }}>*</span>
+                            {`${t("NWL_APPLICANT_BISWANSI_LAND_SCHEDULE")}`}
+                            {/* Biswansi (sq. yard)  */}
+                            <span style={{ color: "red" }}>*</span>
                           </h2>
                           &nbsp;&nbsp;
                         </th>
                         <th>
                           <h2>
-                            Total Area (in acres) <span style={{ color: "red" }}>*</span>
+                            {`${t("NWL_APPLICANT_TOTAL_AREA_LAND_SCHEDULE")}`}
+                            {/* Total Area (in acres) */}
+                            <span style={{ color: "red" }}>*</span>
                           </h2>
                           &nbsp;&nbsp;
                         </th>
@@ -1798,23 +1869,31 @@ const ApllicantPuropseForm = (props) => {
                       <tr>
                         <th>
                           <h2>
-                            Bigha (sq. yard) <span style={{ color: "red" }}>*</span>
+                            {`${t("NWL_APPLICANT_BIGHA_LAND_SCHEDULE")}`}
+                            {/* Bigha (sq. yard) */}
+                            <span style={{ color: "red" }}>*</span>
                           </h2>
                         </th>
                         <th>
                           <h2>
-                            Biswa (sq. yard) <span style={{ color: "red" }}>*</span>
+                            {`${t("NWL_APPLICANT_BISWA_LAND_SCHEDULE")}`}
+                            {/* Biswa (sq. yard) */}
+                            <span style={{ color: "red" }}>*</span>
                           </h2>
                         </th>
                         <th>
                           <h2>
-                            Biswansi (sq. yard) <span style={{ color: "red" }}>*</span>
+                            {`${t("NWL_APPLICANT_BISWANSI_LAND_SCHEDULE")}`}
+                            {/* Biswansi (sq. yard)  */}
+                            <span style={{ color: "red" }}>*</span>
                           </h2>
                           &nbsp;&nbsp;
                         </th>
                         <th>
                           <h2>
-                            Total Area (in acres) <span style={{ color: "red" }}>*</span>
+                            {`${t("NWL_APPLICANT_TOTAL_AREA_LAND_SCHEDULE")}`}
+                            {/* Total Area (in acres) */}
+                            <span style={{ color: "red" }}>*</span>
                           </h2>
                           &nbsp;&nbsp;
                         </th>
