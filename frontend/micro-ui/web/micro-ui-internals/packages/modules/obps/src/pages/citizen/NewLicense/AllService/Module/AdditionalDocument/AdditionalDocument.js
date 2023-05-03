@@ -8,6 +8,7 @@ import FileUpload from "@mui/icons-material/FileUpload";
 import CusToaster from "../../../../../../components/Toaster";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import { useTranslation } from "react-i18next";
+import { getDocShareholding } from "../../../docView/docView.help";
 
 const selectTypeData = [
   { label: "Application Number", value: "APPLICATIONNUMBER" },
@@ -47,6 +48,7 @@ const AdditionalDocument = () => {
       ],
     },
   });
+
   const { fields, append, remove } = useFieldArray({
     control,
     name: "DocumentsDetails",
