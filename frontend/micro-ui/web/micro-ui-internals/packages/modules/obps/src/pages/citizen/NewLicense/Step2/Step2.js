@@ -24,6 +24,11 @@ import InfoIcon from "@mui/icons-material/Info";
 import Tooltip from "@mui/material/Tooltip";
 import { useTranslation } from "react-i18next";
 
+const migrationData = [
+  { label: "Fresh", value: "fresh" },
+  { label: "Addition / Migration", value: "addition-migration" },
+];
+
 const ApllicantPuropseForm = (props) => {
   const datapost = {
     RequestInfo: {
@@ -1121,6 +1126,19 @@ const ApllicantPuropseForm = (props) => {
                     {errors?.purpose?.value && errors?.purpose?.value?.message}
                   </h3>
                 </Col>
+
+                {/* <Col md={4} xxl lg="3">
+                  <div>
+                    <Form.Label>
+                      <h2>
+                        Type of application
+                        <span style={{ color: "red" }}>*</span>
+                      </h2>
+                    </Form.Label>
+                  </div>
+                  <ReactMultiSelect control={control} name="migration" placeholder="" data={migrationData} labels="Migration" />
+                </Col> */}
+
                 <Col style={{ display: "flex", alignItems: "end" }} md={8} xxl lg="9">
                   <p>Note: The application to be received under policy dated 10.11.17 shall only be accepted within window period.</p>
                 </Col>

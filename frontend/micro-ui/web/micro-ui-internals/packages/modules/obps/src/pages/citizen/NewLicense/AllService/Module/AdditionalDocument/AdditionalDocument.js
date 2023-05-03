@@ -287,7 +287,7 @@ const AdditionalDocument = () => {
                             {index > 0 && (
                               <button type="button" style={{ float: "right" }} className="btn btn-primary" onClick={() => remove(index)}>
                                 {`${t("AD_REMOVE")}`}
-                                Remove
+                                {/* Remove */}
                               </button>
                             )}
                           </div>
