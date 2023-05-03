@@ -10,8 +10,16 @@ import Visibility from "@mui/icons-material/Visibility";
 // import Records from "../../pages/employee/ApplicationRecord/Record";
 // import { getActionButton } from "../../utils";
 
-const DesktopInbox = ({ tableConfig, filterComponent, columns, isLoading, setSearchFieldsBackToOriginalState, setSetSearchFieldsBackToOriginalState,
-  viewOptionKey, ...props }) => {
+const DesktopInbox = ({
+  tableConfig,
+  filterComponent,
+  columns,
+  isLoading,
+  setSearchFieldsBackToOriginalState,
+  setSetSearchFieldsBackToOriginalState,
+  viewOptionKey,
+  ...props
+}) => {
   const { data } = props;
   const { t } = useTranslation();
   const [FilterComponent, setComp] = useState(() => Digit.ComponentRegistryService?.getComponent(filterComponent));
@@ -38,26 +46,63 @@ const DesktopInbox = ({ tableConfig, filterComponent, columns, isLoading, setSea
         return (
           <div>
             <span className="link">
-              <Link to={`/digit-ui/employee/tl/${row.original["businessService"] === ('NewTL' || 'TL') ? 'scrutiny' : row.original["businessService"] === 'TRANSFER_OF_LICIENCE' ? 'TransferScrutiny' : row.original["businessService"] === 'SERVICE_PLAN' ? 'ServiceScrutiny' : row.original["businessService"] === 'SERVICE_PLAN_DEMARCATION' ? 'ServiceScrutiny' : row.original["businessService"] === 'ELECTRICAL_PLAN' ? 'ElectricalScrutiny' : row.original["businessService"] === "BG_NEW" ? 'ScrutinyForm' : null  }/` + row.original["applicationId"]}>{row.original["applicationId"]}</Link>
+              <Link
+                to={
+                  `/digit-ui/employee/tl/${
+                    row.original["businessService"] === ("NewTL" || "TL")
+                      ? "scrutiny"
+                      : row.original["businessService"] === "REVISED_LAYOUT_PLAN"
+                      ? "LayoutPlanScritny"
+                      : row.original["businessService"] === "SURREND_OF_LICENSE"
+                      ? "SurrenderScrutiny"
+                      : row.original["businessService"] === "APPROVAL_OF_STANDARD"
+                      ? "StandardDesign"
+                      : row.original["businessService"] === "CHANGE_OF_BENEFICIAL"
+                      ? "BeneficialCard"
+                      : row.original["businessService"] === "RENWAL_OF_LICIENCE"
+                      ? "RenewalScrutiny"
+                      : row.original["businessService"] === "TRANSFER_OF_LICIENCE"
+                      ? "TransferScrutiny"
+                      : row.original["businessService"] === "CONSTRUCTION_OF_COMMUNITY"
+                      ? "ExtensionCom"
+                      : row.original["businessService"] === "COMPLETION_CERTIFICATE"
+                      ? "Completionscrutiny"
+                      : row.original["businessService"] === "SERVICE_PLAN"
+                      ? "ServiceScrutiny"
+                      : row.original["businessService"] === "SERVICE_PLAN_DEMARCATION"
+                      ? "ServiceScrutiny"
+                      : row.original["businessService"] === "ELECTRICAL_PLAN"
+                      ? "ElectricalScrutiny"
+                      : row.original["businessService"] === "EXTENTION_OF_CLU_PERMISSION"
+                      ? "ExtensionCluCard"
+                      : row.original["businessService"] === "BG_NEW"
+                      ? "ScrutinyForm"
+                      : null
+                  }/` + row.original["applicationId"]
+                }
+              >
+                {row.original["applicationId"]}
+              </Link>
               {/* <Link to={`/digit-ui/employee/tl/${row.original["businessService"] === 'SERVICE_PLAN' ? 'ServiceScrutiny' : row.original["businessService"] === 'ELECTRICAL_PLAN' ? 'ElectricalScrutiny' : row.original["businessService"] === "BG_NEW" ? 'ScrutinyForm' : null }/` + row.original["applicationId"]}>{row.original["applicationId"]}</Link> */}
-
             </span>
           </div>
         );
-      }
-    }, {
+      },
+    },
+    {
       Header: t("TL_COMMON_TABLE_COL_APP_DATE"),
       accessor: "applicationDate",
       Cell: ({ row }) => {
         const date = convertEpochToDateDMY(row.original.date);
-        return GetCell(date)
-      }
-    }, {
+        return GetCell(date);
+      },
+    },
+    {
       Header: t("TL_COMMON_TABLE_COL_APP_TYPE"),
       Cell: ({ row }) => {
         return GetCell(t(row.original["businessService"] ? `CS_COMMON_INBOX_${row.original["businessService"]?.toUpperCase()}` : "NA"));
       },
-    }, 
+    },
     // {
     //   Header: t("WF_INBOX_HEADER_LOCALITY"),
     //   Cell: ({ row }) => {
@@ -73,25 +118,28 @@ const DesktopInbox = ({ tableConfig, filterComponent, columns, isLoading, setSea
     {
       Header: t("WF_INBOX_HEADER_STATUS"),
       Cell: ({ row }) => {
-        return GetCell(t(row.original["businessService"] ? `WF_${row.original["businessService"]?.toUpperCase()}_${row.original?.["status"]}` : `NA`));
+        return GetCell(
+          t(row.original["businessService"] ? `WF_${row.original["businessService"]?.toUpperCase()}_${row.original?.["status"]}` : `NA`)
+        );
       },
     },
     {
       Header: t("WF_INBOX_HEADER_CURRENT_OWNER"),
       Cell: ({ row }) => {
         return GetCell(t(`${row.original?.owner}`));
-      }
-    }, {
+      },
+    },
+    {
       Header: t("WF_INBOX_HEADER_SLA_DAYS_REMAINING"),
       Cell: ({ row }) => {
-        return GetSlaCell(row.original["sla"])
+        return GetSlaCell(row.original["sla"]);
       },
     },
     {
       Header: t("WF_INBOX_HEADER_AGING"),
       Cell: ({ row }) => {
-        const date = elapsedTime(row.original.date,new Date().getTime());
-        return GetCell(`${date.days} Days ${date.hours} Hours ${date.hours} Minutes`)
+        const date = elapsedTime(row.original.date, new Date().getTime());
+        return GetCell(`${date.days} Days ${date.hours} Hours ${date.hours} Minutes`);
       },
     },
     {
@@ -100,13 +148,49 @@ const DesktopInbox = ({ tableConfig, filterComponent, columns, isLoading, setSea
         return (
           <div>
             <div className="w-100 text-center link">
-              <Link to={`/digit-ui/employee/tl/${row.original["businessService"] === ('NewTL' || 'TL') ? 'scrutiny' : row.original["businessService"] === 'SERVICE_PLAN' ? 'ServiceScrutiny' : row.original["businessService"] === 'ELECTRICAL_PLAN' ? 'ElectricalScrutiny' : row.original["businessService"] === 'TRANSFER_OF_LICIENCE' ? 'TransferScrutiny' : row.original["businessService"] === "BG_NEW" ? 'ScrutinyForm' :  null  }/` + row.original["applicationId"]}>
-                <Visibility/>
+              <Link
+                to={
+                  `/digit-ui/employee/tl/${
+                    row.original["businessService"] === ("NewTL" || "TL")
+                      ? "scrutiny"
+                      : row.original["businessService"] === "SERVICE_PLAN"
+                      ? "ServiceScrutiny"
+                      : row.original["businessService"] === "REVISED_LAYOUT_PLAN"
+                      ? "LayoutPlanScritny"
+                      : row.original["businessService"] === "SURREND_OF_LICENSE"
+                      ? "SurrenderLic"
+                      : row.original["businessService"] === "APPROVAL_OF_STANDARD"
+                      ? "StandardDesign"
+                      : row.original["businessService"] === "CHANGE_OF_BENEFICIAL"
+                      ? "Beneficialscrutiny"
+                      : row.original["businessService"] === "RENWAL_OF_LICIENCE"
+                      ? "RenewalScrutiny"
+                      : row.original["businessService"] === "TRANSFER_OF_LICIENCE"
+                      ? "TransferScrutiny"
+                      : row.original["businessService"] === "SERVICE_PLAN_DEMARCATION"
+                      ? "ServiceScrutiny"
+                      : row.original["businessService"] === "ELECTRICAL_PLAN"
+                      ? "ElectricalScrutiny"
+                      : row.original["businessService"] === "TRANSFER_OF_LICIENCE"
+                      ? "TransferScrutiny"
+                      : row.original["businessService"] === "CONSTRUCTION_OF_COMMUNITY"
+                      ? "ExtensionCom"
+                      : row.original["businessService"] === "COMPLETION_CERTIFICATE"
+                      ? "Completionscrutiny"
+                      : row.original["businessService"] === "BG_NEW"
+                      ? "ScrutinyForm"
+                      : row.original["businessService"] === "EXTENTION_OF_CLU_PERMISSION"
+                      ? "ExtensionCluCard"
+                      : null
+                  }/` + row.original["applicationId"]
+                }
+              >
+                <Visibility />
               </Link>
             </div>
           </div>
         );
-      }
+      },
     },
   ];
 
@@ -118,7 +202,7 @@ const DesktopInbox = ({ tableConfig, filterComponent, columns, isLoading, setSea
     return {
       days: elapsedDays,
       hours: elapsedHours,
-      minutes: elapsedMinutes
+      minutes: elapsedMinutes,
     };
   }
 
@@ -170,7 +254,8 @@ const DesktopInbox = ({ tableConfig, filterComponent, columns, isLoading, setSea
     <div className="inbox-container">
       {!props.isSearch && (
         <div className="filters-container">
-          <InboxLinks parentRoute={props.parentRoute}
+          <InboxLinks
+            parentRoute={props.parentRoute}
             allLinks={[
               {
                 text: "TL_NEW_APPLICATION",
@@ -203,9 +288,13 @@ const DesktopInbox = ({ tableConfig, filterComponent, columns, isLoading, setSea
                 roles: ["STADMIN"],
               },
             ]}
-            headerText={t("ACTION_TEST_TRADELICENSE")} businessService={props.businessService} />
+            headerText={t("ACTION_TEST_TRADELICENSE")}
+            businessService={props.businessService}
+          />
           <div>
-            {isLoading ? <Loader /> :
+            {isLoading ? (
+              <Loader />
+            ) : (
               <FilterComponent
                 defaultSearchParams={props.defaultSearchParams}
                 statuses={data?.statuses}
@@ -213,7 +302,7 @@ const DesktopInbox = ({ tableConfig, filterComponent, columns, isLoading, setSea
                 searchParams={props.searchParams}
                 type="desktop"
               />
-            }
+            )}
           </div>
         </div>
       )}

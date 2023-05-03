@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState} from "react";
 import Button from "react-bootstrap/Button";
 import Col from "react-bootstrap/Col";
 import Form from "react-bootstrap/Form";
@@ -16,11 +16,16 @@ import '../../css/personalInfoChild.style.js'
 import { IconButton } from "@mui/material";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import FileDownloadIcon from "@mui/icons-material/FileDownload";
+import FormControl from "@mui/material/FormControl";
+import { getDocShareholding } from "../../ScrutinyDevelopment/docview.helper";
 
-function StandardDesign() {
+function StandardDesign(props) {
   const [selects, setSelects] = useState();
   const [showhide, setShowhide] = useState("");
   const [open2, setOpen2] = useState(false);
+  const dataIcons = props.dataForIcons;
+  const apiData =props.apiResponse;
+  const applicationStatus =props.applicationStatus;
 
   // const handleshowhide = (event) => {
   //   const getuser = event.target.value;
@@ -47,6 +52,44 @@ function StandardDesign() {
   } = useForm({});
 
 
+  useEffect(() => {
+    if (apiData) {
+      setValue("licenseNo", apiData?.licenseNo);
+      setValue("anyOtherDoc", apiData?.anyOtherDoc);
+      // setValue("anyOtherDoc", apiData?.newAdditionalDetails?.anyOtherDoc);
+      // setValue("anyOtherDoc", apiData?.newAdditionalDetails?.anyOtherDoc);
+      setValue("licenseNo", apiData?.licenseNo);
+      setValue("selectType", apiData?.additionalDetails?.selectType);
+      setValue("affidavitFixedChargesForAdm", apiData?.additionalDetails?.affidavitFixedChargesForAdm);
+      setValue("affidavitForLicencedArea", apiData?.additionalDetails?.affidavitForLicencedArea);
+      setValue("affidavitForLicencedArea", apiData?.additionalDetails?.affidavitOfAdmCharges);
+      setValue("amount", apiData?.newAdditionalDetails?.amount);
+      setValue("validUpto", apiData?.newAdditionalDetails?.validUpto);
+      setValue("renewalRequiredUpto", apiData?.newAdditionalDetails?.renewalRequiredUpto);
+      setValue("renewalRequiredUpto", apiData?.newAdditionalDetails?.renewalRequiredUpto);
+      setValue("colonizerName", apiData?.newAdditionalDetails?.colonizerName);
+      setValue("sectorNo", apiData?.newAdditionalDetails?.sectorNo);
+      setValue("colonyType", apiData?.newAdditionalDetails?.colonyType);
+      setValue("tehsil", apiData?.newAdditionalDetails?.tehsil);
+      setValue("district", apiData?.newAdditionalDetails?.district);
+      setValue("selectLicence", apiData?.newAdditionalDetails?.selectLicence);
+      setValue("revenueEstate", apiData?.newAdditionalDetails?.revenueEstate);
+      setValue("developmentPlan", apiData?.newAdditionalDetails?.developmentPlan);
+      setValue("anyOtherDoc", apiData?.additionalDetails?.anyOtherDoc);
+      setValue("areaInAcres", apiData?.additionalDetails?.areaInAcres);
+      setValue("areaAcres", apiData?.newAdditionalDetails?.areaAcres);
+      setValue("boardResolutionDoc", apiData?.additionalDetails?.boardResolutionDoc);
+      setValue("changeOfDeveloper", apiData?.additionalDetails?.changeOfDeveloper);
+      setValue("colonizerSeekingTransferLicence", apiData?.additionalDetails?.colonizerSeekingTransferLicence);
+      setValue("consentLetterDoc", apiData?.additionalDetails?.consentLetterDoc);
+      setValue("justificationForRequest", apiData?.additionalDetails?.justificationForRequest);
+      setValue("licenceTransferredFromLandOwn", apiData?.additionalDetails?.licenceTransferredFromLandOwn);
+      
+    }
+  }, [apiData]);
+
+
+
   const standardDesign = (data) => console.log(data);
    
   const classes = useStyles();
@@ -58,39 +101,42 @@ function StandardDesign() {
   const [smShow, setSmShow] = useState(false);
   const [labelValue, setLabelValue] = useState("");
   const Colors = {
-    approved:"#09cb3d",
-    disapproved:"#ff0000",
-    info:"#FFB602"
+    Conditional: "#2874A6",
+    approved: "#09cb3d",
+    disapproved: "#ff0000",
+      info: "#FFB602"
   }
 
-  const handlemodaldData = (data) => {
-    // setmodaldData(data.data);
-    setSmShow(false);
-    console.log("here",openedModal,data);
-    if(openedModal && data){
-      setFieldIconColors({...fieldIconColors,[openedModal]:data.data.isApproved?Colors.approved:Colors.disapproved})
-    }
-      setOpennedModal("");
-      setLabelValue("");
-  };
+  // const handlemodaldData = (data) => {
+   
+  //   setSmShow(false);
+  //   console.log("here",openedModal,data);
+  //   if(openedModal && data){
+  //     setFieldIconColors({...fieldIconColors,[openedModal]:data.data.isApproved?Colors.approved:Colors.disapproved})
+  //   }
+  //     setOpennedModal("");
+  //     setLabelValue("");
+  // };
   const [selectedFieldData,setSelectedFieldData] = useState();
   const [fieldValue, setFieldValue] = useState("");
   const [openedModal, setOpennedModal] = useState("")
   const [fieldIconColors, setFieldIconColors] = useState({
+
     developer: Colors.info,
-    authPersonName: Colors.info,
-    authMobileNo1: Colors.info,
-    authMobileNo2: Colors.info,
-    emailId: Colors.info,
-    pan: Colors.info,
-    address: Colors.info,
-    city: Colors.info,
-    pin: Colors.info,
+    selectLicence: Colors.info,
+    validUpto: Colors.info,
+    renewalRequiredUpto: Colors.info,
+    periodOfRenewal: Colors.info,
+    colonizerName: Colors.info,
+    colonyType: Colors.info,
+    areaAcres: Colors.info,
+    sectorNo: Colors.info,
+    revenueEstate: Colors.info,
+    developmentPlan: Colors.info,
     tehsil: Colors.info,
     district: Colors.info,
-    state: Colors.info,
-    type: Colors.info,
-    lciSignedBy: Colors.info,
+    agreementDoc: Colors.info,
+    anyOtherDoc: Colors.info,
     lciNotSigned: Colors.info,
     parmanentAddress: Colors.info,
     addressForCommunication: Colors.info,
@@ -98,12 +144,77 @@ function StandardDesign() {
     emailForCommunication: Colors.info
   })
 
-  const fieldIdList = [{label:"Developer",key:"developer"},{label:"Authorized Person Name",key:"authPersonName"},{label:"Autrhoized Mobile No",key:"authMobileNo1"},{label:"Authorized MobileNo. 2 ",key:"authMobileNo2"},{label:"Email ID",key:"emailId"},{label:"PAN No.",key:"pan"},{label:"Address  1",key:"address"},{label:"Village/City",key:"city"},{label:"Pincode",key:"pin"},{label:"Tehsil",key:"tehsil"},{label:"District",key:"district"},{label:"State",key:"state"},{label:"Status (Individual/ Company/ Firm/ LLP etc.)",key:"type"},{label:"LC-I signed by",key:"lciSignedBy"},{label:"If LC-I is not signed by self (in case of an individual) nature of authorization (GPA/SPA)",key:"lciNotSigned"},{label: "Permanent address in case of individual/ registered office address in case other than individual", key:"parmanentAddress"},{label:"Address for communication",key:"addressForCommunication"},{label:"Name of the authorized person to sign the application",key:"authPerson"},{label:"Email ID for communication",key:"emailForCommunication"}]
+  const fieldIdList = [{label:"Developer",key:"developer"},
+   { label: "selectLicence", key: "selectLicence" },
+   {label:"Valid Upto",key:"validUpto"},
+   {label:"Renewal required upto",key:"renewalRequiredUpto"},
+   {label:"Period of renewal(In Months)",key:"periodOfRenewal"},
+   {label:"Name of Colonizer",key:"colonizerName"},
+   {label:"Type of Colony",key:"colonyType"},
+   {label:"Area in Acres",key:"areaAcres"},
+   {label:"Sector No",key:"sectorNo"},
+   {label:"Revenue estate",key:"revenueEstate"},
+   {label:"Development Plan",key:"developmentPlan"},
+   {label:"Tehsil",key:"tehsil"},
+   {label:"District",key:"district"},
+   {label:"Standard drawing designs",key:"agreementDoc"},
+   {label:"Any other Document",key:"anyOtherDoc"},
+   {label:"If LC-I is not signed by self (in case of an individual) nature of authorization (GPA/SPA)",key:"lciNotSigned"},{label: "Permanent address in case of individual/ registered office address in case other than individual", key:"parmanentAddress"},{label:"Address for communication",key:"addressForCommunication"},{label:"Name of the authorized person to sign the application",key:"authPerson"},{label:"Email ID for communication",key:"emailForCommunication"}]
 /////////////////////////////////////////////////////
 
+const getColorofFieldIcon = () => {
+  let tempFieldColorState = fieldIconColors;
+  fieldIdList.forEach((item) => {
+    if (dataIcons !== null && dataIcons !== undefined) {
+      console.log("color method called");
+      const fieldPresent = dataIcons.egScrutiny.filter((ele) => ele.fieldIdL === item.label);
+      console.log("filteration value111", fieldPresent, fieldPresent[0]?.isApproved);
+      if (fieldPresent && fieldPresent.length) {
+        console.log("filteration value111", fieldPresent, fieldPresent[0]?.isApproved);
+        tempFieldColorState = {
+          ...tempFieldColorState,
+          [item.key]:
+            fieldPresent[0].isApproved === "In Order"
+              ? Colors.approved
+              : fieldPresent[0].isApproved === "Not In Order"
+              ? Colors.disapproved
+              : fieldPresent[0].isApproved === "Conditional"
+              ? Colors.Conditional
+              : Colors.info,
+        };
+      }
+    }
+  });
+
+  setFieldIconColors(tempFieldColorState);
+};
+
+useEffect(() => {
+  getColorofFieldIcon();
+  console.log("repeating1...");
+}, [dataIcons]);
+
+useEffect(() => {
+  if (labelValue) {
+    const fieldPresent = dataIcons.egScrutiny.filter((ele) => ele.fieldIdL === labelValue);
+    setSelectedFieldData(fieldPresent[0]);
+  } else {
+    setSelectedFieldData(null);
+  }
+}, [labelValue]);
 
 
+const handlemodaldData = (data) => {
 
+  setSmShow(false);
+  console.log("here",openedModal,data);
+  if(openedModal && data){
+    setFieldIconColors({...fieldIconColors,[openedModal]:data.data.isApproved?Colors.approved:Colors.disapproved})
+
+  }
+    setOpennedModal("");
+    setLabelValue("");
+};
 
 
 
@@ -162,52 +273,405 @@ function StandardDesign() {
                 <input type="number" placeholder="" className="form-control" {...register("licenseNo")} />
               </Form.Group>
             </Col> */}
-            <Col className="col-4">
-                 <div>
-                <Form.Label>
-              <h5 className={classes.formLabel}>Licence No &nbsp;</h5>
-            </Form.Label>
-            <span className={classes.required}>*</span> &nbsp;&nbsp;
+
+<div>
+      <div className="row gy-3">
+        <div className="col col-3">
+          <h2>
+            Licence No.<span style={{ color: "red" }}>*</span>
+          </h2>
+          <div style={{ display: "flex", placeItems: "center" }}>
+            <input type="text" className="form-control" placeholder={apiData?.licenseNo}  disabled />
+            <div>
+              <ReportProblemIcon
+                      style={{
+                        color: fieldIconColors.developer,
+                      }}
+                      onClick={() => {
+                        setOpennedModal("Licence No");
+                        setLabelValue("Licence No"),
+                          setSmShow(true),
+                          console.log("modal open"),
+                          setFieldValue(apiData !== null ? apiData.licenseNo : null);
+                      }}
+                    ></ReportProblemIcon>
+                    <ModalChild
+                      labelmodal={labelValue}
+                      passmodalData={handlemodaldData}
+                      displaymodal={smShow}
+                      onClose={() => setSmShow(false)}
+                      selectedFieldData={selectedFieldData}
+                      fieldValue={fieldValue}
+                      remarksUpdate={currentRemarks}
+                      applicationStatus = {applicationStatus} 
+                    ></ModalChild>
+            </div>
           </div>
-            <div className={classes.fieldContainer}>
-            <Form.Control
-              className={classes.formControl}
-              placeholder=""
-              disabled
-            ></Form.Control>
-                
-                <ReportProblemIcon
-              style={{
-                color:fieldIconColors.developer}}
-              onClick={() => {
-                  setOpennedModal("Licence No")
-                  setLabelValue("Licence No"),
-                  setSmShow(true),
-                  console.log("modal open"),
-                  setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
-              }}
-            ></ReportProblemIcon>
-             <ModalChild
-              labelmodal={labelValue}
-              passmodalData={handlemodaldData}
-              displaymodal={smShow}
-              onClose={()=>setSmShow(false)}
-              selectedFieldData={selectedFieldData}
-              fieldValue={fieldValue}
-              remarksUpdate={currentRemarks}
-            ></ModalChild>
-             </div>
-              </Col>
+        
+        </div>
+
+          <div className="col col-3 ">
+            <h2>
+              Select Licence<span style={{ color: "red" }}>*</span>
+            </h2>
+            <div style={{ display: "flex", placeItems: "center" }}>
+            <input type="text" className="form-control" placeholder="" {...register("selectLicence")} disabled />
+            <div>
+              <ReportProblemIcon
+                      style={{
+                        color: fieldIconColors.selectLicence,
+                      }}
+                      onClick={() => {
+                        setOpennedModal("selectLicence");
+                        setLabelValue("Select Licence"),
+                          setSmShow(true),
+                          console.log("modal open"),
+                          setFieldValue(apiData !== null ? apiData?.newAdditionalDetails?.selectLicence : null);
+                      }}
+                    ></ReportProblemIcon>
+                    
+            </div>
+            </div>
+            
+            
+          </div>
+
+      </div>
+
+
+        <div className="row gy-3 mt-3">
+          <div className="col col-3 ">
+            <FormControl>
+              <h2>
+                Valid Upto <span style={{ color: "red" }}>*</span>
+              </h2>
+
+             
+            </FormControl>
+            <div style={{ display: "flex", placeItems: "center" }}>
+            <input type="date" className="form-control" placeholder="" {...register("validUpto")} disabled />
+            <div>
+              <ReportProblemIcon
+                      style={{
+                        color: fieldIconColors.validUpto,
+                      }}
+                      onClick={() => {
+                        setOpennedModal("validUpto");
+                        setLabelValue("Valid Upto"),
+                          setSmShow(true),
+                          console.log("modal open"),
+                          setFieldValue(apiData !== null ? apiData?.newAdditionalDetails?.selectLicence : null);
+                      }}
+                    ></ReportProblemIcon>
+                    
+            </div>
+            </div>
+            
+            {/* <h3 className="error-message" style={{ color: "red" }}>
+              {errors?.validUpto && errors?.validUpto?.message}
+            </h3> */}
+          </div>
+          {/* <div className="col col-3 ">
+            <FormControl>
+              <h2>
+                Renewal required upto <span style={{ color: "red" }}>*</span>
+              </h2>
+            
+            </FormControl>
+            <div style={{ display: "flex", placeItems: "center" }}>
+            <input type="text" className="form-control" placeholder="" {...register("renewalRequiredUpto")} disabled />
+            <div>
+              <ReportProblemIcon
+                      style={{
+                        color: fieldIconColors.renewalRequiredUpto,
+                      }}
+                      onClick={() => {
+                        setOpennedModal("renewalRequiredUpto");
+                        setLabelValue("Renewal required upto"),
+                          setSmShow(true),
+                          console.log("modal open"),
+                          setFieldValue(apiData !== null ? apiData?.newAdditionalDetails?.selectLicence : null);
+                      }}
+                    ></ReportProblemIcon>
+                    
+            </div>
+            </div>
+           
+          </div> */}
+          {/* <div className="col col-3 ">
+            <FormControl>
+              <h2>Period of renewal(In Months)</h2>
+            </FormControl>
+            <div style={{ display: "flex", placeItems: "center" }}>
+            <input type="text" {...register("periodOfRenewal")} className="form-control" disabled />
+            <div>
+              <ReportProblemIcon
+                      style={{
+                        color: fieldIconColors.periodOfRenewal,
+                      }}
+                      onClick={() => {
+                        setOpennedModal("periodOfRenewal");
+                        setLabelValue("Period of renewal(In Months)"),
+                          setSmShow(true),
+                          console.log("modal open"),
+                          setFieldValue(apiData !== null ? apiData?.newAdditionalDetails?.periodOfRenewal : null);
+                      }}
+                    ></ReportProblemIcon>
+                    
+            </div>
+            </div>
+
+          </div> */}
+          <div className="col col-3 ">
+            <FormControl>
+              <h2>
+                Name of Colonizer <span style={{ color: "red" }}>*</span>
+              </h2>
+
+            </FormControl>
+            <div style={{ display: "flex", placeItems: "center" }}>
+            <input type="text" className="form-control" placeholder="" {...register("colonizerName")} disabled />
+            <div>
+              <ReportProblemIcon
+                      style={{
+                        color: fieldIconColors.colonizerName,
+                      }}
+                      onClick={() => {
+                        setOpennedModal("colonizerName");
+                        setLabelValue("Name of Colonizer"),
+                          setSmShow(true),
+                          console.log("modal open"),
+                          setFieldValue(apiData !== null ? apiData?.newAdditionalDetails?.colonizerName : null);
+                      }}
+                    ></ReportProblemIcon>
+                    
+            </div>
+            </div>
+            
+            {/* <h3 className="error-message" style={{ color: "red" }}>
+              {errors?.colonizerName && errors?.colonizerName?.message}
+            </h3> */}
+          </div>
+        {/* </div> */}
+     
+        
+          <div className="col col-3 ">
+            <FormControl>
+              <h2>
+                Type of Colony
+                <span style={{ color: "red" }}>*</span>
+              </h2>
+
+              
+            </FormControl>
+            <div style={{ display: "flex", placeItems: "center" }}>
+            <input type="text" className="form-control" placeholder="" {...register("colonyType")} disabled />
+            <div>
+              <ReportProblemIcon
+                      style={{
+                        color: fieldIconColors.colonyType,
+                      }}
+                      onClick={() => {
+                        setOpennedModal("colonyType");
+                        setLabelValue("Type of Colony"),
+                          setSmShow(true),
+                          console.log("modal open"),
+                          setFieldValue(apiData !== null ? apiData?.newAdditionalDetails?.colonyType : null);
+                      }}
+                    ></ReportProblemIcon>
+                    
+            </div>
+            </div>
+            
+
+           
+            {/* <h3 className="error-message" style={{ color: "red" }}>
+              {errors?.colonyType && errors?.colonyType?.message}
+            </h3> */}
+          </div>
+
+          <div className="col col-3 ">
+            <FormControl>
+              <h2>
+                Area in Acres
+                <span style={{ color: "red" }}>*</span>
+              </h2>
+            </FormControl>
+            <div style={{ display: "flex", placeItems: "center" }}>
+            <input type="text" className="form-control" placeholder="" {...register("areaAcres")} disabled />
+            <div>
+              <ReportProblemIcon
+                      style={{
+                        color: fieldIconColors.areaAcres,
+                      }}
+                      onClick={() => {
+                        setOpennedModal("areaAcres");
+                        setLabelValue("Area in Acres"),
+                          setSmShow(true),
+                          console.log("modal open"),
+                          setFieldValue(apiData !== null ? apiData?.newAdditionalDetails?.areaAcres : null);
+                      }}
+                    ></ReportProblemIcon>
+                    
+            </div>
+            </div>
+          
+            {/* <h3 className="error-message" style={{ color: "red" }}>
+              {errors?.areaAcres && errors?.areaAcres?.message}
+            </h3> */}
+          </div>
+          </div>
+
+          <div className="row gy-3 mt-3">
+          <div className="col col-3 ">
+            <FormControl>
+              <h2>
+                Sector No. <span style={{ color: "red" }}>*</span>
+              </h2>
+
+              
+            </FormControl>
+            <div style={{ display: "flex", placeItems: "center" }}>
+            <input type="text" className="form-control" placeholder="" {...register("sectorNo")} disabled/>
+            <div>
+              <ReportProblemIcon
+                      style={{
+                        color: fieldIconColors.sectorNo,
+                      }}
+                      onClick={() => {
+                        setOpennedModal("sectorNo");
+                        setLabelValue("Sector No"),
+                          setSmShow(true),
+                          console.log("modal open"),
+                          setFieldValue(apiData !== null ? apiData?.newAdditionalDetails?.sectorNo : null);
+                      }}
+                    ></ReportProblemIcon>
+                    
+            </div>
+            </div>
+           
+            {/* <h3 className="error-message" style={{ color: "red" }}>
+              {errors?.sectorNo && errors?.sectorNo?.message}
+            </h3> */}
+          </div>
+          <div className="col col-3 ">
+            <FormControl>
+              <h2>Revenue estate</h2>
+
+            </FormControl>
+            <div style={{ display: "flex", placeItems: "center" }}>
+            <input type="text" className="form-control" placeholder="" {...register("revenueEstate")} disabled />
+            <div>
+              <ReportProblemIcon
+                      style={{
+                        color: fieldIconColors.revenueEstate,
+                      }}
+                      onClick={() => {
+                        setOpennedModal("selectLicence");
+                        setLabelValue("Revenue estate"),
+                          setSmShow(true),
+                          console.log("modal open"),
+                          setFieldValue(apiData !== null ? apiData?.newAdditionalDetails?.revenueEstate : null);
+                      }}
+                    ></ReportProblemIcon>
+                    
+            </div>
+            </div>
+           
+            {/* <h3 className="error-message" style={{ color: "red" }}>
+              {errors?.revenueEstate && errors?.revenueEstate?.message}
+            </h3> */}
+          </div>
+          <div className="col col-3 ">
+            Development Plan
+          
+            <div style={{ display: "flex", placeItems: "center" }}>
+            <input type="text" className="form-control" placeholder="" {...register("developmentPlan")} disabled />
+            <div>
+              <ReportProblemIcon
+                      style={{
+                        color: fieldIconColors.developmentPlan,
+                      }}
+                      onClick={() => {
+                        setOpennedModal("developmentPlan");
+                        setLabelValue("Development Plan"),
+                          setSmShow(true),
+                          console.log("modal open"),
+                          setFieldValue(apiData !== null ? apiData?.newAdditionalDetails?.developmentPlan : null);
+                      }}
+                    ></ReportProblemIcon>
+                    
+            </div>
+            </div>
+         
+          </div>
+          
+        {/* </div>
+
+
+      <div className="row gy-3 mt-3"> */}
+        <div className="col col-3 ">
+          <FormControl>
+            <h2>Tehsil</h2>
+            
+            
+          </FormControl>
+          <div style={{ display: "flex", placeItems: "center" }}>
+          <input type="text" className="form-control" placeholder="" {...register("tehsil")} disabled />
+            <div>
+              <ReportProblemIcon
+                      style={{
+                        color: fieldIconColors.tehsil,
+                      }}
+                      onClick={() => {
+                        setOpennedModal("tehsil");
+                        setLabelValue("Tehsil"),
+                          setSmShow(true),
+                          console.log("modal open"),
+                          setFieldValue(apiData !== null ? apiData?.newAdditionalDetails?.tehsil : null);
+                      }}
+                    ></ReportProblemIcon>
+                    
+            </div>
+            </div>
+         
+        </div>
+        </div>
+        <div className="row gy-3 mt-3"> 
+        <div className="col col-3 ">
+          <FormControl>
+            <h2>District</h2>
+            
+          </FormControl>
+          <div style={{ display: "flex", placeItems: "center" }}>
+          <input type="text" className="form-control" placeholder="" {...register("district")} disabled />
+            <div>
+              <ReportProblemIcon
+                      style={{
+                        color: fieldIconColors.district,
+                      }}
+                      onClick={() => {
+                        setOpennedModal("district");
+                        setLabelValue("District"),
+                          setSmShow(true),
+                          console.log("modal open"),
+                          setFieldValue(apiData !== null ? apiData?.newAdditionalDetails?.district : null);
+                      }}
+                    ></ReportProblemIcon>
+                    
+            </div>
+            </div>
+        </div>
+      </div>
+    </div>
+
+
+
             <Col className="col-4">
-              {/* <Form.Group controlId="formGridState">
-                <Form.Label>
-                  Plan <span style={{ color: "red" }}>*</span>
-                </Form.Label>
-                <input type="file" placeholder="" className="form-control" {...register("plan")} />
-              </Form.Group> */}
+            
                   <div>
                 <Form.Label>
-              <h5 className={classes.formLabel}>Plan  &nbsp;</h5>
+              <h5 className={classes.formLabel}>Standard drawing designs  &nbsp;</h5>
             </Form.Label>
             <span className={classes.required}>*</span> &nbsp;&nbsp;
           </div>
@@ -216,23 +680,23 @@ function StandardDesign() {
                                   
                                   
                                   <div className="btn btn-sm col-md-4">
-                                    <IconButton onClick={()=>getDocShareholding(item?.agreementDoc)}>
+                                    <IconButton onClick={()=>getDocShareholding(apiData?.standardDrawingDesigns)}>
                                        <VisibilityIcon color="info" className="icon" /></IconButton>
                                        </div>
                                   <div className="btn btn-sm col-md-4">
-                                   <IconButton onClick={()=>getDocShareholding(item?.agreementDoc)}>
+                                   <IconButton onClick={()=>getDocShareholding(apiData?.standardDrawingDesigns)}>
                                        <FileDownloadIcon color="info" className="icon" /></IconButton>
                                        </div>
                                        <div className="btn btn-sm col-md-4">
                                        <ReportProblemIcon
               style={{
-                color:fieldIconColors.developer}}
+                color:fieldIconColors.agreementDoc}}
               onClick={() => {
-                  setOpennedModal("Licence No")
-                  setLabelValue("Licence No"),
+                  setOpennedModal("agreementDoc")
+                  setLabelValue("Standard drawing designs"),
                   setSmShow(true),
                   console.log("modal open"),
-                  setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
+                  setFieldValue(personalinfo !== null ? personalinfo.agreementDoc : null);
               }}
             ></ReportProblemIcon>
                                        </div>
@@ -240,53 +704,43 @@ function StandardDesign() {
                                  </div>
             </Col>
             <Col className="col-4">
-              {/* <Form.Group controlId="formGridState">
-                <Form.Label>
-                  Any other Document <span style={{ color: "red" }}>*</span>
-                </Form.Label>
-                <input type="file" placeholder="" className="form-control" {...register("otherDocument")} />
-              </Form.Group> */}
+             
               <div>
                 <Form.Label>
               <h5 className={classes.formLabel}>Any other Document  &nbsp;</h5>
             </Form.Label>
-            <span className={classes.required}>*</span> &nbsp;&nbsp;
+      
           </div>
             <div className={classes.fieldContainer}>
             <div className="row">
                                   
                                   
                                   <div className="btn btn-sm col-md-4">
-                                    <IconButton onClick={()=>getDocShareholding(item?.agreementDoc)}>
+                                    <IconButton onClick={()=>getDocShareholding(apiData?.anyOtherDoc)}>
                                        <VisibilityIcon color="info" className="icon" /></IconButton>
                                        </div>
                                   <div className="btn btn-sm col-md-4">
-                                   <IconButton onClick={()=>getDocShareholding(item?.agreementDoc)}>
+                                   <IconButton onClick={()=>getDocShareholding(apiData?.anyOtherDoc)}>
                                        <FileDownloadIcon color="info" className="icon" /></IconButton>
                                        </div>
                                        <div className="btn btn-sm col-md-4">
                                        <ReportProblemIcon
               style={{
-                color:fieldIconColors.developer}}
+                color:fieldIconColors.anyOtherDoc}}
               onClick={() => {
-                  setOpennedModal("Licence No")
-                  setLabelValue("Licence No"),
+                  setOpennedModal("anyOtherDoc")
+                  setLabelValue("Any other Document"),
                   setSmShow(true),
                   console.log("modal open"),
-                  setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
+                  setFieldValue(personalinfo !== null ? personalinfo.anyOtherDoc : null);
               }}
             ></ReportProblemIcon>
                                        </div>
                                  </div>
                                  </div>
             </Col>
-            <Col className="col-4">
-              {/* <Form.Group controlId="formGridState">
-                <Form.Label>
-                  Amount <span style={{ color: "red" }}>*</span>
-                </Form.Label>
-                <input type="text" required={true} disabled={true} placeholder="" className="form-control" {...register("amount")} />
-              </Form.Group> */}
+            {/* <Col className="col-4">
+         
                     <div>
                 <Form.Label>
               <h5 className={classes.formLabel}> Amount  &nbsp;</h5>
@@ -313,22 +767,11 @@ function StandardDesign() {
             ></ReportProblemIcon>
             
              </div>
-            </Col>
-            {/* <Col className="col-4">
-              <Button variant="success" className="col my-4" type="submit" aria-label="right-end">
-                Pay
-              </Button>
             </Col> */}
+         
           </Row>
 
-          {/* <Row className="justify-content-end">
-            <Button variant="outline-primary" className="col-md-2 my-2 mx-2" type="submit" aria-label="right-end">
-              Save as Draft
-            </Button>
-            <Button type="submit" variant="outline-primary" className="col-md-2 my-2 mx-2" aria-label="right-end">
-              Submit
-            </Button>
-          </Row> */}
+      
         </div>
       </Card>
       </div>

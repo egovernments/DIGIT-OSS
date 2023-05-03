@@ -8,7 +8,7 @@ import { useTranslation } from "react-i18next";
 import { useQueryClient } from "react-query";
 import { useHistory, useParams } from "react-router-dom";
 import ApplicationDetailsActionBar from "../../../../../../templates/ApplicationDetails/components/ApplicationDetailsActionBar";
-import ActionModal from "../../../../../../templates/ApplicationDetails/Modal";
+import ActionModal from "../../../../../../templates/ApplicationDetails/Modal/index";
 // import ScrutitnyForms from "../ScrutinyBasic/ScutinyBasic";
 import ElecticalBase from "./ElectricalscrutinyBase";
 
@@ -184,7 +184,8 @@ const ElectricalScrutiny = (props) => {
 
   return (
     <Card>
-      <Card.Header class="fw-normal" style={{ top: 5, padding: 5, fontSize: 14, height: 90, lineHeight: 2 }}>
+      {/* <Card.Header class="fw-normal" style={{ top: 5, padding: 5 , fontSize: 14 ,height:90, lineHeight:2 }}>
+
         <div className="row">
           <div className="col-md-3">
             <p>Application Number:</p>
@@ -206,6 +207,57 @@ const ElectricalScrutiny = (props) => {
             <p>TCP Dairy Number: </p>
             <p class="fw-normal">{applicationData?.tcpDairyNumber}</p>
           </div>
+        </div>
+  </Card.Header>{" "}*/}
+      <Card.Header className="head-application">
+        <div className="row fw-normal">
+          <div className="col-sm-2">
+            <b>
+              <p className="head-font">Application Number:</p>
+            </b>
+            <b>
+              <p className="head-font">{id}</p>
+            </b>
+          </div>
+          <div className="col-sm-2">
+            <b>
+              <p className="head-font">Service Id: </p>
+            </b>
+            <b>
+              <p className="head-font">
+                {applicationData?.businessService}
+                {/* Licence */}
+              </p>
+            </b>
+          </div>
+          <div className="col-sm-2">
+            <b>
+              <p className="head-font">TCP Application Number:</p>
+            </b>
+            {/* {item.name.substring(0, 4)} */}
+            <b>
+              <p className="head-font">{applicationData?.tcpApplicationNumber}</p>
+            </b>
+          </div>
+          <div className="col-sm-2">
+            <b>
+              <p className="head-font">TCP Case Number:</p>
+            </b>
+            <b>
+              <p className="head-font">{applicationData?.tcpCaseNumber}</p>
+            </b>
+          </div>
+          <div className="col-sm-2">
+            <b>
+              <p className="head-font">TCP Dairy Number: </p>
+            </b>
+            <b>
+              <p className="head-font">{applicationData?.tcpDairyNumber}</p>
+            </b>
+          </div>
+          {/* <div className="col-sm-2">
+            <Button style={{ textAlign: "right" }} value="Submit" id="Submit" onChange1={handleChange} name="Submit" onClick={handleshow19}>Views PDF</Button>
+          </div> */}
         </div>
       </Card.Header>
       <Row style={{ top: 10, padding: 10 }}>

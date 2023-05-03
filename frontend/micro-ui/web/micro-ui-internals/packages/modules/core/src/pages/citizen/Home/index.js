@@ -189,6 +189,10 @@ const Home = () => {
             link: `/digit-ui/citizen/obps/TransferLicense`,
             i18nKey: t("Transfer of License"),
           },
+          {
+            link: `/digit-ui/citizen/tl/TransferLicense/my-applications`,
+            i18nKey: t("My applications"),
+          },
         ],
       },
       {
@@ -274,7 +278,7 @@ const Home = () => {
         value: "fourteen",
         links: [
           {
-            link: ``,
+            link: `/digit-ui/citizen/obps/CompletionLic`,
             i18nKey: t("Completion Certificate In Licence Colony"),
           },
         ],

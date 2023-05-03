@@ -9,6 +9,7 @@ import {
   RemoveIcon,
   DeleteIcon,
   MuiTables,
+  typeOf,
 } from "@egovernments/digit-ui-react-components";
 import React, { useState, useEffect } from "react";
 import { Button } from "@material-ui/core";
@@ -19,6 +20,12 @@ import Radio from "@mui/material/Radio";
 import RadioGroup from "@mui/material/RadioGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import FormLabel from "@mui/material/FormLabel";
+import { Dialog } from "@mui/material";
+import DialogActions from "@mui/material/DialogActions";
+import DialogContent from "@mui/material/DialogContent";
+import DialogContentText from "@mui/material/DialogContentText";
+import DialogTitle from "@mui/material/DialogTitle";
+import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
 import { Modal, ModalHeader, ModalFooter, ModalBody } from "react-bootstrap";
 import { styled } from "@mui/material/styles";
 import Paper from "@mui/material/Paper";
@@ -42,7 +49,33 @@ import FileUpload from "@mui/icons-material/FileUpload";
 import { useLocation } from "react-router-dom";
 import { IconButton } from "@mui/material";
 import SearchLicenceComp from "../../../../../../components/SearchLicence";
+import Item from "antd/lib/list/Item";
+
+const BootstrapDialog = styled(Dialog)(({ theme }) => ({
+  "& .MuiDialogContent-root": {
+    padding: theme.spacing(2),
+  },
+  "& .MuiDialogActions-root": {
+    padding: theme.spacing(1),
+  },
+}));
+
 function LayoutPlanClu() {
+    const [open, setOpen] = React.useState(false);
+  const [open1, setOpen1] = React.useState(false);
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+  const handleClickOpen1 = () => {
+    setOpen1(true);
+  };
+  const handleClose = () => {
+    setOpen(false);
+  };
+  const handleClose1 = () => {
+    setOpen1(false);
+    
+  };
   const { t } = useTranslation();
   const location = useLocation();
   const tenantId = Digit.ULBService.getCurrentTenantId();
@@ -50,6 +83,7 @@ function LayoutPlanClu() {
   const [loader, setLoader] = useState(false);
   const [selects, setSelects] = useState();
   const [showhide, setShowhide] = useState("");
+    const [applicationNumber, setApplicationNumber] = useState();
   const {
     register,
     handleSubmit,
@@ -70,7 +104,7 @@ function LayoutPlanClu() {
   const [Documents, setDocumentsData] = useState();
   const [fileStoreId, setFileStoreId] = useState({});
   const [selectedFiles, setSelectedFiles] = useState([]);
-
+  const[totalArea,setTotalArea]=useState(0);
   const [licenseNoVal, setLicNumber] = useState("");
   const [existingAreaVal, setExistingArea] = useState("");
   const [proposedAreaRevisionVal, setProposedAreaRevision] = useState("");
@@ -84,7 +118,7 @@ function LayoutPlanClu() {
   const [statusCreationAffidavitDocVal, setStatusCreationAffidavitDocVal] = useState("");
   const [boardResolutionAuthSignatoryDocVal, setBoardResolutionAuthSignatoryDocVal] = useState("");
   const [anyOtherDocVal, setAnyOtherDocVal] = useState("");
-
+  const [getTotalArea, setTotlArea] = useState();
   const handleshowhide = (event) => {
     const getuser = event.target.value;
     setShowhide(getuser);
@@ -133,25 +167,51 @@ function LayoutPlanClu() {
     if (id) getApplicantUserData(id);
   }, []);
 
+  useEffect(()=>{
+    console.log("totalarea1")
+    if(modalValue?.length){
+      let totalArea1 = 0
+      modalValue.forEach((item,index)=>{
+         totalArea1 += Number(item?.areaModalPop)
+      }
+      )
+       setValue("existingArea",totalArea1)
+       console.log("totalarea1",totalArea1)
+    }
+  },[modalValue]
+  )
   const layoutPlan = async (data) => {
     const numberLic = data?.licenceNo;
     const token = window?.localStorage?.getItem("token");
-    // console.log(data);
+    console.log(data);
 
     try {
       if (!applicantId) {
         const postLayoutPlan = {
-          RevisedPlan: [
+          RevisedPlan: 
             {
               action: "APPLY",
               tenantId: tenantId,
               licenseNo: numberLic,
+              newAdditionalDetails: {
+              selectLicence: data?.selectLicence?.label,
+              validUpto: data?.validUpto,
+              colonizerName: data?.colonizerName,
+              // periodOfRenewal: "",
+              colonyType: data?.colonyType,
+              areaAcres: data?.areaAcres,
+              sectorNo: data?.sectorNo,
+              revenueEstate: data?.revenueEstate,
+              developmentPlan: data?.developmentPlan,
+              tehsil: data?.tehsil,
+              district: data?.district,
+            },
               ReviseLayoutPlan: {
                 ...data,
                 existingAreaDetails: modalValue,
               },
             },
-          ],
+          
           RequestInfo: {
             apiId: "Rainmaker",
             ver: "v1",
@@ -168,6 +228,7 @@ function LayoutPlanClu() {
         console.log("LAY", postLayoutPlan);
         const Resp = await axios.post("/tl-services/revisedPlan/_create", postLayoutPlan);
         setLoader(false);
+         setApplicationNumber(Resp.data.revisedPlan[0].applicationNumber);
         // const useData = Resp?.data?.RevisedPlan?.[0];
       } else {
         // layOutPlanData.licenseNo = data?.licenseNo ? data?.licenseNo : layOutPlanData.additionalDetails?.licenseNo;
@@ -207,6 +268,23 @@ function LayoutPlanClu() {
           : layOutPlanData.additionalDetails?.boardResolutionAuthSignatoryDoc;
         layOutPlanData.additionalDetails.anyOther = data?.anyOther ? data?.anyOther : layOutPlanData.additionalDetails?.anyOther;
 
+  //  useEffect(() => {
+  //   var nameArray = modalValue?.map(function (itm) {
+  //     if (isNaN(itm?.areaModal)) return 0;
+  //     return itm?.areaModal;
+  //   });
+  //     const mixedSum = (nameArray = []) => {
+  //     let sum = 0;
+  //     for (let i = 0; i < nameArray.length; i++) {
+  //       const el = nameArray[i];
+  //       sum += +el;
+  //     }
+  //     return sum;
+  //   };
+  //    const totalVal = mixedSum(nameArray) + mixedSumB(nameArrayB);
+  //   setTotlArea(totalVal?.toFixed(3));
+  // }, [modalValue]);
+
         const updateRequest = {
           RequestInfo: {
             api_id: "Rainmaker",
@@ -220,7 +298,7 @@ function LayoutPlanClu() {
             authToken: token,
             userInfo: userInfo,
           },
-          RevisedPlan: [
+          revisedPlan: [
             {
               ...layOutPlanData,
 
@@ -344,13 +422,40 @@ function LayoutPlanClu() {
     }
   };
 
+  
+
+  //  const [showhide19, setShowhide19] = useState("true");
+  // const handleshow19 = (e) => {
+  
+  //  console.log("modalValue1234", modalValue?.[0]?.areaModalPop);
+  //  const query = modalValue?.map((elementInArray) => 
+  //  {elementInArray.areaModalPop} );
+    // let query = DetailsofAppliedLand?.dgpsDetails.map((array) => array.map((object) => `${object.latitude},${object.longitude}`).join(":")).join("|")
+    // console.log("Qurey", query);
+    
+  // };
+ 
+
+
+// const users = []
+
+//   const getAverageAge = (users) => {
+//     let sum = 0
+//     for (let i = 0; i < users.length; i++) {
+//       sum += users[i].age
+//     }
+//     return sum / users.length
+//   }
+
+
   return (
+    <React.Fragment>
     <div className="w-100">
       {loader && <Spinner />}
       <form onSubmit={handleSubmit(layoutPlan)}>
         <div className="card">
           <h4 className="my-2">
-            <b>APPROVAL OF REVISED LAYOUT PLAN OF LICENSE</b>
+            <b>{`${t("REV_LAYOUT_APPROVAL_OF_REVISED_LAYOUT_PLAN_OF_LICENCE")}`}</b>
           </h4>
           <div className="card">
             <div className="row gy-3">
@@ -379,9 +484,9 @@ function LayoutPlanClu() {
               <Col md={4} lg={4} mb={3}>
                 <FormControl>
                   <FormLabel id="existing_area" sx={{ fontWeight: "bold" }}>
-                    {`${t("REV_LAYOUT_EXISTING_AREA")}`} <span style={{ color: "red" }}>*</span>
+                    {`${t("REV_LAYOUT_EXISTING_AREAS")}`} <span style={{ color: "red" }}>*</span>
                   </FormLabel>
-                  <OutlinedInput
+                  {/* <OutlinedInput
                     aria-labelledby="existing_area"
                     type="text"
                     placeholder=""
@@ -389,7 +494,7 @@ function LayoutPlanClu() {
                     {...register("existingArea")}
                     onChange={(e) => setExistingArea(e.target.value)}
                     value={existingAreaVal}
-                  />
+                  /> */}
                 </FormControl>
               </Col>
             </div>
@@ -399,13 +504,22 @@ function LayoutPlanClu() {
                   <Table stickyHeader aria-label="sticky table">
                     <TableHead>
                       <TableRow>
-                        <StyledTableCell>Sr No.</StyledTableCell>
-                        <StyledTableCell>License No.</StyledTableCell>
-                        <StyledTableCell>Area</StyledTableCell>
-                        <StyledTableCell>Action</StyledTableCell>
+                        <StyledTableCell> {`${t("REV_LAYOUT_SR_NO")}`}
+                        {/* Sr No. */}
+                        </StyledTableCell>
+                        <StyledTableCell>{`${t("REV_LAYOUT_LICENCE_NO")}`}
+                        {/* License No. */}
+                        </StyledTableCell>
+                        <StyledTableCell>{`${t("REV_LAYOUT_AREA")}`}
+                        {/* Area */}
+                        </StyledTableCell>
+                        <StyledTableCell>{`${t("REV_LAYOUT_ACTION")}`}
+                         {/* Action */}
+                        </StyledTableCell>
                       </TableRow>
                     </TableHead>
                     <TableBody>
+                      
                       {modalValue?.length > 0 ? (
                         modalValue.map((elementInArray, input) => {
                           return (
@@ -415,8 +529,10 @@ function LayoutPlanClu() {
                               </StyledTableCell>
                               <StyledTableCell>{elementInArray.licenseNoPop}</StyledTableCell>
                               <StyledTableCell>{elementInArray.areaModalPop}</StyledTableCell>
+                              
+                              
 
-                              <StyledTableCell align="center">
+                              <StyledTableCell >
                                 <a href="javascript:void(0)" title="Delete record" onClick={() => deleteTableRows(-1)}>
                                   <DeleteIcon style={{ fill: "#ff1a1a" }} />
                                 </a>
@@ -440,6 +556,7 @@ function LayoutPlanClu() {
                   onRowsPerPageChange={handleChangeRowsPerPage}
                 />
               </Paper>
+              <div className="row">
               <Col sx={{ marginY: 2 }}>
                 <button
                   type="button"
@@ -452,15 +569,71 @@ function LayoutPlanClu() {
                   // onClick={() => setNoOfRows(noofRows + 1)}
                   onClick={handleShowAuthuser}
                 >
-                  Add More
+                  {`${t("REV_LAYOUT_ADD_MORES")}`}
+                  {/* Add More */}
                 </button>
               </Col>
+               <Col md={4} lg={4} mb={3}>
+                <FormControl>
+                  <FormLabel id="existing_area" sx={{ fontWeight: "bold" }}>{`${t("REV_LAYOUT_TOTAL_AREAS")}`}
+                    {/* Total Area:{getTotalArea}  */}
+                    <span style={{ color: "red" }}>*</span>
+                    
+                
+                  <OutlinedInput
+                    aria-labelledby="existing_area"
+                    type="text"
+                    placeholder=""
+                    className="Inputcontrol"
+                    {...register("existingArea")}
+                  
+                  />
+                    </FormLabel>
+                </FormControl>
+              </Col>
+               
+                </div>
             </Col>
-            <div className="row">
+             <div className="table table-bordered table-responsive">
+                        {/* <caption>List of users</caption> */}
+                        <thead>
+                          <tr>
+                             <th class="fw-normal"></th>
+                            <th class="fw-normal" style={{ textAlign: "center" }}>{`${t("REV_LAYOUT_AREA_IN_ACRES")}`}
+                              {/* In Acres */}
+                              </th>
+                            <th class="fw-normal"style={{ textAlign: "center" }}>{`${t("REV_LAYOUT_AREA_IN_SQ_M")}`}
+                              {/* In sq.m */}
+                              </th>
+                           
+                          </tr>
+                        </thead>
+                      <tbody>
+                         <tr>
+                            <td>{`${t("REV_LAYOUT_AREA_PROPOSED_REVISION")}`}</td>
+                            <td><input type="number"className="form-control" {...register("areaProposedRevision")} id="areaProposedRevision" /></td>
+                            <td style={{ textAlign: "center" }}>{(watch("areaProposedRevision") * 4046.86)?.toFixed(3)}</td>
+                          </tr>
+                          <tr>
+                            <td> {`${t("REV_LAYOUT_AREA_COMMERCIAL")}`}</td>
+                            <td><input type="number"className="form-control"  {...register("areaCommercial")} id="areaCommercial"/></td>
+                            <td style={{ textAlign: "center" }}>{(watch("areaCommercial") * 4046.86)?.toFixed(3)}</td>
+                          </tr>
+                          <tr>
+                            <td>{`${t("REV_LAYOUT_AREA_RESIDENTIAL")}`}</td>
+                            <td><input type="number"className="form-control" {...register("areaResidential")} id="areaResidential"/></td>
+                            <td style={{ textAlign: "center" }}>{(watch("areaResidential") * 4046.86)?.toFixed(3)}</td>
+                          </tr>
+                       
+                      </tbody>
+                      </div>
+            {/* <div className="row">
+
               <Col md={4} lg={4} mb={3}>
                 <FormControl>
                   <FormLabel id="propesed_revision" sx={{ fontWeight: "bold" }}>
-                    {`${t("REV_LAYOUT_AREA_PROPOSED_REVISION")}`} <span style={{ color: "red" }}>*</span>
+                    {`${t("REV_LAYOUT_AREA_PROPOSED_REVISION")}`}
+                     <span style={{ color: "red" }}>*</span>
                   </FormLabel>
                   <OutlinedInput
                     type="text"
@@ -472,7 +645,8 @@ function LayoutPlanClu() {
                     value={proposedAreaRevisionVal}
                   />
                 </FormControl>
-              </Col>
+                </Col>
+        
               <Col md={4} lg={4} mb={3}>
                 <FormControl>
                   <FormLabel id="commercial_area" sx={{ fontWeight: "bold" }}>
@@ -505,10 +679,40 @@ function LayoutPlanClu() {
                   />
                 </FormControl>
               </Col>
-            </div>
+            </div> */}
 
             <br></br>
-            <div className="row-12">
+              <div className="col col-12">
+                                    <h2>
+                                      {`${t("REV_LAYOUT_ANY_OTHER_REMARK")}`}<span style={{ color: "red" }}>*</span>&nbsp; &nbsp;&nbsp;
+                                    </h2>
+
+                                    <label htmlFor="anyOtherFeature">
+                                      <input {...register("anyOtherFeature")} type="radio" value="Y" id="anyOtherFeature" />
+                                      &nbsp; Yes &nbsp;&nbsp;
+                                    </label>
+                                    <label htmlFor="anyOtherFeature">
+                                      <input {...register("anyOtherFeature")} type="radio" value="N" id="anyOtherFeature" />
+                                      &nbsp; No &nbsp;&nbsp;
+                                    </label>
+                                     {watch("anyOtherFeature") === "Y" && (
+                                      <div className="row ">
+                                        <Col md={4} lg={4}>
+                  <FormControl>
+                    {/* <FormLabel id="any_remarks">Any other remark</FormLabel> */}
+                    <textarea
+                      className="form-control"
+                      aria-labelledby="any_remarks"
+                      {...register("anyOtherRemarks")}
+                      onChange={(e) => setAnyOtherRemarkTextVal(e.target.value)}
+                      value={anyOtherRemarkTextVal}
+                    ></textarea>
+                  </FormControl>
+                </Col>
+                                      </div>
+                                    )}
+                                    </div>
+            {/* <div className="row-12">
               <Col md={4} lg={4}>
                 <FormControl>
                   <FormLabel id="demo-row-radio-buttons-group-label" sx={{ fontWeight: "bold" }}>
@@ -537,7 +741,7 @@ function LayoutPlanClu() {
               {watch("anyOtherFeature") == "Y" || anyOtherRemarkVal == "Y" ? (
                 <Col md={4} lg={4}>
                   <FormControl>
-                    {/* <FormLabel id="any_remarks">Any other remark</FormLabel> */}
+                   
                     <textarea
                       className="form-control"
                       aria-labelledby="any_remarks"
@@ -550,7 +754,7 @@ function LayoutPlanClu() {
               ) : (
                 <p></p>
               )}
-            </div>
+            </div> */}
           </div>
           <div className=" col-12 m-auto">
             <div className="card">
@@ -558,9 +762,15 @@ function LayoutPlanClu() {
                 <table>
                   <thead>
                     <tr>
-                      <th style={{ textAlign: "center" }}>Sr.No</th>
-                      <th style={{ textAlign: "center" }}>Field Name</th>
-                      <th style={{ textAlign: "center" }}>Upload Documents</th>
+                      <th style={{ textAlign: "center" }}>{`${t("REV_LAYOUT_S_No")}`}
+                        {/* Sr.No */}
+                        </th>
+                      <th style={{ textAlign: "center" }}>{`${t("REV_LAYOUT_FIELD_NAME")}`}
+                      {/* Field Name */}
+                      </th>
+                      <th style={{ textAlign: "center" }}>{`${t("REV_LAYOUT_UPLOAD_DOC")}`}
+                      {/* Upload Documents */}
+                      </th>
                     </tr>
                   </thead>
                   <tbody>
@@ -814,27 +1024,38 @@ function LayoutPlanClu() {
                 </table>
               </div>
             </div>
-
-            <div className="col-sm-12 text-right">
-              <Button variant="contained" className="btn btn-primary btn-md center-block text-white" type="submit">
+  <div class="row">
+                <div class="col-sm-12 text-right">
+                  <button type="submit" onClick={handleClickOpen1}  class="btn btn-primary btn-md center-block">
+                    Submit
+                  </button>
+                </div>
+                <div class="col-sm-12 text-right">
+                  <button id="btnSearch" class="btn btn-primary btn-md center-block" style={{ marginTop: "-63px", marginRight: "97px" }}>
+                   Cancel
+                  </button>
+                </div>
+              </div>
+            {/* <div className="col-sm-12 text-right">
+              <Button variant="contained" className="btn btn-primary " type="submit">
                 Submit
               </Button>
-            </div>
+            </div> */}
           </div>
         </div>
       </form>
 
       <Modal show={showAuthuser} onHide={handleCloseAuthuser} animation={false}>
         <Modal.Header closeButton>
-          <Modal.Title>Add Authorised User</Modal.Title>
+          <Modal.Title>{`${t("REV_LAYOUT_ADD_AUTHORIZED_USER")}`}</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <form className="text1">
             <Row>
               <Col md={3} xxl lg="3">
                 <FormControl>
-                  <label htmlFor="licenseNoModal" className="text">
-                    License No. <span className="text-danger font-weight-bold">*</span>
+                  <label htmlFor="licenseNoModal" className="text">{`${t("REV_LAYOUT_LICENCE_NO")}`}
+                    <span className="text-danger font-weight-bold">*</span>
                   </label>
                   <OutlinedInput
                     type="number"
@@ -848,7 +1069,7 @@ function LayoutPlanClu() {
               <Col md={3} xxl lg="3">
                 <FormControl>
                   <label htmlFor="areaModal" className="text">
-                    Area <span className="text-danger font-weight-bold">*</span>
+                    {`${t("REV_LAYOUT_AREA")}`} <span className="text-danger font-weight-bold">*</span>
                   </label>
                   <OutlinedInput
                     type="text"
@@ -872,6 +1093,29 @@ function LayoutPlanClu() {
         </Modal.Footer>
       </Modal>
 
+        <Dialog open={open1} onClose={handleClose1} aria-labelledby="alert-dialog-title" aria-describedby="alert-dialog-description">
+        <DialogTitle id="alert-dialog-title">Approval of Revised Layout Plan Submission</DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+            <p>
+              Your Approval of Revised Layout Plan is submitted successfully{" "}
+              <span>
+                <CheckCircleOutlineIcon style={{ color: "blue", variant: "filled" }} />
+              </span>
+            </p>
+            <p>
+              Please Note down your Application Number <span style={{ padding: "5px", color: "blue" }}>{applicationNumber}</span> for further
+              assistance
+            </p>
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose1} autoFocus>
+            Ok
+          </Button>
+        </DialogActions>
+      </Dialog>
+
       {showToastError && (
         <CusToaster
           label={showToastError?.label}
@@ -883,6 +1127,7 @@ function LayoutPlanClu() {
         />
       )}
     </div>
+    </React.Fragment>
   );
 }
 

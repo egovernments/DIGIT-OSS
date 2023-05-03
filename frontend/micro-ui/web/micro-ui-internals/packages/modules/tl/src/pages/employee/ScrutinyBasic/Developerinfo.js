@@ -554,7 +554,7 @@ const Developerinfo = (props) => {
                   <label className="m-0 mx-2" for="No">No</label>
                   <ReportProblemIcon
                     style={{
-                     display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("Additional application with Migration") ? "block" : "none",
+                     display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_WHETHER_LICENCE_APPLIED_FOR_ADDITIONAL_AREA") ? "block" : "none",
                       color: fieldIconColors.licenceApplied
                     }}
                     onClick={() => {
@@ -590,7 +590,7 @@ const Developerinfo = (props) => {
                         ></Form.Control>
                         <ReportProblemIcon
                           style={{
-                           display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("Licence No. of Parent Licence") ? "block" : "none",
+                           display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_LICENCE_NUMBER_OF_PARENT_LICENCE") ? "block" : "none",
 
                             color: fieldIconColors.licenseNumber
                           }}
@@ -624,7 +624,7 @@ const Developerinfo = (props) => {
                         ></Form.Control>
                         <ReportProblemIcon
                           style={{
-                           display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("Development Plan") ? "block" : "none",
+                           display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_DEVELOMENT_PLAN_ADDICATION_PLAN") ? "block" : "none",
                             // display: hideRemarksPatwari?"none":"block",
                             color: fieldIconColors.potential
                           }}
@@ -653,7 +653,7 @@ const Developerinfo = (props) => {
                         <Form.Control placeholder={landScheduleData !== null ? landScheduleData?.siteLoc : null} disabled></Form.Control>
                         <ReportProblemIcon
                           style={{
-                           display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("Type of colony") ? "block" : "none",
+                           display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_TYPE_OF_COLONY_ADDICATION_PLAN") ? "block" : "none",
                             // display: hideRemarksPatwari?"none":"block",
                             color: fieldIconColors.siteLoc
                           }}
@@ -723,7 +723,7 @@ const Developerinfo = (props) => {
                         <Form.Control placeholder={landScheduleData !== null ? landScheduleData?.areaOfParentLicence : null} disabled></Form.Control>
                         <ReportProblemIcon
                           style={{
-                           display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("Area of parent licence in acres") ? "block" : "none",
+                           display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_AREA_OF_PARENT_LICENCE_IN_ACRES_ADDICATION_PLAN") ? "block" : "none",
                             // display: hideRemarksPatwari?"none":"block",
                             color: fieldIconColors.areaOfParentLicence
                           }}
@@ -759,7 +759,7 @@ const Developerinfo = (props) => {
                         </label>
                         <ReportProblemIcon
                           style={{
-                           display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("Third-party right created in parent license") ? "block" : "none",
+                           display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_VALIDITY_OF_PARENT_LICENCES_ADDICATION_PLAN") ? "block" : "none",
                             // display: hideRemarksPatwari?"none":"block",
                             color: fieldIconColors.thirdPartyRightCreated
                           }}
@@ -794,7 +794,7 @@ const Developerinfo = (props) => {
                         </label>
                         <ReportProblemIcon
                           style={{
-                           display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("Third-party right created in parent license") ? "block" : "none",
+                           display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_WHETHER_RENEWAL_LICENCES_FEE_SUBMITTED_ADDICATION_PLAN") ? "block" : "none",
                             // display: hideRemarksPatwari?"none":"block",
                             color: fieldIconColors.thirdPartyRightCreated
                           }}
@@ -843,7 +843,7 @@ const Developerinfo = (props) => {
                         </label>
                         <ReportProblemIcon
                           style={{
-                           display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("Third-party right created in parent license") ? "block" : "none",
+                           display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_THIRD_PARTY_RIGHT_CREATED_ADDICATION_PLAN") ? "block" : "none",
                             // display: hideRemarksPatwari?"none":"block",
                             color: fieldIconColors.thirdPartyRightCreated
                           }}
@@ -886,7 +886,7 @@ const Developerinfo = (props) => {
 
                                 className={classes.formLabel}
                                 disabled></Form.Control>
-                              <ReportProblemIcon
+                              {/* <ReportProblemIcon
                                 style={{
                                  display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("Remark") ? "block" : "none",
                                   // display: hideRemarksPatwari?"none":"block",
@@ -899,7 +899,7 @@ const Developerinfo = (props) => {
                                     console.log("modal open"),
                                     setFieldValue(landScheduleData !== null ? landScheduleData?.thirdPartyRemark : null);
                                 }}
-                              ></ReportProblemIcon>
+                              ></ReportProblemIcon> */}
                             </div>
                           </div>
                           <div className="col col-4">
@@ -911,10 +911,10 @@ const Developerinfo = (props) => {
                               <IconButton onClick={() => getDocShareholding(landScheduleData?.thirdPartyDoc)}>
                                 <DownloadForOfflineIcon color="primary" className="mx-1" />
                               </IconButton>
-                              <ReportProblemIcon
+                              {/* <ReportProblemIcon
                                 style={{
                                  display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("Address") ? "block" : "none",
-                                  // display: hideRemarksPatwari?"none":"block",
+                               
                                   color: fieldIconColors.thirdPartyDoc
                                 }}
                                 onClick={() => {
@@ -924,7 +924,7 @@ const Developerinfo = (props) => {
                                     console.log("modal open"),
                                     setFieldValue(landScheduleData !== null ? landScheduleData?.thirdPartyDoc : null);
                                 }}
-                              ></ReportProblemIcon>
+                              ></ReportProblemIcon> */}
                             </div>
 
                           </div>
@@ -951,7 +951,7 @@ const Developerinfo = (props) => {
                   <label className="m-0 mx-2" for="No">No</label>
                   <ReportProblemIcon
                     style={{
-                     display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("Address") ? "block" : "none",
+                     display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_WHETHER_LICENCE_APPLIED_UNDER_MIGRATION_POLICY") ? "block" : "none",
 
                       color: fieldIconColors.migrationPolicy
                     }}
@@ -970,7 +970,7 @@ const Developerinfo = (props) => {
             <Row className={classes.formLabel}>
               <Col md={4} xxl lg="12">
                 {
-                  landScheduleData?.migrationLic === "N" &&
+                  landScheduleData?.migrationLic === "Y" &&
 
                   <div>
                     <div style={{ overflow: "scroll" }}>
@@ -1020,7 +1020,7 @@ const Developerinfo = (props) => {
                             <th class="fw-normal py-0 border-top-0">
                               <ReportProblemIcon
                                 style={{
-                                 display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("Address") ? "block" : "none",
+                                 display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_PREVIOUS_LICENCE_MGINATIONLIC") ? "block" : "none",
                                   color: fieldIconColors.licenceNo
                                 }}
                                 onClick={() => {
@@ -1035,7 +1035,7 @@ const Developerinfo = (props) => {
                             <th class="fw-normal py-0 border-top-0">
                               <ReportProblemIcon
                                 style={{
-                                 display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("Address") ? "block" : "none",
+                                 display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_AREA_OF_PARENT_LICENCE_MGINATIONLIC") ? "block" : "none",
                                   color: fieldIconColors.areaOfParentLicence
                                 }}
                                 onClick={() => {
@@ -1050,7 +1050,7 @@ const Developerinfo = (props) => {
                             <th class="fw-normal py-0 border-top-0">
                               <ReportProblemIcon
                                 style={{
-                                 display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("Address") ? "block" : "none",
+                                 display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_PURPOSE_OF_PAREMENT_LICENCE_MGINATIONLIC") ? "block" : "none",
                                   color: fieldIconColors.purposeOfParentLicence
                                 }}
                                 onClick={() => {
@@ -1065,7 +1065,7 @@ const Developerinfo = (props) => {
                             <th class="fw-normal py-0 border-top-0">
                               <ReportProblemIcon
                                 style={{
-                                 display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("Address") ? "block" : "none",
+                                 display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_VALIDITY_OF_PARENT_LICENCE_MGINATIONLIC") ? "block" : "none",
                                   color: fieldIconColors.validityOfParentLicence
                                 }}
                                 onClick={() => {
@@ -1080,7 +1080,7 @@ const Developerinfo = (props) => {
                             <th class="fw-normal py-0 border-top-0">
                               <ReportProblemIcon
                                 style={{
-                                 display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("Address") ? "block" : "none",
+                                 display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_DATE_MGINATIONLIC") ? "block" : "none",
                                   color: fieldIconColors.dateMigration
                                 }}
                                 onClick={() => {
@@ -1095,7 +1095,7 @@ const Developerinfo = (props) => {
                             <th class="fw-normal py-0 border-top-0">
                               <ReportProblemIcon
                                 style={{
-                                 display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("Address") ? "block" : "none",
+                                 display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_AREA_APPLIED_UNDER_MGINATIONLIC") ? "block" : "none",
                                   color: fieldIconColors.areaAppliedUnderMigration
                                 }}
                                 onClick={() => {
@@ -1110,7 +1110,7 @@ const Developerinfo = (props) => {
                             <th class="fw-normal py-0 border-top-0">
                               <ReportProblemIcon
                                 style={{
-                                 display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("Address") ? "block" : "none",
+                                 display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_AREA_APPLIED_UNDER_MGINATIONLIC") ? "block" : "none",
                                   color: fieldIconColors.khasraNumber
                                 }}
                                 onClick={() => {
@@ -1125,7 +1125,7 @@ const Developerinfo = (props) => {
                             <th class="fw-normal py-0 border-top-0">
                               <ReportProblemIcon
                                 style={{
-                                 display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("Address") ? "block" : "none",
+                                 display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_AREA_APPLIED_UNDER_MGINATIONLIC") ? "block" : "none",
                                   color: fieldIconColors.areaMigration
                                 }}
                                 onClick={() => {
@@ -1140,7 +1140,7 @@ const Developerinfo = (props) => {
                             <th class="fw-normal py-0 border-top-0">
                               <ReportProblemIcon
                                 style={{
-                                 display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("Address") ? "block" : "none",
+                                 display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_APPLIED_KHASRS_NUMBER_GINATIONLIC") ? "block" : "none",
                                   color: fieldIconColors.balanceOfParentLicence
                                 }}
                                 onClick={() => {
@@ -1550,7 +1550,7 @@ const Developerinfo = (props) => {
                 <ReportProblemIcon
                   className="m-0 mx-2"
                   style={{
-                   display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("Rehan / Mortgage") ? "block" : "none",
+                   display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_ANY_ENCUMBRANCE_WITH_RESPECT_TO_FOLLOWING") ? "block" : "none",
                     color: fieldIconColors.encumbrance
                   }}
                   onClick={() => {
@@ -1638,7 +1638,7 @@ const Developerinfo = (props) => {
                 <label className="m-0 mx-2" for="No">No</label>
                 <ReportProblemIcon
                   style={{
-                   display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("Existing litigation, if any, concerning applied land including co-sharers and collaborator.") ? "block" : "none",
+                   display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_EXISTING_LITIGATION_IF_ANY_CONCERNING_APPLIED_LAND") ? "block" : "none",
                     color: fieldIconColors.existinglitigation
                   }}
                   onClick={() => {
@@ -1673,7 +1673,7 @@ const Developerinfo = (props) => {
                       <label className="m-0 mx-2" for="No">No</label>
                       <ReportProblemIcon
                         style={{
-                         display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("Court orders, if any, affecting applied land.") ? "block" : "none",
+                         display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_COURT_ORDERS_IF_ANY_AFFECTING_APPLIED_LAND") ? "block" : "none",
                           color: fieldIconColors.courtOrders
                         }}
                         onClick={() => {
@@ -1751,7 +1751,7 @@ const Developerinfo = (props) => {
                   <label className="m-0 mx-2" for="No">No</label>
                   <ReportProblemIcon
                     style={{
-                     display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("Any insolvency/liquidation proceedings against the Land Owing Company/Developer Company") ? "block" : "none",
+                     display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_ANY_INSOLVENCY_LIQUIDATION_PROCEESSDING_AGAINST_THE_LAND_OWING") ? "block" : "none",
                       color: fieldIconColors.anyInsolvency
                     }}
                     onClick={() => {
@@ -1829,7 +1829,7 @@ const Developerinfo = (props) => {
                     <label className="m-0 mx-2" for="No">No</label>
                     <ReportProblemIcon
                       style={{
-                       display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("As per site situation(Yes/No)") ? "block" : "none",
+                       display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_AS_PER_APPLIED_LAND_SHAJRA_PLAN") ? "block" : "none",
                         color: fieldIconColors.asPerAppliedLand
                       }}
                       onClick={() => {
@@ -1877,7 +1877,7 @@ const Developerinfo = (props) => {
                   <label className="m-0 mx-2" for="No">No</label>
                   <ReportProblemIcon
                     style={{
-                     display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("Revenue rasta, if any.") ? "block" : "none",
+                     display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_REVENUE_RASTA_SHAJRA_PLAN") ? "block" : "none",
                       color: fieldIconColors.revenueRasta
                     }}
                     onClick={() => {
@@ -1922,7 +1922,7 @@ const Developerinfo = (props) => {
                   <label className="m-0 mx-2" for="No">No</label>
                   <ReportProblemIcon
                     style={{
-                     display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("Watercourse/Nallah") ? "block" : "none",
+                     display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_WATERCOURSE_SHAJRA_PLAN") ? "block" : "none",
                       color: fieldIconColors.waterCourseRunning
                     }}
                     onClick={() => {
@@ -1960,7 +1960,7 @@ const Developerinfo = (props) => {
                   <label className="m-0 mx-2" for="No">No</label>
                   <ReportProblemIcon
                     style={{
-                     display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("Whether in Compact Block.") ? "block" : "none",
+                     display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_WHETHER_IN_COMPACT_BLOCK_SHAJRA_PLAN") ? "block" : "none",
                       color: fieldIconColors.whetherInCompactBlock
                     }}
                     onClick={() => {
@@ -2010,7 +2010,7 @@ const Developerinfo = (props) => {
                   <label className="m-0 mx-2" for="No">No</label>
                   <ReportProblemIcon
                     style={{
-                     display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("Others land fallng within applied land") ? "block" : "none",
+                     display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_WHETHER_OTHERS_LAND_FALL_SHAJRA_PLAN") ? "block" : "none",
                       color: fieldIconColors.landSandwiche
                     }}
                     onClick={() => {
@@ -2051,7 +2051,7 @@ const Developerinfo = (props) => {
                   <label className="m-0 mx-2" for="No">No</label>
                   <ReportProblemIcon
                     style={{
-                     display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("Address") ? "block" : "none",
+                     display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_ACQUISITION_STATUS_SHAJRA_PLAN") ? "block" : "none",
                       color: fieldIconColors.acquisitionStatus
                     }}
                     onClick={() => {
@@ -2077,7 +2077,7 @@ const Developerinfo = (props) => {
                               disabled placeholder={landScheduleData?.sectionFour} ></Form.Control>
                             <ReportProblemIcon
                               style={{
-                               display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("Date of section 4 notification") ? "block" : "none",
+                               display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_ACQUISITION_STATUS_Y_DATE_SECTION4_SHAJRA_PLAN") ? "block" : "none",
                                 color: fieldIconColors.dateOfSection4Notification
                               }}
                               onClick={() => {
@@ -2105,7 +2105,7 @@ const Developerinfo = (props) => {
                               disabled placeholder={landScheduleData?.sectionSix} ></Form.Control>
                             <ReportProblemIcon
                               style={{
-                               display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("Date of section 6 notification") ? "block" : "none",
+                               display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_ACQUISITION_STATUS_Y_DATE_SECTION6_SHAJRA_PLAN") ? "block" : "none",
                                 color: fieldIconColors.dateOfSection6Notification
                               }}
                               onClick={() => {
@@ -2134,7 +2134,7 @@ const Developerinfo = (props) => {
                             disabled placeholder={landScheduleData?.rewardDate} ></Form.Control>
                           <ReportProblemIcon
                             style={{
-                             display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("Date of Award") ? "block" : "none",
+                             display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_ACQUISITION_STATUS_Y_DATE_AWAED_SHAJRA_PLAN") ? "block" : "none",
                               color: fieldIconColors.dateOfSection6Notification
                             }}
                             onClick={() => {
@@ -2174,7 +2174,7 @@ const Developerinfo = (props) => {
                       <label className="m-0 mx-2" for="No">No</label>
                       <ReportProblemIcon
                         style={{
-                         display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("Whether Land Released/Excluded from aqusition proceeding") ? "block" : "none",
+                         display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_WHETER_LAND_RELEASED_EXCLUDED_FROM_AQUSITION_DATE_AWAED_SHAJRA_PLAN") ? "block" : "none",
                           color: fieldIconColors.ordersUpload
                         }}
                         onClick={() => {
@@ -2207,7 +2207,7 @@ const Developerinfo = (props) => {
 
                             <ReportProblemIcon
                               style={{
-                               display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("Whether land compensation received") ? "block" : "none",
+                               display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_AQUSITION_Y_WHETER_LAND_COMPENSATION_SHAJRA_PLAN") ? "block" : "none",
                                 color: fieldIconColors.landCompensationReceived
                               }}
                               onClick={() => {
@@ -2240,7 +2240,7 @@ const Developerinfo = (props) => {
 
                               <ReportProblemIcon
                                 style={{
-                                 display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("Date of Release of land") ? "block" : "none",
+                                 display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_AQUSITION_Y_STATUS_OF_RELEASE_SHAJRA_PLAN") ? "block" : "none",
                                   color: fieldIconColors.statusOfRelease
                                 }}
                                 onClick={() => {
@@ -2272,7 +2272,7 @@ const Developerinfo = (props) => {
                                 disabled placeholder={landScheduleData?.releaseDate}></Form.Control>
                               <ReportProblemIcon
                                 style={{
-                                 display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("Date of Release of land") ? "block" : "none",
+                                 display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_AQUSITION_Y_DATE_OF_RELEASE_SHAJRA_PLAN") ? "block" : "none",
                                   color: fieldIconColors.dateOfRelease
                                 }}
                                 onClick={() => {
@@ -2305,7 +2305,7 @@ const Developerinfo = (props) => {
                   </IconButton>
                   <ReportProblemIcon
                     style={{
-                     display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("Land schedule") ? "block" : "none",
+                     display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_AQUSITION_Y_COPY_OF_RELEASE_ORDER_SHAJRA_PLAN") ? "block" : "none",
                       color: fieldIconColors.copyOfMutation
                     }}
                     onClick={() => {
@@ -2349,7 +2349,7 @@ const Developerinfo = (props) => {
                                 disabled placeholder={landScheduleData?.siteDetail}></Form.Control>
                               <ReportProblemIcon
                                 style={{
-                                 display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("Address") ? "block" : "none",
+                                 display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_AQUSITION_Y_SITE_DETAILS_SHAJRA_PLAN") ? "block" : "none",
                                   color: fieldIconColors.siteDetails
                                 }}
                                 onClick={() => {
@@ -2381,7 +2381,7 @@ const Developerinfo = (props) => {
 
                             <ReportProblemIcon
                               style={{
-                               display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("Whether land compensation received") ? "block" : "none",
+                               display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_WHETHER_Y_WHETER_LITIGATION_REGARDING_RELEASE_OF_LAND_SHAJRA_PLAN") ? "block" : "none",
                                 color: fieldIconColors.landCompensationReceived
                               }}
                               onClick={() => {
@@ -2416,7 +2416,7 @@ const Developerinfo = (props) => {
 
     <ReportProblemIcon
       style={{
-       display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("Date of Release of land") ? "block" : "none",
+       display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_AQUSITION_Y_CWP_SLP_NUMBER_SHAJRA_PLAN") ? "block" : "none",
         color: fieldIconColors.statusOfRelease
       }}
       onClick={() => {
@@ -2455,7 +2455,7 @@ const Developerinfo = (props) => {
                   <label className="m-0 mx-2" for="No">Category-II approach</label>
                   <ReportProblemIcon
                     style={{
-                     display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("(I) Category-I approach") ? "block" : "none",
+                     display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_DETAILS_OF_EXISTING_APPROACH_AS_PER_POLICY_SHAJRA_PLAN") ? "block" : "none",
                       color: fieldIconColors.siteApproachable
                     }}
                     onClick={() => {
@@ -2491,7 +2491,7 @@ const Developerinfo = (props) => {
                       <div class="col-sm-1 text-right">
                         <ReportProblemIcon
                           style={{
-                           display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("(i)(a) Approach available from minimum 4 karam (22 ft) wide revenue rasta.") ? "block" : "none",
+                           display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_APPROACH_AVAILABLE_FROM_MINIMUN_KARAM_SHAJRA_PLAN") ? "block" : "none",
                             color: fieldIconColors.ordersUpload
                           }}
                           onClick={() => {
@@ -2526,7 +2526,7 @@ const Developerinfo = (props) => {
                       <div class="col-sm-1 text-right">
                         <ReportProblemIcon
                           style={{
-                           display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("(i)(b) Approach available from minimum 11 feet wide revenue rasta and applied site abuts acquired alignment of the sector road and there is no stay regarding construction on the land falling under the abutting") ? "block" : "none",
+                           display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_APPROACH_AVAILABLE_FROM_MINIMUN_FEET_WIDE_REVENUE_SHAJRA_PLAN") ? "block" : "none",
                             color: fieldIconColors.minimumApproachEleven
                           }}
                           onClick={() => {
@@ -2561,7 +2561,7 @@ const Developerinfo = (props) => {
                       <div class="col-sm-1 text-right">
                         <ReportProblemIcon
                           style={{
-                           display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("(ii) Applied site abouts already constructed sector road or internal circulation road of approved sectoral plan (of min. 18m/24m width as the case may be) provided its entire stretch required for approach is licenced and is further leading upto atleast 4 karam wide revenue rasta") ? "block" : "none",
+                           display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_APPLIED_SITE__ABOUTS_ALREADY_CONSTRUCTED_SECTOR_ROAD_SHAJRA_PLAN") ? "block" : "none",
                             color: fieldIconColors.alreadyConstructedSector
                           }}
                           onClick={() => {
@@ -2597,7 +2597,7 @@ const Developerinfo = (props) => {
                       <div class="col-sm-1 text-right">
                         <ReportProblemIcon
                           style={{
-                           display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("(iii)(a) Applied land is accessible from a minimum 4 karam wide rasta through adjoining own land of the applicant (but not applied for licence).") ? "block" : "none",
+                           display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_APPLIED_LAND_IS_ACCESSIBLE_FROM_A_MINIMUN_THROUGH_ADJOINING_SHAJRA_PLAN") ? "block" : "none",
                             color: fieldIconColors.joiningOwnLand
                           }}
                           onClick={() => {
@@ -2648,7 +2648,7 @@ const Developerinfo = (props) => {
                         <div class="col-sm-1 text-right">
                           <ReportProblemIcon
                             style={{
-                             display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("(iv)(b) If applicable, whether the applicant has donated at least 4 karam wide strip from its adjoining others land in favour of the Gram Panchayat/Municipality, in order to connect the applied site to existing 4 karam rasta?") ? "block" : "none",
+                             display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_D_D1_IF_APPLICABLE_WHETHER_THE_APPLICATION_HAS_DONATED_SHAJRA_PLAN") ? "block" : "none",
                               color: fieldIconColors.joiningOwnLand
                             }}
                             onClick={() => {
@@ -2680,7 +2680,7 @@ const Developerinfo = (props) => {
                           </IconButton>
                           <ReportProblemIcon
                             style={{
-                             display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("(iii) Upload irrevocable consent") ? "block" : "none",
+                             display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_D_D1_IF_Y_COPY_OF_GIFT_DEED_SHAJRA_PLAN") ? "block" : "none",
                               color: fieldIconColors.giftDeedHibbanama
                             }}
                             onClick={() => {
@@ -2716,7 +2716,7 @@ const Developerinfo = (props) => {
                       <div class="col-sm-1 text-right">
                       <ReportProblemIcon
                         style={{
-                         display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("(I) Category-I approach") ? "block" : "none",
+                         display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_E_APPLIED_LAND_IS_ACCESSIBLE_FROM_MINIMUN_KARAM_SHAJRA_PLAN") ? "block" : "none",
                           color: fieldIconColors.ordersUpload
                         }}
                         onClick={() => {
@@ -2752,7 +2752,7 @@ const Developerinfo = (props) => {
                           <div class="col-sm-1 text-right">
                           <ReportProblemIcon
                             style={{
-                             display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("(I) Category-I approach") ? "block" : "none",
+                             display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_E_Y_E1_WHETHER_THE_LAND-OWNER_OF_THE_ADJOINING_DONATED_KARAM_SHAJRA_PLAN") ? "block" : "none",
                               color: fieldIconColors.landOwnerDonated
                             }}
                             onClick={() => {
@@ -2781,7 +2781,7 @@ const Developerinfo = (props) => {
                           </IconButton>
                           <ReportProblemIcon
                             style={{
-                             display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("(I) Category-I approach") ? "block" : "none",
+                             display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_E_E1_IF_Y_COPY_OF_GIFT_DEED_SHAJRA_PLAN") ? "block" : "none",
                               color: fieldIconColors.copyOfShajraPlan
                             }}
                             onClick={() => {
@@ -2819,7 +2819,7 @@ const Developerinfo = (props) => {
                       <div class="col-sm-1 text-right">
                         <ReportProblemIcon
                           style={{
-                           display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("(I) Category-I approach") ? "block" : "none",
+                           display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_N_A_ENTER_WIDTH_IN_METERS_SHAJRA_PLAN") ? "block" : "none",
                             color: fieldIconColors.ordersUpload
                           }}
                           onClick={() => {
@@ -2879,7 +2879,7 @@ const Developerinfo = (props) => {
                       <div class="col-sm-1 text-right">
                         <ReportProblemIcon
                           style={{
-                           display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("(I) Category-I approach") ? "block" : "none",
+                           display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_N_B_WHETHER_IRREVOCABLE_CONSENT_FROM_SUCH_DEVELOPER_COLONIZER_SHAJRA_PLAN") ? "block" : "none",
                             color: fieldIconColors.ordersUpload
                           }}
                           onClick={() => {
@@ -2914,7 +2914,7 @@ const Developerinfo = (props) => {
                       <div class="col-sm-1 text-right">
                         <ReportProblemIcon
                           style={{
-                           display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("(I) Category-I approach") ? "block" : "none",
+                           display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_N_C_ACCESS_FROM_NH_SR_SHAJRA_PLAN") ? "block" : "none",
                             color: fieldIconColors.ordersUpload
                           }}
                           onClick={() => {
@@ -2964,7 +2964,7 @@ const Developerinfo = (props) => {
                         <label className="m-0 mx-2" for="No">No</label>
                         <ReportProblemIcon
                           style={{
-                           display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("(B) Details of proposed approach.") ? "block" : "none",
+                           display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_N_I_SITE_APPROACHABLE_FROM_PROPOSED_SECTOR_ROAD_SHAJRA_PLAN") ? "block" : "none",
                             color: fieldIconColors.ordersUpload
                           }}
                           onClick={() => {
@@ -2994,7 +2994,7 @@ const Developerinfo = (props) => {
                               ></Form.Control>
                               <ReportProblemIcon
                                 style={{
-                                 display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("(i)(b) Enter Width in Meters") ? "block" : "none",
+                                 display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_N_ENTER_WIDTH_IN_METERS_SHAJRA_PLAN") ? "block" : "none",
                                   color: fieldIconColors.ordersUpload
                                 }}
                                 onClick={() => {
@@ -3044,7 +3044,7 @@ const Developerinfo = (props) => {
                               <label className="m-0 mx-2" for="No">No</label>
                               <ReportProblemIcon
                                 style={{
-                                 display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("(i)(b) Enter Width in Meters") ? "block" : "none",
+                                 display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_N_B_WHETHER_ACQUIRED_SHAJRA_PLAN") ? "block" : "none",
                                   color: fieldIconColors.ordersUpload
                                 }}
                                 onClick={() => {
@@ -3069,7 +3069,7 @@ const Developerinfo = (props) => {
                               <label className="m-0 mx-2" for="No">No</label>
                               <ReportProblemIcon
                                 style={{
-                                 display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("(i)(b) Enter Width in Meters") ? "block" : "none",
+                                 display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_N_C_WHETHER_CONSTRUCTED_SHAJRA_PLAN") ? "block" : "none",
                                   color: fieldIconColors.ordersUpload
                                 }}
                                 onClick={() => {
@@ -3094,7 +3094,7 @@ const Developerinfo = (props) => {
                               <label className="m-0 mx-2" for="No">No</label>
                               <ReportProblemIcon
                                 style={{
-                                 display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("(i)(b) Enter Width in Meters") ? "block" : "none",
+                                 display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_N_D_WHETHER_SERVICE_ROAD_ALONG_SECTOR_ROAD_ACQURIED_SHAJRA_PLAN") ? "block" : "none",
                                   color: fieldIconColors.ordersUpload
                                 }}
                                 onClick={() => {
@@ -3119,7 +3119,7 @@ const Developerinfo = (props) => {
                               <label className="m-0 mx-2" for="No">No</label>
                               <ReportProblemIcon
                                 style={{
-                                 display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("(i)(b) Enter Width in Meters") ? "block" : "none",
+                                 display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_N_D_WHETHER_SERVICE_ROAD_ALONG_E_SECTOR_ROAD_CONSTRUCTED_SHAJRA_PLAN") ? "block" : "none",
                                   color: fieldIconColors.ordersUpload
                                 }}
                                 onClick={() => {
@@ -3148,7 +3148,7 @@ const Developerinfo = (props) => {
                         <label className="m-0 mx-2" for="No">No</label>
                         <ReportProblemIcon
                           style={{
-                           display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("(i)(b) Enter Width in Meters") ? "block" : "none",
+                           display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_N_2_SITE_APPROACHABLE_FROM_INTERNAL_CIRCULATION_SECTORAL_ROAD_SHAJRA_PLAN") ? "block" : "none",
                             color: fieldIconColors.ordersUpload
                           }}
                           onClick={() => {
@@ -3177,7 +3177,7 @@ const Developerinfo = (props) => {
                               ></Form.Control>
                               <ReportProblemIcon
                                 style={{
-                                 display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("(i)(b) Enter Width in Meters") ? "block" : "none",
+                                 display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_N_2_SITE_APPROACHABLE_A_ENTER_WIDTH_IN_METERS_SHAJRA_PLAN") ? "block" : "none",
                                   color: fieldIconColors.ordersUpload
                                 }}
                                 onClick={() => {
@@ -3200,7 +3200,7 @@ const Developerinfo = (props) => {
                               <label className="m-0 mx-2" for="No">No</label>
                               <ReportProblemIcon
                                 style={{
-                                 display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("(i)(b) Enter Width in Meters") ? "block" : "none",
+                                 display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_N_2_B_WHETHER_ACQUIRED_SHAJRA_PLAN") ? "block" : "none",
                                   color: fieldIconColors.ordersUpload
                                 }}
                                 onClick={() => {
@@ -3223,7 +3223,7 @@ const Developerinfo = (props) => {
                               <label className="m-0 mx-2" for="No">No</label>
                               <ReportProblemIcon
                                 style={{
-                                 display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("(i)(b) Enter Width in Meters") ? "block" : "none",
+                                 display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_N_2_C_WHETHER_CONSTRUCTED_SHAJRA_PLAN") ? "block" : "none",
                                   color: fieldIconColors.ordersUpload
                                 }}
                                 onClick={() => {
@@ -3261,7 +3261,7 @@ const Developerinfo = (props) => {
 
                           <ReportProblemIcon
                             style={{
-                             display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("(i)(b) Enter Width in Meters") ? "block" : "none",
+                             display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_N_2_J_WHETHER_APPROACH_FROM_PARENT_LICENCE_SHAJRA_PLAN") ? "block" : "none",
                               color: fieldIconColors.landCompensationReceived
                             }}
                             onClick={() => {
@@ -3409,7 +3409,7 @@ const Developerinfo = (props) => {
                     <label className="m-0 mx-2" for="No">No</label>
                     <ReportProblemIcon
                       style={{
-                       display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("Address") ? "block" : "none",
+                       display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_N_2_K_ANY_OTHER_TYPE_OF_EXISITING_APPROACH_AVAILABLE_SHAJRA_PLAN") ? "block" : "none",
                         color: fieldIconColors.internalSectoralPlan
                       }}
                       onClick={() => {
@@ -3444,7 +3444,7 @@ const Developerinfo = (props) => {
                   <label className="m-0 mx-2" for="No">No</label>
                   <ReportProblemIcon
                     style={{
-                     display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("Site condition") ? "block" : "none",
+                     display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_4_A_VACANT_SHAJRA_PLAN") ? "block" : "none",
                       color: fieldIconColors.vacant
                     }}
                     onClick={() => {
@@ -3551,7 +3551,7 @@ const Developerinfo = (props) => {
                   <label className="m-0 mx-2" for="No">No</label>
                   <ReportProblemIcon
                     style={{
-                     display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("Site condition") ? "block" : "none",
+                     display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_4_B_HT_LINE_SHAJRA_PLAN") ? "block" : "none",
                       color: fieldIconColors.htLine
                     }}
                     onClick={() => {
@@ -3607,7 +3607,7 @@ const Developerinfo = (props) => {
                   <label className="m-0 mx-2" for="No">No</label>
                   <ReportProblemIcon
                     style={{
-                     display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("Site condition") ? "block" : "none",
+                     display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_4_C_IOC_GAS_PIPELINE_SHAJRA_PLAN") ? "block" : "none",
                       color: fieldIconColors.iocGasPipeline
                     }}
                     onClick={() => {
@@ -3669,7 +3669,7 @@ const Developerinfo = (props) => {
                   <label className="m-0 mx-2" for="No">No</label>
                   <ReportProblemIcon
                     style={{
-                     display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("Site condition") ? "block" : "none",
+                     display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_4_D_NALLAH_SHAJRA_PLAN") ? "block" : "none",
                       color: fieldIconColors.nallah
                     }}
                     onClick={() => {
@@ -3725,7 +3725,7 @@ const Developerinfo = (props) => {
                   <label className="m-0 mx-2" for="No">No</label>
                   <ReportProblemIcon
                     style={{
-                     display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("Site condition") ? "block" : "none",
+                     display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_4_E_ANY_REVENUE_REVENUE_RASTA_ROAD_PASSING_THROUGH_PROPOSED_SITE_SHAJRA_PLAN") ? "block" : "none",
                       color: fieldIconColors.anyRevenueRasta
                     }}
                     onClick={() => {
@@ -3791,7 +3791,7 @@ const Developerinfo = (props) => {
                   <label className="m-0 mx-2" for="No">No</label>
                   <ReportProblemIcon
                     style={{
-                     display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("Site condition") ? "block" : "none",
+                     display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_F_UTILITY_PERMIT_LINE_SHAJRA_PLAN") ? "block" : "none",
                       color: fieldIconColors.utilityLine
                     }}
                     onClick={() => {
@@ -3851,7 +3851,7 @@ const Developerinfo = (props) => {
                   <label className="m-0 mx-2" for="No">No</label>
                   <ReportProblemIcon
                     style={{
-                     display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("Address") ? "block" : "none",
+                     display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_G_COMPACT_BLOCK_SHAJRA_PLAN") ? "block" : "none",
                       color: fieldIconColors.utilityLine
                     }}
                     onClick={() => {
@@ -3921,7 +3921,7 @@ const Developerinfo = (props) => {
                   <label className="m-0 mx-2" for="No">No</label>
                   <ReportProblemIcon
                     style={{
-                     display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("Address") ? "block" : "none",
+                     display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_H_WHETHER_OTHERS_LAND_FALL_SHAJRA_PLAN") ? "block" : "none",
                       color: fieldIconColors.utilityLine
                     }}
                     onClick={() => {
@@ -3965,12 +3965,16 @@ const Developerinfo = (props) => {
                 )}
               </div>
 
-              &nbsp;&nbsp;
-              {`${t("NWL_APPLICANT_SURROUNDINGS_SHAJRA_PLAN")}`}
-              &nbsp;&nbsp;
+             
               <br></br>
               <div className="row">
-              
+              &nbsp;&nbsp;
+              {`${t("NWL_APPLICANT_SURROUNDINGS_SHAJRA_PLAN")}`}
+              &nbsp;&nbsp; 
+              </div>
+              <div className="row">
+             
+
               <div className="col col-2">
                       <label>
                       {`${t("NWL_APPLICANT_SURROUNDINGS_NORTH_SHAJRA_PLAN")}`}
@@ -4029,7 +4033,7 @@ const Developerinfo = (props) => {
                   <label className="m-0 mx-2" for="No">No</label>
                   <ReportProblemIcon
                     style={{
-                     display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("Address") ? "block" : "none",
+                     display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_J_ANY_OTHERS_PASSING_THROUGH_SITE_SHAJRA_PLAN") ? "block" : "none",
                       color: fieldIconColors.utilityLine
                     }}
                     onClick={() => {
@@ -4082,7 +4086,7 @@ const Developerinfo = (props) => {
                 {/* <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled placeholder={landScheduleData?.documentsAsAnnexures}></Form.Control> */}
                 <ReportProblemIcon
                   style={{
-                   display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("Land schedule") ? "block" : "none",
+                   display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_5_ENCLOSE_THE_FOLLOWING_DOCUMENTS_AS_ANNEXURES") ? "block" : "none",
                     color: fieldIconColors.documentsAsAnnexures
                   }}
                   onClick={() => {
@@ -4107,7 +4111,7 @@ const Developerinfo = (props) => {
                   </IconButton>
                   <ReportProblemIcon
                     style={{
-                     display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("Land schedule") ? "block" : "none",
+                     display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_LAND_SCHEDULE") ? "block" : "none",
                       color: fieldIconColors.landSchedule
                     }}
                     onClick={() => {
@@ -4131,7 +4135,7 @@ const Developerinfo = (props) => {
                   </IconButton>
                   <ReportProblemIcon
                     style={{
-                     display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("Land schedule") ? "block" : "none",
+                     display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_COPY_OF_MUTATIION") ? "block" : "none",
                       color: fieldIconColors.copyOfMutation
                     }}
                     onClick={() => {
@@ -4155,7 +4159,7 @@ const Developerinfo = (props) => {
                   </IconButton>
                   <ReportProblemIcon
                     style={{
-                     display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("Copy of Jamabandi duly attested by Halqa Patwari") ? "block" : "none",
+                     display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_COPY_OF_JAMABANDI") ? "block" : "none",
                       color: fieldIconColors.copyOfJamabandi
                     }}
                     onClick={() => {
@@ -4180,7 +4184,7 @@ const Developerinfo = (props) => {
                   </IconButton>
                   <ReportProblemIcon
                     style={{
-                     display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("Details of lease / patta") ? "block" : "none",
+                     display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_DETAILS_OF_LEASE_PATTA") ? "block" : "none",
                       color: fieldIconColors.detailsOfLease
                     }}
                     onClick={() => {
@@ -4210,7 +4214,7 @@ const Developerinfo = (props) => {
 
                   <ReportProblemIcon
                     style={{
-                     display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("Details of lease / patta") ? "block" : "none",
+                     display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_SALES_DEED_EXCHANGE_DEED") ? "block" : "none",
                       color: fieldIconColors.addSalesDeed
                     }}
                     onClick={() => {
@@ -4234,7 +4238,7 @@ const Developerinfo = (props) => {
                   </IconButton>
                   <ReportProblemIcon
                     style={{
-                     display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("Address") ? "block" : "none",
+                     display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_COPY_OF_SPA_GPA_BOARD") ? "block" : "none",
                       color: fieldIconColors.copyofSpaBoard
                     }}
                     onClick={() => {
@@ -4282,7 +4286,7 @@ const Developerinfo = (props) => {
                   </IconButton>
                   <ReportProblemIcon
                     style={{
-                     display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("Address") ? "block" : "none",
+                     display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_SHAJRA_PLAN_DOCUMENT") ? "block" : "none",
                       color: fieldIconColors.copyOfShajraPlan
                     }}
                     onClick={() => {

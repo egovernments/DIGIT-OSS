@@ -91,8 +91,8 @@ function ModalChild(props) {
 
   useEffect(() => {
     if (props.selectedFieldData) {
-      setStatus(props.selectedFieldData.isApproved ? "In Order" : "Not In Order");
-      setDeveloperRemarks({ data: props.selectedFieldData.comment ? props.selectedFieldData.comment : "" });
+      setStatus(props.selectedFieldData.isApproved);
+      setDeveloperRemarks({ data: props.selectedFieldData?.comment ? props.selectedFieldData?.comment : "" });
       // setDeveloperRemarks({data:props.selectedFieldData.isApproved?"In Order":"Not In Order"});
     } else {
       setStatus(null);
@@ -100,7 +100,7 @@ function ModalChild(props) {
     }
   }, [props.selectedFieldData]);
 
-  console.log("Isdata" , status )
+  console.log("Isdata" , status,RemarksDeveloper )
 
   // let empCode = "EMPLOYEE";
   
@@ -189,6 +189,7 @@ function ModalChild(props) {
               rows="3"
               value={RemarksDeveloper.data}
             /> */}
+            {/* {RemarksDeveloper?.data} */}
              <AddPost
               modal={true}
               
@@ -196,7 +197,7 @@ function ModalChild(props) {
                 setDeveloperRemarks({ data: e });
                 // setRemarksEntered(e.target.value);
               }}
-              state={RemarksDeveloper.data}
+              state={RemarksDeveloper?.data}
               ></AddPost>
             {/* <Form.Control type="text" /> */}
           </Col>

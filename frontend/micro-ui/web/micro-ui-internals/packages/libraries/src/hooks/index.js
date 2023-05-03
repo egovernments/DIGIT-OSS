@@ -160,7 +160,13 @@ import useBGInbox from "./obps/useBGInbox";
 import useTOLInbox from "./obps/useTOLInbox";
 import useSLInbox from "./obps/useSLInbox";
 import useLPInbox from "./obps/useLPInbox";
-import useCBIInbox from "./obps/useCBIInbox"
+import useCBIInbox from "./obps/useCBIInbox";
+import useAOSInbox from "./obps/useAOSInbox";
+import useROLInbox from "./obps/useROLInbox";
+import useCCInbox from "./obps/useCCInbox";
+import useECOCSInbox from "./obps/useECOCSInbox";
+import useEOCPInbox from "./obps/useEOCPInbox"
+
 
 
 import useEventInbox from "./events/useEventInbox";
@@ -337,7 +343,12 @@ const obps = {
   useTOLInbox,
   useSLInbox,
   useLPInbox,
-  useCBIInbox
+  useCBIInbox,
+  useAOSInbox,
+  useROLInbox,
+  useCCInbox,
+  useECOCSInbox,
+  useEOCPInbox
 };
 
 const events = {

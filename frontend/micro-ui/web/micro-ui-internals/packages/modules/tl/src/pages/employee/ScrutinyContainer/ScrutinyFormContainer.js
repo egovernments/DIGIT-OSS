@@ -53,11 +53,21 @@ const ScrutinyFormcontainer = (props) => {
 
   const authToken = Digit.UserService.getUser()?.access_token || null;
   const userInfo = Digit.UserService.getUser()?.info || {};
-  const userRolesArray = userInfo?.roles.filter((user) => user.code !== "EMPLOYEE");
-  const filterDataRole = userRolesArray?.[0]?.code;
+  const userRolesArray = userInfo?.roles.filter((user) => user.code);
+  const filterDataRole = userRolesArray?.map((e) => e.code)
   let user = Digit.UserService.getUser();
   const userRoles = user?.info?.roles?.map((e) => e.code);
   const showRemarksSection = userRoles.includes("DTCP_HR")
+
+  console.log("rolename" , filterDataRole);
+  console.log("rolename" , userRolesArray);
+  const roleCodeUseAPi = userRolesArray.map((object) => `${object.code}`)
+
+  let query = userRolesArray.map((object) => `@.role=='${object.code}'`).join("|| ")
+  console.log("Qurey", query);
+  console.log("roleCodeUseAPi", roleCodeUseAPi);
+  console.log("showRemarksSection", showRemarksSection);
+
  
 
   const handleshow19 = async (e) => {
@@ -148,7 +158,8 @@ const ScrutinyFormcontainer = (props) => {
               masterDetails: [
                 {
                   "name": "rolesaccess",
-                  "filter": `[?(@.role=='${filterDataRole}'|| @.role=='${userRolesArray}')]`
+                  "filter":`[?(${query})]`,
+                  // `[?(@.role=='${filterDataRole}'|| @.role=='${userRolesArray}')]`
                 },
                 {
                   "name": "rolesaccess",
@@ -350,7 +361,8 @@ const ScrutinyFormcontainer = (props) => {
         console.log(error);
       }
 
-      if (showRemarksSection==="DTCP_HR"){
+      if (showRemarksSection==="DTCP_HR")
+      {
         let requestInfo = {
 
           RequestInfo: {
@@ -408,7 +420,7 @@ const ScrutinyFormcontainer = (props) => {
 
         }
       }
-      const Resp = await axios.post(`/tl-services/loi/report/_create?applicationNumber=${id}&userId=${userInfo?.id}&hqUserId=2247`, payload, { responseType: "arraybuffer" })
+      const Resp = await axios.post(`/tl-services/loi/report/_create?applicationNumber=${id}&role=DTCP_HR`, payload, { responseType: "arraybuffer" })
 
       console.log("logger12345...", Resp.data, userInfo)
 
@@ -425,10 +437,10 @@ const ScrutinyFormcontainer = (props) => {
 
     // closeModal();
 
-    setTimeout(() => {
-      closeModal()
-      window.location.href = `/digit-ui/employee/tl/inbox`
-    }, 3000);
+    // setTimeout(() => {
+    //   closeModal()
+    //   window.location.href = `/digit-ui/employee/tl/inbox`
+    // }, 3000);
   };
 
   useEffect(() => {
@@ -502,6 +514,7 @@ const ScrutinyFormcontainer = (props) => {
             applicationStatus={status}
             refreshScrutinyData={getScrutinyData}
             mDMSData={mDMSData}
+            applicationimp={applicationData}
           ></ScrutitnyForms>
         </div>
 

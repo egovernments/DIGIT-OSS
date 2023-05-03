@@ -1,13 +1,39 @@
 import React, { useState, useEffect } from "react";
+import {
+  FormStep,
+  TextInput,
+  MobileNumber,
+  CardLabel,
+  CardLabelError,
+  Dropdown,
+  Toast,
+  DeleteIcon,
+  MuiTables,
+} from "@egovernments/digit-ui-react-components";
 import { Card, Row, Col } from "react-bootstrap";
 import { Button, Form } from "react-bootstrap";
+import FormControl from "@mui/material/FormControl";
+import OutlinedInput from "@mui/material/OutlinedInput";
 import { useForm } from "react-hook-form";
-import { Modal, ModalHeader, ModalBody, ModalFooter } from "reactstrap";
+import Collapse from "react-bootstrap/Collapse";
+import AddIcon from "@mui/icons-material/Add";
+import RemoveIcon from "@mui/icons-material/Remove";
+import FileUpload from "@mui/icons-material/FileUpload";
+import VisibilityIcon from "@mui/icons-material/Visibility";
+import axios from "axios";
+import { getDocShareholding } from "../../../../../../tl/src/pages/employee/ScrutinyBasic/ScrutinyDevelopment/docview.helper";
+import CusToaster from "../../../../components/Toaster";
+import { Modal, ModalHeader, ModalBody, ModalFooter, Label } from "reactstrap";
+import { Input } from "antd";
+import ReactMultiSelect from "../../../../../../../react-components/src/atoms/ReactMultiSelect"
 function RenewNew() {
   const [selects, setSelects] = useState();
   const [showhide, setShowhide] = useState("");
   const [modal, setmodal] = useState(false);
   const [modal1, setmodal1] = useState(false);
+  const [open4, setOpen4] = useState(false);
+  const [open3, setOpen3] = useState(false);
+   const [showToastError, setShowToastError] = useState({ label: "", error: false, success: false });
   const handleshowhide = (event) => {
     const getuser = event.target.value;
 
@@ -21,172 +47,310 @@ function RenewNew() {
     setValue,
     watch,
   } = useForm({});
-
+  const selectTypeData = [{ label: "Indian", value: "indian" },
+{
+  label: "Foreign", value: "foreign"
+}];
+  const [fileStoreId, setFileStoreId] = useState({});
+  const [selectedFiles, setSelectedFiles] = useState([]);
+  const [loader, setLoader] = useState(false);
+  const getDocumentData = async (file, fieldName) => {
+    if (selectedFiles.includes(file.name)) {
+      setShowToastError({ label: "Duplicate file Selected", error: true, success: false });
+      return;
+    }
+    const formData = new FormData();
+    formData.append("file", file);
+    formData.append("tenantId", "hr");
+    formData.append("module", "property-upload");
+    formData.append("tag", "tag-property");
+    setLoader(true);
+    try {
+      const Resp = await axios.post("/filestore/v1/files", formData, {});
+      setValue(fieldName, Resp?.data?.files?.[0]?.fileStoreId);
+      setFileStoreId({ ...fileStoreId, [fieldName]: Resp?.data?.files?.[0]?.fileStoreId });
+      setSelectedFiles([...selectedFiles, file.name]);
+      setLoader(false);
+      setShowToastError({ label: "File Uploaded Successfully", error: false, success: true });
+    } catch (error) {
+      setLoader(false);
+      return error.message;
+    }
+  };
   const bankRenew = (data) => console.log(data);
   return (
+    <div>
     <form onSubmit={handleSubmit(bankRenew)}>
-      <Card style={{ width: "126%", border: "5px solid #1266af" }}>
+         <div className="card" style={{ width: "126%", border: "5px solid #1266af" }}>
         <h4 style={{ fontSize: "25px", marginLeft: "21px" }}>Extension of Bank Guarantee</h4>
+        <br></br>
+         <div
+        className="collapse-header"
+        onClick={() => setOpen4(!open4)}
+        aria-controls="example-collapse-text"
+        aria-expanded={open4}
+        style={{
+          background: "#f1f1f1",
+          padding: "0.25rem 1.25rem",
+          borderRadius: "0.25rem",
+          fontWeight: "600",
+          display: "flex",
+          cursor: "pointer",
+          color: "#817f7f",
+          justifyContent: "space-between",
+          alignContent: "center",
+        }}
+      >
+        <span style={{ color: "#817f7f", fontSize: 14 }} className="">
+          - BG Detail
+        </span>
+        {open4 ? <RemoveIcon></RemoveIcon> : <AddIcon></AddIcon>}
+      </div>
+       <Collapse in={open4}>
         <div className="card">
-          <Row className="col-12">
-            <Col md={4} xxl lg="3">
-              <div>
-                <Form.Label>
-                  <h2>Enter License No. </h2>
-                </Form.Label>
-              </div>
-              <input type="number" className="form-control" placeholder="" {...register("licenceNumber")} />
-            </Col>
-
-            <Col md={4} xxl lg="3">
-              <div>
-                <Form.Label>
-                  <h2>Amount (in fig)</h2>
-                </Form.Label>
-              </div>
-              <input type="text" className="form-control" placeholder="" {...register("amountInFig")} disabled />
-            </Col>
-            <Col md={4} xxl lg="3">
-              <div>
-                <Form.Label>
-                  <h2>Amount (in words)</h2>
-                </Form.Label>
-              </div>
-              <input type="text" className="form-control" disabled placeholder="" {...register("amountInWords")} />
-            </Col>
-            <Col md={4} xxl lg="3">
-              <div>
-                <Form.Label>
-                  <h2>Previous Memo No. </h2>
-                </Form.Label>
-              </div>
-              <input type="text" className="form-control" placeholder="" {...register("previousMemoNumber")} disabled />
-            </Col>
-          </Row>
-          <br></br>
-          <Row className="col-12">
-            <Col md={4} xxl lg="3">
-              <div>
-                <Form.Label>
-                  <h2>Validity date </h2>
-                </Form.Label>
-              </div>
-              <input type="date" className="form-control" placeholder="" {...register("validity")} />
-            </Col>
-            <Col md={4} xxl lg="3">
-              <div>
-                <Form.Label>
-                  <h2>Extended time </h2>
-                </Form.Label>
-              </div>
-              <input type="date" className="form-control" placeholder="" {...register("extendedTime")} />
-            </Col>
-            <Col md={4} xxl lg="3">
-              <div>
-                <Form.Label>
-                  <h2>Bank Name </h2>
-                </Form.Label>
-              </div>
-              <input type="text" className="form-control" placeholder="" {...register("bankName")} />
-            </Col>
-            <Col md={4} xxl lg="3">
-              <div>
-                <Form.Label>
-                  <h2>Enter Memo No. </h2>
-                </Form.Label>
-              </div>
-              <input type="text" className="form-control" placeholder="" {...register("memoNumber")} />
-            </Col>
-          </Row>
-          <br></br>
-          <Row className="col-12">
-            <Col md={4} xxl lg="3">
-              <div>
-                <Form.Label>
-                  <h2>Upload B.G. </h2>
-                </Form.Label>
-              </div>
-              <input type="file" className="form-control" placeholder="" {...register("uploadBg")} />
-            </Col>
-          </Row>
-          <br></br>
-          <div className="col col-12 ">
-            <div>
-              <label>
-                Hardcopy Submitted at TCP office.{" "}
-                <label htmlFor="hardcopySubmitted">
-                  <input {...register("hardcopySubmitted")} type="radio" value="Y" id="hardcopySubmitted" />
-                  &nbsp; Yes &nbsp;&nbsp;
-                </label>
-                <label htmlFor="hardcopySubmitted">
-                  <input
-                    {...register("hardcopySubmitted")}
-                    type="radio"
-                    value="N"
-                    id="hardcopySubmitted"
-                    className="btn btn-primary"
-                    onClick={() => setmodal1(true)}
-                  />
-                  &nbsp; No &nbsp;&nbsp;
-                </label>
-                <h3 className="error-message" style={{ color: "red" }}>
-                  {errors?.hardcopySubmitted && errors?.hardcopySubmitted?.message}
-                </h3>
-              </label>
+          <div className="row-12">
+            <div className="col md={4} xxl lg-3">
+              <FormControl>
+                <h2 className="FormLable">Bank Guarantee No. </h2>
+                <OutlinedInput type="text" className="Inputcontrol" placeholder="" {...register("bgNumber")}  disabled/>
+              </FormControl>
+              &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
+              <FormControl>
+                <h2 className="FormLable">Bank Guarantee Issue date </h2>
+                <OutlinedInput type="date" className="Inputcontrol" placeholder="" {...register("bgNumber")}  disabled/>
+              </FormControl>
+              &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
+              <FormControl>
+                <h2 className="FormLable">Expiry date </h2>
+                <OutlinedInput type="date" className="Inputcontrol" placeholder="" {...register("bgNumber")}  disabled/>
+              </FormControl>
+               &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
+              <FormControl>
+                <h2 className="FormLable">Claim expiry date </h2>
+                <OutlinedInput type="date" className="Inputcontrol" placeholder="" {...register("bgNumber")}  disabled/>
+              </FormControl>
+               &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
+              <FormControl>
+                <h2 className="FormLable">Amount </h2>
+                <OutlinedInput type="text" className="Inputcontrol" placeholder="" {...register("bgNumber")}  disabled/>
+              </FormControl>
+            </div>
+            <br></br>
+             <div className="row-12">
+ <div className="col md={4} xxl lg-3">
+              <FormControl>
+                <h2 className="FormLable">Issuing Bank </h2>
+                <OutlinedInput type="text" className="Inputcontrol" placeholder="" {...register("bgNumber")} disabled />
+              </FormControl>
+              &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
+              <FormControl>
+                <h2 className="FormLable">Country of origin</h2>
+                <OutlinedInput type="text" className="Inputcontrol" placeholder="" {...register("bgNumber")} disabled />
+              </FormControl>
+            
+            </div>
             </div>
 
-            {watch("hardcopySubmitted") === "Y" && (
-              <div>
-                <div className="row">
-                  <div className="col col-4">
-                    <label>
-                      <h2>
-                        Upload Receipt of Submission.
-                        <span style={{ color: "red" }}>*</span>
-                      </h2>
+             <br></br>
+           <div className="row gy-3">
+                        <div className="col col-12">
+                           <h2 className="FormLable">
+                               Amount in words<span style={{ color: "red" }}>*</span>
+                              </h2>
+                              <input type="text" className="form-control" disabled></input>
+                        </div>
+            </div>
+            </div>
+            </div>
+          </Collapse>
+            <br></br>
+             <div
+        className="collapse-header"
+        onClick={() => setOpen3(!open3)}
+        aria-controls="example-collapse-text"
+        aria-expanded={open3}
+        style={{
+          background: "#f1f1f1",
+          padding: "0.25rem 1.25rem",
+          borderRadius: "0.25rem",
+          fontWeight: "600",
+          display: "flex",
+          cursor: "pointer",
+          color: "#817f7f",
+          justifyContent: "space-between",
+          alignContent: "center",
+        }}
+      >
+        <span style={{ color: "#817f7f", fontSize: 14 }} className="">
+          - BG Detail
+        </span>
+        {open4 ? <RemoveIcon></RemoveIcon> : <AddIcon></AddIcon>}
+      </div>
+       <Collapse in={open3}>
+             <div className="card">
+              <div className="row-12">
+             <div className="col md={4} xxl lg-3">
+              <FormControl>
+                <h2 className="FormLable">Bank Guarantee No. </h2>
+                <OutlinedInput type="text" className="Inputcontrol" placeholder="" {...register("bgNumber")}  />
+              </FormControl>
+              &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
+              <FormControl>
+                <h2 className="FormLable">Date of amendment</h2>
+                <OutlinedInput type="date" className="Inputcontrol" placeholder="" {...register("bgNumber")}  />
+              </FormControl>
+              &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
+              <FormControl>
+                <h2 className="FormLable">Amendment expiry date </h2>
+                <OutlinedInput type="date" className="Inputcontrol" placeholder="" {...register("bgNumber")}  />
+              </FormControl>
+               &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
+              <FormControl>
+                <h2 className="FormLable">Amendment claim expiry date  </h2>
+                <OutlinedInput type="date" className="Inputcontrol" placeholder="" {...register("bgNumber")} />
+              </FormControl>
+              </div>
+              </div>
+              <br></br>
+                    <div className="row-12">
+ <div className="col md={4} xxl lg-3">
+    <FormControl>
+                <h2 className="FormLable">Amount </h2>
+                <OutlinedInput type="text" className="Inputcontrol" placeholder="" {...register("bgNumber")}  />
+              </FormControl>
+               &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
+              <FormControl>
+                <h2 className="FormLable">Issuing Bank </h2>
+                <OutlinedInput type="text" className="Inputcontrol" placeholder="" {...register("bgNumber")}  />
+              </FormControl>
+              &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
+              <FormControl>
+                <h2 className="FormLable">Country of origin</h2>
+                 <ReactMultiSelect control={control} name="numberType" placeholder="Select Type" data={selectTypeData} labels="" />
+
+                
+              </FormControl>
+            
+            </div>
+            </div>
+            <br></br>
+                <div className="row gy-3">
+                        <div className="col col-12">
+                           <h2 className="FormLable">
+                               Amount in words<span style={{ color: "red" }}>*</span>
+                              </h2>
+                              <input type="text" className="form-control" ></input>
+                        </div>
+            </div>
+            </div>
+           </Collapse>
+            <br></br>
+          <div className="col-12">
+                  <label>
+                    <h2>Hardcopy Submitted at TCP office. </h2>
+                    <label htmlFor="licenseApplied">
+                      <input {...register("licenseApplied")} type="radio" value="Y" id="licenseApplied" />
+                      &nbsp; Yes &nbsp;&nbsp;
                     </label>
-                    <div>
-                      <input type="file" placeholder="" className="form-control" {...register("consentLetter")}></input>
-                    </div>
-
-                    <h3 className="error-message" style={{ color: "red" }}>
-                      {errors?.consentLetter && errors?.consentLetter?.message}
-                    </h3>
-                  </div>
+                    <label htmlFor="licenseApplied">
+                      <input
+                        {...register("licenseApplied")}
+                        type="radio"
+                        value="N"
+                        id="licenseApplied"
+                        className="btn btn-primary"
+                        // onClick={handleClickOpen}
+                      />
+                      &nbsp; No &nbsp;&nbsp;
+                    </label>
+                   
+                  </label>
                 </div>
+            &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
+ <div className="table table-bordered table-responsive">
+                        {/* <caption>List of users</caption> */}
+                        <thead>
+                          <tr>
+                            <th class="fw-normal">Sr. No.</th>
+                            <th class="fw-normal">Type</th>
+                            <th class="fw-normal">Attachment description</th>
+                             <th class="fw-normal">Upload document</th>
+                              <th class="fw-normal">Action</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                           <tr>
+                            <td>1</td>
+                             <td>Bank Guarantee(pdf)</td>
+                              <td><input type="text" className="form-control"></input></td>
+                               <td>  <div>
+                                    <label>
+                                      <FileUpload style={{ cursor: "pointer" }} color="primary" />
+                                      <input
+                                        type="file"
+                                        style={{ display: "none" }}
+                                        accept="application/pdf/jpeg/png"
+                                        onChange={(e) => getDocumentData(e?.target?.files[0], "bankGuaranteePdf")}
+                                      />
+                                    </label>
+                                    {watch("bankGuaranteePdf") && (
+                                      <a onClick={() => getDocShareholding(watch("bankGuaranteePdf"), setLoader)} className="btn btn-sm ">
+                                        <VisibilityIcon color="info" className="icon" />
+                                      </a>
+                                    )}
+                                  </div></td>
+                               <td><DeleteIcon style={{ fill: "#ff1a1a" }} /></td>
+                          </tr>
+                           <tr>
+                            <td>2</td>
+                             <td>Any other document (pdf)</td>
+                              <td><input type="text" className="form-control"></input></td>
+                               <td> <div>
+                                    <label>
+                                      <FileUpload style={{ cursor: "pointer" }} color="primary" />
+                                      <input
+                                        type="file"
+                                        style={{ display: "none" }}
+                                        accept="application/pdf/jpeg/png"
+                                        onChange={(e) => getDocumentData(e?.target?.files[0], "otherDocPdf")}
+                                      />
+                                    </label>
+                                    {watch("otherDocPdf") && (
+                                      <a onClick={() => getDocShareholding(watch("otherDocPdf"), setLoader)} className="btn btn-sm ">
+                                        <VisibilityIcon color="info" className="icon" />
+                                      </a>
+                                    )}
+                                  </div></td>
+                               <td><DeleteIcon style={{ fill: "#ff1a1a" }} /></td>
+                          </tr>
+                        </tbody>
+                        </div>
+           
+           <div class="row-12" className="align-right">
+              <div className="col-4">
+               <button type="submit"  class="btn btn-primary btn-md center-block">
+                  Cancel
+               </button>
+                &nbsp;
+                 <button type="submit"  class="btn btn-primary btn-md center-block">
+                  Submit
+               </button>
               </div>
-            )}
-            {watch("hardcopySubmitted") === "N" && (
-              <div>
-                <Modal
-                  size="lg"
-                  isOpen={modal1}
-                  toggle={() => setmodal(!modal1)}
-                  style={{ width: "500px", height: "200px" }}
-                  aria-labelledby="contained-modal-title-vcenter"
-                  centered
-                >
-                  <ModalHeader toggle={() => setmodal1(!modal1)}></ModalHeader>
-                  <ModalBody style={{ fontSize: 20 }}>
-                    <h2> Submit Hardcopy of B.G. at TCP office.</h2>
-                  </ModalBody>
-                  <ModalFooter toggle={() => setmodal(!modal1)}></ModalFooter>
-                </Modal>
-              </div>
-            )}
+            </div>
           </div>
-
-          <Row className="justify-content-end">
-            <Button variant="outline-primary" className="col-md-2 my-2 mx-2" aria-label="right-end">
-              Cancel
-            </Button>
-            <Button variant="outline-primary" className="col-md-2 my-2 mx-2" type="submit" aria-label="right-end">
-              Submit
-            </Button>
-          </Row>
-        </div>
-      </Card>
+       
     </form>
+    {showToastError && (
+        <CusToaster
+          label={showToastError?.label}
+          success={showToastError?.success}
+          error={showToastError?.error}
+          onClose={() => {
+            setShowToastError({ label: "", success: false, error: false });
+          }}
+        />
+      )}
+      </div>
   );
 }
 
