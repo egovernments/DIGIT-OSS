@@ -172,10 +172,10 @@ const authToken = Digit.UserService.getUser()?.access_token || null;
     }
 
     closeModal();
-    // setTimeout(() => {
+    setTimeout(() => {
      
-    //   window.location.href = `/digit-ui/employee/tl/TranferInbox`
-    //   }, 3000);
+      window.location.href = `/digit-ui/employee/tl/LayoutPlanInbox`
+      }, 3000);
   };
 
   

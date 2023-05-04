@@ -17,7 +17,7 @@ import axios from "axios";
 
 // import AddIcon from "@mui/icons-material/Add";
 
-const LayoutBasic = ({apiResponse,applicationNumber,refreshScrutinyData,setAdditionalDetails,histeroyData,idwDataTreade,edcDataTreade }) => {
+const LayoutBasic = ({apiResponse,applicationNumber,refreshScrutinyData,applicationStatus,setAdditionalDetails,histeroyData,idwDataTreade,edcDataTreade }) => {
   const [purpose, setPurpose] = useState("");
   const jeLandInfoRef = useRef();
 
@@ -238,8 +238,8 @@ const { remarksData,iconStates,handleGetFiledsStatesById,handleGetRemarkssValues
         <div>
          <div>
          <LayoutPlanClu
-         edcDataTreade={edcDataTreade}
-         idwDataTreade={idwDataTreade}
+        //  edcDataTreade={edcDataTreade}
+        //  idwDataTreade={idwDataTreade}
            apiResponse={apiResponse}
            refreshScrutinyData={refreshScrutinyData}
            applicationNumber={applicationNumber}
@@ -247,6 +247,7 @@ const { remarksData,iconStates,handleGetFiledsStatesById,handleGetRemarkssValues
            passCheckedList={getCheckedGeneralInfoValue}
            onClick={() => setOpen(!open)}
            dataForIcons={iconStates}
+           applicationStatus={applicationStatus}
            ></LayoutPlanClu>
          </div>
          
