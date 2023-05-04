@@ -200,6 +200,10 @@ const Home = () => {
             link: `/digit-ui/citizen/obps/SurrenderLic`,
             i18nKey: t("Surrender of License"),
           },
+          {
+            link: `/digit-ui/citizen/tl/SurrenderLic/my-application`,
+            i18nKey: t("TL_MY_APPLICATIONS_HEADER"),
+          },
         ],
       },
       {
