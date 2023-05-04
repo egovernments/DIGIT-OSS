@@ -25,7 +25,8 @@ import ReleaseNew from "./Release";
 import { getDocShareholding } from "../../NewLicense/docView/docView.help";
 import NumberInput from "../../../../components/NumberInput";
 import TextField from "@mui/material/TextField";
-import ReactMultiSelect from "../../../../../../../react-components/src/atoms/ReactMultiSelect"
+import ReactMultiSelect from "../../../../../../../react-components/src/atoms/ReactMultiSelect";
+import { useTranslation } from "react-i18next";
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   "& .MuiDialogContent-root": {
@@ -69,6 +70,7 @@ function SubmitNew() {
     getValues,
   } = useForm({});
   const tenantId = Digit.ULBService.getCurrentTenantId();
+  const {t}=useTranslation();
 //   const selectTypeData = [{ label: "IDW", value: "IDW" },
 // {
 //   label: "EDC", value: "EDC"
@@ -326,13 +328,16 @@ function SubmitNew() {
     <React.Fragment>
       <form onSubmit={handleSubmit(bankSubmitNew)}>
         <div className="card" style={{ width: "126%", border: "5px solid #1266af" }}>
-          <h4 style={{ fontSize: "25px", marginLeft: "21px" }}> Bank Guarantee/Mortgage Submission </h4>
+          <h4 style={{ fontSize: "25px", marginLeft: "21px" }}>{`${t("BG_SUBMIT_MORTGAGE_SUBMISSION")}`}
+             {/* Bank Guarantee/Mortgage Submission  */}
+             </h4>
           <div className="card">
             <div className="row-12">
               <div className="Col md={4} xxl lg-4">
                 <FormControl>
-                  <h2 className="FormLable">
-                    Enter LOI Number<span style={{ color: "red" }}>*</span>
+                  <h2 className="FormLable">{`${t("BG_SUBMIT_ENTER_LOI_NO")}`}
+                    {/* Enter LOI Number */}
+                    <span style={{ color: "red" }}>*</span>
                   </h2>
 
                   <OutlinedInput
@@ -345,8 +350,9 @@ function SubmitNew() {
                 </FormControl>
                 &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
                 <FormControl>
-                  <h2 className="FormLable">
-                    Type of fee<span style={{ color: "red" }}>*</span>
+                  <h2 className="FormLable">{`${t("BG_SUBMIT_TYPE_OF_FEE")}`}
+                    {/* Type of fee */}
+                    <span style={{ color: "red" }}>*</span>
                   </h2>
  {/* <ReactMultiSelect control={control} name="numberType" placeholder="Select Type" data={selectTypeData} labels="" /> */}
                   <select
@@ -381,7 +387,9 @@ function SubmitNew() {
                 value="BG_NEW"
                 onChange={(e) => handleshowhide(e)}
               />
-              &nbsp; Bank Gurantee &nbsp;&nbsp;
+              &nbsp; {`${t("BG_SUBMIT_BANK_GUARANTEE")}`}
+              {/* Bank Gurantee  */}
+              &nbsp;&nbsp;
             </label>
             <label htmlFor="businessService">
               <input
@@ -393,7 +401,9 @@ function SubmitNew() {
                 onClick={handleLoiNumber}
                 onChange={(e) => handleshowhide(e)}
               />
-              &nbsp; Mortgage &nbsp;&nbsp;
+              &nbsp;{`${t("BG_SUBMIT_MORTGAGE")}`}
+               {/* Mortgage */}
+                &nbsp;&nbsp;
             </label>
             {/* &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; */}
             {showhide === "BG_NEW" && (
@@ -402,12 +412,16 @@ function SubmitNew() {
                    <div className="row-12">
  <div className="col md={4} xxl lg-3">
               <FormControl>
-                <h2 className="FormLable"> Amount (in fig)<span style={{ color: "red" }}>*</span></h2>
+                <h2 className="FormLable">{`${t("BG_SUBMIT_AMOUNT_IN_FIG")}`}
+                 {/* Amount (in fig) */}
+                 <span style={{ color: "red" }}>*</span></h2>
                 <OutlinedInput type="text" className="Inputcontrol" placeholder="" {...register("amountInFig")}  />
               </FormControl>
               &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
               <FormControl>
-                <h2 className="FormLable"> Amount (in words)<span style={{ color: "red" }}>*</span></h2>
+                <h2 className="FormLable">{`${t("BG_SUBMIT_AMOUNT_IN_WORDS")}`}
+                 {/* Amount (in words) */}
+                 <span style={{ color: "red" }}>*</span></h2>
                 <OutlinedInput type="text" className="Inputcontrol" placeholder="" {...register("amountInFig")}  />
               </FormControl>
             
@@ -438,12 +452,12 @@ function SubmitNew() {
                   <div className="row-12">
  <div className="col md={4} xxl lg-3">
               <FormControl>
-                <h2 className="FormLable"> Amount (in fig)<span style={{ color: "red" }}>*</span></h2>
+                <h2 className="FormLable">{`${t("BG_SUBMIT_AMOUNT_IN_FIG")}`}<span style={{ color: "red" }}>*</span></h2>
                 <OutlinedInput type="text" className="Inputcontrol" placeholder="" {...register("amountInFig")} disabled />
               </FormControl>
               &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
               <FormControl>
-                <h2 className="FormLable"> Amount (in words)<span style={{ color: "red" }}>*</span></h2>
+                <h2 className="FormLable">{`${t("BG_SUBMIT_AMOUNT_IN_WORDS")}`}<span style={{ color: "red" }}>*</span></h2>
                 <OutlinedInput type="text" className="Inputcontrol" placeholder="" {...register("amountInFig")} disabled />
               </FormControl>
             
@@ -455,12 +469,12 @@ function SubmitNew() {
                     <div className="row-12">
  <div className="col md={4} xxl lg-3">
               <FormControl>
-                <h2 className="FormLable"> Amount (in fig)<span style={{ color: "red" }}>*</span></h2>
+                <h2 className="FormLable">{`${t("BG_SUBMIT_AMOUNT_IN_FIG")}`}<span style={{ color: "red" }}>*</span></h2>
                 <OutlinedInput type="text" className="Inputcontrol" placeholder="" {...register("amountInFig")} disabled />
               </FormControl>
               &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
               <FormControl>
-                <h2 className="FormLable"> Amount (in words)<span style={{ color: "red" }}>*</span></h2>
+                <h2 className="FormLable">{`${t("BG_SUBMIT_AMOUNT_IN_WORDS")}`}<span style={{ color: "red" }}>*</span></h2>
                 <OutlinedInput type="text" className="Inputcontrol" placeholder="" {...register("amountInFig")} disabled />
               </FormControl>
             
@@ -470,32 +484,36 @@ function SubmitNew() {
                 &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
                 <div className="col-12">
                   <FormControl>
-                    <h2 className="FormLable">
-                      Enter Bank Guarantee No.<span style={{ color: "red" }}>*</span>
+                    <h2 className="FormLable">{`${t("BG_SUBMIT_BANK_GUARANTEE_NO")}`}
+                      {/* Enter Bank Guarantee No. */}
+                      <span style={{ color: "red" }}>*</span>
                     </h2>
 
                     <OutlinedInput type="text" className="Inputcontrol" placeholder="" {...register("bgNumber")} />
                   </FormControl>
                   &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
                   <FormControl>
-                    <h2 className="FormLable">
-                      Enter Bank Name<span style={{ color: "red" }}>*</span>
+                    <h2 className="FormLable">{`${t("BG_SUBMIT_BANK_NAME")}`}
+                      {/* Enter Bank Name */}
+                      <span style={{ color: "red" }}>*</span>
                     </h2>
 
                     <OutlinedInput type="text" className="Inputcontrol" placeholder="" {...register("bankName")} />
                   </FormControl>
                   &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
                   <FormControl>
-                    <h2 className="FormLable">
-                      Expiry Date<span style={{ color: "red" }}>*</span>
+                    <h2 className="FormLable">{`${t("BG_SUBMIT_EXPIRY_DATE")}`}
+                      {/* Expiry Date */}
+                      <span style={{ color: "red" }}>*</span>
                     </h2>
 
                     <OutlinedInput type="date" className="Inputcontrol" placeholder={formattedDate} {...register("validity")} />
                   </FormControl>
                   &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
                   <FormControl>
-                    <h2 className="FormLable">
-                      Claim Period<span style={{ color: "red" }}>*</span>
+                    <h2 className="FormLable">{`${t("BG_SUBMIT_CLAIM_PERIOD")}`}
+                      {/* Claim Period */}
+                      <span style={{ color: "red" }}>*</span>
                     </h2>
 
                     <select className="Inputcontrol" class="form-control" placeholder="" {...register("claimPeriod")}>
@@ -518,8 +536,9 @@ function SubmitNew() {
                 &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
                 <div className="col-12">
                   <FormControl>
-                    <h2 className="FormLable">
-                      Country of origin<span style={{ color: "red" }}>*</span>
+                    <h2 className="FormLable">{`${t("BG_SUBMIT_COUNTRY_ORIGIN")}`}
+                      {/* Country of origin */}
+                      <span style={{ color: "red" }}>*</span>
                     </h2>
 
                     <select className="Inputcontrol" class="form-control" placeholder="" {...register("originCountry")}>
@@ -530,7 +549,9 @@ function SubmitNew() {
                   </FormControl>
                   &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
                   <label>
-                    <h2>Upload B.G. softcopy </h2>
+                    <h2>{`${t("BG_SUBMIT_UPLOAD_BG_SOFTCOPY")}`}
+                    {/* Upload B.G. softcopy  */}
+                    </h2>
                     <FileUpload color="primary" />
 
                     <input
@@ -553,7 +574,9 @@ function SubmitNew() {
                 &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
                 <div className="col-12">
                   <label>
-                    <h2>Hardcopy Submitted at TCP office. </h2>
+                    <h2>{`${t("BG_SUBMIT_HARDCOPY_SUBMITTED_TCP")}`}
+                    {/* Hardcopy Submitted at TCP office.  */}
+                    </h2>
                     <label htmlFor="licenseApplied">
                       <input {...register("licenseApplied")} type="radio" value="Y" id="licenseApplied" />
                       &nbsp; Yes &nbsp;&nbsp;
@@ -575,8 +598,8 @@ function SubmitNew() {
                         <div className="row">
                           <div className="col col-12">
                             <label>
-                              <h2>
-                                Upload Receipt of Submission.
+                              <h2>{`${t("BG_SUBMIT_UPLOAD_RECEIPT_SUBMISSION")}`}
+                                {/* Upload Receipt of Submission. */}
                                 <span style={{ color: "red" }}>*</span>
                               </h2>
                               <FileUpload color="primary" />
@@ -619,7 +642,9 @@ function SubmitNew() {
           Modal title
         </BootstrapDialogTitle> */}
                           <DialogContent dividers>
-                            <Typography gutterBottom>Submit Hardcopy of B.G. at TCP office.</Typography>
+                            <Typography gutterBottom>{`${t("BG_SUBMIT_HARDCOPY_AT_TCP_OFFICE")}`}
+                            {/* Submit Hardcopy of B.G. at TCP office. */}
+                            </Typography>
                           </DialogContent>
                           <DialogActions>
                             <Button autoFocus onClick={handleClose}>
@@ -638,11 +663,13 @@ function SubmitNew() {
                   <div>
                     <div className="row">
                       <div className="col col-4">
-                        <p>In case of B.G. from other country, you need to upload Indian Bank Advice Certificate.</p>
+                        <p>{`${t("BG_SUBMIT_FROM-OTHER_COUNTRY")}`}
+                        {/* In case of B.G. from other country, you need to upload Indian Bank Advice Certificate. */}
+                        </p>
 
                         <label>
-                          <h2>
-                            Upload Bank Advice Certificate.
+                          <h2>{`${t("BG_SUBMIT_UPLOAD_ADVICE_CERTIFICATE")}`}
+                            {/* Upload Bank Advice Certificate. */}
                             <span style={{ color: "red" }}>*</span>
                           </h2>
                         </label>
@@ -682,8 +709,8 @@ function SubmitNew() {
                         id="flexCheckDefault"
                       />
 
-                      <label className="checkbox" for="flexCheckDefault">
-                        Existing B.G. No. (In case of replacement, extension, renewal enter bank guarantee number.{" "}
+                      <label className="checkbox" for="flexCheckDefault">{`${t("BG_SUBMIT_EXISTING_BG_NO_IN_REPLACEMENT")}`}
+                        {/* Existing B.G. No. (In case of replacement, extension, renewal enter bank guarantee number.{" "} */}
                       </label>
                     </div>
                     <div className="col-6">
@@ -723,8 +750,12 @@ function SubmitNew() {
                 <div className="table table-bordered table-responsive " style={{ backgroundColor: "rgb(251 251 253))", width: "629px" }}>
                   <thead>
                     <tr>
-                      <th scope="col">Khasra No</th>
-                      <th scope="col">Area to be Mortgaged (in sq meters)</th>
+                      <th scope="col">{`${t("BG_SUBMIT_KHASRA_NO")}`}
+                      {/* Khasra No */}
+                      </th>
+                      <th scope="col">{`${t("BG_SUBMIT_AREA_MORTGAGED_SQ_M")}`}
+                      {/* Area to be Mortgaged (in sq meters) */}
+                      </th>
                     </tr>
                   </thead>
                   <tbody>
@@ -756,7 +787,9 @@ function SubmitNew() {
                   </tr> */}
                 <div class="row-12" className="align-right">
                   <div className="col col-3">
-                    <h2>Total Area (in acres)</h2>
+                    <h2>{`${t("BG_SUBMIT_TOTAL_AREA_IN_ACRES")}`}
+                    {/* Total Area (in acres) */}
+                    </h2>
                     <input
                       type="number"
                       placeholder={watch("areaToBeMortgagedInSqMtrs")}
@@ -776,12 +809,18 @@ function SubmitNew() {
                     </th>
                   </tr> */}
 
-                <h5 className="card-title fw-bold">Enter Plot</h5>
+                <h5 className="card-title fw-bold">{`${t("BG_SUBMIT_ENTER_PLOT")}`}
+                {/* Enter Plot */}
+                </h5>
                 <div className="table table-bordered table-responsive" style={{ backgroundColor: "rgb(251 251 253))", width: "629px" }}>
                   <thead>
                     <tr>
-                      <th scope="col">Plot No</th>
-                      <th scope="col">Area (in sq meters)</th>
+                      <th scope="col">{`${t("BG_SUBMIT_PLOT_NO")}`}
+                      {/* Plot No */}
+                      </th>
+                      <th scope="col">{`${t("BG_SUBMIT_AREA_IN_SQ_M")}`}
+                      {/* Area (in sq meters) */}
+                      </th>
                     </tr>
                   </thead>
                   <tbody>
@@ -819,7 +858,7 @@ function SubmitNew() {
 
                 <div class="row-12" className="align-right">
                   <div className="col col-3">
-                    <h2>Total Area (in acres)</h2>
+                    <h2>{`${t("BG_SUBMIT_TOTAL_AREA_IN_ACRES")}`}</h2>
                     <input
                       type="number"
                       placeholder={watch("areaInSqMtrs")}
@@ -832,11 +871,15 @@ function SubmitNew() {
                 </div>
 
                 <br></br>
-                <h5>Upload Documents</h5>
+                <h5>{`${t("BG_SUBMIT_UPLOAD_DOCUMENTS")}`}
+                {/* Upload Documents */}
+                </h5>
                 <br></br>
                 <div className="row">
                   <div className="col col-12">
-                    <h2 style={{ display: "flex" }}>Upload layout plan earmarking land to be mortgaged</h2>
+                    <h2 style={{ display: "flex" }}>{`${t("BG_SUBMIT_UPLOAD_LAYOUT_PLAN_EARMAKING")}`}
+                    {/* Upload layout plan earmarking land to be mortgaged */}
+                    </h2>
                     <label>
                       <FileUpload style={{ cursor: "pointer" }} color="primary" />
                       <input
@@ -859,8 +902,9 @@ function SubmitNew() {
                 </div>
                 <div className="row">
                   <div className="col col-4">
-                    <h2 style={{ display: "flex" }}>
-                      Mortgage Deed <span style={{ color: "red" }}>*</span>{" "}
+                    <h2 style={{ display: "flex" }}>{`${t("BG_SUBMIT_UPLOAD_MORTGAGE_DEED")}`}
+                      {/* Mortgage Deed  */}
+                      <span style={{ color: "red" }}>*</span>{" "}
                     </h2>
                     <label>
                       <FileUpload style={{ cursor: "pointer" }} color="primary" />
@@ -883,8 +927,9 @@ function SubmitNew() {
                   </div>
 
                   <div className="col col-4">
-                    <h2 style={{ display: "flex" }}>
-                      Land schedule and Plot numbers <span style={{ color: "red" }}>*</span>
+                    <h2 style={{ display: "flex" }}>{`${t("BG_SUBMIT_LAND_SCHEDULE_PLOT_NO")}`}
+                      {/* Land schedule and Plot numbers */}
+                       <span style={{ color: "red" }}>*</span>
                     </h2>
                     <label>
                       <FileUpload style={{ cursor: "pointer" }} color="primary" />
@@ -908,9 +953,9 @@ function SubmitNew() {
                 </div>
                 <div className="row">
                   <div className="col col-12">
-                    <h2 style={{ display: "flex" }}>
-                      Undertaking Amended/supplementary/addendum mortage deed specifying plots/flats/shops and appropriate licenced land to be
-                      mortgaged upon approval of building plans
+                    <h2 style={{ display: "flex" }}>{`${t("BG_SUBMIT_UNDERTAKING_AMEND_MORTGAGE_DEED")}`}
+                      {/* Undertaking Amended/supplementary/addendum mortage deed specifying plots/flats/shops and appropriate licenced land to be
+                      mortgaged upon approval of building plans */}
                     </h2>
                     <label>
                       <FileUpload style={{ cursor: "pointer" }} color="primary" />

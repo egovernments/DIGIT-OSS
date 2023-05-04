@@ -8,6 +8,8 @@ import EPApplications from "./Applications/EPApllications";
 import SPApplications from "./Applications/SPApplications";
 import ASDApplications from "./Applications/ASDApplication";
 import SLApplications from "./Applications/SLApplication";
+import RLApplication from "./Applications/RLApplication";
+import UAApplication from "./Applications/UAApplication";
 // import ApplicationDetails from "../../pages/citizen/Applications/ApplicationDetails";
 // import CreateTradeLicence from "./Create";
 // import EditTrade from "./EditTrade";
@@ -68,6 +70,8 @@ const App = () => {
           <PrivateRoute path={`${path}/bankGuarantee/my-application`} component={BGApplications} />
           <PrivateRoute path={`${path}/Standard/my-application`} component={ASDApplications} />
           <PrivateRoute path={`${path}/SurrenderLic/my-application`} component={SLApplications} />
+          <PrivateRoute path={`${path}/LayoutPlanClu/my-application`} component={RLApplication} />
+          <PrivateRoute path={`${path}/CompositionClu/my-application`} component={UAApplication} />
         </AppContainer>
       </Switch>
     </span>

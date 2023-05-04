@@ -486,15 +486,6 @@ function LayoutPlanClu() {
                   <FormLabel id="existing_area" sx={{ fontWeight: "bold" }}>
                     {`${t("REV_LAYOUT_EXISTING_AREAS")}`} <span style={{ color: "red" }}>*</span>
                   </FormLabel>
-                  {/* <OutlinedInput
-                    aria-labelledby="existing_area"
-                    type="text"
-                    placeholder=""
-                    className="Inputcontrol"
-                    {...register("existingArea")}
-                    onChange={(e) => setExistingArea(e.target.value)}
-                    value={existingAreaVal}
-                  /> */}
                 </FormControl>
               </Col>
             </div>
@@ -586,7 +577,7 @@ function LayoutPlanClu() {
                     placeholder=""
                     className="Inputcontrol"
                     {...register("existingArea")}
-                  
+                  disabled
                   />
                     </FormLabel>
                 </FormControl>
@@ -1058,7 +1049,7 @@ function LayoutPlanClu() {
                     <span className="text-danger font-weight-bold">*</span>
                   </label>
                   <OutlinedInput
-                    type="number"
+                    type="text"
                     placeholder=""
                     className="Inputcontrol"
                     name="licenseNoModal"
@@ -1084,10 +1075,10 @@ function LayoutPlanClu() {
           </form>
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="primary" onClick={handleSubmitExistingArea}>
+          <Button class="btn btn-primary btn-md center-block" onClick={handleSubmitExistingArea}>
             Submit
           </Button>
-          <Button variant="danger" onClick={handleCloseAuthuser}>
+          <Button class="btn btn-primary btn-md center-block" onClick={handleCloseAuthuser}>
             Close
           </Button>
         </Modal.Footer>

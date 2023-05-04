@@ -25,7 +25,8 @@ import { getDocShareholding } from "../../../../../../tl/src/pages/employee/Scru
 import CusToaster from "../../../../components/Toaster";
 import { Modal, ModalHeader, ModalBody, ModalFooter, Label } from "reactstrap";
 import { Input } from "antd";
-import ReactMultiSelect from "../../../../../../../react-components/src/atoms/ReactMultiSelect"
+import ReactMultiSelect from "../../../../../../../react-components/src/atoms/ReactMultiSelect";
+import { useTranslation } from "react-i18next";
 function RenewNew() {
   const [selects, setSelects] = useState();
   const [showhide, setShowhide] = useState("");
@@ -33,6 +34,7 @@ function RenewNew() {
   const [modal1, setmodal1] = useState(false);
   const [open4, setOpen4] = useState(false);
   const [open3, setOpen3] = useState(false);
+  const {t}=useTranslation();
    const [showToastError, setShowToastError] = useState({ label: "", error: false, success: false });
   const handleshowhide = (event) => {
     const getuser = event.target.value;
@@ -82,7 +84,9 @@ function RenewNew() {
     <div>
     <form onSubmit={handleSubmit(bankRenew)}>
          <div className="card" style={{ width: "126%", border: "5px solid #1266af" }}>
-        <h4 style={{ fontSize: "25px", marginLeft: "21px" }}>Extension of Bank Guarantee</h4>
+        <h4 style={{ fontSize: "25px", marginLeft: "21px" }}>{`${t("EXTENSION_BG_HEADING")}`}
+        {/* Extension of Bank Guarantee */}
+        </h4>
         <br></br>
          <div
         className="collapse-header"
@@ -111,27 +115,27 @@ function RenewNew() {
           <div className="row-12">
             <div className="col md={4} xxl lg-3">
               <FormControl>
-                <h2 className="FormLable">Bank Guarantee No. </h2>
+                <h2 className="FormLable">{`${t("MY_APPLICATION_BG_GUARANTEE_NO")}`}</h2>
                 <OutlinedInput type="text" className="Inputcontrol" placeholder="" {...register("bgNumber")}  disabled/>
               </FormControl>
               &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
               <FormControl>
-                <h2 className="FormLable">Bank Guarantee Issue date </h2>
+                <h2 className="FormLable">{`${t("MY_APPLICATION_BG_GUARANTEE_ISSUE_DATE")}`} </h2>
                 <OutlinedInput type="date" className="Inputcontrol" placeholder="" {...register("bgNumber")}  disabled/>
               </FormControl>
               &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
               <FormControl>
-                <h2 className="FormLable">Expiry date </h2>
+                <h2 className="FormLable">{`${t("BG_SUBMIT_EXPIRY_DATE")}`} </h2>
                 <OutlinedInput type="date" className="Inputcontrol" placeholder="" {...register("bgNumber")}  disabled/>
               </FormControl>
                &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
               <FormControl>
-                <h2 className="FormLable">Claim expiry date </h2>
+                <h2 className="FormLable">{`${t("MY_APPLICATION_BG_GUARANTEE_CLAIM_EXPIRY_DATE")}`}</h2>
                 <OutlinedInput type="date" className="Inputcontrol" placeholder="" {...register("bgNumber")}  disabled/>
               </FormControl>
                &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
               <FormControl>
-                <h2 className="FormLable">Amount </h2>
+                <h2 className="FormLable">{`${t("MY_APPLICATION_BG_GUARANTEE_AMOUNT")}`} </h2>
                 <OutlinedInput type="text" className="Inputcontrol" placeholder="" {...register("bgNumber")}  disabled/>
               </FormControl>
             </div>
@@ -139,12 +143,14 @@ function RenewNew() {
              <div className="row-12">
  <div className="col md={4} xxl lg-3">
               <FormControl>
-                <h2 className="FormLable">Issuing Bank </h2>
+                <h2 className="FormLable">{`${t("EXTENSION_ISSUING_BANK")}`}
+                {/* Issuing Bank */}
+                 </h2>
                 <OutlinedInput type="text" className="Inputcontrol" placeholder="" {...register("bgNumber")} disabled />
               </FormControl>
               &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
               <FormControl>
-                <h2 className="FormLable">Country of origin</h2>
+                <h2 className="FormLable">{`${t("BG_SUBMIT_COUNTRY_ORIGIN")}`}</h2>
                 <OutlinedInput type="text" className="Inputcontrol" placeholder="" {...register("bgNumber")} disabled />
               </FormControl>
             
@@ -155,7 +161,7 @@ function RenewNew() {
            <div className="row gy-3">
                         <div className="col col-12">
                            <h2 className="FormLable">
-                               Amount in words<span style={{ color: "red" }}>*</span>
+                              {`${t("BG_SUBMIT_AMOUNT_IN_WORDS")}`}<span style={{ color: "red" }}>*</span>
                               </h2>
                               <input type="text" className="form-control" disabled></input>
                         </div>
@@ -191,22 +197,28 @@ function RenewNew() {
               <div className="row-12">
              <div className="col md={4} xxl lg-3">
               <FormControl>
-                <h2 className="FormLable">Bank Guarantee No. </h2>
+                <h2 className="FormLable">{`${t("MY_APPLICATION_BG_GUARANTEE_NO")}`} </h2>
                 <OutlinedInput type="text" className="Inputcontrol" placeholder="" {...register("bgNumber")}  />
               </FormControl>
               &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
               <FormControl>
-                <h2 className="FormLable">Date of amendment</h2>
+                <h2 className="FormLable">{`${t("EXTENSION_DATE_OF_AMENDMENT")}`}
+                {/* Date of amendment */}
+                </h2>
                 <OutlinedInput type="date" className="Inputcontrol" placeholder="" {...register("bgNumber")}  />
               </FormControl>
               &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
               <FormControl>
-                <h2 className="FormLable">Amendment expiry date </h2>
+                <h2 className="FormLable">{`${t("EXTENSION_AMENDMENT_EXPIRY_DATE")}`}
+                {/* Amendment expiry date  */}
+                </h2>
                 <OutlinedInput type="date" className="Inputcontrol" placeholder="" {...register("bgNumber")}  />
               </FormControl>
                &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
               <FormControl>
-                <h2 className="FormLable">Amendment claim expiry date  </h2>
+                <h2 className="FormLable">{`${t("EXTENSION_AMENDMENT_CLAIM_EXPIRY_DATE")}`}
+                {/* Amendment claim expiry date  */}
+                 </h2>
                 <OutlinedInput type="date" className="Inputcontrol" placeholder="" {...register("bgNumber")} />
               </FormControl>
               </div>
@@ -215,17 +227,17 @@ function RenewNew() {
                     <div className="row-12">
  <div className="col md={4} xxl lg-3">
     <FormControl>
-                <h2 className="FormLable">Amount </h2>
+                <h2 className="FormLable">{`${t("MY_APPLICATION_BG_GUARANTEE_AMOUNT")}`} </h2>
                 <OutlinedInput type="text" className="Inputcontrol" placeholder="" {...register("bgNumber")}  />
               </FormControl>
                &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
               <FormControl>
-                <h2 className="FormLable">Issuing Bank </h2>
+                <h2 className="FormLable">{`${t("EXTENSION_ISSUING_BANK")}`} </h2>
                 <OutlinedInput type="text" className="Inputcontrol" placeholder="" {...register("bgNumber")}  />
               </FormControl>
               &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
               <FormControl>
-                <h2 className="FormLable">Country of origin</h2>
+                <h2 className="FormLable">{`${t("BG_SUBMIT_COUNTRY_ORIGIN")}`}</h2>
                  <ReactMultiSelect control={control} name="numberType" placeholder="Select Type" data={selectTypeData} labels="" />
 
                 
@@ -237,7 +249,7 @@ function RenewNew() {
                 <div className="row gy-3">
                         <div className="col col-12">
                            <h2 className="FormLable">
-                               Amount in words<span style={{ color: "red" }}>*</span>
+                               {`${t("BG_SUBMIT_AMOUNT_IN_WORDS")}`}<span style={{ color: "red" }}>*</span>
                               </h2>
                               <input type="text" className="form-control" ></input>
                         </div>
@@ -247,7 +259,7 @@ function RenewNew() {
             <br></br>
           <div className="col-12">
                   <label>
-                    <h2>Hardcopy Submitted at TCP office. </h2>
+                    <h2> {`${t("BG_SUBMIT_HARDCOPY_SUBMITTED_TCP")}`} </h2>
                     <label htmlFor="licenseApplied">
                       <input {...register("licenseApplied")} type="radio" value="Y" id="licenseApplied" />
                       &nbsp; Yes &nbsp;&nbsp;
@@ -271,17 +283,25 @@ function RenewNew() {
                         {/* <caption>List of users</caption> */}
                         <thead>
                           <tr>
-                            <th class="fw-normal">Sr. No.</th>
-                            <th class="fw-normal">Type</th>
-                            <th class="fw-normal">Attachment description</th>
-                             <th class="fw-normal">Upload document</th>
-                              <th class="fw-normal">Action</th>
+                            <th class="fw-normal">{`${t("EXTENSION_SR_NO")}`}
+                            {/* Sr. No. */}
+                            </th>
+                            <th class="fw-normal">{`${t("EXTENSION_TYPE")}`}</th>
+                            <th class="fw-normal">{`${t("EXTENSION_ATTACHMENT_DESCRIPTION")}`}
+                            {/* Attachment description */}
+                            </th>
+                             <th class="fw-normal">{`${t("EXTENSION_UPLOAD_DOC")}`}
+                             {/* Upload document */}
+                             </th>
+                              <th class="fw-normal">{`${t("EXTENSION_ACTION")}`}</th>
                           </tr>
                         </thead>
                         <tbody>
                            <tr>
                             <td>1</td>
-                             <td>Bank Guarantee(pdf)</td>
+                             <td>{`${t("EXTENSION_BANK_GUARANTEE_PDF")}`}
+                             {/* Bank Guarantee(pdf) */}
+                             </td>
                               <td><input type="text" className="form-control"></input></td>
                                <td>  <div>
                                     <label>
@@ -303,7 +323,9 @@ function RenewNew() {
                           </tr>
                            <tr>
                             <td>2</td>
-                             <td>Any other document (pdf)</td>
+                             <td>{`${t("EXTENSION_ANY_OTHER_DOC_PDF")}`}
+                             {/* Any other document (pdf) */}
+                             </td>
                               <td><input type="text" className="form-control"></input></td>
                                <td> <div>
                                     <label>

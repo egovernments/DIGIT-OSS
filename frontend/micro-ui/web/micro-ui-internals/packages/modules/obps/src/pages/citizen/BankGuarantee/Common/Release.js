@@ -24,6 +24,7 @@ import {
   DeleteIcon,
   MuiTables,
 } from "@egovernments/digit-ui-react-components";
+import { useTranslation } from "react-i18next";
 
 function ReleaseNew(props) {
   const [selects, setSelects] = useState();
@@ -34,6 +35,7 @@ function ReleaseNew(props) {
   const [applicantId, setApplicantId] = useState("");
  const [showToastError, setShowToastError] = useState({ label: "", error: false, success: false });
   const [ServicePlanDataLabel, setServicePlanDataLabel] = useState([]);
+  const{t}=useTranslation();
   const handleshowhide = (event) => {
     const getuser = event.target.value;
 
@@ -168,7 +170,9 @@ function ReleaseNew(props) {
     <div>
     <form onSubmit={handleSubmit(bankRelease)}>
       <div className="card" style={{ width: "126%", border: "5px solid #1266af" }}>
-        <h4 style={{ fontSize: "25px", marginLeft: "21px" }}>Release of Bank Guarantee</h4>
+        <h4 style={{ fontSize: "25px", marginLeft: "21px" }}>{`${t("RELEASE_BG_HEADING")}`}
+        {/* Release of Bank Guarantee */}
+        </h4>
         <br></br>
            <div
         className="collapse-header"
@@ -197,27 +201,27 @@ function ReleaseNew(props) {
           <div className="row-12">
             <div className="col md={4} xxl lg-3">
               <FormControl>
-                <h2 className="FormLable">Bank Guarantee No. </h2>
+                <h2 className="FormLable">{`${t("MY_APPLICATION_BG_GUARANTEE_NO")}`} </h2>
                 <OutlinedInput type="text" className="Inputcontrol" placeholder="" {...register("bgNumber")}  disabled/>
               </FormControl>
               &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
               <FormControl>
-                <h2 className="FormLable">Bank Guarantee Issue date </h2>
+                <h2 className="FormLable">{`${t("MY_APPLICATION_BG_GUARANTEE_ISSUE_DATE")}`} </h2>
                 <OutlinedInput type="date" className="Inputcontrol" placeholder="" {...register("bgNumber")}  disabled/>
               </FormControl>
               &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
               <FormControl>
-                <h2 className="FormLable">Expiry date </h2>
+                <h2 className="FormLable">{`${t("BG_SUBMIT_EXPIRY_DATE")}`}</h2>
                 <OutlinedInput type="date" className="Inputcontrol" placeholder="" {...register("bgNumber")}  disabled/>
               </FormControl>
                &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
               <FormControl>
-                <h2 className="FormLable">Claim expiry date </h2>
+                <h2 className="FormLable">{`${t("MY_APPLICATION_BG_GUARANTEE_CLAIM_EXPIRY_DATE")}`} </h2>
                 <OutlinedInput type="date" className="Inputcontrol" placeholder="" {...register("bgNumber")}  disabled/>
               </FormControl>
                &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
               <FormControl>
-                <h2 className="FormLable">Amount </h2>
+                <h2 className="FormLable">{`${t("MY_APPLICATION_BG_GUARANTEE_AMOUNT")}`} </h2>
                 <OutlinedInput type="text" className="Inputcontrol" placeholder="" {...register("bgNumber")}  disabled/>
               </FormControl>
             </div>
@@ -225,7 +229,7 @@ function ReleaseNew(props) {
              <div className="row gy-3">
                         <div className="col col-12">
                            <h2 className="FormLable">
-                               Amount in words<span style={{ color: "red" }}>*</span>
+                              {`${t("BG_SUBMIT_AMOUNT_IN_WORDS")}`}<span style={{ color: "red" }}>*</span>
                               </h2>
                               <input type="text" className="form-control" disabled></input>
                         </div>
@@ -234,7 +238,7 @@ function ReleaseNew(props) {
               <div className="row-12">
              <div className="col md={4} xxl lg-4">
               <FormControl>
-                <h2 className="FormLable">Release </h2>
+                <h2 className="FormLable"> {`${t("RELEASE_BG")}`} </h2>
                   <ReactMultiSelect control={control} name="numberType" placeholder="Select Type" data={selectTypeData} labels="" />
                 {/* <select
                     className="Inputcontrol"
@@ -249,7 +253,9 @@ function ReleaseNew(props) {
               </FormControl>
               &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
               <FormControl>
-                <h2 className="FormLable">Bank Guarantee to be replaced with </h2>
+                <h2 className="FormLable">{`${t("RELEASE_BG_REPLACED_WITH")}`}
+                {/* Bank Guarantee to be replaced with */}
+                 </h2>
                 <ReactMultiSelect control={control} name="numberType" placeholder="Select Type" data={selectBankGuarantee} labels="" />
                {/* <select
                     className="Inputcontrol"
@@ -264,7 +270,9 @@ function ReleaseNew(props) {
               </FormControl>
               &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
               <FormControl>
-                <h2 className="FormLable">Reason for replacement </h2>
+                <h2 className="FormLable"> {`${t("RELEASE_BG_REASON_FOR_REPLACEMENT")}`}
+                  {/* Reason for replacement  */}
+                  </h2>
                <textarea className="Inputcontrol" class="form-control" placeholder="" {...register("bgNumber")} />
               </FormControl>
             </div>
@@ -277,17 +285,19 @@ function ReleaseNew(props) {
                         {/* <caption>List of users</caption> */}
                         <thead>
                           <tr>
-                            <th class="fw-normal">Sr. No.</th>
-                            <th class="fw-normal">Type</th>
-                            <th class="fw-normal">Attachment description</th>
-                             <th class="fw-normal">Upload document</th>
-                              <th class="fw-normal">Action</th>
+                            <th class="fw-normal">{`${t("EXTENSION_SR_NO")}`}</th>
+                            <th class="fw-normal">{`${t("EXTENSION_TYPE")}`}</th>
+                            <th class="fw-normal">{`${t("EXTENSION_ATTACHMENT_DESCRIPTION")}`}</th>
+                             <th class="fw-normal">{`${t("EXTENSION_UPLOAD_DOC")}`}</th>
+                              <th class="fw-normal">{`${t("EXTENSION_ACTION")}`}</th>
                           </tr>
                         </thead>
                         <tbody>
                           <tr>
                             <td>1</td>
-                             <td>Application (pdf)</td>
+                             <td>{`${t("RELEASE_APPLICATION_PDF")}`}
+                             {/* Application (pdf) */}
+                             </td>
                               <td><input type="text" className="form-control"></input></td>
                                <td> <div>
                                     <label>
@@ -309,7 +319,9 @@ function ReleaseNew(props) {
                           </tr>
                            <tr>
                             <td>2</td>
-                             <td>Completion Certificate (pdf)</td>
+                             <td>{`${t("RELEASE_COMPLETION_CERTIFICATE_PDF")}`}
+                             {/* Completion Certificate (pdf) */}
+                             </td>
                               <td><input type="text" className="form-control"></input></td>
                                <td> <div>
                                     <label>
@@ -331,7 +343,7 @@ function ReleaseNew(props) {
                           </tr>
                            <tr>
                             <td>3</td>
-                             <td>Any other document (pdf)</td>
+                             <td>{`${t("EXTENSION_ANY_OTHER_DOC_PDF")}`}</td>
                               <td><input type="text" className="form-control"></input></td>
                                <td> <div>
                                     <label>
