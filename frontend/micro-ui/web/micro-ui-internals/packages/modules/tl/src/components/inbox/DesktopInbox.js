@@ -58,7 +58,7 @@ const DesktopInbox = ({
                       : row.original["businessService"] === "APPROVAL_OF_STANDARD"
                       ? "StandardDesign"
                       : row.original["businessService"] === "CHANGE_OF_BENEFICIAL"
-                      ? "BeneficialScrutiny"
+                      ? "BeneficialCard"
                       : row.original["businessService"] === "RENWAL_OF_LICIENCE"
                       ? "RenewalScrutiny"
                       : row.original["businessService"] === "TRANSFER_OF_LICIENCE"
@@ -73,6 +73,8 @@ const DesktopInbox = ({
                       ? "ServiceScrutiny"
                       : row.original["businessService"] === "ELECTRICAL_PLAN"
                       ? "ElectricalScrutiny"
+                      : row.original["businessService"] === "EXTENTION_OF_CLU_PERMISSION"
+                      ? "ExtensionCluCard"
                       : row.original["businessService"] === "BG_NEW"
                       ? "ScrutinyForm"
                       : null
@@ -177,6 +179,8 @@ const DesktopInbox = ({
                       ? "Completionscrutiny"
                       : row.original["businessService"] === "BG_NEW"
                       ? "ScrutinyForm"
+                      : row.original["businessService"] === "EXTENTION_OF_CLU_PERMISSION"
+                      ? "ExtensionCluCard"
                       : null
                   }/` + row.original["applicationId"]
                 }

@@ -9,9 +9,9 @@ import { useQueryClient } from "react-query";
 import { useHistory, useParams } from "react-router-dom";
 import ApplicationDetailsActionBar from "../../../../../../../templates/ApplicationDetails/components/ApplicationDetailsActionBar";
 import ActionModal from "../../../../../../../templates/ApplicationDetails/Modal/index";
-import SurrenderBasic from "./SurrenderBasic";
+import ExtensionCluBasic from "./ExtensionCluBasic";
 
-const SurrenderScrutiny = (props) => {
+const ExtensionCluCard = (props) => {
   const { id } = useParams();
 
   const userInfo = Digit.UserService.getUser()?.info || {};
@@ -30,7 +30,7 @@ const SurrenderScrutiny = (props) => {
   const [isEnableLoader, setIsEnableLoader] = useState(false);
   const [isWarningPop, setWarningPopUp] = useState(false);
   const [showhide19, setShowhide19] = useState("true");
-  const [businessService, setBusinessService] = useState("SURREND_OF_LICENSE");
+  const [businessService, setBusinessService] = useState("EXTENTION_OF_CLU_PERMISSION");
   const [moduleCode, setModuleCode] = useState("TL");
   const [scrutinyDetails, setScrutinyDetails] = useState();
   // const [applicationNumber,setApplicationNumber] = useState("");
@@ -71,19 +71,19 @@ const SurrenderScrutiny = (props) => {
       },
     };
     try {
-      const Resp = await axios.post(`/tl-services/SurrendOfLicenseRequest/_search?applicationNumber=${id}`, requestInfo).then((response) => {
+      const Resp = await axios.post(`/tl-services/ExtensionOfCLUPermissionRequest/_search?applicationNumber=${id}`, requestInfo).then((response) => {
         return response?.data;
       });
-        console.log("Response From API1", Resp, Resp?.surrendOfLicense);
-      setScrutinyDetails(Resp?.surrendOfLicense?.[0]);
+        console.log("Response From API1", Resp, Resp?.extensionOfCLUPermission);
+      setScrutinyDetails(Resp?.extensionOfCLUPermission?.[0]);
 
-      console.log("devDel1234", Resp?.surrendOfLicense?.[0]);
-      const loiNumber = Resp?.surrendOfLicense?.[0]?.loiNumber;
-      setApplicationData(Resp?.surrendOfLicense?.[0]);
-      setApplicationStatus(Resp?.surrendOfLicense?.[0]?.status);
+      console.log("devDel1234", Resp?.extensionOfCLUPermission?.[0]);
+      const loiNumber = Resp?.extensionOfCLUPermission?.[0]?.loiNumber;
+      setApplicationData(Resp?.extensionOfCLUPermission?.[0]);
+      setApplicationStatus(Resp?.extensionOfCLUPermission?.[0]?.status);
       setApplicationDetails({
-        applicationData: Resp?.surrendOfLicense?.[0],
-        workflowCode: Resp?.surrendOfLicense?.[0].businessService,
+        applicationData: Resp?.extensionOfCLUPermission?.[0],
+        workflowCode: Resp?.extensionOfCLUPermission?.[0].businessService,
       });
       // console.log("Loi1234787", userInfo );
       // console.log("Loi1234", loiNumber );
@@ -108,10 +108,10 @@ const SurrenderScrutiny = (props) => {
       setEdcDataTreade(Resploi?.data?.Licenses?.[0]?.tradeLicenseDetail?.EDC);
       setIdwDataTreade(Resploi?.data?.Licenses?.[0]?.tradeLicenseDetail?.IDW);
 
-      // setScrutinyDetails(Resp?.surrendOfLicense?.[0]);
+      // setScrutinyDetails(Resp?.extensionOfCLUPermission?.[0]);
 
       console.log(setIdwDataTreade);
-      // setApplicationData(Resp?.surrendOfLicense?.[0]);
+      // setApplicationData(Resp?.extensionOfCLUPermission?.[0]);
     } catch (error) {
       console.log(error);
     }
@@ -171,7 +171,7 @@ const SurrenderScrutiny = (props) => {
     // setTimeout(() => {
       setSelectedAction(null);
       setShowModal(false);
-      window.location.href = `/digit-ui/employee/tl/SurrenderInbox`;
+    //   window.location.href = `/digit-ui/employee/tl/servicePlanInbox`;
     // }, 3000);
   };
 
@@ -181,7 +181,7 @@ const SurrenderScrutiny = (props) => {
 
   const submitAction = async (data = {}, nocData = false, isOBPS = {}) => {
     let tempdata = data || {};
-    tempdata.surrendOfLicense[0].additionalDetails = additionalDetails;
+    tempdata.extensionOfCLUPermission[0].additionalDetails = additionalDetails;
     console.log("logger log1223", tempdata);
 
     try {
@@ -202,7 +202,7 @@ const SurrenderScrutiny = (props) => {
         },
       };
       console.log("logger log1223 body", body);
-      const response = await axios.post("/tl-services/SurrendOfLicenseRequest/_update", body);
+      const response = await axios.post("/tl-services/ExtensionOfCLUPermissionRequest/_update", body);
       console.log("Update API Response ====> ", response.data);
       closeModal();
     } catch (error) {
@@ -243,48 +243,40 @@ const SurrenderScrutiny = (props) => {
 
   return (
     <Card>
-         <Card.Header className="head-application" >
-        <div className="row fw-normal">
-          <div className="col-sm-2">
-            <b><p className="head-font">Application Number:</p></b>
-            <b><p className="head-font">{id}</p></b>
+      <Card.Header class="fw-normal" style={{ top: 5, padding: 5, fontSize: 14, height: 90, lineHeight: 2 }}>
+        <div className="row">
+          <div className="col-md-3">
+            {loiNumberSet}
+            <p>Application Number:</p>
+            <p class="fw-normal">{id}</p>
           </div>
-          <div className="col-sm-2">
-            <b><p className="head-font">Service Id: </p></b>
-            <b><p className="head-font">
-              {applicationData?.businessService}
-              {/* Licence */}
-            </p></b>
+          <div className="col-md-2">
+            <p>Service Id: </p>
+            <p class="fw-normal">{applicationData?.businessService}</p>
           </div>
-          <div className="col-sm-2">
-            <b><p className="head-font">TCP Application Number:</p></b>
-            {/* {item.name.substring(0, 4)} */}
-            <b><p className="head-font">{applicationData?.tcpApplicationNumber}</p></b>
+          <div className="col-md-3">
+            <p>TCP Application Number:</p>
+            <p class="fw-normal">{applicationData?.tcpApplicationNumber}</p>
           </div>
-          <div className="col-sm-2">
-            <b><p className="head-font">TCP Case Number:</p></b>
-            <b><p className="head-font">{applicationData?.tcpCaseNumber}</p></b>
+          <div className="col-md-2">
+            <p>TCP Case Number:</p>
+            <p class="fw-normal">{applicationData?.tcpCaseNumber}</p>
           </div>
-          <div className="col-sm-2">
-            <b><p className="head-font">TCP Dairy Number: </p></b>
-            <b><p className="head-font">{applicationData?.tcpDairyNumber}</p></b>
-
+          <div className="col-md-2">
+            <p>TCP Dairy Number: </p>
+            <p class="fw-normal">{applicationData?.tcpDairyNumber}</p>
           </div>
-          {/* <div className="col-sm-2">
-            <Button style={{ textAlign: "right" }} value="Submit" id="Submit" onChange1={handleChange} name="Submit" onClick={handleshow19}>Views PDF</Button>
-          </div> */}
         </div>
       </Card.Header>
-      
       <Row style={{ top: 10, padding: 10 }}>
-        <SurrenderBasic
+        <ExtensionCluBasic
           apiResponse={scrutinyDetails}
           histeroyData={workflowDetailsTemp}
           applicationNumber={id}
           refreshScrutinyData={getScrutinyData}
           setAdditionalDetails={setAdditionalDetails}
           applicationStatus={applicationStatus}
-        ></SurrenderBasic>
+        ></ExtensionCluBasic>
       </Row>
       {/* <Row style={{ top: 10, padding: "10px 22px" }}> */}
       <Row style={{ top: 10, padding: "10px 22px" }}>
@@ -308,7 +300,7 @@ const SurrenderScrutiny = (props) => {
               applicationDetails={applicationDetails}
               applicationData={{
                 ...applicationDetails?.applicationData,
-                workflowCode: applicationDetails?.applicationData?.workflowCode || "SURREND_OF_LICENSE",
+                workflowCode: applicationDetails?.applicationData?.workflowCode || "EXTENTION_OF_CLU_PERMISSION",
               }}
               closeModal={closeModal}
               submitAction={submitAction}
@@ -360,4 +352,4 @@ const SurrenderScrutiny = (props) => {
   );
 };
 
-export default SurrenderScrutiny;
+export default ExtensionCluCard;

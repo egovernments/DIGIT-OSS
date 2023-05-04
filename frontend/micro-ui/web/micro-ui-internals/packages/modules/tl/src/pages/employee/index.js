@@ -49,6 +49,9 @@ import CommunityInbox from "./ScrutinyBasic/AllServiceScrutiny/ExtensionCommunit
 import Completionscrutiny from "../employee/ScrutinyBasic/AllServiceScrutiny/CompletionLic/CompletionLic";
 import SurrenderLicScrutiny from "../employee/ScrutinyBasic/AllServiceScrutiny/SurrenderLic/SurrenderLic";
 import SurrenderScrutiny from "./ScrutinyBasic/AllServiceScrutiny/SurrenderLic/SurrenderCard";
+import ExtensionInbox from "./ScrutinyBasic/AllServiceScrutiny/ExtensionClu/Inbox";
+import BeneficialCard from "./ScrutinyBasic/AllServiceScrutiny/BeneficialInterest/BeneficialCard";
+import ExtensionCluCard from "./ScrutinyBasic/AllServiceScrutiny/ExtensionClu/ExtensionCluCard";
 
 const TLBreadCrumb = ({ location }) => {
   const { t } = useTranslation();
@@ -243,10 +246,10 @@ const EmployeeApp = ({ path, url, userType }) => {
             {/* <PrivateRoute path={`${path}/Loi`} component={Loi} /> */}
             <PrivateRoute path={`${path}/Records`} component={Records} />
             <PrivateRoute path={`${path}/RenewalScrutiny/:id`} component={RenewalScrutiny} />
-            <PrivateRoute path={`${path}/Beneficialscrutiny/:id`} component={Beneficialscrutiny} />
+            <PrivateRoute path={`${path}/BeneficialCard/:id`} component={BeneficialCard} />
             <PrivateRoute path={`${path}/TransferScrutiny/:id`} component={TransferScrutiny} />
             <PrivateRoute path={`${path}/SurrenderScrutiny/:id`} component={SurrenderScrutiny} />
-            <PrivateRoute path={`${path}/ExtensionClu/:id`} component={ExtensionClu} />
+            <PrivateRoute path={`${path}/ExtensionCluCard/:id`} component={ExtensionCluCard} />
             <PrivateRoute path={`${path}/ExtensionCom/:id`} component={ExtensionCom} />
             <PrivateRoute path={`${path}/LayoutPlanScritny/:id`} component={LayoutPlanScritny} />
             <PrivateRoute path={`${path}/StandardDesign/:id`} component={StandardDesignCard} />
@@ -261,6 +264,18 @@ const EmployeeApp = ({ path, url, userType }) => {
                 <StandardInbox
                   parentRoute={path}
                   businessService={["APPROVAL_OF_STANDARD"]}
+                  filterComponent="TL_INBOX_FILTER"
+                  initialStates={{}}
+                  isInbox={true}
+                />
+              )}
+            />
+            <PrivateRoute
+              path={`${path}/ExtensionInbox`}
+              component={(props) => (
+                <ExtensionInbox
+                  parentRoute={path}
+                  businessService={["EXTENTION_OF_CLU_PERMISSION"]}
                   filterComponent="TL_INBOX_FILTER"
                   initialStates={{}}
                   isInbox={true}

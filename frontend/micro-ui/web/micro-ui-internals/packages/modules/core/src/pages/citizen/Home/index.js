@@ -283,7 +283,7 @@ const Home = () => {
         value: "fourteen",
         links: [
           {
-            link: ``,
+            link: `/digit-ui/citizen/obps/CompletionLic`,
             i18nKey: t("Completion Certificate In Licence Colony"),
           },
         ],

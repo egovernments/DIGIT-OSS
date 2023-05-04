@@ -12,6 +12,9 @@ import TransferLicModal from "./TransferLicModal";
 import RevisedPlanModal from "./RevisedPlanModal";
 
 import StandardDesignModal from "./StandardDesignActionModal";
+import SurrenderActionModal from "./SurrenderActionModal";
+import BeneficialModal from "./ChangeInBenIntModal";
+import ExtensionCluModal from "./ExtensionCluModal";
 
 const ActionModal = (props) => {
   if (props?.businessService.includes("PT")) {
@@ -66,6 +69,9 @@ const ActionModal = (props) => {
   }
   if (props?.businessService.includes("CHANGE_OF_BENEFICIAL")) {
     return <BeneficialModal {...props} />;
+  }
+  if (props?.businessService.includes("EXTENTION_OF_CLU_PERMISSION")) {
+    return <ExtensionCluModal {...props} />;
   }
   // return <FSMActionModal {...props} />;
 };

@@ -19,6 +19,7 @@ const OBPSCard = () => {
     const AOSD_Role = ["CTP_HR","AO_HQ", "JD_HQ", "SD_HQ","DTCP_HR", "DTP_HQ", "JE_HQ", "STP_HQ", "ASST_JE_HQ", "EE_HQ", "PUD"]
     const CC_Role = ["CTP_HR","AO_HQ", "JD_HQ", "SD_HQ","DTCP_HR", "DTP_HQ", "JE_HQ", "STP_HQ", "ASST_JE_HQ", "EE_HQ", "PUD"]
     const CICS_Role = ["CTP_HR","AO_HQ", "JD_HQ", "SD_HQ","DTCP_HR", "DTP_HQ", "JE_HQ", "STP_HQ", "ASST_JE_HQ", "EE_HQ", "PUD"]
+    const EOCP_Role = ["CTP_HR","AO_HQ", "JD_HQ", "SD_HQ","DTCP_HR", "DTP_HQ", "JE_HQ", "STP_HQ", "ASST_JE_HQ", "EE_HQ", "PUD"]
     
     
     function isBankGuarrantee(){
@@ -121,6 +122,15 @@ const OBPSCard = () => {
           }
         }
         return isCICS
+      }
+      function isEXTENTIONSiteEmp(){
+        let isEOCP= false
+        for(let i=0; i<userRoles.length; i++){
+          if(EOCP_Role.includes(userRoles[i].code)){
+            isEOCP = true
+          }
+        }
+        return isEOCP
       }
         
     const [isStateLocalisation, setIsStateLocalisation] = useState(true);
@@ -333,6 +343,24 @@ const OBPSCard = () => {
           }
         ],
       };
+      const propsForExtentionModuleCard = {
+        Icon: <DocumentIconSolid />,
+        moduleName: t("EXTENTION_OF_CLU_PERMISSION_CARD"),
+        kpis: [
+          {
+            count: "-",
+            label: t("EXTENTION_OF_CLU_PERMISSION_CARD"),
+            link: `/digit-ui/employee/tl/ExtensionInbox`,
+          },
+        ],
+        links: [
+          {
+            count: "-",
+            label: t("ES_TITLE_INBOX"),
+            link: `/digit-ui/employee/tl/ExtensionInbox`,
+          }
+        ],
+      };
       
 
       const obpsSubModuleProps = []
@@ -358,6 +386,7 @@ const OBPSCard = () => {
       obpsSubModuleProps.push(propsForRENEWALModuleCard)
       obpsSubModuleProps.push(propsForCommiunitySiteoduleCard)
       obpsSubModuleProps.push(propsForCopletionModuleCard)
+      obpsSubModuleProps.push(propsForExtentionModuleCard)
         return (
         <React.Fragment>
         {

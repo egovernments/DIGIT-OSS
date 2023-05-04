@@ -62,9 +62,21 @@ function TransferLicense(props) {
       setValue("affidavitFixedChargesForAdm", apiData?.additionalDetails?.affidavitFixedChargesForAdm);
       setValue("affidavitForLicencedArea", apiData?.additionalDetails?.affidavitForLicencedArea);
       setValue("affidavitForLicencedArea", apiData?.additionalDetails?.affidavitOfAdmCharges);
-      setValue("amount", apiData?.additionalDetails?.amount);
+      setValue("amount", apiData?.newAdditionalDetails?.amount);
+      setValue("validUpto", apiData?.newAdditionalDetails?.validUpto);
+      setValue("renewalRequiredUpto", apiData?.newAdditionalDetails?.renewalRequiredUpto);
+      setValue("renewalRequiredUpto", apiData?.newAdditionalDetails?.renewalRequiredUpto);
+      setValue("colonizerName", apiData?.newAdditionalDetails?.colonizerName);
+      setValue("sectorNo", apiData?.newAdditionalDetails?.sectorNo);
+      setValue("colonyType", apiData?.newAdditionalDetails?.colonyType);
+      setValue("tehsil", apiData?.newAdditionalDetails?.tehsil);
+      setValue("district", apiData?.newAdditionalDetails?.district);
+      setValue("selectLicence", apiData?.newAdditionalDetails?.selectLicence);
+      setValue("revenueEstate", apiData?.newAdditionalDetails?.revenueEstate);
+      setValue("developmentPlan", apiData?.newAdditionalDetails?.developmentPlan);
       setValue("anyOtherDoc", apiData?.additionalDetails?.anyOtherDoc);
       setValue("areaInAcres", apiData?.additionalDetails?.areaInAcres);
+      setValue("areaAcres", apiData?.newAdditionalDetails?.areaAcres);
       setValue("boardResolutionDoc", apiData?.additionalDetails?.boardResolutionDoc);
       setValue("changeOfDeveloper", apiData?.additionalDetails?.changeOfDeveloper);
       setValue("colonizerSeekingTransferLicence", apiData?.additionalDetails?.colonizerSeekingTransferLicence);
@@ -122,12 +134,16 @@ function TransferLicense(props) {
     addressForCommunication: Colors.info,
     authPerson: Colors.info,
     emailForCommunication: Colors.info,
+    areaInAcres: Colors.info,
+    licenceTransferredFromLandOwn: Colors.info,
+    changeOfDeveloper: Colors.info,
+    transferredTitleOfLand: Colors.info,
   });
 
   const fieldIdList = [
     { label: "Licence No", key: "licenseNo" },
    
-    { label: "selectLicence", key: "selectLicence" },
+   
     { label: "selectLicence", key: "selectLicence" },
     {label:"Valid Upto",key:"validUpto"},
     {label:"Renewal required upto",key:"renewalRequiredUpto"},
@@ -142,6 +158,10 @@ function TransferLicense(props) {
     {label:"District",key:"district"},
     {label:"Standard drawing designs",key:"agreementDoc"},
     {label:"Any other Document",key:"anyOtherDoc"},
+    {label:"Area in Acres",key:"areaInAcres"},
+    {label:"Do you want to apply for Change of Developer",key:"changeOfDeveloper"},
+    {label:" Have you transferred title of land requiring amendment in land schedule without prior approval of competent authority",key:"transferredTitleOfLand"},
+    {label:" Have you transferred licence from licencee land owner in favor of collaborator without prior approval of competent authority",key:"licenceTransferredFromLandOwn"},
     
     { label: "Affidavit regarding the creation of 3rd party right on the licenced area", key: "affidavitForLicencedArea" },
     { label: "The colonizer seeking transfer of whole license/part license shall submit self-certification along with a certificate of the Chartered Accountant that a 15% profit margin is not exceeded from the project cost at the time of submission of application for transfer of license", key: "colonizerSeekingTransferLicence" },
@@ -379,7 +399,7 @@ function TransferLicense(props) {
               {errors?.validUpto && errors?.validUpto?.message}
             </h3>
           </div>
-          <div className="col col-3 ">
+          {/* <div className="col col-3 ">
             <FormControl>
               <h2>
                 Renewal required upto <span style={{ color: "red" }}>*</span>
@@ -407,8 +427,8 @@ function TransferLicense(props) {
             <h3 className="error-message" style={{ color: "red" }}>
               {errors?.renewalRequiredUpto && errors?.renewalRequiredUpto?.message}
             </h3>
-          </div>
-          <div className="col col-3 ">
+          </div> */}
+          {/* <div className="col col-3 ">
             <FormControl>
               <h2>Period of renewal(In Months)</h2>
             </FormControl>
@@ -431,7 +451,7 @@ function TransferLicense(props) {
             </div>
             </div>
 
-          </div>
+          </div> */}
           <div className="col col-3 ">
             <FormControl>
               <h2>
@@ -631,14 +651,14 @@ function TransferLicense(props) {
             <div>
               <ReportProblemIcon
                       style={{
-                        color: fieldIconColors.selectLicence,
+                        color: fieldIconColors.tehsil,
                       }}
                       onClick={() => {
-                        setOpennedModal("selectLicence");
-                        setLabelValue("Select Licence"),
+                        setOpennedModal("tehsil");
+                        setLabelValue("Tehsil"),
                           setSmShow(true),
                           console.log("modal open"),
-                          setFieldValue(apiData !== null ? apiData.selectLicence : null);
+                          setFieldValue(apiData !== null ? apiData?.newAdditionalDetails?.tehsil : null);
                       }}
                     ></ReportProblemIcon>
                     
@@ -656,14 +676,14 @@ function TransferLicense(props) {
           <div>
               <ReportProblemIcon
                       style={{
-                        color: fieldIconColors.tehsil,
+                        color: fieldIconColors.district,
                       }}
                       onClick={() => {
-                        setOpennedModal("tehsil");
-                        setLabelValue("Tehsil"),
+                        setOpennedModal("district");
+                        setLabelValue("District"),
                           setSmShow(true),
                           console.log("modal open"),
-                          setFieldValue(apiData !== null ? apiData.tehsil : null);
+                          setFieldValue(apiData !== null ? apiData?.newAdditionalDetails?.district : null);
                       }}
                     ></ReportProblemIcon>
                     
@@ -686,11 +706,11 @@ function TransferLicense(props) {
                         color: fieldIconColors.district,
                       }}
                       onClick={() => {
-                        setOpennedModal("district");
-                        setLabelValue("District"),
+                        setOpennedModal("selectType");
+                        setLabelValue("Select Type (Complete or Partial)"),
                           setSmShow(true),
                           console.log("modal open"),
-                          setFieldValue(apiData !== null ? apiData.district : null);
+                          setFieldValue(apiData !== null ? apiData?.additionalDetails?.selectType : null);
                       }}
                     ></ReportProblemIcon>
                     
@@ -713,17 +733,17 @@ function TransferLicense(props) {
                           
                           <div className={classes.fieldContainer}>
                        
-                            <input type="number" placeholder="" className="form-control" disabled {...register("araeInAcres")} />
+                            <input type="number" placeholder="" className="form-control" disabled {...register("areaInAcres")} />
                             <ReportProblemIcon
                               style={{
                                 color: fieldIconColors.developer,
                               }}
                               onClick={() => {
-                                setOpennedModal("Licence No");
-                                setLabelValue("Licence No"),
+                                setOpennedModal("areaInAcres");
+                                setLabelValue("Area in Acres"),
                                   setSmShow(true),
                                   console.log("modal open"),
-                                  setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
+                                  setFieldValue(personalinfo !== null ? apiData?.additionalDetails?.areaInAcres : null);
                               }}
                             ></ReportProblemIcon>
 
@@ -755,11 +775,11 @@ function TransferLicense(props) {
                   <label className="m-0 mx-2" for="No">No</label>
                   <ReportProblemIcon
                         style={{
-                          color: fieldIconColors.developer,
+                          color: fieldIconColors.licenceTransferredFromLandOwn,
                         }}
                         onClick={() => {
-                          setOpennedModal("Licence No");
-                          setLabelValue("Licence No"),
+                          setOpennedModal("licenceTransferredFromLandOwn");
+                          setLabelValue(" Have you transferred licence from licencee land owner in favor of collaborator without prior approval of competent authority"),
                             setSmShow(true),
                             console.log("modal open"),
                             setFieldValue(personalinfo !== null ? personalinfo.licenceTransferredFromLandOwn : null);
@@ -787,14 +807,14 @@ function TransferLicense(props) {
                   <label className="m-0 mx-2" for="No">No</label>
                   <ReportProblemIcon
                         style={{
-                          color: fieldIconColors.developer,
+                          color: fieldIconColors.transferredTitleOfLand,
                         }}
                         onClick={() => {
-                          setOpennedModal("Licence No");
-                          setLabelValue("Licence No"),
+                          setOpennedModal("transferredTitleOfLand");
+                          setLabelValue("Have you transferred title of land requiring amendment in land schedule without prior approval of competent authority"),
                             setSmShow(true),
                             console.log("modal open"),
-                            setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
+                            setFieldValue(apiData !== null ? apiData?.additionalDetails?.transferredTitleOfLand : null);
                         }}
                       ></ReportProblemIcon>
                 </div>
@@ -815,14 +835,14 @@ function TransferLicense(props) {
                   <label className="m-0 mx-2" for="No">No</label>
                   <ReportProblemIcon
                         style={{
-                          color: fieldIconColors.developer,
+                          color: fieldIconColors.changeOfDeveloper,
                         }}
                         onClick={() => {
-                          setOpennedModal("Licence No");
-                          setLabelValue("Licence No"),
+                          setOpennedModal("changeOfDeveloper");
+                          setLabelValue("Do you want to apply for Change of Developer"),
                             setSmShow(true),
                             console.log("modal open"),
-                            setFieldValue(personalinfo !== null ? personalinfo.licenceTransferredFromLandOwn : null);
+                            setFieldValue(personalinfo !== null ? apiData?.additionalDetails?.changeOfDeveloper : null);
                         }}
                       ></ReportProblemIcon>
                 </div>

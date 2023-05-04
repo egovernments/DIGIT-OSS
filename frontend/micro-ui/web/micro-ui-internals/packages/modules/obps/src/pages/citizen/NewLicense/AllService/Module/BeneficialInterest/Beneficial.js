@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Button } from "@material-ui/core";
+import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from "@material-ui/core";
 import FormControl from "@mui/material/FormControl";
 import { useForm } from "react-hook-form";
 import OutlinedInput from "@mui/material/OutlinedInput";
@@ -16,6 +16,7 @@ import { useLocation } from "react-router-dom";
 import Spinner from "../../../../../../components/Loader";
 import Visibility from "@mui/icons-material/Visibility";
 import { useTranslation } from "react-i18next";
+import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
 
 function Beneficial() {
   const [applicantId, setApplicantId] = useState("");
@@ -24,12 +25,19 @@ function Beneficial() {
   const [showToastError, setShowToastError] = useState({ label: "", error: false, success: false });
   const [beneficialInterestLabel, setBeneficialInterestLabel] = useState([]);
   const [loader, setLoader] = useState(false);
+  const [successDialog, setSuccessDialog] = useState(false);
+  const [applicationNumber, setApplicationNumber] = useState("");
   const { t } = useTranslation();
   const { pathname: url } = useLocation();
   const handleshowhide = (event) => {
     const getuser = event.target.value;
 
     setShowhide(getuser);
+  };
+
+  const handleClose = () => {
+    setSuccessDialog(false);
+    window.location.href = `/digit-ui/citizen`;
   };
 
   const {
@@ -39,7 +47,6 @@ function Beneficial() {
     control,
     watch,
     setValue,
-    resetField,
   } = useForm({});
 
   const changeOfDeveloperForm = [
@@ -242,8 +249,8 @@ function Beneficial() {
     setLoader(true);
     try {
       const postDistrict = {
-        changeBeneficial: [
-          {
+        changeBeneficial:
+          [{
             licenseNumber: data?.licenceNo || "",
             developerServiceCode: data?.developerServiceCode || "",
             paidAmount: data?.paidAmount || "",
@@ -259,8 +266,21 @@ function Beneficial() {
             shareholdingPatternCertificate: data?.shareholdingPatternCertificate || "",
             reraRegistrationCertificate: data?.reraRegistrationCertificate || "",
             fiancialCapacityCertificate: data?.fiancialCapacityCertificate || "",
-          },
-        ],
+            newAdditionalDetails: {
+              selectLicence: data?.selectLicence,
+              validUpto: data?.validUpto,
+              renewalRequiredUpto: data?.renewalRequiredUpto,
+              colonizerName: data?.colonizerName,
+              periodOfRenewal: data?.periodOfRenewal,
+              colonyType: data?.colonyType,
+              areaAcres: data?.areaAcres,
+              sectorNo: data?.sectorNo,
+              revenueEstate: data?.revenueEstate,
+              developmentPlan: data?.developmentPlan,
+              tehsil: data?.tehsil,
+              district: data?.district
+          }
+          }],
         RequestInfo: {
           apiId: "Rainmaker",
           msgId: "1669293303096|en_IN",
@@ -271,7 +291,16 @@ function Beneficial() {
       const Resp = await axios.post("/tl-services/beneficial/_create", postDistrict);
       setBeneficialInterestLabel(Resp.data);
       setLoader(false);
-      setShowToastError({ label: "Beneficial Created Successfully", error: false, success: true });
+
+      if (Resp?.data?.changeBeneficial?.length) {
+        setShowToastError({ label: "Beneficial Created Successfully", error: false, success: true });
+
+        setSuccessDialog(true);
+        setApplicationNumber(Resp?.data?.changeBeneficial?.[0]?.applicationNumber || "");
+      } else {
+        setShowToastError({ label: Resp?.data?.message, error: true, success: false });
+      }
+
       // setApplicationNumber(Resp.data.changeBeneficial.applicationNumber);
     } catch (error) {
       console.log("Submit Error ====> ", err.message);
@@ -317,6 +346,7 @@ function Beneficial() {
       setLoader(false);
       setShowToastError({ label: "Beneficial Interest Updated Successfully", error: false, success: true });
       // setApplicationNumber(Resp.data.changeBeneficial.applicationNumber);
+      handleClose();
     } catch (error) {
       console.log("Submit Error ====> ", err.message);
       setLoader(false);
@@ -361,6 +391,7 @@ function Beneficial() {
       setValue("paidAmount", Resp?.data?.changeBeneficial?.[0]?.paidAmount);
       setValue("areaInAcres", Resp?.data?.changeBeneficial?.[0]?.areaInAcres);
       console.log("scene", Resp?.data?.changeBeneficial?.[0]?.areaInAcres);
+
       setLoader(false);
       setShowhide(Resp?.data?.changeBeneficial?.[0]?.developerServiceCode);
     } catch (err) {
@@ -420,6 +451,48 @@ function Beneficial() {
     }
   };
 
+
+  const pay = async () => {
+  
+    try{
+      const body = {
+        "RequestInfo":{
+          "apiId": "Rainmaker",
+          "ver": ".01",
+          "ts": 0,
+          "action": "_update",
+          "did": "1",
+          "key": "",
+          "msgId": "20170310130900|en_IN",
+          "authToken": token,
+          "correlationId": null,
+           "userInfo": userInfo
+        }
+      }
+  
+      const response = await axios.post(`/tl-services/beneficial/_pay?licenseNumber=${watch('licenceNo')}`,body);
+
+      console.log("log...",response);
+
+      if (response?.data?.changeBeneficial?.length) {
+        if(response?.data?.changeBeneficial?.redirectUrl){
+          window.open(response?.data?.changeBeneficial?.redirectUrl);
+        }
+      } else {
+        setShowToastError({ label: response?.data?.message, error: true, success: false });
+      }
+
+      // setLoader(false);
+      // setShowToastError({ label: "Beneficial Interest Updated Successfully", error: false, success: true });
+
+    } catch (err) {
+      console.log("Submit Error ====> ", err.message);
+      setLoader(false);
+      setShowToastError({ label: err.message, error: true, success: false });
+    }
+
+  }
+
   return (
     <div>
       <form onSubmit={handleSubmit(formSubmitHandler)}>
@@ -442,15 +515,7 @@ function Beneficial() {
             <div className="">
               <div className="row">
                 <div className="col-12 p-3">
-                  <SearchLicenceComp
-                    watch={watch}
-                    register={register}
-                    control={control}
-                    setLoader={setLoader}
-                    errors={errors}
-                    setValue={setValue}
-                    resetField={resetField}
-                  />
+                  <SearchLicenceComp watch={watch} register={register} control={control} setLoader={setLoader} errors={errors} setValue={setValue} />
                 </div>
 
                 {/* <FormControl>
@@ -551,7 +616,7 @@ function Beneficial() {
                                   <div className="d-flex justify-content-center">
                                     <label title="Upload Document" for={item.selectorKey}>
                                       {" "}
-                                      <FileUpload color="primary" for={item.selectorKey} />
+                                      <FileUpload style={{ cursor: "pointer" }} color="info" className="icon" for={item.selectorKey} />
                                     </label>
                                     <input
                                       id={item.selectorKey}
@@ -563,7 +628,7 @@ function Beneficial() {
 
                                     {watch(item.fileName) && (
                                       <a onClick={() => getDocShareholding(watch(item.fileName), setLoader)} className="btn btn-sm ">
-                                        <Visibility />
+                                        <Visibility color="info" className="icon" />
                                       </a>
                                     )}
                                   </div>
@@ -573,7 +638,7 @@ function Beneficial() {
                                   <div>
                                     <label title="Upload Document" for={item.selectorKey}>
                                       {" "}
-                                      <FileUpload color="primary" for={item.selectorKey} />
+                                      <FileUpload style={{ cursor: "pointer" }} color="info" className="icon" for={item.selectorKey} />
                                     </label>
                                     <input
                                       id={item.selectorKey}
@@ -624,7 +689,7 @@ function Beneficial() {
                                   <div className="d-flex justify-content-center">
                                     <label title="Upload Document" for={item.selectorKey}>
                                       {" "}
-                                      <FileUpload color="primary" for={item.selectorKey} />
+                                      <FileUpload style={{ cursor: "pointer" }} color="info" className="icon" for={item.selectorKey} />
                                     </label>
                                     <input
                                       id={item.selectorKey}
@@ -636,7 +701,7 @@ function Beneficial() {
 
                                     {watch(item.fileName) && (
                                       <a onClick={() => getDocShareholding(watch(item.fileName), setLoader)} className="btn btn-sm ">
-                                        <Visibility />
+                                        <Visibility color="info" className="icon" />
                                       </a>
                                     )}
                                   </div>
@@ -646,7 +711,7 @@ function Beneficial() {
                                   <div>
                                     <label title="Upload Document" for={item.selectorKey}>
                                       {" "}
-                                      <FileUpload color="primary" for={item.selectorKey} />
+                                      <FileUpload style={{ cursor: "pointer" }} color="info" className="icon" for={item.selectorKey} />
                                     </label>
                                     <input
                                       id={item.selectorKey}
@@ -698,7 +763,7 @@ function Beneficial() {
                                   <div className="d-flex justify-content-center">
                                     <label title="Upload Document" for={item.selectorKey}>
                                       {" "}
-                                      <FileUpload color="primary" for={item.selectorKey} />
+                                      <FileUpload style={{ cursor: "pointer" }} color="info" className="icon" for={item.selectorKey} />
                                     </label>
                                     <input
                                       id={item.selectorKey}
@@ -710,7 +775,7 @@ function Beneficial() {
 
                                     {watch(item.fileName) && (
                                       <a onClick={() => getDocShareholding(watch(item.fileName), setLoader)} className="btn btn-sm ">
-                                        <Visibility />
+                                        <Visibility color="info" className="icon" />
                                       </a>
                                     )}
                                   </div>
@@ -720,7 +785,7 @@ function Beneficial() {
                                   <div>
                                     <label title="Upload Document" for={item.selectorKey}>
                                       {" "}
-                                      <FileUpload color="primary" for={item.selectorKey} />
+                                      <FileUpload style={{ cursor: "pointer" }} color="info" className="icon" for={item.selectorKey} />
                                     </label>
                                     <input
                                       id={item.selectorKey}
@@ -751,7 +816,7 @@ function Beneficial() {
                   </div>
                 </div>
                 <div class="col-sm-12 text-right mt-3">
-                  <button id="btnSearch" type="submit" class="btn btn-primary btn-md center-block" style={{ marginRight: "5px" }}>
+                  <button onClick={pay} id="btnSearch" type="button" class="btn btn-primary btn-md center-block" style={{ marginRight: "5px" }}>
                     Pay
                   </button>{" "}
                   &nbsp;
@@ -778,6 +843,29 @@ function Beneficial() {
           }}
         />
       )} */}
+
+      <Dialog open={successDialog} onClose={handleClose} aria-labelledby="alert-dialog-title" aria-describedby="alert-dialog-description">
+        <DialogTitle id="alert-dialog-title">Change In Beneficial Interest Submission</DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+            <p>
+              Your change in beneficial interest is submitted successfully{" "}
+              <span>
+                <CheckCircleOutlineIcon style={{ color: "blue", variant: "filled" }} />
+              </span>
+            </p>
+            <p>
+              Please Note down your Application Number <span style={{ padding: "5px", color: "blue" }}>{applicationNumber}</span> for further
+              assistance
+            </p>
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose} autoFocus>
+            Ok
+          </Button>
+        </DialogActions>
+      </Dialog>
     </div>
   );
 }

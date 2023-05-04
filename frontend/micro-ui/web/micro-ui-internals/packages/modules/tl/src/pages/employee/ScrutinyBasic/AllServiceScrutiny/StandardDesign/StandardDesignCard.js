@@ -73,14 +73,14 @@ const authToken = Digit.UserService.getUser()?.access_token || null;
         return response?.data;
       });
    
-      setScrutinyDetails(Resp?.approvalStandardResponse?.[0]);
-      setStatus(Resp?.approvalStandardResponse?.[0]?.status);
+      setScrutinyDetails(Resp?.ApprovalStandardEntity?.[0]);
+      setStatus(Resp?.ApprovalStandardEntity?.[0]?.status);
 
-      console.log("transfer001822",Resp?.approvalStandardResponse?.[0]);
-      setApplicationData(Resp?.approvalStandardResponse?.[0]);
+      console.log("transfer001822",Resp?.ApprovalStandardEntity?.[0]);
+      setApplicationData(Resp?.ApprovalStandardEntity?.[0]);
       setApplicationDetails({
-        applicationData: Resp?.approvalStandardResponse?.[0],
-        workflowCode: Resp?.approvalStandardResponse?.[0].businessService
+        applicationData: Resp?.ApprovalStandardEntity?.[0],
+        workflowCode: Resp?.ApprovalStandardEntity?.[0].businessService
       })
     } catch (error) {
       console.log(error);
@@ -163,7 +163,7 @@ const authToken = Digit.UserService.getUser()?.access_token || null;
           userInfo: userInfo
       }
       }
-      const response = await axios.post("/tl-services/ApprovalStandard/_update",body);
+      const response = await axios.post("/tl-services/_ApprovalStandard/_update",body);
       console.log("Update API Response ====> ", response.data);
     } catch (error) {
       console.log("Update Error ===> ", error.message)
