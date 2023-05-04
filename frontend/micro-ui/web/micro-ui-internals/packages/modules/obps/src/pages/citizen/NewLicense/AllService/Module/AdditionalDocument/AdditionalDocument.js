@@ -8,11 +8,12 @@ import FileUpload from "@mui/icons-material/FileUpload";
 import CusToaster from "../../../../../../components/Toaster";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import { useTranslation } from "react-i18next";
+import { getDocShareholding } from "../../../docView/docView.help";
 
 const selectTypeData = [
-  { label: "Application Number", value: "APPLICATIONNUMBER" },
-  { label: "LOI Number", value: "LOINUMBER" },
-  { label: "Licence Number", value: "LICENCENUMBER" },
+  { label: "Application Number", value: "applicationNumber" },
+  { label: "LOI Number", value: "loiNumber" },
+  { label: "Licence Number", value: "licenceNumber" },
 ];
 
 const AdditionalDocument = () => {
@@ -47,14 +48,61 @@ const AdditionalDocument = () => {
       ],
     },
   });
+
   const { fields, append, remove } = useFieldArray({
     control,
     name: "DocumentsDetails",
   });
 
-  const additionalDoc = (data) => {
-    console.log("data", data);
-    data["selectLicence"] = data?.selectLicence?.label;
+  const additionalDoc = async (data) => {
+    const token = window?.localStorage?.getItem("token");
+    setLoader(true);
+
+    data["businessService"] = data?.allservices?.value;
+    data["type"] = data?.numberType?.value;
+
+    if (data?.numberType?.value == "loiNumber") {
+      data["loiNumber"] = data?.number;
+      data["applicationNumber"] = "";
+      data["licenceNumber"] = "";
+    } else if (data?.numberType?.value == "applicationNumber") {
+      data["applicationNumber"] = data?.number;
+      data["loiNumber"] = "";
+      data["licenceNumber"] = "";
+    } else if (data?.numberType?.value == "licenceNumber") {
+      data["licenceNumber"] = data?.number;
+      data["applicationNumber"] = "";
+      data["loiNumber"] = "";
+    }
+    delete data?.numberType;
+    delete data?.allservices;
+    delete data?.number;
+
+    const payload = {
+      RequestInfo: {
+        apiId: "Rainmaker",
+        ver: "v1",
+        ts: 0,
+        action: "_search",
+        did: "",
+        key: "",
+        msgId: "090909",
+        requesterId: "",
+        authToken: token,
+        userInfo: userInfo,
+      },
+      AddtionalDocuments: {
+        ...data,
+      },
+    };
+    try {
+      const Resp = await axios.post("/tl-services/_additionalDocuments/_create", payload);
+      setLoader(false);
+      // setApplicationNumber(Resp.data.changeBeneficial.applicationNumber);
+    } catch (error) {
+      setLoader(false);
+      return error;
+    }
   };
 
   const getAllservices = async (val) => {
@@ -287,7 +335,7 @@ const AdditionalDocument = () => {
                             {index > 0 && (
                               <button type="button" style={{ float: "right" }} className="btn btn-primary" onClick={() => remove(index)}>
                                 {`${t("AD_REMOVE")}`}
-                                Remove
+                                {/* Remove */}
                               </button>
                             )}
                           </div>
@@ -354,7 +402,8 @@ const AdditionalDocument = () => {
                 id="btnSearch"
                 class=""
               >
-                Submit
+                {`${t("AD_SUBMIT")}`}
+                {/* Submit */}
               </button>
             </div>
           </div>

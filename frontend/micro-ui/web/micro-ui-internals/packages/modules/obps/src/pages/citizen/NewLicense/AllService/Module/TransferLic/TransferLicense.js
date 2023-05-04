@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import axios from "axios";
 import { Button } from "react-bootstrap";
@@ -34,6 +34,7 @@ const Transferlicence = () => {
   const [getError, setError] = useState("");
   const [applicationNumber, setApplicationNumber] = useState("");
   const [open, setOpen] = useState(false);
+  const userInfo = Digit.UserService.getUser()?.info || {};
 
   const {
     register,
@@ -53,7 +54,6 @@ const Transferlicence = () => {
     delete data?.licenceNo;
     setLoader(true);
     const token = window?.localStorage?.getItem("token");
-    const userInfo = Digit.UserService.getUser()?.info || {};
     const postDistrict = {
       RequestInfo: {
         apiId: "Rainmaker",
@@ -137,7 +137,7 @@ const Transferlicence = () => {
     setLoader(true);
     const licNo = watch("licenceNo");
     const token = window?.localStorage?.getItem("token");
-    const userInfo = Digit.UserService.getUser()?.info || {};
+
     const postDistrict = {
       RequestInfo: {
         apiId: "Rainmaker",
@@ -163,6 +163,51 @@ const Transferlicence = () => {
       setLoader(false);
     }
   };
+
+  const getTransferLicenceDetails = async (id) => {
+    setLoader(true);
+    const token = window?.localStorage?.getItem("token");
+    const data = {
+      RequestInfo: {
+        apiId: "Rainmaker",
+        ver: "v1",
+        ts: 0,
+        action: "_search",
+        did: "",
+        key: "",
+        msgId: "090909",
+        requesterId: "",
+        authToken: token,
+        userInfo: userInfo,
+      },
+    };
+    try {
+      const Resp = await axios.post(`/tl-services/_TransferOfLicenseRequest/_search?applicationNumber=${id}`, data);
+      setLoader(false);
+      const resData = Resp?.data?.transfer[0]?.additionalDetails;
+      console.log(Resp?.data?.transfer[0]?.additionalDetails);
+      Object?.keys(resData)?.map((item) => {
+        setValue(item, resData[item]);
+      });
+      setValue("selectType", { label: resData?.selectType, value: resData?.selectType });
+    } catch (error) {
+      setLoader(false);
+      return error.message;
+    }
+  };
+
+  const getApplicationId = (url) => {
+    const urlParams = new URLSearchParams(url.split("?")[1]);
+    return urlParams.get("id");
+  };
+
+  const id = getApplicationId(window.location.href);
+
+  useEffect(() => {
+    if (id) {
+      getTransferLicenceDetails(id);
+    }
+  }, [id]);
 
   return (
     <div>

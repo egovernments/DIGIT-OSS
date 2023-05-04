@@ -14,8 +14,10 @@ import { VALIDATION_SCHEMA } from "../../../../utils/schema/step1";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import CusToaster from "../../../../components/Toaster";
 import FileUpload from "@mui/icons-material/FileUpload";
+import { useTranslation } from "react-i18next";
 
 const ApllicantFormStep1 = (props) => {
+  const { t } = useTranslation();
   const history = useHistory();
   const location = useLocation();
   const userInfo = Digit.UserService.getUser()?.info || {};
@@ -230,7 +232,10 @@ const ApllicantFormStep1 = (props) => {
       <form onSubmit={handleSubmit(ApplicantFormSubmitHandlerForm)}>
         <div className="card" style={{ width: "126%", border: "5px solid #1266af" }}>
           <div style={{ display: "flex", justifyContent: "space-between" }}>
-            <h4 style={{ fontSize: "25px", marginLeft: "21px" }}>New Licence Application </h4>
+            <h4 style={{ fontSize: "25px", marginLeft: "21px" }}>
+              {`${t("NWL_NEW_LICENCE_APPLICATION")}`}
+              {/* New Licence Application  */}
+            </h4>
             {applicantId && <h6 style={{ display: "flex", alignItems: "center" }}>Application No: {applicantId}</h6>}
           </div>
           {getData?.caseNumber && (
@@ -244,14 +249,19 @@ const ApllicantFormStep1 = (props) => {
             </div>
           )}
           <div className="card" style={{ width: "126%", marginLeft: "-2px", paddingRight: "10px", marginTop: "40px", marginBottom: "10px" }}>
-            <h5 className="card-title fw-bold">Developer Information</h5>
+            <h5 className="card-title fw-bold">
+              {`${t("NWL_DEVELOPER_INFORMATION")}`}
+              {/* Developer Information */}
+            </h5>
             <div className="row-12">
               <div className="col md={4} xxl lg-4">
                 {developerDataLabel?.addInfo?.showDevTypeFields != "Individual" &&
                   developerDataLabel?.addInfo?.showDevTypeFields != "Proprietorship Firm" && (
                     <FormControl>
                       <h2>
-                        Name <span style={{ color: "red" }}>*</span>
+                        {`${t("NWL_APPLICANT_DEVELOPER_NAME")}`}
+                        {/* Name  */}
+                        <span style={{ color: "red" }}>*</span>
                       </h2>
                       <input
                         type="text"
@@ -271,7 +281,9 @@ const ApllicantFormStep1 = (props) => {
                 &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp;
                 <FormControl>
                   <h2>
-                    Address<span style={{ color: "red" }}>*</span>
+                    {`${t("NWL_APPLICANT_DEVELOPER_ADDRESS")}`}
+                    {/* Address */}
+                    <span style={{ color: "red" }}>*</span>
                   </h2>
 
                   <Controller
@@ -299,7 +311,9 @@ const ApllicantFormStep1 = (props) => {
                 &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp;
                 <FormControl>
                   <h2>
-                    EmailId<span style={{ color: "red" }}>*</span>
+                    {`${t("NWL_APPLICANT_DEVELOPER_EMAILID")}`}
+                    {/* EmailId */}
+                    <span style={{ color: "red" }}>*</span>
                   </h2>
 
                   <Controller
@@ -326,7 +340,10 @@ const ApllicantFormStep1 = (props) => {
                 </FormControl>
                 &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp;
                 <FormControl>
-                  <h2>Developer Type</h2>
+                  <h2>
+                    {`${t("NWL_APPLICANT_DEVELOPER_TYPE")}`}
+                    {/* Developer Type */}
+                  </h2>
 
                   <Controller
                     control={control}
@@ -361,7 +378,9 @@ const ApllicantFormStep1 = (props) => {
                   developerDataLabel?.addInfo?.showDevTypeFields != "Proprietorship Firm" && (
                     <FormControl>
                       <h2>
-                        CIN Number<span style={{ color: "red" }}>*</span>
+                        {`${t("NWL_APPLICANT_CIN_NUMBER")}`}
+                        {/* CIN Number */}
+                        <span style={{ color: "red" }}>*</span>
                       </h2>
 
                       <Controller
@@ -390,7 +409,9 @@ const ApllicantFormStep1 = (props) => {
                   developerDataLabel?.addInfo?.showDevTypeFields != "Partnership Firm" && (
                     <FormControl>
                       <h2>
-                        PAN Number<span style={{ color: "red" }}>*</span>
+                        {`${t("NWL_APPLICANT_PAN_NUMBER")}`}
+                        {/* PAN Number */}
+                        <span style={{ color: "red" }}>*</span>
                       </h2>
 
                       <Controller
@@ -417,7 +438,9 @@ const ApllicantFormStep1 = (props) => {
                 {developerDataLabel?.addInfo?.showDevTypeFields != "Company" && (
                   <FormControl>
                     <h2>
-                      GST Number<span style={{ color: "red" }}>*</span>
+                      {`${t("NWL_APPLICANT_GST_NUMBER")}`}
+                      {/* GST Number */}
+                      <span style={{ color: "red" }}>*</span>
                     </h2>
 
                     <Controller
@@ -448,7 +471,9 @@ const ApllicantFormStep1 = (props) => {
                   developerDataLabel?.addInfo?.showDevTypeFields != "Partnership Firm" && (
                     <FormControl>
                       <h2>
-                        LLP Number<span style={{ color: "red" }}>*</span>
+                        {`${t("NWL_APPLICANT_LLP_NUMBER")}`}
+                        {/* LLP Number */}
+                        <span style={{ color: "red" }}>*</span>
                       </h2>
 
                       <Controller
@@ -479,7 +504,11 @@ const ApllicantFormStep1 = (props) => {
               developerDataLabel?.addInfo?.showDevTypeFields != "Hindu Undivided Family" &&
               developerDataLabel?.addInfo?.showDevTypeFields != "Proprietorship Firm" && (
                 <div>
-                  <h5 className="card-title fw-bold"> Director Information as per MCA</h5>
+                  <h5 className="card-title fw-bold">
+                    {`${t("NWL_APPLICANT_1_DIRECTOR_INFOMATION_AS_PER_MCA")}`}
+
+                    {/* Director Information as per MCA */}
+                  </h5>
                   <div className="card-body">
                     <div className="table-bd">
                       <table className="table table-bordered">
@@ -508,7 +537,10 @@ const ApllicantFormStep1 = (props) => {
                     </div>
                   </div>
 
-                  <h5 className="card-title fw-bold">Directors Information as per developer</h5>
+                  <h5 className="card-title fw-bold">
+                    {`${t("NWL_APPLICANT_1_DIRECTOR_INFOMATION_AS_PER_DEVELOPER")}`}
+                    {/* Directors Information as per developer */}
+                  </h5>
                   <div className="card-body">
                     <div className="table-bd">
                       <table className="table table-bordered">
@@ -553,7 +585,10 @@ const ApllicantFormStep1 = (props) => {
                     </div>
                   </div>
 
-                  <h5 className="card-title fw-bold">Shareholding Patterns</h5>
+                  <h5 className="card-title fw-bold">
+                    {`${t("NWL_APPLICANT_SHAREHOLDING_PATTERNS")}`}
+                    {/* Shareholding Patterns */}
+                  </h5>
                   <div className="card-body">
                     <div className="table-bd">
                       <table className="table table-bordered">
@@ -562,7 +597,6 @@ const ApllicantFormStep1 = (props) => {
                             <th>Sr. No</th>
                             <th>Name</th>
                             <th>Designition</th>
-
                             <th>Percentage</th>
                             <th>View Document</th>
                           </tr>
@@ -604,12 +638,17 @@ const ApllicantFormStep1 = (props) => {
           </div>
 
           <div classname="card" style={{ marginLeft: "-2px", paddingRight: "10px", marginTop: "5px", marginBottom: "52px" }}>
-            <h5 className="card-title fw-bold">Authorized Person Information </h5>
+            <h5 className="card-title fw-bold">
+              {`${t("NWL_AUTHORIZED PERSON INFORMATION")}`}
+              {/* Authorized Person Information */}
+            </h5>
             <div className="row-12">
               <div className="col md={3} xxl lg-3">
                 <FormControl>
                   <h2>
-                    Name <span style={{ color: "red" }}>*</span>
+                    {`${t("NWL_APPLICANT_AUTHORIZED_NAME")}`}
+                    {/* Name  */}
+                    <span style={{ color: "red" }}>*</span>
                   </h2>
 
                   <input type="text" className="form-control" placeholder="N/A" disabled {...register("authorizedName")} />
@@ -620,7 +659,9 @@ const ApllicantFormStep1 = (props) => {
                 &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp;
                 <FormControl>
                   <h2>
-                    Mobile No.<span style={{ color: "red" }}>*</span>
+                    {`${t("NWL_APPLICANT_AUTHORIZED_MOBILE_NO")}`}
+                    {/* Mobile No. */}
+                    <span style={{ color: "red" }}>*</span>
                   </h2>
 
                   <Controller
@@ -648,7 +689,9 @@ const ApllicantFormStep1 = (props) => {
                 &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp;
                 <FormControl>
                   <h2>
-                    Emailid for Authorized Signatory<span style={{ color: "red" }}>*</span>
+                    {`${t("NWL_APPLICANT_EMAILID_FOR_AUTHORIZED_SINGNATORY")}`}
+                    {/* Emailid for Authorized Signatory */}
+                    <span style={{ color: "red" }}>*</span>
                   </h2>
 
                   <Controller
@@ -675,7 +718,10 @@ const ApllicantFormStep1 = (props) => {
                 </FormControl>
                 &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp;
                 <FormControl>
-                  <h2>Pan No.</h2>
+                  <h2>
+                    {`${t("NWL_APPLICANT_AUTHORIZED_PAN_NUMBER")}`}
+                    {/* Pan No. */}
+                  </h2>
 
                   <Controller
                     control={control}
@@ -716,7 +762,9 @@ const ApllicantFormStep1 = (props) => {
                   id="btnSearch"
                   class=""
                 >
-                  View Upload Digital Signature <VisibilityIcon color="info" className="icon" />
+                  {`${t("NWL_VIEW_UPLOAD_DIGITAL_SIGNATURE ")}`}
+                  {/* View Upload Digital Signature  */}
+                  <VisibilityIcon color="info" className="icon" />
                 </div>
               </FormControl>
               &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp;
@@ -731,7 +779,9 @@ const ApllicantFormStep1 = (props) => {
                   id="btnSearch"
                   class=""
                 >
-                  View Upload Board Resolution <VisibilityIcon color="info" className="icon" />
+                  {`${t("NWL_VIEW_UPLOAD_BOARD_RESOLUTION")}`}
+                  {/* View Upload Board Resolution */}
+                  <VisibilityIcon color="info" className="icon" />
                 </div>
               </FormControl>
               &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp;
@@ -749,7 +799,9 @@ const ApllicantFormStep1 = (props) => {
                       id="btnSearch"
                       class=""
                     >
-                      View MOA Document <VisibilityIcon color="info" className="icon" />
+                      {`${t("NWL_VIEW_MOA_DOCUMENT ")}`}
+                      {/* View MOA Document  */}
+                      <VisibilityIcon color="info" className="icon" />
                     </div>
                   </FormControl>
                 )}
@@ -757,7 +809,10 @@ const ApllicantFormStep1 = (props) => {
           </div>
           <div className="row mt-4">
             <div className="col col-4">
-              <h2 style={{ display: "flex" }}>Upload Board resolution </h2>
+              <h2 style={{ display: "flex" }}>
+                {`${t("NWL_UPLOAD_BOARD_RESOLUTION")}`}
+                {/* Upload Board resolution  */}
+              </h2>
 
               <label>
                 <FileUpload style={{ cursor: "pointer" }} color="primary" />
@@ -775,7 +830,10 @@ const ApllicantFormStep1 = (props) => {
               )}
             </div>
             <div className="col col-4">
-              <h2 style={{ display: "flex" }}>Consent of Architect along with Qualification documents</h2>
+              <h2 style={{ display: "flex" }}>
+                {`${t("NWL_CONSENT_OF_ARCHITECT_ALONG")}`}
+                {/* Consent of Architect along with Qualification documents */}
+              </h2>
               <label>
                 <FileUpload style={{ cursor: "pointer" }} color="primary" />
                 <input
@@ -793,7 +851,10 @@ const ApllicantFormStep1 = (props) => {
               )}
             </div>
             <div className="col col-4">
-              <h2 style={{ display: "flex" }}>Consent of Engineer along with Qualification documents</h2>
+              <h2 style={{ display: "flex" }}>
+                {`${t("NWL_CONSENT_OF_ENGINEER")}`}
+                {/* Consent of Engineer along with Qualification documents */}
+              </h2>
               <label>
                 <FileUpload style={{ cursor: "pointer" }} color="primary" />
                 <input
@@ -830,7 +891,8 @@ const ApllicantFormStep1 = (props) => {
                 id="flexCheckDefault"
               />
               <label className="checkbox" for="flexCheckDefault">
-                The information fetched from developer registration is updated
+                {`${t("NWL_THE_INFORMATION_FETCHED")}`}
+                {/* The information fetched from developer registration is updated */}
                 <span className="text-danger">
                   <b>*</b>
                 </span>
@@ -841,7 +903,8 @@ const ApllicantFormStep1 = (props) => {
           <div class="row">
             <div class="col-sm-12 text-right">
               <button disabled={getDisable} type="submit" id="btnSearch" class="btn btn-primary btn-md center-block">
-                Save and Continue
+                {`${t("NWL_SAVE_AND_CONTINUE")}`}
+                {/* Save and Continue */}
               </button>
             </div>
           </div>

@@ -189,6 +189,10 @@ const Home = () => {
             link: `/digit-ui/citizen/obps/TransferLicense`,
             i18nKey: t("Transfer of License"),
           },
+          {
+            link: `/digit-ui/citizen/tl/TransferLicense/my-applications`,
+            i18nKey: t("My applications"),
+          },
         ],
       },
       {
