@@ -126,6 +126,7 @@ export const SelectPaymentType = (props) => {
           name: name || userInfo?.info?.name,
           mobileNumber: mobileNumber || userInfo?.info?.mobileNumber,
           tenantId: tenantId,
+          emailId: userInfo?.info?.emailId,
         },
         // success
         callbackUrl: `http://103.166.62.118:80/tl-services/new/transaction/v1/_redirect`,
