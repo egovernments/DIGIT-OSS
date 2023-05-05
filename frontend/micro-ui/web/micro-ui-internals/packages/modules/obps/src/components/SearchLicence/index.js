@@ -7,7 +7,7 @@ import { useTranslation } from "react-i18next";
 // import ReactMultiSelect from "../../../../../../../../../react-components/src/atoms/ReactMultiSelect";
 import ReactMultiSelect from "../../../../../react-components/src/atoms/ReactMultiSelect";
 
-const SearchLicenceComp = ({ watch, register, control, setLoader, errors, setValue, resetField, apiData, comp }) => {
+const SearchLicenceComp = ({ watch, register, control, setLoader, errors, setValue, resetField, apiData, comp, getData }) => {
   const { t } = useTranslation();
   const userInfo = Digit.UserService.getUser()?.info || {};
   const [showField, setShowField] = useState({ select: false, other: false });
@@ -39,8 +39,6 @@ const SearchLicenceComp = ({ watch, register, control, setLoader, errors, setVal
         `/tl-services/_additionalDocuments/_search?licenceNumber=${licenceNumber}&loiNumber=${loiNumber}&applicationNumber=${applicationNumber}`,
         data
       );
-
-      console.log("resp===", Resp?.data);
     } catch (error) {
       setLoader(false);
       return error.message;
@@ -49,7 +47,6 @@ const SearchLicenceComp = ({ watch, register, control, setLoader, errors, setVal
 
   const getLicenceDetails = async () => {
     setLoader(true);
-    console.log("watch", watch("numberType"));
     const data = {
       Flag: watch("numberType")?.value == "LICENCENUMBER" ? 3 : 1,
       SearchParam: apiData?.length ? watch("licenceNo")?.value : watch("licenceNo"),
@@ -61,11 +58,11 @@ const SearchLicenceComp = ({ watch, register, control, setLoader, errors, setVal
         .map((item) => {
           return { label: item.Text.split(" |")[0], value: item };
         });
-      console.log("lllll====", filteredData);
       setShowField({ select: true, other: false });
       const setLicData = filteredData?.map(function (data) {
         return { value: data?.value?.Text, label: data?.label };
       });
+
       setLicenceData(setLicData);
       setLoader(false);
     } catch (error) {
@@ -75,18 +72,37 @@ const SearchLicenceComp = ({ watch, register, control, setLoader, errors, setVal
   };
 
   const setTextValues = (val) => {
-    const grantDate = val.value?.split("|")?.[10];
-    const validDate = val.value?.split("|")?.[11];
+    console.log("val", val);
+    // if (val) {
+    const grantDate = val?.value?.split("|")?.[10];
+    const validDate = val?.value?.split("|")?.[11];
     setShowField({ select: true, other: true });
-    setValue("district", val.value?.split("|")?.[3]);
-    setValue("colonyType", val.value?.split("|")?.[4]);
-    setValue("colonizerName", val.value?.split("|")?.[5]);
-    setValue("developmentPlan", val.value?.split("|")?.[6]);
-    setValue("sectorNo", val.value?.split("|")?.[7]);
-    setValue("areaAcres", val.value?.split("|")?.[9]);
+    setValue("district", val?.value?.split("|")?.[3]);
+    setValue("colonyType", val?.value?.split("|")?.[4]);
+    setValue("colonizerName", val?.value?.split("|")?.[5]);
+    setValue("developmentPlan", val?.value?.split("|")?.[6]);
+    setValue("sectorNo", val?.value?.split("|")?.[7]);
+    setValue("areaAcres", val?.value?.split("|")?.[9]);
     setValue("licenceGrantDate", moment(grantDate).format("YYYY-MM-DD"));
     setValue("validUpto", moment(validDate).format("YYYY-MM-DD"));
+    // }
   };
+
+  useEffect(() => {
+    if (getData) {
+      setValue("revenueEstate", getData?.newAdditionalDetails?.revenueEstate);
+      setValue("tehsil", getData?.newAdditionalDetails?.tehsil);
+      const data = licenceData?.filter((item) => item?.label === getData?.newAdditionalDetails?.selectLicence);
+      setValue("selectLicence", { label: data?.[0]?.label, value: data?.[0]?.value });
+      // watch()
+      setTextValues({ label: data?.[0]?.label, value: data?.[0]?.value });
+    }
+  }, [getData, licenceData]);
+
+  useEffect(() => {
+    if (watch("licenceNo")) getLicenceDetails();
+  }, [watch("licenceNo")]);
+
   return (
     <div>
       <div className="row gy-3">
@@ -202,7 +218,6 @@ const SearchLicenceComp = ({ watch, register, control, setLoader, errors, setVal
 
                     const diff = monthDiff + yearDiff * 12;
                     setValue("periodOfRenewal", diff);
-                    console.log("value", e?.target?.value, diff);
                   }}
                 />
               </FormControl>

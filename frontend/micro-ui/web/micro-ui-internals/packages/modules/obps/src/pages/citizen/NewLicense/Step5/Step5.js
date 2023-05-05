@@ -449,21 +449,21 @@ const FeesChargesForm = (props) => {
                     <div className="col col-4">
                       <h6>
                         {`${t("NWL_APPLICANT_FEE_TOTAL_SCRUITNY_FEE")}`}
-                        Total Scrutiny Fee
+                        {/* Total Scrutiny Fee */}
                       </h6>
                       <input type="text" className="form-control" disabled {...register("totalScrutinyFee")} />
                     </div>
                     <div className="col col-4">
                       <h6>
                         {`${t("NWL_APPLICANT_FEE_TOTAL_LICENCE_FEE")}`}
-                        Total License Fee (25%)
+                        {/* Total License Fee (25%) */}
                       </h6>
                       <input type="text" className="form-control" disabled {...register("totalLicenseFee")} />
                     </div>
                     <div className="col col-4">
                       <h6 data-toggle="tooltip" data-placement="top" title="Total Fees (License fee 25% + Scrutiny Fees)">
                         {`${t("NWL_APPLICANT_FEE_TOTAL_FEE")}`}
-                        Amount Payable
+                        {/* Amount Payable */}
                       </h6>
                       <input type="text" className="form-control" disabled {...register("payableNow")} />
                     </div>
@@ -550,7 +550,7 @@ const FeesChargesForm = (props) => {
                   <br></br>
                   <h5 className="text-black">
                     {`${t("NWL_UNDERTAKINGS")}`}
-                    Undertakings
+                    {/* Undertakings */}
                     <span style={{ color: "red" }}>*</span>
                   </h5>
                   <div className="px-2">
@@ -571,7 +571,7 @@ const FeesChargesForm = (props) => {
                         onClick={() => showPdf()}
                       >
                         {`${t("NWL_REVIEW_APPLICATION")}`}
-                        Review Application
+                        {/* Review Application */}
                       </div>
                     </ul>
                   </div>
