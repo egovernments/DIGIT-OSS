@@ -479,7 +479,7 @@ const LandScheduleForm = (props) => {
                     <div className="col col-12 ">
                       <div>
                         <h2>
-                          1.&nbsp;(i)
+                          1.&nbsp;
                           {`${t("NWL_APPLICANT_WHETHER_LICENCE_APPLIED_FOR_ADDITIONAL_AREA")}`}
                           {/* Whether licence applied for additional area ? */}
                           <span style={{ color: "red" }}>*</span>&nbsp;&nbsp;
@@ -794,7 +794,7 @@ const LandScheduleForm = (props) => {
                     <div className="col col-12 ">
                       <div>
                         <h2>
-                          &nbsp;&nbsp;(ii)
+                          &nbsp;&nbsp;
                           {`${t("NWL_APPLICANT_WHETHER_LICENCE_APPLIED_UNDER_MIGRATION_POLICY")}`}
                           {/* Whether licence applied under Migration Policy ? */}
                           <span style={{ color: "red" }}>*</span>&nbsp;&nbsp;
@@ -837,7 +837,6 @@ const LandScheduleForm = (props) => {
                   <br></br>
                   <div>
                     <h4>
-                      2.
                       {`${t("NWL_APPLICANT_ANY_ENCUMBRANCE_WITH_RESPECT_TO_FOLLOWING")}`}
                       {/* Any encumbrance with respect to following  */}
                       <span style={{ color: "red" }}>*</span>
@@ -1083,7 +1082,6 @@ const LandScheduleForm = (props) => {
                   <br></br>
                   <div>
                     <h6>
-                      (ii)
                       {`${t("NWL_APPLICANT_EXISTING_LITIGATION_IF_ANY_CONCERNING_APPLIED_LAND")}`}
                       {/* Existing litigation, if any, concerning applied land including co-sharers and collaborator. */}
                       <span style={{ color: "red" }}>*</span> &nbsp;&nbsp;
@@ -1131,7 +1129,7 @@ const LandScheduleForm = (props) => {
                                 <div className="col col-6">
                                   <label>
                                     <h2>
-                                      {`${t("NWL_APPLICANT_REMARK_CASE_NO")}`}
+                                      {`${t("NWL_APPLICANT_REMARKCASE_NO")}`}
                                       {/* Remark/Case No. */}
                                       <span style={{ color: "red" }}>*</span>
                                     </h2>{" "}
@@ -1177,7 +1175,6 @@ const LandScheduleForm = (props) => {
                   <br></br>
                   <div>
                     <h6>
-                      (iii)
                       {`${t("NWL_APPLICANT_ANY_INSOLVENCY_LIQUIDATION_PROCEESSDING_AGAINST_THE_LAND_OWING")}`}
                       {/* Any insolvency/liquidation proceedings against the Land Owing Company/Developer Company. */}
                       <span style={{ color: "red" }}>*</span> &nbsp;&nbsp;
@@ -1247,7 +1244,7 @@ const LandScheduleForm = (props) => {
                   <div className="row">
                     <div className="col col-3 ">
                       <h2>
-                        (a)&nbsp;
+                        &nbsp;
                         {`${t("NWL_APPLICANT_AS_PER_APPLIED_LAND_SHAJRA_PLAN")}`}
                         {/* As per applied land (Yes/No) */}
                         <span style={{ color: "red" }}>*</span>
@@ -1296,7 +1293,7 @@ const LandScheduleForm = (props) => {
 
                     <div className="col col-3 ">
                       <h2>
-                        (b)&nbsp;
+                        &nbsp;
                         {`${t("NWL_APPLICANT_REVENUE_RASTA_SHAJRA_PLAN")}`}
                         {/* Revenue rasta */}
                         <span style={{ color: "red" }}>*</span>
@@ -1342,7 +1339,7 @@ const LandScheduleForm = (props) => {
                     </div>
                     <div className="col col-3 ">
                       <h2>
-                        (c)&nbsp;
+                        &nbsp;
                         {`${t("NWL_APPLICANT_WATERCOURSE_SHAJRA_PLAN")}`}
                         {/* Watercourse */}
                         <span style={{ color: "red" }}>*</span>
@@ -1463,7 +1460,7 @@ const LandScheduleForm = (props) => {
                     </div> */}
                     <div className="col col-3 ">
                       <h2>
-                        (f)&nbsp;
+                        &nbsp;
                         {`${t("NWL_APPLICANT_ACQUISITION_STATUS_SHAJRA_PLAN")}`}
                         {/* Acquisition status */}
                         <span style={{ color: "red" }}>*</span>
@@ -1544,7 +1541,7 @@ const LandScheduleForm = (props) => {
                       <div className="col col-12">
                         <label>
                           <h2>
-                            (g)&nbsp;&nbsp;
+                            &nbsp;&nbsp;
                             {`${t("NWL_APPLICANT_WHETER_LAND_RELEASED_EXCLUDED_FROM_AQUSITION_DATE_AWAED_SHAJRA_PLAN")}`}
                             {/* Whether Land Released/Excluded from aqusition proceeding. */}
                             <span style={{ color: "red" }}>*</span> &nbsp;&nbsp;
@@ -1684,7 +1681,7 @@ const LandScheduleForm = (props) => {
                   <div className="row">
                     <div className="col col-12">
                       <h2>
-                        (h)&nbsp;&nbsp;
+                        &nbsp;&nbsp;
                         {`${t("NWL_APPLICANT_DETAILS_OF_EXISTING_APPROACH_AS_PER_POLICY_SHAJRA_PLAN")}`}
                         {/* Details of existing approach as per policy dated 20-10-20. */}
                         <span style={{ color: "red" }}>*</span> &nbsp;&nbsp;
@@ -1706,7 +1703,7 @@ const LandScheduleForm = (props) => {
                         <div class="row">
                           <div class="col-sm-6 text-left">
                             <h2>
-                              (a)&nbsp;
+                              &nbsp;
                               {`${t("NWL_APPLICANT_APPROACH_AVAILABLE_FROM_MINIMUN_KARAM_SHAJRA_PLAN")}`}
                               {/* Approach available from minimum 4 karam (22 ft) wide revenue rasta. */}
                               <span style={{ color: "red" }}>*</span>
@@ -1730,7 +1727,7 @@ const LandScheduleForm = (props) => {
                         <div className="row">
                           <div class="col-sm-6 text-left">
                             <h2>
-                              (b)&nbsp;&nbsp;
+                              &nbsp;&nbsp;
                               {`${t("NWL_APPLICANT_APPROACH_AVAILABLE_FROM_MINIMUN_FEET_WIDE_REVENUE_SHAJRA_PLAN")}`}
                               {/* Approach available from minimum 11 feet wide revenue rasta and applied site abuts acquired alignment of
                               the sector road and there is no stay regarding construction on the land falling under the abutting sector road. */}
@@ -1756,7 +1753,7 @@ const LandScheduleForm = (props) => {
                         <div className="row">
                           <div class="col-sm-6 text-left">
                             <h2>
-                              (c)&nbsp;&nbsp;
+                              &nbsp;&nbsp;
                               {`${t("NWL_APPLICANT_APPLIED_SITE__ABOUTS_ALREADY_CONSTRUCTED_SECTOR_ROAD_SHAJRA_PLAN")}`}
                               {/* Applied site Abuts already constructed sector road or internal circulation road of approved sectoral plan
                               (of min. 18m/24m width as the case may be) provided its entire stretch required for approach is licenced and is further
@@ -1783,7 +1780,7 @@ const LandScheduleForm = (props) => {
                         <div className="row">
                           <div class="col-sm-6 text-left">
                             <h2>
-                              (d)&nbsp;&nbsp;
+                              &nbsp;&nbsp;
                               {`${t("NWL_APPLICANT_APPLIED_LAND_IS_ACCESSIBLE_FROM_A_MINIMUN_THROUGH_ADJOINING_SHAJRA_PLAN")}`}
                               {/* Applied land is accessible from a minimum 4 karam wide rasta through adjoining own land of the applicant
                               (but not applied for licence). */}
@@ -1810,7 +1807,7 @@ const LandScheduleForm = (props) => {
                             <div className="row">
                               <div class="col-sm-6 text-left">
                                 <h2>
-                                  (d1)&nbsp;&nbsp;
+                                  &nbsp;&nbsp;
                                   {`${t("NWL_APPLICANT_D_D1_IF_APPLICABLE_WHETHER_THE_APPLICATION_HAS_DONATED_SHAJRA_PLAN")}`}
                                   {/* If applicable, whether the applicant has donated at least 4 karam wide strip from its adjoining own
                                   land in favour of the Gram Panchayat/Municipality, in order to connect the applied site to existing 4 karam rasta?. */}
@@ -1865,7 +1862,7 @@ const LandScheduleForm = (props) => {
                         <div className="row">
                           <div class="col-sm-6 text-left">
                             <h2>
-                              (e)&nbsp;&nbsp;
+                              &nbsp;&nbsp;
                               {`${t("NWL_APPLICANT_E_APPLIED_LAND_IS_ACCESSIBLE_FROM_MINIMUN_KARAM_SHAJRA_PLAN")}`}
                               {/* Applied land is accessible from a minimum 4 karam wide rasta through adjoining other’s land */}
                               <span style={{ color: "red" }}>*</span>
@@ -1891,7 +1888,7 @@ const LandScheduleForm = (props) => {
                             <div className="row">
                               <div class="col-sm-6 text-left">
                                 <h2>
-                                  (e1)&nbsp;&nbsp;
+                                  &nbsp;&nbsp;
                                   {`${t("NWL_APPLICANT_E_Y_E1_WHETHER_THE_LAND-OWNER_OF_THE_ADJOINING_DONATED_KARAM_SHAJRA_PLAN")}`}
                                   {/* whether the land-owner of the adjoining land has donated at least 4 karam wide strip of land to the
                                   Gram Panchayat/Municipality, in a manner that the applied site gets connected to existing public rasta of atleast 4
@@ -1951,7 +1948,7 @@ const LandScheduleForm = (props) => {
                           <div class="col-sm-9 text-left">
                             <label>
                               <h2>
-                                (a)&nbsp;&nbsp;
+                                &nbsp;&nbsp;
                                 {`${t("NWL_APPLICANT_N_A_ENTER_WIDTH_IN_METERS_SHAJRA_PLAN")}`}
                                 {/* Enter Width in Meters */}
                               </h2>
@@ -1965,7 +1962,7 @@ const LandScheduleForm = (props) => {
                         <div className="row">
                           <div class="col-sm-6 text-left">
                             <h2>
-                              (b)&nbsp;&nbsp;
+                              &nbsp;&nbsp;
                               {`${t("NWL_APPLICANT_N_B_WHETHER_IRREVOCABLE_CONSENT_FROM_SUCH_DEVELOPER_COLONIZER_SHAJRA_PLAN")}`}
                               {/* Whether irrevocable consent from such developer/ colonizer for uninterrupted usage of such internal road
                               for the purpose of development of the colony by the applicant or by its agencies and for usage by its allottees
@@ -2013,7 +2010,7 @@ const LandScheduleForm = (props) => {
                         <div className="row">
                           <div class="col-sm-6 text-left">
                             <h2>
-                              (c)&nbsp;&nbsp;
+                              &nbsp;&nbsp;
                               {`${t("NWL_APPLICANT_N_C_ACCESS_FROM_NH_SR_SHAJRA_PLAN")}`}
                               {/* Access from NH/SR */}
                             </h2>
@@ -2079,14 +2076,14 @@ const LandScheduleForm = (props) => {
                         <div>
                           <div className="col col-5">
                             <label>
-                              (a)&nbsp;&nbsp;
+                              &nbsp;&nbsp;
                               {`${t("NWL_APPLICANT_N_ENTER_WIDTH_IN_METERS_SHAJRA_PLAN")}`}
                               {/* Enter Width in Meters */}
                             </label>
                             <input type="number" {...register("sectorAndDevelopmentWidth")} className="form-control" />
                           </div>
                           <h2>
-                            (b)&nbsp;&nbsp;
+                            &nbsp;&nbsp;
                             {`${t("NWL_APPLICANT_N_B_WHETHER_ACQUIRED_SHAJRA_PLAN")}`}
                             {/* Whether acquired? */}
                             &nbsp;&nbsp;
@@ -2100,7 +2097,7 @@ const LandScheduleForm = (props) => {
                             </label>
                           </h2>
                           <h2>
-                            (c)&nbsp;&nbsp;
+                            &nbsp;&nbsp;
                             {`${t("NWL_APPLICANT_N_C_WHETHER_CONSTRUCTED_SHAJRA_PLAN")}`}
                             {/* Whether constructed?  */}
                             &nbsp;&nbsp;
@@ -2114,7 +2111,7 @@ const LandScheduleForm = (props) => {
                             </label>
                           </h2>
                           <h2>
-                            (d)&nbsp;&nbsp;
+                            &nbsp;&nbsp;
                             {`${t("NWL_APPLICANT_N_D_WHETHER_SERVICE_ROAD_ALONG_SECTOR_ROAD_ACQURIED_SHAJRA_PLAN")}`}
                             {/* Whether Service road along sector road acquired?  */}
                             &nbsp;&nbsp;
@@ -2128,7 +2125,7 @@ const LandScheduleForm = (props) => {
                             </label>
                           </h2>
                           <h2>
-                            (e)&nbsp;&nbsp;
+                            &nbsp;&nbsp;
                             {`${t("NWL_APPLICANT_N_D_WHETHER_SERVICE_ROAD_ALONG_E_SECTOR_ROAD_CONSTRUCTED_SHAJRA_PLAN")}`}
                             {/* Whether Service road along sector road constructed? */}
                             &nbsp;&nbsp;
@@ -2146,7 +2143,7 @@ const LandScheduleForm = (props) => {
                     </div>
                     <div className="mt-4 ml-4">
                       <h2>
-                        (2)&nbsp;&nbsp;
+                        &nbsp;&nbsp;
                         {`${t("NWL_APPLICANT_N_2_SITE_APPROACHABLE_FROM_INTERNAL_CIRCULATION_SECTORAL_ROAD_SHAJRA_PLAN")}`}
                         {/* Site approachable from internal circulation / sectoral plan road. */}
                         &nbsp;&nbsp;
@@ -2163,14 +2160,14 @@ const LandScheduleForm = (props) => {
                         <div>
                           <div className="col col-3">
                             <label>
-                              (a)&nbsp;&nbsp;
+                              &nbsp;&nbsp;
                               {`${t("NWL_APPLICANT_N_2_SITE_APPROACHABLE_A_ENTER_WIDTH_IN_METERS_SHAJRA_PLAN")}`}
                               {/* Enter Width in Meters */}
                             </label>
                             <input type="number" {...register("internalAndSectoralWidth")} className="form-control" />
                           </div>
                           <h2>
-                            (b)&nbsp;&nbsp;
+                            &nbsp;&nbsp;
                             {`${t("NWL_APPLICANT_N_2_B_WHETHER_ACQUIRED_SHAJRA_PLAN")}`}
                             {/* Whether acquired?  */}
                             &nbsp;&nbsp;
@@ -2194,7 +2191,7 @@ const LandScheduleForm = (props) => {
                             </label>
                           </h2>
                           <h2>
-                            (c)&nbsp;&nbsp;
+                            &nbsp;&nbsp;
                             {`${t("NWL_APPLICANT_N_2_C_WHETHER_CONSTRUCTED_SHAJRA_PLAN")}`}
                             {/* Whether constructed? */}
                             &nbsp;&nbsp;
@@ -2251,7 +2248,7 @@ const LandScheduleForm = (props) => {
                   <div className="row">
                     <div className="col col-12">
                       <h2>
-                        (k)&nbsp;&nbsp;
+                        &nbsp;&nbsp;
                         {`${t("NWL_APPLICANT_N_2_K_ANY_OTHER_TYPE_OF_EXISITING_APPROACH_AVAILABLE_SHAJRA_PLAN")}`}
                         {/* Any other type of existing approach available. */}
                         <span style={{ color: "red" }}>*</span> &nbsp;&nbsp;
@@ -2313,7 +2310,7 @@ const LandScheduleForm = (props) => {
                   <div className="row">
                     <div className="col col-3">
                       <h2>
-                        (a) &nbsp;
+                        &nbsp;
                         {`${t("NWL_APPLICANT_4_A_VACANT_SHAJRA_PLAN")}`}
                         {/* Vacant */}
                         <span style={{ color: "red" }}>*</span>{" "}
@@ -2367,7 +2364,7 @@ const LandScheduleForm = (props) => {
 
                     <div className="col col-3">
                       <h2>
-                        (b) &nbsp;
+                        &nbsp;
                         {`${t("NWL_APPLICANT_4_B_HT_LINE_SHAJRA_PLAN")}`}
                         {/* HT line  */}
                         <span style={{ color: "red" }}>*</span>
@@ -2418,7 +2415,7 @@ const LandScheduleForm = (props) => {
 
                     <div className="col col-3">
                       <h2>
-                        (c)&nbsp;
+                        &nbsp;
                         {`${t("NWL_APPLICANT_4_C_IOC_GAS_PIPELINE_SHAJRA_PLAN")}`}
                         {/* IOC Gas Pipeline  */}
                         <span style={{ color: "red" }}>*</span>
@@ -2464,7 +2461,7 @@ const LandScheduleForm = (props) => {
                     </div>
                     <div className="col col-3">
                       <h2>
-                        (d) &nbsp;
+                        &nbsp;
                         {`${t("NWL_APPLICANT_4_D_NALLAH_SHAJRA_PLAN")}`}
                         {/* Nallah/drain */}
                         <span style={{ color: "red" }}>*</span>
@@ -2513,7 +2510,7 @@ const LandScheduleForm = (props) => {
                   <div className="row ">
                     <div className="col col-3">
                       <h2>
-                        (e) &nbsp;
+                        &nbsp;
                         {`${t("NWL_APPLICANT_4_E_ANY_REVENUE_REVENUE_RASTA_ROAD_PASSING_THROUGH_PROPOSED_SITE_SHAJRA_PLAN")}`}
                         {/* Any revenue rasta  */}
                         <span style={{ color: "red" }}>*</span>
@@ -2624,7 +2621,7 @@ const LandScheduleForm = (props) => {
                     </div> */}
                     <div className="col col-3">
                       <h2>
-                        (f)&nbsp;
+                        &nbsp;
                         {`${t("NWL_APPLICANT_F_UTILITY_PERMIT_LINE_SHAJRA_PLAN")}`}
                         {/* Utility/Permit Line */}
                         <span style={{ color: "red" }}>*</span>
@@ -2692,7 +2689,7 @@ const LandScheduleForm = (props) => {
 
                     <div className="col col-3">
                       <h2>
-                        (g)&nbsp;
+                        &nbsp;
                         {`${t("NWL_APPLICANT_G_COMPACT_BLOCK_SHAJRA_PLAN")}`}
                         {/* Compact Block */}
                       </h2>
@@ -2735,7 +2732,7 @@ const LandScheduleForm = (props) => {
 
                     <div className="col col-3">
                       <h2>
-                        (h)&nbsp;
+                        &nbsp;
                         {`${t("NWL_APPLICANT_H_WHETHER_OTHERS_LAND_FALL_SHAJRA_PLAN")}`}
                         {/* Whether Others Land fall */}
                       </h2>
@@ -2778,7 +2775,7 @@ const LandScheduleForm = (props) => {
 
                     <div className="col col-6 mt-3">
                       <h2>
-                        (i)&nbsp;
+                        &nbsp;
                         {`${t("NWL_APPLICANT_SURROUNDINGS_SHAJRA_PLAN")}`}
                         {/* Surroundings  */}
                         <span style={{ color: "red" }}>*</span>
@@ -2838,7 +2835,7 @@ const LandScheduleForm = (props) => {
 
                     <div className="col col-3">
                       <h2>
-                        (j)&nbsp;
+                        &nbsp;
                         {`${t("NWL_APPLICANT_J_ANY_OTHERS_PASSING_THROUGH_SITE_SHAJRA_PLAN")}`}
                         {/* Any other feature passing through site */}
                       </h2>

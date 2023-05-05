@@ -140,6 +140,16 @@ const ApllicantFormStep1 = (props) => {
   }, []);
 
   useEffect(() => {
+    const data = developerDataLabel?.aurthorizedUserInfoArray?.filter((item) => item?.emailId === userInfo?.emailId);
+    setValue("authorizedName", data?.[0]?.name);
+    setValue("authorizedMobile", data?.[0]?.mobileNumber);
+    setValue("authorizedEmail", data?.[0]?.emailId);
+    setValue("authorizedPan", data?.[0]?.pan);
+    // const filteredObject = developerDataLabel?.aurthorizedUserInfoArray.filter()
+    // developerDataLabel?.aurthorizedUserInfoArray?.[0]?.name
+  }, [userInfo, developerDataLabel]);
+
+  useEffect(() => {
     if (developerDataLabel) {
       setValue("developerName", developerDataLabel?.addInfo?.companyName);
       setValue("developerAddress", developerDataLabel?.addInfo?.registeredAddress);
@@ -158,10 +168,10 @@ const ApllicantFormStep1 = (props) => {
       // setValue("shareholdingDesignition", developerDataLabel?.addInfo?.shareHoldingPatterens?.[0]?.designition);
       // setValue("shareholdingPercentage", developerDataLabel?.addInfo?.shareHoldingPatterens?.[0]?.percentage);
       // setValue("shareholdingDoc", developerDataLabel?.addInfo?.showDevTypeFields);
-      setValue("authorizedName", developerDataLabel?.aurthorizedUserInfoArray?.[0]?.name);
-      setValue("authorizedMobile", developerDataLabel?.aurthorizedUserInfoArray?.[0]?.mobileNumber);
-      setValue("authorizedEmail", developerDataLabel?.aurthorizedUserInfoArray?.[0]?.emailId);
-      setValue("authorizedPan", developerDataLabel?.aurthorizedUserInfoArray?.[0]?.pan);
+      // setValue("authorizedName", developerDataLabel?.aurthorizedUserInfoArray?.[0]?.name);
+      // setValue("authorizedMobile", developerDataLabel?.aurthorizedUserInfoArray?.[0]?.mobileNumber);
+      // setValue("authorizedEmail", developerDataLabel?.aurthorizedUserInfoArray?.[0]?.emailId);
+      // setValue("authorizedPan", developerDataLabel?.aurthorizedUserInfoArray?.[0]?.pan);
       setValue("authorizedAddress", developerDataLabel?.aurthorizedUserInfoArray?.[0]?.permaneneAddress);
       setValue(
         "permanentAddress",
@@ -762,7 +772,7 @@ const ApllicantFormStep1 = (props) => {
                   id="btnSearch"
                   class=""
                 >
-                  {`${t("NWL_VIEW_UPLOAD_DIGITAL_SIGNATURE ")}`}
+                  {`${t("NWL_VIEW_UPLOAD_DIGITAL_SIGNATURE")}`}
                   {/* View Upload Digital Signature  */}
                   <VisibilityIcon color="info" className="icon" />
                 </div>
@@ -799,7 +809,7 @@ const ApllicantFormStep1 = (props) => {
                       id="btnSearch"
                       class=""
                     >
-                      {`${t("NWL_VIEW_MOA_DOCUMENT ")}`}
+                      {`${t("NWL_VIEW_MOA_DOCUMENT")}`}
                       {/* View MOA Document  */}
                       <VisibilityIcon color="info" className="icon" />
                     </div>

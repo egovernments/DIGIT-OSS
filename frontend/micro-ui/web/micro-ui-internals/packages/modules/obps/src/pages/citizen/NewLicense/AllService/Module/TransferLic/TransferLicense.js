@@ -79,6 +79,7 @@ const Transferlicence = () => {
         licenseNo: numberLic,
         action: "APPLY",
         tenantId: "hr",
+        status: "apply",
         applicationNumber: id,
         id: getId,
         newAdditionalDetails: {

@@ -730,7 +730,7 @@ const AppliedDetailForm = (props) => {
                       setDGPSModal(true);
                     }}
                   >
-                    {`${t("NWL_APPLICANT_DGPS_POINTS_DOCUMsENT")}`}
+                    {`${t("NWL_APPLICANT_DGPS_POINTS_DOCUMENTS")}`}
                     {/* Enter DGPS points */}
                   </Button>
                 </div>
