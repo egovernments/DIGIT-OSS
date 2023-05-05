@@ -2,14 +2,19 @@ import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { SubmitBar, ActionBar, Menu } from "@egovernments/digit-ui-react-components";
 
-function ApplicationDetailsActionBar({ workflowDetails, displayMenu, onActionSelect, setDisplayMenu, businessService, forcedActionPrefix,ActionBarStyle={},MenuStyle={} }) {
+import axios from "axios";
+import { Button } from "react-bootstrap";
+// import Button from '@mui/material/Button';
+
+function ApplicationDetailsActionBar({ workflowDetails, displayMenu, onActionSelect, ApplicationNumber, setDisplayMenu, businessService, forcedActionPrefix,ActionBarStyle={},MenuStyle={} }) {
 
   const { t } = useTranslation();
 
   const [isSingleButton,setIsSingleButton] = useState(false)
   const [isMenuBotton,setIsMenuBotton] = useState(false)
   const [actions,setActions] = useState([]);
-
+  
+  const authToken = Digit.UserService.getUser()?.access_token || null;
   
   useEffect(()=>{
 
@@ -42,6 +47,45 @@ function ApplicationDetailsActionBar({ workflowDetails, displayMenu, onActionSel
     }
   },[actions])
 
+  // const shoot = () => {
+  //   alert("Great Shot!");
+  // }
+ 
+  const shoot = async (e) => {
+    const payload = {
+
+        "RequestInfo": {
+
+            "apiId": "Rainmaker",
+
+            "ver": ".01",
+
+            "ts": null,
+
+            "action": "_update",
+
+            "did": "1",
+
+            "key": "",
+
+            "msgId": "20170310130900|en_IN",
+
+            "authToken": authToken
+
+        }
+    }
+    const Resp = await axios.post(`/tl-services/loi/report/_create?applicationNumber=${ApplicationNumber}`, payload, { responseType: "arraybuffer" })
+
+    // console.log("loggerNew...", Resp.data, userInfo)
+
+    const pdfBlob = new Blob([Resp.data], { type: 'application/pdf' });
+    const pdfUrl = URL.createObjectURL(pdfBlob);
+    window.open(pdfUrl);
+
+    console.log("logger123456...", pdfBlob, pdfUrl);
+
+};
+
   return (
     <React.Fragment>
       
@@ -57,7 +101,22 @@ function ApplicationDetailsActionBar({ workflowDetails, displayMenu, onActionSel
               style={MenuStyle}
             />
           ) : null}
-          <SubmitBar label={t("WF_TAKE_ACTION")} onSubmit={() => setDisplayMenu(!displayMenu)} />
+
+         
+                      { businessService === "NewTL" && 
+            <Button 
+             className="submit-bar submit-bar-take-action"
+             onClick={shoot} >
+               {t("WF_PDF_ACTION")}
+            </Button>
+                }
+          
+         
+      
+          <SubmitBar style={{marginLeft: 20}} label={t("WF_TAKE_ACTION")} onSubmit={() => setDisplayMenu(!displayMenu)} />
+         
+         
+
         </ActionBar>
       )}
       {!workflowDetails?.isLoading && !isMenuBotton && isSingleButton && (

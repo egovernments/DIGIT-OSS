@@ -264,6 +264,10 @@ const Home = () => {
             link: `/digit-ui/citizen/obps/ExtensionClu`,
             i18nKey: t("Extension of CLU permission"),
           },
+          {
+            link: `/digit-ui/citizen/tl/ExtensionClu/my-application`,
+            i18nKey: t("TL_MY_APPLICATIONS_HEADER"),
+          },
           
         ],
       },
