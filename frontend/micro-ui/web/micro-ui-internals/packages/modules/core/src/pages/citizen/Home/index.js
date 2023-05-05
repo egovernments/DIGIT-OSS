@@ -189,6 +189,10 @@ const Home = () => {
             link: `/digit-ui/citizen/obps/TransferLicense`,
             i18nKey: t("Transfer of License"),
           },
+          {
+            link: `/digit-ui/citizen/tl/TransferLicense/my-applications`,
+            i18nKey: t("My applications"),
+          },
         ],
       },
       {
@@ -200,6 +204,10 @@ const Home = () => {
             link: `/digit-ui/citizen/obps/SurrenderLic`,
             i18nKey: t("Surrender of License"),
           },
+          {
+            link: `/digit-ui/citizen/tl/SurrenderLic/my-application`,
+            i18nKey: t("TL_MY_APPLICATIONS_HEADER"),
+          },
         ],
       },
       {
@@ -210,6 +218,10 @@ const Home = () => {
           {
             link: `/digit-ui/citizen/obps/Standard`,
             i18nKey: t("Approval of Standard Design"),
+          },
+          {
+            link: `/digit-ui/citizen/tl/Standard/my-application`,
+            i18nKey: t("TL_MY_APPLICATIONS_HEADER"),
           },
         ],
       },
@@ -249,6 +261,7 @@ const Home = () => {
             link: `/digit-ui/citizen/obps/ExtensionCom`,
             i18nKey: t("Extension of time"),
           },
+         
         ],
       },
       {
@@ -260,6 +273,7 @@ const Home = () => {
             link: `/digit-ui/citizen/obps/ExtensionClu`,
             i18nKey: t("Extension of CLU permission"),
           },
+          
         ],
       },
       {

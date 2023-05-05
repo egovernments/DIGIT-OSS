@@ -209,11 +209,11 @@ const ExtensionCluCard = (props) => {
       console.log("Update Error ===> ", error.message);
       closeModal();
     }
-    // closeModal();
-    // setTimeout(() => {
-    //   setShowToast();
-    //   window.location.href = `/digit-ui/employee/tl/servicePlanInbox`
-    // }, 3000);
+    closeModal();
+    setTimeout(() => {
+      setShowToast();
+      window.location.href = `/digit-ui/employee/tl/ExtensionInbox`
+    }, 3000);
   };
 
   useEffect(() => {

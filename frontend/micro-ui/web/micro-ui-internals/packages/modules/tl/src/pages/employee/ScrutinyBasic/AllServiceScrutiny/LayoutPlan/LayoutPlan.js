@@ -104,19 +104,39 @@ function LayoutPlanClu(props) {
   useEffect(() => {
     if (apiData) {
       setValue("licenseNo", apiData?.licenseNo);
-      setValue("selectType", apiData?.additionalDetails?.selectType);
-      setValue("affidavitFixedChargesForAdm", apiData?.additionalDetails?.affidavitFixedChargesForAdm);
-      setValue("affidavitForLicencedArea", apiData?.additionalDetails?.affidavitForLicencedArea);
-      setValue("affidavitForLicencedArea", apiData?.additionalDetails?.affidavitOfAdmCharges);
-      setValue("amount", apiData?.additionalDetails?.amount);
-      setValue("anyOtherDoc", apiData?.additionalDetails?.anyOtherDoc);
-      setValue("areaInAcres", apiData?.additionalDetails?.areaInAcres);
-      setValue("boardResolutionDoc", apiData?.additionalDetails?.boardResolutionDoc);
-      setValue("changeOfDeveloper", apiData?.additionalDetails?.changeOfDeveloper);
-      setValue("colonizerSeekingTransferLicence", apiData?.additionalDetails?.colonizerSeekingTransferLicence);
-      setValue("consentLetterDoc", apiData?.additionalDetails?.consentLetterDoc);
-      setValue("justificationForRequest", apiData?.additionalDetails?.justificationForRequest);
-      setValue("licenceTransferredFromLandOwn", apiData?.additionalDetails?.licenceTransferredFromLandOwn);
+      setValue("selectType", apiData?.newAdditionalDetails?.selectType);
+      setValue("selectLicence", apiData?.newAdditionalDetails?.selectLicence);
+      setValue("validUpto", apiData?.newAdditionalDetails?.validUpto);
+      setValue("areaAcres", apiData?.newAdditionalDetails?.areaAcres);
+      setValue("colonizerName", apiData?.newAdditionalDetails?.colonizerName);
+      setValue("colonyType", apiData?.newAdditionalDetails?.colonyType);
+      setValue("validUpto", apiData?.newAdditionalDetails?.validUpto);
+      setValue("district", apiData?.newAdditionalDetails?.district);
+      setValue("revenueEstate", apiData?.newAdditionalDetails?.revenueEstate);
+      setValue("sectorNo", apiData?.newAdditionalDetails?.sectorNo);
+      setValue("tehsil", apiData?.newAdditionalDetails?.tehsil);
+     
+      setValue("affidavitForLicencedArea", apiData?.newAdditionalDetails?.affidavitForLicencedArea);
+      setValue("affidavitForLicencedArea", apiData?.newAdditionalDetails?.affidavitOfAdmCharges);
+      setValue("amount", apiData?.newAdditionalDetails?.amount);
+      setValue("anyOtherDoc", apiData?.newAdditionalDetails?.anyOtherDoc);
+      setValue("areaInAcres", apiData?.newAdditionalDetails?.areaInAcres);
+      setValue("boardResolutionDoc", apiData?.newAdditionalDetails?.boardResolutionDoc);
+      setValue("changeOfDeveloper", apiData?.newAdditionalDetails?.changeOfDeveloper);
+      setValue("colonizerSeekingTransferLicence", apiData?.newAdditionalDetails?.colonizerSeekingTransferLicence);
+      setValue("consentLetterDoc", apiData?.newAdditionalDetails?.consentLetterDoc);
+      setValue("justificationForRequest", apiData?.newAdditionalDetails?.justificationForRequest);
+      setValue("licenceTransferredFromLandOwn", apiData?.newAdditionalDetails?.licenceTransferredFromLandOwn);
+      setValue("anyOtherFeature", apiData?.additionalDetails?.anyOtherFeature);
+      setValue("areaCommercial", apiData?.additionalDetails?.areaCommercial);
+      setValue("areaProposedRevision", apiData?.additionalDetails?.areaProposedRevision);
+      setValue("boardResolutionAuthSignatoryDoc", apiData?.additionalDetails?.boardResolutionAuthSignatoryDoc);
+      setValue("earlierApprovedlayoutPlan", apiData?.additionalDetails?.earlierApprovedlayoutPlan);
+      setValue("existingArea", apiData?.additionalDetails?.existingArea);
+      setValue("reasonRevisionLayoutPlanDoc", apiData?.additionalDetails?.reasonRevisionLayoutPlanDoc);
+      setValue("statusCreationAffidavitDoc", apiData?.additionalDetails?.statusCreationAffidavitDoc);
+      setValue("anyOtherRemarks", apiData?.additionalDetails?.anyOtherRemarks);
+      setValue("areaResidential", apiData?.additionalDetails?.areaResidential);
     }
   }, [apiData]); const handlemodaldData = (data) => {
 
@@ -136,6 +156,7 @@ function LayoutPlanClu(props) {
     developer: Colors.info,
     licenseNo: Colors.info,
 
+    selectType: Colors.info,
     selectLicence: Colors.info,
     validUpto: Colors.info,
     renewalRequiredUpto: Colors.info,
@@ -173,7 +194,7 @@ function LayoutPlanClu(props) {
     { label: "Licence No", key: "licenseNo" },
 
     { label: "selectLicence", key: "selectLicence" },
-    { label: "selectLicence", key: "selectLicence" },
+    { label: "Select Type", key: "selectType" },
     { label: "Valid Upto", key: "validUpto" },
     { label: "Renewal required upto", key: "renewalRequiredUpto" },
     { label: "Period of renewal(In Months)", key: "periodOfRenewal" },
@@ -531,7 +552,7 @@ function LayoutPlanClu(props) {
               {errors?.validUpto && errors?.validUpto?.message}
             </h3> */}
                     </div>
-                    <div className="col col-3 ">
+                    {/* <div className="col col-3 ">
                       <FormControl>
                         <h2>
                           Renewal required upto <span style={{ color: "red" }}>*</span>
@@ -556,11 +577,9 @@ function LayoutPlanClu(props) {
 
                         </div>
                       </div>
-                      {/* <h3 className="error-message" style={{ color: "red" }}>
-              {errors?.renewalRequiredUpto && errors?.renewalRequiredUpto?.message}
-            </h3> */}
-                    </div>
-                    <div className="col col-3 ">
+                   
+                    </div> */}
+                    {/* <div className="col col-3 ">
                       <FormControl>
                         <h2>Period of renewal(In Months)</h2>
                       </FormControl>
@@ -583,7 +602,7 @@ function LayoutPlanClu(props) {
                         </div>
                       </div>
 
-                    </div>
+                    </div> */}
                     <div className="col col-3 ">
                       <FormControl>
                         <h2>
@@ -614,11 +633,11 @@ function LayoutPlanClu(props) {
               {errors?.colonizerName && errors?.colonizerName?.message}
             </h3> */}
                     </div>
-                  </div>
+               
                   {/* )} */}
 
                   {/* {showField.other && ( */}
-                  <div className="row gy-3 mt-3">
+                  
                     <div className="col col-3 ">
                       <FormControl>
                         <h2>
@@ -685,6 +704,8 @@ function LayoutPlanClu(props) {
             </h3> */}
                     </div>
 
+</div>
+<div className="row gy-3 mt-3">
                     <div className="col col-3 ">
                       <FormControl>
                         <h2>
@@ -768,10 +789,7 @@ function LayoutPlanClu(props) {
 
                     </div>
 
-                  </div>
-                  {/* )} */}
-
-                  <div className="row gy-3 mt-3">
+                
                     <div className="col col-3 ">
                       <FormControl>
                         <h2>Tehsil</h2>
@@ -798,6 +816,10 @@ function LayoutPlanClu(props) {
                       </div>
 
                     </div>
+                    </div>
+                  
+
+                  <div className="row gy-3 mt-3">
                     <div className="col col-3 ">
                       <FormControl>
                         <h2>District</h2>
@@ -822,8 +844,7 @@ function LayoutPlanClu(props) {
                         </div>
                       </div>
                     </div>
-                  </div>
-                </div>
+                 
                 {/* <OutlinedInput
                   aria-labelledby="lic_no"
                   type="number"
@@ -833,23 +854,58 @@ function LayoutPlanClu(props) {
                   onChange={(e) => setLicNumber(e.target.value)}
                   value={licenseNoVal}
                 /> */}
-
-                <Col md={4} lg={4} mb={3}>
+<div className="col col-3 ">
+                {/* <Col md={4} lg={4} mb={3}> */}
                   <FormControl>
                     <FormLabel id="existing_area" sx={{ fontWeight: "bold" }}>
                       {`${t("REV_LAYOUT_EXISTING_AREA")}`} <span style={{ color: "red" }}>*</span>
                     </FormLabel>
-                    <OutlinedInput
+                  
+                    <div style={{ display: "flex", placeItems: "center" }}>
+                        <input type="text" className="form-control" placeholder="" {...register("existingArea")} disabled />
+                        <div>
+                          <ReportProblemIcon
+                            style={{
+                              color: fieldIconColors.tehsil,
+                            }}
+                            onClick={() => {
+                              setOpennedModal("tehsil");
+                              setLabelValue("Tehsil"),
+                                setSmShow(true),
+                                console.log("modal open"),
+                                setFieldValue(apiData !== null ? apiData.tehsil : null);
+                            }}
+                          ></ReportProblemIcon>
+
+                        </div>
+                      </div>
+                    {/* <OutlinedInput
                       aria-labelledby="existing_area"
                       type="text"
                       placeholder=""
                       className="Inputcontrol"
                       {...register("existingArea")}
-                    // onChange={(e) => setExistingArea(e.target.value)}
-                    // value={apiData?.additionalDetails?.existingAreaVal}
-                    />
+                    onChange={(e) => setExistingArea(e.target.value)}
+                    value={apiData?.additionalDetails?.existingAreaVal}
+                    /> */}
+
                   </FormControl>
-                </Col>
+                {/* </Col> */}
+                </div>
+                <div className="col col-3 ">
+                {/* <Col md={4} lg={4} mb={3}> */}
+                    <FormControl>
+                      <FormLabel id="existing_area" sx={{ fontWeight: "bold" }}>
+                        Total Area <span style={{ color: "red" }}>*</span>
+
+                       
+                        <input type="text" className="form-control" placeholder="" {...register("existingArea")} disabled />
+                      </FormLabel>
+                    </FormControl>
+                  {/* </Col> */}
+                  </div>
+                  </div>
+                  </div>
               </div>
               <Col md={12} lg={12} mb={3} sx={{ marginY: 2 }}>
                 <Paper sx={{ width: "100%", overflow: "hidden", marginY: 2 }}>
@@ -913,22 +969,7 @@ function LayoutPlanClu(props) {
                   Add More
                 </button>
               </Col> */}
-                  <Col md={4} lg={4} mb={3}>
-                    <FormControl>
-                      <FormLabel id="existing_area" sx={{ fontWeight: "bold" }}>
-                        Total Area <span style={{ color: "red" }}>*</span>
-
-                        <OutlinedInput
-                          aria-labelledby="existing_area"
-                          type="text"
-                          placeholder=""
-                          className="Inputcontrol"
-                          {...register("existingArea")}
-
-                        />
-                      </FormLabel>
-                    </FormControl>
-                  </Col>
+                  
 
                 </div>
               </Col>
@@ -945,21 +986,21 @@ function LayoutPlanClu(props) {
                 <tbody>
                   <tr>
                     <td>Area proposed in revision</td>
-                    <td><input type="number" className="form-control" {...register("areaProposedRevision")} id="areaProposedRevision" /></td>
-                    {/* <td style={{ textAlign: "center" }}>{(watch("areaProposedRevision") * 4046.86)?.toFixed(3)}</td> */}
-                    <td></td>
+                    <td><input type="number" className="form-control" {...register("areaProposedRevision")} disabled id="areaProposedRevision" /></td>
+                    <td style={{ textAlign: "center" }}>{(watch("areaProposedRevision") * 4046.86)?.toFixed(3)}</td>
+                    {/* <td></td> */}
                   </tr>
                   <tr>
                     <td>Commercial area</td>
-                    <td><input type="number" className="form-control"  {...register("areaCommercial")} id="areaCommercial" /></td>
-                    {/* <td style={{ textAlign: "center" }}>{(watch("areaCommercial") * 4046.86)?.toFixed(3)}</td> */}
-                    <td></td>
+                    <td><input type="number" className="form-control"  {...register("areaCommercial")} disabled id="areaCommercial" /></td>
+                    <td style={{ textAlign: "center" }}>{(watch("areaCommercial") * 4046.86)?.toFixed(3)}</td>
+                    {/* <td></td> */}
                   </tr>
                   <tr>
                     <td>Residential area</td>
-                    <td><input type="number" className="form-control" {...register("areaResidential")} id="areaResidential" /></td>
-                    {/* <td style={{ textAlign: "center" }}>{(watch("areaResidential") * 4046.86)?.toFixed(3)}</td> */}
-                    <td></td>
+                    <td><input type="number" className="form-control" {...register("areaResidential")} disabled id="areaResidential" /></td>
+                    <td style={{ textAlign: "center" }}>{(watch("areaResidential") * 4046.86)?.toFixed(3)}</td>
+                    {/* <td></td> */}
                   </tr>
 
                 </tbody>
@@ -973,14 +1014,14 @@ function LayoutPlanClu(props) {
                 </h2>
 
                 <label htmlFor="anyOtherFeature">
-                  <input {...register("anyOtherFeature")} type="radio" value="Y" id="anyOtherFeature" />
+                  <input {...register("anyOtherFeature")} type="radio" value="Y" id="anyOtherFeature" disabled />
                   &nbsp; Yes &nbsp;&nbsp;
                 </label>
                 <label htmlFor="anyOtherFeature">
-                  <input {...register("anyOtherFeature")} type="radio" value="N" id="anyOtherFeature" />
+                  <input {...register("anyOtherFeature")} type="radio" value="N" id="anyOtherFeature" disabled />
                   &nbsp; No &nbsp;&nbsp;
                 </label>
-                {/* {watch("anyOtherFeature") === "Y" && ( */}
+                {watch("anyOtherFeature") === "Y" && (
                 <div className="row ">
                   <Col md={4} lg={4}>
                     <FormControl>
@@ -991,11 +1032,12 @@ function LayoutPlanClu(props) {
                         {...register("anyOtherRemarks")}
                       // onChange={(e) => setAnyOtherRemarkTextVal(e.target.value)}
                       // value={anyOtherRemarkTextVal}
+                      disabled
                       ></textarea>
                     </FormControl>
                   </Col>
                 </div>
-                {/* )} */}
+                 )} 
               </div>
 
             </div>
@@ -1020,12 +1062,12 @@ function LayoutPlanClu(props) {
                         <td>
                         <div className="row">
                                       <div className="btn btn-sm col-md-4">
-                                        <IconButton onClick={() => getDocShareholding(apiData?.additionalDetails?.noObjectionCertificate)}>
+                                        <IconButton onClick={() => getDocShareholding(apiData?.additionalDetails?.reasonRevisionLayoutPlanDoc)}>
                                           <VisibilityIcon color="info" className="icon" />
                                         </IconButton>
                                       </div>
                                       <div className="btn btn-sm col-md-4">
-                                        <IconButton onClick={() => getDocShareholding(apiData?.additionalDetails?.noObjectionCertificate)}>
+                                        <IconButton onClick={() => getDocShareholding(apiData?.additionalDetails?.reasonRevisionLayoutPlanDoc)}>
                                           <FileDownloadIcon color="info" className="icon" />
                                         </IconButton>
                                       </div>
@@ -1080,12 +1122,12 @@ function LayoutPlanClu(props) {
                         <td>
                         <div className="row">
                                       <div className="btn btn-sm col-md-4">
-                                        <IconButton onClick={() => getDocShareholding(apiData?.additionalDetails?.noObjectionCertificate)}>
+                                        <IconButton onClick={() => getDocShareholding(apiData?.additionalDetails?.earlierApprovedlayoutPlan)}>
                                           <VisibilityIcon color="info" className="icon" />
                                         </IconButton>
                                       </div>
                                       <div className="btn btn-sm col-md-4">
-                                        <IconButton onClick={() => getDocShareholding(apiData?.additionalDetails?.noObjectionCertificate)}>
+                                        <IconButton onClick={() => getDocShareholding(apiData?.additionalDetails?.earlierApprovedlayoutPlan)}>
                                           <FileDownloadIcon color="info" className="icon" />
                                         </IconButton>
                                       </div>
@@ -1201,12 +1243,12 @@ function LayoutPlanClu(props) {
                         <td>
                         <div className="row">
                                       <div className="btn btn-sm col-md-4">
-                                        <IconButton onClick={() => getDocShareholding(apiData?.additionalDetails?.noObjectionCertificate)}>
+                                        <IconButton onClick={() => getDocShareholding(apiData?.additionalDetails?.statusCreationAffidavitDoc)}>
                                           <VisibilityIcon color="info" className="icon" />
                                         </IconButton>
                                       </div>
                                       <div className="btn btn-sm col-md-4">
-                                        <IconButton onClick={() => getDocShareholding(apiData?.additionalDetails?.noObjectionCertificate)}>
+                                        <IconButton onClick={() => getDocShareholding(apiData?.additionalDetails?.statusCreationAffidavitDoc)}>
                                           <FileDownloadIcon color="info" className="icon" />
                                         </IconButton>
                                       </div>
@@ -1253,12 +1295,12 @@ function LayoutPlanClu(props) {
                         <td>
                         <div className="row">
                                       <div className="btn btn-sm col-md-4">
-                                        <IconButton onClick={() => getDocShareholding(apiData?.additionalDetails?.noObjectionCertificate)}>
+                                        <IconButton onClick={() => getDocShareholding(apiData?.additionalDetails?.boardResolutionAuthSignatoryDoc)}>
                                           <VisibilityIcon color="info" className="icon" />
                                         </IconButton>
                                       </div>
                                       <div className="btn btn-sm col-md-4">
-                                        <IconButton onClick={() => getDocShareholding(apiData?.additionalDetails?.noObjectionCertificate)}>
+                                        <IconButton onClick={() => getDocShareholding(apiData?.additionalDetails?.boardResolutionAuthSignatoryDoc)}>
                                           <FileDownloadIcon color="info" className="icon" />
                                         </IconButton>
                                       </div>

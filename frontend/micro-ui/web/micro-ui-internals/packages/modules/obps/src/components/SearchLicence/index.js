@@ -289,7 +289,7 @@ const SearchLicenceComp = ({ watch, register, control, setLoader, errors, setVal
             <FormControl>
               <h2>
                 {`${t("LC_REVENUE_ESTATE")}`}
-                Revenue estate
+                {/* Revenue estate */}
               </h2>
 
               <input type="text" className="form-control" placeholder="" {...register("revenueEstate")} />
@@ -312,7 +312,7 @@ const SearchLicenceComp = ({ watch, register, control, setLoader, errors, setVal
           <FormControl>
             <h2>
               {`${t("LC_TEHSIL")}`}
-              Tehsil
+              {/* Tehsil */}
             </h2>
             <input type="text" className="form-control" placeholder="" {...register("tehsil")} />
           </FormControl>
@@ -321,7 +321,7 @@ const SearchLicenceComp = ({ watch, register, control, setLoader, errors, setVal
           <FormControl>
             <h2>
               {`${t("LC_DISTRICT")}`}
-              District
+              {/* District */}
             </h2>
             <input type="text" className="form-control" placeholder="" {...register("district")} />
           </FormControl>
