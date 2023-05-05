@@ -303,22 +303,22 @@ const Addmoreinput = ({ applicationimp }) => {
                                                 <StyledTableCell style={{ width: 50 }}>Sr No.</StyledTableCell>
                                                 <StyledTableCell style={{ width: 750 }}>Compliances</StyledTableCell>
                                                 <StyledTableCell style={{ width: 350 }}>User name , Role , Date Time</StyledTableCell>
-                                                <StyledTableCell style={{ width: 100 }}>Proposed Condition Of LOI</StyledTableCell>
-                                                <StyledTableCell style={{ width: 50 }}>
+                                                <StyledTableCell style={{ width: 150 }}>Proposed Condition Of LOI</StyledTableCell>
+                                                {/* <StyledTableCell style={{ width: 50 }}>
                                                     <div className='row'>
                                                         <div className="btn btn-sm col-md-1">
                                                             <IconButton onClick={handleshow19}>
                                                                 <VisibilityIcon color="info" className="icon" />
                                                             </IconButton>
                                                         </div>
-                                                        {/* <div className="btn btn-sm col-md-1">
+                                                        <div className="btn btn-sm col-md-1">
                                         <IconButton onClick={handleshow19}>
                                           <FileDownloadIcon color="info" className="icon" />
                                         </IconButton>
-                                      </div> */}
+                                      </div>
                                                     </div>
 
-                                                </StyledTableCell>
+                                                </StyledTableCell> */}
 
                                             </TableRow>
 

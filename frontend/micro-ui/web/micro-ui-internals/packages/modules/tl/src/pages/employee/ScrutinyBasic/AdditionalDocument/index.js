@@ -72,7 +72,7 @@ const handleSubmit=(e)=>{
                     <th>Sr. No</th>
                     <th>Document Description</th>
                     <th>
-                   Download Document
+                     Download Document
                     </th>
                     
                     {/* <th>Part of LOI</th> */}
@@ -95,13 +95,13 @@ const handleSubmit=(e)=>{
                         {/* <input type="text" className="form-control" name="address" value={formValues.address} onChange={ event=>handleInputChange(index,event)} placeholder="Enter Address"/> */}
                         </td>
                     <td>  
-                    <button className="btn btn-success btn-lg mb-3" onClick={ addFields}>Add More </button>
+                    {/* <button className="btn btn-success btn-lg mb-3" onClick={ addFields}>Add More </button>
                         {
                           index!==0 &&(
                             <button className="btn btn-danger mx-2" onClick={ ()=>removeFields(index)}>Remove </button>
                           )  
                           
-                        }                                       
+                        }                                        */}
                                           
                     </td>
                     </tr> 
