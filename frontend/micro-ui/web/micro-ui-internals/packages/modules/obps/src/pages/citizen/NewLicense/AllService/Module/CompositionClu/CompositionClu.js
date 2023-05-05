@@ -73,7 +73,7 @@ function CompositionClu() {
     const handleSubmitExistingArea = () => {
     if (khasraModal !== "" && areaModal !== "") {
       const values = {
-        khasraNo: khasraModal,
+        kashraNo: khasraModal,
         area: areaModal,
       };
 
@@ -190,14 +190,17 @@ function CompositionClu() {
       compositionOfUrban: [
         {
           ...data,
-        }]
+          totalLandSoldInPartDetails:{
+            totalLandSoldInPart:modalValue
+        }}
+      ]
     };
 
     try {
       const Resp = await axios.post("/tl-services/composition/_create", postDistrict);
       setLoader(false);
-      setApplicationNumber(Resp?.data?.transfer?.[0]?.applicationNumber);
-      console.log("Resp=====", Resp?.data?.transfer?.[0]?.applicationNumber);
+      setApplicationNumber(Resp?.data?.compositionOfUrban?.[0]?.applicationNumber);
+      console.log("Resp=====", Resp?.data?.compositionOfUrban?.[0]?.applicationNumber);
       setOpen(true);
       // history.push("/digit-ui/citizen");
       // setApplicationNumber(Resp.data.changeBeneficial.applicationNumber);
@@ -214,7 +217,7 @@ function CompositionClu() {
          totalArea1 += Number(item?.area)
       }
       )
-       setValue("totalArea",totalArea1)
+       setValue("totalAreaInSqMetter",totalArea1)
        console.log("totalarea1",totalArea1)
     }
   },[modalValue]
@@ -234,14 +237,14 @@ function CompositionClu() {
                 <h2 className="FormLable">{`${t("URBAN_VIOLATION_NAME_OF_LAND_OWNER")}`}
                 {/* Name of original land owner  */}
                 </h2>{" "}
-                <OutlinedInput type="text" placeholder="" className="Inputcontrol" {...register("originalLand")} />
+                <OutlinedInput type="text" placeholder="" className="Inputcontrol" {...register("nameOfOrginalLandOner")} />
               </FormControl>
               &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
               <FormControl>
                 <h2 className="FormLable">{`${t("URBAN_VIOLATION_LAND_HOLDING")}`}
                  {/* Land holding of above  */}
                  </h2>{" "}
-                <OutlinedInput type="text" placeholder="" className="Inputcontrol" {...register("landHolding")} />
+                <OutlinedInput type="text" placeholder="" className="Inputcontrol" {...register("landHoldingOfAbove")} />
               </FormControl>
             </div>
           </div>
@@ -287,7 +290,7 @@ function CompositionClu() {
                               <StyledTableCell component="th" scope="row">
                                 {input + 1}
                               </StyledTableCell>
-                              <StyledTableCell>{elementInArray.khasraNo}</StyledTableCell>
+                              <StyledTableCell>{elementInArray.kashraNo}</StyledTableCell>
                               <StyledTableCell>{elementInArray.area}</StyledTableCell>
                               
                               
@@ -345,7 +348,7 @@ function CompositionClu() {
                     type="text"
                     placeholder=""
                     className="Inputcontrol"
-                   {...register("totalArea")} 
+                   {...register("totalAreaInSqMetter")} 
                   disabled
                   />
                     </FormLabel>
@@ -361,7 +364,7 @@ function CompositionClu() {
                 <h2 className="FormLable">{`${t("URBAN_VIOLATION_REASON_FOR_VIOLATION")}`}
                  {/* Explain the reason for the violation */}
                  </h2>{" "}
-                <OutlinedInput type="text" className="Inputcontrol" placeholder="" rows="3" {...register("violationReason")} />
+                <OutlinedInput type="text" className="Inputcontrol" placeholder="" rows="3" {...register("explainTheReasonForVoilation")} />
               </FormControl>
             </div>
           </div>
@@ -392,11 +395,11 @@ function CompositionClu() {
                                         type="file"
                                         style={{ display: "none" }}
                                         accept="application/pdf/jpeg/png"
-                                        onChange={(e) => getDocumentData(e?.target?.files[0], "dateOfSaleDeed")}
+                                        onChange={(e) => getDocumentData(e?.target?.files[0], "dateOfSaleDeeds")}
                                       />
                                     </label>
-                                    {watch("dateOfSaleDeed") && (
-                                      <a onClick={() => getDocShareholding(watch("dateOfSaleDeed"), setLoader)} className="btn btn-sm ">
+                                    {watch("dateOfSaleDeeds") && (
+                                      <a onClick={() => getDocShareholding(watch("dateOfSaleDeeds"), setLoader)} className="btn btn-sm ">
                                         <VisibilityIcon color="info" className="icon" />
                                       </a>
                                     )}
@@ -418,11 +421,11 @@ function CompositionClu() {
                                         type="file"
                                         style={{ display: "none" }}
                                         accept="application/pdf/jpeg/png"
-                                        onChange={(e) => getDocumentData(e?.target?.files[0], "anyOther")}
+                                        onChange={(e) => getDocumentData(e?.target?.files[0], "anyOtherDoc")}
                                       />
                                     </label>
-                                    {watch("anyOther") && (
-                                      <a onClick={() => getDocShareholding(watch("anyOther"), setLoader)} className="btn btn-sm ">
+                                    {watch("anyOtherDoc") && (
+                                      <a onClick={() => getDocShareholding(watch("anyOtherDoc"), setLoader)} className="btn btn-sm ">
                                         <VisibilityIcon color="info" className="icon" />
                                       </a>
                                     )}

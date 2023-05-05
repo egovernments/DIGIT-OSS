@@ -92,7 +92,7 @@ function LayoutPlanClu() {
     watch,
     setValue,
     resetField,
-  } = useForm({});
+  } = useForm({ reValidateMode: "onChange", mode: "onChange" });
   // const { register, handleSubmit, setValue, getValues, watch } = useForm();
   const [layOutPlanData, setLayOutPlanData] = useState([]);
   const [showToastError, setShowToastError] = useState({ label: "", error: false, success: false });
