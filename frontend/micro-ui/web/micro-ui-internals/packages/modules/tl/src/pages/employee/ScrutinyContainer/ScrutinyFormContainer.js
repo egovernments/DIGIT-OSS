@@ -435,12 +435,12 @@ const ScrutinyFormcontainer = (props) => {
 
     }
 
-    // closeModal();
+    closeModal();
 
-    // setTimeout(() => {
-    //   closeModal()
-    //   window.location.href = `/digit-ui/employee/tl/inbox`
-    // }, 3000);
+    setTimeout(() => {
+      closeModal()
+      window.location.href = `/digit-ui/employee/tl/inbox`
+    }, 3000);
   };
 
   useEffect(() => {
