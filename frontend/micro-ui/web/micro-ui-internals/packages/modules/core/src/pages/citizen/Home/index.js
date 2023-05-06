@@ -315,6 +315,10 @@ const Home = () => {
             link: `/digit-ui/citizen/obps/Beneficial`,
             i18nKey: t("Change in Beneficial Interest"),
           },
+          {
+            link: `/digit-ui/citizen/tl/Beneficial/my-application`,
+            i18nKey: t("TL_MY_APPLICATIONS_HEADER"),
+          },
         ],
       },
       {
