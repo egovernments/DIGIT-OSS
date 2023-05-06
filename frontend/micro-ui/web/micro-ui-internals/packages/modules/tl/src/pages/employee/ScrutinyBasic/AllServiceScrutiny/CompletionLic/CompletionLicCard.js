@@ -171,7 +171,7 @@ const CompletionLicCard = (props) => {
     // setTimeout(() => {
       setSelectedAction(null);
       setShowModal(false);
-      window.location.href = `/digit-ui/employee/tl/BeneficialInbox`;
+      window.location.href = `/digit-ui/employee/tl/CompletionInbox`;
     // }, 3000);
   };
 
