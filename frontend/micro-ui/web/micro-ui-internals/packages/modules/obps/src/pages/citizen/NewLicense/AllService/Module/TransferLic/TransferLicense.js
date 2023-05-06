@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import axios from "axios";
 import { Button } from "react-bootstrap";
@@ -34,6 +34,9 @@ const Transferlicence = () => {
   const [getError, setError] = useState("");
   const [applicationNumber, setApplicationNumber] = useState("");
   const [open, setOpen] = useState(false);
+  const [getId, setId] = useState("");
+  const [getData, setData] = useState(null);
+  const userInfo = Digit.UserService.getUser()?.info || {};
 
   const {
     register,
@@ -45,15 +48,20 @@ const Transferlicence = () => {
     resetField,
   } = useForm({});
 
+  const getApplicationId = (url) => {
+    const urlParams = new URLSearchParams(url.split("?")[1]);
+    return urlParams.get("id");
+  };
+
+  const id = getApplicationId(window.location.href);
+
   const transferLic = async (data) => {
-    console.log("data", data);
     // data["selectLicence"] = data?.selectLicence?.label;
     data["selectType"] = data?.selectType?.value;
     const numberLic = data?.licenceNo;
     delete data?.licenceNo;
     setLoader(true);
     const token = window?.localStorage?.getItem("token");
-    const userInfo = Digit.UserService.getUser()?.info || {};
     const postDistrict = {
       RequestInfo: {
         apiId: "Rainmaker",
@@ -71,6 +79,9 @@ const Transferlicence = () => {
         licenseNo: numberLic,
         action: "APPLY",
         tenantId: "hr",
+        status: "apply",
+        applicationNumber: id,
+        id: getId,
         newAdditionalDetails: {
           selectLicence: data?.selectLicence?.label,
           validUpto: data?.validUpto,
@@ -90,17 +101,26 @@ const Transferlicence = () => {
       },
     };
 
-    try {
-      const Resp = await axios.post("/tl-services/_TransferOfLicenseRequest/_create", postDistrict);
-      setLoader(false);
-      setApplicationNumber(Resp?.data?.transfer?.[0]?.applicationNumber);
-      console.log("Resp=====", Resp?.data?.transfer?.[0]?.applicationNumber);
-      setOpen(true);
-      // history.push("/digit-ui/citizen");
-      // setApplicationNumber(Resp.data.changeBeneficial.applicationNumber);
-    } catch (error) {
-      setError(error?.response?.data?.Errors[0]?.message);
-      setLoader(false);
+    if (id) {
+      try {
+        const Resp = await axios.post("/tl-services/_TransferOfLicenseRequest/_update", postDistrict);
+        setLoader(false);
+        setApplicationNumber(Resp?.data?.transfer?.[0]?.applicationNumber);
+        setOpen(true);
+      } catch (error) {
+        setError(error?.response?.data?.Errors[0]?.message);
+        setLoader(false);
+      }
+    } else {
+      try {
+        const Resp = await axios.post("/tl-services/_TransferOfLicenseRequest/_create", postDistrict);
+        setLoader(false);
+        setApplicationNumber(Resp?.data?.transfer?.[0]?.applicationNumber);
+        setOpen(true);
+      } catch (error) {
+        setError(error?.response?.data?.Errors[0]?.message);
+        setLoader(false);
+      }
     }
   };
 
@@ -133,12 +153,10 @@ const Transferlicence = () => {
     }
   };
 
-  const checkLicenceNumber = async () => {
+  const getTransferLicenceDetails = async (id) => {
     setLoader(true);
-    const licNo = watch("licenceNo");
     const token = window?.localStorage?.getItem("token");
-    const userInfo = Digit.UserService.getUser()?.info || {};
-    const postDistrict = {
+    const data = {
       RequestInfo: {
         apiId: "Rainmaker",
         ver: "v1",
@@ -153,16 +171,29 @@ const Transferlicence = () => {
       },
     };
     try {
-      const respData = await axios.post(`/tl-services/_TransferOfLicenseRequest/_search?licenseNo=${licNo}`, postDistrict);
-      console.log("resp====", respData?.data?.transfer[0]?.additionalDetails?.amount);
-      setValue("amount", respData?.data?.transfer[0]?.additionalDetails?.amount);
-      setShowField(true);
+      const Resp = await axios.post(`/tl-services/_TransferOfLicenseRequest/_search?applicationNumber=${id}`, data);
       setLoader(false);
-      // setApplicationNumber(Resp.data.changeBeneficial.applicationNumber);
+      const allData = Resp?.data?.transfer[0];
+      setData(allData);
+      const resData = Resp?.data?.transfer[0]?.additionalDetails;
+      console.log(Resp?.data?.transfer[0]);
+      setId(Resp?.data?.transfer[0]?.id);
+      Object?.keys(resData)?.map((item) => {
+        setValue(item, resData[item]);
+      });
+      setValue("selectType", { label: resData?.selectType, value: resData?.selectType });
+      setValue("licenceNo", allData?.licenseNo);
     } catch (error) {
       setLoader(false);
+      return error.message;
     }
   };
+
+  useEffect(() => {
+    if (id) {
+      getTransferLicenceDetails(id);
+    }
+  }, [id]);
 
   return (
     <div>
@@ -183,6 +214,7 @@ const Transferlicence = () => {
                 errors={errors}
                 setValue={setValue}
                 resetField={resetField}
+                getData={getData}
               />
               {/* <div className="col col-3">
                 <h2 className="FormLable">

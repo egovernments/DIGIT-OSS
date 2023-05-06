@@ -420,7 +420,7 @@ const ScrutinyFormcontainer = (props) => {
 
         }
       }
-      const Resp = await axios.post(`/tl-services/loi/report/_create?applicationNumber=${id}&role=DTCP_HR`, payload, { responseType: "arraybuffer" })
+      const Resp = await axios.post(`/tl-services/loi/report/_create?applicationNumber=${id}`, payload, { responseType: "arraybuffer" })
 
       console.log("logger12345...", Resp.data, userInfo)
 
@@ -435,12 +435,12 @@ const ScrutinyFormcontainer = (props) => {
 
     }
 
-    // closeModal();
+    closeModal();
 
-    // setTimeout(() => {
-    //   closeModal()
-    //   window.location.href = `/digit-ui/employee/tl/inbox`
-    // }, 3000);
+    setTimeout(() => {
+      closeModal()
+      window.location.href = `/digit-ui/employee/tl/inbox`
+    }, 3000);
   };
 
   useEffect(() => {
@@ -563,6 +563,7 @@ const ScrutinyFormcontainer = (props) => {
             setDisplayMenu={setDisplayMenu}
             businessService={businessService}
             // forcedActionPrefix={forcedActionPrefix}
+            ApplicationNumber={id}
             ActionBarStyle={{}}
             MenuStyle={{}}
           />

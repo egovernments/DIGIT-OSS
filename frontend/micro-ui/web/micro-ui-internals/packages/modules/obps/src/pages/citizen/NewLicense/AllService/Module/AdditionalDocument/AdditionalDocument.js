@@ -1,6 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { useForm, useFieldArray } from "react-hook-form";
 import axios from "axios";
+import { Button } from "react-bootstrap";
+import { Dialog } from "@mui/material";
+import DialogActions from "@mui/material/DialogActions";
+import DialogContent from "@mui/material/DialogContent";
+import DialogContentText from "@mui/material/DialogContentText";
+import DialogTitle from "@mui/material/DialogTitle";
+import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
 import ReactMultiSelect from "../../../../../../../../../react-components/src/atoms/ReactMultiSelect";
 import Spinner from "../../../../../../components/Loader";
 import SearchLicenceComp from "../../../../../../components/SearchLicence";
@@ -8,21 +15,25 @@ import FileUpload from "@mui/icons-material/FileUpload";
 import CusToaster from "../../../../../../components/Toaster";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import { useTranslation } from "react-i18next";
+import { getDocShareholding } from "../../../docView/docView.help";
+import { useHistory } from "react-router-dom";
 
 const selectTypeData = [
-  { label: "Application Number", value: "APPLICATIONNUMBER" },
-  { label: "LOI Number", value: "LOINUMBER" },
-  { label: "Licence Number", value: "LICENCENUMBER" },
+  { label: "Application Number", value: "applicationNumber" },
+  { label: "LOI Number", value: "loiNumber" },
+  { label: "Licence Number", value: "licenceNumber" },
 ];
 
 const AdditionalDocument = () => {
   const { t } = useTranslation();
+  const history = useHistory();
   const userInfo = Digit.UserService.getUser()?.info || {};
   const [loader, setLoader] = useState(false);
   const [selectedFiles, setSelectedFiles] = useState([]);
   const [showToastError, setShowToastError] = useState({ label: "", error: false, success: false });
   const [services, setServices] = useState([]);
   const [getData, setData] = useState([]);
+  const [open, setOpen] = useState(false);
 
   const {
     watch,
@@ -47,14 +58,69 @@ const AdditionalDocument = () => {
       ],
     },
   });
+
+  useEffect(() => {
+    console.log("user", userInfo);
+  }, []);
+
   const { fields, append, remove } = useFieldArray({
     control,
     name: "DocumentsDetails",
   });
 
-  const additionalDoc = (data) => {
-    console.log("data", data);
-    data["selectLicence"] = data?.selectLicence?.label;
+  const additionalDoc = async (data) => {
+    const token = window?.localStorage?.getItem("token");
+    setLoader(true);
+
+    data["businessService"] = data?.allservices?.value;
+    data["type"] = data?.numberType?.value;
+
+    if (data?.numberType?.value == "loiNumber") {
+      data["loiNumber"] = data?.number;
+      data["applicationNumber"] = "";
+      data["licenceNumber"] = "";
+    } else if (data?.numberType?.value == "applicationNumber") {
+      data["applicationNumber"] = data?.number;
+      data["loiNumber"] = "";
+      data["licenceNumber"] = "";
+    } else if (data?.numberType?.value == "licenceNumber") {
+      data["licenceNumber"] = data?.number;
+      data["applicationNumber"] = "";
+      data["loiNumber"] = "";
+    }
+
+    data["username"] = userInfo?.userName;
+    data["developerName"] = userInfo?.name;
+    delete data?.numberType;
+    delete data?.allservices;
+    delete data?.number;
+
+    const payload = {
+      RequestInfo: {
+        apiId: "Rainmaker",
+        ver: "v1",
+        ts: 0,
+        action: "_search",
+        did: "",
+        key: "",
+        msgId: "090909",
+        requesterId: "",
+        authToken: token,
+        userInfo: userInfo,
+      },
+      AddtionalDocuments: {
+        ...data,
+      },
+    };
+    try {
+      const Resp = await axios.post("/tl-services/_additionalDocuments/_create", payload);
+      setLoader(false);
+      setOpen(true);
+      // setApplicationNumber(Resp.data.changeBeneficial.applicationNumber);
+    } catch (error) {
+      setLoader(false);
+      return error;
+    }
   };
 
   const getAllservices = async (val) => {
@@ -158,6 +224,11 @@ const AdditionalDocument = () => {
   //     return error;
   //   }
   // };
+
+  const handleClose = () => {
+    setOpen(false);
+    history.push("/digit-ui/citizen");
+  };
 
   return (
     <div>
@@ -287,7 +358,7 @@ const AdditionalDocument = () => {
                             {index > 0 && (
                               <button type="button" style={{ float: "right" }} className="btn btn-primary" onClick={() => remove(index)}>
                                 {`${t("AD_REMOVE")}`}
-                                Remove
+                                {/* Remove */}
                               </button>
                             )}
                           </div>
@@ -354,12 +425,36 @@ const AdditionalDocument = () => {
                 id="btnSearch"
                 class=""
               >
-                Submit
+                {`${t("AD_SUBMIT")}`}
+                {/* Submit */}
               </button>
             </div>
           </div>
         </div>
       </form>
+      <Dialog open={open} onClose={handleClose} aria-labelledby="alert-dialog-title" aria-describedby="alert-dialog-description">
+        <DialogTitle id="alert-dialog-title">Service Plan Submission</DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+            <p>
+              {/* {`${t("TL_YOUR_TRANSFER_OF_LICENSE_IS_SUBMITTED_SUCCESSFULLY")}`} */}
+              Your Documents has been added successfully
+              <span>
+                <CheckCircleOutlineIcon style={{ color: "blue", variant: "filled" }} />
+              </span>
+            </p>
+            {/* <p>
+              Please Note down your Application Number <span style={{ padding: "5px", color: "blue" }}>test</span> for further assistance
+            </p> */}
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose} autoFocus>
+            {`${t("TL_OK")}`}
+            {/* Ok */}
+          </Button>
+        </DialogActions>
+      </Dialog>
       {showToastError && (
         <CusToaster
           label={showToastError?.label}

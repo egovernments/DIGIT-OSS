@@ -163,17 +163,17 @@ const authToken = Digit.UserService.getUser()?.access_token || null;
           userInfo: userInfo
       }
       }
-      const response = await axios.post("/tl-services/ApprovalStandard/_update",body);
+      const response = await axios.post("/tl-services/_ApprovalStandard/_update",body);
       console.log("Update API Response ====> ", response.data);
     } catch (error) {
       console.log("Update Error ===> ", error.message)
     }
 
     closeModal();
-    // setTimeout(() => {
+    setTimeout(() => {
      
-    //   window.location.href = `/digit-ui/employee/tl/TranferInbox`
-    //   }, 3000);
+      window.location.href = `/digit-ui/employee/tl/StandardInbox`
+      }, 3000);
   };
 
   

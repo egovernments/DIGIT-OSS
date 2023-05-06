@@ -15,9 +15,11 @@ import ScrollToTop from "@egovernments/digit-ui-react-components/src/atoms/Scrol
 import FileUpload from "@mui/icons-material/FileUpload";
 import { Toast } from "@egovernments/digit-ui-react-components";
 import AddBoxSharp from "@mui/icons-material/AddBoxSharp";
+import { useTranslation } from "react-i18next";
 
 const FeesChargesForm = (props) => {
   const location = useLocation();
+  const { t } = useTranslation();
   const history = useHistory();
   const userInfo = Digit.UserService.getUser()?.info || {};
   const [modal, setmodal] = useState(false);
@@ -445,16 +447,23 @@ const FeesChargesForm = (props) => {
                   )}
                   <div className="row">
                     <div className="col col-4">
-                      <h6>Total Scrutiny Fee</h6>
+                      <h6>
+                        {`${t("NWL_APPLICANT_FEE_TOTAL_SCRUITNY_FEE")}`}
+                        {/* Total Scrutiny Fee */}
+                      </h6>
                       <input type="text" className="form-control" disabled {...register("totalScrutinyFee")} />
                     </div>
                     <div className="col col-4">
-                      <h6>Total License Fee (25%)</h6>
+                      <h6>
+                        {`${t("NWL_APPLICANT_FEE_TOTAL_LICENCE_FEE")}`}
+                        {/* Total License Fee (25%) */}
+                      </h6>
                       <input type="text" className="form-control" disabled {...register("totalLicenseFee")} />
                     </div>
                     <div className="col col-4">
                       <h6 data-toggle="tooltip" data-placement="top" title="Total Fees (License fee 25% + Scrutiny Fees)">
-                        Amount Payable
+                        {`${t("NWL_APPLICANT_FEE_TOTAL_FEE")}`}
+                        {/* Amount Payable */}
                       </h6>
                       <input type="text" className="form-control" disabled {...register("payableNow")} />
                     </div>
@@ -540,7 +549,9 @@ const FeesChargesForm = (props) => {
                   <hr />
                   <br></br>
                   <h5 className="text-black">
-                    Undertakings <span style={{ color: "red" }}>*</span>
+                    {`${t("NWL_UNDERTAKINGS")}`}
+                    {/* Undertakings */}
+                    <span style={{ color: "red" }}>*</span>
                   </h5>
                   <div className="px-2">
                     <p className="text-black">The following is undertaken: </p>
@@ -559,7 +570,8 @@ const FeesChargesForm = (props) => {
                         }}
                         onClick={() => showPdf()}
                       >
-                        Review Application
+                        {`${t("NWL_REVIEW_APPLICATION")}`}
+                        {/* Review Application */}
                       </div>
                     </ul>
                   </div>

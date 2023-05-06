@@ -34,9 +34,11 @@ import VisibilityIcon from "@mui/icons-material/Visibility";
 import CusToaster from "../../../../components/Toaster";
 import InfoIcon from "@mui/icons-material/Info";
 import Tooltip from "@mui/material/Tooltip";
+import { useTranslation } from "react-i18next";
 
 const AppliedDetailForm = (props) => {
   const location = useLocation();
+  const { t } = useTranslation();
   const Purpose = localStorage.getItem("purpose");
   const [file, setFile] = useState(null);
   const [loader, setLoader] = useState(false);
@@ -639,14 +641,16 @@ const AppliedDetailForm = (props) => {
                 <div key={i}>
                   <h6 style={{ marginTop: "10px" }}>
                     <span>
-                      <b>Purpose Name: </b>
+                      <b>
+                        {`${t("NWL_APPLICANT_DGPS_POINTS_PURPOSE_NAME")}`}:{/* Purpose Name: */}
+                      </b>
                     </span>
                     {x?.name}
                   </h6>
                   <div className="row">
                     <div className="col col-4 mt-3">
                       <h6>
-                        Area(in acres):
+                        {`${t("NWL_APPLICANT_DGPS_POINTS_AREA")}`}:{/* Area(in acres): */}
                         <input
                           type="number"
                           className="form-control"
@@ -670,7 +674,7 @@ const AppliedDetailForm = (props) => {
                     {farsArr?.length > 0 && (
                       <div className="col col-4 mt-3">
                         <h6>
-                          FAR:{" "}
+                          {`${t("NWL_APPLICANT_DGPS_POINTS_FAR")}`}:{/* FAR:{" "} */}
                           <ReactMultiSelect
                             control={control}
                             name={x?.code + x?.id}
@@ -726,7 +730,8 @@ const AppliedDetailForm = (props) => {
                       setDGPSModal(true);
                     }}
                   >
-                    Enter DGPS points
+                    {`${t("NWL_APPLICANT_DGPS_POINTS_DOCUMENTS")}`}
+                    {/* Enter DGPS points */}
                   </Button>
                 </div>
 
@@ -762,7 +767,10 @@ const AppliedDetailForm = (props) => {
                       <b>Bifurcation Of Component</b>
                     </h4>
                     <h4 className="mt-3">
-                      <b>Total Applied Area: </b> {stepData?.ApplicantPurpose?.totalArea}
+                      <b>
+                        {`${t("NWL_APPLICANT_DGPS_TOTAL_APPLIED_AREA")}`}:{/* Total Applied Area:  */}
+                      </b>{" "}
+                      {stepData?.ApplicantPurpose?.totalArea}
                     </h4>
                   </div>
                 </div>
@@ -980,7 +988,9 @@ const AppliedDetailForm = (props) => {
                   <div className="row mt-3 ">
                     <div className="col col-3">
                       <h6 style={{ display: "flex" }}>
-                        Layout Plan in pdf<span style={{ color: "red" }}>*</span>
+                        {`${t("NWL_APPLICANT_DGPS_DOCUMENTS_LAYOUT_PLAN_PDF")}`}
+                        {/* Layout Plan in pdf */}
+                        <span style={{ color: "red" }}>*</span>
                       </h6>
                       <label>
                         <FileUpload style={{ cursor: "pointer" }} color="primary" />
@@ -999,7 +1009,9 @@ const AppliedDetailForm = (props) => {
                     </div>
                     <div className="col col-3">
                       <h6 style={{ display: "flex" }}>
-                        Layout Plan in dxf<span style={{ color: "red" }}>*</span>
+                        {`${t("NWL_APPLICANT_DGPS_DOCUMENTS_LAYOUT_PLAN_DXF")}`}
+                        {/* Layout Plan in dxf */}
+                        <span style={{ color: "red" }}>*</span>
                       </h6>
                       <label>
                         <FileUpload style={{ cursor: "pointer" }} color="primary" />
@@ -1020,7 +1032,9 @@ const AppliedDetailForm = (props) => {
                     <div className="col col-3">
                       <label>
                         <h6 style={{ display: "flex" }}>
-                          Undertaking<span style={{ color: "red" }}>*</span>
+                          {`${t("NWL_APPLICANT_DGPS_DOCUMENTS_UNDERTAKING")}`}
+                          {/* Undertaking */}
+                          <span style={{ color: "red" }}>*</span>
                           <Tooltip title="Undertaking that no change has been made in the phasing ">
                             <InfoIcon style={{ cursor: "pointer" }} color="primary"></InfoIcon>
                           </Tooltip>
@@ -1044,7 +1058,9 @@ const AppliedDetailForm = (props) => {
 
                     <div className="col col-3">
                       <h6 style={{ display: "flex" }}>
-                        Development Plan<span style={{ color: "red" }}>*</span>
+                        {`${t("NWL_APPLICANT_DGPS_DOCUMENTS_DEVELOPMENT_PLAN")}`}
+                        {/* Development Plan */}
+                        <span style={{ color: "red" }}>*</span>
                       </h6>
                       <label>
                         <FileUpload style={{ cursor: "pointer" }} color="primary" />
@@ -1064,7 +1080,9 @@ const AppliedDetailForm = (props) => {
 
                     <div className="col col-3">
                       <h6 style={{ display: "flex" }}>
-                        Sectoral Plan<span style={{ color: "red" }}>*</span>
+                        {`${t("NWL_APPLICANT_DGPS_DOCUMENTS_SECTORAL_PLAN")}`}
+                        {/* Sectoral Plan */}
+                        <span style={{ color: "red" }}>*</span>
                       </h6>
                       <label>
                         <FileUpload style={{ cursor: "pointer" }} color="primary" />
@@ -1084,7 +1102,9 @@ const AppliedDetailForm = (props) => {
 
                     <div className="col col-3">
                       <h6 style={{ display: "flex" }}>
-                        Explanatory note<span style={{ color: "red" }}>*</span>
+                        {`${t("NWL_APPLICANT_DGPS_DOCUMENTS_EXPLANATORY_NOTE")}`}
+                        {/* Explanatory note */}
+                        <span style={{ color: "red" }}>*</span>
                       </h6>
                       <label>
                         <FileUpload style={{ cursor: "pointer" }} color="primary" />
@@ -1104,7 +1124,9 @@ const AppliedDetailForm = (props) => {
 
                     <div className="col col-3">
                       <h6 style={{ display: "flex" }}>
-                        Guide Map<span style={{ color: "red" }}>*</span>
+                        {`${t("NWL_APPLICANT_DGPS_DOCUMENTS_GUIDE_MAP")}`}
+                        {/* Guide Map */}
+                        <span style={{ color: "red" }}>*</span>
                       </h6>
                       <label>
                         <FileUpload style={{ cursor: "pointer" }} color="primary" />
@@ -1124,7 +1146,9 @@ const AppliedDetailForm = (props) => {
 
                     <div className="col col-3">
                       <h6 style={{ display: "flex" }}>
-                        Indemnity Bond<span style={{ color: "red" }}>*</span>
+                        {`${t("NWL_APPLICANT_DGPS_DOCUMENTS_INDEMNITY_BOND")}`}
+                        {/* Indemnity Bond */}
+                        <span style={{ color: "red" }}>*</span>
                       </h6>
                       <label>
                         <FileUpload style={{ cursor: "pointer" }} color="primary" />
@@ -1143,7 +1167,10 @@ const AppliedDetailForm = (props) => {
                     </div>
 
                     <div className="col col-3">
-                      <h6 style={{ display: "flex" }}>Any other relevant document</h6>
+                      <h6 style={{ display: "flex" }}>
+                        {`${t("NWL_APPLICANT_DGPS_DOCUMENTS_ANY_OTHER_RELEVANT_DOCUMENT")}`}
+                        {/* Any other relevant document */}
+                      </h6>
                       <label>
                         <FileUpload style={{ cursor: "pointer" }} color="primary" />
                         <input

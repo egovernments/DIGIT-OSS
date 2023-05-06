@@ -1,12 +1,11 @@
-import { Card, Header, KeyNote, Loader, SubmitBar } from "@egovernments/digit-ui-react-components";
+import { Header } from "@egovernments/digit-ui-react-components";
 import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useHistory } from "react-router-dom";
 import Spinner from "../../../components/Loader";
 import axios from "axios";
-
-///////////////////////////////////////
 import { convertEpochToDateDMY } from "../../../utils";
+///////////////////////////////////////
 import Col from "react-bootstrap/Col";
 
 import Paper from "@mui/material/Paper";
@@ -20,14 +19,13 @@ import TableHead from "@mui/material/TableHead";
 import TablePagination from "@mui/material/TablePagination";
 import TableRow from "@mui/material/TableRow";
 
-const MyApplications = ({ view }) => {
+const ASDApplications = ({ view }) => {
   const { t } = useTranslation();
   const history = useHistory();
   const [loader, setLoader] = useState(false);
   const [data, setData] = useState([]);
 
   // const { mobileNumber, tenantId } = Digit.UserService.getUser()?.info || {};
-
   // const { isLoading, isError, data, error, ...rest } =
   //   view === "bills"
   //     ? Digit.Hooks.tl.useFetchBill({
@@ -55,7 +53,7 @@ const MyApplications = ({ view }) => {
       },
     };
     try {
-      const Resp = await axios.post("/tl-services/v1/_search", data);
+      const Resp = await axios.post("/tl-services/_ApprovalStandard/_search", data);
       setLoader(false);
       setData(Resp?.data);
     } catch (error) {
@@ -68,7 +66,7 @@ const MyApplications = ({ view }) => {
     getApplications();
   }, []);
 
-  ////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const handleChangePage = (event, newPage) => {
       setPage(newPage);
@@ -99,7 +97,6 @@ const MyApplications = ({ view }) => {
       },
   }));
 
-
   return (
     <div>
       {loader && <Spinner></Spinner>}
@@ -108,21 +105,25 @@ const MyApplications = ({ view }) => {
         <tr>
           <th
             style={{
-              border: "1px solid rgb(221, 221, 221)",
-              padding: "12px 8px",
+              border: "1px solid #ddd",
+              padding: "8px",
+              paddingTop: "12px",
+              paddingBottom: "12px",
               textAlign: "left",
-              backgroundColor: "#024f9d",
+              backgroundColor: "#4169E1",
               color: "white",
             }}
           >
-            ID
+          ID
           </th>
           <th
             style={{
-              border: "1px solid rgb(221, 221, 221)",
-              padding: "12px 8px",
+              border: "1px solid #ddd",
+              padding: "8px",
+              paddingTop: "12px",
+              paddingBottom: "12px",
               textAlign: "left",
-              backgroundColor: "#024f9d",
+              backgroundColor: "#4169E1",
               color: "white",
             }}
           >
@@ -130,10 +131,12 @@ const MyApplications = ({ view }) => {
           </th>
           <th
             style={{
-              border: "1px solid rgb(221, 221, 221)",
-              padding: "12px 8px",
+              border: "1px solid #ddd",
+              padding: "8px",
+              paddingTop: "12px",
+              paddingBottom: "12px",
               textAlign: "left",
-              backgroundColor: "#024f9d",
+              backgroundColor: "#4169E1",
               color: "white",
             }}
           >
@@ -141,10 +144,12 @@ const MyApplications = ({ view }) => {
           </th>
           <th
             style={{
-              border: "1px solid rgb(221, 221, 221)",
-              padding: "12px 8px",
+              border: "1px solid #ddd",
+              padding: "8px",
+              paddingTop: "12px",
+              paddingBottom: "12px",
               textAlign: "left",
-              backgroundColor: "#024f9d",
+              backgroundColor: "#4169E1",
               color: "white",
             }}
           >
@@ -152,10 +157,12 @@ const MyApplications = ({ view }) => {
           </th>
           <th
             style={{
-              border: "1px solid rgb(221, 221, 221)",
-              padding: "12px 8px",
+              border: "1px solid #ddd",
+              padding: "8px",
+              paddingTop: "12px",
+              paddingBottom: "12px",
               textAlign: "left",
-              backgroundColor: "#024f9d",
+              backgroundColor: "#4169E1",
               color: "white",
             }}
           >
@@ -163,10 +170,12 @@ const MyApplications = ({ view }) => {
           </th>
           <th
             style={{
-              border: "1px solid rgb(221, 221, 221)",
-              padding: "12px 8px",
+              border: "1px solid #ddd",
+              padding: "8px",
+              paddingTop: "12px",
+              paddingBottom: "12px",
               textAlign: "left",
-              backgroundColor: "#024f9d",
+              backgroundColor: "#4169E1",
               color: "white",
             }}
           >
@@ -174,17 +183,19 @@ const MyApplications = ({ view }) => {
           </th>
           <th
             style={{
-              border: "1px solid rgb(221, 221, 221)",
-              padding: "12px 8px",
+              border: "1px solid #ddd",
+              padding: "8px",
+              paddingTop: "12px",
+              paddingBottom: "12px",
               textAlign: "left",
-              backgroundColor: "#024f9d",
+              backgroundColor: "#4169E1",
               color: "white",
             }}
           >
             Status
           </th>
         </tr>
-        {data?.Licenses?.map((item, index) => {
+        {data?.ApprovalStandardEntity?.map((item, index) => {
           return (
             <tr key={`table${index}`}>
               <td style={{ border: "1px solid #ddd", padding: " 8px" }}>{item?.id}</td>
@@ -195,22 +206,21 @@ const MyApplications = ({ view }) => {
                 onClick={() => {
                   window.localStorage.setItem("ApplicationStatus", item?.status);
                   history.push({
-                    pathname: "/digit-ui/citizen/obps/tab",
+                    pathname: "/digit-ui/citizen/obps/Standard",
                     search: `?id=${item?.applicationNumber}`,
                   });
                 }}
               >
                 {item?.applicationNumber}
               </td>
-              <td style={{ border: "1px solid #ddd", padding: " 8px" }}>{item?.applicationDate}</td>
+              <td style={{ border: "1px solid #ddd", padding: " 8px" }}>{convertEpochToDateDMY(item?.auditDetails?.createdTime)}</td>
               <td style={{ border: "1px solid #ddd", padding: " 8px" }}>{item?.action}</td>
               <td style={{ border: "1px solid #ddd", padding: " 8px" }}>{item?.status}</td>
             </tr>
           );
         })}
       </table> */}
-
-      <Col md={12} lg={12} mb={3} sx={{ marginY: 2 }}>
+        <Col md={12} lg={12} mb={3} sx={{ marginY: 2 }}>
 
 <Paper sx={{ width: "126%", overflow: "hidden", marginY: 2 }}>
 
@@ -232,7 +242,7 @@ const MyApplications = ({ view }) => {
             </TableHead>
             <TableBody>
 
-            {data?.Licenses?.map((item, index) => {
+            {data?.ApprovalStandardEntity?.map((item, index) => {
           return (
                         <StyledTableRow sx={{ "&:last-child td, &:last-child th": { border: 0 } }}>
                             <StyledTableCell component="th" scope="row">
@@ -247,7 +257,7 @@ const MyApplications = ({ view }) => {
                              onClick={() => {
                                window.localStorage.setItem("ApplicationStatus", item?.status);
                                history.push({
-                                 pathname: "/digit-ui/citizen/obps/tab",
+                                 pathname: "/digit-ui/citizen/obps/Standard",
                                  search: `?id=${item?.applicationNumber}`,
                                });
                              }}
@@ -283,7 +293,6 @@ const MyApplications = ({ view }) => {
 </Paper>
 
 </Col>
-
     </div>
 
     /* <Card>
@@ -300,4 +309,4 @@ const MyApplications = ({ view }) => {
     /* tradelicence/application/PG-TL-2021-09-07-002737/pg.citya */
   );
 };
-export default MyApplications;
+export default ASDApplications;
