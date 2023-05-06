@@ -209,6 +209,46 @@ function CompositionClu() {
       setLoader(false);
     }
   };
+
+    const getCompositionCluDetails = async (id) => {
+    setLoader(true);
+    const token = window?.localStorage?.getItem("token");
+    const data = {
+      RequestInfo: {
+        apiId: "Rainmaker",
+        ver: "v1",
+        ts: 0,
+        action: "_search",
+        did: "",
+        key: "",
+        msgId: "090909",
+        requesterId: "",
+        authToken: token,
+        userInfo: userInfo,
+      },
+    };
+    try {
+      const Resp = await axios.post(`/tl-services/composition/_get?applicationNumber=${id}`, data);
+      setLoader(false);
+      const resData = Resp?.data?.compositionOfUrban[0]?.additionalDetails;
+      console.log(Resp?.data?.compositionOfUrban[0]?.additionalDetails);
+      Object?.keys(resData)?.map((item) => {
+        setValue(item, resData[item]);
+      });
+      setValue("selectType", { label: resData?.selectType, value: resData?.selectType });
+    } catch (error) {
+      setLoader(false);
+      return error.message;
+    }
+  };
+    const id = getApplicationId(window.location.href);
+
+  useEffect(() => {
+    if (id) {
+      getCompositionCluDetails(id);
+    }
+  }, [id]);
+
    useEffect(()=>{
     console.log("totalarea1")
     if(modalValue?.length){
