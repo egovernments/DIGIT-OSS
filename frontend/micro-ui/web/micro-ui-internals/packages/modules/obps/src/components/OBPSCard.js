@@ -332,14 +332,14 @@ const OBPSCard = () => {
           {
             count: "-",
             label: t("COMPLETION_CERTIFICATE_CARD"),
-            link: `/digit-ui/employee/tl/CompositionInbox`,
+            link: `/digit-ui/employee/tl/CompletionInbox`,
           },
         ],
         links: [
           {
             count: "-",
             label: t("ES_TITLE_INBOX"),
-            link: `/digit-ui/employee/tl/CompositionInbox`,
+            link: `/digit-ui/employee/tl/CompletionInbox`,
           }
         ],
       };

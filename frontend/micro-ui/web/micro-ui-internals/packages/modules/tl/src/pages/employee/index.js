@@ -44,7 +44,7 @@ import StandardInbox from "./ScrutinyBasic/AllServiceScrutiny/StandardDesign/Inb
 import RenewalInbox from "./ScrutinyBasic/AllServiceScrutiny/Renewal/Inbox";
 import Beneficialscrutiny from "../employee/ScrutinyBasic/AllServiceScrutiny/BeneficialInterest/Beneficial";
 import StandardDesignCard from "./ScrutinyBasic/AllServiceScrutiny/StandardDesign/StandardDesignCard";
-import CompositionInbox from "./ScrutinyBasic/AllServiceScrutiny/CompletionLic/Inbox/index";
+// import CompositionInbox from "./ScrutinyBasic/AllServiceScrutiny/CompletionLic/Inbox/index";
 import CommunityInbox from "./ScrutinyBasic/AllServiceScrutiny/ExtensionCommunity/Inbox";
 import Completionscrutiny from "../employee/ScrutinyBasic/AllServiceScrutiny/CompletionLic/CompletionLic";
 import SurrenderLicScrutiny from "../employee/ScrutinyBasic/AllServiceScrutiny/SurrenderLic/SurrenderLic";
@@ -52,6 +52,8 @@ import SurrenderScrutiny from "./ScrutinyBasic/AllServiceScrutiny/SurrenderLic/S
 import ExtensionInbox from "./ScrutinyBasic/AllServiceScrutiny/ExtensionClu/Inbox";
 import BeneficialCard from "./ScrutinyBasic/AllServiceScrutiny/BeneficialInterest/BeneficialCard";
 import ExtensionCluCard from "./ScrutinyBasic/AllServiceScrutiny/ExtensionClu/ExtensionCluCard";
+import CompletionLicCard from "./ScrutinyBasic/AllServiceScrutiny/CompletionLic/CompletionLicCard";
+import CompletionInbox from "./ScrutinyBasic/AllServiceScrutiny/CompletionLic/Inbox/index";
 
 const TLBreadCrumb = ({ location }) => {
   const { t } = useTranslation();
@@ -254,7 +256,7 @@ const EmployeeApp = ({ path, url, userType }) => {
             <PrivateRoute path={`${path}/LayoutPlanScritny/:id`} component={LayoutPlanScritny} />
             <PrivateRoute path={`${path}/StandardDesign/:id`} component={StandardDesignCard} />
             <PrivateRoute path={`${path}/CompositionClu/:id`} component={CompositionClu} />
-            <PrivateRoute path={`${path}/Completionscrutiny/:id`} component={Completionscrutiny} />
+            <PrivateRoute path={`${path}/Completionscrutiny/:id`} component={CompletionLicCard} />
             <PrivateRoute path={`${path}/ServiceScrutiny/:id`} component={ServiceScrutiny} />
             {/* <PrivateRoute path={`${path}/ScrutinyForm`} component={ScrutinyForm} /> */}
             <PrivateRoute path={`${path}/ScrutinyForm/:id`} component={ScrutinyForm} />
@@ -306,10 +308,23 @@ const EmployeeApp = ({ path, url, userType }) => {
                 />
               )}
             />
-            <PrivateRoute
+            {/* <PrivateRoute
               path={`${path}/CompositionInbox`}
               component={(props) => (
                 <CompositionInbox
+                  parentRoute={path}
+                  businessService={["COMPLETION_CERTIFICATE"]}
+                  filterComponent="TL_INBOX_FILTER"
+                  initialStates={{}}
+                  isInbox={true}
+                />
+              )}
+            /> */}
+
+            <PrivateRoute
+              path={`${path}/CompletionInbox`}
+              component={(props) => (
+                <CompletionInbox
                   parentRoute={path}
                   businessService={["COMPLETION_CERTIFICATE"]}
                   filterComponent="TL_INBOX_FILTER"

@@ -77,6 +77,8 @@ const DesktopInbox = ({
                       ? "ElectricalScrutiny"
                       : row.original["businessService"] === "BG_NEW"
                       ? "ScrutinyForm"
+                      : row.original["businessService"] === "COMPLETION_CERTIFICATE"
+                      ? "Completionscrutiny"
                       : null
                   }/` + row.original["applicationId"]
                 }
@@ -179,6 +181,8 @@ const DesktopInbox = ({
                       ? "Completionscrutiny"
                       : row.original["businessService"] === "BG_NEW"
                       ? "ScrutinyForm"
+                      : row.original["businessService"] === "COMPLETION_CERTIFICATE"
+                      ? "Completionscrutiny"
                       : null
                   }/` + row.original["applicationId"]
                 }

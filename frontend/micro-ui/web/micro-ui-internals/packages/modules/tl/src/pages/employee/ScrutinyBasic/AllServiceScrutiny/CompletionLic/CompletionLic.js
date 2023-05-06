@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Button from "react-bootstrap/Button";
 import Col from "react-bootstrap/Col";
 import Form from "react-bootstrap/Form";
@@ -14,11 +14,18 @@ import ModalChild from "../../Remarks/ModalChild";
 import DownloadForOfflineIcon from "@mui/icons-material/DownloadForOffline";
 import { useStyles } from "../../css/personalInfoChild.style";
 import '../../css/personalInfoChild.style.js'
+import { useLocation } from "react-router-dom";
+import { useTranslation } from "react-i18next";
+import { getDocShareholding } from "../../ScrutinyDevelopment/docview.helper";
+import Visibility from "@mui/icons-material/Visibility";
+import { FormControl, FormHelperText } from "@mui/material";
 
-function Completionscrutiny() {
+function Completionscrutiny({ apiResponse, dataForIcons, refreshScrutinyData, applicationNumber, passUncheckedList, passCheckedList, applicationStatus }) {
   const [selects, setSelects] = useState();
   const [showhide, setShowhide] = useState("");
   const [open2, setOpen2] = useState(false);
+
+  const { t } = useTranslation();
 
   const handleshowhide = (event) => {
     const getuser = event.target.value;
@@ -31,6 +38,7 @@ function Completionscrutiny() {
     formState: { errors },
     control,
     setValue,
+    watch
   } = useForm({});
 
   const completionLic = (data) => console.log(data);
@@ -41,26 +49,199 @@ function Completionscrutiny() {
     props.showTable({ data: data.data });
   };
 
-  
+  useEffect(() => {
+    if (apiResponse) {
+      setFields(apiResponse)
+    }
+  }, [apiResponse])
+
+  const setFields = (details) => {
+    setValue("licenseNo", details?.licenseNumber);
+    setValue("licenseValidTill", details?.licenseValidTill);
+    setValue("statusOfComplainsIfAny", details?.statusOfComplainsIfAny);
+    setValue("complianceOfRules", details?.complianceOfRules);
+    setValue("complainsDetails", details?.complainsDetails);
+    setValue("statusOfComplainsIfAny", details?.statusOfComplainsIfAny);
+    setValue("statusOfTotalComunity", details?.statusOfTotalComunity);
+    setValue("statusOfNplPlot", details?.statusOfNplPlot);
+    setValue("statusOfHandlingOver", details?.statusOfHandlingOver);
+    setValue("statusOfReadingHandlingOver", details?.statusOfReadingHandlingOver);
+    setValue("handlingOverComunitySite", details?.handlingOverComunitySite);
+    setValue("caCertificate", details?.caCertificate);
+    setValue("iacAplicable", details?.iacAplicable);
+    setValue("statusOfComplainsForRules", details?.statusOfComplainsForRules);
+    setValue("statusOfEDCisFullyPaid", details?.statusOfEDCisFullyPaid);
+    setValue("statusOfSIDCisFullyPaid", details?.statusOfSIDCisFullyPaid);
+    setValue("bgOnAccountTillValid", details?.bgOnAccountTillValid);
+    setValue("copyApprovalServicePlan", details?.copyApprovalServicePlan);
+    setValue("electricServicePlan", details?.electricServicePlan);
+    setValue("transferOfLicenseCertificate", details?.transferOfLicenseCertificate);
+    setValue("occupationCertificate", details?.occupationCertificate);
+    setValue("updatedComplianceWithRules", details?.updatedComplianceWithRules);
+    setValue("paymentAugmentationCharges", details?.paymentAugmentationCharges);
+    setValue("caCertificateRegarding15Percentage", details?.caCertificateRegarding15Percentage);
+    setValue("statusOfDevelopmentWork", details?.statusOfDevelopmentWork);
+    setValue("completionApprovalLayoutPlan", details?.completionApprovalLayoutPlan);
+    setValue("nocFromMOEF", details?.nocFromMOEF);
+    setValue("nocFromFairSafety", details?.nocFromFairSafety);
+    setValue("affidavitNoUnauthorized", details?.affidavitNoUnauthorized);
+    setValue("accessPermissionFromNHAI", details?.accessPermissionFromNHAI);
+
+
+    setValue("areaAcres", details?.newAdditionalDetails?.areaAcres);
+    setValue("colonizerName", details?.newAdditionalDetails?.colonizerName);
+    setValue("colonyType", details?.newAdditionalDetails?.colonyType);
+    setValue("developmentPlan", details?.newAdditionalDetails?.developmentPlan);
+    setValue("district", details?.newAdditionalDetails?.district);
+    setValue("periodOfRenewal", details?.newAdditionalDetails?.periodOfRenewal);
+    setValue("renewalRequiredUpto", details?.newAdditionalDetails?.renewalRequiredUpto);
+    setValue("revenueEstate", details?.newAdditionalDetails?.revenueEstate);
+    setValue("sectorNo", details?.newAdditionalDetails?.sectorNo);
+    setValue("selectLicence", details?.newAdditionalDetails?.selectLicence);
+    setValue("tehsil", details?.newAdditionalDetails?.tehsil);
+    setValue("validUpto", details?.newAdditionalDetails?.validUpto);
+  }
+
   const [smShow, setSmShow] = useState(false);
   const [labelValue, setLabelValue] = useState("");
   const Colors = {
-    approved:"#09cb3d",
-    disapproved:"#ff0000",
-    info:"#FFB602"
-  }
+    approved: "#09cb3d",
+    disapproved: "#ff0000",
+    info: "#FFB602",
+    conditional: "#2874A6"
+  };
 
   const handlemodaldData = (data) => {
     // setmodaldData(data.data);
     setSmShow(false);
-    console.log("here",openedModal,data);
-    if(openedModal && data){
-      setFieldIconColors({...fieldIconColors,[openedModal]:data.data.isApproved?Colors.approved:Colors.disapproved})
+    console.log("here", openedModal, data);
+    if (openedModal && data) {
+      setFieldIconColors({ ...fieldIconColors, [openedModal]: data.data.isApproved ? Colors.approved : Colors.disapproved })
     }
-      setOpennedModal("");
-      setLabelValue("");
+    setOpennedModal("");
+    setLabelValue("");
   };
-  const [selectedFieldData,setSelectedFieldData] = useState();
+
+  const documents = [
+    {
+      label: t("COPY_OF_APPROVED_SERVICE_PLAN_ESTIMATE"),
+      selectorKey: "copyApprovalServicePlanFile",
+      fileName: "copyApprovalServicePlan"
+    },
+    {
+      label: t("ELECTRICAL_PLAN_IS_VERIFIED"),
+      selectorKey: "electricServicePlanFile",
+      fileName: "electricServicePlan"
+    },
+    {
+      label: t("TRANSFER_OF_LICENSED_LAND"),
+      selectorKey: "transferOfLicenseCertificateFile",
+      fileName: "transferOfLicenseCertificate"
+    },
+    {
+      label: t("OCCUPATION_CERTIFICATION"),
+      selectorKey: "occupationCertificateFile",
+      fileName: "occupationCertificate"
+    },
+    {
+      label: t("UPDATED_COMPLIANCE_WITH_RULES"),
+      selectorKey: "updatedComplianceWithRulesFile",
+      fileName: "updatedComplianceWithRules"
+    },
+    {
+      label: t("PAYMENT_OF_AUGMENTATION_CHARGES"),
+      selectorKey: "paymentAugmentationChargesFile",
+      fileName: "paymentAugmentationCharges"
+    },
+    {
+      label: t("THIRD_PARTY_AUDIT_ON_15%"),
+      selectorKey: "caCertificateFile",
+      fileName: "caCertificate"
+    },
+    {
+      label: t("STATUS_OF_DEVELOPMENT_WORK_ALONG_WITH_SITE_PHOTO"),
+      selectorKey: "statusOfDevelopmentWorkFile",
+      fileName: "statusOfDevelopmentWork"
+    },
+    {
+      label: t("IF_PART_COMPLETION_IS_APPLIED"),
+      selectorKey: "completionApprovalLayoutPlanFile",
+      fileName: "completionApprovalLayoutPlan"
+    },
+    {
+      label: t("NOC_FROM_MOEF"),
+      selectorKey: "nocFromMOEFFile",
+      fileName: "nocFromMOEF"
+    },
+    {
+      label: t("NOC_FROM_FIRE_SAFETY"),
+      selectorKey: "nocFromFairSafetyFile",
+      fileName: "nocFromFairSafety"
+    },
+    {
+      label: t("AFFIDAVIT_OF_NO_UNAUTHORIZED"),
+      selectorKey: "affidavitNoUnauthorizedFile",
+      fileName: "affidavitNoUnauthorized"
+    },
+    {
+      label: t("ACCESS_PERMISSION_FROM_NHAI"),
+      selectorKey: "accessPermissionFromNHAIFile",
+      fileName: "accessPermissionFromNHAI"
+    }
+  ]
+
+  const fields = [
+    {
+      label: t('IS_LICENSE_NO_VALID_TILL_COMPLETION_CERTIFICATE'),
+      register: "licenseValidTill",
+    },
+    {
+      label: t('COMPLIANCE_STATUS_WITH_RULES'),
+      register: "statusOfComplainsForRules",
+    },
+    {
+      label: t('STATUS_OF_EDC'),
+      register: "statusOfEDCisFullyPaid",
+    },
+    {
+      label: t('STATUS_OF_SIDC'),
+      register: "statusOfSIDCisFullyPaid",
+    },
+    {
+      label: t('BANK_GUARANTEE_ON_ACCOUNT_OF_IDW'),
+      register: "bgOnAccountTillValid",
+    },
+    {
+      label: t('STATUS_OF_COMPLAINT'),
+      register: "statusOfComplainsIfAny",
+    },
+    {
+      label: t('STATUS_OF_TOTAL_COMMUNITY'),
+      register: "statusOfTotalComunity",
+    },
+    {
+      label: t('STATUS_OF_NPNL_PLOTS'),
+      register: "statusOfNplPlot",
+    },
+    {
+      label: t('STATUS_OF_HANDLING_OVER_EWS_PLOTS'),
+      register: "statusOfHandlingOver",
+    },
+    {
+      label: t('STATUS_REGARDING_HANDLING_OVER_OF_PARK'),
+      register: "statusOfReadingHandlingOver",
+    },
+    {
+      label: t('DETAILS_OF_COMPLAINT'),
+      register: "complainsDetails",
+    },
+    {
+      label: t('UPLOAD_COMPLIANCE_OF_RULES'),
+      register: "complianceOfRules",
+    }
+  ]
+
+  const [selectedFieldData, setSelectedFieldData] = useState();
   const [fieldValue, setFieldValue] = useState("");
   const [openedModal, setOpennedModal] = useState("")
   const [fieldIconColors, setFieldIconColors] = useState({
@@ -85,13 +266,38 @@ function Completionscrutiny() {
     emailForCommunication: Colors.info
   })
 
-  const fieldIdList = [{label:"Developer",key:"developer"},{label:"Authorized Person Name",key:"authPersonName"},{label:"Autrhoized Mobile No",key:"authMobileNo1"},{label:"Authorized MobileNo. 2 ",key:"authMobileNo2"},{label:"Email ID",key:"emailId"},{label:"PAN No.",key:"pan"},{label:"Address  1",key:"address"},{label:"Village/City",key:"city"},{label:"Pincode",key:"pin"},{label:"Tehsil",key:"tehsil"},{label:"District",key:"district"},{label:"State",key:"state"},{label:"Status (Individual/ Company/ Firm/ LLP etc.)",key:"type"},{label:"LC-I signed by",key:"lciSignedBy"},{label:"If LC-I is not signed by self (in case of an individual) nature of authorization (GPA/SPA)",key:"lciNotSigned"},{label: "Permanent address in case of individual/ registered office address in case other than individual", key:"parmanentAddress"},{label:"Address for communication",key:"addressForCommunication"},{label:"Name of the authorized person to sign the application",key:"authPerson"},{label:"Email ID for communication",key:"emailForCommunication"}]
+
+  const findfisrtObj = (list = [], label) => {
+    return list?.filter((item, index) => item.fieldIdL === label)?.[0] || {}
+  }
+
+  const getIconColor = (label) => {
+    if (findfisrtObj(dataForIcons?.egScrutiny, label)?.isApproved === 'In Order') {
+      return Colors.approved;
+    }
+    if (findfisrtObj(dataForIcons?.egScrutiny, label)?.isApproved === 'Not In Order') {
+      return Colors.disapproved;
+    }
+    if (findfisrtObj(dataForIcons?.egScrutiny, label)?.isApproved === "Conditional") {
+      return Colors.conditional;
+    }
+    return Colors.info
+  }
+
+  useEffect(() => {
+    if (labelValue) {
+      setSelectedFieldData(findfisrtObj(dataForIcons?.egScrutiny, labelValue))
+    } else {
+      setSelectedFieldData(null)
+    }
+    console.log("regergerg", labelValue, selectedFieldData)
+  }, [labelValue])
 
   return (
-  
-        
-          <form onSubmit={handleSubmit(completionLic)}>
-             <div
+
+
+    <form onSubmit={handleSubmit(completionLic)}>
+      <div
         className="collapse-header"
         onClick={() => setOpen2(!open2)}
         aria-controls="example-collapse-text"
@@ -109,525 +315,530 @@ function Completionscrutiny() {
         }}
       >
         <span style={{ color: "#817f7f" }} className="">
-        Completion Certificate In Licence Colony
+          Completion Certificate In Licence Colony
         </span>
         {open2 ? <RemoveIcon></RemoveIcon> : <AddIcon></AddIcon>}
       </div>
       <Collapse in={open2}>
         <div id="example-collapse-text">
-        
-            <Card style={{ width: "126%", border: "5px solid #1266af" }}>
+
+          <Card style={{ width: "126%", border: "5px solid #1266af" }}>
             <h4 style={{ fontSize: "25px", marginLeft: "21px" }}>Completion Certificate In Licence Colony</h4>
             <div className="card">
-       
-            <Row>
-              <Col className="col-4">
-                {/* <Form.Group controlId="formGridCase"> */}
-                  <div>
-                <Form.Label>
-              <h5 className={classes.formLabel}>Licence No &nbsp;</h5>
-            </Form.Label>
-            <span className={classes.required}>*</span> &nbsp;&nbsp;
-          </div>
-            <div className={classes.fieldContainer}>
-            {/* <Form.Control
-              className={classes.formControl}
-              placeholder=""
-              disabled
-            ></Form.Control> */}
-            <input type="number" className={classes.formControl} placeholder="" {...register("licNo")} disabled />
-                
-                <ReportProblemIcon
-              style={{
-                color:fieldIconColors.developer}}
-              onClick={() => {
-                  setOpennedModal("Licence No")
-                  setLabelValue("Licence No"),
-                  setSmShow(true),
-                  console.log("modal open"),
-                  setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
-              }}
-            ></ReportProblemIcon>
-             <ModalChild
-              labelmodal={labelValue}
-              passmodalData={handlemodaldData}
-              displaymodal={smShow}
-              onClose={()=>setSmShow(false)}
-              selectedFieldData={selectedFieldData}
-              fieldValue={fieldValue}
-              remarksUpdate={currentRemarks}
-            ></ModalChild>
-             </div>
-                {/* </Form.Group> */}
-              </Col>
-              <Col className="col-4">
-                  <div>
-                <Form.Label data-toggle="tooltip" data-placement="top" title="The license is valid at the time of completion certificate">
-              <h5 className={classes.formLabel}>completion certificate&nbsp;</h5>
-            </Form.Label>
-            <span className={classes.required}>*</span> &nbsp;&nbsp;
-          </div>
-            <div className={classes.fieldContainer}>
-            {/* <Form.Control
-              className={classes.formControl}
-              placeholder=""
-              disabled
-            ></Form.Control> */}
-             <input type="text" className={classes.formControl} placeholder="" {...register("completionCertificate")}  disabled/>
-                
-                <ReportProblemIcon
-              style={{
-                color:fieldIconColors.developer}}
-              onClick={() => {
-                  setOpennedModal("The license is valid at the time of completion certificate")
-                  setLabelValue("The license is valid at the time of completion certificate"),
-                  setSmShow(true),
-                  console.log("modal open"),
-                  setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
-              }}
-            ></ReportProblemIcon>
-           
-             </div>
-              </Col>
-              <Col className="col-4">
-                
-                 
-                  {/* <input type="text" className="form-control" placeholder="" {...register("edcFullypaid")} /> */}
-                  <div>
-                <Form.Label data-toggle="tooltip"
-                    data-placement="top"
-                    title=" EDC and IDC be fully paid and bank guarantees on account of
-                    IDW are valid.">
-              <h5 className={classes.formLabel}>EDC and IDC be fully paid &nbsp;</h5>
-            </Form.Label>
-            <span className={classes.required}>*</span> &nbsp;&nbsp;
-          </div>
-            <div className={classes.fieldContainer}>
-            {/* <Form.Control
-              className={classes.formControl}
-              placeholder=""
-              disabled
-            ></Form.Control> */}
-                <input type="text" className={classes.formControl} placeholder="" {...register("edcFullypaid")} disabled />
-                <ReportProblemIcon
-              style={{
-                color:fieldIconColors.developer}}
-              onClick={() => {
-                  setOpennedModal("EDC and IDC be fully paid and bank guarantees on account of IDW are valid"),
-                  setLabelValue("EDC and IDC be fully paid and bank guarantees on account of IDW are valid"),
-                  setSmShow(true),
-                  console.log("modal open"),
-                  setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
-              }}
-            ></ReportProblemIcon>
-           
-             </div>
-                
-              </Col>
-              <Col className="col-4">
-                {/* <Form.Group controlId="formGridState">
-                  <Form.Label>
-                    <h2> Status of complaint if any. </h2>
-                  </Form.Label>
-                  <input type="text" className="form-control" placeholder="" {...register("statusOfComplaint")} />
-                </Form.Group> */}
-                <div>
-                <Form.Label >
-              <h5 className={classes.formLabel}>Status of complaint if any. &nbsp;</h5>
-            </Form.Label>
-            <span className={classes.required}>*</span> &nbsp;&nbsp;
-          </div>
-            <div className={classes.fieldContainer}>
-            {/* <Form.Control
-              className={classes.formControl}
-              placeholder=""
-              disabled
-            ></Form.Control> */}
-                <input type="text" className={classes.formControl} placeholder="" {...register("statusOfComplaint")} disabled />
-                <ReportProblemIcon
-              style={{
-                color:fieldIconColors.developer}}
-              onClick={() => {
-                  setOpennedModal("Status of complaint if any"),
-                  setLabelValue("Status of complaint if any"),
-                  setSmShow(true),
-                  console.log("modal open"),
-                  setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
-              }}
-            ></ReportProblemIcon>
-           
-             </div>
-              </Col>
-              <Col className="col-4">
-                {/* <Form.Group controlId="formGridState">
-                  <Form.Label
-                    data-toggle="tooltip"
-                    data-placement="top"
-                    title="Status of total community sites/approval of zoning/building
-                    plans and occupation certificate granted."
-                  >
-                    <h2> Occupation Certificate </h2>
-                  </Form.Label>
-                  <input type="text" className="form-control" placeholder="" {...register("occupationCertificate")} />
-                </Form.Group> */}
-                <div>
-                <Form.Label data-toggle="tooltip"
-                    data-placement="top"
-                    title="Status of total community sites/approval of zoning/building
-                    plans and occupation certificate granted." >
-              <h5 className={classes.formLabel}>Occupation Certificate  &nbsp;</h5>
-            </Form.Label>
-            <span className={classes.required}>*</span> &nbsp;&nbsp;
-          </div>
-            <div className={classes.fieldContainer}>
-            {/* <Form.Control
-              className={classes.formControl}
-              placeholder=""
-              disabled
-            ></Form.Control> */}
-                <input type="text" className={classes.formControl} placeholder="" {...register("occupationCertificate")} disabled />
-                <ReportProblemIcon
-              style={{
-                color:fieldIconColors.developer}}
-              onClick={() => {
-                  setOpennedModal("Status of total community sites/approval of zoning/building plans and occupation certificate granted."),
-                  setLabelValue("Status of total community sites/approval of zoning/building plans and occupation certificate granted."),
-                  setSmShow(true),
-                  console.log("modal open"),
-                  setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
-              }}
-            ></ReportProblemIcon>
-           
-             </div>
-              </Col>
-              <Col className="col-4">
-                {/* <Form.Group controlId="formGridState">
-                  <Form.Label
-                    data-toggle="tooltip"
-                    data-placement="top"
-                    title=" Status of NPNL plots. (detail of NPNL plots and rates
-                    approval for NPNL)"
-                  >
-                    <h2>Status of NPNL plots.</h2>
-                  </Form.Label>
-                  <input type="text" className="form-control" placeholder="" {...register("statusNpnlPlot")} />
-                </Form.Group> */}
-                  <div>
-                <Form.Label data-toggle="tooltip"
-                    data-placement="top"
-                    title=" Status of NPNL plots. (detail of NPNL plots and rates approval for NPNL)" >
-              <h5 className={classes.formLabel}>Status of NPNL plots.  &nbsp;</h5>
-            </Form.Label>
-            <span className={classes.required}>*</span> &nbsp;&nbsp;
-          </div>
-            <div className={classes.fieldContainer}>
-            {/* <Form.Control
-              className={classes.formControl}
-              placeholder=""
-              disabled
-            ></Form.Control> */}
-                 <input type="text" className={classes.formControl} placeholder="" {...register("statusNpnlPlot")}  disabled/>
-                <ReportProblemIcon
-              style={{
-                color:fieldIconColors.developer}}
-              onClick={() => {
-                  setOpennedModal(" Status of NPNL plots. (detail of NPNL plots and rates approval for NPNL)"),
-                  setLabelValue(" Status of NPNL plots. (detail of NPNL plots and rates approval for NPNL)"),
-                  setSmShow(true),
-                  console.log("modal open"),
-                  setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
-              }}
-            ></ReportProblemIcon>
-           
-             </div>
-              </Col>
-              <Col className="col-4">
-                {/* <Form.Group controlId="formGridState">
-                  <Form.Label data-toggle="tooltip" data-placement="top" title="Status of handing over EWS plots to housing board/allottees">
-                    <h2> Housing board/allottees </h2>
-                  </Form.Label>
-                  <input type="text" className="form-control" placeholder="" {...register("housingBoard")} />
-                </Form.Group> */}
-                 <div>
-                <Form.Label data-toggle="tooltip" data-placement="top" title="Status of handing over EWS plots to housing board/allottees" >
-              <h5 className={classes.formLabel}>Housing board/allottees  &nbsp;</h5>
-            </Form.Label>
-            <span className={classes.required}>*</span> &nbsp;&nbsp;
-          </div>
-            <div className={classes.fieldContainer}>
-            {/* <Form.Control
-              className={classes.formControl}
-              placeholder=""
-              disabled
-            ></Form.Control> */}
-                <input type="text"  className={classes.formControl} placeholder="" {...register("housingBoard")} disabled/>
-                <ReportProblemIcon
-              style={{
-                color:fieldIconColors.developer}}
-              onClick={() => {
-                  setOpennedModal("Status of handing over EWS plots to housing board/allottees"),
-                  setLabelValue("Status of handing over EWS plots to housing board/allottees"),
-                  setSmShow(true),
-                  console.log("modal open"),
-                  setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
-              }}
-            ></ReportProblemIcon>
-           
-             </div>
-              </Col>
-              <Col className="col-4">
-                {/* <Form.Group controlId="formGridState">
-                  <Form.Label
-                    data-toggle="tooltip"
-                    data-placement="top"
-                    title=" Status regarding handing over of park/internal road/public
-                    utility to the concerned authority"
-                  >
-                    <h2> Concerned Authority </h2>
-                  </Form.Label>
-                  <input type="text" className="form-control" placeholder="" {...register("concernedAuthority")} />
-                </Form.Group> */}
-                 <div>
-                <Form.Label data-toggle="tooltip"
-                    data-placement="top"
-                    title=" Status regarding handing over of park/internal road/public utility to the concerned authority" >
-              <h5 className={classes.formLabel}>Concerned Authority  &nbsp;</h5>
-            </Form.Label>
-            <span className={classes.required}>*</span> &nbsp;&nbsp;
-          </div>
-            <div className={classes.fieldContainer}>
-            {/* <Form.Control
-              className={classes.formControl}
-              placeholder=""
-              disabled
-            ></Form.Control> */}
-                 <input type="text"   className={classes.formControl} placeholder="" {...register("concernedAuthority")}  disabled/>
-                <ReportProblemIcon
-              style={{
-                color:fieldIconColors.developer}}
-              onClick={() => {
-                  setOpennedModal(" Status regarding handing over of park/internal road/public utility to the concerned authority"),
-                  setLabelValue(" Status regarding handing over of park/internal road/public utility to the concerned authority"),
-                  setSmShow(true),
-                  console.log("modal open"),
-                  setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
-              }}
-            ></ReportProblemIcon>
-           
-             </div>
-              </Col>
-              <Col className="col-4">
-                {/* <Form.Group controlId="formGridState">
-                  <Form.Label
-                    data-toggle="tooltip"
-                    data-placement="top"
-                    title=" Handing over community sites to the Government agency and
-                    constructed by the Government."
-                  >
-                    <h2>Handing over community sites </h2>
-                  </Form.Label>
-                  <input type="text" className="form-control" placeholder="" {...register("handleCommunitySites")} />
-                </Form.Group> */}
-                 <div>
-                <Form.Label  data-toggle="tooltip"
-                    data-placement="top"
-                    title="Handing over community sites to the Government agency and constructed by the Government.">
-              <h5 className={classes.formLabel}>Handing over community sites   &nbsp;</h5>
-            </Form.Label>
-            <span className={classes.required}>*</span> &nbsp;&nbsp;
-          </div>
-            <div className={classes.fieldContainer}>
-            {/* <Form.Control
-              className={classes.formControl}
-              placeholder=""
-              disabled
-            ></Form.Control> */}
-            <input type="text" className={classes.formControl} placeholder="" {...register("handleCommunitySites")} disabled />
-                
-                <ReportProblemIcon
-              style={{
-                color:fieldIconColors.developer}}
-              onClick={() => {
-                  setOpennedModal("Handing over community sites to the Government agency and constructed by the Government."),
-                  setLabelValue("Handing over community sites to the Government agency and constructed by the Government."),
-                  setSmShow(true),
-                  console.log("modal open"),
-                  setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
-              }}
-            ></ReportProblemIcon>
-           
-             </div>
-              </Col>
-            </Row>
-            <br>
-            </br>
-           
-            <div className="table table-bordered table-responsive">
-                  {/* <caption>List of users</caption> */}
-                  <thead>
-                    <tr>
-                       <th class="fw-normal">Sr.No</th>
-                       <th class="fw-normal">Field Name</th>
-                       <th class="fw-normal">Documents download</th> 
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                       <th class="fw-normal">1</th>
-                      <td>
-                        <h2> The service plan/estimate copy of approved </h2>
-                      </td>
-                      <td>
-                        {/* <input type="file" className="form-control" placeholder="" {...register("servicePlanApproved")}></input> */}
-                        <DownloadForOfflineIcon color="primary" className="mx-1" />
-                      </td>
-                    </tr>
-                    <tr>
-                       <th class="fw-normal">2</th>
-                      <td>
-                        {" "}
-                        <h2>The electrical Service plan is approved and verification of service is laid as per the approval.</h2>{" "}
-                      </td>
-                      <td>
-                        <input type="file" className="form-control" placeholder="" {...register("electricalServicePlan")}></input>
-                      </td>
-                    </tr>
-                    <tr>
-                       <th class="fw-normal">3</th>
-                      <td>
-                        {" "}
-                        <h2>Transfer of licensed land to the Government agency falling under 18/24 mtr. Road/green belt/sector road.</h2>{" "}
-                      </td>
-                      <td>
-                        <input type="file" className="form-control" placeholder="" {...register("transferLicensedLand")}></input>
-                      </td>
-                    </tr>
-                    <tr>
-                       <th class="fw-normal">4</th>
-                      <td>
-                        {" "}
-                        <h2>Occupation certificate In case of (Group Housing, Commercial, IT Colony)</h2>{" "}
-                      </td>
-                      <td>
-                        <input type="file" className="form-control" placeholder="" {...register("occupationCertificateCommercial")}></input>
-                      </td>
-                    </tr>
-                    <tr>
-                       <th class="fw-normal">5</th>
-                      <td>
-                        {" "}
-                        <h2>Updated compliance with Rules 24, 26(2), 27 & 28.</h2>{" "}
-                      </td>
-                      <td>
-                        <input type="file" className="form-control" placeholder="" {...register("updatedCompliance")}></input>
-                      </td>
-                    </tr>
-                    <tr>
-                       <th class="fw-normal">6</th>
-                      <td>
-                        {" "}
-                        <h2>Submit a report regarding infrastructure augmentation charges.</h2>
-                      </td>
-                      <td>
-                        <input type="file" className="form-control" placeholder="" {...register("reportInfrastructure")}></input>
-                      </td>
-                    </tr>
-                    <tr>
-                       <th class="fw-normal">7</th>
-                      <td>
-                        {" "}
-                        <h2>Third-party audit on 15% profitability and CA certificate regarding 15% profit.</h2>
-                      </td>
-                      <td>
-                        <input type="file" className="form-control" placeholder="" {...register("thirdPartyAudit")}></input>
-                      </td>
-                    </tr>
-                    <tr>
-                       <th class="fw-normal">8</th>
-                      <td>
-                        {" "}
-                        <h2>
-                          Status of development work along with site photographs and CD/DVD regarding completion of public health services, and
-                          internal roads{" "}
-                        </h2>{" "}
-                      </td>
-                      <td>
-                        <input type="file" className="form-control" placeholder="" {...register("statusDevelopment")}></input>
-                      </td>
-                    </tr>
-                    <tr>
-                       <th class="fw-normal">9</th>
-                      <td>
-                        {" "}
-                        <h2>Report regarding functional of internal services and connection of external services of HUDA/MC. </h2>
-                      </td>
-                      <td>
-                        <input type="file" className="form-control" placeholder="" {...register("functionalServices")}></input>
-                      </td>
-                    </tr>
-                    <tr>
-                       <th class="fw-normal">10</th>
-                      <td>
-                        {" "}
-                        <h2>Affidavit of no unauthorized construction/addition/ alteration after the issuance of completion certificate.</h2>
-                      </td>
-                      <td>
-                        <input type="file" className="form-control" placeholder="" {...register("affidavitUnauthorized")}></input>
-                      </td>
-                    </tr>
-                    <tr>
-                       <th class="fw-normal">11</th>
-                      <td>
-                        {" "}
-                        <h2>NOC from MOEF required.</h2>{" "}
-                      </td>
-                      <td>
-                        <input type="file" className="form-control" placeholder="" {...register("nocRequired")}></input>
-                      </td>
-                    </tr>
-                    <tr>
-                       <th class="fw-normal">12</th>
-                      <td>
-                        {" "}
-                        <h2>NOC from fire safety and certificate from structural stability.</h2>
-                      </td>
-                      <td>
-                        <input type="file" className="form-control" placeholder="" {...register("fireSafetyCertificate")}></input>
-                      </td>
-                    </tr>
-                    <tr>
-                       <th class="fw-normal">13</th>
-                      <td>
-                        {" "}
-                        <h2>
-                          Access permission from NHAI if the site abuts with NH/Scheduled Road and status regarding construction within green belt
-                          along NH/Scheduled road.
-                        </h2>{" "}
-                      </td>
-                      <td>
-                        <input type="file" className="form-control" placeholder="" {...register("accessPermission")}></input>
-                      </td>
-                    </tr>
-                  </tbody>
-              
-              </div>
-           
 
-            <Row className="justify-content-end">
+              <div className="row px-3" style={{ placeItems: "end", rowGap: "10px" }}>
+
+                <ModalChild
+                  labelmodal={labelValue}
+                  passmodalData={handlemodaldData}
+                  displaymodal={smShow}
+                  onClose={() => setSmShow(false)}
+                  selectedFieldData={selectedFieldData}
+                  fieldValue={fieldValue}
+                  remarksUpdate={currentRemarks}
+                  applicationStatus={applicationStatus}
+                ></ModalChild>
+
+
+                <div className="col col-4">
+                  <FormControl className="w-100">
+                    <h2 className="FormLable">
+                      {`${t("LICENSE_NO")}`} <span style={{ color: "red" }}>*</span>
+                    </h2>
+                    <div className="d-flex align-items-center">
+
+                      <input className="form-control" disabled {...register("licenseNo")} />
+                      <ReportProblemIcon
+                        style={{
+                          color: getIconColor(t('LICENSE_NO')),
+                        }}
+                        className="ml-2"
+                        onClick={() => {
+                          setSmShow(true);
+                          setOpennedModal(t('LICENSE_NO'));
+                          setLabelValue(t('LICENSE_NO')),
+                            setFieldValue(watch('licenseNo') || null);
+                        }}
+                      ></ReportProblemIcon>
+                    </div>
+
+                  </FormControl>
+                </div>
+
+                <div className="col col-4">
+                  <FormControl className="w-100">
+                    <h2 className="FormLable">
+                      {`${t("Area in Acres (License)")}`} <span style={{ color: "red" }}>*</span>
+                    </h2>
+                    <div className="d-flex align-items-center">
+
+                      <input className="form-control" disabled {...register("areaAcres")} />
+                      <ReportProblemIcon
+                        style={{
+                          color: getIconColor(t('Area in Acres (License)')),
+                        }}
+                        className="ml-2"
+                        onClick={() => {
+                          setSmShow(true);
+                          setOpennedModal(t('Area in Acres (License)'));
+                          setLabelValue(t('Area in Acres (License)')),
+                            setFieldValue(watch('areaAcres') || null);
+                        }}
+                      ></ReportProblemIcon>
+                    </div>
+                  </FormControl>
+                </div>
+
+
+                <div className="col col-4">
+                  <FormControl className="w-100">
+                    <h2 className="FormLable">
+                      {`${t("Colonizer Name")}`} <span style={{ color: "red" }}>*</span>
+                    </h2>
+                    <div className="d-flex align-items-center">
+
+                      <input className="form-control" disabled {...register("colonizerName")} />
+                      <ReportProblemIcon
+                        style={{
+                          color: getIconColor(t('Colonizer Name')),
+                        }}
+                        className="ml-2"
+                        onClick={() => {
+                          setSmShow(true);
+                          setOpennedModal(t('Colonizer Name'));
+                          setLabelValue(t('Colonizer Name')),
+                            setFieldValue(watch('colonizerName') || null);
+                        }}
+                      ></ReportProblemIcon>
+                    </div>
+                  </FormControl>
+                </div>
+
+
+                <div className="col col-4">
+                  <FormControl className="w-100">
+                    <h2 className="FormLable">
+                      {`${t("Colony Type")}`} <span style={{ color: "red" }}>*</span>
+                    </h2>
+                    <div className="d-flex align-items-center">
+
+                      <input className="form-control" disabled {...register("colonyType")} />
+                      <ReportProblemIcon
+                        style={{
+                          color: getIconColor(t('Colony Type')),
+                        }}
+                        className="ml-2"
+                        onClick={() => {
+                          setSmShow(true);
+                          setOpennedModal(t('Colony Type'));
+                          setLabelValue(t('Colony Type')),
+                            setFieldValue(watch('colonyType') || null);
+                        }}
+                      ></ReportProblemIcon>
+                    </div>
+                  </FormControl>
+                </div>
+
+
+                <div className="col col-4">
+                  <FormControl className="w-100">
+                    <h2 className="FormLable">
+                      {`${t("Development Plan")}`} <span style={{ color: "red" }}>*</span>
+                    </h2>
+                    <div className="d-flex align-items-center">
+
+                      <input className="form-control" disabled {...register("developmentPlan")} />
+                      <ReportProblemIcon
+                        style={{
+                          color: getIconColor(t('Development Plan')),
+                        }}
+                        className="ml-2"
+                        onClick={() => {
+                          setSmShow(true);
+                          setOpennedModal(t('Development Plan'));
+                          setLabelValue(t('Development Plan')),
+                            setFieldValue(watch('developmentPlan') || null);
+                        }}
+                      ></ReportProblemIcon>
+                    </div>
+                  </FormControl>
+                </div>
+
+
+                <div className="col col-4">
+                  <FormControl className="w-100">
+                    <h2 className="FormLable">
+                      {`${t("District")}`} <span style={{ color: "red" }}>*</span>
+                    </h2>
+                    <div className="d-flex align-items-center">
+
+                      <input className="form-control" disabled {...register("district")} />
+                      <ReportProblemIcon
+                        style={{
+                          color: getIconColor(t('District')),
+                        }}
+                        className="ml-2"
+                        onClick={() => {
+                          setSmShow(true);
+                          setOpennedModal(t('District'));
+                          setLabelValue(t('District')),
+                            setFieldValue(watch('district') || null);
+                        }}
+                      ></ReportProblemIcon>
+                    </div>
+                  </FormControl>
+                </div>
+
+
+                <div className="col col-4">
+                  <FormControl className="w-100">
+                    <h2 className="FormLable">
+                      {`${t("Period of Renewal")}`} <span style={{ color: "red" }}>*</span>
+                    </h2>
+                    <div className="d-flex align-items-center">
+
+                      <input className="form-control" disabled {...register("periodOfRenewal")} />
+                      <ReportProblemIcon
+                        style={{
+                          color: getIconColor(t('Period of Renewal')),
+                        }}
+                        className="ml-2"
+                        onClick={() => {
+                          setSmShow(true);
+                          setOpennedModal(t('Period of Renewal'));
+                          setLabelValue(t('Period of Renewal')),
+                            setFieldValue(watch('periodOfRenewal') || null);
+                        }}
+                      ></ReportProblemIcon>
+                    </div>
+                  </FormControl>
+                </div>
+
+
+                <div className="col col-4">
+                  <FormControl className="w-100">
+                    <h2 className="FormLable">
+                      {`${t("Renewal required upto")}`} <span style={{ color: "red" }}>*</span>
+                    </h2>
+                    <div className="d-flex align-items-center">
+
+                      <input className="form-control" disabled {...register("renewalRequiredUpto")} />
+                      <ReportProblemIcon
+                        style={{
+                          color: getIconColor(t('Renewal required upto')),
+                        }}
+                        className="ml-2"
+                        onClick={() => {
+                          setSmShow(true);
+                          setOpennedModal(t('Renewal required upto'));
+                          setLabelValue(t('Renewal required upto')),
+                            setFieldValue(watch('renewalRequiredUpto') || null);
+                        }}
+                      ></ReportProblemIcon>
+                    </div>
+                  </FormControl>
+                </div>
+
+
+                <div className="col col-4">
+                  <FormControl className="w-100">
+                    <h2 className="FormLable">
+                      {`${t("Revenue Estate")}`} <span style={{ color: "red" }}>*</span>
+                    </h2>
+                    <div className="d-flex align-items-center">
+
+                      <input className="form-control" disabled {...register("revenueEstate")} />
+                      <ReportProblemIcon
+                        style={{
+                          color: getIconColor(t('Revenue Estate')),
+                        }}
+                        className="ml-2"
+                        onClick={() => {
+                          setSmShow(true);
+                          setOpennedModal(t('Revenue Estate'));
+                          setLabelValue(t('Revenue Estate')),
+                            setFieldValue(watch('revenueEstate') || null);
+                        }}
+                      ></ReportProblemIcon>
+                    </div>
+                  </FormControl>
+                </div>
+
+
+                <div className="col col-4">
+                  <FormControl className="w-100">
+                    <h2 className="FormLable">
+                      {`${t("Sector No.")}`} <span style={{ color: "red" }}>*</span>
+                    </h2>
+                    <div className="d-flex align-items-center">
+
+                      <input className="form-control" disabled {...register("sectorNo")} />
+                      <ReportProblemIcon
+                        style={{
+                          color: getIconColor(t('Sector No.')),
+                        }}
+                        className="ml-2"
+                        onClick={() => {
+                          setSmShow(true);
+                          setOpennedModal(t('Sector No.'));
+                          setLabelValue(t('Sector No.')),
+                            setFieldValue(watch('sectorNo') || null);
+                        }}
+                      ></ReportProblemIcon>
+                    </div>
+                  </FormControl>
+                </div>
+
+
+                <div className="col col-4">
+                  <FormControl className="w-100">
+                    <h2 className="FormLable">
+                      {`${t("Select License")}`} <span style={{ color: "red" }}>*</span>
+                    </h2>
+                    <div className="d-flex align-items-center">
+
+                      <input className="form-control" disabled {...register("selectLicence")} />
+                      <ReportProblemIcon
+                        style={{
+                          color: getIconColor(t('Select License')),
+                        }}
+                        className="ml-2"
+                        onClick={() => {
+                          setSmShow(true);
+                          setOpennedModal(t('Select License'));
+                          setLabelValue(t('Select License')),
+                            setFieldValue(watch('selectLicence') || null);
+                        }}
+                      ></ReportProblemIcon>
+                    </div>
+                  </FormControl>
+                </div>
+
+
+                <div className="col col-4">
+                  <FormControl className="w-100">
+                    <h2 className="FormLable">
+                      {`${t("Tehsil")}`} <span style={{ color: "red" }}>*</span>
+                    </h2>
+                    <div className="d-flex align-items-center">
+
+                      <input className="form-control" disabled {...register("tehsil")} />
+                      <ReportProblemIcon
+                        style={{
+                          color: getIconColor(t('Tehsil')),
+                        }}
+                        className="ml-2"
+                        onClick={() => {
+                          setSmShow(true);
+                          setOpennedModal(t('Tehsil'));
+                          setLabelValue(t('Tehsil')),
+                            setFieldValue(watch('tehsil') || null);
+                        }}
+                      ></ReportProblemIcon>
+                    </div>
+                  </FormControl>
+                </div>
+
+
+                <div className="col col-4">
+                  <FormControl className="w-100">
+                    <h2 className="FormLable">
+                      {`${t("Valid Upto")}`} <span style={{ color: "red" }}>*</span>
+                    </h2>
+                    <div className="d-flex align-items-center">
+
+                      <input className="form-control" disabled {...register("validUpto")} />
+                      <ReportProblemIcon
+                        style={{
+                          color: getIconColor(t('Valid Upto')),
+                        }}
+                        className="ml-2"
+                        onClick={() => {
+                          setSmShow(true);
+                          setOpennedModal(t('Valid Upto'));
+                          setLabelValue(t('Valid Upto')),
+                            setFieldValue(watch('validUpto') || null);
+                        }}
+                      ></ReportProblemIcon>
+                    </div>
+                  </FormControl>
+                </div>
+
+
+                {
+                  fields.map((item, index) => (
+                    <div className="col col-4">
+                      <FormControl className="w-100">
+                        <h2 className="FormLable">
+                          {item?.label} <span style={{ color: "red" }}>*</span>
+                        </h2>
+                        <div className="d-flex align-items-center">
+
+                          <input className="form-control" disabled {...register(item?.register)} />
+                          <ReportProblemIcon
+                            style={{
+                              color: getIconColor(item?.label),
+                            }}
+                            className="ml-2"
+                            onClick={() => {
+                              setSmShow(true);
+                              setOpennedModal(item?.label);
+                              setLabelValue(item?.label),
+                                setFieldValue(watch(item?.register) || null);
+                            }}
+                          ></ReportProblemIcon>
+                        </div>
+                      </FormControl>
+                    </div>
+                  ))
+                }
+
+              </div>
+              <br />
+              <div className="row px-3">
+                <div className="col col-12 ">
+                  <h6>
+                    {`${t("IF_PROFIT_COMPONENT_IS_LESS_THAN_15%")}`} <span style={{ color: "red" }}>*</span> &nbsp;&nbsp;
+                    <label htmlFor="caCertificateRegarding15Percentage">
+                      <input
+                        type="radio"
+                        value="yes"
+                        label="Yes"
+                        disabled
+                        name="areaFallingUnder"
+                        id="areaFallingUnder"
+                        {...register("caCertificateRegarding15Percentage", {
+                          required: "Please Select (Yes/No)",
+                        })}
+                      // onChange={(e) => handleselects(e)}
+                      />
+                      &nbsp; {`${t("YES")}`} &nbsp;&nbsp;
+                    </label>
+                    <label htmlFor="caCertificateRegarding15Percentage">
+                      <input
+                        type="radio"
+                        value="no"
+                        label="No"
+                        disabled
+                        name="caCertificateRegarding15Percentage"
+                        id="caCertificateRegarding15Percentage"
+                        {...register("caCertificateRegarding15Percentage", {
+                          required: "Please Select (Yes/No)",
+                        })}
+                      // onChange={(e) => handleselects(e)}
+                      />
+                      &nbsp; {`${t("NO")}`} &nbsp;&nbsp;
+                    </label>
+                    <h3 className="error-message" style={{ color: "red" }}>
+                      {errors?.caCertificateRegarding15Percentage && errors?.caCertificateRegarding15Percentage?.message}
+                    </h3>
+                  </h6>
+                </div>
+
+                {
+                  watch('caCertificateRegarding15Percentage') && (
+                    <div className="col-4">
+                      <FormControl class="w-100">
+                        <h2 class="mb-2">
+                          {t('DEPOSIT_APPLICABLE')}  <span style={{ color: "red" }}>*</span>
+                        </h2>
+
+                        <input disabled className="form-control" placeholder="" {...register("iacAplicable", {
+                          required: "This field cannot be blank",
+                          pattern: {
+                            value: /^[0-9]+(\.[0-9]+)?$/,
+                            message: "Invalid Value."
+                          }
+                        })} />
+                      </FormControl>
+                      <h3 className="error-message" style={{ color: "red" }}>
+                        {Boolean(errors?.iacAplicable) && errors?.iacAplicable?.message}
+                      </h3>
+                    </div>
+
+                  )
+                }
+              </div>
+              <br>
+              </br>
+
+              <div className="table table-bordered table-responsive">
+                {/* <caption>List of users</caption> */}
+                <thead>
+                  <tr>
+                    <th class="fw-normal">Sr.No</th>
+                    <th class="fw-normal">Field Name</th>
+                    <th class="fw-normal">Documents download</th>
+                  </tr>
+                </thead>
+                <tbody>
+
+                  {
+                    documents.map((item, index) => (
+
+                      <tr key={index}>
+                        <th class="fw-normal">{index + 1}</th>
+                        <td>
+                          {item.label}
+                        </td>
+
+                        {
+                          watch(item.fileName) &&
+                          (
+
+                            <td>
+
+                              <div className="d-flex justify-content-center">
+                                {watch(item.fileName) && (
+                                  <a onClick={() => getDocShareholding(watch(item.fileName), setLoader)} className="btn btn-sm ">
+                                    <Visibility color="info" className="icon" />
+                                  </a>
+                                )}
+
+                                <ReportProblemIcon
+                                  style={{
+                                    color: getIconColor(item.label),
+                                  }}
+                                  className="ml-2"
+                                  onClick={() => {
+                                    setSmShow(true)
+                                    setOpennedModal(item.label);
+                                    setLabelValue(item.label),
+                                      setFieldValue(watch(item.fileName) || null);
+                                  }}
+                                ></ReportProblemIcon>
+                              </div>
+                            </td>
+
+
+                          )
+                        }
+
+                      </tr>
+
+                    ))
+                  }
+
+                </tbody>
+
+              </div>
+
+
+              {/* <Row className="justify-content-end">
               <Button variant="outline-primary" className="col-md-2 my-2 mx-2" type="save" aria-label="right-end">
                 Save as Draft
               </Button>
               <Button variant="outline-primary" className="col-md-2 my-2 mx-2" type="submit" aria-label="right-end">
                 Submit
               </Button>
-            </Row>
+            </Row> */}
             </div>
-            </Card>
-            </div>
-            </Collapse>
-          </form>
-      
-    
+          </Card>
+        </div>
+      </Collapse>
+    </form>
+
+
   );
 }
 
