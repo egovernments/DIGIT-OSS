@@ -13,6 +13,7 @@ import UAApplication from "./Applications/UAApplication";
 import TransferLicenceApplications from "./Applications/TLApplication";
 
 import ECLUApplications from "./Applications/ECLUApplication";
+import CompletionApplications from "./Applications/CompletionApplications";
 // import ApplicationDetails from "../../pages/citizen/Applications/ApplicationDetails";
 // import CreateTradeLicence from "./Create";
 // import EditTrade from "./EditTrade";
@@ -77,6 +78,7 @@ const App = () => {
           <PrivateRoute path={`${path}/CompositionClu/my-application`} component={UAApplication} />
           <PrivateRoute path={`${path}/TransferLicense/my-applications`} component={TransferLicenceApplications} />
           <PrivateRoute path={`${path}/ExtensionClu/my-application`} component={ECLUApplications} />
+          <PrivateRoute path={`${path}/CompletionLic/my-application`} component={CompletionApplications} />
         </AppContainer>
       </Switch>
     </span>
