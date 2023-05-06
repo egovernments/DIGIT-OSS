@@ -114,7 +114,7 @@ const RevisedPlanModal = ({ t, action, tenantId, state, id, closeModal, submitAc
     console.log("log123...submitted updated",applicationData,selectedApprover, selectedApprover.map((ele)=>ele[1]?.uuid));
     submitAction({
         // ElectricPlanRequest: [applicationData],
-        revisedPlan: [applicationData],
+        revisedPlan: applicationData,
     });
   }
   useEffect(() => {

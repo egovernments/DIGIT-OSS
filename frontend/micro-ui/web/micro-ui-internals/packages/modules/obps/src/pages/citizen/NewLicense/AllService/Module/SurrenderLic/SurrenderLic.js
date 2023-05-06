@@ -83,6 +83,20 @@ function SurrenderLic() {
       setValue("availedEdcfileUrl", details?.availedEdcfileUrl);
       setValue("areaFallingUnderfileUrl", details?.areaFallingUnderfileUrl);
       setValue("areaFallingDividing", details?.areaFallingDividing);
+
+      setValue("areaAcres", details?.newAdditionalDetails?.areaAcres);
+      setValue("colonizerName", details?.newAdditionalDetails?.colonizerName);
+      setValue("colonyType", details?.newAdditionalDetails?.colonyType);
+      setValue("developmentPlan", details?.newAdditionalDetails?.developmentPlan);
+      setValue("district", details?.newAdditionalDetails?.district);
+      setValue("periodOfRenewal", details?.newAdditionalDetails?.periodOfRenewal);
+      setValue("renewalRequiredUpto", details?.newAdditionalDetails?.renewalRequiredUpto);
+      setValue("revenueEstate", details?.newAdditionalDetails?.revenueEstate);
+      setValue("sectorNo", details?.newAdditionalDetails?.sectorNo);
+      setValue("selectLicence", details?.newAdditionalDetails?.selectLicence);
+      setValue("tehsil", details?.newAdditionalDetails?.tehsil);
+      setValue("validUpto", details?.newAdditionalDetails?.validUpto);
+      
       setLoading(false);
     } catch (error) {
       console.log("Get Error ====> ", error.message);

@@ -1410,7 +1410,7 @@ const ApllicantPuropseForm = (props) => {
                 <div>
                   <label>
                     <h2>
-                      {`${t("NWL_APPLICANT_KHEWATS_NUMBER_LAND_SCHEDULE")}`}
+                      {`${t("NWL_APPLICANT_KHASRA_NUMBER_LAND_SCHEDULE")}`}
                       {/* Khasra Number */}
                       <span style={{ color: "red" }}>*</span>
                     </h2>

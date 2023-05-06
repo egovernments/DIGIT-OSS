@@ -303,9 +303,9 @@ function Beneficial() {
 
       // setApplicationNumber(Resp.data.changeBeneficial.applicationNumber);
     } catch (error) {
-      console.log("Submit Error ====> ", err.message);
+      console.log("Submit Error ====> ", error.message);
       setLoader(false);
-      setShowToastError({ label: err.message, error: true, success: false });
+      setShowToastError({ label: error.message, error: true, success: false });
       return error.message;
     }
   };
@@ -348,9 +348,9 @@ function Beneficial() {
       // setApplicationNumber(Resp.data.changeBeneficial.applicationNumber);
       handleClose();
     } catch (error) {
-      console.log("Submit Error ====> ", err.message);
+      console.log("Submit Error ====> ", error.message);
       setLoader(false);
-      setShowToastError({ label: err.message, error: true, success: false });
+      setShowToastError({ label: error.message, error: true, success: false });
       return error.message;
     }
   };
@@ -392,12 +392,25 @@ function Beneficial() {
       setValue("areaInAcres", Resp?.data?.changeBeneficial?.[0]?.areaInAcres);
       console.log("scene", Resp?.data?.changeBeneficial?.[0]?.areaInAcres);
 
+      setValue("areaAcres", details?.newAdditionalDetails?.areaAcres);
+      setValue("colonizerName", details?.newAdditionalDetails?.colonizerName);
+      setValue("colonyType", details?.newAdditionalDetails?.colonyType);
+      setValue("developmentPlan", details?.newAdditionalDetails?.developmentPlan);
+      setValue("district", details?.newAdditionalDetails?.district);
+      setValue("periodOfRenewal", details?.newAdditionalDetails?.periodOfRenewal);
+      setValue("renewalRequiredUpto", details?.newAdditionalDetails?.renewalRequiredUpto);
+      setValue("revenueEstate", details?.newAdditionalDetails?.revenueEstate);
+      setValue("sectorNo", details?.newAdditionalDetails?.sectorNo);
+      setValue("selectLicence", details?.newAdditionalDetails?.selectLicence);
+      setValue("tehsil", details?.newAdditionalDetails?.tehsil);
+      setValue("validUpto", details?.newAdditionalDetails?.validUpto);
+
       setLoader(false);
       setShowhide(Resp?.data?.changeBeneficial?.[0]?.developerServiceCode);
-    } catch (err) {
-      console.log("Submit Error ====> ", err.message);
+    } catch (error) {
+      console.log("Submit Error ====> ", error.message);
       setLoader(false);
-      setShowToastError({ label: err.message, error: true, success: false });
+      setShowToastError({ label: error.message, error: true, success: false });
       return error.message;
     }
   };
@@ -435,11 +448,11 @@ function Beneficial() {
       // console.log("Submit Error ====> ", err.message);
 
       setLoader(false);
-      setShowToastError({ label: err.message, error: true, success: false });
+      setShowToastError({ label: "File Uploaded Successfully", error: false, success: true });
     } catch (error) {
-      console.log("Submit Error ====> ", err.message);
+      console.log("Submit Error ====> ", error.message);
       setLoader(false);
-      setShowToastError({ label: err.message, error: true, success: false });
+      setShowToastError({ label: error.message, error: true, success: false });
     }
   };
 
@@ -635,7 +648,7 @@ function Beneficial() {
                                 </td>
                               ) : (
                                 <td>
-                                  <div>
+                                  <div className="d-flex justify-content-center">
                                     <label title="Upload Document" for={item.selectorKey}>
                                       {" "}
                                       <FileUpload style={{ cursor: "pointer" }} color="info" className="icon" for={item.selectorKey} />
