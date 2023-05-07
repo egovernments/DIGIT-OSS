@@ -764,7 +764,7 @@ const AppliedDetailForm = (props) => {
                 <div>
                   <div className="mt-3 mb-3">
                     <h4>
-                      <b>Bifurcation Of Component</b>
+                      <b>Bifurcation Of Component of type of Licence</b>
                     </h4>
                     <h4 className="mt-3">
                       <b>
