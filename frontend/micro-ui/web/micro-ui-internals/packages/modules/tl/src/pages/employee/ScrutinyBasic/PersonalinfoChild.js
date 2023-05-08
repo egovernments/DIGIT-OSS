@@ -13,6 +13,8 @@ import FileDownload from "@mui/icons-material/FileDownload";
 import { IconButton } from "@mui/material";
 import { getDocShareholding } from "./ScrutinyDevelopment/docview.helper";
 import { useLocation } from "react-router-dom";
+// import CusToaster from "../../../../components/Toaster";
+import CusToaster from "../../../components/Toaster/index";
 
 
 // import {AiFillCheckCircle, AiFillCloseCircle} from "react-icons/ai";
@@ -101,6 +103,7 @@ const PersonalinfoChild = (props) => {
   // const [handleshow ,setHandleShow] = () => setShow(true);
  
   const [smShow, setSmShow] = useState(false);
+  const [docModal, setDocModal] = useState(false);
   const [labelValue, setLabelValue] = useState("");
   const Colors = {
     Conditional: "#2874A6",
@@ -254,6 +257,8 @@ const PersonalinfoChild = (props) => {
 //   console.log("unchecked values", uncheckedValue);
 
 //   console.log(uncheckedValue.indexOf("developer"));
+const [loader, setLoader] = useState(false);
+const [showToastError, setShowToastError] = useState({ label: "", error: false, success: false });
   
 
   return (
@@ -263,7 +268,8 @@ const PersonalinfoChild = (props) => {
            labelmodal={labelValue}
            passmodalData={handlemodaldData}
            displaymodal={smShow}
-           onClose={() => setSmShow(false)}
+           disPlayDoc={docModal}
+           onClose={() =>{setSmShow(false);setDocModal(false)}} 
            selectedFieldData={selectedFieldData}
            fieldValue={fieldValue}
            remarksUpdate={currentRemarks}
@@ -322,6 +328,7 @@ const PersonalinfoChild = (props) => {
                       setOpennedModal("developerName")
                       setLabelValue("Developer's Name"),
                         setSmShow(true),
+                        setDocModal(false),
                         console.log("modal open"),
                         setFieldValue(personalinfo !== null ? personalinfo?.devDetail?.addInfo?.companyName : null);
                     }}
@@ -362,6 +369,7 @@ const PersonalinfoChild = (props) => {
                       setOpennedModal("registeredAddress2")
                       setLabelValue("Registered Address"),
                         setSmShow(true),
+                        setDocModal(false),
                         console.log("modal open"),
                         setFieldValue(personalinfo !== null ? personalinfo?.devDetail?.addInfo?.registeredAddress : null);
                     }}
@@ -398,6 +406,7 @@ const PersonalinfoChild = (props) => {
                       setOpennedModal("developerEmail")
                       setLabelValue("Developer's Email"),
                         setSmShow(true),
+                        setDocModal(false),
                         console.log("modal open"),
                         setFieldValue(personalinfo !== null ? personalinfo?.devDetail?.addInfo?.emailId : null);
                     }}
@@ -434,6 +443,7 @@ const PersonalinfoChild = (props) => {
         setOpennedModal("developerType")
         setLabelValue("Developer Type"),
           setSmShow(true),
+          setDocModal(false),
           console.log("modal open"),
           setFieldValue(personalinfo !== null ? personalinfo?.devDetail?.addInfo?.showDevTypeFields : null);
       }}
@@ -474,6 +484,7 @@ personalinfo?.devDetail?.addInfo?.showDevTypeFields != "Partnership Firm" &&
           setOpennedModal("cin_Number")
           setLabelValue("CIN Number"),
             setSmShow(true),
+            setDocModal(false),
             console.log("modal open"),
             setFieldValue(personalinfo !== null ? personalinfo?.devDetail?.addInfo?.cin_Number : null);
         }}
@@ -514,6 +525,7 @@ personalinfo?.devDetail?.addInfo?.showDevTypeFields != "Partnership Firm" &&
                       setOpennedModal("developerPan")
                       setLabelValue("Developer's PAN"),
                         setSmShow(true),
+                        setDocModal(false),
                         console.log("modal open"),
                         setFieldValue(personalinfo !== null ? personalinfo?.devDetail?.addInfo?.PanNumber : null);
                     }}
@@ -554,6 +566,7 @@ personalinfo?.devDetail?.addInfo?.showDevTypeFields != "Partnership Firm" &&
                     setOpennedModal("gst_Number")
                     setLabelValue("GST Number"),
                       setSmShow(true),
+                      setDocModal(false),
                       console.log("modal open"),
                       setFieldValue(personalinfo !== null ? personalinfo?.devDetail?.addInfo?.gst_Number : null);
                   }}
@@ -597,6 +610,7 @@ personalinfo?.devDetail?.addInfo?.showDevTypeFields != "Partnership Firm" &&
                       setOpennedModal("developerMobileNo")
                       setLabelValue("Developer's Mobile No"),
                         setSmShow(true),
+                        setDocModal(false),
                         console.log("modal open"),
                         setFieldValue(personalinfo !== null ? personalinfo?.devDetail?.addInfo?.mobileNumberUser : null);
                     }}
@@ -702,6 +716,7 @@ personalinfo?.devDetail?.addInfo?.showDevTypeFields != "Partnership Firm" &&
                 setOpennedModal("DirectorsInformation")
                 setLabelValue("Director Information as per MCA"),
                   setSmShow(true),
+                  setDocModal(false),
                   console.log("modal open"),
                   setFieldValue(personalinfo !== null ? personalinfo?.devDetail?.aurthorizedUserInfoArray?.[0]?.uploadBoardResolution : null);
               }}
@@ -792,6 +807,7 @@ personalinfo?.devDetail?.addInfo?.showDevTypeFields != "Partnership Firm" &&
                 setOpennedModal("directorsInformation")
                 setLabelValue("Director Information"),
                   setSmShow(true),
+                  setDocModal(false),
                   console.log("modal open"),
                   setFieldValue(personalinfo !== null ? personalinfo?.devDetail?.aurthorizedUserInfoArray?.[0]?.uploadBoardResolution : null);
               }}
@@ -874,6 +890,7 @@ personalinfo?.devDetail?.addInfo?.showDevTypeFields != "Partnership Firm" &&
                 setOpennedModal("shareholdingPatterns")
                 setLabelValue("Shareholding Patterns"),
                   setSmShow(true),
+                  setDocModal(false),
                   console.log("modal open"),
                   setFieldValue(personalinfo !== null ? personalinfo?.devDetail?.aurthorizedUserInfoArray?.[0]?.uploadBoardResolution : null);
               }}
@@ -992,6 +1009,7 @@ personalinfo?.devDetail?.addInfo?.showDevTypeFields != "Partnership Firm" &&
                 setOpennedModal("authPersonName")
                 setLabelValue("Authorized Person Name"),
                   setSmShow(true),
+                  setDocModal(false),
                   console.log("modal open"),
                   setFieldValue(personalinfo !== null ? personalinfo?.devDetail?.aurthorizedUserInfoArray?.[0]?.name : null);
               }}
@@ -1052,6 +1070,7 @@ personalinfo?.devDetail?.addInfo?.showDevTypeFields != "Partnership Firm" &&
                 setOpennedModal("authMobileNo1")
                 setLabelValue("Autrhoized Mobile No"),
                   setSmShow(true),
+                  setDocModal(false),
                   console.log("modal open"),
                   setFieldValue(personalinfo !== null ? personalinfo?.devDetail?.aurthorizedUserInfoArray?.[0]?.mobileNumber : null);
               }}
@@ -1087,6 +1106,7 @@ personalinfo?.devDetail?.addInfo?.showDevTypeFields != "Partnership Firm" &&
                 setOpennedModal("emailForCommunication")
                 setLabelValue("Emailid for Authorized signatory"),
                   setSmShow(true),
+                  setDocModal(false),
                   console.log("modal open"),
                   setFieldValue(personalinfo !== null ? personalinfo?.devDetail?.aurthorizedUserInfoArray?.[0]?.emailId : null);
               }}
@@ -1126,6 +1146,7 @@ personalinfo?.devDetail?.addInfo?.showDevTypeFields != "Partnership Firm" &&
                 setOpennedModal("authPan")
                 setLabelValue("Pan No"),
                   setSmShow(true),
+                  setDocModal(false),
                   console.log("modal open"),
                   setFieldValue(personalinfo !== null ? personalinfo?.devDetail?.aurthorizedUserInfoArray?.[0]?.pan : null);
               }}
@@ -1155,12 +1176,36 @@ personalinfo?.devDetail?.addInfo?.showDevTypeFields != "Partnership Firm" &&
             {/* <div className="row"> */}
 
             <div className="btn btn-sm col-md-2">
-              <IconButton onClick={() => getDocShareholding(personalinfo?.devDetail?.aurthorizedUserInfoArray?.[0]?.uploadDigitalSignaturePdf)}>
+              <IconButton 
+              style={{
+                color: " #1266af",
+                fontSize: " 12px",
+                fontWeight: "bold",
+                cursor: "pointer",
+                textDecorationLine: "underline",
+              }}
+              onClick={() => {
+                if (personalinfo?.devDetail?.aurthorizedUserInfoArray?.[0]?.uploadDigitalSignaturePdf) getDocShareholding(personalinfo?.devDetail?.aurthorizedUserInfoArray?.[0]?.uploadDigitalSignaturePdf, setLoader);
+                else setShowToastError({ label: "No pdf here", error: true, success: false });
+              }}>
                 <Visibility color="info" className="icon" /></IconButton>
 
             </div>
             <div className="btn btn-sm col-md-5">
-              <IconButton onClick={() => getDocShareholding(personalinfo?.devDetail?.aurthorizedUserInfoArray?.[0]?.uploadDigitalSignaturePdf)}>
+              <IconButton 
+              // onClick={() => getDocShareholding(personalinfo?.devDetail?.aurthorizedUserInfoArray?.[0]?.uploadDigitalSignaturePdf)}
+               style={{
+                color: " #1266af",
+                fontSize: " 12px",
+                fontWeight: "bold",
+                cursor: "pointer",
+                textDecorationLine: "underline",
+              }}
+              onClick={() => {
+                if (personalinfo?.devDetail?.aurthorizedUserInfoArray?.[0]?.uploadDigitalSignaturePdf) getDocShareholding(personalinfo?.devDetail?.aurthorizedUserInfoArray?.[0]?.uploadDigitalSignaturePdf, setLoader);
+                else setShowToastError({ label: "No pdf here", error: true, success: false });
+              }}
+              >
                 <FileDownload color="primary" className="mx-1" />
               </IconButton>
             </div>
@@ -1175,6 +1220,7 @@ personalinfo?.devDetail?.addInfo?.showDevTypeFields != "Partnership Firm" &&
                   setOpennedModal("uploadDigitalSignaturePdf")
                   setLabelValue("Digital Signature"),
                     setSmShow(true),
+                    setDocModal(true),
                     console.log("modal open"),
                     setFieldValue(personalinfo !== null ? personalinfo?.devDetail?.aurthorizedUserInfoArray?.[0]?.uploadDigitalSignaturePdf : null);
                 }}
@@ -1208,12 +1254,37 @@ personalinfo?.devDetail?.addInfo?.showDevTypeFields != "Partnership Firm" &&
             {/* <div className="row"> */}
 
             <div className="btn btn-sm col-md-2">
-              <IconButton onClick={() => getDocShareholding(personalinfo?.devDetail?.aurthorizedUserInfoArray?.[0]?.uploadBoardResolution)}>
+              <IconButton 
+              // onClick={() => getDocShareholding(personalinfo?.devDetail?.aurthorizedUserInfoArray?.[0]?.uploadBoardResolution)}
+              style={{
+                color: " #1266af",
+                fontSize: " 12px",
+                fontWeight: "bold",
+                cursor: "pointer",
+                textDecorationLine: "underline",
+              }}
+              onClick={() => {
+                if (personalinfo?.devDetail?.aurthorizedUserInfoArray?.[0]?.uploadBoardResolution) getDocShareholding(personalinfo?.devDetail?.aurthorizedUserInfoArray?.[0]?.uploadBoardResolution, setLoader);
+                else setShowToastError({ label: "No pdf here", error: true, success: false });
+              }}
+              >
                 <Visibility color="info" className="icon" /></IconButton>
 
             </div>
             <div className="btn btn-sm col-md-5">
-              <IconButton onClick={() => getDocShareholding(personalinfo?.devDetail?.aurthorizedUserInfoArray?.[0]?.uploadBoardResolution)}>
+              <IconButton 
+              style={{
+                color: " #1266af",
+                fontSize: " 12px",
+                fontWeight: "bold",
+                cursor: "pointer",
+                textDecorationLine: "underline",
+              }}
+              onClick={() => {
+                if (personalinfo?.devDetail?.aurthorizedUserInfoArray?.[0]?.uploadBoardResolution) getDocShareholding(personalinfo?.devDetail?.aurthorizedUserInfoArray?.[0]?.uploadBoardResolution, setLoader);
+                else setShowToastError({ label: "No pdf here", error: true, success: false });
+              }}
+              >
                 <FileDownload color="primary" className="mx-1" />
               </IconButton>
             </div>
@@ -1228,6 +1299,7 @@ personalinfo?.devDetail?.addInfo?.showDevTypeFields != "Partnership Firm" &&
                   setOpennedModal("uploadBoardResolution")
                   setLabelValue("Board Resolution"),
                     setSmShow(true),
+                    setDocModal(true),
                     console.log("modal open"),
                     setFieldValue(personalinfo !== null ? personalinfo?.devDetail?.aurthorizedUserInfoArray?.[0]?.uploadBoardResolution : null);
                 }}
@@ -1556,6 +1628,17 @@ personalinfo?.devDetail?.addInfo?.showDevTypeFields != "Partnership Firm" &&
         </Col>
       
       </Row> */}
+      {showToastError && (
+        <CusToaster
+          label={showToastError?.label}
+          success={showToastError?.success}
+          error={showToastError?.error}
+          onClose={() => {
+            setShowToastError({ label: "", success: false, error: false });
+          }}
+        />
+      )}
+
     </Form.Group>
   );
 };
