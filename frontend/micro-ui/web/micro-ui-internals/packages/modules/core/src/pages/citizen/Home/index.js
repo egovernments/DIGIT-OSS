@@ -271,6 +271,10 @@ const Home = () => {
             link: `/digit-ui/citizen/obps/ExtensionClu`,
             i18nKey: t("Extension of CLU permission"),
           },
+          {
+            link: `/digit-ui/citizen/tl/ExtensionClu/my-application`,
+            i18nKey: t("TL_MY_APPLICATIONS_HEADER"),
+          },
         ],
       },
       {
@@ -281,6 +285,10 @@ const Home = () => {
           {
             link: `/digit-ui/citizen/obps/CompositionClu`,
             i18nKey: t("Composition of urban Area Violation"),
+          },
+          {
+            link: `/digit-ui/citizen/tl/CompositionClu/my-application`,
+            i18nKey: t("TL_MY_APPLICATIONS_HEADER"),
           },
         ],
       },
@@ -307,6 +315,10 @@ const Home = () => {
           {
             link: `/digit-ui/citizen/obps/Beneficial`,
             i18nKey: t("Change in Beneficial Interest"),
+          },
+          {
+            link: `/digit-ui/citizen/tl/Beneficial/my-application`,
+            i18nKey: t("TL_MY_APPLICATIONS_HEADER"),
           },
         ],
       },
