@@ -40,7 +40,7 @@ const ScrutinyFormcontainer = (props) => {
   const [businessService, setBusinessServices] = useState("NewTL");
   const [moduleCode, setModuleCode] = useState("TL")
   const [scrutinyDetails, setScrutinyDetails] = useState();
-  const [feeandchargesData, SetFeeandchargesData] = useState();
+  const [additionalDocResponData, SetAdditionalDocResponData] = useState();
   const [status, setStatus] = useState();
 
   const [applicationDetails, setApplicationDetails] = useState();
@@ -188,24 +188,39 @@ const ScrutinyFormcontainer = (props) => {
       console.log(error);
 
     }
-    const applicationNo = id
-    console.log("applicationNo", applicationNo);
-    const feeAndChargesData = {
+    // const applicationNo = id
+    // console.log("applicationNo", applicationNo);
+    const additionalDoc = {
 
 
       "RequestInfo": {
+
         "apiId": "Rainmaker",
-        "msgId": "1669293303096|en_IN",
-        userInfo: userInfo,
+
+        "ver": "v1",
+
+        "ts": 0,
+
+        "action": "_search",
+
+        "did": "",
+
+        "key": "",
+
+        "msgId": "090909",
+
+        "requesterId": "",
+
         "authToken": authToken,
 
+        "userInfo": userInfo
 
-      },
-      applicationNo: applicationNo,
+    },
+     
     }
-    const feeandchargesRespon = await axios.post(`/tl-calculator/v1/_getPaymentEstimate`, feeAndChargesData)
-    SetFeeandchargesData(feeandchargesRespon?.data);
-    console.log("Datafee", feeandchargesRespon);
+    const additionalDocRespon = await axios.post(`/tl-services/_additionalDocuments/_search?licenceNumber=${id}&businessService=NewTL&type=licenceNumber`, additionalDoc)
+    SetAdditionalDocResponData(additionalDocRespon?.data);
+    console.log("Datafee", additionalDocRespon);
 
 
   };
@@ -507,7 +522,7 @@ const ScrutinyFormcontainer = (props) => {
       <Row >
         <div className="formlist">
           <ScrutitnyForms
-            feeandcharges={feeandchargesData}
+            additionalDocResponData={additionalDocResponData}
             histeroyData={workflowDetailsTemp}
             apiResponse={scrutinyDetails}
             applicationNumber={id}

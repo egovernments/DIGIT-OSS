@@ -1,13 +1,23 @@
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 // import AddPost from '../Material/TextEditor';
 import Collapse from "react-bootstrap/Collapse";  
 import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
+import { getDocShareholding } from '../ScrutinyDevelopment/docview.helper';
+import { IconButton } from "@mui/material";
+import VisibilityIcon from "@mui/icons-material/Visibility";
+import FileDownloadIcon from "@mui/icons-material/FileDownload";
+import { convertEpochToDateDMY } from '../../../../utils';
 
-function AdditionalDocument()
+function AdditionalDocument (prop)
 {
+
+ const additionalDocref=useRef()
+  const additionalDocResponData = prop.additionalDocRespon;
   const[formValues, setFormValues]= useState([{name:'', email:'', address:''}]);
   const[msg, setMsg]= useState('');
+  const dateTime = new Date();
+  const[newDocAdd, setNewDocAdd]= useState('');
   const [open, setOpen] = useState(false);
 
   const handleInputChange=(index, event)=>{
@@ -33,12 +43,26 @@ const handleSubmit=(e)=>{
     setMsg("Data Saved Successfully");
 
 }
+useEffect(() => {
+if(additionalDocResponData?.AdditionalDocuments?.length){
+   additionalDocref.current.classList.add("blinkComponentScrutiny")
+}
+},[additionalDocResponData])
+
+const handleDOc = () =>{
+  additionalDocref.current.classList.remove("blinkComponentScrutiny")
+}
+
+console.log("additionalDocResponData" , additionalDocResponData);
+
 
     return(
         <React.Fragment>
+          
             <div
         className="collapse-header"
-        onClick={() => setOpen(!open)}
+        ref={additionalDocref}
+        onClick={() => {handleDOc();setOpen(!open)}}
         aria-controls="example-collapse-text"
         aria-expanded={open}
         style={{
@@ -51,7 +75,8 @@ const handleSubmit=(e)=>{
           color: "#817f7f",
           justifyContent: "space-between",
           alignContent: "center",
-        }}
+         }}
+         
       >
         <span style={{ color: "#817f7f" }} className="">
           AdditionalDocument
@@ -76,46 +101,67 @@ const handleSubmit=(e)=>{
                     </th>
                     
                     {/* <th>Part of LOI</th> */}
-                    <th>Action</th>
+                    <th>Date</th>
                     </tr>
                     </thead>
-                    <tbody>
-                        {
-                            formValues.map( (input, index)=>
+                    
+                    {additionalDocResponData?.AdditionalDocuments?.map((item) => (
+                     <tbody>
+                        { item?.additionalDetails?.map( (input, index)=>(
                             <tr key={index}>                        
-                    <td>{index+1} </td>
+                    <td>{index + 1}</td>
                     <td>
-                        {/* <input type="text"  className="form-control" name="name" value={formValues.name} onChange={ event=>handleInputChange(index,event)} placeholder="Enter Username"/>  */}
-                       {/* <AddPost></AddPost> */}
+                    
+                       {input?.documentName}
                          </td>
                     <td>
-                        {/* <input type="text" className="form-control" name="email"   value={formValues.email} onChange={ event=>handleInputChange(index,event)} placeholder="Enter email"/> */}
+                  
+                        {/* {input?.document} */}
+                        <div className="row">
+                                      <div className="btn btn-sm col-md-4">
+                                        <IconButton onClick={() => getDocShareholding(input?.document)}>
+                                          <VisibilityIcon color="info" className="icon" />
+                                        </IconButton>
+                                      </div>
+                                      <div className="btn btn-sm col-md-4">
+                                        <IconButton onClick={() => getDocShareholding(input?.document)}>
+                                          <FileDownloadIcon color="info" className="icon" />
+                                        </IconButton>
+                                      </div>
+                                      {/* <div className="btn btn-sm col-md-4">
+                                        <ReportProblemIcon
+                                          style={{
+                                            color: fieldIconColors.technicalAndFinancialCapacityDoc,
+                                          }}
+                                          onClick={() => {
+                                            setOpennedModal("technicalAndFinancialCapacityDoc");
+                                            setLabelValue("Documents about the Technical and Financial Capacity of the ‘new entity’ proposed to be inducted as a ‘Developer’ or ‘shareholder(s)’ as per prescribed policy parameters for grant of a license"),
+                                              setSmShow(true),
+                                              console.log("modal open"),
+                                              setFieldValue(personalinfo !== null ? personalinfo.technicalAndFinancialCapacityDoc : null);
+                                          }}
+                                        ></ReportProblemIcon>
+                                      </div> */}
+                                    </div>
                         </td>
                     <td>
-                        {/* <input type="text" className="form-control" name="address" value={formValues.address} onChange={ event=>handleInputChange(index,event)} placeholder="Enter Address"/> */}
+        
+                        {/* {input?.Date} */}
+                      {convertEpochToDateDMY(input.Date)} 
                         </td>
-                    <td>  
-                    {/* <button className="btn btn-success btn-lg mb-3" onClick={ addFields}>Add More </button>
-                        {
-                          index!==0 &&(
-                            <button className="btn btn-danger mx-2" onClick={ ()=>removeFields(index)}>Remove </button>
-                          )  
-                          
-                        }                                        */}
-                                          
-                    </td>
+
                     </tr> 
-                            )
-                        }                              
+                         ) )
+                        }   
+                      </tbody> 
+)) }                          
                                           
-                    </tbody>
+                                          
                     </table>
-                    <button className="btn btn-success btn-lg" onClick={ handleSubmit}>Submit </button>
+                
                 </div>
             
-                {/* </div> */}
-                {/* </div>
-                </div> */}
+       
                  </div>
       </Collapse>
 
