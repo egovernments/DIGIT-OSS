@@ -31,12 +31,16 @@ import WorkingTable from "../../../../components/Table";
 import CusToaster from "../../../../components/Toaster";
 import { useTranslation } from "react-i18next";
 
-const compactBlock = [
+const compactBlockA = [
   { label: "Private Road", value: "privateRoad" },
   { label: "Street", value: "street" },
   { label: "Lane footway/footpath", value: "laneFootpath" },
   { label: "Passage/Drain (Natural/Artificial)", value: "passage/drain/natural/atrificial" },
-  { label: "None of the above", value: "none" },
+];
+
+const compactBlockB = [
+  { label: "Private Land", value: "privateLand" },
+  { label: "Any other", value: "anyOther" },
 ];
 
 const test = {
@@ -253,18 +257,18 @@ const LandScheduleForm = (props) => {
 
   const [fileStoreId, setFileStoreId] = useState({});
   const [specificTableData, setSpecificTableData] = useState(null);
-  const Purpose = localStorage.getItem("purpose");
   const userInfo = Digit.UserService.getUser()?.info || {};
 
   const landScheduleFormSubmitHandler = async (data) => {
     const token = window?.localStorage?.getItem("token");
-    // setLoader(true);
+    setLoader(true);
     data["potential"] = data?.potential?.value;
     data["typeLand"] = data?.typeLand?.value;
     data["siteLoc"] = data?.siteLoc?.value;
     data["purposeParentLic"] = data?.purposeParentLic?.value;
     data["releaseStatus"] = data?.releaseStatus?.value;
     data["unconsolidated"] = data?.unconsolidated?.value;
+    data["separatedBy"] = data?.separatedBy?.value;
     const postDistrict = {
       pageName: "LandSchedule",
       action: "LANDSCHEDULE",
@@ -320,19 +324,6 @@ const LandScheduleForm = (props) => {
       setValue("typeLand", { label: typeLandData?.[0]?.label, value: typeLandData?.[0]?.value });
     }
   }, [stepData, purposeOptions, getPotentialOptons, typeOfLand]);
-
-  // const getSubmitDataLabel = async () => {
-  //   try {
-  //     const Resp = await axios.get(`http://103.166.62.118:80/land-services/new/licenses/_get?id=${props.getId}`);
-  //     const userData = Resp?.data?.newServiceInfoData?.[0]?.LandSchedule;
-  //   } catch (error) {
-  //     return error.message;
-  //   }
-  // };
-
-  // useEffect(() => {
-  //   getSubmitDataLabel();
-  // }, []);
 
   const getDocumentData = async (file, fieldName) => {
     if (selectedFiles.includes(file.name)) {
@@ -474,7 +465,7 @@ const LandScheduleForm = (props) => {
           <Card style={{ width: "126%", marginLeft: "-2px", paddingRight: "10px", marginTop: "40px", marginBottom: "52px" }}>
             <Form.Group className="justify-content-center" controlId="formBasicEmail">
               <Row className="ml-auto" style={{ marginBottom: 5 }}>
-                <Col col-12>
+                <Col>
                   <div className="row">
                     <div className="col col-12 ">
                       <div>
@@ -1331,16 +1322,15 @@ const LandScheduleForm = (props) => {
                               labels="Potential"
                             />
                           </div>
-                          <h3 className="error-message" style={{ color: "red" }}>
+                          {/* <h3 className="error-message" style={{ color: "red" }}>
                             {errors?.waterCourse && errors?.waterCourse?.message}
-                          </h3>
+                          </h3> */}
                         </div>
                       )}
                     </div>
                     <div className="col col-3 ">
                       <h2>
-                        &nbsp;
-                        {`${t("NWL_APPLICANT_WATERCOURSE_SHAJRA_PLAN")}`}
+                        &nbsp; (c) {`${t("NWL_APPLICANT_WATERCOURSE_SHAJRA_PLAN")}`}
                         {/* Watercourse */}
                         <span style={{ color: "red" }}>*</span>
                         <Tooltip title="Watercourse running along boundary through the applied site ?">
@@ -1380,9 +1370,6 @@ const LandScheduleForm = (props) => {
                     </div>
 
                     <div className="col col-3 ">
-                      {/* <h2>
-                        (d) &nbsp;Whether in Compact Block.<span style={{ color: "red" }}>*</span>
-                      </h2> */}
                       <label>
                         <h2>
                           {`${t("NWL_APPLICANT_WHETHER_IN_COMPACT_BLOCK_SHAJRA_PLAN")}`}
@@ -1391,73 +1378,59 @@ const LandScheduleForm = (props) => {
                         </h2>
                       </label>
 
-                      <ReactMultiSelect control={control} name="compactBlock" placeholder="compact block" data={compactBlock} labels="Potential" />
-                      {/* &nbsp;&nbsp;&nbsp;&nbsp;
-                      <label htmlFor="compactBlock">
-                        <input {...register("compactBlock")} type="radio" value="Y" id="compactBlock" />
+                      <label htmlFor="compactBlockYes">
+                        <input {...register("whetherCompactBlock")} type="radio" value="Y" id="compactBlockYes" />
                         &nbsp; Yes &nbsp;&nbsp;
                       </label>
-                      <label htmlFor="compactBlock">
-                        <input {...register("compactBlock")} type="radio" value="N" id="compactBlock" />
+                      <label htmlFor="compactBlockNo">
+                        <input {...register("whetherCompactBlock")} type="radio" value="N" id="compactBlockNo" />
                         &nbsp; No &nbsp;&nbsp;
-                      </label> */}
-                      {/* <h3 className="error-message" style={{ color: "red" }}>
-                        {errors?.compactBlock && errors?.compactBlock?.message}
-                      </h3> */}
-                      {/* {watch("compactBlock") === "Y" && (
+                      </label>
+
+                      {watch("whetherCompactBlock") === "Y" && (
                         <div className="row ">
                           <div className="col col">
                             <label>
                               <h2>
-                                Remark <span style={{ color: "red" }}>*</span>
-                              </h2>{" "}
+                                {/* {`${t("NWL_APPLICANT_REVENUE_RASTA_Y_UNCONSOLIDATED_SHAJRA_PLAN")}`} */}
+                                Separated by
+                                <span style={{ color: "red" }}>*</span>&nbsp;
+                              </h2>
                             </label>
-                            <input type="text" className="form-control" {...register("compactBlockRemark")} />
-                            <h3 className="error-message" style={{ color: "red" }}>
-                              {errors?.compactBlockRemark && errors?.compactBlockRemark?.message}
-                            </h3>
+                            <ReactMultiSelect
+                              control={control}
+                              name="separatedBy"
+                              placeholder="separated by"
+                              data={compactBlockA}
+                              labels="Separated by"
+                            />
                           </div>
                         </div>
-                      )} */}
+                      )}
+                      {watch("whetherCompactBlock") === "N" && (
+                        <div className="row ">
+                          <div className="col col">
+                            <label>
+                              <h2>
+                                {/* {`${t("NWL_APPLICANT_REVENUE_RASTA_Y_UNCONSOLIDATED_SHAJRA_PLAN")}`} */}
+                                Separated by
+                                <span style={{ color: "red" }}>*</span>&nbsp;
+                              </h2>
+                            </label>
+                            <ReactMultiSelect
+                              control={control}
+                              name="separatedBy"
+                              placeholder="separated by"
+                              data={compactBlockB}
+                              labels="Separated by"
+                            />
+                          </div>
+                        </div>
+                      )}
                     </div>
                   </div>
                   <br></br>
                   <div className="row">
-                    {/* <div className="col col-3 ">
-                      <h2>
-                        (e)&nbsp;Whether Others Land fall <span style={{ color: "red" }}>*</span>
-                        <Tooltip title="Whether Others Land fall within Applied Land">
-                          <InfoIcon style={{ cursor: "pointer" }} color="primary"></InfoIcon>
-                        </Tooltip>
-                      </h2>{" "}
-                      &nbsp;&nbsp;&nbsp;&nbsp;
-                      <label htmlFor="landSandwiched">
-                        <input {...register("landSandwiched")} type="radio" value="Y" id="landSandwiched" />
-                        &nbsp; Yes &nbsp;&nbsp;
-                      </label>
-                      <label htmlFor="landSandwiched">
-                        <input {...register("landSandwiched")} type="radio" value="N" id="landSandwiched" />
-                        &nbsp; No &nbsp;&nbsp;
-                      </label>
-                      <h3 className="error-message" style={{ color: "red" }}>
-                        {errors?.landSandwiched && errors?.landSandwiched?.message}
-                      </h3>
-                      {watch("landSandwiched") === "Y" && (
-                        <div className="row ">
-                          <div className="col col-12">
-                            <label>
-                              <h2>
-                                Enter Kharsa No. <span style={{ color: "red" }}>*</span>
-                              </h2>
-                            </label>
-                            <input type="text" className="form-control" {...register("landSandwichedRemark")} />
-                            <h3 className="error-message" style={{ color: "red" }}>
-                              {errors?.landSandwichedRemark && errors?.landSandwichedRemark?.message}
-                            </h3>
-                          </div>
-                        </div>
-                      )}
-                    </div> */}
                     <div className="col col-3 ">
                       <h2>
                         &nbsp;
@@ -2387,7 +2360,7 @@ const LandScheduleForm = (props) => {
                             <label>
                               <h2>
                                 {`${t("NWL_APPLICANT_4_B_HT_REMARKS_SHAJRA_PLAN")}`}
-                                {/* HT Remark  */}
+                                {/* HT Line Remark  */}
                                 <span style={{ color: "red" }}>*</span>
                               </h2>
                             </label>
@@ -2404,7 +2377,7 @@ const LandScheduleForm = (props) => {
                             <label>
                               <h2>
                                 {`${t("NWL_APPLICANT_4_B_HT_REMARKS_SHAJRA_PLAN")}`}
-                                {/* HT Remark */}
+                                {/* HT Line Remark */}
                               </h2>
                             </label>
                             <input type="text" className="form-control" {...register("htRemark")} />
@@ -2437,7 +2410,7 @@ const LandScheduleForm = (props) => {
                           <div className="col col">
                             <label>
                               {`${t("NWL_APPLICANT_4_Y_IOC_REMARKS_SHAJRA_PLAN")}`}
-                              {/* IOC Remark  */}
+                              {/* IOC Gas Pipeline Remark  */}
                               <span style={{ color: "red" }}>*</span>
                             </label>
                             <input type="text" className="form-control" {...register("gasRemark")} />
@@ -2452,7 +2425,7 @@ const LandScheduleForm = (props) => {
                           <div className="col col">
                             <label>
                               {`${t("NWL_APPLICANT_4_Y_IOC_REMARKS_SHAJRA_PLAN")}`}
-                              {/* IOC Remark */}
+                              {/* IOC Gas Pipeline Remark */}
                             </label>
                             <input type="text" className="form-control" {...register("gasRemark")} />
                           </div>
@@ -2734,7 +2707,7 @@ const LandScheduleForm = (props) => {
                       <h2>
                         &nbsp;
                         {`${t("NWL_APPLICANT_H_WHETHER_OTHERS_LAND_FALL_SHAJRA_PLAN")}`}
-                        {/* Whether Others Land fall */}
+                        {/* Whether other land falls within the applied land */}
                       </h2>
                       &nbsp;&nbsp;&nbsp;&nbsp;
                       <label htmlFor="othersLandFall">
@@ -3010,9 +2983,9 @@ const LandScheduleForm = (props) => {
                       <label>
                         <h2 style={{ display: "flex" }}>
                           {`${t("NWL_APPLICANT_COPY_OF_SPA_GPA_BOARD")}`}
-                          {/* Copy of spa/GPA  */}
+                          {/* Copy of SPA/GPA/BR  */}
                           <span style={{ color: "red" }}>*</span>
-                          <Tooltip title="Copy of spa/GPA/board resolution to sign collaboration agrrement">
+                          <Tooltip title="Copy of SPA/GPA/Board Resolution to sign collaboration agreement">
                             <InfoIcon style={{ cursor: "pointer" }} color="primary"></InfoIcon>
                           </Tooltip>
                         </h2>
