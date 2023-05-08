@@ -7,6 +7,10 @@ import { useStyles } from "./styles/modalChild.style";
 import { useParams } from "react-router-dom";
 import { ScrutinyRemarksContext } from "../../../../../context/remarks-data-context";
 import AddPost from "../../Material/TextEditor";
+import { getDocShareholding } from "../ScrutinyDevelopment/docview.helper";
+import Visibility from "@mui/icons-material/Visibility";
+// import FileDownload from "@mui/icons-material/FileDownload";
+import { IconButton } from "@mui/material";
 
 
 function ModalChild(props) {
@@ -15,6 +19,7 @@ function ModalChild(props) {
   const userInfo = Digit.UserService.getUser()?.info || {};
   const classes = useStyles();
   const smShow = props.displaymodal;
+  const docModal = props.disPlayDoc;
   const [RemarksDeveloper, setDeveloperRemarks] = useState("");
   const [RemarksEntered, setRemarksEntered] = useState("");
   const [yesOrNoClicked, setIsYesorNoClicked] = useState();
@@ -91,8 +96,8 @@ function ModalChild(props) {
 
   useEffect(() => {
     if (props.selectedFieldData) {
-      setStatus(props.selectedFieldData.isApproved);
-      setDeveloperRemarks({ data: props.selectedFieldData?.comment ? props.selectedFieldData?.comment : "" });
+      setStatus(props.selectedFieldData.isApproved ? "In Order" : "Not In Order");
+      setDeveloperRemarks({ data: props.selectedFieldData.comment ? props.selectedFieldData.comment : "" });
       // setDeveloperRemarks({data:props.selectedFieldData.isApproved?"In Order":"Not In Order"});
     } else {
       setStatus(null);
@@ -100,7 +105,9 @@ function ModalChild(props) {
     }
   }, [props.selectedFieldData]);
 
-  console.log("Isdata" , status,RemarksDeveloper )
+  console.log("Isdata" , status )
+  console.log("docModal123....." , docModal )
+
 
   // let empCode = "EMPLOYEE";
   
@@ -120,7 +127,20 @@ function ModalChild(props) {
         <Modal.Title id="example-modal-sizes-title-sm">
           <div>
             <h3>{props.labelmodal}</h3>
+            {/* { docModal === false && */}
             <p className={classes.subHead}>{inputFieldValue}</p>
+            {/* } */}
+            { docModal === true &&
+            
+            <div className="btn btn-sm col-md-2">
+            <IconButton onClick={() => getDocShareholding(inputFieldValue)}>
+              <Visibility color="info" className="icon" /></IconButton>
+
+          </div>
+            
+            }
+
+            
           </div>
 
           {/* <Row>
@@ -189,7 +209,6 @@ function ModalChild(props) {
               rows="3"
               value={RemarksDeveloper.data}
             /> */}
-            {/* {RemarksDeveloper?.data} */}
              <AddPost
               modal={true}
               
@@ -197,7 +216,7 @@ function ModalChild(props) {
                 setDeveloperRemarks({ data: e });
                 // setRemarksEntered(e.target.value);
               }}
-              state={RemarksDeveloper?.data}
+              state={RemarksDeveloper.data}
               ></AddPost>
             {/* <Form.Control type="text" /> */}
           </Col>

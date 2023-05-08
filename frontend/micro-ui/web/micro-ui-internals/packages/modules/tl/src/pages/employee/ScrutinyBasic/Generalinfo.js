@@ -651,7 +651,7 @@ Note: The term “Collaboration agreement" shall include all Development agreeme
                      <th class="fw-normal pb-0 border-bottom-0 align-top">
                     {/* Khasra No. */}
                     {/* khewats No */}
-                    {`${t("NWL_APPLICANT_KHEWATS_NUMBER_LAND_SCHEDULE")}`}
+                    {`${t("NWL_APPLICANT_KHASRA_NUMBER_LAND_SCHEDULE")}`}
                     </th>
                     <th class="fw-normal pb-0 border-bottom-0 align-top">
                     {/* Name of Land Owner */}
