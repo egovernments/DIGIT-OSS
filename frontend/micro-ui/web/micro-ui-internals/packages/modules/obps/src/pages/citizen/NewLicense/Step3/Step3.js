@@ -31,6 +31,8 @@ import WorkingTable from "../../../../components/Table";
 import CusToaster from "../../../../components/Toaster";
 import { useTranslation } from "react-i18next";
 
+const dataSet = [{ name: "test" }];
+
 const compactBlockA = [
   { label: "Private Road", value: "privateRoad" },
   { label: "Street", value: "street" },
@@ -261,6 +263,14 @@ const LandScheduleForm = (props) => {
 
   const landScheduleFormSubmitHandler = async (data) => {
     const token = window?.localStorage?.getItem("token");
+    // console.log("data",data);
+    // return
+    if (data?.pocket) {
+      delete data?.northSurroundings;
+      delete data?.southSurroundings;
+      delete data?.eastSurroundings;
+      delete data?.westSurroundings;
+    }
     setLoader(true);
     data["potential"] = data?.potential?.value;
     data["typeLand"] = data?.typeLand?.value;
@@ -1425,6 +1435,14 @@ const LandScheduleForm = (props) => {
                               labels="Separated by"
                             />
                           </div>
+                          {watch("separatedBy")?.value && (
+                            <div className="col col-4">
+                              <label>
+                                <h2>Pocket</h2>
+                              </label>
+                              <Form.Control type="number" className="form-control" placeholder="" {...register("pocket")} />
+                            </div>
+                          )}
                         </div>
                       )}
                     </div>
@@ -2754,56 +2772,119 @@ const LandScheduleForm = (props) => {
                         <span style={{ color: "red" }}>*</span>
                       </h2>
 
-                      <div className="row ">
-                        <div className="col col-3">
-                          <label>
-                            <h2>
-                              {`${t("NWL_APPLICANT_SURROUNDINGS_NORTH_SHAJRA_PLAN")}`}
-                              {/* North */}
-                            </h2>
-                          </label>
-                          <input type="text" className="form-control" {...register("northSurroundings")} />
-                          <h3 className="error-message" style={{ color: "red" }}>
-                            {errors?.northSurroundings && errors?.northSurroundings?.message}
-                          </h3>
+                      {/* Render the data array according to the pocket */}
+                      {watch("pocket") ? (
+                        [...Array(parseInt(watch("pocket")))].map((_, index) => {
+                          return (
+                            <div key={index} className="row mt-3">
+                              <div className="col col-3">
+                                <label>
+                                  <h2>
+                                    {`${t("NWL_APPLICANT_SURROUNDINGS_NORTH_SHAJRA_PLAN")}`}
+                                    {/* North */}
+                                  </h2>
+                                </label>
+                                <input type="text" className="form-control" {...register(`northSurroundings${index}`)} />
+                                <h3 className="error-message" style={{ color: "red" }}>
+                                  {errors?.northSurroundings && errors?.northSurroundings?.message}
+                                </h3>
+                              </div>
+                              <div className="col col-3">
+                                <label>
+                                  <h2>
+                                    {`${t("NWL_APPLICANT_SURROUNDINGS_SOUTH_SHAJRA_PLAN")}`}
+                                    {/* South */}
+                                  </h2>
+                                </label>
+                                <input type="text" className="form-control" {...register(`southSurroundings${index}`)} />
+                                <h3 className="error-message" style={{ color: "red" }}>
+                                  {errors?.southSurroundings && errors?.southSurroundings?.message}
+                                </h3>
+                              </div>
+                              <div className="col col-3">
+                                <label>
+                                  <h2>
+                                    {`${t("NWL_APPLICANT_SURROUNDINGS_EAST_SHAJRA_PLAN")}`}
+                                    {/* East */}
+                                  </h2>
+                                </label>
+                                <input type="text" className="form-control" {...register(`eastSurroundings${index}`)} />
+                                <h3 className="error-message" style={{ color: "red" }}>
+                                  {errors?.eastSurroundings && errors?.eastSurroundings?.message}
+                                </h3>
+                              </div>
+                              <div className="col col-3">
+                                <label>
+                                  <h2>
+                                    {`${t("NWL_APPLICANT_SURROUNDINGS_WEST_SHAJRA_PLAN")}`}
+                                    {/* West */}
+                                  </h2>
+                                </label>
+                                <input type="text" className="form-control" {...register(`westSurroundings${index}`)} />
+                                <h3 className="error-message" style={{ color: "red" }}>
+                                  {errors?.westSurroundings && errors?.westSurroundings?.message}
+                                </h3>
+                              </div>
+                            </div>
+                            // <div key={index}>
+                            //   {dataSet.map((item, subIndex) => (
+                            //     <p key={subIndex}>{item.name}</p>
+                            //   ))}
+                            // </div>
+                          );
+                        })
+                      ) : (
+                        <div className="row mt-3">
+                          <div className="col col-3">
+                            <label>
+                              <h2>
+                                {`${t("NWL_APPLICANT_SURROUNDINGS_NORTH_SHAJRA_PLAN")}`}
+                                {/* North */}
+                              </h2>
+                            </label>
+                            <input type="text" className="form-control" {...register("northSurroundings")} />
+                            <h3 className="error-message" style={{ color: "red" }}>
+                              {errors?.northSurroundings && errors?.northSurroundings?.message}
+                            </h3>
+                          </div>
+                          <div className="col col-3">
+                            <label>
+                              <h2>
+                                {`${t("NWL_APPLICANT_SURROUNDINGS_SOUTH_SHAJRA_PLAN")}`}
+                                {/* South */}
+                              </h2>
+                            </label>
+                            <input type="text" className="form-control" {...register("southSurroundings")} />
+                            <h3 className="error-message" style={{ color: "red" }}>
+                              {errors?.southSurroundings && errors?.southSurroundings?.message}
+                            </h3>
+                          </div>
+                          <div className="col col-3">
+                            <label>
+                              <h2>
+                                {`${t("NWL_APPLICANT_SURROUNDINGS_EAST_SHAJRA_PLAN")}`}
+                                {/* East */}
+                              </h2>
+                            </label>
+                            <input type="text" className="form-control" {...register("eastSurroundings")} />
+                            <h3 className="error-message" style={{ color: "red" }}>
+                              {errors?.eastSurroundings && errors?.eastSurroundings?.message}
+                            </h3>
+                          </div>
+                          <div className="col col-3">
+                            <label>
+                              <h2>
+                                {`${t("NWL_APPLICANT_SURROUNDINGS_WEST_SHAJRA_PLAN")}`}
+                                {/* West */}
+                              </h2>
+                            </label>
+                            <input type="text" className="form-control" {...register("westSurroundings")} />
+                            <h3 className="error-message" style={{ color: "red" }}>
+                              {errors?.westSurroundings && errors?.westSurroundings?.message}
+                            </h3>
+                          </div>
                         </div>
-                        <div className="col col-3">
-                          <label>
-                            <h2>
-                              {`${t("NWL_APPLICANT_SURROUNDINGS_SOUTH_SHAJRA_PLAN")}`}
-                              {/* South */}
-                            </h2>
-                          </label>
-                          <input type="text" className="form-control" {...register("southSurroundings")} />
-                          <h3 className="error-message" style={{ color: "red" }}>
-                            {errors?.southSurroundings && errors?.southSurroundings?.message}
-                          </h3>
-                        </div>
-                        <div className="col col-3">
-                          <label>
-                            <h2>
-                              {`${t("NWL_APPLICANT_SURROUNDINGS_EAST_SHAJRA_PLAN")}`}
-                              {/* East */}
-                            </h2>
-                          </label>
-                          <input type="text" className="form-control" {...register("eastSurroundings")} />
-                          <h3 className="error-message" style={{ color: "red" }}>
-                            {errors?.eastSurroundings && errors?.eastSurroundings?.message}
-                          </h3>
-                        </div>
-                        <div className="col col-3">
-                          <label>
-                            <h2>
-                              {`${t("NWL_APPLICANT_SURROUNDINGS_WEST_SHAJRA_PLAN")}`}
-                              {/* West */}
-                            </h2>
-                          </label>
-                          <input type="text" className="form-control" {...register("westSurroundings")} />
-                          <h3 className="error-message" style={{ color: "red" }}>
-                            {errors?.westSurroundings && errors?.westSurroundings?.message}
-                          </h3>
-                        </div>
-                      </div>
+                      )}
                     </div>
 
                     <div className="col col-3">
@@ -3275,7 +3356,7 @@ const LandScheduleForm = (props) => {
                 <div>
                   <label>
                     <h2>
-                      {`${t(" NWL_APPLICANT_APPLIED_KHASRS_NUMBER_GINATIONLIC")}`}
+                      {`${t("NWL_APPLICANT_APPLIED_KHASRS_NUMBER_GINATIONLIC")}`}
                       {/* Applied Khasra number */}
                       <span style={{ color: "red" }}>*</span>
                     </h2>
