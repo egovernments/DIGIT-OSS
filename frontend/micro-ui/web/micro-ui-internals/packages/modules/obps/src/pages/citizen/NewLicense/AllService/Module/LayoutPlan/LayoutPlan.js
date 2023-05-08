@@ -298,7 +298,7 @@ function LayoutPlanClu() {
             authToken: token,
             userInfo: userInfo,
           },
-          revisedPlan: [
+          revisedPlan: 
             {
               ...layOutPlanData,
 
@@ -309,7 +309,7 @@ function LayoutPlanClu() {
               // "comment": "",
               // "assignee": null
             },
-          ],
+          
         };
         const Resp = await axios.post("/tl-services/revisedPlan/_update", updateRequest);
         setOpen(true);

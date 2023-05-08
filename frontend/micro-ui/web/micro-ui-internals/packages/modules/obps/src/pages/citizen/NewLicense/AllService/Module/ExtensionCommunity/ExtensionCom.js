@@ -3,11 +3,12 @@ import { Button } from "@material-ui/core";
 import FormControl from "@mui/material/FormControl";
 import { useForm } from "react-hook-form";
 import OutlinedInput from "@mui/material/OutlinedInput";
+import SearchLicenceComp from "../../../../../../components/SearchLicence";
 
 function ExtensionCom() {
   const [selects, setSelects] = useState();
   const [showhide, setShowhide] = useState("");
-
+ const [loader, setLoader] = useState(false);
   const handleshowhide = (event) => {
     const getuser = event.target.value;
 
@@ -18,6 +19,7 @@ function ExtensionCom() {
     handleSubmit,
     formState: { errors },
     control,
+    watch,
     setValue,
   } = useForm({});
 
@@ -29,16 +31,21 @@ function ExtensionCom() {
         <h4 style={{ fontSize: "25px", marginLeft: "21px" }}>Extension (construction in community sites)</h4>
         <div className="card">
           <div className="row-12">
-            <div className="col md={4} xxl lg-4">
-              <FormControl>
-                <h2 className="FormLable">
-                  {" "}
-                  License No.<span style={{ color: "red" }}>*</span>
-                </h2>
-
-                <OutlinedInput type="number" className="Inputcontrol" placeholder="" {...register("licenseNumber")} />
-              </FormControl>
+            <div className="row gy-3">
+              <SearchLicenceComp
+                watch={watch}
+                register={register}
+                control={control}
+                setLoader={setLoader}
+                errors={errors}
+                setValue={setValue}
+                resetField={resetField}
+              />
+            </div>
+            </div>
               &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
+              <div className="row-12">
+                  <div className="col md={4} xxl lg-4">
               <FormControl>
                 <h2 className="FormLable">
                   {" "}
