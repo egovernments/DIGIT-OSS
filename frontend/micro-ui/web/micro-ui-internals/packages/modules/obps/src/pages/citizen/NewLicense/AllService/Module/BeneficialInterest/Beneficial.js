@@ -372,7 +372,7 @@ function Beneficial() {
         },
       };
 
-      const Resp = await axios.post(`/tl-services/beneficial/_get?licenseNumber=${params.get("id")}`, reqBody);
+      const Resp = await axios.post(`/tl-services/beneficial/_get?applicationNumber=${params.get("id")}`, reqBody);
       console.log("BeneficiaryDetails ====> ", Resp, Resp?.data?.changeBeneficial?.[0], Resp?.data?.changeBeneficial?.[0]?.licenseNumber);
       setBeneficialDetails(Resp?.data?.changeBeneficial?.[0]);
       setValue("licenceNo", Resp?.data?.changeBeneficial?.[0]?.licenseNumber);

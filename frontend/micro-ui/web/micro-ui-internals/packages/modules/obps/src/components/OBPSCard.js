@@ -1,6 +1,34 @@
-import { EmployeeModuleCard, DocumentIconSolid } from "@egovernments/digit-ui-react-components";
+// import { EmployeeModuleCard, DocumentIconSolid , LicencingIcon} from "@egovernments/digit-ui-react-components";
 import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
+import {
+  EmployeeModuleCard, 
+  DocumentIconSolid ,
+  Calender,
+  CardBasedOptions,
+  ServiceCardOptions,
+  CaseIcon,
+  ComplaintIcon,
+  DocumentIcon,
+  HomeIcon,
+  BPAHomeIcon,
+  BPAIco,
+  Loader,
+  OBPSIcon,
+  PTIcon,
+  StandaloneSearchBar,
+  WhatsNewCard,
+  BannerAllCard,
+  LicencingIcon,
+  ServicePlanIcon,
+  ElectricPlanIcon,
+  BankGuaranteeIcon,
+  RenewLic,
+  LabTabs,
+  TransferLic,
+  SurrenderLic,
+  StandardDesign,
+} from "@egovernments/digit-ui-react-components";
 
 
 const OBPSCard = () => {
@@ -143,7 +171,7 @@ const OBPSCard = () => {
     }, [tenantId]);
 
     const propsForServiceModuleCard = {
-        Icon: <DocumentIconSolid />,
+        Icon: <ServicePlanIcon className="fill-path-primary-main"/>,
         moduleName: t("SERVICE_PLAN_CARD"),
         kpis: [
           {
@@ -162,7 +190,7 @@ const OBPSCard = () => {
       };
 
       const propsForElectricModuleCard = {
-        Icon: <DocumentIconSolid />,
+        Icon: <ElectricPlanIcon className="fill-path-primary-main" />,
         moduleName: t("ELECTRIC_PLAN_CARD"),
         kpis: [
           {
@@ -181,7 +209,7 @@ const OBPSCard = () => {
       };
 
       const propsForBankModuleCard = {
-        Icon: <DocumentIconSolid />,
+        Icon: <BankGuaranteeIcon className="fill-path-primary-main"/>,
         moduleName: t("BANK_GUARANTEE_PLAN"),
         kpis: [
           {
@@ -199,7 +227,7 @@ const OBPSCard = () => {
         ],
       };
       const propsForTranserModuleCard = {
-        Icon: <DocumentIconSolid />,
+        Icon: <TransferLic className="fill-path-primary-main" />,
         moduleName: t("TRANSFER_LICIENCE_CARD"),
         kpis: [
           {
@@ -217,7 +245,7 @@ const OBPSCard = () => {
         ],
       };
       const propsForSURRENDModuleCard = {
-        Icon: <DocumentIconSolid />,
+        Icon: <SurrenderLic className="fill-path-primary-main" />,
         moduleName: t("SURREND_OF_LICENSE_CARD"),
         kpis: [
           {
@@ -290,7 +318,7 @@ const OBPSCard = () => {
       };
       
       const propsForSTANDARDModuleCard = {
-        Icon: <DocumentIconSolid />,
+        Icon: <StandardDesign className="fill-path-primary-main"/>,
         moduleName: t("APPROVAL_OF_STANDARD_CARD"),
         kpis: [
           {
@@ -332,14 +360,14 @@ const OBPSCard = () => {
           {
             count: "-",
             label: t("COMPLETION_CERTIFICATE_CARD"),
-            link: `/digit-ui/employee/tl/CompositionInbox`,
+            link: `/digit-ui/employee/tl/CompletionInbox`,
           },
         ],
         links: [
           {
             count: "-",
             label: t("ES_TITLE_INBOX"),
-            link: `/digit-ui/employee/tl/CompositionInbox`,
+            link: `/digit-ui/employee/tl/CompletionInbox`,
           }
         ],
       };

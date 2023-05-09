@@ -381,10 +381,13 @@ const FeesChargesForm = (props) => {
               </h6>
             </div>
           )}
-          <Card style={{ width: "126%", marginLeft: "-2px", paddingRight: "10px", marginTop: "40px", marginBottom: "52px" }}>
+          <Card style={{ width: "126%", paddingRight: "10px", marginTop: "40px", marginBottom: "52px" }}>
+            <h4 className="mb-2 mt-1">
+              <b>Component wise Fee/Charges</b>
+            </h4>
             <Form.Group className="justify-content-center" controlId="formBasicEmail">
               <Row className="ml-auto" style={{ marginBottom: 5 }}>
-                <Col col-12>
+                <Col className="p-0" col-12>
                   {/* <table className="table table-bordered" style={{ backgroundColor: "rgb(251 251 253))", width: "629px" }}>
                     <thead>
                       <tr>

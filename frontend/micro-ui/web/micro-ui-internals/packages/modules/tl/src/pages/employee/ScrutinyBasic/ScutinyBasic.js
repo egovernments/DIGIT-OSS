@@ -26,7 +26,7 @@ import ProformForRevenu from "../Proforma/ProformForRevenu";
 import AdditionalDocument from "./AdditionalDocument";
 // import AddPost from "../Material/TextEditor";
 
-const ScrutitnyForms = ({ apiResponse, applicationNumber, refreshScrutinyData , histeroyData, feeandcharges , applicationStatus ,mDMSData ,applicationimp }) => {
+const ScrutitnyForms = ({ apiResponse, applicationNumber, refreshScrutinyData , histeroyData,additionalDocResponData, applicationStatus ,mDMSData ,applicationimp }) => {
   const personalInfoRef = useRef();
   const generalInfoRef = useRef();
   const developerInfoRef = useRef();
@@ -378,14 +378,16 @@ console.log("roleData",rolesDate )
               passUncheckedList={getUncheckedFeeandChargesInfo}
               heightFee={defaultheightFee}
               ApiResponseData={apiResponse !== undefined ? apiResponse?.FeesAndCharges : null}
-              feeandchargesData={feeandcharges}
+              // feeandchargesData={feeandcharges}
               applicationStatus={applicationStatus}
               mDMSData={mDMSData}
             ></Feeandcharges>
          
           </div>
           <div>
-            <AdditionalDocument>
+            <AdditionalDocument
+            additionalDocRespon={additionalDocResponData}
+            >
               
             </AdditionalDocument>
           </div>

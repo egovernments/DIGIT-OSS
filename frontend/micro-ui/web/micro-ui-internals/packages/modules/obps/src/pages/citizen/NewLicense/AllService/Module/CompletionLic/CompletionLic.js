@@ -130,7 +130,7 @@ function CompletionLic() {
         }
       }
 
-      const Resp = await axios.post(`/tl-services/certicifate/_get?licenseNumber=${params.get('id')}`, reqBody)
+      const Resp = await axios.post(`/tl-services/certicifate/_get?applicationNumber=${params.get('id')}`, reqBody)
 
 
       if (Resp?.data?.completionCertificate?.length) {
@@ -300,7 +300,7 @@ function CompletionLic() {
 
   const handleClose = () => {
     setSuccessDialog(false);
-    window.location.href = `/digit-ui/citizen`;
+    window.location.href = `/digit-ui/citizen/tl/CompletionLic/my-application`;
   };
 
 

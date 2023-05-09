@@ -42,7 +42,7 @@ function SurrenderLic() {
 
   const handleClose = () => {
     setSuccessDialog(false);
-    window.location.href = `/digit-ui/citizen`;
+    window.location.href = `/digit-ui/citizen/SurrenderLic/my-application`;
   };
 
   const getLicenseData = async () => {
@@ -96,7 +96,7 @@ function SurrenderLic() {
       setValue("selectLicence", details?.newAdditionalDetails?.selectLicence);
       setValue("tehsil", details?.newAdditionalDetails?.tehsil);
       setValue("validUpto", details?.newAdditionalDetails?.validUpto);
-      
+
       setLoading(false);
     } catch (error) {
       console.log("Get Error ====> ", error.message);

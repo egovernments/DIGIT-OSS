@@ -6,7 +6,7 @@ import { Header } from "@egovernments/digit-ui-react-components";
 
 
 
-const CompositionInbox = ({
+const CompletionInbox = ({
   parentRoute,
   businessService = ["COMPLETION_CERTIFICATE"],
   initialStates = {},
@@ -150,4 +150,4 @@ const CompositionInbox = ({
   }
 }
 
-export default CompositionInbox
+export default CompletionInbox

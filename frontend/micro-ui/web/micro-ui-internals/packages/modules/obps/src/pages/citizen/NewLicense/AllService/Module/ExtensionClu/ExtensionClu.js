@@ -53,7 +53,7 @@ function ExtensionClu() {
 
   const handleClose = () => {
     setSuccessDialog(false);
-    window.location.href = `/digit-ui/citizen`;
+    window.location.href = `/digit-ui/citizen/ExtensionClu/my-application`;
   };
 
   const updateExtensionClu = async (data) => {

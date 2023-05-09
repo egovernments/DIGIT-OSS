@@ -20,7 +20,7 @@ import TablePagination from "@mui/material/TablePagination";
 import TableRow from "@mui/material/TableRow";
 
 
-const SPApplications = ({ view }) => {
+const CompletionApplications = ({ view }) => {
   const { t } = useTranslation();
   const history = useHistory();
   const [loader, setLoader] = useState(false);
@@ -54,7 +54,7 @@ const SPApplications = ({ view }) => {
       },
     };
     try {
-      const Resp = await axios.post("/tl-services/serviceplan/_get", data);
+      const Resp = await axios.post("/tl-services/certicifate/_get", data);
       setLoader(false);
       setData(Resp?.data);
     } catch (error) {
@@ -197,7 +197,7 @@ const SPApplications = ({ view }) => {
             Status
           </th>
         </tr>
-        {data?.servicePlanResponse?.map((item, index) => {
+        {data?.completionCertificate?.map((item, index) => {
           return (
             <tr key={`table${index}`}>
               <td style={{ border: "1px solid #ddd", padding: " 8px" }}>{item?.loiNumber}</td>
@@ -245,7 +245,7 @@ const SPApplications = ({ view }) => {
               </TableHead>
               <TableBody>
 
-                {data?.servicePlanResponse?.map((item, index) => {
+                {data?.completionCertificate?.map((item, index) => {
                   return (
                     <StyledTableRow sx={{ "&:last-child td, &:last-child th": { border: 0 } }}>
                       <StyledTableCell component="th" scope="row">
@@ -260,7 +260,7 @@ const SPApplications = ({ view }) => {
                         onClick={() => {
                           window.localStorage.setItem("ApplicationStatus", item?.status);
                           history.push({
-                            pathname: "/digit-ui/citizen/obps/servicePlan",
+                            pathname: "/digit-ui/citizen/obps/CompletionLic",
                             search: `?id=${item?.applicationNumber}`,
                           });
                         }}
@@ -312,4 +312,4 @@ const SPApplications = ({ view }) => {
     /* tradelicence/application/PG-TL-2021-09-07-002737/pg.citya */
   );
 };
-export default SPApplications;
+export default CompletionApplications;

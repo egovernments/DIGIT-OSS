@@ -15,6 +15,7 @@ import StandardDesignModal from "./StandardDesignActionModal";
 import SurrenderActionModal from "./SurrenderActionModal";
 import BeneficialModal from "./ChangeInBenIntModal";
 import ExtensionCluModal from "./ExtensionCluModal";
+import CompletionLicModal from "./CompletionActionModal";
 
 const ActionModal = (props) => {
   if (props?.businessService.includes("PT")) {
@@ -72,6 +73,9 @@ const ActionModal = (props) => {
   }
   if (props?.businessService.includes("EXTENTION_OF_CLU_PERMISSION")) {
     return <ExtensionCluModal {...props} />;
+  }
+  if (props?.businessService.includes("COMPLETION_CERTIFICATE")) {
+    return <CompletionLicModal {...props} />;
   }
   // return <FSMActionModal {...props} />;
 };
