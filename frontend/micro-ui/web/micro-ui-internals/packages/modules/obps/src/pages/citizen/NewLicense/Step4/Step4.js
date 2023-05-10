@@ -637,6 +637,8 @@ const AppliedDetailForm = (props) => {
               const farsArr = [];
               const testData = x?.fars?.forEach((i) => farsArr?.push({ label: i, value: i }));
               setValue(x?.id, x?.area);
+              setValue(x?.code + x?.id, { label: x?.far, value: x?.far });
+
               return (
                 <div key={i}>
                   <h6 style={{ marginTop: "10px" }}>
