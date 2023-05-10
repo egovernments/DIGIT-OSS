@@ -28,6 +28,8 @@ import TradeLicenseList  from "./pages/citizen/Renewal/TradeLicenseList";
 import TLWFApplicationTimeline from "./pageComponents/TLWFApplicationTimeline";  
 import SelectOtherTradeDetails from "./pageComponents/SelectOtherTradeDetails";
 import TLSelectStreet from "./pageComponents/TLSelectStreet";
+import TLSelectLandmark from "./pageComponents/TLSelectLandmark";
+import TLSelectOwnerAddress from "./pageComponents/TLSelectOwnerAddress";
 
 import TLOwnerDetailsEmployee from "./pageComponents/TLOwnerDetailsEmployee";
 import TLTradeDetailsEmployee from "./pageComponents/TLTradeDetailsEmployee";
@@ -120,6 +122,8 @@ const componentsToRegister = {
   SelectProofIdentity,
   SelectOwnershipProof,
   TLSelectStreet,
+  TLSelectLandmark,
+  TLSelectOwnerAddress,
   TLCheckPage,
   TLDocument,
   TLAcknowledgement,

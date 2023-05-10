@@ -299,6 +299,15 @@ export const gettradeupdateaccessories = (data) => {
   return TLaccessories;
 }
 
+export const currentFinancialYear = () => {
+  const data = convertEpochToDate(Date.now());
+  const splitData = data.split("-")[0];
+  const year = splitData.slice(2, 4);
+  let monthNo = Number(data.split("-")[1]);
+  const currentFinancialYear = monthNo < 4?`${Number(splitData)-1}-${Number(year)}`:`${Number(splitData)}-${Number(year) + 1}`;
+  return currentFinancialYear;
+}
+
 export const convertToTrade = (data = {}) => {
   let Financialyear = sessionStorage.getItem("CurrentFinancialYear");
   let isSameAsPropertyOwner = sessionStorage.getItem("isSameAsPropertyOwner");

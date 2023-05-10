@@ -89,7 +89,7 @@ import ResubmitDisconnection from "./pages/employee/EditDisconnectionApplication
 
 const WSModule = ({ stateCode, userType, tenants }) => {
   const tenantId = Digit.SessionStorage.get("CITIZEN.COMMON.HOME.CITY")?.code || Digit.ULBService.getCurrentTenantId();
-  const moduleCode = ["ws", "pt", "common", tenantId];
+  const moduleCode = ["ws", "pt", "common", tenantId, "bill-amend","abg"];
   const { path, url } = useRouteMatch();
   const language = Digit.StoreData.getCurrentLanguage();
   const { isLoading, data: store } = Digit.Services.useStore({

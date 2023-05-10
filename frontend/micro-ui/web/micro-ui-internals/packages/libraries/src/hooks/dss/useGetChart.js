@@ -54,6 +54,9 @@ const useGetChart = (args) => {
       }),
     {
       select: defaultSelect,
+      refetchOnMount: true,
+      retry: false,
+      refetchOnWindowFocus: false
     }
   );
 };
