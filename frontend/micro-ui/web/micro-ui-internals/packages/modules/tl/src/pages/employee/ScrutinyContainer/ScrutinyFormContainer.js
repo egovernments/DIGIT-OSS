@@ -376,8 +376,8 @@ const ScrutinyFormcontainer = (props) => {
         console.log(error);
       }
 
-      if (showRemarksSection==="DTCP_HR")
-      {
+      // if (showRemarksSection==="DTCP_HR")
+      // {
         let requestInfo = {
 
           RequestInfo: {
@@ -411,7 +411,7 @@ const ScrutinyFormcontainer = (props) => {
         console.log(error);
 
       }
-    }
+    // }
 
       const payload = {
 
@@ -487,7 +487,7 @@ const ScrutinyFormcontainer = (props) => {
   console.log("meri update34", lastUpdate)
   return (
     <Card className="formColorEmp">
-      <Card.Header className="head-application" >
+      <Card.Header  className="head-application">
         <div className="row fw-normal">
           <div className="col-sm-2">
             <b><p className="head-font">Application Number:</p></b>
