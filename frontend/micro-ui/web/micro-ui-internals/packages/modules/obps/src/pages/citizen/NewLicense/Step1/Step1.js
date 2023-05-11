@@ -73,6 +73,10 @@ const ApllicantFormStep1 = (props) => {
     delete data?.authorizedPan;
     delete data?.authorizedAddress;
 
+    const testingData = developerDataLabel;
+
+    // testingData?.aurthorizedUserInfoArray = developerDataLabel?.aurthorizedUserInfoArray?.filter((item) => item?.emailId === userInfo?.emailId);
+
     // data["notSigned"] = data?.notSigned?.value;
     const postDistrict = {
       pageName: "ApplicantInfo",
@@ -84,7 +88,10 @@ const ApllicantFormStep1 = (props) => {
       LicenseDetails: {
         ApplicantInfo: {
           ...data,
-          devDetail: developerDataLabel,
+          devDetail: {
+            ...testingData,
+            aurthorizedUserInfoArray: testingData?.aurthorizedUserInfoArray?.filter((item) => item?.emailId === userInfo?.emailId),
+          },
         },
       },
       RequestInfo: {
@@ -649,7 +656,7 @@ const ApllicantFormStep1 = (props) => {
 
           <div classname="card" style={{ marginLeft: "-2px", paddingRight: "10px", marginTop: "5px", marginBottom: "52px" }}>
             <h5 className="card-title fw-bold">
-              {`${t("NWL_AUTHORIZED PERSON INFORMATION")}`}
+              {`${t("NWL_AUTHORIZED_PERSON_INFORMATION")}`}
               {/* Authorized Person Information */}
             </h5>
             <div className="row-12">
