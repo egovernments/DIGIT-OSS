@@ -385,6 +385,7 @@ function SubmitNew() {
                 name="businessService"
                 id="businessService1"
                 value="BG_NEW"
+                 onClick={handleLoiNumber}
                 onChange={(e) => handleshowhide(e)}
               />
               &nbsp; {`${t("BG_SUBMIT_BANK_GUARANTEE")}`}
@@ -398,7 +399,7 @@ function SubmitNew() {
                 name="businessService"
                 id="businessService2"
                 value="BG_MORTGAGE"
-                onClick={handleLoiNumber}
+               
                 onChange={(e) => handleshowhide(e)}
               />
               &nbsp;{`${t("BG_SUBMIT_MORTGAGE")}`}

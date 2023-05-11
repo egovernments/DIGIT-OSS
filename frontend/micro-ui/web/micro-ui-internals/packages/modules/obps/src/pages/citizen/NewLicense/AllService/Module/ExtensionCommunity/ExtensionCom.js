@@ -155,7 +155,7 @@ function ExtensionCom() {
               </FormControl>
                &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
                 {watch("appliedBy")?.value == "1" && (
-               <FormControl className="col col-md:6 col-lg-4 p-3">
+               <FormControl className="col col-md:4 col-lg-4 ">
                     <h2 className="FormLable">
                      Licensed renewed Upto 
                       <span style={{ color: "red" }}>*</span>

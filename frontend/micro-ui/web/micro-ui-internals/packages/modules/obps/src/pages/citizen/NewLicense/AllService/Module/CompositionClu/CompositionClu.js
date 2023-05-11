@@ -90,6 +90,7 @@ function CompositionClu() {
   const [showToastError, setShowToastError] = useState({ label: "", error: false, success: false });
   const [showhide, setShowhide] = useState("No");
   const [applicationNumber, setApplicationNumber] = useState();
+   const [applicantId, setApplicantId] = useState("");
   const [open, setOpen] = React.useState(false);
   const [open1, setOpen1] = React.useState(false);
   const [khasraModal, setKhasraModal] = useState("");
@@ -210,6 +211,7 @@ function CompositionClu() {
     }
   };
 
+    
     const getCompositionCluDetails = async (id) => {
     setLoader(true);
     const token = window?.localStorage?.getItem("token");
@@ -228,7 +230,7 @@ function CompositionClu() {
       },
     };
     try {
-      const Resp = await axios.post(`/tl-services/composition/_get?applicationNumber=${id}`, data);
+      const Resp = await axios.post(`tl-services/composition/_get?applicationNumber=${id}`, data);
       setLoader(false);
       const resData = Resp?.data?.compositionOfUrban[0]?.additionalDetails;
       console.log(Resp?.data?.compositionOfUrban[0]?.additionalDetails);
@@ -241,13 +243,16 @@ function CompositionClu() {
       return error.message;
     }
   };
-    const id = getApplicationId(window.location.href);
+    useEffect(() => {
+    const search = location?.search;
+    const params = new URLSearchParams(search);
+    const id = params.get("id");
+    // const id = "TCP_RLP_20230408_000282";
+    setApplicantId(id);
+    if (id) getCompositionCluDetails(id);
+  }, []);
 
-  useEffect(() => {
-    if (id) {
-      getCompositionCluDetails(id);
-    }
-  }, [id]);
+
 
    useEffect(()=>{
     console.log("totalarea1")
