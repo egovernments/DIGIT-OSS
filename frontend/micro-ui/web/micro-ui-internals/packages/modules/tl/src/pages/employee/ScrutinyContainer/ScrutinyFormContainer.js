@@ -355,7 +355,7 @@ const ScrutinyFormcontainer = (props) => {
         },
       });
     }
-    if (data.Licenses[0].action === "APPROVE_SITE_VERIFICATION") {
+    if (data.Licenses[0].action === "APPROVED_WITH_LOI") {
 
       let requesttoloi = {
         "RequestInfo": {
