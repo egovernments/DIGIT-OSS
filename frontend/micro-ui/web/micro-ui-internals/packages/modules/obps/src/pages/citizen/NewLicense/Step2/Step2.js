@@ -1147,7 +1147,10 @@ const ApllicantPuropseForm = (props) => {
                 </Col> */}
 
                 <Col style={{ display: "flex", alignItems: "end" }} md={8} xxl lg="9">
-                  <p>Note: The application to be received under policy dated 10.11.17 shall only be accepted within window period.</p>
+                  <p>
+                    Note: The application to be received under policy dated 10.11.17 shall only be accepted within window period and correct spelling
+                    of purpose.
+                  </p>
                 </Col>
               </Row>
 

@@ -31,6 +31,7 @@ const ApllicantFormStep1 = (props) => {
   const [fileStoreId, setFileStoreId] = useState({});
   const [showToastError, setShowToastError] = useState({ label: "", error: false, success: false });
   const [getDisable, setDisable] = useState(true);
+  const [getAuthUserData, setAuthUserData] = useState(null);
 
   const {
     register,
@@ -148,6 +149,7 @@ const ApllicantFormStep1 = (props) => {
 
   useEffect(() => {
     const data = developerDataLabel?.aurthorizedUserInfoArray?.filter((item) => item?.emailId === userInfo?.emailId);
+    setAuthUserData(data);
     setValue("authorizedName", data?.[0]?.name);
     setValue("authorizedMobile", data?.[0]?.mobileNumber);
     setValue("authorizedEmail", data?.[0]?.emailId);
@@ -592,7 +594,7 @@ const ApllicantFormStep1 = (props) => {
                                       else setShowToastError({ label: "No pdf here", error: true, success: false });
                                     }}
                                   >
-                                    <VisibilityIcon color="info" className="icon" />
+                                    {item?.uploadPdf && <VisibilityIcon color="info" className="icon" />}
                                   </td>
                                 </tr>
                               );
@@ -641,7 +643,7 @@ const ApllicantFormStep1 = (props) => {
                                       else setShowToastError({ label: "No pdf here", error: true, success: false });
                                     }}
                                   >
-                                    <VisibilityIcon color="info" className="icon" />
+                                    {it?.uploadPdf && <VisibilityIcon color="info" className="icon" />}
                                   </td>
                                 </tr>
                               );
@@ -772,8 +774,8 @@ const ApllicantFormStep1 = (props) => {
                 <div
                   style={{ cursor: "pointer" }}
                   onClick={() => {
-                    if (developerDataLabel?.aurthorizedUserInfoArray?.[0]?.uploadDigitalSignaturePdf)
-                      getDocShareholding(developerDataLabel?.aurthorizedUserInfoArray?.[0]?.uploadDigitalSignaturePdf, setLoader);
+                    if (getAuthUserData?.[0]?.uploadDigitalSignaturePdf)
+                      getDocShareholding(getAuthUserData?.[0]?.uploadDigitalSignaturePdf, setLoader);
                     else setShowToastError({ label: "No pdf here", error: true, success: false });
                   }}
                   id="btnSearch"
@@ -781,7 +783,7 @@ const ApllicantFormStep1 = (props) => {
                 >
                   {`${t("NWL_VIEW_UPLOAD_DIGITAL_SIGNATURE")}`}
                   {/* View Upload Digital Signature  */}
-                  <VisibilityIcon color="info" className="icon" />
+                  {getAuthUserData?.[0]?.uploadDigitalSignaturePdf && <VisibilityIcon color="info" className="icon" />}
                 </div>
               </FormControl>
               &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp;
@@ -789,8 +791,7 @@ const ApllicantFormStep1 = (props) => {
                 <div
                   style={{ cursor: "pointer" }}
                   onClick={() => {
-                    if (developerDataLabel?.aurthorizedUserInfoArray?.[0]?.uploadBoardResolution)
-                      getDocShareholding(developerDataLabel?.aurthorizedUserInfoArray?.[0]?.uploadBoardResolution, setLoader);
+                    if (getAuthUserData?.[0]?.uploadBoardResolution) getDocShareholding(getAuthUserData?.[0]?.uploadBoardResolution, setLoader);
                     else setShowToastError({ label: "No pdf here", error: true, success: false });
                   }}
                   id="btnSearch"
@@ -806,20 +807,22 @@ const ApllicantFormStep1 = (props) => {
                 developerDataLabel?.addInfo?.showDevTypeFields != "Proprietorship Firm" &&
                 developerDataLabel?.addInfo?.showDevTypeFields != "Partnership Firm" && (
                   <FormControl>
-                    <div
-                      style={{ cursor: "pointer" }}
-                      onClick={() => {
-                        if (developerDataLabel?.licensesDoc?.[0]?.memorandumOfArticles)
-                          getDocShareholding(developerDataLabel?.licensesDoc?.[0]?.memorandumOfArticles, setLoader);
-                        else setShowToastError({ label: "No pdf here", error: true, success: false });
-                      }}
-                      id="btnSearch"
-                      class=""
-                    >
-                      {`${t("NWL_VIEW_MOA_DOCUMENT")}`}
-                      {/* View MOA Document  */}
-                      <VisibilityIcon color="info" className="icon" />
-                    </div>
+                    {developerDataLabel?.licensesDoc?.[0]?.memorandumOfArticles && (
+                      <div
+                        style={{ cursor: "pointer" }}
+                        onClick={() => {
+                          if (developerDataLabel?.licensesDoc?.[0]?.memorandumOfArticles)
+                            getDocShareholding(developerDataLabel?.licensesDoc?.[0]?.memorandumOfArticles, setLoader);
+                          else setShowToastError({ label: "No pdf here", error: true, success: false });
+                        }}
+                        id="btnSearch"
+                        class=""
+                      >
+                        {`${t("NWL_VIEW_MOA_DOCUMENT")}`}
+                        {/* View MOA Document  */}
+                        {developerDataLabel?.licensesDoc?.[0]?.memorandumOfArticles && <VisibilityIcon color="info" className="icon" />}
+                      </div>
+                    )}
                   </FormControl>
                 )}
             </div>
