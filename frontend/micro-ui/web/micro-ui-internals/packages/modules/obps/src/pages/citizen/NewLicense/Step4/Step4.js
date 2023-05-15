@@ -637,6 +637,8 @@ const AppliedDetailForm = (props) => {
               const farsArr = [];
               const testData = x?.fars?.forEach((i) => farsArr?.push({ label: i, value: i }));
               setValue(x?.id, x?.area);
+              setValue(x?.code + x?.id, { label: x?.far, value: x?.far });
+
               return (
                 <div key={i}>
                   <h6 style={{ marginTop: "10px" }}>
@@ -764,7 +766,7 @@ const AppliedDetailForm = (props) => {
                 <div>
                   <div className="mt-3 mb-3">
                     <h4>
-                      <b>Bifurcation Of Component</b>
+                      <b>Bifurcation Of Component of type of Licence</b>
                     </h4>
                     <h4 className="mt-3">
                       <b>

@@ -31,12 +31,18 @@ import WorkingTable from "../../../../components/Table";
 import CusToaster from "../../../../components/Toaster";
 import { useTranslation } from "react-i18next";
 
-const compactBlock = [
+const dataSet = [{ name: "test" }];
+
+const compactBlockA = [
   { label: "Private Road", value: "privateRoad" },
   { label: "Street", value: "street" },
   { label: "Lane footway/footpath", value: "laneFootpath" },
   { label: "Passage/Drain (Natural/Artificial)", value: "passage/drain/natural/atrificial" },
-  { label: "None of the above", value: "none" },
+];
+
+const compactBlockB = [
+  { label: "Private Land", value: "privateLand" },
+  { label: "Any other", value: "anyOther" },
 ];
 
 const test = {
@@ -253,18 +259,37 @@ const LandScheduleForm = (props) => {
 
   const [fileStoreId, setFileStoreId] = useState({});
   const [specificTableData, setSpecificTableData] = useState(null);
-  const Purpose = localStorage.getItem("purpose");
   const userInfo = Digit.UserService.getUser()?.info || {};
 
   const landScheduleFormSubmitHandler = async (data) => {
     const token = window?.localStorage?.getItem("token");
-    // setLoader(true);
+    // console.log("data",data);
+    // return
+
+    if (data?.pocket) {
+      delete data?.northSurroundings;
+      delete data?.southSurroundings;
+      delete data?.eastSurroundings;
+      delete data?.westSurroundings;
+    }
+    setLoader(true);
     data["potential"] = data?.potential?.value;
     data["typeLand"] = data?.typeLand?.value;
     data["siteLoc"] = data?.siteLoc?.value;
     data["purposeParentLic"] = data?.purposeParentLic?.value;
     data["releaseStatus"] = data?.releaseStatus?.value;
     data["unconsolidated"] = data?.unconsolidated?.value;
+    data["separatedBy"] = data?.separatedBy?.value;
+
+    const filteredData = Object.keys(data)
+      .filter((key) => key.includes("north") || key.includes("south") || key.includes("east") || key.includes("west"))
+      .reduce((obj, key) => {
+        obj[key] = data[key];
+        return obj;
+      }, {});
+
+    if (data?.pocket) data["surroundings"] = filteredData;
+
     const postDistrict = {
       pageName: "LandSchedule",
       action: "LANDSCHEDULE",
@@ -320,19 +345,6 @@ const LandScheduleForm = (props) => {
       setValue("typeLand", { label: typeLandData?.[0]?.label, value: typeLandData?.[0]?.value });
     }
   }, [stepData, purposeOptions, getPotentialOptons, typeOfLand]);
-
-  // const getSubmitDataLabel = async () => {
-  //   try {
-  //     const Resp = await axios.get(`http://103.166.62.118:80/land-services/new/licenses/_get?id=${props.getId}`);
-  //     const userData = Resp?.data?.newServiceInfoData?.[0]?.LandSchedule;
-  //   } catch (error) {
-  //     return error.message;
-  //   }
-  // };
-
-  // useEffect(() => {
-  //   getSubmitDataLabel();
-  // }, []);
 
   const getDocumentData = async (file, fieldName) => {
     if (selectedFiles.includes(file.name)) {
@@ -474,7 +486,7 @@ const LandScheduleForm = (props) => {
           <Card style={{ width: "126%", marginLeft: "-2px", paddingRight: "10px", marginTop: "40px", marginBottom: "52px" }}>
             <Form.Group className="justify-content-center" controlId="formBasicEmail">
               <Row className="ml-auto" style={{ marginBottom: 5 }}>
-                <Col col-12>
+                <Col>
                   <div className="row">
                     <div className="col col-12 ">
                       <div>
@@ -483,12 +495,12 @@ const LandScheduleForm = (props) => {
                           {`${t("NWL_APPLICANT_WHETHER_LICENCE_APPLIED_FOR_ADDITIONAL_AREA")}`}
                           {/* Whether licence applied for additional area ? */}
                           <span style={{ color: "red" }}>*</span>&nbsp;&nbsp;
-                          <label htmlFor="licenseApplied">
-                            <input {...register("licenseApplied")} type="radio" value="Y" id="licenseApplied" />
+                          <label htmlFor="licenseAppliedYes">
+                            <input {...register("licenseApplied")} type="radio" value="Y" id="licenseAppliedYes" />
                             &nbsp; Yes &nbsp;&nbsp;
                           </label>
-                          <label htmlFor="licenseApplied">
-                            <input {...register("licenseApplied")} type="radio" value="N" id="licenseApplied" />
+                          <label htmlFor="licenseAppliedNo">
+                            <input {...register("licenseApplied")} type="radio" value="N" id="licenseAppliedNo" />
                             &nbsp; No &nbsp;&nbsp;
                           </label>
                           <h3 className="error-message" style={{ color: "red" }}>
@@ -596,12 +608,12 @@ const LandScheduleForm = (props) => {
                                 {/* Validity of parent licence  */}
                                 <span style={{ color: "red" }}>*</span>
                                 &nbsp;&nbsp;
-                                <label htmlFor="validity">
-                                  <input {...register("validity")} type="radio" value="Y" id="yes" />
+                                <label htmlFor="validityYes">
+                                  <input {...register("validity")} type="radio" value="Y" id="validityYes" />
                                   &nbsp;&nbsp; Yes &nbsp;&nbsp;
                                 </label>
-                                <label htmlFor="validity">
-                                  <input {...register("validity")} type="radio" value="N" id="no" />
+                                <label htmlFor="validityNo">
+                                  <input {...register("validity")} type="radio" value="N" id="validityNo" />
                                   &nbsp;&nbsp; No &nbsp;&nbsp;
                                 </label>
                                 <h3 className="error-message" style={{ color: "red" }}>
@@ -651,12 +663,12 @@ const LandScheduleForm = (props) => {
                                 <span style={{ color: "red" }}>*</span>&nbsp; &nbsp;&nbsp;
                               </h2>
                               <br></br>
-                              <label htmlFor="thirdParty">
-                                <input {...register("thirdParty")} type="radio" value="Y" id="thirdParty" />
+                              <label htmlFor="thirdPartyYes">
+                                <input {...register("thirdParty")} type="radio" value="Y" id="thirdPartyYes" />
                                 &nbsp; Yes &nbsp;&nbsp;
                               </label>
-                              <label htmlFor="thirdParty">
-                                <input {...register("thirdParty")} type="radio" value="N" id="thirdParty" />
+                              <label htmlFor="thirdPartyNo">
+                                <input {...register("thirdParty")} type="radio" value="N" id="thirdPartyNo" />
                                 &nbsp; No &nbsp;&nbsp;
                               </label>
                               <h3 className="error-message" style={{ color: "red" }}>
@@ -701,12 +713,12 @@ const LandScheduleForm = (props) => {
                                       <span style={{ color: "red" }}>*</span>&nbsp; &nbsp;&nbsp;
                                     </h2>
 
-                                    <label htmlFor="reraRegistered">
-                                      <input {...register("reraRegistered")} type="radio" value="Y" id="reraRegistered" />
+                                    <label htmlFor="reraRegisteredYes">
+                                      <input {...register("reraRegistered")} type="radio" value="Y" id="reraRegisteredYes" />
                                       &nbsp; Yes &nbsp;&nbsp;
                                     </label>
-                                    <label htmlFor="reraRegistered">
-                                      <input {...register("reraRegistered")} type="radio" value="N" id="reraRegistered" />
+                                    <label htmlFor="reraRegisteredNo">
+                                      <input {...register("reraRegistered")} type="radio" value="N" id="reraRegisteredNo" />
                                       &nbsp; No &nbsp;&nbsp;
                                     </label>
                                     {watch("reraRegistered") === "Y" && (
@@ -798,12 +810,12 @@ const LandScheduleForm = (props) => {
                           {`${t("NWL_APPLICANT_WHETHER_LICENCE_APPLIED_UNDER_MIGRATION_POLICY")}`}
                           {/* Whether licence applied under Migration Policy ? */}
                           <span style={{ color: "red" }}>*</span>&nbsp;&nbsp;
-                          <label htmlFor="migrationLic">
+                          <label htmlFor="migrationLicYes">
                             <input
                               {...register("migrationLic")}
                               type="radio"
                               value="Y"
-                              id="migrationLic"
+                              id="migrationLicYes"
                               onClick={() => {
                                 resetValues();
                                 setSpecificTableData(null);
@@ -812,8 +824,8 @@ const LandScheduleForm = (props) => {
                             />
                             &nbsp; Yes &nbsp;&nbsp;
                           </label>
-                          <label htmlFor="migrationLic">
-                            <input {...register("migrationLic")} type="radio" value="N" id="migrationLic" />
+                          <label htmlFor="migrationLicNo">
+                            <input {...register("migrationLic")} type="radio" value="N" id="migrationLicNo" />
                             &nbsp; No &nbsp;&nbsp;
                           </label>
                           <h3 className="error-message" style={{ color: "red" }}>
@@ -841,28 +853,28 @@ const LandScheduleForm = (props) => {
                       {/* Any encumbrance with respect to following  */}
                       <span style={{ color: "red" }}>*</span>
                     </h4>
-                    <label htmlFor="encumburance">
-                      <input {...register("encumburance")} type="radio" value="rehan" id="encumburance" />
+                    <label htmlFor="encumburancer">
+                      <input {...register("encumburance")} type="radio" value="rehan" id="encumburancer" />
                       &nbsp;&nbsp; Rehan / Mortgage &nbsp;&nbsp;
                     </label>
-                    <label htmlFor="encumburance">
-                      <input {...register("encumburance")} type="radio" value="patta" id="encumburance" />
+                    <label htmlFor="encumburancep">
+                      <input {...register("encumburance")} type="radio" value="patta" id="encumburancep" />
                       &nbsp;&nbsp; Patta/Lease &nbsp;&nbsp;
                     </label>
-                    <label htmlFor="encumburance">
-                      <input {...register("encumburance")} type="radio" value="gair" id="encumburance" />
+                    <label htmlFor="encumburanceg">
+                      <input {...register("encumburance")} type="radio" value="gair" id="encumburanceg" />
                       &nbsp;&nbsp; Gair/Marusi &nbsp;&nbsp;
                     </label>
-                    <label htmlFor="encumburance">
-                      <input {...register("encumburance")} type="radio" value="loan" id="encumburance" />
+                    <label htmlFor="encumburancel">
+                      <input {...register("encumburance")} type="radio" value="loan" id="encumburancel" />
                       &nbsp;&nbsp; Loan &nbsp;&nbsp;
                     </label>
-                    <label htmlFor="encumburance">
-                      <input {...register("encumburance")} type="radio" value="anyOther" id="encumburance" />
+                    <label htmlFor="encumburancea">
+                      <input {...register("encumburance")} type="radio" value="anyOther" id="encumburancea" />
                       &nbsp;&nbsp; Any Other &nbsp;&nbsp;
                     </label>
-                    <label htmlFor="encumburance">
-                      <input {...register("encumburance")} type="radio" value="none" id="encumburance" />
+                    <label htmlFor="encumburancen">
+                      <input {...register("encumburance")} type="radio" value="none" id="encumburancen" />
                       &nbsp;&nbsp; None &nbsp;&nbsp;
                     </label>
                     <div className="row ">
@@ -1085,12 +1097,12 @@ const LandScheduleForm = (props) => {
                       {`${t("NWL_APPLICANT_EXISTING_LITIGATION_IF_ANY_CONCERNING_APPLIED_LAND")}`}
                       {/* Existing litigation, if any, concerning applied land including co-sharers and collaborator. */}
                       <span style={{ color: "red" }}>*</span> &nbsp;&nbsp;
-                      <label htmlFor="litigation">
-                        <input {...register("litigation")} type="radio" value="Y" id="litigation" />
+                      <label htmlFor="litigationYes">
+                        <input {...register("litigation")} type="radio" value="Y" id="litigationYes" />
                         &nbsp; Yes &nbsp;&nbsp;
                       </label>
-                      <label htmlFor="litigation">
-                        <input {...register("litigation")} type="radio" value="N" id="litigation" />
+                      <label htmlFor="litigationNo">
+                        <input {...register("litigation")} type="radio" value="N" id="litigationNo" />
                         &nbsp; No &nbsp;&nbsp;
                       </label>
                       <h3 className="error-message" style={{ color: "red" }}>
@@ -1109,12 +1121,12 @@ const LandScheduleForm = (props) => {
                             {`${t("NWL_APPLICANT_COURT_ORDERS_IF_ANY_AFFECTING_APPLIED_LAND")}`}
                             {/* Court orders, if any, affecting applied land. */}
                             <span style={{ color: "red" }}>*</span> &nbsp;&nbsp;
-                            <label htmlFor="court">
-                              <input {...register("court")} type="radio" value="Y" id="court" />
+                            <label htmlFor="courtYes">
+                              <input {...register("court")} type="radio" value="Y" id="courtYes" />
                               &nbsp; Yes &nbsp;&nbsp;
                             </label>
-                            <label htmlFor="court">
-                              <input {...register("court")} type="radio" value="N" id="court" />
+                            <label htmlFor="courtNo">
+                              <input {...register("court")} type="radio" value="N" id="courtNo" />
                               &nbsp; No &nbsp;&nbsp;
                             </label>
                             <h3 className="error-message" style={{ color: "red" }}>
@@ -1178,12 +1190,12 @@ const LandScheduleForm = (props) => {
                       {`${t("NWL_APPLICANT_ANY_INSOLVENCY_LIQUIDATION_PROCEESSDING_AGAINST_THE_LAND_OWING")}`}
                       {/* Any insolvency/liquidation proceedings against the Land Owing Company/Developer Company. */}
                       <span style={{ color: "red" }}>*</span> &nbsp;&nbsp;
-                      <label htmlFor="insolvency">
-                        <input {...register("insolvency")} type="radio" value="Y" id="insolvency" />
+                      <label htmlFor="insolvencyYes">
+                        <input {...register("insolvency")} type="radio" value="Y" id="insolvencyYes" />
                         &nbsp; Yes &nbsp;&nbsp;
                       </label>
-                      <label htmlFor="insolvency">
-                        <input {...register("insolvency")} type="radio" value="N" id="insolvency" />
+                      <label htmlFor="insolvencyNo">
+                        <input {...register("insolvency")} type="radio" value="N" id="insolvencyNo" />
                         &nbsp; No &nbsp;&nbsp;
                       </label>
                       <h3 className="error-message" style={{ color: "red" }}>
@@ -1250,12 +1262,12 @@ const LandScheduleForm = (props) => {
                         <span style={{ color: "red" }}>*</span>
                       </h2>
                       &nbsp;&nbsp;&nbsp;&nbsp;
-                      <label htmlFor="appliedLand">
-                        <input {...register("appliedLand")} type="radio" value="Y" id="appliedLand" />
+                      <label htmlFor="appliedLandYes">
+                        <input {...register("appliedLand")} type="radio" value="Y" id="appliedLandYes" />
                         &nbsp; Yes &nbsp;&nbsp;
                       </label>
-                      <label htmlFor="appliedLand">
-                        <input {...register("appliedLand")} type="radio" value="N" id="appliedLand" />
+                      <label htmlFor="appliedLandNo">
+                        <input {...register("appliedLand")} type="radio" value="N" id="appliedLandNo" />
                         &nbsp; No &nbsp;&nbsp;
                       </label>
                       <h3 className="error-message" style={{ color: "red" }}>
@@ -1302,12 +1314,12 @@ const LandScheduleForm = (props) => {
                         </Tooltip>
                       </h2>
                       &nbsp;&nbsp;&nbsp;&nbsp;
-                      <label htmlFor="revenueRasta">
-                        <input {...register("revenueRasta")} type="radio" value="Y" id="revenueRasta" />
+                      <label htmlFor="revenueRastaYes">
+                        <input {...register("revenueRasta")} type="radio" value="Y" id="revenueRastaYes" />
                         &nbsp; Yes &nbsp;&nbsp;
                       </label>
-                      <label htmlFor="revenueRasta">
-                        <input {...register("revenueRasta")} type="radio" value="N" id="revenueRasta" />
+                      <label htmlFor="revenueRastaNo">
+                        <input {...register("revenueRasta")} type="radio" value="N" id="revenueRastaNo" />
                         &nbsp; No &nbsp;&nbsp;
                       </label>
                       <h3 className="error-message" style={{ color: "red" }}>
@@ -1331,16 +1343,15 @@ const LandScheduleForm = (props) => {
                               labels="Potential"
                             />
                           </div>
-                          <h3 className="error-message" style={{ color: "red" }}>
+                          {/* <h3 className="error-message" style={{ color: "red" }}>
                             {errors?.waterCourse && errors?.waterCourse?.message}
-                          </h3>
+                          </h3> */}
                         </div>
                       )}
                     </div>
                     <div className="col col-3 ">
                       <h2>
-                        &nbsp;
-                        {`${t("NWL_APPLICANT_WATERCOURSE_SHAJRA_PLAN")}`}
+                        &nbsp; (c) {`${t("NWL_APPLICANT_WATERCOURSE_SHAJRA_PLAN")}`}
                         {/* Watercourse */}
                         <span style={{ color: "red" }}>*</span>
                         <Tooltip title="Watercourse running along boundary through the applied site ?">
@@ -1348,12 +1359,12 @@ const LandScheduleForm = (props) => {
                         </Tooltip>
                       </h2>
                       &nbsp;&nbsp;&nbsp;&nbsp;
-                      <label htmlFor="waterCourse">
-                        <input {...register("waterCourse")} type="radio" value="Y" id="waterCourse" />
+                      <label htmlFor="waterCourseYes">
+                        <input {...register("waterCourse")} type="radio" value="Y" id="waterCourseYes" />
                         &nbsp; Yes &nbsp;&nbsp;
                       </label>
-                      <label htmlFor="waterCourse">
-                        <input {...register("waterCourse")} type="radio" value="N" id="waterCourse" />
+                      <label htmlFor="waterCourseNo">
+                        <input {...register("waterCourse")} type="radio" value="N" id="waterCourseNo" />
                         &nbsp; No &nbsp;&nbsp;
                       </label>
                       <h3 className="error-message" style={{ color: "red" }}>
@@ -1380,9 +1391,6 @@ const LandScheduleForm = (props) => {
                     </div>
 
                     <div className="col col-3 ">
-                      {/* <h2>
-                        (d) &nbsp;Whether in Compact Block.<span style={{ color: "red" }}>*</span>
-                      </h2> */}
                       <label>
                         <h2>
                           {`${t("NWL_APPLICANT_WHETHER_IN_COMPACT_BLOCK_SHAJRA_PLAN")}`}
@@ -1391,73 +1399,67 @@ const LandScheduleForm = (props) => {
                         </h2>
                       </label>
 
-                      <ReactMultiSelect control={control} name="compactBlock" placeholder="compact block" data={compactBlock} labels="Potential" />
-                      {/* &nbsp;&nbsp;&nbsp;&nbsp;
-                      <label htmlFor="compactBlock">
-                        <input {...register("compactBlock")} type="radio" value="Y" id="compactBlock" />
+                      <label htmlFor="compactBlockYes">
+                        <input {...register("whetherCompactBlock")} type="radio" value="Y" id="compactBlockYes" />
                         &nbsp; Yes &nbsp;&nbsp;
                       </label>
-                      <label htmlFor="compactBlock">
-                        <input {...register("compactBlock")} type="radio" value="N" id="compactBlock" />
+                      <label htmlFor="compactBlockNo">
+                        <input {...register("whetherCompactBlock")} type="radio" value="N" id="compactBlockNo" />
                         &nbsp; No &nbsp;&nbsp;
-                      </label> */}
-                      {/* <h3 className="error-message" style={{ color: "red" }}>
-                        {errors?.compactBlock && errors?.compactBlock?.message}
-                      </h3> */}
-                      {/* {watch("compactBlock") === "Y" && (
+                      </label>
+
+                      {watch("whetherCompactBlock") === "Y" && (
                         <div className="row ">
                           <div className="col col">
                             <label>
                               <h2>
-                                Remark <span style={{ color: "red" }}>*</span>
-                              </h2>{" "}
+                                {/* {`${t("NWL_APPLICANT_REVENUE_RASTA_Y_UNCONSOLIDATED_SHAJRA_PLAN")}`} */}
+                                Separated by
+                                <span style={{ color: "red" }}>*</span>&nbsp;
+                              </h2>
                             </label>
-                            <input type="text" className="form-control" {...register("compactBlockRemark")} />
-                            <h3 className="error-message" style={{ color: "red" }}>
-                              {errors?.compactBlockRemark && errors?.compactBlockRemark?.message}
-                            </h3>
+                            <ReactMultiSelect
+                              control={control}
+                              name="separatedBy"
+                              placeholder="separated by"
+                              data={compactBlockA}
+                              labels="Separated by"
+                            />
                           </div>
                         </div>
-                      )} */}
+                      )}
+                      {watch("whetherCompactBlock") === "N" && (
+                        <div className="row ">
+                          <div className="col col">
+                            <label>
+                              <h2>
+                                {/* {`${t("NWL_APPLICANT_REVENUE_RASTA_Y_UNCONSOLIDATED_SHAJRA_PLAN")}`} */}
+                                Separated by
+                                <span style={{ color: "red" }}>*</span>&nbsp;
+                              </h2>
+                            </label>
+                            <ReactMultiSelect
+                              control={control}
+                              name="separatedBy"
+                              placeholder="separated by"
+                              data={compactBlockB}
+                              labels="Separated by"
+                            />
+                          </div>
+                          {watch("separatedBy")?.value && (
+                            <div className="col col-4">
+                              <label>
+                                <h2>Pocket</h2>
+                              </label>
+                              <Form.Control type="number" className="form-control" placeholder="" {...register("pocket")} />
+                            </div>
+                          )}
+                        </div>
+                      )}
                     </div>
                   </div>
                   <br></br>
                   <div className="row">
-                    {/* <div className="col col-3 ">
-                      <h2>
-                        (e)&nbsp;Whether Others Land fall <span style={{ color: "red" }}>*</span>
-                        <Tooltip title="Whether Others Land fall within Applied Land">
-                          <InfoIcon style={{ cursor: "pointer" }} color="primary"></InfoIcon>
-                        </Tooltip>
-                      </h2>{" "}
-                      &nbsp;&nbsp;&nbsp;&nbsp;
-                      <label htmlFor="landSandwiched">
-                        <input {...register("landSandwiched")} type="radio" value="Y" id="landSandwiched" />
-                        &nbsp; Yes &nbsp;&nbsp;
-                      </label>
-                      <label htmlFor="landSandwiched">
-                        <input {...register("landSandwiched")} type="radio" value="N" id="landSandwiched" />
-                        &nbsp; No &nbsp;&nbsp;
-                      </label>
-                      <h3 className="error-message" style={{ color: "red" }}>
-                        {errors?.landSandwiched && errors?.landSandwiched?.message}
-                      </h3>
-                      {watch("landSandwiched") === "Y" && (
-                        <div className="row ">
-                          <div className="col col-12">
-                            <label>
-                              <h2>
-                                Enter Kharsa No. <span style={{ color: "red" }}>*</span>
-                              </h2>
-                            </label>
-                            <input type="text" className="form-control" {...register("landSandwichedRemark")} />
-                            <h3 className="error-message" style={{ color: "red" }}>
-                              {errors?.landSandwichedRemark && errors?.landSandwichedRemark?.message}
-                            </h3>
-                          </div>
-                        </div>
-                      )}
-                    </div> */}
                     <div className="col col-3 ">
                       <h2>
                         &nbsp;
@@ -1466,12 +1468,12 @@ const LandScheduleForm = (props) => {
                         <span style={{ color: "red" }}>*</span>
                       </h2>
                       &nbsp;&nbsp;&nbsp;&nbsp;
-                      <label htmlFor="acquistion">
-                        <input {...register("acquistion")} type="radio" value="Y" id="acquistion" />
+                      <label htmlFor="acquistionYes">
+                        <input {...register("acquistion")} type="radio" value="Y" id="acquistionYes" />
                         &nbsp; Yes &nbsp;&nbsp;
                       </label>
-                      <label htmlFor="acquistion">
-                        <input {...register("acquistion")} type="radio" value="N" id="acquistion" />
+                      <label htmlFor="acquistionNo">
+                        <input {...register("acquistion")} type="radio" value="N" id="acquistionNo" />
                         &nbsp; No &nbsp;&nbsp;
                       </label>
                       <h3 className="error-message" style={{ color: "red" }}>
@@ -1547,12 +1549,12 @@ const LandScheduleForm = (props) => {
                             <span style={{ color: "red" }}>*</span> &nbsp;&nbsp;
                           </h2>
                         </label>
-                        <label htmlFor="orderUpload">
-                          <input {...register("orderUpload")} type="radio" value="Y" id="orderUpload" />
+                        <label htmlFor="orderUploadYes">
+                          <input {...register("orderUpload")} type="radio" value="Y" id="orderUploadYes" />
                           &nbsp; Yes &nbsp;&nbsp;
                         </label>
-                        <label htmlFor="orderUpload">
-                          <input {...register("orderUpload")} type="radio" value="N" id="orderUpload" />
+                        <label htmlFor="orderUploadNo">
+                          <input {...register("orderUpload")} type="radio" value="N" id="orderUploadNo" />
                           &nbsp; No &nbsp;&nbsp;
                         </label>
                         <h3 className="error-message" style={{ color: "red" }}>
@@ -1569,12 +1571,12 @@ const LandScheduleForm = (props) => {
                                 </Tooltip>
                               </h2>
 
-                              <label htmlFor="landCompensation">
-                                <input {...register("landCompensation")} type="radio" value="Y" id="landCompensation" />
+                              <label htmlFor="landCompensationYes">
+                                <input {...register("landCompensation")} type="radio" value="Y" id="landCompensationYes" />
                                 &nbsp; Yes &nbsp;&nbsp;
                               </label>
-                              <label htmlFor="landCompensation">
-                                <input {...register("landCompensation")} type="radio" value="N" id="landCompensation" />
+                              <label htmlFor="landCompensationNo">
+                                <input {...register("landCompensation")} type="radio" value="N" id="landCompensationNo" />
                                 &nbsp; No &nbsp;&nbsp;
                               </label>
                             </div>
@@ -1643,12 +1645,17 @@ const LandScheduleForm = (props) => {
                                 {`${t("NWL_APPLICANT_WHETHER_Y_WHETER_LITIGATION_REGARDING_RELEASE_OF_LAND_SHAJRA_PLAN")}`}
                                 {/* whether litigation regarding release of Land */}
                               </h2>
-                              <label htmlFor="litigationRegardingLandRelease">
-                                <input {...register("litigationRegardingLandRelease")} type="radio" value="Y" id="litigationRegardingLandRelease" />
+                              <label htmlFor="litigationRegardingLandReleaseYes">
+                                <input
+                                  {...register("litigationRegardingLandRelease")}
+                                  type="radio"
+                                  value="Y"
+                                  id="litigationRegardingLandReleaseYes"
+                                />
                                 &nbsp; Yes &nbsp;&nbsp;
                               </label>
-                              <label htmlFor="litigationRegardingLandRelease">
-                                <input {...register("litigationRegardingLandRelease")} type="radio" value="N" id="litigationRegardingLandRelease" />
+                              <label htmlFor="litigationRegardingLandReleaseNo">
+                                <input {...register("litigationRegardingLandRelease")} type="radio" value="N" id="litigationRegardingLandReleaseNo" />
                                 &nbsp; No &nbsp;&nbsp;
                               </label>
                             </div>
@@ -1685,12 +1692,12 @@ const LandScheduleForm = (props) => {
                         {`${t("NWL_APPLICANT_DETAILS_OF_EXISTING_APPROACH_AS_PER_POLICY_SHAJRA_PLAN")}`}
                         {/* Details of existing approach as per policy dated 20-10-20. */}
                         <span style={{ color: "red" }}>*</span> &nbsp;&nbsp;
-                        <label htmlFor="siteApproachable">
-                          <input {...register("siteApproachable")} type="radio" value="Y" id="siteApproachable" />
+                        <label htmlFor="siteApproachableC">
+                          <input {...register("siteApproachable")} type="radio" value="Y" id="siteApproachableC" />
                           &nbsp; Category-I approach &nbsp;&nbsp;
                         </label>
-                        <label htmlFor="siteApproachable">
-                          <input {...register("siteApproachable")} type="radio" value="N" id="siteApproachable" />
+                        <label htmlFor="siteApproachableD">
+                          <input {...register("siteApproachable")} type="radio" value="N" id="siteApproachableD" />
                           &nbsp; Category-II approach &nbsp;&nbsp;
                         </label>
                       </h2>
@@ -1735,12 +1742,12 @@ const LandScheduleForm = (props) => {
                             </h2>
                           </div>
                           <div class="col-sm-6 text-right">
-                            <label htmlFor="minimumApproachEleven">
-                              <input {...register("minimumApproachEleven")} type="radio" value="Y" id="minimumApproachEleven" />
+                            <label htmlFor="minimumApproachElevenYes">
+                              <input {...register("minimumApproachEleven")} type="radio" value="Y" id="minimumApproachElevenYes" />
                               &nbsp; Yes &nbsp;&nbsp;
                             </label>
-                            <label htmlFor="minimumApproachEleven">
-                              <input {...register("minimumApproachEleven")} type="radio" value="N" id="minimumApproachEleven" />
+                            <label htmlFor="minimumApproachElevenNo">
+                              <input {...register("minimumApproachEleven")} type="radio" value="N" id="minimumApproachElevenNo" />
                               &nbsp; No &nbsp;&nbsp;
                             </label>
 
@@ -1788,12 +1795,12 @@ const LandScheduleForm = (props) => {
                             </h2>
                           </div>
                           <div class="col-sm-6 text-right">
-                            <label htmlFor="adjoiningOwnLand">
-                              <input {...register("adjoiningOwnLand")} type="radio" value="Y" id="adjoiningOwnLand" />
+                            <label htmlFor="adjoiningOwnLandYes">
+                              <input {...register("adjoiningOwnLand")} type="radio" value="Y" id="adjoiningOwnLandYes" />
                               &nbsp; Yes &nbsp;&nbsp;
                             </label>
-                            <label htmlFor="adjoiningOwnLand">
-                              <input {...register("adjoiningOwnLand")} type="radio" value="N" id="adjoiningOwnLand" />
+                            <label htmlFor="adjoiningOwnLandNo">
+                              <input {...register("adjoiningOwnLand")} type="radio" value="N" id="adjoiningOwnLandNo" />
                               &nbsp; No &nbsp;&nbsp;
                             </label>
                           </div>
@@ -1815,12 +1822,12 @@ const LandScheduleForm = (props) => {
                                 </h2>
                               </div>
                               <div class="col-sm-6 text-right">
-                                <label htmlFor="applicantHasDonated">
-                                  <input {...register("applicantHasDonated")} type="radio" value="Y" id="applicantHasDonated" />
+                                <label htmlFor="applicantHasDonatedYes">
+                                  <input {...register("applicantHasDonated")} type="radio" value="Y" id="applicantHasDonatedYes" />
                                   &nbsp; Yes &nbsp;&nbsp;
                                 </label>
-                                <label htmlFor="applicantHasDonated">
-                                  <input {...register("applicantHasDonated")} type="radio" value="N" id="applicantHasDonated" />
+                                <label htmlFor="applicantHasDonatedNo">
+                                  <input {...register("applicantHasDonated")} type="radio" value="N" id="applicantHasDonatedNo" />
                                   &nbsp; No &nbsp;&nbsp;
                                 </label>
                               </div>
@@ -1869,12 +1876,12 @@ const LandScheduleForm = (props) => {
                             </h2>
                           </div>
                           <div class="col-sm-6 text-right">
-                            <label htmlFor="adjoiningOthersLand">
-                              <input {...register("adjoiningOthersLand")} type="radio" value="Y" id="adjoiningOthersLand" />
+                            <label htmlFor="adjoiningOthersLandYes">
+                              <input {...register("adjoiningOthersLand")} type="radio" value="Y" id="adjoiningOthersLandYes" />
                               &nbsp; Yes &nbsp;&nbsp;
                             </label>
-                            <label htmlFor="adjoiningOthersLand">
-                              <input {...register("adjoiningOthersLand")} type="radio" value="N" id="adjoiningOthersLand" />
+                            <label htmlFor="adjoiningOthersLandNo">
+                              <input {...register("adjoiningOthersLand")} type="radio" value="N" id="adjoiningOthersLandNo" />
                               &nbsp; No &nbsp;&nbsp;
                             </label>
                           </div>
@@ -1897,12 +1904,12 @@ const LandScheduleForm = (props) => {
                                 </h2>
                               </div>
                               <div class="col-sm-6 text-right">
-                                <label htmlFor="landOwnerDonated">
-                                  <input {...register("landOwnerDonated")} type="radio" value="Y" id="landOwnerDonated" />
+                                <label htmlFor="landOwnerDonatedYes">
+                                  <input {...register("landOwnerDonated")} type="radio" value="Y" id="landOwnerDonatedYes" />
                                   &nbsp; Yes &nbsp;&nbsp;
                                 </label>
-                                <label htmlFor="landOwnerDonated">
-                                  <input {...register("landOwnerDonated")} type="radio" value="N" id="landOwnerDonated" />
+                                <label htmlFor="landOwnerDonatedNo">
+                                  <input {...register("landOwnerDonated")} type="radio" value="N" id="landOwnerDonatedNo" />
                                   &nbsp; No &nbsp;&nbsp;
                                 </label>
                               </div>
@@ -1971,12 +1978,12 @@ const LandScheduleForm = (props) => {
                             </h2>
                           </div>
                           <div class="col-sm-6 text-right">
-                            <label htmlFor="irrevocableConsent">
-                              <input {...register("irrevocableConsent")} type="radio" value="Y" id="irrevocableConsent" />
+                            <label htmlFor="irrevocableConsentYes">
+                              <input {...register("irrevocableConsent")} type="radio" value="Y" id="irrevocableConsentYes" />
                               &nbsp; Yes &nbsp;&nbsp;
                             </label>
-                            <label htmlFor="irrevocableConsent">
-                              <input {...register("irrevocableConsent")} type="radio" value="N" id="irrevocableConsent" />
+                            <label htmlFor="irrevocableConsentNo">
+                              <input {...register("irrevocableConsent")} type="radio" value="N" id="irrevocableConsentNo" />
                               &nbsp; No &nbsp;&nbsp;
                             </label>
                           </div>
@@ -2016,12 +2023,12 @@ const LandScheduleForm = (props) => {
                             </h2>
                           </div>
                           <div class="col-sm-6 text-right">
-                            <label htmlFor="NHSRAccess">
-                              <input {...register("NHSRAccess")} type="radio" value="Y" id="NHSRAccess" />
+                            <label htmlFor="NHSRAccessYes">
+                              <input {...register("NHSRAccess")} type="radio" value="Y" id="NHSRAccessYes" />
                               &nbsp; Yes &nbsp;&nbsp;
                             </label>
-                            <label htmlFor="NHSRAccess">
-                              <input {...register("NHSRAccess")} type="radio" value="N" id="NHSRAccess" />
+                            <label htmlFor="NHSRAccessNo">
+                              <input {...register("NHSRAccess")} type="radio" value="N" id="NHSRAccessNo" />
                               &nbsp; No &nbsp;&nbsp;
                             </label>
                           </div>
@@ -2063,12 +2070,12 @@ const LandScheduleForm = (props) => {
                         {`${t("NWL_APPLICANT_N_I_SITE_APPROACHABLE_FROM_PROPOSED_SECTOR_ROAD_SHAJRA_PLAN")}`}
                         {/*  Site approachable from proposed sector road/ Development Plan Road. */}
                         &nbsp;&nbsp;
-                        <label htmlFor="approachFromProposedSector">
-                          <input {...register("approachFromProposedSector")} type="radio" value="Y" id="approachFromProposedSector" />
+                        <label htmlFor="approachFromProposedSectorYes">
+                          <input {...register("approachFromProposedSector")} type="radio" value="Y" id="approachFromProposedSectorYes" />
                           &nbsp; Yes &nbsp;&nbsp;
                         </label>
-                        <label htmlFor="approachFromProposedSector">
-                          <input {...register("approachFromProposedSector")} type="radio" value="N" id="approachFromProposedSector" />
+                        <label htmlFor="approachFromProposedSectorNo">
+                          <input {...register("approachFromProposedSector")} type="radio" value="N" id="approachFromProposedSectorNo" />
                           &nbsp; No &nbsp;&nbsp;
                         </label>
                       </h2>
@@ -2087,12 +2094,12 @@ const LandScheduleForm = (props) => {
                             {`${t("NWL_APPLICANT_N_B_WHETHER_ACQUIRED_SHAJRA_PLAN")}`}
                             {/* Whether acquired? */}
                             &nbsp;&nbsp;
-                            <label htmlFor="whetherAcquired">
-                              <input {...register("whetherAcquired")} type="radio" value="Y" id="whetherAcquired" />
+                            <label htmlFor="whetherAcquiredYes">
+                              <input {...register("whetherAcquired")} type="radio" value="Y" id="whetherAcquiredYes" />
                               &nbsp; Yes &nbsp;&nbsp;
                             </label>
-                            <label htmlFor="whetherAcquired">
-                              <input {...register("whetherAcquired")} type="radio" value="N" id="whetherAcquired" />
+                            <label htmlFor="whetherAcquiredNo">
+                              <input {...register("whetherAcquired")} type="radio" value="N" id="whetherAcquiredNo" />
                               &nbsp; No &nbsp;&nbsp;
                             </label>
                           </h2>
@@ -2101,12 +2108,12 @@ const LandScheduleForm = (props) => {
                             {`${t("NWL_APPLICANT_N_C_WHETHER_CONSTRUCTED_SHAJRA_PLAN")}`}
                             {/* Whether constructed?  */}
                             &nbsp;&nbsp;
-                            <label htmlFor="whetherConstructed">
-                              <input {...register("whetherConstructed")} type="radio" value="Y" id="whetherConstructed" />
+                            <label htmlFor="whetherConstructedYes">
+                              <input {...register("whetherConstructed")} type="radio" value="Y" id="whetherConstructedYes" />
                               &nbsp; Yes &nbsp;&nbsp;
                             </label>
-                            <label htmlFor="whetherConstructed">
-                              <input {...register("whetherConstructed")} type="radio" value="N" id="whetherConstructed" />
+                            <label htmlFor="whetherConstructedNo">
+                              <input {...register("whetherConstructed")} type="radio" value="N" id="whetherConstructedNo" />
                               &nbsp; No &nbsp;&nbsp;
                             </label>
                           </h2>
@@ -2115,12 +2122,12 @@ const LandScheduleForm = (props) => {
                             {`${t("NWL_APPLICANT_N_D_WHETHER_SERVICE_ROAD_ALONG_SECTOR_ROAD_ACQURIED_SHAJRA_PLAN")}`}
                             {/* Whether Service road along sector road acquired?  */}
                             &nbsp;&nbsp;
-                            <label htmlFor="serviceSectorRoadAcquired">
-                              <input {...register("serviceSectorRoadAcquired")} type="radio" value="Y" id="serviceSectorRoadAcquired" />
+                            <label htmlFor="serviceSectorRoadAcquiredYes">
+                              <input {...register("serviceSectorRoadAcquired")} type="radio" value="Y" id="serviceSectorRoadAcquiredYes" />
                               &nbsp; Yes &nbsp;&nbsp;
                             </label>
-                            <label htmlFor="serviceSectorRoadAcquired">
-                              <input {...register("serviceSectorRoadAcquired")} type="radio" value="N" id="serviceSectorRoadAcquired" />
+                            <label htmlFor="serviceSectorRoadAcquiredNo">
+                              <input {...register("serviceSectorRoadAcquired")} type="radio" value="N" id="serviceSectorRoadAcquiredNo" />
                               &nbsp; No &nbsp;&nbsp;
                             </label>
                           </h2>
@@ -2129,12 +2136,12 @@ const LandScheduleForm = (props) => {
                             {`${t("NWL_APPLICANT_N_D_WHETHER_SERVICE_ROAD_ALONG_E_SECTOR_ROAD_CONSTRUCTED_SHAJRA_PLAN")}`}
                             {/* Whether Service road along sector road constructed? */}
                             &nbsp;&nbsp;
-                            <label htmlFor="serviceSectorRoadConstructed">
-                              <input {...register("serviceSectorRoadConstructed")} type="radio" value="Y" id="serviceSectorRoadConstructed" />
+                            <label htmlFor="serviceSectorRoadConstructedYes">
+                              <input {...register("serviceSectorRoadConstructed")} type="radio" value="Y" id="serviceSectorRoadConstructedYes" />
                               &nbsp; Yes &nbsp;&nbsp;
                             </label>
-                            <label htmlFor="serviceSectorRoadConstructed">
-                              <input {...register("serviceSectorRoadConstructed")} type="radio" value="N" id="serviceSectorRoadConstructed" />
+                            <label htmlFor="serviceSectorRoadConstructedNo">
+                              <input {...register("serviceSectorRoadConstructed")} type="radio" value="N" id="serviceSectorRoadConstructedNo" />
                               &nbsp; No &nbsp;&nbsp;
                             </label>
                           </h2>
@@ -2147,12 +2154,12 @@ const LandScheduleForm = (props) => {
                         {`${t("NWL_APPLICANT_N_2_SITE_APPROACHABLE_FROM_INTERNAL_CIRCULATION_SECTORAL_ROAD_SHAJRA_PLAN")}`}
                         {/* Site approachable from internal circulation / sectoral plan road. */}
                         &nbsp;&nbsp;
-                        <label htmlFor="approachFromInternalCirculation">
-                          <input {...register("approachFromInternalCirculation")} type="radio" value="Y" id="approachFromInternalCirculation" />
+                        <label htmlFor="approachFromInternalCirculationYes">
+                          <input {...register("approachFromInternalCirculation")} type="radio" value="Y" id="approachFromInternalCirculationYes" />
                           &nbsp; Yes &nbsp;&nbsp;
                         </label>
-                        <label htmlFor="approachFromInternalCirculation">
-                          <input {...register("approachFromInternalCirculation")} type="radio" value="N" id="approachFromInternalCirculation" />
+                        <label htmlFor="approachFromInternalCirculationNo">
+                          <input {...register("approachFromInternalCirculation")} type="radio" value="N" id="approachFromInternalCirculationNo" />
                           &nbsp; No &nbsp;&nbsp;
                         </label>
                       </h2>
@@ -2171,21 +2178,21 @@ const LandScheduleForm = (props) => {
                             {`${t("NWL_APPLICANT_N_2_B_WHETHER_ACQUIRED_SHAJRA_PLAN")}`}
                             {/* Whether acquired?  */}
                             &nbsp;&nbsp;
-                            <label htmlFor="whetherAcquiredForInternalCirculation">
+                            <label htmlFor="whetherAcquiredForInternalCirculationYes">
                               <input
                                 {...register("whetherAcquiredForInternalCirculation")}
                                 type="radio"
                                 value="Y"
-                                id="whetherAcquiredForInternalCirculation"
+                                id="whetherAcquiredForInternalCirculationYes"
                               />
                               &nbsp; Yes &nbsp;&nbsp;
                             </label>
-                            <label htmlFor="whetherAcquiredForInternalCirculation">
+                            <label htmlFor="whetherAcquiredForInternalCirculationNo">
                               <input
                                 {...register("whetherAcquiredForInternalCirculation")}
                                 type="radio"
                                 value="N"
-                                id="whetherAcquiredForInternalCirculation"
+                                id="whetherAcquiredForInternalCirculationNo"
                               />
                               &nbsp; No &nbsp;&nbsp;
                             </label>
@@ -2195,21 +2202,21 @@ const LandScheduleForm = (props) => {
                             {`${t("NWL_APPLICANT_N_2_C_WHETHER_CONSTRUCTED_SHAJRA_PLAN")}`}
                             {/* Whether constructed? */}
                             &nbsp;&nbsp;
-                            <label htmlFor="whetherConstructedForInternalCirculation">
+                            <label htmlFor="whetherConstructedForInternalCirculationYes">
                               <input
                                 {...register("whetherConstructedForInternalCirculation")}
                                 type="radio"
                                 value="Y"
-                                id="whetherConstructedForInternalCirculation"
+                                id="whetherConstructedForInternalCirculationYes"
                               />
                               &nbsp; Yes &nbsp;&nbsp;
                             </label>
-                            <label htmlFor="whetherConstructedForInternalCirculation">
+                            <label htmlFor="whetherConstructedForInternalCirculationNo">
                               <input
                                 {...register("whetherConstructedForInternalCirculation")}
                                 type="radio"
                                 value="N"
-                                id="whetherConstructedForInternalCirculation"
+                                id="whetherConstructedForInternalCirculationNo"
                               />
                               &nbsp; No &nbsp;&nbsp;
                             </label>
@@ -2228,12 +2235,12 @@ const LandScheduleForm = (props) => {
                           {`${t("NWL_APPLICANT_N_2_J_WHETHER_APPROACH_FROM_PARENT_LICENCE_SHAJRA_PLAN")}`}
                           {/* Whether approach from parent licence. */}
                           <span style={{ color: "red" }}>*</span> &nbsp;&nbsp;
-                          <label htmlFor="parentLicenceApproach">
-                            <input {...register("parentLicenceApproach")} type="radio" value="Y" id="parentLicenceApproach" />
+                          <label htmlFor="parentLicenceApproachYes">
+                            <input {...register("parentLicenceApproach")} type="radio" value="Y" id="parentLicenceApproachYes" />
                             &nbsp; Yes &nbsp;&nbsp;
                           </label>
-                          <label htmlFor="parentLicenceApproach">
-                            <input {...register("parentLicenceApproach")} type="radio" value="N" id="parentLicenceApproach" />
+                          <label htmlFor="parentLicenceApproachNo">
+                            <input {...register("parentLicenceApproach")} type="radio" value="N" id="parentLicenceApproachNo" />
                             &nbsp; No &nbsp;&nbsp;
                           </label>
                         </h2>
@@ -2252,12 +2259,12 @@ const LandScheduleForm = (props) => {
                         {`${t("NWL_APPLICANT_N_2_K_ANY_OTHER_TYPE_OF_EXISITING_APPROACH_AVAILABLE_SHAJRA_PLAN")}`}
                         {/* Any other type of existing approach available. */}
                         <span style={{ color: "red" }}>*</span> &nbsp;&nbsp;
-                        <label htmlFor="availableExistingApproach">
-                          <input {...register("availableExistingApproach")} type="radio" value="Y" id="availableExistingApproach" />
+                        <label htmlFor="availableExistingApproachYes">
+                          <input {...register("availableExistingApproach")} type="radio" value="Y" id="availableExistingApproachYes" />
                           &nbsp; Yes &nbsp;&nbsp;
                         </label>
-                        <label htmlFor="availableExistingApproach">
-                          <input {...register("availableExistingApproach")} type="radio" value="N" id="availableExistingApproach" />
+                        <label htmlFor="availableExistingApproachNo">
+                          <input {...register("availableExistingApproach")} type="radio" value="N" id="availableExistingApproachNo" />
                           &nbsp; No &nbsp;&nbsp;
                         </label>
                       </h2>
@@ -2316,12 +2323,12 @@ const LandScheduleForm = (props) => {
                         <span style={{ color: "red" }}>*</span>{" "}
                       </h2>
                       &nbsp;&nbsp;&nbsp;&nbsp;
-                      <label htmlFor="vacant">
-                        <input {...register("vacant")} type="radio" value="Y" id="vacant" />
+                      <label htmlFor="vacantYes">
+                        <input {...register("vacant")} type="radio" value="Y" id="vacantYes" />
                         &nbsp; Yes &nbsp;&nbsp;
                       </label>
-                      <label htmlFor="vacant">
-                        <input {...register("vacant")} type="radio" value="N" id="vacant" />
+                      <label htmlFor="vacantNo">
+                        <input {...register("vacant")} type="radio" value="N" id="vacantNo" />
                         &nbsp; No &nbsp;&nbsp;
                       </label>
                       <h3 className="error-message" style={{ color: "red" }}>
@@ -2370,12 +2377,12 @@ const LandScheduleForm = (props) => {
                         <span style={{ color: "red" }}>*</span>
                       </h2>{" "}
                       &nbsp;&nbsp;&nbsp;&nbsp;
-                      <label htmlFor="HTLine">
-                        <input {...register("ht")} type="radio" value="Y" id="HTLine" />
+                      <label htmlFor="HTLineYes">
+                        <input {...register("ht")} type="radio" value="Y" id="HTLineYes" />
                         &nbsp; Yes &nbsp;&nbsp;
                       </label>
-                      <label htmlFor="HTLine">
-                        <input {...register("ht")} type="radio" value="N" id="HTLine" />
+                      <label htmlFor="HTLineNo">
+                        <input {...register("ht")} type="radio" value="N" id="HTLineNo" />
                         &nbsp; No &nbsp;&nbsp;
                       </label>
                       <h3 className="error-message" style={{ color: "red" }}>
@@ -2387,7 +2394,7 @@ const LandScheduleForm = (props) => {
                             <label>
                               <h2>
                                 {`${t("NWL_APPLICANT_4_B_HT_REMARKS_SHAJRA_PLAN")}`}
-                                {/* HT Remark  */}
+                                {/* HT Line Remark  */}
                                 <span style={{ color: "red" }}>*</span>
                               </h2>
                             </label>
@@ -2404,7 +2411,7 @@ const LandScheduleForm = (props) => {
                             <label>
                               <h2>
                                 {`${t("NWL_APPLICANT_4_B_HT_REMARKS_SHAJRA_PLAN")}`}
-                                {/* HT Remark */}
+                                {/* HT Line Remark */}
                               </h2>
                             </label>
                             <input type="text" className="form-control" {...register("htRemark")} />
@@ -2421,12 +2428,12 @@ const LandScheduleForm = (props) => {
                         <span style={{ color: "red" }}>*</span>
                       </h2>
                       &nbsp;&nbsp;&nbsp;&nbsp;
-                      <label htmlFor="IOCGasPipeline">
-                        <input {...register("gas")} type="radio" value="Y" id="IOCGasPipeline" />
+                      <label htmlFor="IOCGasPipelineYes">
+                        <input {...register("gas")} type="radio" value="Y" id="IOCGasPipelineYes" />
                         &nbsp; Yes &nbsp;&nbsp;
                       </label>
-                      <label htmlFor="IOCGasPipeline">
-                        <input {...register("gas")} type="radio" value="N" id="IOCGasPipeline" />
+                      <label htmlFor="IOCGasPipelineNo">
+                        <input {...register("gas")} type="radio" value="N" id="IOCGasPipelineNo" />
                         &nbsp; No &nbsp;&nbsp;
                       </label>
                       <h3 className="error-message" style={{ color: "red" }}>
@@ -2437,7 +2444,7 @@ const LandScheduleForm = (props) => {
                           <div className="col col">
                             <label>
                               {`${t("NWL_APPLICANT_4_Y_IOC_REMARKS_SHAJRA_PLAN")}`}
-                              {/* IOC Remark  */}
+                              {/* IOC Gas Pipeline Remark  */}
                               <span style={{ color: "red" }}>*</span>
                             </label>
                             <input type="text" className="form-control" {...register("gasRemark")} />
@@ -2452,7 +2459,7 @@ const LandScheduleForm = (props) => {
                           <div className="col col">
                             <label>
                               {`${t("NWL_APPLICANT_4_Y_IOC_REMARKS_SHAJRA_PLAN")}`}
-                              {/* IOC Remark */}
+                              {/* IOC Gas Pipeline Remark */}
                             </label>
                             <input type="text" className="form-control" {...register("gasRemark")} />
                           </div>
@@ -2467,12 +2474,12 @@ const LandScheduleForm = (props) => {
                         <span style={{ color: "red" }}>*</span>
                       </h2>
                       &nbsp;&nbsp;&nbsp;&nbsp;
-                      <label htmlFor="nallah">
-                        <input {...register("nallah")} type="radio" value="Y" id="nallah" />
+                      <label htmlFor="nallahYes">
+                        <input {...register("nallah")} type="radio" value="Y" id="nallahYes" />
                         &nbsp; Yes &nbsp;&nbsp;
                       </label>
-                      <label htmlFor="nallah">
-                        <input {...register("nallah")} type="radio" value="N" id="nallah" />
+                      <label htmlFor="nallahNo">
+                        <input {...register("nallah")} type="radio" value="N" id="nallahNo" />
                         &nbsp; No &nbsp;&nbsp;
                       </label>
                       <h3 className="error-message" style={{ color: "red" }}>
@@ -2519,12 +2526,12 @@ const LandScheduleForm = (props) => {
                         </Tooltip>
                       </h2>
                       &nbsp;&nbsp;&nbsp;&nbsp;
-                      <label htmlFor="road">
-                        <input {...register("road")} type="radio" value="Y" id="road" />
+                      <label htmlFor="roadYes">
+                        <input {...register("road")} type="radio" value="Y" id="roadYes" />
                         &nbsp; Yes &nbsp;&nbsp;
                       </label>
-                      <label htmlFor="road">
-                        <input {...register("road")} type="radio" value="N" id="road" />
+                      <label htmlFor="roadNo">
+                        <input {...register("road")} type="radio" value="N" id="roadNo" />
                         &nbsp; No &nbsp;&nbsp;
                       </label>
                       <h3 className="error-message" style={{ color: "red" }}>
@@ -2630,12 +2637,12 @@ const LandScheduleForm = (props) => {
                         </Tooltip>
                       </h2>
                       &nbsp;&nbsp;&nbsp;&nbsp;
-                      <label htmlFor="utilityLine">
-                        <input {...register("utilityLine")} type="radio" value="Y" id="utilityLine" />
+                      <label htmlFor="utilityLineYes">
+                        <input {...register("utilityLine")} type="radio" value="Y" id="utilityLineYes" />
                         &nbsp; Yes &nbsp;&nbsp;
                       </label>
-                      <label htmlFor="utilityLine">
-                        <input {...register("utilityLine")} type="radio" value="N" id="utilityLine" />
+                      <label htmlFor="utilityLineNo">
+                        <input {...register("utilityLine")} type="radio" value="N" id="utilityLineNo" />
                         &nbsp; No &nbsp;&nbsp;
                       </label>
                       <h3 className="error-message" style={{ color: "red" }}>
@@ -2694,12 +2701,12 @@ const LandScheduleForm = (props) => {
                         {/* Compact Block */}
                       </h2>
                       &nbsp;&nbsp;&nbsp;&nbsp;
-                      <label htmlFor="compactBlock">
-                        <input {...register("compactBlock")} type="radio" value="Y" id="compactBlock" />
+                      <label htmlFor="compactBlockYes">
+                        <input {...register("compactBlock")} type="radio" value="Y" id="compactBlockYes" />
                         &nbsp; Yes &nbsp;&nbsp;
                       </label>
-                      <label htmlFor="compactBlock">
-                        <input {...register("compactBlock")} type="radio" value="N" id="compactBlock" />
+                      <label htmlFor="compactBlockNo">
+                        <input {...register("compactBlock")} type="radio" value="N" id="compactBlockNo" />
                         &nbsp; No &nbsp;&nbsp;
                       </label>
                       {watch("compactBlock") === "Y" && (
@@ -2734,15 +2741,15 @@ const LandScheduleForm = (props) => {
                       <h2>
                         &nbsp;
                         {`${t("NWL_APPLICANT_H_WHETHER_OTHERS_LAND_FALL_SHAJRA_PLAN")}`}
-                        {/* Whether Others Land fall */}
+                        {/* Whether other land falls within the applied land */}
                       </h2>
                       &nbsp;&nbsp;&nbsp;&nbsp;
-                      <label htmlFor="othersLandFall">
-                        <input {...register("othersLandFall")} type="radio" value="Y" id="othersLandFall" />
+                      <label htmlFor="othersLandFallYes">
+                        <input {...register("othersLandFall")} type="radio" value="Y" id="othersLandFallYes" />
                         &nbsp; Yes &nbsp;&nbsp;
                       </label>
-                      <label htmlFor="othersLandFall">
-                        <input {...register("othersLandFall")} type="radio" value="N" id="othersLandFall" />
+                      <label htmlFor="othersLandFallNo">
+                        <input {...register("othersLandFall")} type="radio" value="N" id="othersLandFallNo" />
                         &nbsp; No &nbsp;&nbsp;
                       </label>
                       {watch("othersLandFall") === "Y" && (
@@ -2781,56 +2788,119 @@ const LandScheduleForm = (props) => {
                         <span style={{ color: "red" }}>*</span>
                       </h2>
 
-                      <div className="row ">
-                        <div className="col col-3">
-                          <label>
-                            <h2>
-                              {`${t("NWL_APPLICANT_SURROUNDINGS_NORTH_SHAJRA_PLAN")}`}
-                              {/* North */}
-                            </h2>
-                          </label>
-                          <input type="text" className="form-control" {...register("northSurroundings")} />
-                          <h3 className="error-message" style={{ color: "red" }}>
-                            {errors?.northSurroundings && errors?.northSurroundings?.message}
-                          </h3>
+                      {/* Render the data array according to the pocket */}
+                      {watch("pocket") ? (
+                        [...Array(parseInt(watch("pocket")))].map((_, index) => {
+                          return (
+                            <div key={index} className="row mt-3">
+                              <div className="col col-3">
+                                <label>
+                                  <h2>
+                                    {`${t("NWL_APPLICANT_SURROUNDINGS_NORTH_SHAJRA_PLAN")}`}
+                                    {/* North */}
+                                  </h2>
+                                </label>
+                                <input type="text" className="form-control" {...register(`northSurroundings${index}`)} />
+                                <h3 className="error-message" style={{ color: "red" }}>
+                                  {errors?.northSurroundings && errors?.northSurroundings?.message}
+                                </h3>
+                              </div>
+                              <div className="col col-3">
+                                <label>
+                                  <h2>
+                                    {`${t("NWL_APPLICANT_SURROUNDINGS_SOUTH_SHAJRA_PLAN")}`}
+                                    {/* South */}
+                                  </h2>
+                                </label>
+                                <input type="text" className="form-control" {...register(`southSurroundings${index}`)} />
+                                <h3 className="error-message" style={{ color: "red" }}>
+                                  {errors?.southSurroundings && errors?.southSurroundings?.message}
+                                </h3>
+                              </div>
+                              <div className="col col-3">
+                                <label>
+                                  <h2>
+                                    {`${t("NWL_APPLICANT_SURROUNDINGS_EAST_SHAJRA_PLAN")}`}
+                                    {/* East */}
+                                  </h2>
+                                </label>
+                                <input type="text" className="form-control" {...register(`eastSurroundings${index}`)} />
+                                <h3 className="error-message" style={{ color: "red" }}>
+                                  {errors?.eastSurroundings && errors?.eastSurroundings?.message}
+                                </h3>
+                              </div>
+                              <div className="col col-3">
+                                <label>
+                                  <h2>
+                                    {`${t("NWL_APPLICANT_SURROUNDINGS_WEST_SHAJRA_PLAN")}`}
+                                    {/* West */}
+                                  </h2>
+                                </label>
+                                <input type="text" className="form-control" {...register(`westSurroundings${index}`)} />
+                                <h3 className="error-message" style={{ color: "red" }}>
+                                  {errors?.westSurroundings && errors?.westSurroundings?.message}
+                                </h3>
+                              </div>
+                            </div>
+                            // <div key={index}>
+                            //   {dataSet.map((item, subIndex) => (
+                            //     <p key={subIndex}>{item.name}</p>
+                            //   ))}
+                            // </div>
+                          );
+                        })
+                      ) : (
+                        <div className="row mt-3">
+                          <div className="col col-3">
+                            <label>
+                              <h2>
+                                {`${t("NWL_APPLICANT_SURROUNDINGS_NORTH_SHAJRA_PLAN")}`}
+                                {/* North */}
+                              </h2>
+                            </label>
+                            <input type="text" className="form-control" {...register("northSurroundings")} />
+                            <h3 className="error-message" style={{ color: "red" }}>
+                              {errors?.northSurroundings && errors?.northSurroundings?.message}
+                            </h3>
+                          </div>
+                          <div className="col col-3">
+                            <label>
+                              <h2>
+                                {`${t("NWL_APPLICANT_SURROUNDINGS_SOUTH_SHAJRA_PLAN")}`}
+                                {/* South */}
+                              </h2>
+                            </label>
+                            <input type="text" className="form-control" {...register("southSurroundings")} />
+                            <h3 className="error-message" style={{ color: "red" }}>
+                              {errors?.southSurroundings && errors?.southSurroundings?.message}
+                            </h3>
+                          </div>
+                          <div className="col col-3">
+                            <label>
+                              <h2>
+                                {`${t("NWL_APPLICANT_SURROUNDINGS_EAST_SHAJRA_PLAN")}`}
+                                {/* East */}
+                              </h2>
+                            </label>
+                            <input type="text" className="form-control" {...register("eastSurroundings")} />
+                            <h3 className="error-message" style={{ color: "red" }}>
+                              {errors?.eastSurroundings && errors?.eastSurroundings?.message}
+                            </h3>
+                          </div>
+                          <div className="col col-3">
+                            <label>
+                              <h2>
+                                {`${t("NWL_APPLICANT_SURROUNDINGS_WEST_SHAJRA_PLAN")}`}
+                                {/* West */}
+                              </h2>
+                            </label>
+                            <input type="text" className="form-control" {...register("westSurroundings")} />
+                            <h3 className="error-message" style={{ color: "red" }}>
+                              {errors?.westSurroundings && errors?.westSurroundings?.message}
+                            </h3>
+                          </div>
                         </div>
-                        <div className="col col-3">
-                          <label>
-                            <h2>
-                              {`${t("NWL_APPLICANT_SURROUNDINGS_SOUTH_SHAJRA_PLAN")}`}
-                              {/* South */}
-                            </h2>
-                          </label>
-                          <input type="text" className="form-control" {...register("southSurroundings")} />
-                          <h3 className="error-message" style={{ color: "red" }}>
-                            {errors?.southSurroundings && errors?.southSurroundings?.message}
-                          </h3>
-                        </div>
-                        <div className="col col-3">
-                          <label>
-                            <h2>
-                              {`${t("NWL_APPLICANT_SURROUNDINGS_EAST_SHAJRA_PLAN")}`}
-                              {/* East */}
-                            </h2>
-                          </label>
-                          <input type="text" className="form-control" {...register("eastSurroundings")} />
-                          <h3 className="error-message" style={{ color: "red" }}>
-                            {errors?.eastSurroundings && errors?.eastSurroundings?.message}
-                          </h3>
-                        </div>
-                        <div className="col col-3">
-                          <label>
-                            <h2>
-                              {`${t("NWL_APPLICANT_SURROUNDINGS_WEST_SHAJRA_PLAN")}`}
-                              {/* West */}
-                            </h2>
-                          </label>
-                          <input type="text" className="form-control" {...register("westSurroundings")} />
-                          <h3 className="error-message" style={{ color: "red" }}>
-                            {errors?.westSurroundings && errors?.westSurroundings?.message}
-                          </h3>
-                        </div>
-                      </div>
+                      )}
                     </div>
 
                     <div className="col col-3">
@@ -2840,12 +2910,12 @@ const LandScheduleForm = (props) => {
                         {/* Any other feature passing through site */}
                       </h2>
                       &nbsp;&nbsp;&nbsp;&nbsp;
-                      <label htmlFor="passingOtherFeature">
-                        <input {...register("passingOtherFeature")} type="radio" value="Y" id="passingOtherFeature" />
+                      <label htmlFor="passingOtherFeatureYes">
+                        <input {...register("passingOtherFeature")} type="radio" value="Y" id="passingOtherFeatureYes" />
                         &nbsp; Yes &nbsp;&nbsp;
                       </label>
-                      <label htmlFor="passingOtherFeature">
-                        <input {...register("passingOtherFeature")} type="radio" value="N" id="passingOtherFeature" />
+                      <label htmlFor="passingOtherFeatureNo">
+                        <input {...register("passingOtherFeature")} type="radio" value="N" id="passingOtherFeatureNo" />
                         &nbsp; No &nbsp;&nbsp;
                       </label>
                       {watch("passingOtherFeature") === "Y" && (
@@ -3010,9 +3080,9 @@ const LandScheduleForm = (props) => {
                       <label>
                         <h2 style={{ display: "flex" }}>
                           {`${t("NWL_APPLICANT_COPY_OF_SPA_GPA_BOARD")}`}
-                          {/* Copy of spa/GPA  */}
+                          {/* Copy of SPA/GPA/BR  */}
                           <span style={{ color: "red" }}>*</span>
-                          <Tooltip title="Copy of spa/GPA/board resolution to sign collaboration agrrement">
+                          <Tooltip title="Copy of SPA/GPA/Board Resolution to sign collaboration agreement">
                             <InfoIcon style={{ cursor: "pointer" }} color="primary"></InfoIcon>
                           </Tooltip>
                         </h2>
@@ -3221,12 +3291,12 @@ const LandScheduleForm = (props) => {
                     <span style={{ color: "red" }}>*</span>
                   </b>
                   &nbsp;&nbsp;
-                  <label htmlFor="validity">
-                    <input {...register("validity")} type="radio" value="Y" id="yes" />
+                  <label htmlFor="validityYes">
+                    <input {...register("validity")} type="radio" value="Y" id="validityYes" />
                     &nbsp;&nbsp; Yes &nbsp;&nbsp;
                   </label>
-                  <label htmlFor="validity">
-                    <input {...register("validity")} type="radio" value="N" id="no" />
+                  <label htmlFor="validityNo">
+                    <input {...register("validity")} type="radio" value="N" id="validityNo" />
                     &nbsp;&nbsp; No &nbsp;&nbsp;
                   </label>
                   <h3 className="error-message" style={{ color: "red" }}>
@@ -3262,12 +3332,12 @@ const LandScheduleForm = (props) => {
                           <span style={{ color: "red" }}>*</span>
                         </b>
                         &nbsp;&nbsp;
-                        <label htmlFor="yess">
-                          <input {...register("renewalLicenceFee")} type="radio" value="Y" id="yess" />
+                        <label htmlFor="renewalLicenceFeeYes">
+                          <input {...register("renewalLicenceFee")} type="radio" value="Y" id="renewalLicenceFeeYes" />
                           &nbsp;&nbsp; Yes &nbsp;&nbsp;
                         </label>
-                        <label htmlFor="noo">
-                          <input {...register("renewalLicenceFee")} type="radio" value="N" id="noo" />
+                        <label htmlFor="renewalLicenceFeeNo">
+                          <input {...register("renewalLicenceFee")} type="radio" value="N" id="renewalLicenceFeeNo" />
                           &nbsp;&nbsp; No &nbsp;&nbsp;
                         </label>
                         <h3 className="error-message" style={{ color: "red" }}>
@@ -3302,7 +3372,7 @@ const LandScheduleForm = (props) => {
                 <div>
                   <label>
                     <h2>
-                      {`${t(" NWL_APPLICANT_APPLIED_KHASRS_NUMBER_GINATIONLIC")}`}
+                      {`${t("NWL_APPLICANT_APPLIED_KHASRS_NUMBER_GINATIONLIC")}`}
                       {/* Applied Khasra number */}
                       <span style={{ color: "red" }}>*</span>
                     </h2>
@@ -3333,12 +3403,12 @@ const LandScheduleForm = (props) => {
                   <span style={{ color: "red" }}>*</span>&nbsp; &nbsp;&nbsp;
                 </h2>
                 <br></br>
-                <label htmlFor="thirdParty">
-                  <input {...register("thirdParty")} type="radio" value="Y" id="thirdParty" />
+                <label htmlFor="thirdPartyYes">
+                  <input {...register("thirdParty")} type="radio" value="Y" id="thirdPartyYes" />
                   &nbsp; Yes &nbsp;&nbsp;
                 </label>
-                <label htmlFor="thirdParty">
-                  <input {...register("thirdParty")} type="radio" value="N" id="thirdParty" />
+                <label htmlFor="thirdPartyNo">
+                  <input {...register("thirdParty")} type="radio" value="N" id="thirdPartyNo" />
                   &nbsp; No &nbsp;&nbsp;
                 </label>
                 <h3 className="error-message" style={{ color: "red" }}>
@@ -3383,12 +3453,12 @@ const LandScheduleForm = (props) => {
                         <span style={{ color: "red" }}>*</span>&nbsp; &nbsp;&nbsp;
                       </h2>
 
-                      <label htmlFor="reraRegistered">
-                        <input {...register("reraRegistered")} type="radio" value="Y" id="reraRegistered" />
+                      <label htmlFor="reraRegisteredYes">
+                        <input {...register("reraRegistered")} type="radio" value="Y" id="reraRegisteredYes" />
                         &nbsp; Yes &nbsp;&nbsp;
                       </label>
-                      <label htmlFor="reraRegistered">
-                        <input {...register("reraRegistered")} type="radio" value="N" id="reraRegistered" />
+                      <label htmlFor="reraRegisteredNo">
+                        <input {...register("reraRegistered")} type="radio" value="N" id="reraRegisteredNo" />
                         &nbsp; No &nbsp;&nbsp;
                       </label>
                       {watch("reraRegistered") === "Y" && (

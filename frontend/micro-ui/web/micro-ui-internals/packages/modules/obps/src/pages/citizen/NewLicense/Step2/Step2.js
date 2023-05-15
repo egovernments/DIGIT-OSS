@@ -181,6 +181,10 @@ const ApllicantPuropseForm = (props) => {
       render: (data) => (data?.biswansi ? data?.biswansi : "N/A"),
     },
     {
+      title: "Acquisition Status",
+      render: (data) => (data?.acquistionStatus ? data?.acquistionStatus : "N/A"),
+    },
+    {
       title: "Consolidated Total Area",
       render: (data) => (data?.consolidatedTotal ? data?.consolidatedTotal : "N/A"),
     },
@@ -294,6 +298,7 @@ const ApllicantPuropseForm = (props) => {
     resetField("typeLand");
     resetField("developmentPlan");
     resetField("nonConsolidationType");
+    resetField("acquistionStatus");
     resetField("nonConsolidatedTotal");
     resetField("consolidatedTotal");
   };
@@ -309,6 +314,7 @@ const ApllicantPuropseForm = (props) => {
       setValue("bigha", specificTableData?.bigha);
       setValue("biswansi", specificTableData?.biswansi);
       setValue("biswa", specificTableData?.biswa);
+      setValue("acquistionStatus", specificTableData?.biswa);
       setValue("collaboration", specificTableData?.collaboration);
       setValue("landOwner", specificTableData?.landOwner);
       setValue("developerCompany", specificTableData?.developerCompany);
@@ -844,6 +850,7 @@ const ApllicantPuropseForm = (props) => {
     delete data?.bigha;
     delete data?.biswa;
     delete data?.biswansi;
+    delete data?.acquistionStatus;
     delete data?.agreementIrrevocialble;
     delete data?.agreementValidFrom;
     delete data?.validitydate;
@@ -1592,7 +1599,10 @@ const ApllicantPuropseForm = (props) => {
                       </div>
 
                       <div className="col col-3">
-                        <h6 style={{ display: "flex" }}>Upload SPA/GPA of authorized signatory on behalf of land owner</h6>
+                        <h6 style={{ display: "flex" }}>
+                          {`${t("NWL_APPLICANT_BEHALF_OF_LAND_OWNER_DOCUMENT")}`}
+                          {/* Upload SPA/GPA of authorized signatory on behalf of land owner */}
+                        </h6>
                         <label>
                           <FileUpload style={{ cursor: "pointer" }} color="primary" />
                           <input
@@ -1610,7 +1620,10 @@ const ApllicantPuropseForm = (props) => {
                       </div>
 
                       <div className="col col-3">
-                        <h6 style={{ display: "flex" }}>Upload SPA/GPA of authorized signatory on behalf of developer</h6>
+                        <h6 style={{ display: "flex" }}>
+                          {`${t("NWL_APPLICANT_BEHALF_OF_DEVELOPER_DOCUMENT")}`}
+                          {/* Upload SPA/GPA of authorized signatory on behalf of developer */}
+                        </h6>
                         <label>
                           <FileUpload style={{ cursor: "pointer" }} color="primary" />
                           <input
@@ -1622,6 +1635,27 @@ const ApllicantPuropseForm = (props) => {
                         </label>
                         {watch("developerSPAGPADoc") && (
                           <a onClick={() => getDocShareholding(watch("developerSPAGPADoc"), setLoader)} className="btn btn-sm ">
+                            <VisibilityIcon color="info" className="icon" />
+                          </a>
+                        )}
+                      </div>
+
+                      <div className="col col-3">
+                        <h6 style={{ display: "flex" }}>
+                          {`${t("NWL_APPLICANT_COLLABORATOR_AGREEMENT_DOCUMENT")}`}
+                          {/* Collaborator Agreement Document */}
+                        </h6>
+                        <label>
+                          <FileUpload style={{ cursor: "pointer" }} color="primary" />
+                          <input
+                            type="file"
+                            style={{ display: "none" }}
+                            onChange={(e) => getDocumentData(e?.target?.files[0], "collaboratorAgreementDocument")}
+                            accept="application/pdf/jpeg/png"
+                          />
+                        </label>
+                        {watch("collaboratorAgreementDocument") && (
+                          <a onClick={() => getDocShareholding(watch("collaboratorAgreementDocument"), setLoader)} className="btn btn-sm ">
                             <VisibilityIcon color="info" className="icon" />
                           </a>
                         )}
@@ -1744,81 +1778,110 @@ const ApllicantPuropseForm = (props) => {
 
                 {watch("consolidationType") == "non-consolidated" && (
                   <div>
-                    <h2>
-                      <b>
-                        Non Consolidation Type<span style={{ color: "red" }}>*</span>{" "}
-                      </b>
-                      &nbsp;&nbsp;&nbsp;&nbsp;
-                      <label htmlFor="nonConsolidationType">
-                        <input {...register("nonConsolidationType")} type="radio" value="kachha" id="nonConsolidationType" />
-                        &nbsp; Kachha &nbsp;&nbsp;
+                    <div className="col col-4 mt-2 mb-3 p-0">
+                      <label>
+                        <h2>
+                          {`${t("NWL_APPLICANT_ACQUISITION_STATUS")}`}
+                          {/* Acquisition status */}
+                        </h2>
                       </label>
-                      <label htmlFor="nonConsolidatedType">
-                        <input {...register("nonConsolidationType")} type="radio" value="pucka" id="nonConsolidatedType" />
-                        &nbsp; Pucka &nbsp;&nbsp;
-                      </label>
-                    </h2>
-                    {/* <h3 className="error-message" style={{ color: "red" }}>
+                      <Form.Control type="text" className="form-control" placeholder="" {...register("acquistionStatus")} />
+                      {/* <h3 className="error-message" style={{ color: "red" }}>
+                    {errors?.registeringAuthority && errors?.registeringAuthority?.message}
+                  </h3> */}
+                    </div>
+                    <div>
+                      <h2>
+                        <b>
+                          Non Consolidation Type<span style={{ color: "red" }}>*</span>{" "}
+                        </b>
+                        &nbsp;&nbsp;&nbsp;&nbsp;
+                        <label htmlFor="nonConsolidationType">
+                          <input {...register("nonConsolidationType")} type="radio" value="kachha" id="nonConsolidationType" />
+                          &nbsp; Kachha &nbsp;&nbsp;
+                        </label>
+                        <label htmlFor="nonConsolidatedType">
+                          <input {...register("nonConsolidationType")} type="radio" value="pucka" id="nonConsolidatedType" />
+                          &nbsp; Pucka &nbsp;&nbsp;
+                        </label>
+                      </h2>
+                      {/* <h3 className="error-message" style={{ color: "red" }}>
                       {errors?.nonConsolidationType && errors?.nonConsolidationType?.message}
                     </h3> */}
+                    </div>
                   </div>
                 )}
 
                 {watch("consolidationType") == "consolidated" && (
-                  <table className="table table-bordered" style={{ backgroundColor: "rgb(251 251 253))" }}>
-                    <thead>
-                      <tr>
-                        <th>
-                          <h2>
-                            {`${t("NWL_APPLICANT_KANAL_LAND_SCHEDULE")}`}
-                            {/* Kanal  */}
-                            <span style={{ color: "red" }}>*</span>
-                          </h2>
-                        </th>
-                        <th>
-                          <h2>
-                            {`${t("NWL_APPLICANT_MARLA_LAND_SCHEDULE")}`}
-                            {/* Marla  */}
-                            <span style={{ color: "red" }}>*</span>
-                          </h2>
-                        </th>
-                        <th>
-                          <h2>
-                            {`${t("NWL_APPLICANT_SARSAI_LAND_SCHEDULE")}`}
-                            {/* Sarsai */}
-                            <span style={{ color: "red" }}>*</span>
-                          </h2>
-                        </th>
-                        <th>
-                          <h2>
-                            {`${t("NWL_APPLICANT_TOTAL_AREA_LAND_SCHEDULE")}`}
-                            {/* Total Area (in acres)  */}
-                            <span style={{ color: "red" }}>*</span>
-                          </h2>
-                        </th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr>
-                        <td>
-                          <input type="number" className="form-control  " {...register("kanal")} id="kanal" />
-                          <label htmlFor="sum">Total: {(watch("kanal") * 0.125)?.toFixed(3)}</label>&nbsp;&nbsp;
-                        </td>
-                        <td>
-                          <input type="number" className="form-control " {...register("marla")} id="marla" />
-                          <label htmlFor="summarla">Total: {(watch("marla") * 0.0062)?.toFixed(3)}</label>&nbsp;&nbsp;
-                        </td>
-                        <td>
-                          <input type="number" className="form-control " {...register("sarsai")} id="sarsai" />
-                          <label htmlFor="sumsarsai">Total: {(watch("sarsai") * 0.00069)?.toFixed(3)}</label>&nbsp;&nbsp;
-                        </td>
-                        <td>
-                          <input type="number" className="form-control" {...register("consolidatedTotal")} disabled />
-                          &nbsp;&nbsp;
-                        </td>
-                      </tr>
-                    </tbody>
-                  </table>
+                  <div>
+                    <div className="col col-4 mt-2 mb-3 p-0">
+                      <label>
+                        <h2>
+                          {`${t("NWL_APPLICANT_ACQUISITION_STATUS")}`}
+                          {/* Acquisition status */}
+                        </h2>
+                      </label>
+                      <Form.Control type="text" className="form-control" placeholder="" {...register("acquistionStatus")} />
+                      {/* <h3 className="error-message" style={{ color: "red" }}>
+                          {errors?.registeringAuthority && errors?.registeringAuthority?.message}
+                        </h3> */}
+                    </div>
+
+                    <table className="table table-bordered" style={{ backgroundColor: "rgb(251 251 253))" }}>
+                      <thead>
+                        <tr>
+                          <th>
+                            <h2>
+                              {`${t("NWL_APPLICANT_KANAL_LAND_SCHEDULE")}`}
+                              {/* Kanal  */}
+                              <span style={{ color: "red" }}>*</span>
+                            </h2>
+                          </th>
+                          <th>
+                            <h2>
+                              {`${t("NWL_APPLICANT_MARLA_LAND_SCHEDULE")}`}
+                              {/* Marla  */}
+                              <span style={{ color: "red" }}>*</span>
+                            </h2>
+                          </th>
+                          <th>
+                            <h2>
+                              {`${t("NWL_APPLICANT_SARSAI_LAND_SCHEDULE")}`}
+                              {/* Sarsai */}
+                              <span style={{ color: "red" }}>*</span>
+                            </h2>
+                          </th>
+                          <th>
+                            <h2>
+                              {`${t("NWL_APPLICANT_TOTAL_AREA_LAND_SCHEDULE")}`}
+                              {/* Total Area (in acres)  */}
+                              <span style={{ color: "red" }}>*</span>
+                            </h2>
+                          </th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <td>
+                            <input type="number" className="form-control  " {...register("kanal")} id="kanal" />
+                            <label htmlFor="sum">Total: {(watch("kanal") * 0.125)?.toFixed(3)}</label>&nbsp;&nbsp;
+                          </td>
+                          <td>
+                            <input type="number" className="form-control " {...register("marla")} id="marla" />
+                            <label htmlFor="summarla">Total: {(watch("marla") * 0.0062)?.toFixed(3)}</label>&nbsp;&nbsp;
+                          </td>
+                          <td>
+                            <input type="number" className="form-control " {...register("sarsai")} id="sarsai" />
+                            <label htmlFor="sumsarsai">Total: {(watch("sarsai") * 0.00069)?.toFixed(3)}</label>&nbsp;&nbsp;
+                          </td>
+                          <td>
+                            <input type="number" className="form-control" {...register("consolidatedTotal")} disabled />
+                            &nbsp;&nbsp;
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
                 )}
                 {watch("nonConsolidationType") == "kachha" && (
                   <table className="table table-bordered" style={{ backgroundColor: "rgb(251 251 253))" }}>

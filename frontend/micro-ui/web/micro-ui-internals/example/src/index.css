@@ -21199,3 +21199,28 @@ input[type=text]:disabled {
   background-color: #ffd863!important;
     color: #000!important;
 }
+
+.blinkComponentScrutiny{
+background-color: #ff000042;
+color: #fff;
+/* animation:blinkanimetion 100ms infinite; */
+animation: mymove 300ms infinite;
+}
+
+/* @keyframes blinkanimetion{
+  0% {
+    background-color: #f1f1f1 !important;
+    color: #817f7f !important;
+  }
+  100% {
+    background-color: #ff000042 !important;
+color: #fff !important;
+  }
+} */
+@keyframes mymove {
+  0%   { background: #ff000042;}
+  /* 25%  { background: #f1f1f1;}
+  50%  { background: #ff000042;}
+  75%  { background: #f1f1f1;} */
+  100% { background: #f1f1f1;}
+}
