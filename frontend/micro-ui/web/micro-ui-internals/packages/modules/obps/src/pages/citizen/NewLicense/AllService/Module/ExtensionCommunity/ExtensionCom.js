@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Button } from "@material-ui/core";
 import FormControl from "@mui/material/FormControl";
 import { useForm } from "react-hook-form";
@@ -100,7 +100,7 @@ function ExtensionCom() {
     <form onSubmit={handleSubmit(extensionCom)}>
       <div className="card" style={{ width: "126%", border: "5px solid #1266af" }}>
         <h4 style={{ fontSize: "25px", marginLeft: "21px" }}>{t("EXTENSION _COMMUNITY_SITE_HEADING")}
-        {/* Extension (construction in community sites) */}
+        {/* Extension (construction in community site) */}
         </h4>
         <div className="card">
           <div className="row-12">

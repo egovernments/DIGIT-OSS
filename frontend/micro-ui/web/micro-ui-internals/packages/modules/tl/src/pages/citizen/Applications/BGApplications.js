@@ -12,9 +12,9 @@ import RemoveIcon from "@mui/icons-material/Remove";
 import SearchLicenceComp from "../../../../../obps/src/components/SearchLicence";
 
 const selectTypeData = [
-  { label: "Application No.", value: "Appplication No." },
-  {label: "Licence No.", value: "Licence No."},
-  { label: "LOI No.", value: "LOI No."}];
+  { label: "Application No.", value: "1" },
+  {label: "Licence No.", value: "2"},
+  { label: "LOI No.", value: "3"}];
 
   const selectData = [
   { label: "A-No.", value: "A-No." },
@@ -29,14 +29,10 @@ const BGApplications = ({ view }) => {
   const [open4, setOpen4] = useState(false);
   const [loader, setLoader] = useState(false);
   const [data, setData] = useState([]);
- 
+  const [showField, setShowField] = useState({ select: false, other: false });
+   const [licenceData, setLicenceData] = useState([]);
   const {
-    watch,
-    register,
-    handleSubmit,
-    control,
-    setValue,
-    formState: { errors },
+   watch, register, control,errors, setValue, resetField, apiData, comp, getData
   } = useForm({
     
   });
@@ -59,6 +55,7 @@ const BGApplications = ({ view }) => {
     };
     try {
       const Resp = await axios.post("/tl-services/v1/_search", data);
+
       setLoader(false);
       setData(Resp?.data);
     } catch (error) {
@@ -71,6 +68,39 @@ const BGApplications = ({ view }) => {
     getApplications();
   }, []);
 
+  //   const [LOINumber, setLOINumber] = useState("");
+  // const [khasraNumber, setKhasraNumber] = useState("");
+  const handleLoiNumber = async (e) => {
+    const token = window?.localStorage?.getItem("token");
+ 
+    try {
+      const loiRequest = {
+          api_id: "Rainmaker",
+          msg_id: "1669293303096|en_IN",
+          authToken: token,
+          userInfo: userInfo,
+          active: true,
+          tenantId: "hr",
+          permanentCity: null
+        };
+      const Resp = await axios.post(`/tl-services/bank/guarantee/dropdonelist?type=1`, loiRequest);
+      
+     
+      // setKhasraNumber(Resp?.data?.Licenses?.[1]?.tradeLicenseDetail?.additionalDetail?.[0]?.ApplicantPurpose?.AppliedLandDetails?.[0]?.khewats);
+      // setDevelopmentPlan(Resp?.data?.Licenses?.[0]?.tradeLicenseDetail?.additionalDetail?.[0]?.ApplicantPurpose?.AppliedLandDetails?.[0]?.developmentPlan)
+      // setPurpose(Resp?.data?.Licenses?.[0]?.tradeLicenseDetail?.additionalDetail?.[0]?.ApplicantPurpose?.purpose)
+      // setTotalArea(Resp?.data?.Licenses?.[0]?.tradeLicenseDetail?.additionalDetail?.[0]?.ApplicantPurpose?.totalArea)
+
+      // console.log({ devName, developmentPlan, purpose, totalArea });
+     
+    } catch (error) {
+      console.log(error);
+    }
+
+    console.log("loiloiloi" , Resp);
+  };
+
+ 
   return (
     <div>
      
@@ -86,7 +116,9 @@ const BGApplications = ({ view }) => {
                                 {/* Select */}
                                 <span style={{ color: "red" }}>*</span>
                               </h2>
+                              
                               <ReactMultiSelect control={control} name="numberType" placeholder="Select" data={selectTypeData} labels="" />
+                              
                             </div>
 
                             {/* <SearchLicenceComp watch={watch} register={register} control={control} setLoader={setLoader} errors={errors} setValue={setValue} /> */}
@@ -95,14 +127,28 @@ const BGApplications = ({ view }) => {
                               <h2 className="FormLable">
                               {`${t("MY_APPLICATION_BG_SELECT")}`} <span style={{ color: "red" }}>*</span>
                               </h2>
-                              <ReactMultiSelect control={control} name="allservices" placeholder="Select" data={selectData} labels="" />
+                               {apiData?.length ? (
+                              <ReactMultiSelect control={control} name="allservices" placeholder="Select" data={apiData} labels="" />
+                               ) : (
+                              <input
+                                type="text"
+                                className="form-control"
+                                placeholder=""
+                                {...register("licenceNo")}
+                                onChange={() => {
+                                  setShowField({ select: false, other: false });
+                                }}
+                              />
+                                )}
                             </div>
 
                           <div style={{ textAlignLast: "right", marginTop: "-41px" }}>
                             <button
                               type="button"
                               style={{ width: "79px", marginRight: "196px" }}
-                              className="btn btn-primary"
+                              className="btn btn-primary"   onClick={() => {
+                handleLoiNumber();
+              }}
                             >
                               Search
                             </button>
