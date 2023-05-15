@@ -6,7 +6,11 @@
   "private": true,
   "homepage": "digit-ui/",
   "scripts": {
-    "start": "react-scripts start"
+    "start": "react-scripts start",
+    "build": "react-scripts build"
+  },
+   "eslintConfig": {
+    "extends": "react-app"
   },
   "devDependencies": {
     "http-proxy-middleware": "^1.0.5",

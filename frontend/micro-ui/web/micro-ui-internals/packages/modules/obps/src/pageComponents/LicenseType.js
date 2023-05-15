@@ -10,7 +10,7 @@ import {
   MuiRadio,
   Link,
 } from "@egovernments/digit-ui-react-components";
-import React, { useEffect, useState } from "react";
+import React, { Fragment, useEffect, useState } from "react";
 import { stringReplaceAll } from "../utils";
 import Timeline from "../components/Timeline";
 import { Form, Row } from "react-bootstrap";
@@ -23,6 +23,7 @@ import RadioGroup from "@mui/material/RadioGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import FormControl from "@mui/material/FormControl";
 import FormLabel from "@mui/material/FormLabel";
+import { OutlinedInput } from "@material-ui/core";
 
 const LicenseType = ({ t, config, onSelect, userType, formData }) => {
   const userInfo = Digit.UserService.getUser();
@@ -75,6 +76,7 @@ const LicenseType = ({ t, config, onSelect, userType, formData }) => {
     formData?.LicneseType?.licenceTypeSelected || formData?.formData?.LicneseType?.licenceTypeSelected || ""
   );
   const [ArchitectNo, setArchitectNo] = useState(formData?.LicneseType?.ArchitectNo || formData?.formData?.LicneseType?.ArchitectNo || null);
+  const [ArchitectValidityDate, setArchitectValidityDate] = useState(formData?.LicneseType?.ArchitectValidityDate || formData?.formData?.LicneseType?.ArchitectValidityDate || null);
   const [showDevTypeFields, setShowDevTypeFields] = useState(
     formData?.LicneseType?.showDevTypeFields || formData?.formData?.LicneseType?.showDevTypeFields || ""
   );
@@ -96,13 +98,14 @@ const LicenseType = ({ t, config, onSelect, userType, formData }) => {
     };
 
   function getLicenseType() {
+    console.log("logger Trade LIC .....",data?.StakeholderRegistraition?.TradeTypetoRoleMapping )
     let list = [];
     let found = false;
     data?.StakeholderRegistraition?.TradeTypetoRoleMapping.map((ob) => {
       found = list.some((el) => el.i18nKey.includes(ob.tradeType.split(".")[0]));
       if (!found) list.push({ role: ob.role, i18nKey: `TRADELICENSE_TRADETYPE_${ob.tradeType.split(".")[0]}`, tradeType: ob.tradeType });
     });
-    // console.log("DATAList", list);
+    console.log("DATAList", list);
     return list;
   }
 
@@ -127,6 +130,9 @@ const LicenseType = ({ t, config, onSelect, userType, formData }) => {
   function selectArchitectNo(e) {
     setArchitectNo(e.target.value.toUpperCase());
   }
+  function selectArchitectValidityDate(e) {
+    setArchitectValidityDate(e.target.value);
+  }
 
   // console.log("++++",`${LicenseType?.tradeType}.${showDevTypeFields}`);
 
@@ -139,6 +145,8 @@ const LicenseType = ({ t, config, onSelect, userType, formData }) => {
       licenceType: licenceTypeCombined,
       licenceTypeSelected: licenceTypeSelected,
       developerType: showDevTypeFields,
+      architectNo: ArchitectNo,
+      architectValidityDate: ArchitectValidityDate
     };
     const developerRegisterData = {
       id: userInfo?.info?.id,
@@ -151,7 +159,7 @@ const LicenseType = ({ t, config, onSelect, userType, formData }) => {
     };
 
     // console.log("logger123",config,applicantType);
-    if (licenceTypeSelected === "ARCHITECT.CLASSA") {
+    if ((licenceTypeSelected !== "CITIZEN.CLASSA" && licenceTypeSelected !== "BPA_DEVELOPER")) {
       onSelect(config.key, applicantType);
     } else {
       onSelect(config.key, applicantType, null, null, "license-add-info");
@@ -169,7 +177,7 @@ const LicenseType = ({ t, config, onSelect, userType, formData }) => {
           developerType: developerType,
         };
         //1, units
-        if (licenceTypeSelected === "ARCHITECT.CLASSA") {
+        if ((licenceTypeSelected !== "CITIZEN.CLASSA" && licenceTypeSelected !== "BPA_DEVELOPER")) {
           onSelect("", data, "", true);
         } else {
           onSelect("", data, "", true, "license-add-info");
@@ -191,7 +199,7 @@ const LicenseType = ({ t, config, onSelect, userType, formData }) => {
       {loader && <Spinner />}
       <div className={isopenlink ? "OpenlinkContainer" : ""}>
         {isopenlink && <BackButton style={{ border: "none" }}>{t("CS_COMMON_BACK")}</BackButton>}
-        <Timeline currentStep={1} flow={licenceTypeSelected === "ARCHITECT.CLASSA" ? "ARCHITECT.CLASSA" : "STAKEHOLDER"} />
+        <Timeline currentStep={1} flow={(licenceTypeSelected !== "CITIZEN.CLASSA" && licenceTypeSelected !== "BPA_DEVELOPER") ? "ARCHITECT.CLASSA" : "STAKEHOLDER"} />
         <FormStep
           t={t}
           config={config}
@@ -206,55 +214,28 @@ const LicenseType = ({ t, config, onSelect, userType, formData }) => {
           <div className="happy">
             <div className="card mb-3">
               <Row className="justify-content-between">
-                <Form.Group className="col-md-7">
-                  <CardLabel>
-                    {t("BPA_LICENSE_TYPE_TEXT")} <span className="font-weight-bold text-danger">*</span>
-                  </CardLabel>
-                  {/* <CardLabel>{t("BPA_LICENSE_TYPE_TEXT")} <span className="font-weight-bold text-danger">*</span></CardLabel> */}
-                  <div className={"form-pt-dropdown-only"}>
-                    {/* {JSON.stringify(licenceTypeSelected)} */}
-                    {/* {data && (
-                      <div>
-                        <RadioOrSelect
-                          t={t}
-                          optionKey="i18nKey"
-                          
-                          isMandatory={config.isMandatory}
-                          options={getLicenseType() || {}}
-                          selectedOption={LicenseType}
-                          onSelect={selectLicenseType}
-                          placeholder="Select option"
-                          checked={true}
-                        />
-                      </div>
-                    )} */}
-                  </div>
-                  {getLicenseType()?.map((item, index) => {
-                    return (
-                      <FormControl>
-                        {/* <FormLabel id="demo-row-radio-buttons-group-label">Gender</FormLabel> */}
 
-                        <RadioGroup
-                          aria-labelledby="demo-row-radio-buttons-group-label"
-                          name={licenceTypeSelected}
-                          value={licenceTypeSelected}
-                          onChange={selectLicenseType}
-                        >
-                          <FormControlLabel key={index} value={item?.tradeType} control={<Radio />} label={t(item?.i18nKey)} />
-                        </RadioGroup>
-                      </FormControl>
-                    );
-                  })}
+              <Form.Group className="col-md-6">
+                  <CardLabel>
+                  {t("BPA_LICENSE_TYPE_TEXT")} <span className="font-weight-bold text-danger">*</span>
+                  </CardLabel>
+                  <select value={licenceTypeSelected || ""} onChange={selectLicenseType} className="w-100 form-control" variant="standard">
+                  <option value={""}>{t("BPA_LICENSE_TYPE_TEXT")}</option>
+                    {getLicenseType()?.map((item, index) => (
+                      <option value={item?.tradeType}>{t(item?.i18nKey)}</option>
+                    ))}
+                  </select>
                 </Form.Group>
 
-                <Form.Group className="col-md-5">
-                  {licenceTypeSelected && licenceTypeSelected.includes("ARCHITECT") && (
-                    <div>
+                {licenceTypeSelected && licenceTypeSelected.includes("ARCHITECT") && (
+                    <Fragment>
+                      <Form.Group className="col-md-6">
                       <CardLabel>
                         {`${t("BPA_COUNCIL_NUMBER")}`} <span className="font-weight-bold text-danger">*</span>
                       </CardLabel>
-                      <TextInput
+                      <input
                         t={t}
+                        className={"form-control"}
                         type={"text"}
                         isMandatory={false}
                         optionKey="i18nKey"
@@ -264,15 +245,39 @@ const LicenseType = ({ t, config, onSelect, userType, formData }) => {
                         maxlength={"15"}
                       />
                       {ArchitectNo && ArchitectNo.length > 0 && !ArchitectNo.match(Digit.Utils.getPattern("architectNumber")) && (
-                        <CardLabelError style={{ width: "100%", marginTop: "-15px", fontSize: "16px", marginBottom: "12px", color: "red" }}>
+                        <CardLabelError style={{ width: "100%", fontSize: "16px", marginBottom: "12px", color: "red" }}>
                           {t("Invalid Architect Number")}
                         </CardLabelError>
                       )}
-                    </div>
+                    </Form.Group>
+
+                    <Form.Group className="col-md-6">
+                      <CardLabel>
+                        {`${t("BPA_COUNCIL_ARCHITECT_VALIDITY_DATE")}`} <span className="font-weight-bold text-danger">*</span>
+                      </CardLabel>
+                      <input
+                        t={t}
+                        className={"form-control"}
+                        type={"date"}
+                        isMandatory={false}
+                        optionKey="i18nKey"
+                        name="ArchitectNo"
+                        value={ArchitectValidityDate}
+                        onChange={selectArchitectValidityDate}
+                        // maxlength={"15"}
+                      />
+                      {/* {ArchitectNo && ArchitectNo.length > 0 && !ArchitectNo.match(Digit.Utils.getPattern("architectNumber")) && (
+                        <CardLabelError style={{ width: "100%", marginTop: "-15px", fontSize: "16px", marginBottom: "12px", color: "red" }}>
+                          {t("Invalid Architect Number")}
+                        </CardLabelError>
+                      )} */}
+                    </Form.Group>
+                    </Fragment>
                   )}
 
+                <Form.Group className="col-md-6">
                   {licenceTypeSelected && licenceTypeSelected.includes("DEVELOPER") && (
-                    <div>
+                    <div className="col-md-6">
                       <CardLabel>
                         {`${t("BPA_DEVELOPER_TYPE_TEXT")}`} <span className="font-weight-bold text-danger">*</span>
                       </CardLabel>
@@ -285,7 +290,7 @@ const LicenseType = ({ t, config, onSelect, userType, formData }) => {
                   )}
 
                   {licenceTypeSelected && licenceTypeSelected.includes("CITIZEN") && (
-                    <div>
+                    <div className="col-md-6">
                       <a className="btn btn-primary btn-sm" href="/digit-ui/citizen">
                         Licencing Services
                       </a>

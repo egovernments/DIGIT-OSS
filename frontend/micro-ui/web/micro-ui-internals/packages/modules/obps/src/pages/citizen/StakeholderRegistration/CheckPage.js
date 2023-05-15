@@ -55,10 +55,10 @@ const CheckPage = ({ onSubmit, value }) => {
       };
       const getDevDetails = await axios.get(`/user/developer/_getDeveloperById?id=${userInfo?.info?.id}&isAllData=true`, requestResp, {});
       const developerDataGet = getDevDetails?.data;
-      setDevData(getDevDetails?.data?.devDetail[0]?.addInfo);
+      setDevData(getDevDetails?.data?.devDetail[0]?.addInfo ||  getDevDetails?.data?.devDetail[0]?.applicantType);
       setDevDataFinancialCapacity(getDevDetails?.data?.devDetail[0]?.capacityDevelopAColony?.documents);
       setShowDevTypeFields(developerDataGet?.devDetail[0]?.applicantType?.developerType);
-      setShowLicenceType(developerDataGet?.devDetail[0]?.applicantType?.licenceType);
+      setShowLicenceType(developerDataGet?.devDetail[0]?.applicantType?.licenceTypeSelected);
       setPersonalData(developerDataGet?.devDetail[0]?.licenceDetails);
       console.log("LOLO", developerDataGet?.devDetail[0]?.licenceDetails);
       setAurthorizedUserInfoArray(developerDataGet?.devDetail[0]?.aurthorizedUserInfoArray);
@@ -74,7 +74,7 @@ const CheckPage = ({ onSubmit, value }) => {
   const [showDevTypeFields, setShowDevTypeFields] = useState("");
   const [showLicenceType, setShowLicenceType] = useState("");
   const [aurthorizedUserInfoArray, setAurthorizedUserInfoArray] = useState([]);
-  const [getDevData, setDevData] = useState([]);
+  const [getDevData, setDevData] = useState();
   const [getPersonalData, setPersonalData] = useState([]);
   const [getDevDataFinancialCapacity, setDevDataFinancialCapacity] = useState([]);
 
@@ -102,7 +102,8 @@ const CheckPage = ({ onSubmit, value }) => {
   const navigate = useHistory();
 
   const changeStep = (step) => {
-    if (value?.LicneseType?.licenceType === "ARCHITECT.CLASSA") {
+    console.log("logger6...",step,value)
+    if ((value?.LicneseType?.licenceTypeSelected !== "CITIZEN.CLASSA" && value?.LicneseType?.licenceTypeSelected !== "BPA_DEVELOPER")) {
       switch (step) {
         case 1:
           navigate.replace("/digit-ui/citizen/obps/stakeholder/apply/provide-license-type");
@@ -142,11 +143,11 @@ const CheckPage = ({ onSubmit, value }) => {
         <div className="summary-page">
           {isopenlink && <BackButton style={{ border: "none" }}>{t("CS_COMMON_BACK")}</BackButton>}
           <Timeline
-            currentStep={value?.LicneseType?.licenceType === "ARCHITECT.CLASSA" ? 4 : 6}
-            flow={value?.LicneseType?.licenceType === "ARCHITECT.CLASSA" ? "ARCHITECT.CLASSA" : "STAKEHOLDER"}
+            currentStep={(value?.LicneseType?.licenceTypeSelected !== "CITIZEN.CLASSA" && value?.LicneseType?.licenceTypeSelected !== "BPA_DEVELOPER") ? 4 : 6}
+            flow={(value?.LicneseType?.licenceTypeSelected !== "CITIZEN.CLASSA" && value?.LicneseType?.licenceTypeSelected !== "BPA_DEVELOPER") ? "ARCHITECT.CLASSA" : "STAKEHOLDER"}
             onChangeStep={changeStep}
-            isAPILoaded={value?.LicneseType?.licenceType ? true : false}
-          />
+            isAPILoaded={value?.LicneseType?.licenceTypeSelected ? true : false}
+          />  
           <Header styles={{ fontSize: "32px" }}>{t("BPA_STEPPER_SUMMARY_HEADER")}</Header>
           <Card>
             <StatusTable>
@@ -174,14 +175,14 @@ const CheckPage = ({ onSubmit, value }) => {
                 className="border-none"
                 label={t(`BPA_LICENSE_TYPE`)}
                 textStyle={{ paddingLeft: "12px" }}
-                text={t(getDevData?.showDevTypeFields)}
+                text={t(getDevData?.showDevTypeFields || getDevData?.licenceTypeSelected)}
               />
               {formData?.LicneseType?.LicenseType?.i18nKey.includes("ARCHITECT") && (
                 <Row className="border-none" label={t(`BPA_COUNCIL_NUMBER`)} text={formData?.LicneseType?.ArchitectNo} />
               )}
             </StatusTable>
           </Card>
-          {showLicenceType === "ARCHITECT.CLASSA" && (
+          {(showLicenceType !== "CITIZEN.CLASSA" && showLicenceType !== "BPA_DEVELOPER") && ( 
             <Card>
               <CardHeader>
                 {t("Peronal Details")}{" "}
@@ -206,7 +207,7 @@ const CheckPage = ({ onSubmit, value }) => {
             </Card>
           )}
 
-          {showLicenceType !== "ARCHITECT.CLASSA" && (
+          {(showLicenceType === "CITIZEN.CLASSA" || showLicenceType === "BPA_DEVELOPER") && (
             <Card>
               <CardHeader>
                 {t(`BPA_ADD_INFO_LABEL`)}{" "}
@@ -250,7 +251,7 @@ const CheckPage = ({ onSubmit, value }) => {
               {/* <Row className="border-none" text={t(formData?.LicneseDetails?.cin_Number)} /> */}
             </Card>
           )}
-          {showLicenceType !== "ARCHITECT.CLASSA" && (
+          {(showLicenceType === "CITIZEN.CLASSA" || showLicenceType === "BPA_DEVELOPER") && (
             <Card>
               <CardHeader>
                 {t(`BPA_AUTHORIZED_USER_LABEL`)}{" "}
@@ -297,7 +298,7 @@ const CheckPage = ({ onSubmit, value }) => {
               </StatusTable>
             </Card>
           )}
-          {showLicenceType !== "ARCHITECT.CLASSA" && (
+          {(showLicenceType === "CITIZEN.CLASSA" || showLicenceType === "BPA_DEVELOPER") && (
             <Card>
               <CardHeader>
                 {t("Financial Capacity Document")}{" "}
