@@ -1,15 +1,24 @@
 import { Card, Header, KeyNote, Loader, SubmitBar } from "@egovernments/digit-ui-react-components";
 import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
+import { useForm } from "react-hook-form";
 import { useHistory } from "react-router-dom";
 import Spinner from "../../../components/Loader";
 import axios from "axios";
+import ReactMultiSelect from "../../../../../../react-components/src/atoms/ReactMultiSelect";
+
+const dateRange = [
+  { label: "Descending", value: "descending" },
+  { label: "Ascending", value: "ascending" },
+];
 
 const MyApplications = ({ view }) => {
   const { t } = useTranslation();
   const history = useHistory();
   const [loader, setLoader] = useState(false);
   const [data, setData] = useState([]);
+
+  const { control, register } = useForm();
 
   // const { mobileNumber, tenantId } = Digit.UserService.getUser()?.info || {};
 
@@ -57,6 +66,20 @@ const MyApplications = ({ view }) => {
     <div>
       {loader && <Spinner></Spinner>}
       <Header>{`${t("TL_MY_APPLICATIONS_HEADER")}`}</Header>
+      <div className="row mb-3">
+        <div className="col col-4 mt-3">
+          <h6>
+            Order By
+            <ReactMultiSelect control={control} name="selectData" placeholder="Select option" data={dateRange} labels="" />
+          </h6>
+        </div>
+        <div className="col col-4 mt-3">
+          <h6>
+            Search
+            <input type="text" className="form-control" placeholder="search" {...register(`search`)} />
+          </h6>
+        </div>
+      </div>
       <table className="customers" id="customers" style={{ borderCollapse: "collapse", width: "100%" }}>
         <tr>
           <th

@@ -17,17 +17,11 @@ import Spinner from "../../../../components/Loader";
 import { getDocShareholding } from "../docView/docView.help";
 import { convertEpochToDate } from "../../../../../../tl/src/utils";
 import { useLocation } from "react-router-dom";
-import { Toast, CardLabelError } from "@egovernments/digit-ui-react-components";
 import _ from "lodash";
 import CusToaster from "../../../../components/Toaster";
 import InfoIcon from "@mui/icons-material/Info";
 import Tooltip from "@mui/material/Tooltip";
 import { useTranslation } from "react-i18next";
-
-const migrationData = [
-  { label: "Fresh", value: "fresh" },
-  { label: "Addition / Migration", value: "addition-migration" },
-];
 
 const ApllicantPuropseForm = (props) => {
   const datapost = {
@@ -43,6 +37,7 @@ const ApllicantPuropseForm = (props) => {
       authToken: "",
     },
   };
+
   const columns = [
     {
       title: "District",
@@ -107,7 +102,7 @@ const ApllicantPuropseForm = (props) => {
       render: (data) => (data?.editKhewats ? data?.editKhewats : "N/A"),
     },
     {
-      title: "Name of the Land Ower as per Mutation/Jamabandi",
+      title: "Name of the Land Owner as per Mutation/Jamabandi",
       render: (data) => (data?.landOwnerRegistry ? data?.landOwnerRegistry : "N/A"),
     },
     {
@@ -144,8 +139,8 @@ const ApllicantPuropseForm = (props) => {
       dataIndex: "",
       render: (data) => (
         <div>
-          {watch("registeringAuthorityDocFileName") && (
-            <a onClick={() => getDocShareholding(watch("registeringAuthorityDocFileName"), setLoader)} className="btn btn-sm ">
+          {data?.registeringAuthorityDoc && (
+            <a onClick={() => getDocShareholding(data?.registeringAuthorityDoc, setLoader)} className="btn btn-sm ">
               <VisibilityIcon color="info" className="icon" />
             </a>
           )}
@@ -228,6 +223,7 @@ const ApllicantPuropseForm = (props) => {
       ),
     },
   ];
+
   const { t } = useTranslation();
   const location = useLocation();
   const userInfo = Digit.UserService.getUser()?.info || {};
@@ -1020,7 +1016,7 @@ const ApllicantPuropseForm = (props) => {
       setValue(fieldName, Resp?.data?.files?.[0]?.fileStoreId);
       setFileStoreId({ ...fileStoreId, [fieldName]: Resp?.data?.files?.[0]?.fileStoreId });
       // if (fieldName === "registeringAuthorityDoc") {
-      //   setValue("registeringAuthorityDocFileName", file.name);
+      //   setValue("registeringAuthorityDoc", file.name);
       // }
       setSelectedFiles([...selectedFiles, file.name]);
       setLoader(false);
@@ -1492,6 +1488,9 @@ const ApllicantPuropseForm = (props) => {
                           </h2>
                         </label>
                         <Form.Control type="text" className="form-control" placeholder="" {...register("developerCompany")} required="required" />
+                        <h3 className="error-message" style={{ color: "red" }}>
+                          {errors?.developerCompany && errors?.developerCompany?.message}
+                        </h3>
                         {/* <CardLabelError style={{ width: "100%", marginTop: "5px", fontSize: "16px", marginBottom: "12px", color: "red" }}>
                           ("This is requird field")
                         </CardLabelError> */}
@@ -1590,12 +1589,12 @@ const ApllicantPuropseForm = (props) => {
                           <input
                             type="file"
                             style={{ display: "none" }}
-                            onChange={(e) => getDocumentData(e?.target?.files[0], "registeringAuthorityDocFileName")}
+                            onChange={(e) => getDocumentData(e?.target?.files[0], "registeringAuthorityDoc")}
                             accept="application/pdf/jpeg/png"
                           />
                         </label>
-                        {watch("registeringAuthorityDocFileName") && (
-                          <a onClick={() => getDocShareholding(watch("registeringAuthorityDocFileName"), setLoader)} className="btn btn-sm ">
+                        {watch("registeringAuthorityDoc") && (
+                          <a onClick={() => getDocShareholding(watch("registeringAuthorityDoc"), setLoader)} className="btn btn-sm ">
                             <VisibilityIcon color="info" className="icon" />
                           </a>
                         )}

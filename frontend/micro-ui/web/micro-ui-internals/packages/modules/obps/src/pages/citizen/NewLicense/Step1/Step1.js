@@ -53,6 +53,7 @@ const ApllicantFormStep1 = (props) => {
     // props.Step1Continue("6", "userInfo", "licData");
 
     delete data?.developerName;
+    delete data?.developerNameA;
     delete data?.developerAddress;
     delete data?.developerEmail;
     delete data?.developerType;
@@ -161,6 +162,7 @@ const ApllicantFormStep1 = (props) => {
   useEffect(() => {
     if (developerDataLabel) {
       setValue("developerName", developerDataLabel?.addInfo?.companyName);
+      setValue("developerNameA", developerDataLabel?.addInfo?.name);
       setValue("developerAddress", developerDataLabel?.addInfo?.registeredAddress);
       setValue("developerEmail", developerDataLabel?.addInfo?.emailId);
       setValue("developerType", developerDataLabel?.addInfo?.showDevTypeFields);
@@ -274,29 +276,49 @@ const ApllicantFormStep1 = (props) => {
             </h5>
             <div className="row-12">
               <div className="col md={4} xxl lg-4">
-                {developerDataLabel?.addInfo?.showDevTypeFields != "Individual" &&
+                {/* {developerDataLabel?.addInfo?.showDevTypeFields != "Individual" &&
                   developerDataLabel?.addInfo?.showDevTypeFields != "Proprietorship Firm" && (
-                    <FormControl>
-                      <h2>
-                        {`${t("NWL_APPLICANT_DEVELOPER_NAME")}`}
-                        {/* Name  */}
-                        <span style={{ color: "red" }}>*</span>
-                      </h2>
-                      <input
-                        type="text"
-                        className="Inputcontrol"
-                        class="form-control"
-                        id="standard-disabled"
-                        label="Disabled"
-                        placeholder="N/A"
-                        readOnly
-                        {...register("developerName")}
-                      />
-                      <h3 className="error-message" style={{ color: "red" }}>
-                        {errors?.developerName && errors?.developerName?.message}
-                      </h3>
-                    </FormControl>
-                  )}
+                    
+                  )} */}
+                {developerDataLabel?.addInfo?.showDevTypeFields == "Individual" ||
+                developerDataLabel?.addInfo?.showDevTypeFields == "Proprietorship Firm" ||
+                developerDataLabel?.addInfo?.showDevTypeFields == "Hindu Undivided Family" ? (
+                  <FormControl>
+                    <h2>
+                      {`${t("NWL_APPLICANT_DEVELOPER_NAME")}`}
+                      {/* Name  */}
+                      <span style={{ color: "red" }}>*</span>
+                    </h2>
+                    <input
+                      type="text"
+                      className="Inputcontrol"
+                      class="form-control"
+                      id="standard-disabled"
+                      label="Disabled"
+                      placeholder="N/A"
+                      readOnly
+                      {...register("developerNameA")}
+                    />
+                  </FormControl>
+                ) : (
+                  <FormControl>
+                    <h2>
+                      {`${t("NWL_APPLICANT_DEVELOPER_NAME")}`}
+                      {/* Name  */}
+                      <span style={{ color: "red" }}>*</span>
+                    </h2>
+                    <input
+                      type="text"
+                      className="Inputcontrol"
+                      class="form-control"
+                      id="standard-disabled"
+                      label="Disabled"
+                      placeholder="N/A"
+                      readOnly
+                      {...register("developerName")}
+                    />
+                  </FormControl>
+                )}
                 &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp;
                 <FormControl>
                   <h2>
