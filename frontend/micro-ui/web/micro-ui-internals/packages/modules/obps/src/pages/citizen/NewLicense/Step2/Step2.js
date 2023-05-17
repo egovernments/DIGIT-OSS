@@ -1083,6 +1083,10 @@ const ApllicantPuropseForm = (props) => {
     }
   }, [watch("bigha"), watch("biswa"), watch("biswansi")]);
 
+  useEffect(() => {
+    console.log("errors", errors);
+  }, [errors]);
+
   return (
     <div>
       {loader && <Spinner />}
@@ -1487,14 +1491,25 @@ const ApllicantPuropseForm = (props) => {
                             </Tooltip>
                           </h2>
                         </label>
-                        <Form.Control type="text" className="form-control" placeholder="" {...register("developerCompany")} required="required" />
+                        <Form.Control type="text" className="form-control" placeholder="" {...register("developerCompany")} />
+                        {/* <input
+                          {...register("developerCompany", {
+                            validate: {
+                              required: (value) => {
+                                if (!value && watch("collaboration") === "Y") return "Required when username is provided";
+                                return true;
+                              },
+                            },
+                          })}
+                          name="developerCompany"
+                          type="text"
+                        /> */}
+
                         <h3 className="error-message" style={{ color: "red" }}>
                           {errors?.developerCompany && errors?.developerCompany?.message}
                         </h3>
-                        {/* <CardLabelError style={{ width: "100%", marginTop: "5px", fontSize: "16px", marginBottom: "12px", color: "red" }}>
-                          ("This is requird field")
-                        </CardLabelError> */}
                       </div>
+
                       <div className="col col-4">
                         <label>
                           <h2>
