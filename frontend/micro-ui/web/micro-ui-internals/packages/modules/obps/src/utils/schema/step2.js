@@ -29,6 +29,10 @@ const MODAL_VALIDATION_SCHEMA = Yup.object().shape({
     value: Yup.string().required("This field is required"),
   }),
   hadbastNo: Yup.string().max(99, "Too Long!").required("This field is required."),
+  landOwnerRegistry: Yup.string().max(99, "Too Long!").required("This field is required."),
+  developerCompany: Yup.string().max(20, "Too Long!").required("This field is required."),
+  authSignature: Yup.string().max(99, "Too Long!").required("This field is required."),
+  nameAuthSign: Yup.string().max(99, "Too Long!").required("This field is required."),
 
   khewats: Yup.string().max(99, "Too Long!").required("This field is required."),
   typeLand: Yup.object({
