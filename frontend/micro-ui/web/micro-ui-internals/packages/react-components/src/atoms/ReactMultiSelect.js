@@ -8,6 +8,7 @@ const MultiSelectField = (props) => {
       <Controller
         name={props?.name}
         control={props?.control}
+        rules={props?.rules}
         render={({ field: { onChange, value } }) => (
           <Select
             isMulti={props.multiSelect}
