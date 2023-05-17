@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import "bootstrap/dist/css/bootstrap.css";
-import { useForm } from "react-hook-form";
+import { useForm, useFieldArray } from "react-hook-form";
 import { Form } from "react-bootstrap";
 import { Card, Row, Col } from "react-bootstrap";
 import { Modal, ModalHeader, ModalBody, ModalFooter } from "reactstrap";
@@ -126,26 +126,27 @@ const unconsolidated = [
 const LandScheduleForm = (props) => {
   const { t } = useTranslation();
   const location = useLocation();
+  const userInfo = Digit.UserService.getUser()?.info || {};
+  const stateId = Digit.ULBService.getStateId();
+  const { data: PurposeType } = Digit.Hooks.obps.useMDMS(stateId, "common-masters", ["Purpose"]);
+  const { data: LandData } = Digit.Hooks.obps.useMDMS(stateId, "common-masters", ["LandType"]);
+  const { data: PotentialType } = Digit.Hooks.obps.useMDMS(stateId, "common-masters", ["DevPlan"]);
   const [purposeOptions, setPurposeOptions] = useState({ data: [], isLoading: true });
   const [getPotentialOptons, setPotentialOptions] = useState({ data: [], isLoading: true });
   const [typeOfLand, setYypeOfLand] = useState({ data: [], isLoading: true });
   const [loader, setLoader] = useState(false);
   const [modal, setmodal] = useState(false);
   const [modal1, setmodal1] = useState(false);
-  const stateId = Digit.ULBService.getStateId();
   const [stepData, setStepData] = useState(null);
   const [selectedFiles, setSelectedFiles] = useState([]);
-  const [showToast, setShowToast] = useState(null);
   const [showToastError, setShowToastError] = useState({ label: "", error: false, success: false });
   const [applicantId, setApplicantId] = useState("");
-  const [litigationRemark, setLitigationRemark] = useState("");
-  const { data: PurposeType } = Digit.Hooks.obps.useMDMS(stateId, "common-masters", ["Purpose"]);
   const [modalData, setModalData] = useState([]);
-  const { data: LandData } = Digit.Hooks.obps.useMDMS(stateId, "common-masters", ["LandType"]);
   const [getData, setData] = useState({ caseNumber: "", dairyNumber: "" });
-  const [success, setError] = useState(null);
   const [toastError, setToastError] = useState("");
-  const { data: PotentialType } = Digit.Hooks.obps.useMDMS(stateId, "common-masters", ["DevPlan"]);
+  const [fileStoreId, setFileStoreId] = useState({});
+  const [specificTableData, setSpecificTableData] = useState(null);
+
   const columns = [
     {
       key: "previousLicensenumber",
@@ -252,26 +253,35 @@ const LandScheduleForm = (props) => {
   } = useForm({
     mode: "onChange",
     reValidateMode: "onChange",
-    resolver: yupResolver(VALIDATION_SCHEMA),
+    // resolver: yupResolver(VALIDATION_SCHEMA),
     // resolver: yupResolver(modal ? MODAL_VALIDATION_SCHEMA : VALIDATION_SCHEMA),
     shouldFocusError: true,
+    defaultValues: {
+      surroundingsObj: [
+        {
+          north: "",
+          south: "",
+          east: "",
+          west: "",
+        },
+      ],
+    },
   });
 
-  const [fileStoreId, setFileStoreId] = useState({});
-  const [specificTableData, setSpecificTableData] = useState(null);
-  const userInfo = Digit.UserService.getUser()?.info || {};
+  const { fields, append, remove } = useFieldArray({
+    control,
+    name: "surroundingsObj",
+  });
+
+  const handleFunction = (val) => {
+    for (let i = 0; i < val - 1; i++) {
+      append({ north: "", south: "", east: "", west: "" });
+    }
+  };
 
   const landScheduleFormSubmitHandler = async (data) => {
     const token = window?.localStorage?.getItem("token");
-    // console.log("data",data);
-    // return
 
-    if (data?.pocket) {
-      delete data?.northSurroundings;
-      delete data?.southSurroundings;
-      delete data?.eastSurroundings;
-      delete data?.westSurroundings;
-    }
     setLoader(true);
     data["potential"] = data?.potential?.value;
     data["typeLand"] = data?.typeLand?.value;
@@ -390,6 +400,7 @@ const LandScheduleForm = (props) => {
       return error;
     }
   };
+
   const resetValues = () => {
     resetField("previousLicensenumber");
     resetField("areaOfParentLicence");
@@ -848,7 +859,7 @@ const LandScheduleForm = (props) => {
                   <hr></hr>
                   <br></br>
                   <div>
-                    <h4>
+                    <h4 className="mb-2">
                       {`${t("NWL_APPLICANT_ANY_ENCUMBRANCE_WITH_RESPECT_TO_FOLLOWING")}`}
                       {/* Any encumbrance with respect to following  */}
                       <span style={{ color: "red" }}>*</span>
@@ -1451,7 +1462,19 @@ const LandScheduleForm = (props) => {
                               <label>
                                 <h2>Pocket</h2>
                               </label>
-                              <Form.Control type="number" className="form-control" placeholder="" {...register("pocket")} />
+                              <Form.Control
+                                type="number"
+                                className="form-control"
+                                placeholder=""
+                                {...register("pocket")}
+                                onChange={(e) => {
+                                  let delay;
+                                  delay = setTimeout(() => {
+                                    console.log("e===", handleFunction(e?.target?.value));
+                                  }, 500);
+                                  return () => clearTimeout(delay);
+                                }}
+                              />
                             </div>
                           )}
                         </div>
@@ -2789,7 +2812,7 @@ const LandScheduleForm = (props) => {
                       </h2>
 
                       {/* Render the data array according to the pocket */}
-                      {watch("pocket") ? (
+                      {/* {watch("pocket") ? (
                         [...Array(parseInt(watch("pocket")))].map((_, index) => {
                           return (
                             <div key={index} className="row mt-3">
@@ -2797,7 +2820,6 @@ const LandScheduleForm = (props) => {
                                 <label>
                                   <h2>
                                     {`${t("NWL_APPLICANT_SURROUNDINGS_NORTH_SHAJRA_PLAN")}`}
-                                    {/* North */}
                                   </h2>
                                 </label>
                                 <input type="text" className="form-control" {...register(`northSurroundings${index}`)} />
@@ -2809,7 +2831,6 @@ const LandScheduleForm = (props) => {
                                 <label>
                                   <h2>
                                     {`${t("NWL_APPLICANT_SURROUNDINGS_SOUTH_SHAJRA_PLAN")}`}
-                                    {/* South */}
                                   </h2>
                                 </label>
                                 <input type="text" className="form-control" {...register(`southSurroundings${index}`)} />
@@ -2821,7 +2842,6 @@ const LandScheduleForm = (props) => {
                                 <label>
                                   <h2>
                                     {`${t("NWL_APPLICANT_SURROUNDINGS_EAST_SHAJRA_PLAN")}`}
-                                    {/* East */}
                                   </h2>
                                 </label>
                                 <input type="text" className="form-control" {...register(`eastSurroundings${index}`)} />
@@ -2833,7 +2853,6 @@ const LandScheduleForm = (props) => {
                                 <label>
                                   <h2>
                                     {`${t("NWL_APPLICANT_SURROUNDINGS_WEST_SHAJRA_PLAN")}`}
-                                    {/* West */}
                                   </h2>
                                 </label>
                                 <input type="text" className="form-control" {...register(`westSurroundings${index}`)} />
@@ -2842,11 +2861,7 @@ const LandScheduleForm = (props) => {
                                 </h3>
                               </div>
                             </div>
-                            // <div key={index}>
-                            //   {dataSet.map((item, subIndex) => (
-                            //     <p key={subIndex}>{item.name}</p>
-                            //   ))}
-                            // </div>
+                           
                           );
                         })
                       ) : (
@@ -2855,7 +2870,6 @@ const LandScheduleForm = (props) => {
                             <label>
                               <h2>
                                 {`${t("NWL_APPLICANT_SURROUNDINGS_NORTH_SHAJRA_PLAN")}`}
-                                {/* North */}
                               </h2>
                             </label>
                             <input type="text" className="form-control" {...register("northSurroundings")} />
@@ -2867,7 +2881,6 @@ const LandScheduleForm = (props) => {
                             <label>
                               <h2>
                                 {`${t("NWL_APPLICANT_SURROUNDINGS_SOUTH_SHAJRA_PLAN")}`}
-                                {/* South */}
                               </h2>
                             </label>
                             <input type="text" className="form-control" {...register("southSurroundings")} />
@@ -2879,7 +2892,6 @@ const LandScheduleForm = (props) => {
                             <label>
                               <h2>
                                 {`${t("NWL_APPLICANT_SURROUNDINGS_EAST_SHAJRA_PLAN")}`}
-                                {/* East */}
                               </h2>
                             </label>
                             <input type="text" className="form-control" {...register("eastSurroundings")} />
@@ -2891,7 +2903,6 @@ const LandScheduleForm = (props) => {
                             <label>
                               <h2>
                                 {`${t("NWL_APPLICANT_SURROUNDINGS_WEST_SHAJRA_PLAN")}`}
-                                {/* West */}
                               </h2>
                             </label>
                             <input type="text" className="form-control" {...register("westSurroundings")} />
@@ -2900,10 +2911,53 @@ const LandScheduleForm = (props) => {
                             </h3>
                           </div>
                         </div>
-                      )}
+                      )} */}
                     </div>
 
-                    <div className="col col-3">
+                    {fields?.map((item, index) => (
+                      <div key={item?.id}>
+                        <div key={index} className="row mt-3">
+                          <div className="col col-3">
+                            <label>
+                              <h2>
+                                {`${t("NWL_APPLICANT_SURROUNDINGS_NORTH_SHAJRA_PLAN")}`}
+                                {/* North */}
+                              </h2>
+                            </label>
+                            <input type="text" className="form-control" {...register(`surroundingsObj.${index}.north`)} />
+                          </div>
+                          <div className="col col-3">
+                            <label>
+                              <h2>
+                                {`${t("NWL_APPLICANT_SURROUNDINGS_SOUTH_SHAJRA_PLAN")}`}
+                                {/* South */}
+                              </h2>
+                            </label>
+                            <input type="text" className="form-control" {...register(`surroundingsObj.${index}.south`)} />
+                          </div>
+                          <div className="col col-3">
+                            <label>
+                              <h2>
+                                {`${t("NWL_APPLICANT_SURROUNDINGS_EAST_SHAJRA_PLAN")}`}
+                                {/* East */}
+                              </h2>
+                            </label>
+                            <input type="text" className="form-control" {...register(`surroundingsObj.${index}.east`)} />
+                          </div>
+                          <div className="col col-3">
+                            <label>
+                              <h2>
+                                {`${t("NWL_APPLICANT_SURROUNDINGS_WEST_SHAJRA_PLAN")}`}
+                                {/* West */}
+                              </h2>
+                            </label>
+                            <input type="text" className="form-control" {...register(`surroundingsObj.${index}.west`)} />
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+
+                    <div className="col col-4 mt-2">
                       <h2>
                         &nbsp;
                         {`${t("NWL_APPLICANT_J_ANY_OTHERS_PASSING_THROUGH_SITE_SHAJRA_PLAN")}`}

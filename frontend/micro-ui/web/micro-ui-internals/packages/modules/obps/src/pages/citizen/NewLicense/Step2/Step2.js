@@ -1219,7 +1219,7 @@ const ApllicantPuropseForm = (props) => {
         <ModalBody>
           <form onSubmit={handleSubmit(ApplicantPurposeModalData)}>
             <Row className="ml-auto mb-3">
-              <Col md={4} xxl lg="4">
+              <Col className="mt-2" md={4} xxl lg="4">
                 <div>
                   <Form.Label>
                     <h2>
@@ -1249,7 +1249,7 @@ const ApllicantPuropseForm = (props) => {
               </Col>
               <br></br>
               {watch("district")?.value && (
-                <Col md={4} xxl lg="4">
+                <Col className="mt-2" md={4} xxl lg="4">
                   <div>
                     <Form.Label>
                       <h2>
@@ -1277,7 +1277,7 @@ const ApllicantPuropseForm = (props) => {
               )}
               <br></br>
               {watch("developmentPlan")?.value && (
-                <Col md={4} xxl lg="4">
+                <Col className="mt-2" md={4} xxl lg="4">
                   <div>
                     <Form.Label>
                       <h2>
@@ -1305,7 +1305,7 @@ const ApllicantPuropseForm = (props) => {
               )}
               <br></br>
               {watch("potential")?.value && (
-                <Col md={4} xxl lg="4">
+                <Col className="mt-2" md={4} xxl lg="4">
                   <div>
                     <Form.Label>
                       <h2>
@@ -1331,7 +1331,7 @@ const ApllicantPuropseForm = (props) => {
                 </Col>
               )}
               <br></br>
-              <Col md={4} xxl lg="4">
+              <Col className="mt-2" md={4} xxl lg="4">
                 <div>
                   <Form.Label>
                     <h2>
@@ -1358,7 +1358,7 @@ const ApllicantPuropseForm = (props) => {
                   {errors?.tehsil && "This field is required"}
                 </h3>
               </Col>
-              <Col md={4} xxl lg="4">
+              <Col className="mt-2" md={4} xxl lg="4">
                 <div>
                   <Form.Label>
                     <h2>
@@ -1383,7 +1383,7 @@ const ApllicantPuropseForm = (props) => {
                 </h3>
               </Col>
               <br></br>
-              <Col md={4} xxl lg="4">
+              <Col className="mt-2" md={4} xxl lg="4">
                 <div>
                   <Form.Label>
                     <h2>
