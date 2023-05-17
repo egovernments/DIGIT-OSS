@@ -29,10 +29,15 @@ const BGApplications = ({ view }) => {
   const [open4, setOpen4] = useState(false);
   const [loader, setLoader] = useState(false);
   const [data, setData] = useState([]);
+  const [bgType,setBgType] = useState([]);
+  // const[applicationNo,setApplicationNo] = useState();
+  const[licenceNo,setLicenseNo]=useState();
+  const[loiAppLicNo,setLoiAppLicNo]=useState("");
   const [showField, setShowField] = useState({ select: false, other: false });
    const [licenceData, setLicenceData] = useState([]);
   const {
-   watch, register, control,errors, setValue, resetField, apiData, comp, getData
+   watch, register, control,errors, setValue, 
+    getValues,resetField, apiData, comp, getData
   } = useForm({
     
   });
@@ -67,9 +72,7 @@ const BGApplications = ({ view }) => {
   useEffect(() => {
     getApplications();
   }, []);
-
-  //   const [LOINumber, setLOINumber] = useState("");
-  // const [khasraNumber, setKhasraNumber] = useState("");
+ 
   const handleLoiNumber = async (e) => {
     const token = window?.localStorage?.getItem("token");
  
@@ -83,24 +86,74 @@ const BGApplications = ({ view }) => {
           tenantId: "hr",
           permanentCity: null
         };
-      const Resp = await axios.post(`/tl-services/bank/guarantee/dropdonelist?type=1`, loiRequest);
-      
-     
-      // setKhasraNumber(Resp?.data?.Licenses?.[1]?.tradeLicenseDetail?.additionalDetail?.[0]?.ApplicantPurpose?.AppliedLandDetails?.[0]?.khewats);
-      // setDevelopmentPlan(Resp?.data?.Licenses?.[0]?.tradeLicenseDetail?.additionalDetail?.[0]?.ApplicantPurpose?.AppliedLandDetails?.[0]?.developmentPlan)
-      // setPurpose(Resp?.data?.Licenses?.[0]?.tradeLicenseDetail?.additionalDetail?.[0]?.ApplicantPurpose?.purpose)
-      // setTotalArea(Resp?.data?.Licenses?.[0]?.tradeLicenseDetail?.additionalDetail?.[0]?.ApplicantPurpose?.totalArea)
+      const Resp = await axios.post(`/tl-services/bank/guarantee/dropdonelist?type=${loiAppLicNo}`, loiRequest);
+      // console.log ("RESp",Resp.data,Resp.data.map(item => ({
+      //   ...item,value:item.id
+      // })))
+      setBgType(Resp.data.map(item => ({
+        ...item,value:item.id
+      })))
+    } catch (error) {
+      console.log(error);
+    }
 
-      // console.log({ devName, developmentPlan, purpose, totalArea });
+   
+  };
+    function handleonChangeApplication(data){
+              //  console.log("ApNo",data)
+              setLoiAppLicNo(data.value)
+    }
+
+    useEffect(()=>{
+            if(loiAppLicNo){
+              handleLoiNumber()
+            }
+    },[loiAppLicNo])
+
+  const [claimPeriod, setClaimPeriod] = useState("");
+  const [amountInWords, setamountWords] = useState("");
+  const [amountInFig, setamountFig] = useState("");
+  const [issuingBank, setIssuingBank] = useState("");
+  const [bgNumber, setBgNumber] = useState("");
+  const [validity, setValidity] = useState("");
+    const handleApplLoiNumber = async (e) => {
+    const token = window?.localStorage?.getItem("token");
+    // const licenceNumber = apiData?.length ? watch("licenceNo")?.value : watch("licenceNo");
+    // const loiNumber = apiData?.length ? watch("licenceNo")?.value : watch("licenceNo");
+    // const applicationNumber = apiData?.length ? watch("licenceNo")?.value : watch("licenceNo");
+    try {
+      const loiRequest = {
+         RequestInfo: {
+          api_id: "Rainmaker",
+          ver: "v1",
+          ts: 0,
+          action: "_search",
+          did: "",
+          key:"",
+          msg_id: "090909",
+          authToken: token,
+          userInfo: userInfo
+        },};
+      const Resp = await axios.post(`/tl-services/bank/guarantee/_search?applicationNumber=${bgType}`, loiRequest);
+      console.log ("RESp",Resp.data)
+      setClaimPeriod(Resp?.data?.newBankGuaranteeList?.[0]?.claimPeriod);
+      setBgNumber(Resp?.data?.newBankGuaranteeList?.[0]?.bgNumber);
+      setIssuingBank(Resp?.data?.newBankGuaranteeList?.[0]?.issuingBank);
+      setamountFig(Resp?.data?.newBankGuaranteeList?.[0]?.amountInFig);
+      setamountWords(Resp?.data?.newBankGuaranteeList?.[0]?.amountInWords);
+      setValidity(Resp?.data?.newBankGuaranteeList?.[0]?.validity);
+     
      
     } catch (error) {
       console.log(error);
     }
 
-    console.log("loiloiloi" , Resp);
+   
   };
-
+     
+  console.log("DATADFFG",selectTypeData , loiAppLicNo , bgType);
  
+
   return (
     <div>
      
@@ -117,7 +170,7 @@ const BGApplications = ({ view }) => {
                                 <span style={{ color: "red" }}>*</span>
                               </h2>
                               
-                              <ReactMultiSelect control={control} name="numberType" placeholder="Select" data={selectTypeData} labels="" />
+                              <ReactMultiSelect control={control} name="numberType" placeholder="Select" data={selectTypeData} labels="" value={loiAppLicNo} onChange={handleonChangeApplication}/>
                               
                             </div>
 
@@ -125,30 +178,21 @@ const BGApplications = ({ view }) => {
 
                             <div className="col col-4">
                               <h2 className="FormLable">
+                                
                               {`${t("MY_APPLICATION_BG_SELECT")}`} <span style={{ color: "red" }}>*</span>
                               </h2>
-                               {apiData?.length ? (
-                              <ReactMultiSelect control={control} name="allservices" placeholder="Select" data={apiData} labels="" />
-                               ) : (
-                              <input
-                                type="text"
-                                className="form-control"
-                                placeholder=""
-                                {...register("licenceNo")}
-                                onChange={() => {
-                                  setShowField({ select: false, other: false });
-                                }}
-                              />
-                                )}
+                              
+                                <ReactMultiSelect control={control} name="applicationNumber" placeholder="Select" data={bgType} labels="" />
+                           
                             </div>
 
                           <div style={{ textAlignLast: "right", marginTop: "-41px" }}>
                             <button
                               type="button"
                               style={{ width: "79px", marginRight: "196px" }}
-                              className="btn btn-primary"   onClick={() => {
-                handleLoiNumber();
-              }}
+                              className="btn btn-primary" onClick={() => {
+                                  handleApplLoiNumber();
+                                }}  
                             >
                               Search
                             </button>
@@ -246,27 +290,27 @@ const BGApplications = ({ view }) => {
                         <label>{`${t("MY_APPLICATION_BG_GUARANTEE_NO")}`}
                         {/* Bank Guarantee No */}
                         </label>
-                        <input type="text" className="form-control"  />
+                        <input type="text" className="form-control" {...register("bgNumber")} value={bgNumber}/>
                       </div>
                        <div className="col col-3">
                         <label>{`${t("MY_APPLICATION_BG_GUARANTEE_ISSUE_DATE")}`}
                         {/* Bank Guarantee Issue date */}
                         </label>
-                        <input type="date" className="form-control"  />
+                        <input type="date" className="form-control" {...register("issuingBank")} value={issuingBank}/>
                       </div>
                        <div className="col col-2">
                         <label>{`${t("BG_SUBMIT_EXPIRY_DATE")}`}</label>
-                        <input type="date" className="form-control"  />
+                        <input type="date" className="form-control" {...register("validity")} value={validity}/>
                       </div>
                        <div className="col col-2">
                         <label>{`${t("MY_APPLICATION_BG_GUARANTEE_CLAIM_EXPIRY_DATE")}`}
                         {/* Claim expiry date */}
                         </label>
-                        <input type="date" className="form-control"  />
+                        <input type="text" className="form-control"  {...register("claimPeriod")} value={claimPeriod}/>
                       </div>
                       <div className="col col-2">
                         <label>{`${t("MY_APPLICATION_BG_GUARANTEE_AMOUNT")}`}</label>
-                        <input type="text" className="form-control"  />
+                        <input type="text" className="form-control"  {...register("amountInFig")} value={amountInFig}/>
                       </div>
                        <br></br>
                         <div className="row gy-3">
@@ -274,7 +318,7 @@ const BGApplications = ({ view }) => {
                            <h2 className="FormLable">
                               {`${t("BG_SUBMIT_AMOUNT_IN_WORDS")}`}<span style={{ color: "red" }}>*</span>
                               </h2>
-                              <input type="text" className="form-control" disabled></input>
+                              <input type="text" className="form-control" disabled {...register("amountInWords")} value={amountInWords}></input>
                         </div>
                 <div class="col-sm-6 text-right">
                   <button type="submit"  class="btn btn-primary btn-md center-block">

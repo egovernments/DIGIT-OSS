@@ -67,21 +67,19 @@ function ReleaseNew(props) {
   label: "BG-N", value: "bgn"
 }];
   const bankRelease = async (data) => {
+    console.log("data",data)
     const token = window?.localStorage?.getItem("token");
     const userInfo = Digit.UserService.getUser()?.info || {};
-
+    const applicationNo = data?.newBankGuaranteeList?.[0]?.applicationNumber
     try {
       const postDistrict = {
         NewBankGuaranteeRequest: [
           {
-            action: "APPLY_FOR_RELEASE",
-            comment: "test comment",
-            assignee: null,
-
-            // validity: data?.validity,
-            // ...searchExistingBg,
+            applicationNumber:"HR_BG_NEW_20230227000483",
             ...data,
             updateType:"RELEASE",
+             bankGuaranteeReplacedWith:data?.bankGuaranteeReplacedWith?.value,
+            releaseCertificate:data?.releaseCertificate?.value
           },
         ],
         RequestInfo: {
@@ -207,22 +205,22 @@ function ReleaseNew(props) {
               &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
               <FormControl>
                 <h2 className="FormLable">{`${t("MY_APPLICATION_BG_GUARANTEE_ISSUE_DATE")}`} </h2>
-                <OutlinedInput type="date" className="Inputcontrol" placeholder="" {...register("bgNumber")}  disabled/>
+                <OutlinedInput type="date" className="Inputcontrol" placeholder="" {...register("issuingBank")}  disabled/>
               </FormControl>
               &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
               <FormControl>
                 <h2 className="FormLable">{`${t("BG_SUBMIT_EXPIRY_DATE")}`}</h2>
-                <OutlinedInput type="date" className="Inputcontrol" placeholder="" {...register("bgNumber")}  disabled/>
+                <OutlinedInput type="date" className="Inputcontrol" placeholder="" {...register("validity")}  disabled/>
               </FormControl>
                &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
               <FormControl>
                 <h2 className="FormLable">{`${t("MY_APPLICATION_BG_GUARANTEE_CLAIM_EXPIRY_DATE")}`} </h2>
-                <OutlinedInput type="date" className="Inputcontrol" placeholder="" {...register("bgNumber")}  disabled/>
+                <OutlinedInput type="date" className="Inputcontrol" placeholder="" {...register("claimPeriod")}  disabled/>
               </FormControl>
                &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
               <FormControl>
                 <h2 className="FormLable">{`${t("MY_APPLICATION_BG_GUARANTEE_AMOUNT")}`} </h2>
-                <OutlinedInput type="text" className="Inputcontrol" placeholder="" {...register("bgNumber")}  disabled/>
+                <OutlinedInput type="text" className="Inputcontrol" placeholder="" {...register("amountInFig")}  disabled/>
               </FormControl>
             </div>
             <br></br>
@@ -231,7 +229,7 @@ function ReleaseNew(props) {
                            <h2 className="FormLable">
                               {`${t("BG_SUBMIT_AMOUNT_IN_WORDS")}`}<span style={{ color: "red" }}>*</span>
                               </h2>
-                              <input type="text" className="form-control" disabled></input>
+                              <input type="text" className="form-control" disabled {...register("amountInWords")}></input>
                         </div>
             </div>
             <br></br>
@@ -273,7 +271,7 @@ function ReleaseNew(props) {
                 <h2 className="FormLable"> {`${t("RELEASE_BG_REASON_FOR_REPLACEMENT")}`}
                   {/* Reason for replacement  */}
                   </h2>
-               <textarea rowspan="2" className="Inputcontrol" class="form-control" placeholder="" {...register("reasonForReplacement")} />
+               <textarea rows="2" cols="2" className="Inputcontrol" class="form-control" placeholder="" {...register("reasonForReplacement")} />
               </FormControl>
             </div>
             </div>

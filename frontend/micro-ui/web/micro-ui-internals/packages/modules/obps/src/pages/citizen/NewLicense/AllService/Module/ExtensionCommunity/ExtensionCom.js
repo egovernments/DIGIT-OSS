@@ -69,8 +69,6 @@ function ExtensionCom() {
     setOpen1(false);
     
   };
-
-  const extensionCom = (data) => console.log(data);
    const getDocumentData = async (file, fieldName) => {
     if (selectedFiles.includes(file.name)) {
       setShowToastError({ label: "Duplicate file Selected", error: true, success: false });
@@ -95,9 +93,69 @@ function ExtensionCom() {
     }
   };
 
+   const extensionComSite = async (data) => {
+    const numberLic = data?.licenceNo;
+    const token = window?.localStorage?.getItem("token");
+    console.log(data);
+
+    try {
+     
+        const postLayoutPlan = {
+          newAdditionalDetails: 
+            {
+              action: "APPLY",
+              tenantId: tenantId,
+              licenseNo: numberLic,
+              newAdditionalDetails: {
+              selectLicence: data?.selectLicence?.label,
+              validUpto: data?.validUpto,
+              colonizerName: data?.colonizerName,
+              // periodOfRenewal: "",
+              colonyType: data?.colonyType,
+              areaAcres: data?.areaAcres,
+              sectorNo: data?.sectorNo,
+              revenueEstate: data?.revenueEstate,
+              developmentPlan: data?.developmentPlan,
+              tehsil: data?.tehsil,
+              district: data?.district,
+            },
+              constructionOfCommunity: {
+                ...data,
+              },
+            },
+          
+          RequestInfo: {
+            apiId: "Rainmaker",
+            ver: "v1",
+            ts: 0,
+            action: "_search",
+            did: "",
+            key: "",
+            msgId: "090909",
+            requesterId: "",
+            authToken: token,
+            userInfo: userInfo,
+          },
+        };
+        console.log("LAY", postLayoutPlan);
+        const Resp = await axios.post("/tl-services/construction/_create", postLayoutPlan);
+        setLoader(false);
+         setApplicationNumber(Resp.data.revisedPlan[0].applicationNumber);
+        // const useData = Resp?.data?.RevisedPlan?.[0];
+     
+    } catch (error) {
+      setLoader(false);
+      setToastError(error?.response?.data?.Errors?.[0]?.code);
+      setTimeout(() => {
+        setToastError(null);
+      }, 2000);
+      return error.message;
+    }
+  };
+
   return (
     <div>
-    <form onSubmit={handleSubmit(extensionCom)}>
+    <form onSubmit={handleSubmit(extensionComSite)}>
       <div className="card" style={{ width: "126%", border: "5px solid #1266af" }}>
         <h4 style={{ fontSize: "25px", marginLeft: "21px" }}>{t("EXTENSION _COMMUNITY_SITE_HEADING")}
         {/* Extension (construction in community site) */}
