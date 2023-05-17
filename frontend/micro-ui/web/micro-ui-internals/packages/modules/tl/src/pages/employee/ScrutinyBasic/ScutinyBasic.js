@@ -469,6 +469,7 @@ console.log("roleData",rolesDate )
           applicationNumber={applicationNumber}
           dataForIcons={rolesDate}
           applicationStatus={applicationStatus}
+          remarksData={remarksData}
           >
           </DataGridDemo>
       </div>
