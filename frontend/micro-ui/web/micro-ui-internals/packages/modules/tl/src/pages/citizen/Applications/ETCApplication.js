@@ -18,7 +18,7 @@ import TableHead from "@mui/material/TableHead";
 import TablePagination from "@mui/material/TablePagination";
 import TableRow from "@mui/material/TableRow";
 
-const UAApplication = ({ view }) => {
+const ETCApplication = ({ view }) => {
   const { t } = useTranslation();
   const history = useHistory();
   const [loader, setLoader] = useState(false);
@@ -52,7 +52,7 @@ const UAApplication = ({ view }) => {
       },
     };
     try {
-      const Resp = await axios.post("/tl-services/composition/_get", data);
+      const Resp = await axios.post("/tl-services/construction/_get", data);
       setLoader(false);
       setData(Resp?.data);
     } catch (error) {
@@ -137,7 +137,7 @@ const UAApplication = ({ view }) => {
                         onClick={() => {
                           window.localStorage.setItem("ApplicationStatus", item?.status);
                          history.push({
-                    pathname: "/digit-ui/citizen/obps/CompositionClu",
+                    pathname: "/digit-ui/citizen/obps/ExtensionCom",
                     search: `?id=${item?.applicationNumber}`,
                           });
                         }}
@@ -189,4 +189,4 @@ const UAApplication = ({ view }) => {
     /* tradelicence/application/PG-TL-2021-09-07-002737/pg.citya */
   );
 };
-export default UAApplication;
+export default ETCApplication;

@@ -79,7 +79,41 @@ function RenewNew() {
       return error.message;
     }
   };
-  const bankRenew = (data) => console.log(data);
+ 
+    const bankRenew = async (data) => {
+    console.log("data",data)
+    const token = window?.localStorage?.getItem("token");
+    const userInfo = Digit.UserService.getUser()?.info || {};
+    const applicationNo = data?.newBankGuaranteeList?.[0]?.applicationNumber
+    try {
+      const postDistrict = {
+        NewBankGuaranteeRequest: [
+          {
+            applicationNumber:"HR_BG_NEW_20230227000483",
+            ...data,
+            updateType:"EXTEND",
+           originCountry:data?.originCountry?.label
+          },
+        ],
+        RequestInfo: {
+          apiId: "Rainmaker",
+          action: "_create",
+          did: 1,
+          key: "",
+          msgId: "20170310130900|en_IN",
+          ts: 0,
+          ver: ".01",
+          authToken: token,
+          userInfo: userInfo,
+        },
+      };
+      const Resp = await axios.post("/tl-services/bank/guarantee/_update", postDistrict);
+      console.log("Release", Resp);
+      setSubmissionSearch(UserData);
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
   return (
     <div>
     <form onSubmit={handleSubmit(bankRenew)}>
@@ -121,22 +155,22 @@ function RenewNew() {
               &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
               <FormControl>
                 <h2 className="FormLable">{`${t("MY_APPLICATION_BG_GUARANTEE_ISSUE_DATE")}`} </h2>
-                <OutlinedInput type="date" className="Inputcontrol" placeholder="" {...register("bgNumber")}  disabled/>
+                <OutlinedInput type="date" className="Inputcontrol" placeholder="" {...register("issuingBank")}  disabled/>
               </FormControl>
               &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
               <FormControl>
                 <h2 className="FormLable">{`${t("BG_SUBMIT_EXPIRY_DATE")}`} </h2>
-                <OutlinedInput type="date" className="Inputcontrol" placeholder="" {...register("bgNumber")}  disabled/>
+                <OutlinedInput type="date" className="Inputcontrol" placeholder="" {...register("validity")}  disabled/>
               </FormControl>
                &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
               <FormControl>
                 <h2 className="FormLable">{`${t("MY_APPLICATION_BG_GUARANTEE_CLAIM_EXPIRY_DATE")}`}</h2>
-                <OutlinedInput type="date" className="Inputcontrol" placeholder="" {...register("bgNumber")}  disabled/>
+                <OutlinedInput type="date" className="Inputcontrol" placeholder="" {...register("claimPeriod")}  disabled/>
               </FormControl>
                &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
               <FormControl>
                 <h2 className="FormLable">{`${t("MY_APPLICATION_BG_GUARANTEE_AMOUNT")}`} </h2>
-                <OutlinedInput type="text" className="Inputcontrol" placeholder="" {...register("bgNumber")}  disabled/>
+                <OutlinedInput type="text" className="Inputcontrol" placeholder="" {...register("amountInFig")}  disabled/>
               </FormControl>
             </div>
             <br></br>
@@ -146,12 +180,12 @@ function RenewNew() {
                 <h2 className="FormLable">{`${t("EXTENSION_ISSUING_BANK")}`}
                 {/* Issuing Bank */}
                  </h2>
-                <OutlinedInput type="text" className="Inputcontrol" placeholder="" {...register("bgNumber")} disabled />
+                <OutlinedInput type="text" className="Inputcontrol" placeholder="" {...register("issuingBank")} disabled />
               </FormControl>
               &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
               <FormControl>
                 <h2 className="FormLable">{`${t("BG_SUBMIT_COUNTRY_ORIGIN")}`}</h2>
-                <OutlinedInput type="text" className="Inputcontrol" placeholder="" {...register("bgNumber")} disabled />
+                <OutlinedInput type="text" className="Inputcontrol" placeholder="" {...register("originCountry")} disabled />
               </FormControl>
             
             </div>
@@ -163,7 +197,7 @@ function RenewNew() {
                            <h2 className="FormLable">
                               {`${t("BG_SUBMIT_AMOUNT_IN_WORDS")}`}<span style={{ color: "red" }}>*</span>
                               </h2>
-                              <input type="text" className="form-control" disabled></input>
+                              <input type="text" className="form-control" {...register("amountInWords")} disabled></input>
                         </div>
             </div>
             </div>
@@ -205,21 +239,21 @@ function RenewNew() {
                 <h2 className="FormLable">{`${t("EXTENSION_DATE_OF_AMENDMENT")}`}
                 {/* Date of amendment */}
                 </h2>
-                <OutlinedInput type="date" className="Inputcontrol" placeholder="" {...register("bgNumber")}  />
+                <OutlinedInput type="date" className="Inputcontrol" placeholder="" {...register("dateOfAmendment")}  />
               </FormControl>
               &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
               <FormControl>
                 <h2 className="FormLable">{`${t("EXTENSION_AMENDMENT_EXPIRY_DATE")}`}
                 {/* Amendment expiry date  */}
                 </h2>
-                <OutlinedInput type="date" className="Inputcontrol" placeholder="" {...register("bgNumber")}  />
+                <OutlinedInput type="date" className="Inputcontrol" placeholder="" {...register("amendmentExpiryDate")}  />
               </FormControl>
                &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
               <FormControl>
                 <h2 className="FormLable">{`${t("EXTENSION_AMENDMENT_CLAIM_EXPIRY_DATE")}`}
                 {/* Amendment claim expiry date  */}
                  </h2>
-                <OutlinedInput type="date" className="Inputcontrol" placeholder="" {...register("bgNumber")} />
+                <OutlinedInput type="date" className="Inputcontrol" placeholder="" {...register("amendmentClaimExpiryDate")} />
               </FormControl>
               </div>
               </div>
@@ -228,17 +262,17 @@ function RenewNew() {
  <div className="col md={4} xxl lg-3">
     <FormControl>
                 <h2 className="FormLable">{`${t("MY_APPLICATION_BG_GUARANTEE_AMOUNT")}`} </h2>
-                <OutlinedInput type="text" className="Inputcontrol" placeholder="" {...register("bgNumber")}  />
+                <OutlinedInput type="text" className="Inputcontrol" placeholder="" {...register("amountInFig")}  />
               </FormControl>
                &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
               <FormControl>
                 <h2 className="FormLable">{`${t("EXTENSION_ISSUING_BANK")}`} </h2>
-                <OutlinedInput type="text" className="Inputcontrol" placeholder="" {...register("bgNumber")}  />
+                <OutlinedInput type="text" className="Inputcontrol" placeholder="" {...register("issuingBank")}  />
               </FormControl>
               &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
               <FormControl>
                 <h2 className="FormLable">{`${t("BG_SUBMIT_COUNTRY_ORIGIN")}`}</h2>
-                 <ReactMultiSelect control={control} name="numberType" placeholder="Select Type" data={selectTypeData} labels="" />
+                 <ReactMultiSelect control={control} name="originCountry" placeholder="Select Type" data={selectTypeData} labels="" />
 
                 
               </FormControl>
@@ -251,7 +285,7 @@ function RenewNew() {
                            <h2 className="FormLable">
                                {`${t("BG_SUBMIT_AMOUNT_IN_WORDS")}`}<span style={{ color: "red" }}>*</span>
                               </h2>
-                              <input type="text" className="form-control" ></input>
+                              <input type="text" className="form-control" {...register("amountInWords")}></input>
                         </div>
             </div>
             </div>
@@ -302,7 +336,7 @@ function RenewNew() {
                              <td>{`${t("EXTENSION_BANK_GUARANTEE_PDF")}`}
                              {/* Bank Guarantee(pdf) */}
                              </td>
-                              <td><input type="text" className="form-control"></input></td>
+                              <td><input type="text" className="form-control" {...register("bankGurenteeCertificateDescription")}></input></td>
                                <td>  <div>
                                     <label>
                                       <FileUpload style={{ cursor: "pointer" }} color="primary" />
@@ -310,11 +344,11 @@ function RenewNew() {
                                         type="file"
                                         style={{ display: "none" }}
                                         accept="application/pdf/jpeg/png"
-                                        onChange={(e) => getDocumentData(e?.target?.files[0], "bankGuaranteePdf")}
+                                        onChange={(e) => getDocumentData(e?.target?.files[0], "bankGurenteeCertificate")}
                                       />
                                     </label>
-                                    {watch("bankGuaranteePdf") && (
-                                      <a onClick={() => getDocShareholding(watch("bankGuaranteePdf"), setLoader)} className="btn btn-sm ">
+                                    {watch("bankGurenteeCertificate") && (
+                                      <a onClick={() => getDocShareholding(watch("bankGurenteeCertificate"), setLoader)} className="btn btn-sm ">
                                         <VisibilityIcon color="info" className="icon" />
                                       </a>
                                     )}
@@ -326,7 +360,7 @@ function RenewNew() {
                              <td>{`${t("EXTENSION_ANY_OTHER_DOC_PDF")}`}
                              {/* Any other document (pdf) */}
                              </td>
-                              <td><input type="text" className="form-control"></input></td>
+                              <td><input type="text" className="form-control" {...register("anyOtherDocumentDescription")}></input></td>
                                <td> <div>
                                     <label>
                                       <FileUpload style={{ cursor: "pointer" }} color="primary" />
@@ -334,11 +368,11 @@ function RenewNew() {
                                         type="file"
                                         style={{ display: "none" }}
                                         accept="application/pdf/jpeg/png"
-                                        onChange={(e) => getDocumentData(e?.target?.files[0], "otherDocPdf")}
+                                        onChange={(e) => getDocumentData(e?.target?.files[0], "anyOtherDocument")}
                                       />
                                     </label>
-                                    {watch("otherDocPdf") && (
-                                      <a onClick={() => getDocShareholding(watch("otherDocPdf"), setLoader)} className="btn btn-sm ">
+                                    {watch("anyOtherDocument") && (
+                                      <a onClick={() => getDocShareholding(watch("anyOtherDocument"), setLoader)} className="btn btn-sm ">
                                         <VisibilityIcon color="info" className="icon" />
                                       </a>
                                     )}
