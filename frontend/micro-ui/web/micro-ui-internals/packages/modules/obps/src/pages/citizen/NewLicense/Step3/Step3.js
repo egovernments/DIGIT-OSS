@@ -1399,12 +1399,12 @@ const LandScheduleForm = (props) => {
                         </h2>
                       </label>
 
-                      <label htmlFor="compactBlockYes">
-                        <input {...register("whetherCompactBlock")} type="radio" value="Y" id="compactBlockYes" />
+                      <label htmlFor="whetherCompactBlockYes">
+                        <input {...register("whetherCompactBlock")} type="radio" value="Y" id="whetherCompactBlockYes" />
                         &nbsp; Yes &nbsp;&nbsp;
                       </label>
-                      <label htmlFor="compactBlockNo">
-                        <input {...register("whetherCompactBlock")} type="radio" value="N" id="compactBlockNo" />
+                      <label htmlFor="whetherCompactBlockNo">
+                        <input {...register("whetherCompactBlock")} type="radio" value="N" id="whetherCompactBlockNo" />
                         &nbsp; No &nbsp;&nbsp;
                       </label>
 
