@@ -27,6 +27,7 @@ const Genarelinfo = (props) => {
   const [showhide1, setShowhide1] = useState("No");
   const [uncheckedValue, setUncheckedVlue] = useState([]);
   const [checkValue, setCheckedVAlue] = useState([]);
+  const [docModal, setDocModal] = useState(false);
   // const [fieldValue, setFieldValue] = useState("");
   // let user = Digit.UserService.getUser();
   // const userRoles = user?.info?.roles?.map((e) => e.code) || [];
@@ -392,6 +393,7 @@ const Genarelinfo = (props) => {
         labelmodal={labelValue}
         passmodalData={handlemodaldData}
         displaymodal={smShow}
+        disPlayDoc={docModal}
         onClose={() => setSmShow(false)}
         selectedFieldData={selectedFieldData}
         fieldValue={fieldValue}
@@ -460,6 +462,7 @@ const Genarelinfo = (props) => {
                       setOpennedModal("purpose")
                       setLabelValue("Purpose Of License"),
                         setSmShow(true),
+                        setDocModal(false),
                         console.log("modal open"),
                         setFieldValue(applicantInfoPersonal !== null ? applicantInfoPersonal?.purpose : null);
                     }}
@@ -512,6 +515,7 @@ const Genarelinfo = (props) => {
                       setLabelValue("Potential Zone"),
                       setOpennedModal("potential")
                         setSmShow(true),
+                        setDocModal(false),
                         console.log("modal open"),
                         setFieldValue(applicantInfoPersonal !== null ? applicantInfoPersonal?.potential : null);
                     }}
@@ -548,6 +552,7 @@ const Genarelinfo = (props) => {
                         setLabelValue("District"),
                         setOpennedModal("district")
                           setSmShow(true),
+                        setDocModal(false),
                           console.log("modal open"),
                           setFieldValue(applicantInfoPersonal !== null ? applicantInfoPersonal?.district : null);
                       }}
@@ -583,6 +588,7 @@ const Genarelinfo = (props) => {
                         setLabelValue("State"),
                         setOpennedModal("state")
                           setSmShow(true),
+                        setDocModal(false),
                           console.log("modal open"),
                           setFieldValue(applicantInfoPersonal !== null ? applicantInfoPersonal?.state : null);
                       }}
@@ -762,6 +768,8 @@ Note: The term “Collaboration agreement" shall include all Development agreeme
                         setLabelValue("District"),
                         setOpennedModal("district")
                           setSmShow(true),
+                        setDocModal(false),
+                          
                           console.log("modal open"),
                           // setFieldValue(applicantInfoPersonal !== null ? applicantInfoPersonal?.district : null);
                           setFieldValue(applicantInfoPersonal?.AppliedLandDetails[0] !== null ? applicantInfoPersonal?.AppliedLandDetails[0]?.district : null);
@@ -778,6 +786,7 @@ Note: The term “Collaboration agreement" shall include all Development agreeme
                         setLabelValue("Development Plan"),
                         setOpennedModal("developmentPlan")
                           setSmShow(true),
+                        setDocModal(false),
                           console.log("modal open"),
                           // setFieldValue(applicantInfoPersonal !== null ? applicantInfoPersonal?.district : null);
                           setFieldValue(applicantInfoPersonal?.AppliedLandDetails[0] !== null ? applicantInfoPersonal?.AppliedLandDetails[0]?.developmentPlan : null);
@@ -794,6 +803,7 @@ Note: The term “Collaboration agreement" shall include all Development agreeme
                       setLabelValue("Potential Zone"),
                       setOpennedModal("potential")
                         setSmShow(true),
+                        setDocModal(false),
                         console.log("modal open"),
                         // setFieldValue(applicantInfoPersonal !== null ? applicantInfoPersonal?.potential : null);
                         setFieldValue(applicantInfoPersonal?.AppliedLandDetails[0] !== null ? applicantInfoPersonal?.AppliedLandDetails[0]?.potential : null);
@@ -811,6 +821,7 @@ Note: The term “Collaboration agreement" shall include all Development agreeme
                           setLabelValue("Sector"),
                           setOpennedModal("sector")
                           setSmShow(true),
+                        setDocModal(false),
                           console.log("modal open"),
                           setFieldValue(applicantInfoPersonal?.AppliedLandDetails[0] !== null ? applicantInfoPersonal?.AppliedLandDetails[0]?.sector : null);
                         }}
@@ -827,6 +838,7 @@ Note: The term “Collaboration agreement" shall include all Development agreeme
                           setLabelValue("Tehsil"),
                           setOpennedModal("tehsil")
                           setSmShow(true),
+                        setDocModal(false),
                           console.log("modal open"),
                           setFieldValue(applicantInfoPersonal?.AppliedLandDetails[0] !== null ? applicantInfoPersonal?.AppliedLandDetails[0]?.tehsil : null);
                         }}
@@ -842,6 +854,7 @@ Note: The term “Collaboration agreement" shall include all Development agreeme
                           setLabelValue("Revenue estate"),
                           setOpennedModal("revenue")
                           setSmShow(true),
+                        setDocModal(false),
                           console.log("modal open"),
                           setFieldValue(applicantInfoPersonal?.AppliedLandDetails[0] !== null ? applicantInfoPersonal?.AppliedLandDetails[0]?.revenueEstate : null);
                         }}
@@ -858,6 +871,7 @@ Note: The term “Collaboration agreement" shall include all Development agreeme
                           setLabelValue(" Hadbast Number"),
                           setOpennedModal("hadbastNo")
                           setSmShow(true),
+                        setDocModal(false),
                           console.log("modal open"),
                           setFieldValue(applicantInfoPersonal?.AppliedLandDetails[0] !== null ? applicantInfoPersonal?.AppliedLandDetails[0]?.hadbastNo : null);
                         }}
@@ -874,6 +888,7 @@ Note: The term “Collaboration agreement" shall include all Development agreeme
                           setLabelValue("Rectangle No"),
                           setOpennedModal("rectangeNo")
                           setSmShow(true),
+                        setDocModal(false),
                           console.log("modal open"),
                           setFieldValue(applicantInfoPersonal?.AppliedLandDetails[0] !== null ? applicantInfoPersonal?.AppliedLandDetails[0]?.rectangleNo : null);
                         }}
@@ -889,6 +904,7 @@ Note: The term “Collaboration agreement" shall include all Development agreeme
                           setLabelValue("khewats No"),
                           setOpennedModal("khewatsNo")
                           setSmShow(true),
+                        setDocModal(false),
                           console.log("modal open"),
                           setFieldValue(applicantInfoPersonal?.AppliedLandDetails[0] !== null ? applicantInfoPersonal?.AppliedLandDetails[0]?.khewats : null);
                         }}
@@ -904,6 +920,7 @@ Note: The term “Collaboration agreement" shall include all Development agreeme
                           setLabelValue("Land owner"),
                           setOpennedModal("landOwner")
                           setSmShow(true),
+                        setDocModal(false),
                           console.log("modal open"),
                           setFieldValue(applicantInfoPersonal?.AppliedLandDetails[0] !== null ? applicantInfoPersonal?.AppliedLandDetails[0]?.landOwner : null);
                         }}
@@ -921,6 +938,7 @@ Note: The term “Collaboration agreement" shall include all Development agreeme
                           setLabelValue("Type of land"),
                           setOpennedModal("typeLand")
                           setSmShow(true),
+                        setDocModal(false),
                           console.log("modal open"),
                           setFieldValue(applicantInfoPersonal?.AppliedLandDetails[0] !== null ? applicantInfoPersonal?.AppliedLandDetails[0]?.typeLand : null);
                         }}
@@ -938,6 +956,7 @@ Note: The term “Collaboration agreement" shall include all Development agreeme
                           setLabelValue("change in information"),
                           setOpennedModal("isChange")
                           setSmShow(true),
+                        setDocModal(false),
                           console.log("modal open"),
                           setFieldValue(applicantInfoPersonal?.AppliedLandDetails[0] !== null ? applicantInfoPersonal?.AppliedLandDetails[0]?.isChange : null);
                         }}
@@ -956,6 +975,7 @@ Note: The term “Collaboration agreement" shall include all Development agreeme
                           setLabelValue("Rectangle No./Mustil(Changed)"),
                           setOpennedModal("editRectangleNo")
                           setSmShow(true),
+                        setDocModal(false),
                           console.log("modal open"),
                           setFieldValue(applicantInfoPersonal?.AppliedLandDetails[0] !== null ? applicantInfoPersonal?.AppliedLandDetails[0]?.editRectangleNo : null);
                         }}
@@ -975,6 +995,7 @@ Note: The term “Collaboration agreement" shall include all Development agreeme
                           setLabelValue("khewats No(Changed)"),
                           setOpennedModal("editKhewats")
                           setSmShow(true),
+                        setDocModal(false),
                           console.log("modal open"),
                           setFieldValue(applicantInfoPersonal?.AppliedLandDetails[0] !== null ? applicantInfoPersonal?.AppliedLandDetails[0]?.editKhewats : null);
                         }}
@@ -992,6 +1013,7 @@ Note: The term “Collaboration agreement" shall include all Development agreeme
                           setLabelValue("Name of the Land Ower as per Mutation/Jamabandi"),
                           setOpennedModal("landOwnerRegistry")
                           setSmShow(true),
+                        setDocModal(false),
                           console.log("modal open"),
                           setFieldValue(applicantInfoPersonal?.AppliedLandDetails[0] !== null ? applicantInfoPersonal?.AppliedLandDetails[0]?.landOwnerRegistry : null);
                         }}
@@ -1010,6 +1032,7 @@ Note: The term “Collaboration agreement" shall include all Development agreeme
                           setLabelValue("Whether Khasra been developed in collaboration"),
                           setOpennedModal("collaboration")
                           setSmShow(true),
+                        setDocModal(false),
                           console.log("modal open"),
                           setFieldValue(applicantInfoPersonal?.AppliedLandDetails[0] !== null ? applicantInfoPersonal?.AppliedLandDetails[0]?.collaboration : null);
                         }}
@@ -1026,6 +1049,7 @@ Note: The term “Collaboration agreement" shall include all Development agreeme
                           setLabelValue("Name of the developer company"),
                           setOpennedModal("developerCompany")
                           setSmShow(true),
+                        setDocModal(false),
                           console.log("modal open"),
                           setFieldValue(applicantInfoPersonal?.AppliedLandDetails[0] !== null ? applicantInfoPersonal?.AppliedLandDetails[0]?.developerCompany : null);
                         }}
@@ -1042,6 +1066,7 @@ Note: The term “Collaboration agreement" shall include all Development agreeme
                           setLabelValue("Date of registering collaboration agreement"),
                           setOpennedModal("agreementValidFrom")
                           setSmShow(true),
+                        setDocModal(false),
                           console.log("modal open"),
                           setFieldValue(applicantInfoPersonal?.AppliedLandDetails[0] !== null ? applicantInfoPersonal?.AppliedLandDetails[0]?.agreementValidFrom : null);
                         }}
@@ -1058,6 +1083,7 @@ Note: The term “Collaboration agreement" shall include all Development agreeme
                           setLabelValue("Collabration Agreement Irrevociable"),
                           setOpennedModal("agreementIrrevocialble")
                           setSmShow(true),
+                        setDocModal(false),
                           console.log("modal open"),
                           setFieldValue(applicantInfoPersonal?.AppliedLandDetails[0] !== null ? applicantInfoPersonal?.AppliedLandDetails[0]?.agreementIrrevocialble : null);
                         }}
@@ -1074,6 +1100,7 @@ Note: The term “Collaboration agreement" shall include all Development agreeme
                           setLabelValue("Name of authorized signatory on behalf of land owner(s)"),
                           setOpennedModal("authSignature")
                           setSmShow(true),
+                        setDocModal(false),
                           console.log("modal open"),
                           setFieldValue(applicantInfoPersonal?.AppliedLandDetails[0] !== null ? applicantInfoPersonal?.AppliedLandDetails[0]?.authSignature : null);
                         }}
@@ -1090,6 +1117,7 @@ Note: The term “Collaboration agreement" shall include all Development agreeme
                           setLabelValue("Name of authorized signatory on behalf of developer"),
                           setOpennedModal("nameAuthSign")
                           setSmShow(true),
+                        setDocModal(false),
                           console.log("modal open"),
                           setFieldValue(applicantInfoPersonal?.AppliedLandDetails[0] !== null ? applicantInfoPersonal?.AppliedLandDetails[0]?.nameAuthSign : null);
                         }}
@@ -1106,6 +1134,7 @@ Note: The term “Collaboration agreement" shall include all Development agreeme
                           setLabelValue("Registering Authority"),
                           setOpennedModal("registeringAuthority")
                           setSmShow(true),
+                        setDocModal(false),
                           console.log("modal open"),
                           setFieldValue(applicantInfoPersonal?.AppliedLandDetails[0] !== null ? applicantInfoPersonal?.AppliedLandDetails[0]?.registeringAuthority : null);
                         }}
@@ -1123,6 +1152,7 @@ Note: The term “Collaboration agreement" shall include all Development agreeme
                           setLabelValue("Registering Authority document"),
                           setOpennedModal("registeringAuthorityDoc")
                           setSmShow(true),
+                        setDocModal(true),
                           console.log("modal open"),
                           setFieldValue(applicantInfoPersonal?.AppliedLandDetails[0] !== null ? applicantInfoPersonal?.AppliedLandDetails[0]?.registeringAuthorityDoc : null);
                         }}
@@ -1138,6 +1168,7 @@ Note: The term “Collaboration agreement" shall include all Development agreeme
                           setLabelValue("Consolidation Type"),
                           setOpennedModal("consolidationType")
                           setSmShow(true),
+                        setDocModal(false),
                           console.log("modal open"),
                           setFieldValue(applicantInfoPersonal?.AppliedLandDetails[0] !== null ? applicantInfoPersonal?.AppliedLandDetails[0]?.consolidationType : null);
                         }}
@@ -1153,6 +1184,7 @@ Note: The term “Collaboration agreement" shall include all Development agreeme
                           setLabelValue("Kanal"),
                           setOpennedModal("kanal")
                           setSmShow(true),
+                        setDocModal(false),
                           console.log("modal open"),
                           setFieldValue(applicantInfoPersonal?.AppliedLandDetails[0] !== null ? applicantInfoPersonal?.AppliedLandDetails[0]?.kanal : null);
                         }}
@@ -1169,6 +1201,7 @@ Note: The term “Collaboration agreement" shall include all Development agreeme
                           setLabelValue("Marla"),
                           setOpennedModal("marla")
                           setSmShow(true),
+                        setDocModal(false),
                           console.log("modal open"),
                           setFieldValue(applicantInfoPersonal?.AppliedLandDetails[0] !== null ? applicantInfoPersonal?.AppliedLandDetails[0]?.marla : null);
                         }}
@@ -1184,6 +1217,7 @@ Note: The term “Collaboration agreement" shall include all Development agreeme
                           setLabelValue("Sarsai"),
                           setOpennedModal("sarsai")
                           setSmShow(true),
+                        setDocModal(false),
                           console.log("modal open"),
                           setFieldValue(applicantInfoPersonal?.AppliedLandDetails[0] !== null ? applicantInfoPersonal?.AppliedLandDetails[0]?.sarsai : null);
                         }}
@@ -1199,6 +1233,7 @@ Note: The term “Collaboration agreement" shall include all Development agreeme
                           setLabelValue("Bigha"),
                           setOpennedModal("bigha")
                           setSmShow(true),
+                        setDocModal(false),
                           console.log("modal open"),
                           setFieldValue(applicantInfoPersonal?.AppliedLandDetails[0] !== null ? applicantInfoPersonal?.AppliedLandDetails[0]?.bigha : null);
                         }}
@@ -1215,6 +1250,7 @@ Note: The term “Collaboration agreement" shall include all Development agreeme
                           setLabelValue("Biswa"),
                           setOpennedModal("biswa")
                           setSmShow(true),
+                        setDocModal(false),
                           console.log("modal open"),
                           setFieldValue(applicantInfoPersonal?.AppliedLandDetails[0] !== null ? applicantInfoPersonal?.AppliedLandDetails[0]?.biswa : null);
                         }}
@@ -1230,6 +1266,7 @@ Note: The term “Collaboration agreement" shall include all Development agreeme
                           setLabelValue("Biswansi"),
                           setOpennedModal("biswansi")
                           setSmShow(true),
+                        setDocModal(false),
                           console.log("modal open"),
                           setFieldValue(applicantInfoPersonal?.AppliedLandDetails[0] !== null ? applicantInfoPersonal?.AppliedLandDetails[0]?.biswansi : null);
                         }}
@@ -1247,6 +1284,7 @@ Note: The term “Collaboration agreement" shall include all Development agreeme
                           setLabelValue("tehsil"),
                           setOpennedModal("ConsolidatedTotal")
                           setSmShow(true),
+                        setDocModal(false),
                           console.log("modal open"),
                           setFieldValue(applicantInfoPersonal?.AppliedLandDetails[0] !== null ? applicantInfoPersonal?.AppliedLandDetails[0]?.tehsil : null);
                         }}
@@ -1382,6 +1420,7 @@ Note: The term “Collaboration agreement" shall include all Development agreeme
                         setLabelValue("Land schedule Table"),
                         setOpennedModal("district")
                           setSmShow(true),
+                        setDocModal(false),
                           console.log("modal open"),
                           setFieldValue(applicantInfoPersonal !== null ? applicantInfoPersonal?.district : null);
                           // setFieldValue(applicantInfoPersonal?.AppliedLandDetails[0] !== null ? applicantInfoPersonal?.AppliedLandDetails : null);
@@ -1394,13 +1433,19 @@ Note: The term “Collaboration agreement" shall include all Development agreeme
                   }
                 </tbody>
               </table>
+                 
             </div>
             {/* </div>
       </Collapse> */}
             {/* <div style={{ position: "relative", marginBottom: 40 }}>
               <Button onClick={() => props.passUncheckedList({ data: uncheckedValue, purpose: purpose })}>Submit</Button>
             </div> */}
+            <div className="row" style={{margin : 10}}>
+                  totalArea : {applicantInfoPersonal?.totalArea}
+                  </div>
+            
           </Form.Group>
+          
    </div>
       </Collapse>
       {/* </Card> */}
