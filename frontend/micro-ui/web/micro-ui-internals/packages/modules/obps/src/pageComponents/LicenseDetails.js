@@ -51,7 +51,7 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
 
   const { setValue, getValues, watch } = useForm();
   const [Documents, setDocumentsData] = useState({});
-  const [LicenseType, setLicenseType] = useState();
+  const [LicenseType, setLicenseType] = useState(formData?.LicneseType?.licenceTypeSelected || formData?.formData?.LicneseType?.licenceTypeSelected || "");
   const getDeveloperData = async () => {
     try {
       const requestResp = {
@@ -71,7 +71,7 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
       const licenseDataList = getDevDetails?.data;
       setTradeType(licenseDataList?.devDetail[0]?.applicantType?.licenceType);
       // console.log("LICENCE DET", getDevDetails?.data.devDetail[0]?.licenceDetails?.email, userInfo);
-      setLicenseType(licenseDataList?.devDetail[0]?.applicantType?.licenceType);
+      setLicenseType(licenseDataList?.devDetail[0]?.applicantType?.licenceTypeSelected);
       setEmail(licenseDataList?.devDetail[0]?.licenceDetails?.email || userInfo.info.emailId);
       setMobileNumber(licenseDataList?.devDetail[0]?.licenceDetails?.mobileNumber || userInfo.info.mobileNumber);
       setDOB(licenseDataList?.devDetail[0]?.licenceDetails?.dob);
@@ -577,7 +577,7 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
               },
             ],
             subOwnerShipCategory: "INDIVIDUAL",
-            tradeType: tradeType,
+            tradeType: (LicenseType === "CITIZEN.CLASSA" || LicenseType === "BPA_DEVELOPER") ? tradeType : "TECHNICAL_PROFESSIONAL",
 
             additionalDetail: {
               counsilForArchNo: null,
@@ -598,7 +598,7 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
       ],
     };
 
-    if (LicenseType === "ARCHITECT.CLASSA") {
+    if ((LicenseType !== "CITIZEN.CLASSA" && LicenseType !== "BPA_DEVELOPER")) {
       onSelect(config.key, licenseDet, null, null, "stakeholder-document-details");
     } else {
       onSelect(config.key, licenseDet);
@@ -617,7 +617,7 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
           isAddressSame: isAddressSame,
         };
         //1, units
-        if (LicenseType === "ARCHITECT.CLASSA") {
+        if ((LicenseType !== "CITIZEN.CLASSA" && LicenseType !== "BPA_DEVELOPER")) {
           onSelect("", data, "", true, "stakeholder-document-details");
         } else {
           onSelect("", data, "", true);
@@ -669,7 +669,9 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
         },
       },
     };
-    if (LicenseType === "ARCHITECT.CLASSA") {
+    console.log("logger123...",LicenseType)
+
+    if ((LicenseType !== "CITIZEN.CLASSA" && LicenseType !== "BPA_DEVELOPER")) {
       onSelect(config.key, developerRegisterData, null, null, "stakeholder-document-details");
     } else {
       onSelect(config.key, developerRegisterData);
@@ -689,7 +691,8 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
           isAddressSame: isAddressSame,
         };
         //1, units
-        if (LicenseType === "ARCHITECT.CLASSA") {
+        console.log("logger123...",LicenseType)
+        if ((LicenseType !== "CITIZEN.CLASSA" && LicenseType !== "BPA_DEVELOPER")) {
           onSelect("", formData, "", true, "stakeholder-document-details");
         } else {
           onSelect("", formData, "", true);
@@ -741,7 +744,7 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
         {isOpenLinkFlow && <BackButton style={{ border: "none" }}>{t("CS_COMMON_BACK")}</BackButton>}
         <Timeline
           currentStep={2}
-          flow={LicenseType === "ARCHITECT.CLASSA" ? "ARCHITECT.CLASSA" : "STAKEHOLDER"}
+          flow={(LicenseType !== "CITIZEN.CLASSA" && LicenseType !== "BPA_DEVELOPER") ? "ARCHITECT.CLASSA" : "STAKEHOLDER"}
           onChangeStep={changeStep}
           isAPILoaded={LicenseType ? true : false}
         />

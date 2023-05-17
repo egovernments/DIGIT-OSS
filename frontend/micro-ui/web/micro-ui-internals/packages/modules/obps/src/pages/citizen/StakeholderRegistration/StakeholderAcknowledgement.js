@@ -52,15 +52,22 @@ const StakeholderAcknowledgement = ({ data, onSuccess }) => {
 
   useEffect(() => {
     try {
-      let tenantId = data?.result?.Licenses[0]?.tenantId ? data?.result?.Licenses[0]?.tenantId : tenantId;
-      data.tenantId = tenantId;
+      console.log("logger1234...",data,tenantId)
+      let tenantIdTemp = data?.result?.Licenses?.[0]?.tenantId ? data?.result?.Licenses?.[0]?.tenantId : tenantId;
+      data.tenantId = tenantIdTemp;
       let formdata = {};
-      formdata = convertToStakeholderObject(data);
+      console.log("logger1234...5",data)
+      let tradeType = (data?.LicenseType?.licenceTypeSelected === "CITIZEN.CLASSA" || data?.LicenseType?.licenceTypeSelected === "BPA_DEVELOPER") ? "BPA_DEVELOPER.Company" : "TECHNICAL_PROFESSIONAL"
+      console.log("logger1234...",data)
+      let businessService = (data?.LicenseType?.licenceTypeSelected === "CITIZEN.CLASSA" || data?.LicenseType?.licenceTypeSelected === "BPA_DEVELOPER") ? "" : "BPAREG"
+      formdata = convertToStakeholderObject(data,tradeType,businessService);
+      console.log("logger1234...",tradeType,formdata)
       mutation.mutate(formdata, {
         onSuccess,
       });
 
     } catch (err) {
+      console.log("Aknowledgement Error ====> ",err)
     }
   }, []);
 

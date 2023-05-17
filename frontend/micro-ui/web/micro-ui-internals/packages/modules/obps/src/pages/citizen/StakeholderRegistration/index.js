@@ -36,6 +36,7 @@ const StakeholderRegistration = () => {
     queryClient.invalidateQueries("PT_CREATE_PROPERTY");
   };
   const createApplication = async () => {
+    console.log("Logger123... Submit")
     sessionStorage.removeItem("Digit.BUILDING_PERMIT");
     history.replace(`${path}/acknowledgement`);
   };
