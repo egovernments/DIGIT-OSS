@@ -54,6 +54,7 @@ import BeneficialCard from "./ScrutinyBasic/AllServiceScrutiny/BeneficialInteres
 import ExtensionCluCard from "./ScrutinyBasic/AllServiceScrutiny/ExtensionClu/ExtensionCluCard";
 import CompletionLicCard from "./ScrutinyBasic/AllServiceScrutiny/CompletionLic/CompletionLicCard";
 import CompletionInbox from "./ScrutinyBasic/AllServiceScrutiny/CompletionLic/Inbox/index";
+import CompositionCluInbox from "./ScrutinyBasic/AllServiceScrutiny/CompositionClu/Inbox/Index";
 
 const TLBreadCrumb = ({ location }) => {
   const { t } = useTranslation();
@@ -308,18 +309,18 @@ const EmployeeApp = ({ path, url, userType }) => {
                 />
               )}
             />
-            {/* <PrivateRoute
-              path={`${path}/CompositionInbox`}
+            <PrivateRoute
+              path={`${path}/CompositionCluInbox`}
               component={(props) => (
-                <CompositionInbox
+                <CompositionCluInbox
                   parentRoute={path}
-                  businessService={["COMPLETION_CERTIFICATE"]}
+                  businessService={["TRANSFER_OF_LICIENCE"]}
                   filterComponent="TL_INBOX_FILTER"
                   initialStates={{}}
                   isInbox={true}
                 />
               )}
-            /> */}
+            />
 
             <PrivateRoute
               path={`${path}/CompletionInbox`}

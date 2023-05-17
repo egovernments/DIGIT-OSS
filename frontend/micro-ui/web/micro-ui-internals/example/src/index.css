@@ -21199,7 +21199,11 @@ input[type=text]:disabled {
 background-color: #ff000042;
 color: #fff;
 /* animation:blinkanimetion 100ms infinite; */
-animation: mymove 300ms infinite;
+/* animation: mymove 300ms infinite; */
+/* animation: mymove 3s infinite alternate slidein; */
+animation: mymove 200ms infinite;
+animation-duration: 6s;
+animation-iteration-count: 3;
 }
 
 /* @keyframes blinkanimetion{
@@ -21218,4 +21222,5 @@ color: #fff !important;
   50%  { background: #ff000042;}
   75%  { background: #f1f1f1;} */
   100% { background: #f1f1f1;}
+  
 }

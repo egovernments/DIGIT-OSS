@@ -37,9 +37,11 @@ const DesktopInbox = ({
     }
     return str;
   };
+  
 
   const GetMobCell = (value) => <span className="sla-cell">{value}</span>;
-  const inboxColumns = () => [
+  const inboxColumns = () =>[
+    
     {
       Header: t("WF_INBOX_HEADER_APPLICATION_NO"),
       Cell: ({ row }) => {
@@ -101,6 +103,7 @@ const DesktopInbox = ({
     },
     {
       Header: t("TL_COMMON_TABLE_COL_APP_TYPE"),
+      
       Cell: ({ row }) => {
         return GetCell(t(row.original["businessService"] ? `CS_COMMON_INBOX_${row.original["businessService"]?.toUpperCase()}` : "NA"));
       },
