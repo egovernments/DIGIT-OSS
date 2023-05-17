@@ -82,7 +82,7 @@ const LicenseType = ({ t, config, onSelect, userType, formData }) => {
   );
   const [licenceTypeCombined, setLicenseTypeCom] = useState("");
   const { data, isLoading } = Digit.Hooks.obps.useMDMS(stateId, "StakeholderRegistraition", "TradeTypetoRoleMapping");
-  let isopenlink = window.location.href.includes("/openlink/");
+  let isopenlink = window.location.href?.includes("/openlink/");
   const isCitizenUrl = Digit.Utils.browser.isMobile() ? true : false;
 
   const { data: optionsArrList } = Digit.Hooks.obps.useMDMS(stateId, "Developer-type", ["DeveloperType"]);
@@ -102,7 +102,7 @@ const LicenseType = ({ t, config, onSelect, userType, formData }) => {
     let list = [];
     let found = false;
     data?.StakeholderRegistraition?.TradeTypetoRoleMapping.map((ob) => {
-      found = list.some((el) => el.i18nKey.includes(ob.tradeType.split(".")[0]));
+      found = list.some((el) => el.i18nKey?.includes(ob.tradeType.split(".")[0]));
       if (!found) list.push({ role: ob.role, i18nKey: `TRADELICENSE_TRADETYPE_${ob.tradeType.split(".")[0]}`, tradeType: ob.tradeType });
     });
     console.log("DATAList", list);
@@ -206,9 +206,9 @@ const LicenseType = ({ t, config, onSelect, userType, formData }) => {
           onSelect={goNext}
           onSkip={onSkip}
           isDisabled={
-            licenceTypeSelected && licenceTypeSelected.includes("ARCHITECT")
+            licenceTypeSelected && licenceTypeSelected?.includes("ARCHITECT")
               ? !licenceTypeSelected || !ArchitectNo
-              : licenceTypeSelected.includes("CITIZEN")
+              : licenceTypeSelected?.includes("CITIZEN")
           }
         >
           <div className="happy">
@@ -227,7 +227,7 @@ const LicenseType = ({ t, config, onSelect, userType, formData }) => {
                   </select>
                 </Form.Group>
 
-                {licenceTypeSelected && licenceTypeSelected.includes("ARCHITECT") && (
+                {licenceTypeSelected && licenceTypeSelected?.includes("ARCHITECT") && (
                     <Fragment>
                       <Form.Group className="col-md-6">
                       <CardLabel>
@@ -276,7 +276,7 @@ const LicenseType = ({ t, config, onSelect, userType, formData }) => {
                   )}
 
                 <Form.Group className="col-md-6">
-                  {licenceTypeSelected && licenceTypeSelected.includes("DEVELOPER") && (
+                  {licenceTypeSelected && licenceTypeSelected?.includes("DEVELOPER") && (
                     <div className="col-md-6">
                       <CardLabel>
                         {`${t("BPA_DEVELOPER_TYPE_TEXT")}`} <span className="font-weight-bold text-danger">*</span>
@@ -289,7 +289,7 @@ const LicenseType = ({ t, config, onSelect, userType, formData }) => {
                     </div>
                   )}
 
-                  {licenceTypeSelected && licenceTypeSelected.includes("CITIZEN") && (
+                  {licenceTypeSelected && licenceTypeSelected?.includes("CITIZEN") && (
                     <div className="col-md-6">
                       <a className="btn btn-primary btn-sm" href="/digit-ui/citizen">
                         Licencing Services
@@ -297,7 +297,7 @@ const LicenseType = ({ t, config, onSelect, userType, formData }) => {
                     </div>
                   )}
                 </Form.Group>
-                {/* {LicenseType && LicenseType?.i18nKey.includes("CITIZEN") && <a className="submit-bar col-md-4" onClick={() => history.push("/digit-ui/citizen")}>Submit</a>} */}
+                {/* {LicenseType && LicenseType?.i18nKey?.includes("CITIZEN") && <a className="submit-bar col-md-4" onClick={() => history.push("/digit-ui/citizen")}>Submit</a>} */}
               </Row>
             </div>
           </div>
