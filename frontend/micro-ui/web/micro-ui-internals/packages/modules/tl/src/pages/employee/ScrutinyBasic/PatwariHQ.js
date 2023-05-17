@@ -17,7 +17,11 @@ import {
 
 const DataGridDemo = (props) => {
     const applicant = props.dataForIcons;
-    console.log("newdataPA", applicant);
+    const applicants = props.remarksData;
+
+    console.log("newdataPA", applicants);
+    console.log("newdatahapp", applicant);
+
     const [chatSheet, setChatSheet] = useState([])
     const [expanded, setExpanded] = useState({})
 
@@ -71,7 +75,9 @@ const DataGridDemo = (props) => {
             <React.Fragment>
                 {
                     element?.isApproved === "Not In Order" && (
-                        <div style={{ backgroundColor: "#ff0000" }}>
+                        <td
+                        style={{ backgroundColor: "#ff0000" }}
+                        >
 
                             <p onClick={() => handleExpend(element.role, item.name, !expanded?.[element?.role]?.[item?.name])}>
                                 {element?.isApproved}
@@ -88,14 +94,16 @@ const DataGridDemo = (props) => {
                                     </button>
                                 </Card>
                             )}
-                        </div>
+                        </td>
                     )
 
 
                 }
                 {
                     element?.isApproved === "Conditional" && (
-                        <div style={{ backgroundColor: "#2874A6" }}>
+                        <td
+                         style={{ backgroundColor: "#2874A6" }}
+                        >
                             <p onClick={() => handleExpend(element.role, item.name, !expanded?.[element?.role]?.[item?.name])}>
                                 {element?.isApproved}
                             </p>
@@ -111,14 +119,16 @@ const DataGridDemo = (props) => {
                                     </button>
                                 </Card>
                             )}
-                        </div>
+                        </td>
                     )
 
 
                 }
                 {
                     element?.isApproved === "In Order" && (
-                        <div style={{ backgroundColor: "#09cb3d" }}>
+                        <td 
+                        style={{ backgroundColor: "#09cb3d" }}
+                        >
                             <p onClick={() => handleExpend(element.role, item.name, !expanded?.[element?.role]?.[item?.name])}>
                                 {element?.isApproved}
                             </p>
@@ -134,7 +144,7 @@ const DataGridDemo = (props) => {
                                     </button>
                                 </Card>
                             )}
-                        </div>
+                        </td>
                     )
 
 
@@ -153,13 +163,9 @@ const DataGridDemo = (props) => {
     return (
         <Form ref={props.generalInfoRef}>
 
-            <Form.Group className="justify-content-center" controlId="formBasicEmail" style={{ border: "2px solid #e9ecef", margin: 10, padding: 20 }}>
-
-
-
-
-
-                <div style={{ overflow: "scroll" }}>
+<Form.Group className="justify-content-center" controlId="formBasicEmail" style={{ border: "2px solid #e9ecef", margin: 10, padding: 20 , display:"grid"}}>
+          
+ <div style={{ overflow: "scroll" }}>
                     <Card style={{ textAlign: "center" }}>ONLINE LICENSE APPLICATION SCRUTINY PROFORMA</Card>
                     <table className="table table-bordered">
                         <thead>
@@ -174,44 +180,44 @@ const DataGridDemo = (props) => {
 
                                
                                 <th class="fw-normal py-0 border-top-0">
-                                    Patwari_HQ
+                                    Patwari Head Quarter
                                 </th>
 
                                 <th class="fw-normal py-0 border-top-0">
-                                    JE_HQ
+                                    JE Head Quarter
                                 </th>
                                 <th class="fw-normal py-0 border-top-0">
-                                    AD_HQ
+                                    AD Head Quarter
                                 </th>
                                 <th class="fw-normal py-0 border-top-0">
-                                    JD_HQ
+                                    JD Head Quarter
                                 </th>
                                 <th class="fw-normal py-0 border-top-0">
-                                    DA_HQ/ADA_HQ
+                                    DA/ADA Head Quarter
                                 </th>
                                 <th class="fw-normal py-0 border-top-0">
-                                    AO_HQ
+                                    AO Head Quarter
                                 </th>
                                 <th class="fw-normal py-0 border-top-0">
-                                    ATP_HQ
+                                    ATP Head Quarter
                                 </th>
                                 <th class="fw-normal py-0 border-top-0">
-                                    Patwari
+                                    Patwari Filed
                                 </th>
                                 <th class="fw-normal py-0 border-top-0">
-                                    JE_Filed
+                                    JE Filed
                                 </th>
                                 <th class="fw-normal py-0 border-top-0">
-                                    AD_Filed
+                                    AD Filed
                                 </th>
                                 <th class="fw-normal py-0 border-top-0">
-                                    DA_Filed/ADA_Filed
+                                    DA/ADA Filed
                                 </th>
                                 <th class="fw-normal py-0 border-top-0">
-                                    AO_Filed
+                                    AO Filed
                                 </th>
                                 <th class="fw-normal py-0 border-top-0">
-                                    ATP_Filed
+                                    ATP Filed
                                 </th>
 
 
@@ -234,62 +240,82 @@ const DataGridDemo = (props) => {
                                             {item?.name}
 
                                         </td>
-                                         <td>
-                                            {item.employees?.find((item, index) => (item.role === "Patwari"))?.isApproved || ""}
+                                        
+                                        
+                                        {
+                                            item.employees?.find((item, index) => (item.role === "Patwari"))?getDataGri(item.employees?.find((item, index) => (item.role === "Patwari")),item): <td></td>
 
-                                            {getDataGri(item.employees?.find((item, index) => (item.role === "Patwari")),item)}
-                                        </td>
-                                        <td>
-                                            {/* {item.employees?.find((item, index) => (item.role === "JE_HQ"))?.isApproved || ""} */}
+                                        }
+                                            
+                                        
+                                       
+                                            
+                                                {
+                                            item.employees?.find((item, index) => (item.role === "JE_HQ"))?getDataGri(item.employees?.find((item, index) => (item.role === "JE_HQ")),item): <td></td>
 
-                                            {getDataGri(item.employees?.find((item, index) => (item.role === "JE_HQ")),item)}
+                                                }
+                                          
 
-                                        </td>
-                                        <td>
-                                            {item.employees?.find((item, index) => (item.role === "AD_HQ"))?.isApproved || ""}
+                                            {/* {
+                                            item.employees?.find((item, index) => (item.role === "JE_HQ"))?.length?getDataGri(item.employees?.find((item, index) => (item.role === "JE_HQ")),item): <td></td>
 
-                                        </td>
-                                        <td>
-                                            {item.employees?.find((item, index) => (item.role === "JD_HQ"))?.isApproved || ""}
+                                                } */}
+                                            {
+                                            item.employees?.find((item, index) => (item.role === "AD_HQ"))?getDataGri(item.employees?.find((item, index) => (item.role === "AD_HQ")),item): <td></td>
 
-                                        </td>
-                                        <td>
-                                            {item.employees?.find((item, index) => (item.role === ("DA_HQ" || "ADA_HQ")))?.isApproved || ""}
+                                                }
+                                            {
+                                            item.employees?.find((item, index) => (item.role === ("DA_HQ" || "ADA_HQ")))?getDataGri(item.employees?.find((item, index) => (item.role === ("DA_HQ" || "ADA_HQ"))),item): <td></td>
 
-                                        </td>
-                                        <td>
-                                            {item.employees?.find((item, index) => (item.role === "AO_HQ"))?.isApproved || ""}
+                                                }
+                                            {
+                                            item.employees?.find((item, index) => (item.role === "AO_HQ"))?getDataGri(item.employees?.find((item, index) => (item.role === "AO_HQ")),item): <td></td>
 
-                                        </td>
-                                        <td>
-                                            {item.employees?.find((item, index) => (item.role === "ATP_HQ"))?.isApproved || ""}
+                                                }
+                                       
+                                            {
+                                            item.employees?.find((item, index) => (item.role === "ATP_HQ"))?getDataGri(item.employees?.find((item, index) => (item.role === "ATP_HQ")),item): <td></td>
 
-                                        </td>
-                                        <td>
-                                            {item.employees?.find((item, index) => (item.role === "Patwari_Filed"))?.isApproved || ""}
+                                                }
+                                            {
+                                            item.employees?.find((item, index) => (item.role === "ATP_HQ"))?getDataGri(item.employees?.find((item, index) => (item.role === "ATP_HQ")),item): <td></td>
 
-                                        </td>
-                                        <td>
-                                            {item.employees?.find((item, index) => (item.role === "JE_Filed"))?.isApproved || ""}
+                                                }
+                                            {
+                                            item.employees?.find((item, index) => (item.role === "Patwari_Filed"))?getDataGri(item.employees?.find((item, index) => (item.role === "Patwari_Filed")),item): <td></td>
 
-                                        </td>
-                                        <td>
-                                            {item.employees?.find((item, index) => (item.role === "AD_Filed"))?.isApproved || ""}
+                                                }
+                                            {/* {
+                                            item.employees?.find((item, index) => (item.role === "Patwari_Filed"))?getDataGri(item.employees?.find((item, index) => (item.role === "Patwari_Filed")),item): <td></td>
 
-                                        </td>
-                                        <td>
-                                            {item.employees?.find((item, index) => (item.role === ("DA_Filed" || "ADA_Filed")))?.isApproved || ""}
+                                                } */}
+                                            {
+                                            item.employees?.find((item, index) => (item.role === "JE_Filed"))?getDataGri(item.employees?.find((item, index) => (item.role === "JE_Filed")),item): <td></td>
 
-                                        </td>
-                                        <td>
+                                                }
+                                            {
+                                            item.employees?.find((item, index) => (item.role === ("DA_Filed" || "ADA_Filed")))?getDataGri(item.employees?.find((item, index) => (item.role === ("DA_Filed" || "ADA_Filed"))),item): <td></td>
+
+                                                }
+                                            {
+                                            item.employees?.find((item, index) => (item.role === "AO_Filed"))?getDataGri(item.employees?.find((item, index) => (item.role === "AO_Filed")),item): <td></td>
+
+                                                }
+                                            {
+                                            item.employees?.find((item, index) => (item.role === "ATP_Filed"))?getDataGri(item.employees?.find((item, index) => (item.role === "ATP_Filed")),item): <td></td>
+
+                                                }
+                                       
+                                        
+                                        {/* <td>
                                             {item.employees?.find((item, index) => (item.role === "AO_Filed"))?.isApproved || ""}
-
+                                            {getDataGri(item.employees?.find((item, index) => (item.role === "AO_Filed")),item)}
                                         </td>
                                         <td>
                                             {item.employees?.find((item, index) => (item.role === "ATP_Filed"))?.isApproved || ""}
-
-                                        </td>
-                                        <td> <p>
+                                            {getDataGri(item.employees?.find((item, index) => (item.role === "ATP_Filed")),item)}
+                                        </td> */}
+                                        {/* <td> <p>
                                             <IconButton
                                                 onClick={() => toggleshown1(item.name)}
                                             >
@@ -317,7 +343,7 @@ const DataGridDemo = (props) => {
                                                     </Box>
                                                 )}
                                             </div>
-                                        </td>
+                                        </td> */}
                                         {/* <td>
                                             {item.employees?.find((item, index) => (item.role === "Patwari_HQ"))?.isApproved || ""}
 

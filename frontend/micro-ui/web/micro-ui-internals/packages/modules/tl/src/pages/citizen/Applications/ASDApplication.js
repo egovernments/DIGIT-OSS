@@ -228,7 +228,7 @@ const ASDApplications = ({ view }) => {
         <Table stickyHeader aria-label="sticky table">
             <TableHead>
                 <TableRow>
-                    <StyledTableCell >ID</StyledTableCell>
+                    {/* <StyledTableCell >ID</StyledTableCell> */}
                     <StyledTableCell >Tenant Id</StyledTableCell>
                     <StyledTableCell >Business Service</StyledTableCell>
                     <StyledTableCell >Application Number</StyledTableCell>
@@ -245,9 +245,9 @@ const ASDApplications = ({ view }) => {
             {data?.ApprovalStandardEntity?.map((item, index) => {
           return (
                         <StyledTableRow sx={{ "&:last-child td, &:last-child th": { border: 0 } }}>
-                            <StyledTableCell component="th" scope="row">
+                            {/* <StyledTableCell component="th" scope="row">
                             {item?.id}
-                            </StyledTableCell>
+                            </StyledTableCell> */}
                             <StyledTableCell>{item?.tenantId}</StyledTableCell>
                             <StyledTableCell>
                             {item?.businessService}
