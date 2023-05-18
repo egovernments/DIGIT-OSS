@@ -302,7 +302,7 @@ function SubmitNew() {
           userInfo: userInfo,
         },
       };
-      const Resp = await axios.post(`/tl-services/v1/_search?loiNumber=${getValues("LOINumber")}`, loiRequest);
+      const Resp = await axios.post(`/tl-services/v1/_search?loiNumber=${LOINumber}`, loiRequest);
       console.log(Resp, "RRRRRRRRRRR");
       setKhasraNumber(Resp?.data?.Licenses?.[1]?.tradeLicenseDetail?.additionalDetail?.[0]?.ApplicantPurpose?.AppliedLandDetails?.[0]?.khewats);
       // setDevelopmentPlan(Resp?.data?.Licenses?.[0]?.tradeLicenseDetail?.additionalDetail?.[0]?.ApplicantPurpose?.AppliedLandDetails?.[0]?.developmentPlan)

@@ -52,7 +52,7 @@ const ETCApplication = ({ view }) => {
       },
     };
     try {
-      const Resp = await axios.post("/tl-services/construction/_get", data);
+      const Resp = await axios.post("/tl-services/construction/_get", data); 
       setLoader(false);
       setData(Resp?.data);
     } catch (error) {
@@ -122,7 +122,7 @@ const ETCApplication = ({ view }) => {
               </TableHead>
               <TableBody>
 
-                {data?.compositionOfUrban?.map((item, index) => {
+                {data?.constructionOfCommunity?.map((item, index) => {
                   return (
                     <StyledTableRow sx={{ "&:last-child td, &:last-child th": { border: 0 } }}>
                       <StyledTableCell component="th" scope="row">
