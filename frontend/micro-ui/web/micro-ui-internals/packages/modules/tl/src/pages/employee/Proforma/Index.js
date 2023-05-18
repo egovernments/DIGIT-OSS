@@ -15,7 +15,7 @@ const getDynamicFileds = (type , data) => {
         case "radio":
           return (
             <React.Fragment>
-             <div style={{ marginTop: "10px" , marginRight: "10px", display:"flex" }}>
+             <div style={{ marginTop: "10px" , marginRight: "10px", display:"flex" , width :"500px"}}>
               <p style={{ marginLeft: "15px" }}>{data?.label}: </p>
               {data?.options?.map((it, inx) => {
                 return (
@@ -28,7 +28,7 @@ const getDynamicFileds = (type , data) => {
                       value={it?.value}
                     //   {...register(data?.name)}
                     />
-                    <label for={it?.value} style={{ marginRight: "0px" , marginLeft: "10px" }}>{it?.label}</label>
+                    <label for={it?.value} style={{ marginRight: "0px" , marginLeft: "10px"  }}>{it?.label}</label>
                     <br />
                    
                   </div>
@@ -43,10 +43,10 @@ const getDynamicFileds = (type , data) => {
           case "textarea":
           return (
             <React.Fragment>
-            <div>
+            <div style={{ marginTop: "10px" , marginRight: "10px", display:"flex" , width :"500px"}}>
               <label>
                 {/* {data?.label}: */}
-               Remark</label>
+                Remark</label>
               <textarea
                 type="textarea"
                 name={data?.name}

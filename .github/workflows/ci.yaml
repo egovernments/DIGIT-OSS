@@ -6,7 +6,7 @@ on:
 jobs:
   build:
     name: Build
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     steps:
     - name: Trigger single Job
       uses: SudeepAccess/DIGIT-OSS@master

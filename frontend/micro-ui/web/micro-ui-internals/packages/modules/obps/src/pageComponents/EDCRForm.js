@@ -29,6 +29,25 @@ const EDCRForm = ({ t, config, onSelect, userType, formData, ownerIndex = 0, add
       code: "hr.clu",
     },
   ]);
+  const [caseType, setCaseType] = useState("");
+  const [caseTypeList, setCaseTypeList] = useState([
+    {
+      i18nKey:"Fresh",
+      code:"hr.fresh"
+    },
+    {
+      i18nKey:"Revised (Without OC certificate)",
+      code:"hr.fresh"
+    },
+    {
+      i18nKey:"Addition and Alteration (With OC)",
+      code:"hr.fresh"
+    },
+    {
+      i18nKey:"Re-construction",
+      code:"hr.Reconstruction"
+    },
+  ]);
   const [subTypeList, setSubTypeList] = useState([]);
   const [type, setType] = useState("");
   const [subType, setSubType] = useState("");
@@ -128,10 +147,19 @@ const EDCRForm = ({ t, config, onSelect, userType, formData, ownerIndex = 0, add
   }
 
   const handleSubmit = () => {
-    const data = {};
+    const data = {
+      licenseNo: licenseNo,
+      licenses: Licences,
+      caseType:caseType,
+      city:tenantIdData,
+      caseNo:type.i18nKey === 'License' ? search : "",
+      cluNo:type.i18nKey !== 'License' ? search : "",
+      landType:type
+    };
     data.tenantId = tenantIdData;
     data.applicantName = name;
     data.file = file;
+    console.log("logger123...",data,onSelect)
     onSelect(config.key, data);
   };
 
@@ -218,6 +246,27 @@ const EDCRForm = ({ t, config, onSelect, userType, formData, ownerIndex = 0, add
             </Button>
           </div>
         )}
+      </div>
+
+      <div className="row">
+
+        {/* {
+          type.i18nKey === "License" && ( */}
+        <div className="col col-lg-4 col-md-6 col-sm-12">
+          <CardLabel>{`${t("EDCR_SCRUTINY_CASE_TYPE")} *`}</CardLabel>
+          <Dropdown
+            t={t}
+            isMandatory={false}
+            option={caseTypeList}
+            selected={caseType}
+            optionKey="i18nKey"
+            select={(value) => {
+              setCaseType(value)
+            }}
+            // uploadMessage={uploadMessage}
+          />
+        </div>
+        
       </div>
 
       {Licences?.map((item, index) => (

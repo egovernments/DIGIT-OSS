@@ -260,6 +260,10 @@ const Home = () => {
             link: `/digit-ui/citizen/obps/ExtensionCom`,
             i18nKey: t("Extension of time"),
           },
+           {
+            link: `/digit-ui/citizen/tl/ExtensionCom/my-application`,
+            i18nKey: t("TL_MY_APPLICATIONS_HEADER"),
+          },
         ],
       },
       {

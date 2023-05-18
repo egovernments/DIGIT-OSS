@@ -576,7 +576,7 @@ const ScrutinyFormcontainer = (props) => {
           <div className="col-sm-2">
             <b><p className="head-font">TCP Application Number:</p></b>
             {/* {item.name.substring(0, 4)} */}
-            <b><p className="head-font">{applicationData?.tcpApplicationNumber}</p></b>
+            <b><p className="head-font">{applicationData?.tcpApplicationNumber.substring(7, 20)}</p></b>
           </div>
           <div className="col-sm-2">
             <b><p className="head-font">TCP Case Number:</p></b>

@@ -11,12 +11,14 @@ import {
   Toast,
   Loader,
 } from "@egovernments/digit-ui-react-components";
+import { TextField } from "@material-ui/core";
 import React, { useEffect, useState, useMemo } from "react";
 import { render } from "react-dom";
 import { useTranslation } from "react-i18next";
 import { Link, useHistory, useParams } from "react-router-dom";
 import Timeline from "../components/Timeline";
 import { stringReplaceAll } from "../utils";
+import { fromUnixTime, format } from 'date-fns';
 
 const ScrutinyDetails = ({ onSelect, userType, formData, config }) => {
   const { t } = useTranslation();
@@ -56,10 +58,10 @@ const ScrutinyDetails = ({ onSelect, userType, formData, config }) => {
   function getsuboptions() {
     let suboccoption = [];
     // data &&
-      // data?.planDetail?.mdmsMasterData?.SubOccupancyType?.map((ob) => {
-        mdmsData?.BPA?.SubOccupancyType?.map((ob) => {
-        suboccoption.push({ code: ob.code, name: ob.name, i18nKey: `BPA_SUBOCCUPANCYTYPE_${stringReplaceAll(ob?.code?.toUpperCase(), "-", "_")}` });
-      });
+    // data?.planDetail?.mdmsMasterData?.SubOccupancyType?.map((ob) => {
+    mdmsData?.BPA?.SubOccupancyType?.map((ob) => {
+      suboccoption.push({ code: ob.code, name: ob.name, i18nKey: `BPA_SUBOCCUPANCYTYPE_${stringReplaceAll(ob?.code?.toUpperCase(), "-", "_")}` });
+    });
     return suboccoption;
   }
 
@@ -178,16 +180,17 @@ const ScrutinyDetails = ({ onSelect, userType, formData, config }) => {
             if (result?.BPA?.length > 0) {
               result.BPA[0].data = formData.data;
               result.BPA[0].uiFlow = formData?.uiFlow;
-              onSelect("", result.BPA[0], "", true);
+              // onSelect("", result.BPA[0], "", true);
             }
           })
           .catch((e) => {
             setShowToast({ key: "true", message: e?.response?.data?.Errors[0]?.message || null });
           });
       } else {
-        onSelect("", formData, "", true);
+        // onSelect("", formData, "", true);
       }
     } else {
+      console.log("Logger123.......", config.key, subOccupancyObject)
       onSelect(config.key, subOccupancyObject);
     }
   };
@@ -199,6 +202,9 @@ const ScrutinyDetails = ({ onSelect, userType, formData, config }) => {
     setsubOccupancy(res);
     setsubOccupancyObject(temp);
   };
+
+  // const { isMdmsLoading, data: mdmsData } = Digit.Hooks.obps.useMDMS(stateCode, "BPA", ["RiskTypeComputation"]);
+  const riskType = Digit.Utils.obps.calculateRiskType(mdmsData?.BPA?.RiskTypeComputation, data?.planDetail?.plot?.area, data?.planDetail?.blocks);
 
   function getSubOccupancyValues(index) {
     let values = formData?.data?.bpaData?.bpaApprovalResponse?.[0]?.landInfo?.unit;
@@ -215,12 +221,24 @@ const ScrutinyDetails = ({ onSelect, userType, formData, config }) => {
     return returnValue ? returnValue : "NA";
   }
 
-  if (isMdmsLoading) return <Loader /> 
+  if (isMdmsLoading) return <Loader />
 
   return (
     <React.Fragment>
       <Timeline currentStep={checkingFlow === "OCBPA" ? 2 : 1} flow={checkingFlow === "OCBPA" ? "OCBPA" : ""} />
       <FormStep t={t} config={config} onSelect={goNext} onSkip={onSkip} /* isDisabled={Object.keys(subOccupancyObject).length === 0} */>
+
+        <CardSubHeader style={{ fontSize: "20px" }}>{t(`BPA_BASIC_DETAILS_TITLE`)}</CardSubHeader>
+        <StatusTable>
+          <Row className="border-none" label={t(`BPA_BASIC_DETAILS_APP_DATE_LABEL`)} text={data?.applicationDate ? format(new Date(data?.applicationDate), 'dd/MM/yyyy') : data?.applicationDate} />
+          <Row className="border-none" label={t(`BPA_BASIC_DETAILS_APPLICATION_TYPE_LABEL`)} text={t(`WF_BPA_${data?.appliactionType}`)} />
+          <Row className="border-none" label={t(`BPA_BASIC_DETAILS_SERVICE_TYPE_LABEL`)} text={t(data?.applicationSubType)} />
+          <Row className="border-none" label={t(`BPA_BASIC_DETAILS_OCCUPANCY_LABEL`)} text={data?.planDetail?.planInformation?.occupancy} />
+          <Row className="border-none" label={t(`BPA_BASIC_DETAILS_RISK_TYPE_LABEL`)} text={t(`WF_BPA_${riskType}`)} />
+          <Row className="border-none" label={t(`BPA_BASIC_DETAILS_APPLICATION_NAME_LABEL`)} text={data?.planDetail?.planInformation?.applicantName} />
+        </StatusTable>
+
+
         <CardSubHeader style={{ fontSize: "20px" }}>{t("BPA_EDCR_DETAILS")}</CardSubHeader>
         <StatusTable style={{ border: "none" }}>
           <Row
@@ -247,6 +265,15 @@ const ScrutinyDetails = ({ onSelect, userType, formData, config }) => {
         <StatusTable style={{ border: "none" }}>
           <Row
             className="border-none"
+            label={t("BPA_TOTAL_AREA_HEADER")}
+            text={
+              data?.planDetail?.blocks?.[0]?.building?.area
+                ? `${data?.planDetail?.blocks?.[0]?.building?.area} ${t("BPA_SQ_MTRS_LABEL")}`
+                : t("NA")
+            }
+          ></Row>
+          <Row
+            className="border-none"
             label={t("BPA_TOTAL_BUILT_UP_AREA_HEADER")}
             text={
               data?.planDetail?.blocks?.[0]?.building?.totalBuitUpArea
@@ -259,6 +286,13 @@ const ScrutinyDetails = ({ onSelect, userType, formData, config }) => {
             label={t("BPA_SCRUTINY_DETAILS_NUMBER_OF_FLOORS_LABEL")}
             text={data?.planDetail?.blocks?.[0]?.building?.totalFloors}
           ></Row>
+
+          <Row
+            className="border-none"
+            label={t("BPA_SCRUTINY_DETAILS_FLOOR_WISE_COVERAGE_AREA")}
+            text={data?.planDetail?.blocks?.[0]?.building?.totalFloorArea}
+          ></Row>
+
           <Row
             className="border-none"
             label={t("BPA_HEIGHT_FROM_GROUND_LEVEL_FROM_MUMTY")}
@@ -268,7 +302,140 @@ const ScrutinyDetails = ({ onSelect, userType, formData, config }) => {
                 : t("NA")
             }
           ></Row>
+
+          <Row
+            className="border-none"
+            label={t("BPA_TOTAL_PURCHASABLE_AREA_HEADER")}
+            text={
+              data?.planDetail?.blocks?.[0]?.building?.area
+                ? `${data?.planDetail?.blocks?.[0]?.building?.area} ${t("BPA_MTRS_LABEL")}`
+                : t("NA")
+            }
+          ></Row>
         </StatusTable>
+
+
+        <hr style={{ color: "#cccccc", backgroundColor: "#cccccc", height: "2px", marginTop: "20px", marginBottom: "20px" }} />
+        <CardSubHeader style={{ fontSize: "20px" }}>
+          {checkingFlow === "OCBPA" ? t("BPA_BUILDING_SETBACK_HEADER") : t("BPA_BUILDING_SETBACK_HEADER")}
+        </CardSubHeader>
+        <StatusTable style={{ border: "none" }}>
+          <Row
+            className="border-none"
+            label={t("BPA_TOTAL_AREA_HEADER")}
+            text={
+              data?.planDetail?.blocks?.[0]?.building?.area
+                ? `${data?.planDetail?.blocks?.[0]?.building?.area} ${t("BPA_SQ_MTRS_LABEL")}`
+                : t("NA")
+            }
+          ></Row>
+          <Row
+            className="border-none"
+            label={t("BPA_FRONT_AREA_HEADER")}
+            text={
+              data?.planDetail?.blocks?.[0]?.building?.totalBuitUpArea
+                ? `${data?.planDetail?.blocks?.[0]?.building?.totalBuitUpArea} ${t("BPA_SQ_MTRS_LABEL")}`
+                : t("NA")
+            }
+          ></Row>
+          <Row
+            className="border-none"
+            label={t("BPA_REAR_AREA_HEADER")}
+            text={data?.planDetail?.blocks?.[0]?.building?.totalFloors}
+          ></Row>
+
+          <Row
+            className="border-none"
+            label={t("BPA_SCRUTINY_SIDE1_LABEL")}
+            text={data?.planDetail?.blocks?.[0]?.building?.totalFloorArea}
+          ></Row>
+
+          <Row
+            className="border-none mt-4"
+            label={t("BPA_BASEMENT_POSITION")}
+          ></Row>
+
+          <input className="form-control w-100 p-2 mb-2" type="number" placeholder="Distance from left side" />
+          <input className="form-control w-100 p-2 mb-2" type="number" placeholder="Distance from right side" />
+
+          {/* <TextField variant="outlined" label={"Distance from left side"}/>
+            <TextField variant="outlined" label={"Distance from right side"}/> */}
+
+        </StatusTable>
+
+
+
+        <hr style={{ color: "#cccccc", backgroundColor: "#cccccc", height: "2px", marginTop: "20px", marginBottom: "20px" }} />
+        <CardSubHeader style={{ fontSize: "20px" }}>
+          {checkingFlow === "OCBPA" ? t("BPA_BUILDING_EXISTING_FLOOR_AREA_HEADER") : t("BPA_BUILDING_EXISTING_FLOOR_AREA_HEADER")}
+        </CardSubHeader>
+        <StatusTable style={{ border: "none" }}>
+          <Row
+            className="border-none"
+            label={t("BPA_EXISTING_AREA_OF_ALL_FLOOR_HEADER")}
+            text={
+              data?.planDetail?.blocks?.[0]?.building?.area
+                ? `${data?.planDetail?.blocks?.[0]?.building?.area} ${t("BPA_SQ_MTRS_LABEL")}`
+                : t("NA")
+            }
+          ></Row>
+          <Row
+            className="border-none"
+            label={t("BPA_EXISTING_FAR_ACHIEVED_HEADER")}
+            text={
+              data?.planDetail?.blocks?.[0]?.building?.totalBuitUpArea
+                ? `${data?.planDetail?.blocks?.[0]?.building?.totalBuitUpArea} ${t("BPA_SQ_MTRS_LABEL")}`
+                : t("NA")
+            }
+          ></Row>
+          <Row
+            className="border-none"
+            label={t("BPA_TOTAL_PURCHASABLE_AREA_HEADER")}
+            text={data?.planDetail?.blocks?.[0]?.building?.totalFloors}
+          ></Row>
+
+        </StatusTable>
+
+
+        <hr style={{ color: "#cccccc", backgroundColor: "#cccccc", height: "2px", marginTop: "20px", marginBottom: "20px" }} />
+        <CardSubHeader style={{ fontSize: "20px" }}>
+          {checkingFlow === "OCBPA" ? t("BPA_BUILDING_PROPOSED_AREA_HEADER") : t("BPA_BUILDING_PROPOSED_AREA_HEADER")}
+        </CardSubHeader>
+        <StatusTable style={{ border: "none" }}>
+          <Row
+            className="border-none"
+            label={t("BPA_PROPOSED_FLOOR_WISE_COVERAGED_AREA_HEADER")}
+            text={
+              data?.planDetail?.blocks?.[0]?.building?.area
+                ? `${data?.planDetail?.blocks?.[0]?.building?.area} ${t("BPA_SQ_MTRS_LABEL")}`
+                : t("NA")
+            }
+          ></Row>
+          <Row
+            className="border-none"
+            label={t("BPA_PROPOSED_TOTAL_AREA_HEADER")}
+            text={
+              data?.planDetail?.blocks?.[0]?.building?.totalBuitUpArea
+                ? `${data?.planDetail?.blocks?.[0]?.building?.totalBuitUpArea} ${t("BPA_SQ_MTRS_LABEL")}`
+                : t("NA")
+            }
+          ></Row>
+          <Row
+            className="border-none"
+            label={t("BPA_PROPOSED_BUILDUP_AREA_HEADER")}
+            text={data?.planDetail?.blocks?.[0]?.building?.totalFloors}
+          ></Row>
+
+          <Row
+            className="border-none"
+            label={t("BPA_PROPOSED_PURCHASABLE_AREA_HEADER")}
+            text={data?.planDetail?.blocks?.[0]?.building?.totalFloorArea}
+          ></Row>
+
+        </StatusTable>
+
+
+
         <hr style={{ color: "#cccccc", backgroundColor: "#cccccc", height: "2px", marginTop: "20px", marginBottom: "20px" }} />
         <CardSubHeader style={{ fontSize: "20px" }}>{t("BPA_OCC_SUBOCC_HEADER")}</CardSubHeader>
         {data?.planDetail?.blocks?.map((block, index) => (
@@ -293,7 +460,7 @@ const ScrutinyDetails = ({ onSelect, userType, formData, config }) => {
                 onSelect={(e) => selectOccupancy(e, data, block.number)}
                 isOBPSMultiple={true}
                 optionsKey="i18nKey"
-                ServerStyle={{ width: "100%", overflowX: "hidden"}}
+                ServerStyle={{ width: "100%", overflowX: "hidden" }}
                 t={t}
               />
             ) : null}
@@ -308,9 +475,9 @@ const ScrutinyDetails = ({ onSelect, userType, formData, config }) => {
             ) : null}
             {!(checkingFlow === "OCBPA")
               ? subOccupancyObject[`Block_${block.number}`] &&
-                subOccupancyObject[`Block_${block.number}`].length > 0 && (
-                  <LinkButton style={{ textAlign: "left" }} label={"Clear All"} onClick={() => clearall(block.number)} />
-                )
+              subOccupancyObject[`Block_${block.number}`].length > 0 && (
+                <LinkButton style={{ textAlign: "left" }} label={"Clear All"} onClick={() => clearall(block.number)} />
+              )
               : null}
             <div style={{ marginTop: "20px" }}>
               {checkingFlow === "OCBPA" ? (
