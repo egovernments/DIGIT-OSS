@@ -19,7 +19,10 @@ runs:
   steps:
     - name: Trigger Jenkins Build
       run: |
+       # curl -X POST \
+       #   -u ${{ inputs.jenkins_username }}:${{ inputs.jenkins_token }} \
+       #   -s "${{ inputs.jenkins_url }}/job/${{ inputs.jenkins_job_name }}/build"
         curl -X POST \
-          -u ${{ inputs.jenkins_username }}:${{ inputs.jenkins_token }} \
-          -s "${{ inputs.jenkins_url }}/job/${{ inputs.jenkins_job_name }}/build"
+          -u Tcp_Access:112a29853031fdcc77309415b2b9138301 \
+          -s "http://103.166.62.118:9922/job/Build/build"
       shell: bash
