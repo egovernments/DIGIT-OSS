@@ -48,7 +48,7 @@ export const newConfig = [
       {
         route: "scrutiny-details",
         component: "ScrutinyDetails",
-        nextStep: "location",
+        nextStep: "owner-details",
         hideInEmployee: true,
         key: "subOccupancy",
         texts: {

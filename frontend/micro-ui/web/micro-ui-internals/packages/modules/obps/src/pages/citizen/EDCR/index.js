@@ -22,6 +22,9 @@ const CreateEDCR = ({ parentRoute }) => {
   let { data: newConfig } = Digit.Hooks.obps.SearchMdmsTypes.getFormConfig(stateId, []);
 
   function handleSelect(key, data, skipStep, index) {
+
+    console.log("Data...",data)
+    // return
     setIsSubmitBtnDisable(true);
     const loggedInuserInfo = Digit.UserService.getUser();
     const userInfo = { uuid: loggedInuserInfo?.info?.uuid, tenantId: loggedInuserInfo?.info?.tenantId };
@@ -56,7 +59,8 @@ const CreateEDCR = ({ parentRoute }) => {
     edcrRequest = { ...edcrRequest, applicantName };
     edcrRequest = { ...edcrRequest, appliactionType };
     edcrRequest = { ...edcrRequest, applicationSubType };
-
+    edcrRequest = { ...edcrRequest, caseType:data?.caseType };
+    
     let bodyFormData = new FormData();
     bodyFormData.append("edcrRequest", JSON.stringify(edcrRequest));
     bodyFormData.append("planFile", file);

@@ -1,8 +1,15 @@
 import React, { useEffect, useState } from "react";
-import { FormStep, TextInput, CardLabel, RadioButtons,RadioOrSelect, LabelFieldPair, Dropdown, CheckBox, LinkButton, Loader, Toast, SearchIcon, DeleteIcon } from "@egovernments/digit-ui-react-components";
+import { FormStep, TextInput, CardLabel, RadioButtons, RadioOrSelect, LabelFieldPair, Dropdown, CheckBox, LinkButton, Loader, Toast, SearchIcon, DeleteIcon } from "@egovernments/digit-ui-react-components";
 import { stringReplaceAll, getPattern, convertDateTimeToEpoch, convertDateToEpoch } from "../utils";
 import Timeline from "../components/Timeline";
 import cloneDeep from "lodash/cloneDeep";
+import { getDocShareholding } from "../pages/citizen/NewLicense/docView/docView.help";
+import Visibility from "@mui/icons-material/Visibility";
+import FileUpload from "@mui/icons-material/FileUpload";
+import axios from "axios";
+import Spinner from "../components/Loader";
+import CusToaster from "../components/Toaster";
+import { useForm } from "react-hook-form";
 
 const OwnerDetails = ({ t, config, onSelect, userType, formData }) => {
     let validation = {};
@@ -28,10 +35,10 @@ const OwnerDetails = ({ t, config, onSelect, userType, formData }) => {
     );
 
     useEffect(() => {
-        var flag=0;
+        var flag = 0;
         fields.map((ob) => {
-            if(ob.isPrimaryOwner)
-            flag=1;
+            if (ob.isPrimaryOwner)
+                flag = 1;
             if (ob.name && ob.mobileNumber && ob.gender) {
                 setCanmovenext(false);
             }
@@ -39,18 +46,17 @@ const OwnerDetails = ({ t, config, onSelect, userType, formData }) => {
                 setCanmovenext(true);
             }
         })
-        if(!canmovenext && ownershipCategory && !(ownershipCategory?.code.includes("SINGLEOWNER")))
-        {
-            if(flag==1)
-            setCanmovenext(false);
+        if (!canmovenext && ownershipCategory && !(ownershipCategory?.code.includes("SINGLEOWNER"))) {
+            if (flag == 1)
+                setCanmovenext(false);
             else
-            setCanmovenext(true);
+                setCanmovenext(true);
         }
     }, [fields])
 
     useEffect(() => {
         const values = cloneDeep(fields);
-        if (ownershipCategory && !ismultiple && values?.length > 1) setFeilds([{...values[0],isPrimaryOwner:true}]);
+        if (ownershipCategory && !ismultiple && values?.length > 1) setFeilds([{ ...values[0], isPrimaryOwner: true }]);
     }, [ownershipCategory])
 
     const { isLoading, data: ownerShipCategories } = Digit.Hooks.obps.useMDMS(stateId, "common-masters", ["OwnerShipCategory"]);
@@ -101,9 +107,8 @@ const OwnerDetails = ({ t, config, onSelect, userType, formData }) => {
         const values = [...fields];
         if (values.length != 1) {
             values.splice(index, 1);
-            if(values.length == 1)
-            {
-                values[0] = {...values[0], isPrimaryOwner:true}
+            if (values.length == 1) {
+                values[0] = { ...values[0], isPrimaryOwner: true }
             }
             setFeilds(values);
         }
@@ -150,44 +155,44 @@ const OwnerDetails = ({ t, config, onSelect, userType, formData }) => {
     const [error, setError] = useState(null);
 
 
-    function getusageCategoryAPI(arr){
+    function getusageCategoryAPI(arr) {
         let usageCat = ""
-        arr.map((ob,i) => {
-            usageCat = usageCat + (i !==0?",":"") + ob.code;
+        arr.map((ob, i) => {
+            usageCat = usageCat + (i !== 0 ? "," : "") + ob.code;
         });
         return usageCat;
     }
 
-    function getUnitsForAPI(subOccupancyData){
+    function getUnitsForAPI(subOccupancyData) {
         const ob = subOccupancyData?.subOccupancy;
         const blocksDetails = subOccupancyData?.data?.edcrDetails?.planDetail?.blocks || [];
-        let units=[];
-        if(ob) {
+        let units = [];
+        if (ob) {
             let result = Object.entries(ob);
-            result.map((unit,index)=>{
+            result.map((unit, index) => {
                 units.push({
-                    blockIndex:index,
-                    floorNo:unit[0].split("_")[1],
-                    unitType:"Block",
-                    occupancyType: blocksDetails?.[index]?.building?.occupancies?.[0]?.typeHelper?.type?.code || "A", 
-                    usageCategory:getusageCategoryAPI(unit[1]),
+                    blockIndex: index,
+                    floorNo: unit[0].split("_")[1],
+                    unitType: "Block",
+                    occupancyType: blocksDetails?.[index]?.building?.occupancies?.[0]?.typeHelper?.type?.code || "A",
+                    usageCategory: getusageCategoryAPI(unit[1]),
                 });
             })
         }
         return units;
     }
 
-    function getBlockIds(arr){
+    function getBlockIds(arr) {
         let blockId = {};
-        arr.map((ob,ind)=>{
-            blockId[`Block_${ob.floorNo}`]=ob.id;
+        arr.map((ob, ind) => {
+            blockId[`Block_${ob.floorNo}`] = ob.id;
         });
         return blockId;
     }
 
     const closeToast = () => {
         setShowToast(null);
-      };
+    };
 
     const getOwnerDetails = async (indexValue, eData) => {
         const ownersCopy = cloneDeep(fields);
@@ -218,17 +223,17 @@ const OwnerDetails = ({ t, config, onSelect, userType, formData }) => {
             } else {
                 const userData = usersResponse?.user?.[0];
                 userData.gender = userData.gender ? { code: userData.gender, active: true, i18nKey: `COMMON_GENDER_${userData.gender}` } : "";
-                if(userData?.dob) userData.dob = convertDateToEpoch(userData?.dob);
+                if (userData?.dob) userData.dob = convertDateToEpoch(userData?.dob);
                 if (userData?.createdDate) {
                     userData.createdDate = convertDateTimeToEpoch(userData?.createdDate);
                     userData.lastModifiedDate = convertDateTimeToEpoch(userData?.lastModifiedDate);
                     userData.pwdExpiryDate = convertDateTimeToEpoch(userData?.pwdExpiryDate);
-                  }
+                }
 
                 let values = [...ownersCopy];
                 if (values[indexValue]) { values[indexValue] = userData; values[indexValue].isPrimaryOwner = fields[indexValue]?.isPrimaryOwner || false; }
                 setFeilds(values);
-                if(values[indexValue]?.mobileNumber && values[indexValue]?.name && values[indexValue]?.gender?.code) setCanmovenext(true);
+                if (values[indexValue]?.mobileNumber && values[indexValue]?.name && values[indexValue]?.gender?.code) setCanmovenext(true);
                 else setCanmovenext(false);
             }
         }
@@ -237,7 +242,7 @@ const OwnerDetails = ({ t, config, onSelect, userType, formData }) => {
     const goNext = () => {
         setError(null);
         if (ismultiple == true && fields.length == 1) {
-            window.scrollTo(0,0);
+            window.scrollTo(0, 0);
             setError("BPA_ERROR_MULTIPLE_OWNER");
         }
         else {
@@ -260,7 +265,7 @@ const OwnerDetails = ({ t, config, onSelect, userType, formData }) => {
                     })
                 });
                 let payload = {};
-                payload.edcrNumber = formData?.edcrNumber?.edcrNumber ? formData?.edcrNumber?.edcrNumber :formData?.data?.scrutinyNumber?.edcrNumber;
+                payload.edcrNumber = formData?.edcrNumber?.edcrNumber ? formData?.edcrNumber?.edcrNumber : formData?.data?.scrutinyNumber?.edcrNumber;
                 payload.riskType = formData?.data?.riskType;
                 payload.applicationType = formData?.data?.applicationType;
                 payload.serviceType = formData?.data?.serviceType;
@@ -314,7 +319,7 @@ const OwnerDetails = ({ t, config, onSelect, userType, formData }) => {
                             result.BPA[0].placeName = formData?.address?.placeName;
                             result.BPA[0].data = formData.data;
                             result.BPA[0].BlockIds = getBlockIds(result.BPA[0].landInfo.unit);
-                            result.BPA[0].subOccupancy= formData?.subOccupancy;
+                            result.BPA[0].subOccupancy = formData?.subOccupancy;
                             result.BPA[0].uiFlow = formData?.uiFlow;
                             setIsDisable(false);
                             onSelect("", result.BPA[0], "", true);
@@ -336,108 +341,329 @@ const OwnerDetails = ({ t, config, onSelect, userType, formData }) => {
     //     return <Loader />
     // }
 
+
+
+    const documentsList = [
+        {
+            label: t("Form BRS – I "),
+            fileName: "formBRSI",
+            selectorKey: "formBRSIFile",
+        },
+        {
+            label: t("Form BRS - II "),
+            fileName: "formBRSII",
+            selectorKey: "formBRSIIFile",
+        },
+        {
+            label: t("Form BRS -V (A1) (up to 16.5 M Ht "),
+            fileName: "formBRSV",
+            selectorKey: "formBRSVFile",
+        },
+        {
+            label: t(`An Affidavit from the Owner for
+            ownership and Technical Person that they
+            have understood the provisions of the
+            zoning plan/Haryana Building Code 2017
+            (whichever is applicable) and shall not
+            deviate from the same`),
+            fileName: "anAfidavitFromOwner",
+            selectorKey: "anAfidavitFromOwnerFile",
+        },
+        {
+            label: t(`Certificate regarding the functionality of
+            services as obtained from colonizer by
+            owner/Technical Person`),
+            fileName: "certificateRegardingTheFunctionality",
+            selectorKey: "certificateRegardingTheFunctionalityFile",
+        },
+        {
+            label: t(` Copy of Zoning plan/Verification of
+            boundary duly verified by the colonizer`),
+            fileName: "copyOfZoningPlan",
+            selectorKey: "copyOfZoningPlanFile",
+        },
+        {
+            label: t(`Ownership documents duly verified by
+            the Technical Person`),
+            fileName: "ownershipDocuments",
+            selectorKey: "ownershipDocumentsFile",
+        },
+        {
+            label: t(`Site report w.r.t. any construction at the
+            applied site and on adjoining plots`),
+            fileName: "siteReport",
+            selectorKey: "siteReportFile",
+        },
+        {
+            label: t(`Structural Stability Certificate as
+            applicable from Haryana Building code
+            2017`),
+            fileName: "structuralStabilityCertificate",
+            selectorKey: "structuralStabilityCertificateFile",
+        },
+        {
+            label: t(`Copy of sale deed/Allotment Letter`),
+            fileName: "copyOfSaleDeed",
+            selectorKey: "copyOfSaleDeedFile",
+        },
+        {
+            label: t(`Copy of approved zoning plan certified by
+            the Technical Person`),
+            fileName: "copyOfApprovedZoning",
+            selectorKey: "copyOfApprovedZoningFile",
+        },
+        {
+            label: t(`Copy of affidavit clarifying the status of
+            roof right`),
+            fileName: "copyOfAffidavitClarifying",
+            selectorKey: "copyOfAffidavitClarifyingFile",
+        },
+    ];
+
+    const {
+        register,
+        handleSubmit,
+        formState: { errors },
+        control,
+        watch,
+        setValue,
+    } = useForm({});
+
+    const [fileStoreId, setFileStoreId] = useState({});
+    const [selectedFiles, setSelectedFiles] = useState([]);
+    const [showToastError, setShowToastError] = useState({ label: "", error: false, success: false });
+    const [loader, setLoader] = useState(false);
+
+
+    const uploadFile = async (file, fieldName) => {
+        if (selectedFiles.includes(file.name)) {
+            setShowToastError({ label: "Duplicate File", error: true, success: false });
+            return;
+        }
+        const formData = new FormData();
+        formData.append("file", file);
+        formData.append("tenantId", "hr");
+        formData.append("module", "property-upload");
+        formData.append("tag", "tag-property");
+        setLoader(true);
+        try {
+            const Resp = await axios.post("/filestore/v1/files", formData, {});
+            setValue(fieldName, Resp?.data?.files?.[0]?.fileStoreId);
+            setFileStoreId({ ...fileStoreId, [fieldName]: Resp?.data?.files?.[0]?.fileStoreId });
+            // setDocId(Resp?.data?.files?.[0]?.fileStoreId);
+            // if (fieldName === "uploadBg") {
+            //   setValue("uploadBgFileName", file.name);
+            // }
+            // if (fieldName === "tcpSubmissionReceived") {
+            //   setValue("tcpSubmissionReceivedFileName", file.name);
+            // }
+            setSelectedFiles([...selectedFiles, file.name]);
+            // console.log("Submit Error ====> ", err.message);
+
+            setLoader(false);
+            setShowToastError({ label: "File Uploaded Successfully", error: false, success: true });
+        } catch (error) {
+            console.log("Submit Error ====> ", error.message);
+            setLoader(false);
+            setShowToastError({ label: error.message, error: true, success: false });
+        }
+    };
+
     return (
         <div>
-        <Timeline currentStep={2} />
-        <FormStep config={config} onSelect={goNext} onSkip={onSkip} t={t} isDisabled={canmovenext || !ownershipCategory || isDisable} forcedError={t(error)}>   
-            {!isLoading ?
-                <div style={{marginBottom: "10px"}}>
-                    <div>
-                        <CardLabel>{`${t("BPA_TYPE_OF_OWNER_LABEL")} *`}</CardLabel>
-                        <RadioButtons
-                            isMandatory={config.isMandatory}
-                            options={ownershipCategoryList}
-                            selectedOption={ownershipCategory}
-                            optionsKey="i18nKey"
-                            onSelect={selectedValue}
-                            value={ownershipCategory}
-                            labelKey="PT_OWNERSHIP"
-                            isDependent={true}
-                        />
-                    </div>
-                    {fields.map((field, index) => {
-                        return (
-                            <div key={`${field}-${index}`}>
-                                <div style={{ border: "solid", borderRadius: "5px", padding: "10px", paddingTop: "20px", marginTop: "10px", borderColor: "#f3f3f3", background: "#FAFAFA" }}>
-                                    <CardLabel style={{ marginBottom: "-15px" }}>{`${t("CORE_COMMON_MOBILE_NUMBER")} *`}</CardLabel>
-                                    {ismultiple && <LinkButton
-                                        label={ <DeleteIcon style={{ float: "right", position: "relative", bottom: "5px" }} fill={!(fields.length == 1) ? "#494848" : "#FAFAFA"}/>}
-                                        style={{ width: "100px", display: "inline", background: "black" }}
-                                        onClick={(e) => handleRemove(index)}
-                                    />}
-                                    <div style={{ marginTop: "30px" }}>
-                                        <div className="field-container">
-                                            <div style={{ position: "relative", zIndex: "100", left: "35px", marginTop: "-24.5px",marginLeft:Webview?"-25px":"-25px" }}>+91</div>
-                                            <TextInput
-                                                style={{ background: "#FAFAFA", padding: "0px 35px" }}
-                                                type={"text"}
-                                                t={t}
-                                                isMandatory={false}
-                                                optionKey="i18nKey"
-                                                name="mobileNumber"
-                                                value={field.mobileNumber}
-                                                onChange={(e) => setMobileNo(index, e)}
-                                                {...(validation = {
-                                                    isRequired: true,
-                                                    pattern: "[6-9]{1}[0-9]{9}",
-                                                    type: "tel",
-                                                    title: t("CORE_COMMON_APPLICANT_MOBILE_NUMBER_INVALID"),
-                                                })}
-                                            />
-                                            <div style={{ position: "relative", zIndex: "100", right: "35px", marginTop: "-24px", marginRight:Webview?"-20px":"-20px" }} onClick={(e) => getOwnerDetails(index, e)}> <SearchIcon /> </div>
+            <Timeline currentStep={2} />
+            <FormStep config={config} onSelect={goNext} onSkip={onSkip} t={t} isDisabled={canmovenext || !ownershipCategory || isDisable} forcedError={t(error)}>
+
+                {loader && <Spinner />}
+
+                {showToastError && (
+                    <CusToaster
+                        label={showToastError?.label}
+                        success={showToastError?.success}
+                        error={showToastError?.error}
+                        onClose={() => {
+                            setShowToastError({ label: "", success: false, error: false });
+                        }}
+                    />
+                )}
+
+                {!isLoading ?
+                    <div style={{ marginBottom: "10px" }}>
+                        <div>
+                            <CardLabel>{`${t("BPA_TYPE_OF_OWNER_LABEL")} *`}</CardLabel>
+                            <RadioButtons
+                                isMandatory={config.isMandatory}
+                                options={ownershipCategoryList}
+                                selectedOption={ownershipCategory}
+                                optionsKey="i18nKey"
+                                onSelect={selectedValue}
+                                value={ownershipCategory}
+                                labelKey="PT_OWNERSHIP"
+                                isDependent={true}
+                            />
+                        </div>
+                        {fields.map((field, index) => {
+                            return (
+                                <div key={`${field}-${index}`}>
+                                    <div style={{ border: "solid", borderRadius: "5px", padding: "10px", paddingTop: "20px", marginTop: "10px", borderColor: "#f3f3f3", background: "#FAFAFA" }}>
+                                        <CardLabel style={{ marginBottom: "-15px" }}>{`${t("CORE_COMMON_MOBILE_NUMBER")} *`}</CardLabel>
+                                        {ismultiple && <LinkButton
+                                            label={<DeleteIcon style={{ float: "right", position: "relative", bottom: "5px" }} fill={!(fields.length == 1) ? "#494848" : "#FAFAFA"} />}
+                                            style={{ width: "100px", display: "inline", background: "black" }}
+                                            onClick={(e) => handleRemove(index)}
+                                        />}
+                                        <div style={{ marginTop: "30px" }}>
+                                            <div className="field-container">
+                                                <div style={{ position: "relative", zIndex: "100", left: "35px", marginTop: "-24.5px", marginLeft: Webview ? "-25px" : "-25px" }}>+91</div>
+                                                <TextInput
+                                                    style={{ background: "#FAFAFA", padding: "0px 35px" }}
+                                                    type={"text"}
+                                                    t={t}
+                                                    isMandatory={false}
+                                                    optionKey="i18nKey"
+                                                    name="mobileNumber"
+                                                    value={field.mobileNumber}
+                                                    onChange={(e) => setMobileNo(index, e)}
+                                                    {...(validation = {
+                                                        isRequired: true,
+                                                        pattern: "[6-9]{1}[0-9]{9}",
+                                                        type: "tel",
+                                                        title: t("CORE_COMMON_APPLICANT_MOBILE_NUMBER_INVALID"),
+                                                    })}
+                                                />
+                                                <div style={{ position: "relative", zIndex: "100", right: "35px", marginTop: "-24px", marginRight: Webview ? "-20px" : "-20px" }} onClick={(e) => getOwnerDetails(index, e)}> <SearchIcon /> </div>
+                                            </div>
                                         </div>
-                                    </div>
-                                    <CardLabel>{`${t("CORE_COMMON_NAME")} *`}</CardLabel>
-                                    <TextInput
-                                        style={{ background: "#FAFAFA" }}
-                                        t={t}
-                                        type={"text"}
-                                        isMandatory={false}
-                                        optionKey="i18nKey"
-                                        name="name"
-                                        value={field.name}
-                                        onChange={(e) => setOwnerName(index, e)}
-                                        {...(validation = {
-                                            isRequired: true,
-                                            pattern: "^[a-zA-Z-.`' ]*$",
-                                            type: "text",
-                                            title: t("TL_NAME_ERROR_MESSAGE"),
-                                        })}
-                                    />
-                                    <CardLabel>{`${t("BPA_APPLICANT_GENDER_LABEL")} *`}</CardLabel>
-                                    <RadioOrSelect
-                                    name="gender"
-                                    options={genderList}
-                                    selectedOption={field.gender}
-                                    optionKey="i18nKey"
-                                    onSelect={(e) => setGenderName(index, e)}
-                                    t={t}
-                                    />
-                                    {ismultiple && (
-                                        <CheckBox
-                                            label={t("BPA_IS_PRIMARY_OWNER_LABEL")}
-                                            onChange={(e) => setPrimaryOwner(index, e)}
-                                            value={field.isPrimaryOwner}
-                                            checked={field.isPrimaryOwner}
-                                            style={{ paddingTop: "10px" }}
+                                        <CardLabel>{`${t("CORE_COMMON_NAME")} *`}</CardLabel>
+                                        <TextInput
+                                            style={{ background: "#FAFAFA" }}
+                                            t={t}
+                                            type={"text"}
+                                            isMandatory={false}
+                                            optionKey="i18nKey"
+                                            name="name"
+                                            value={field.name}
+                                            onChange={(e) => setOwnerName(index, e)}
+                                            {...(validation = {
+                                                isRequired: true,
+                                                pattern: "^[a-zA-Z-.`' ]*$",
+                                                type: "text",
+                                                title: t("TL_NAME_ERROR_MESSAGE"),
+                                            })}
                                         />
-                                    )}
+                                        <CardLabel>{`${t("BPA_APPLICANT_GENDER_LABEL")} *`}</CardLabel>
+                                        <RadioOrSelect
+                                            name="gender"
+                                            options={genderList}
+                                            selectedOption={field.gender}
+                                            optionKey="i18nKey"
+                                            onSelect={(e) => setGenderName(index, e)}
+                                            t={t}
+                                        />
+                                        {ismultiple && (
+                                            <CheckBox
+                                                label={t("BPA_IS_PRIMARY_OWNER_LABEL")}
+                                                onChange={(e) => setPrimaryOwner(index, e)}
+                                                value={field.isPrimaryOwner}
+                                                checked={field.isPrimaryOwner}
+                                                style={{ paddingTop: "10px" }}
+                                            />
+                                        )}
+                                    </div>
+                                </div>
+                            );
+                        })}
+
+
+                        {ismultiple ? (
+                            <div>
+                                <div style={{ display: "flex", paddingBottom: "15px", color: "#FF8C00" }}>
+                                    <button type="button" style={{ paddingTop: "10px" }} onClick={() => handleAdd()}>
+                                        {t("BPA_ADD_OWNER")}
+                                    </button>
                                 </div>
                             </div>
-                        );
-                    })}
-                    {ismultiple ? (
-                        <div>
-                            <div style={{ display: "flex", paddingBottom: "15px", color: "#FF8C00" }}>
-                                <button type="button" style={{ paddingTop: "10px" }} onClick={() => handleAdd()}>
-                                    {t("BPA_ADD_OWNER")}
-                                </button>
-                            </div>
+                        ) : null}
+
+
+<div className="row-12 mt-3">
+                    {/* {showhide === "COD" && ( */}
+                    <div className="card">
+                        <div className="table table-bordered table-responsive">
+                            {/* <caption>List of users</caption> */}
+                            <thead>
+                                <tr>
+                                    <th class="fw-normal">{t("SR_NO")}</th>
+                                    <th class="fw-normal">{t("FIELD_NAME")}</th>
+                                    <th class="fw-normal">{t("UPLOAD_DOCUMENTS")}</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {documentsList.map((item, index) => (
+                                    <tr key={index}>
+                                        <th class="fw-normal">{index + 1}</th>
+                                        <td>{item.label}</td>
+
+                                        {watch(item.fileName) ? (
+                                            <td>
+                                                <div className="d-flex justify-content-center">
+                                                    <label title="Upload Document" for={item.selectorKey}>
+                                                        {" "}
+                                                        <FileUpload style={{ cursor: "pointer" }} color="info" className="icon" for={item.selectorKey} />
+                                                    </label>
+                                                    <input
+                                                        id={item.selectorKey}
+                                                        type="file"
+                                                        placeholder=""
+                                                        className="form-control d-none"
+                                                        onChange={(e) => uploadFile(e.target.files[0], item.fileName)}
+                                                    ></input>
+
+                                                    {watch(item.fileName) && (
+                                                        <a onClick={() => getDocShareholding(watch(item.fileName), setLoader)} className="btn btn-sm ">
+                                                            <Visibility color="info" className="icon" />
+                                                        </a>
+                                                    )}
+                                                </div>
+                                            </td>
+                                        ) : (
+                                            <td>
+                                                <div className="d-flex justify-content-center">
+                                                    <label title="Upload Document" for={item.selectorKey}>
+                                                        {" "}
+                                                        <FileUpload style={{ cursor: "pointer" }} color="info" className="icon" for={item.selectorKey} />
+                                                    </label>
+                                                    <input
+                                                        id={item.selectorKey}
+                                                        type="file"
+                                                        placeholder=""
+                                                        className="form-control d-none"
+                                                        {...register(item.selectorKey, { required: "This Document is required" })}
+                                                        onChange={(e) => uploadFile(e.target.files[0], item.fileName)}
+                                                    ></input>
+
+                                                    {watch(item.fileName) && (
+                                                        <a onClick={() => getDocShareholding(watch(item.fileName), setLoader)} className="btn btn-sm "></a>
+                                                    )}
+                                                </div>
+
+                                                <h3 className="error-message" style={{ color: "red" }}>
+                                                    {errors?.[item.selectorKey] && errors?.[item.selectorKey]?.message}
+                                                </h3>
+                                            </td>
+                                        )}
+                                    </tr>
+                                ))}
+                            </tbody>
                         </div>
-                    ) : null}
-                </div> : <Loader />
-            }
-        </FormStep>
+                    </div>
+
+                </div>
+                    </div> : <Loader />
+                }
+
+                
+            </FormStep>
             {showToast && <Toast
                 error={showToast?.error}
                 warning={showToast?.warning}
@@ -446,6 +672,9 @@ const OwnerDetails = ({ t, config, onSelect, userType, formData }) => {
                 onClose={closeToast}
             />
             }
+
+
+
         </div>
     );
 };
