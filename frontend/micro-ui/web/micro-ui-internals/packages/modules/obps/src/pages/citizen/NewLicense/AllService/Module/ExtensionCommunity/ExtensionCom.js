@@ -36,11 +36,13 @@ function ExtensionCom() {
   const [showhide, setShowhide] = useState("");
   const [loader, setLoader] = useState(false);
   const [showToastError, setShowToastError] = useState({ label: "", error: false, success: false });
-   const [fileStoreId, setFileStoreId] = useState({});
+  const [fileStoreId, setFileStoreId] = useState({});
   const [selectedFiles, setSelectedFiles] = useState([]);
-    const [applicationNumber, setApplicationNumber] = useState();
+  const params = new URLSearchParams(location.search);
+  const [applicationNumber, setApplicationNumber] = useState();
   const [open, setOpen] = React.useState(false);
   const [open1, setOpen1] = React.useState(false);
+  const [licenseData, setLicenseData] = useState();
   const {t}= useTranslation();
   const handleshowhide = (event) => {
     const getuser = event.target.value;
@@ -93,69 +95,177 @@ function ExtensionCom() {
     }
   };
 
-   const extensionComSite = async (data) => {
-    const numberLic = data?.licenceNo;
+    const ExtensionCom = async (data) => {
+    console.log("data", data);
+    setLoader(true);
     const token = window?.localStorage?.getItem("token");
-    console.log(data);
+    const userInfo = Digit.UserService.getUser()?.info || {};
+    const numberLic = data?.licenceNo;
+    const postDistrict = {
+      RequestInfo: {
+          apiId: "Rainmaker",
+          ver: "v1",
+          ts: 0,
+          action: "_search",
+          did: "",
+         key: "",
+         msgId: "090909",
+         requesterId: "",
+         authToken: token,
+        userInfo: userInfo,
+   },
+      constructionOfCommunity: [
+        {
+          ...data,
+          appliedBy:data?.appliedBy?.label,
+          licenseNumber: numberLic,
+           newAdditionalDetails:{
+                  selectLicence: data?.selectLicence?.label,
+                  validUpto: data?.validUpto,
+                  colonizerName: data?.colonizerName,
+                  colonyType: data?.colonyType,
+                  areaAcres: data?.areaAcres,
+                  sectorNo: data?.sectorNo,
+                  revenueEstate: data?.revenueEstate,
+                  developmentPlan: data?.developmentPlan,
+                  tehsil: data?.tehsil,
+                  district: data?.district,
+           }
+          }
+      ]
+    };
 
     try {
-     
-        const postLayoutPlan = {
-          newAdditionalDetails: 
-            {
-              action: "APPLY",
-              tenantId: tenantId,
-              licenseNo: numberLic,
-              newAdditionalDetails: {
-              selectLicence: data?.selectLicence?.label,
-              validUpto: data?.validUpto,
-              colonizerName: data?.colonizerName,
-              // periodOfRenewal: "",
-              colonyType: data?.colonyType,
-              areaAcres: data?.areaAcres,
-              sectorNo: data?.sectorNo,
-              revenueEstate: data?.revenueEstate,
-              developmentPlan: data?.developmentPlan,
-              tehsil: data?.tehsil,
-              district: data?.district,
-            },
-              constructionOfCommunity: {
-                ...data,
-              },
-            },
-          
-          RequestInfo: {
-            apiId: "Rainmaker",
-            ver: "v1",
-            ts: 0,
-            action: "_search",
-            did: "",
-            key: "",
-            msgId: "090909",
-            requesterId: "",
-            authToken: token,
-            userInfo: userInfo,
-          },
-        };
-        console.log("LAY", postLayoutPlan);
-        const Resp = await axios.post("/tl-services/construction/_create", postLayoutPlan);
-        setLoader(false);
-         setApplicationNumber(Resp.data.revisedPlan[0].applicationNumber);
-        // const useData = Resp?.data?.RevisedPlan?.[0];
-     
-    } catch (error) {
+      const Resp = await axios.post("/tl-services/construction/_create", postDistrict);
       setLoader(false);
-      setToastError(error?.response?.data?.Errors?.[0]?.code);
-      setTimeout(() => {
-        setToastError(null);
-      }, 2000);
-      return error.message;
+      setApplicationNumber(Resp?.data?.constructionOfCommunity?.[0]?.applicationNumber);
+      console.log("Resp=====", Resp?.data?.constructionOfCommunity?.[0]?.applicationNumber);
+      setOpen(true);
+    } catch (error) {
+      setError(error?.response?.data?.Errors[0]?.message);
+      setLoader(false);
     }
   };
 
+   const UpdateExtensionInConstruction = async (data) => {
+    console.log("REQUEST LOG1 ====> ", data, JSON.stringify(data));
+    try {
+      setLoading(true);
+      const body = {
+        RequestInfo: {
+          apiId: "Rainmaker",
+          msgId: "1669293303096|en_IN",
+          authToken: authToken,
+          userInfo: userInfo,
+        },
+        "constructionOfCommunity": [
+          {
+            ...licenseData,
+            licenseNumber: data?.licenseNumber,
+            appliedBy: data?.appliedBy,
+            areaInAcers: data?.areaInAcers,
+            validUpTo: data?.validUpTo,
+            applyedForExtentionPerioud: data?.applyedForExtentionPerioud,
+            typeOfCommunitySite: data?.typeOfCommunitySite,
+            copyOfBoardResolution: data?.copyOfBoardResolution,
+            justificationForExtention: data?.justificationForExtention,
+            proofOfOwnershipOfCommunity: data?.proofOfOwnershipOfCommunity,
+            proofOfOnlinePaymentOfExtention: data?.proofOfOnlinePaymentOfExtention,
+            uploadRenewalLicenseCopy: data?.uploadRenewalLicenseCopy,
+            explonatoryNotForExtention: data?.explonatoryNotForExtention,
+            locationOfApplied: data?.locationOfApplied,
+            anyOtherDocumentByDirector: data?.anyOtherDocumentByDirector
+          },
+        ],
+      };
+
+      const response = await axios.post("/tl-services/construction/_update", body);
+
+      console.log("Update Response ====> ", response);
+
+      setLoading(false);
+      setShowToastError({ label: "Surrender of License updated successfully", error: false, success: true });
+      handleClose();
+    } catch (err) {
+      console.log("Update Error ====> ", err.message);
+      setLoading(false);
+      setShowToastError({ label: err.message, error: true, success: false });
+    }
+  };
+
+  const extensionComSiteLic = (data) => {
+    if (params.get("id")) {
+      UpdateExtensionInConstruction(data);
+    } else {
+      ExtensionCom(data);
+    }
+  };
+
+   const getLicenseData = async () => {
+    try {
+      let id = params.get("id");
+      setLoading(true);
+
+      const requestData = {
+        RequestInfo: {
+          apiId: "Rainmaker",
+          authToken: authToken,
+          msgId: "1669293303096|en_IN",
+          userInfo: userInfo,
+        },
+      };
+      const response = await axios.post(`/tl-services/construction/_get?licenseNumber=${id}`, requestData);
+      console.log("Response ====> ", response);
+      setLicenseData(response?.data?.constructionOfCommunity?.[0]);
+      const details = response?.data?.constructionOfCommunity?.[0];
+      // setValue("licenceNo", details?.licenseNo);
+      // setValue("selectType", details?.selectType);
+      // setValue("areaFallingUnder", details?.areaFallingUnder);
+      // setValue("thirdPartyRights", details?.thirdPartyRights);
+      // setValue("reraRegistration", details?.areraRegistration);
+      // setValue("zoningLayoutPlanfileUrl", details?.zoningLayoutPlanfileUrl);
+      // setValue("licenseCopyfileUrl", details?.licenseCopyfileUrl);
+      // setValue("edcaVailedfileUrl", details?.edcaVailedfileUrl);
+      // setValue("detailedRelocationSchemefileUrl", details?.detailedRelocationSchemefileUrl);
+      // setValue("giftDeedfileUrl", details?.giftDeedfileUrl);
+      // setValue("mutationfileUrl", details?.mutationfileUrl);
+      // setValue("jamabandhifileUrl", details?.jamabandhifileUrl);
+      // setValue("thirdPartyRightsDeclarationfileUrl", details?.thirdPartyRightsDeclarationfileUrl);
+      // setValue("areaInAcres", details?.areaInAcres);
+      // setValue("declarationIDWWorksfileUrl", details?.declarationIDWWorksfileUrl);
+      // setValue("revisedLayoutPlanfileUrl", details?.revisedLayoutPlanfileUrl);
+      // setValue("availedEdcfileUrl", details?.availedEdcfileUrl);
+      // setValue("areaFallingUnderfileUrl", details?.areaFallingUnderfileUrl);
+      // setValue("areaFallingDividing", details?.areaFallingDividing);
+
+      // setValue("areaAcres", details?.newAdditionalDetails?.areaAcres);
+      // setValue("colonizerName", details?.newAdditionalDetails?.colonizerName);
+      // setValue("colonyType", details?.newAdditionalDetails?.colonyType);
+      // setValue("developmentPlan", details?.newAdditionalDetails?.developmentPlan);
+      // setValue("district", details?.newAdditionalDetails?.district);
+      // setValue("periodOfRenewal", details?.newAdditionalDetails?.periodOfRenewal);
+      // setValue("renewalRequiredUpto", details?.newAdditionalDetails?.renewalRequiredUpto);
+      // setValue("revenueEstate", details?.newAdditionalDetails?.revenueEstate);
+      // setValue("sectorNo", details?.newAdditionalDetails?.sectorNo);
+      // setValue("selectLicence", details?.newAdditionalDetails?.selectLicence);
+      // setValue("tehsil", details?.newAdditionalDetails?.tehsil);
+      // setValue("validUpto", details?.newAdditionalDetails?.validUpto);
+
+      setLoading(false);
+    } catch (error) {
+      console.log("Get Error ====> ", error.message);
+      setLoading(false);
+      setShowToastError({ label: error.message, error: true, success: false });
+    }
+  };
+
+   useEffect(() => {
+    getLicenseData();
+  }, []);
+
   return (
     <div>
-    <form onSubmit={handleSubmit(extensionComSite)}>
+    <form onSubmit={handleSubmit(extensionComSiteLic)}>
       <div className="card" style={{ width: "126%", border: "5px solid #1266af" }}>
         <h4 style={{ fontSize: "25px", marginLeft: "21px" }}>{t("EXTENSION _COMMUNITY_SITE_HEADING")}
         {/* Extension (construction in community site) */}
@@ -619,11 +729,11 @@ function ExtensionCom() {
       </div>
     </form>
        <Dialog open={open1} onClose={handleClose1} aria-labelledby="alert-dialog-title" aria-describedby="alert-dialog-description">
-        <DialogTitle id="alert-dialog-title">Approval of Revised Layout Plan Submission</DialogTitle>
+        <DialogTitle id="alert-dialog-title">Extension of construction in community site Submission</DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
             <p>
-              Your Composition of Urban Area Violation in CLU is submitted successfully{" "}
+              Your Extension of construction in community site is submitted successfully{" "}
               <span>
                 <CheckCircleOutlineIcon style={{ color: "blue", variant: "filled" }} />
               </span>
