@@ -21014,24 +21014,25 @@ input[type=text]:disabled {
 
 
 
-.banner-row .css-h0q0iv-MuiButtonBase-root-MuiTab-root.Mui-selected {
-  background-color: #024f9d;
-  color: #fff;
+
+.banner-row .Mui-selected {
+  background-color: #024f9d !important;
+  color: #fff !important;
 }
 
-.banner-row .css-h0q0iv-MuiButtonBase-root-MuiTab-root svg {
+.banner-row .MuiTab-root svg {
   fill: #024f9d;
   width: 28px;
   height: 32px;
 }
 
-.banner-row .css-h0q0iv-MuiButtonBase-root-MuiTab-root.Mui-selected svg {
+.banner-row .Mui-selected svg {
   fill: #fff;
   width: 28px;
   height: 32px;
 }
 
-.banner-row .css-h0q0iv-MuiButtonBase-root-MuiTab-root {
+.banner-row .MuiTab-root {
   display: -webkit-inline-box;
   display: -webkit-inline-flex;
   display: -ms-inline-flexbox;
@@ -21088,16 +21089,20 @@ input[type=text]:disabled {
   box-shadow: 0.375rem 0.375rem 0.125rem 0 rgb(0 0 0 / 10%);
 }
 
-.css-jpln7h-MuiTabs-scroller {
+.banner-row .MuiTabs-scroller {
   border-radius: 0.65rem;
-  background: #ffd954;
+  background: #ffd954 ;
   padding: 1.6rem 1rem;
 }
 
-.css-heg063-MuiTabs-flexContainer {
+.banner-row .MuiTabs-flexContainer {
   justify-content: center;
   align-items: center;
 }
+
+
+
+
 .card.main {
   box-shadow: none;
   padding: 1.5rem;
@@ -21190,7 +21195,7 @@ input[type=text]:disabled {
   height: 20px;
 }
 
-.css-67bhig-MuiTableCell-root.MuiTableCell-head {
+.MuiTableCell-head {
   background-color: #ffd863!important;
     color: #000!important;
 }
@@ -21199,7 +21204,11 @@ input[type=text]:disabled {
 background-color: #ff000042;
 color: #fff;
 /* animation:blinkanimetion 100ms infinite; */
-animation: mymove 300ms infinite;
+/* animation: mymove 300ms infinite; */
+/* animation: mymove 3s infinite alternate slidein; */
+animation: mymove 200ms infinite;
+animation-duration: 6s;
+animation-iteration-count: 3;
 }
 
 /* @keyframes blinkanimetion{
@@ -21218,4 +21227,5 @@ color: #fff !important;
   50%  { background: #ff000042;}
   75%  { background: #f1f1f1;} */
   100% { background: #f1f1f1;}
+  
 }

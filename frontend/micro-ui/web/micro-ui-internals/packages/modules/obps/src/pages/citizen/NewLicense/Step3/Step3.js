@@ -2940,6 +2940,7 @@ const LandScheduleForm = (props) => {
                     5.
                     {`${t("NWL_APPLICANT_5_ENCLOSE_THE_FOLLOWING_DOCUMENTS_AS_ANNEXURES")}`}
                     {/* Enclose the following documents as Annexures */}
+                    <span style={{ color: "#e47878", paddingLeft: "5px" }}>(Documents should be less than 25mb)</span>
                   </h5>
                   <br></br>
                   <div className="row">

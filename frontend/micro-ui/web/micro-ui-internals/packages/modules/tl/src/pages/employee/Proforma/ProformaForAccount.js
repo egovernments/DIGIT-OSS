@@ -1,66 +1,4 @@
-// import React, { useState } from "react";
-// import { Button } from "@material-ui/core";
-// import FormControl from "@mui/material/FormControl";
-// import { useForm } from "react-hook-form";
-// import OutlinedInput from "@mui/material/OutlinedInput";
-
-// function RadioButtonsGroup() {
-//   const [selects, setSelects] = useState();
-//   const [showhide, setShowhide] = useState("");
-//   const { register, handleSubmit } = useForm();
-//   const RadioButtonsGroup = (data) => console.log(data);
-
-//   const handleshowhide = (event) => {
-//     const getuser = event.target.value;
-
-//     setShowhide(getuser);
-//   };
-//   return (
-//     <form onSubmit={handleSubmit(RadioButtonsGroup)}>
-//       <div className="card" style={{ width: "126%", border: "5px solid #1266af" }}>
-//         <h4 style={{ fontSize: "25px", marginLeft: "21px" }}>APPROVAL OF REVISED LAYOUT PLAN OF LICENSE</h4>
-
-//         <div className="row">
-//     <FormControl>
-
-//   <div class="col-sm-8 text-left">
-// <h2 className="FormLable">
-//   Any other feature
-//   <span style={{ color: "red" }}>*</span>
-// </h2>
-// </div>
-// {/* <div class="col-md-4 text-right"> */}
-//     <input
-//       type="radio"
-//       value="true"
-//       label="Yes"
-//       name="anyOtherFeature"
-//       id="anyOtherFeature"
-//       {...register(" anyOtherFeature")}
-//       onChange={(e) => handleselects(e)}
-//     />
-
-//     <input
-//       type="radio"
-//       value="false"
-//       label="No"
-//       name="c"
-//       id="anyOtherFeature"
-//       {...register("anyOtherFeature")}
-//       onChange={(e) => handleselects(e)}
-//     />
-//   </div>
-
-// </FormControl>
-// </div>
-// </div>
-//     </form>
-//   );
-// }
-
-// export default RadioButtonsGroup;
-
-import React, { useState } from "react";
+import React, { useState, useContext  } from "react";
 import Button from "react-bootstrap/Button";
 import Col from "react-bootstrap/Col";
 import Form from "react-bootstrap/Form";
@@ -69,6 +7,8 @@ import { useForm } from "react-hook-form";
 import { Card } from "react-bootstrap";
 import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
+import { useParams } from "react-router-dom";
+import axios from "axios";
 
 import Collapse from "react-bootstrap/Collapse";
 //////////////////////////////////////////////////////////
@@ -84,9 +24,25 @@ import RadioGroup from "@mui/material/RadioGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import FormControl from "@mui/material/FormControl";
 import FormLabel from "@mui/material/FormLabel";
+import { ScrutinyRemarksContext } from "../../../../context/remarks-data-context";
+import { useTranslation } from "react-i18next";
 // import AddPost from "../Material/TextEditor";
 
-function RadioButtonsGroup() {
+function RadioButtonsGroup(props) {
+
+  const {handleRoles, handleGetFiledsStatesById, handleGetRemarkssValues , bussinessService} = useContext(ScrutinyRemarksContext,);
+  const apiData = props.apiResponseData;
+  const applicationStatu =props.applicationStatus;
+  const data =props.dataMDMS;
+
+  
+  
+  const businessService = apiData?.businessService;
+  const {t} = useTranslation();
+ 
+  console.log("loginRadioButtonsGroup" , apiData ,applicationStatu , businessService,data)
+
+
   const userRoles = Digit.UserService.getUser()?.info?.roles.map((item) => item.code) || [];
   const showActionButton = userRoles.includes("AO_HQ");
   const showActionButton1 = userRoles.includes("SO_HQ");
@@ -94,7 +50,7 @@ function RadioButtonsGroup() {
 
   const [selects, setSelects] = useState();
   const [showhide, setShowhide] = useState("");
-  const { register, handleSubmit } = useForm();
+  const { register, handleSubmit , watch } = useForm();
   const layoutPlan = (data) => console.log(data);
 
   const handleshowhide = (event) => {
@@ -103,6 +59,69 @@ function RadioButtonsGroup() {
     setShowhide(getuser);
   };
   const [open2, setOpen2] = useState(false);
+  const dateTime = new Date();
+  const authToken = Digit.UserService.getUser()?.access_token || null;
+  const userInfo = Digit.UserService.getUser()?.info || {};
+  const userRolesArray = userInfo?.roles.filter((user) => user.code !=="EMPLOYEE" );
+  const filterDataRole = userRolesArray?.[0]?.code;
+  const designation = userRolesArray?.[0]?.name;
+  const { id } = useParams();
+
+
+  const handlemodalsubmit = async (fieldIdL , comment , functional) => {
+    if (applicationStatu) {
+ const postData = {
+        requestInfo: {
+          api_id: "1",
+          ver: "1",
+          ts: null,
+          action: "create",
+          did: "",
+          key: "",
+          msg_id: "",
+          requester_id: "",
+          authToken: authToken,
+        },
+        egScrutiny: {
+          applicationId: id,
+          comment:comment,
+          fieldValue: functional,
+          fieldIdL: fieldIdL,
+          isApproved: "Proform",
+          isLOIPart: "", 
+          userid: userInfo?.id || null,
+          serviceId: "123",
+          documentId: null,
+          ts: dateTime.toUTCString(),
+          bussinessServiceName : businessService,
+          designation : designation,
+          name : userInfo?.name || null,
+          employeeName : userInfo?.name || null,
+         role : filterDataRole,
+         applicationStatus : applicationStatu
+        },
+      };
+
+      try {
+        const Resp = await axios.post("/land-services/egscrutiny/_create?status=submit", postData, {}).then((response) => {
+          return response.data;
+        });
+      } catch (error) {
+        console.log(error);
+      }
+      // handleGetFiledsStatesById(id);
+      // handleGetRemarkssValues(id);
+      handleRoles(id)
+      // console.log("response from API", Resp);
+      // props?.remarksUpdate({ data: RemarksDeveloper.data });
+    } else {
+      // props?.passmodalData();
+    }
+  };
+
+
+
+
 
   return (
     <form onSubmit={handleSubmit(layoutPlan)}>
@@ -136,14 +155,26 @@ function RadioButtonsGroup() {
               <Form>
                 <TableContainer>
                   <Table aria-label="simple table">
-                    <TableHead>
-                      <TableRow>
-                        <TableCell>Sr.No</TableCell>
-                        <TableCell align="left">Description</TableCell>
-                        <TableCell align="right">Action</TableCell>
-                        <TableCell align="right">Remarks</TableCell>
-                      </TableRow>
-                    </TableHead>
+                  <TableHead>
+					<TableRow>
+						<TableCell style={{ width: 20 }}>
+							Sr.No
+						</TableCell>
+						<TableCell align="center" style={{ width: 350 , marginRight:5 }}>
+                        Description
+						</TableCell>
+						<TableCell align="center" style={{ width: 200 }}>
+						Conditional
+						</TableCell>
+						<TableCell align="center" style={{ width: 450 }}>
+						Remarks
+						</TableCell>
+						<TableCell align="center" style={{ width: 60 }}>
+						Action
+						</TableCell>
+						
+					</TableRow>
+				</TableHead>
                     <TableBody>
                       <TableRow
                         sx={{
@@ -153,8 +184,10 @@ function RadioButtonsGroup() {
                         <TableCell>1</TableCell>
                         <TableCell align="left">
                           <h2>
-                            Whether Scrutiny fee @ Rs. 10 per sq.mtr of the applied land in case of plotted colony and @ Rs. 10 per sq.mtr X FAR in
-                            case of other than plotted colony deposited. &nbsp;&nbsp;
+                            {/* Whether Scrutiny fee @ Rs. 10 per sq.mtr of the applied land in case of plotted colony and @ Rs. 10 per sq.mtr X FAR in
+                            case of other than plotted colony deposited.  */}
+                            {`${t("NWL_PROFORMA_WHETHER_SCRUTINY_FEE_APPLIED_LAND_PLOTTED_COLONY_ACCOUNT")}`}
+                            &nbsp;&nbsp;
                           </h2>
                         </TableCell>
                         <TableCell align="left">
@@ -162,23 +195,23 @@ function RadioButtonsGroup() {
                             <div className="row">
                               {/* <div class="col-md-4 text-right"> */}
                               <div className="d-flex flex-row align-items-center my-1">
-                                <label htmlFor="approachFromProposedSector">
+                                <label htmlFor="whetherScrutinyFee">
                                   <input
-                                    {...register("approachFromProposedSector")}
+                                    {...register("whetherScrutinyFee")}
                                     type="radio"
                                     disabled={!showActionButton && !showActionButton1 && !showActionButton2}
                                     value="Y"
-                                    id="approachFromProposedSector"
+                                    id="whetherScrutinyFee"
                                   />
                                   &nbsp;&nbsp; &nbsp; Yes &nbsp;&nbsp;
                                 </label>
-                                <label htmlFor="approachFromProposedSector">
+                                <label htmlFor="whetherScrutinyFee">
                                   <input
-                                    {...register("approachFromProposedSector")}
+                                    {...register("whetherScrutinyFee")}
                                     type="radio"
                                     disabled={!showActionButton && !showActionButton1 && !showActionButton2}
                                     value="N"
-                                    id="approachFromProposedSector"
+                                    id="whetherScrutinyFee"
                                   />
                                   &nbsp;&nbsp; &nbsp; No &nbsp;&nbsp;
                                 </label>
@@ -188,10 +221,35 @@ function RadioButtonsGroup() {
                           </FormControl>
                         </TableCell>
                         <TableCell align="left">
-                          {/* < AddPost 
-                                       disabled={!showActionButton && !showActionButton1 && !showActionButton2}
-                                       ></AddPost> */}
+                                    <textarea
+          class="form-control"
+          id="exampleFormControlTextarea1"
+          placeholder="Enter your Remarks"
+          autoFocus
+          // onChange={(e) => {
+          //   setDeveloperRemarks({ data: e.target.value });
+          //   setRemarksEntered(e.target.value);
+          // }}
+          {...register("whetherScrutinyFeeRmarkes")}
+          disabled={!showActionButton && !showActionButton1 && !showActionButton2}
+          rows="3"
+          // value={RemarksDeveloper.data}
+        />
                         </TableCell>
+                        <TableCell align="left">
+                 
+                 <div class="col-md-12 bg-light text-right" style={{ position: "relative", marginBottom: 30 }}>
+                   { (watch("whetherScrutinyFeeRmarkes") || watch("whetherScrutinyFee")) &&
+
+                     <Button style={{ textAlign: "right" }} 
+                     onClick ={() => handlemodalsubmit("NWL_PROFORMA_WHETHER_LICENCE_FEE_DEPOSITED_ACCOUNT", watch("whetherScrutinyFeeRmarkes"), watch("whetherScrutinyFee") )}
+                     >
+                       Submit
+                     </Button>
+                     }
+
+</div>
+                 </TableCell>
                       </TableRow>
 
                       <TableRow
@@ -201,7 +259,10 @@ function RadioButtonsGroup() {
                       >
                         <TableCell>2</TableCell>
                         <TableCell align="left">
-                          <h2>Whether 25% of the licence fee deposited. &nbsp;&nbsp;</h2>
+                          <h2>
+                            {/* Whether 25% of the licence fee deposited.  */}
+                          {`${t("NWL_PROFORMA_WHETHER_LICENCE_FEE_DEPOSITED_ACCOUNT")}`}
+                            &nbsp;&nbsp;</h2>
                         </TableCell>
                         <TableCell align="left">
                           <FormControl>
@@ -234,19 +295,35 @@ function RadioButtonsGroup() {
                           </FormControl>
                         </TableCell>
                         <TableCell align="left">
-                          <textarea
-                            class="form-control"
-                            id="exampleFormControlTextarea2"
-                            placeholder="Enter your Remarks"
-                            autoFocus
-                            //   onChange={(e) => {
-                            //     setDeveloperRemarks({ data: e.target.value });
-                            //     setRemarksEntered(e.target.value);
-                            //   }}
-                            rows="3"
-                            //   value={RemarksDeveloper.data}
-                          />
-                        </TableCell>
+                                    <textarea
+          class="form-control"
+          id="exampleFormControlTextarea1"
+          placeholder="Enter your Remarks"
+          autoFocus
+          // onChange={(e) => {
+          //   setDeveloperRemarks({ data: e.target.value });
+          //   setRemarksEntered(e.target.value);
+          // }}
+          {...register("licencefeedepositedRmarkes")}
+          disabled={!showActionButton && !showActionButton1 && !showActionButton2}
+          rows="3"
+          // value={RemarksDeveloper.data}
+        />
+                                    </TableCell>
+                        <TableCell align="left">
+                 
+                 <div class="col-md-12 bg-light text-right" style={{ position: "relative", marginBottom: 30 }}>
+                   { (watch("licencefeedepositedRmarkes") || watch("licencefeedeposited")) &&
+
+                     <Button style={{ textAlign: "right" }} 
+                     onClick ={() => handlemodalsubmit("NWL_PROFORMA_WHETHER_LICENCE_FEE_DEPOSITED_ACCOUNT", watch("licencefeedepositedRmarkes"), watch("licencefeedeposited") )}
+                     >
+                       Submit
+                     </Button>
+                     }
+
+</div>
+                 </TableCell>
                       </TableRow>
                       {/* ))} */}
 

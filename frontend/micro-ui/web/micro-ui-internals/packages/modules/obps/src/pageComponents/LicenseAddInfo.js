@@ -168,7 +168,7 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
       const developerDataGet = getDevDetails?.data;
       const developerDataGetDocs = getDevDetails?.data?.devDetail[0]?.addInfo;
       setDeveloperDataAddinfo(developerDataGetDocs);
-
+      setLicenseTypeSelected(developerDataGet?.devDetail[0]?.applicantType?.licenceTypeSelected);
       // console.log("STAKEHOLDER",getDevDetails?.data?.devDetail[0]?.addInfo?.registeredContactNo);
       setShowDevTypeFields(developerDataGet?.devDetail[0]?.applicantType?.developerType);
       setName(developerDataGet?.devDetail[0]?.addInfo?.name);
@@ -324,7 +324,9 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
   // const handleChange = (e) => {
   //   this.setState({ isRadioSelected: true });
   // };
-
+  const [licenceTypeSelected, setLicenseTypeSelected] = useState(
+    formData?.LicneseType?.licenceTypeSelected || formData?.formData?.LicneseType?.licenceTypeSelected || ""
+  );
   const [checked, setChecked] = React.useState(false);
   const [showhide0, setShowhide0] = useState("No");
   const [showDevTypeFields, setShowDevTypeFields] = useState(
@@ -953,7 +955,7 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
       <div className={isOpenLinkFlow ? "OpenlinkContainer" : ""}>
         {/* {JSON.stringify(showDevTypeFields)}efewfewfef */}
         {isOpenLinkFlow && <BackButton style={{ border: "none" }}>{t("CS_COMMON_BACK")}</BackButton>}
-        <Timeline currentStep={2} flow="STAKEHOLDER" onChangeStep={changeStep} />
+        <Timeline currentStep={2} flow={"STAKEHOLDER"} onChangeStep={changeStep} />
         {!isLoading ? (
           <FormStep
             // onSubmit={AddInfoForm}

@@ -24,9 +24,10 @@ import ProformaPatwari from "../Proforma/ProformaForPatwari";
 import Addmoreinput from "../Complaince/Compliances";
 import ProformForRevenu from "../Proforma/ProformForRevenu";
 import AdditionalDocument from "./AdditionalDocument";
+import Component from "../Proforma/Index";
 // import AddPost from "../Material/TextEditor";
 
-const ScrutitnyForms = ({ apiResponse, applicationNumber, refreshScrutinyData , histeroyData,additionalDocResponData, applicationStatus ,mDMSData ,applicationimp }) => {
+const ScrutitnyForms = ({ apiResponse, applicationNumber, refreshScrutinyData , histeroyData,additionalDocResponData, applicationStatus ,mDMSData ,applicationimp , dataMDMS }) => {
   const personalInfoRef = useRef();
   const generalInfoRef = useRef();
   const developerInfoRef = useRef();
@@ -387,6 +388,7 @@ console.log("roleData",rolesDate )
           <div>
             <AdditionalDocument
             additionalDocRespon={additionalDocResponData}
+           
             >
               
             </AdditionalDocument>
@@ -395,7 +397,11 @@ console.log("roleData",rolesDate )
             <ProformForRevenu></ProformForRevenu>
           </div>
           <div>
-          <RadioButtonsGroup>
+          <RadioButtonsGroup
+             apiResponseData ={applicationimp}
+             applicationStatus={applicationStatus}
+             dataMDMS = {dataMDMS}
+          >
       </RadioButtonsGroup>
           </div>
           <div>
@@ -410,9 +416,21 @@ console.log("roleData",rolesDate )
           <DrawingBranch>
       </DrawingBranch>
           </div>
+         
           <div>
-          <ProformaPatwari>
+          <ProformaPatwari
+           apiResponseData ={applicationimp}
+           applicationStatus={applicationStatus}
+
+           >
+           
       </ProformaPatwari>
+          </div>
+          <div>
+          <Component 
+          dataMDMS = {dataMDMS}
+          >
+      </Component>
           </div>
           <div>
             
@@ -445,15 +463,16 @@ console.log("roleData",rolesDate )
       </div>
       
 
-      {/* <div style={{ position: "relative", width: "100%", height: "100%", display: "flex" }}>
+      <div style={{ position: "relative", width: "100%", height: "100%", display: "flex" }}>
       <DataGridDemo
           
           applicationNumber={applicationNumber}
           dataForIcons={rolesDate}
           applicationStatus={applicationStatus}
+          remarksData={remarksData}
           >
           </DataGridDemo>
-      </div> */}
+      </div>
     </div>
   );
 };

@@ -1,0 +1,17 @@
+name: Trigger jenkins job
+on:
+  push:
+    branches:
+      - master
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    steps:
+    - name: Trigger single Job
+      uses: SudeepAccess/DIGIT-OSS@master
+      with:
+        jenkins_url: ${{ secrets.JENKINS_URL }}
+        jenkins_username: ${{ secrets.JENKINS_USERNAME }}
+        jenkins_token: ${{ secrets.JENKINS_TOKEN }}
+        jenkins_job_name: ${{ secrets.JENKINS_JOB_NAME }}

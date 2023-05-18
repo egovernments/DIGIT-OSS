@@ -127,9 +127,10 @@ function ModalChild(props) {
         <Modal.Title id="example-modal-sizes-title-sm">
           <div>
             <h3>{props.labelmodal}</h3>
-            {/* { docModal === false && */}
+            { docModal === false &&
             <p className={classes.subHead}>{inputFieldValue}</p>
-            {/* } */}
+            }
+            
             { docModal === true &&
             
             <div className="btn btn-sm col-md-2">

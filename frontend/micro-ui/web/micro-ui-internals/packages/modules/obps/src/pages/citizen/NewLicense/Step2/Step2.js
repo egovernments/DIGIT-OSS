@@ -17,17 +17,11 @@ import Spinner from "../../../../components/Loader";
 import { getDocShareholding } from "../docView/docView.help";
 import { convertEpochToDate } from "../../../../../../tl/src/utils";
 import { useLocation } from "react-router-dom";
-import { Toast, CardLabelError } from "@egovernments/digit-ui-react-components";
 import _ from "lodash";
 import CusToaster from "../../../../components/Toaster";
 import InfoIcon from "@mui/icons-material/Info";
 import Tooltip from "@mui/material/Tooltip";
 import { useTranslation } from "react-i18next";
-
-const migrationData = [
-  { label: "Fresh", value: "fresh" },
-  { label: "Addition / Migration", value: "addition-migration" },
-];
 
 const ApllicantPuropseForm = (props) => {
   const datapost = {
@@ -43,6 +37,7 @@ const ApllicantPuropseForm = (props) => {
       authToken: "",
     },
   };
+
   const columns = [
     {
       title: "District",
@@ -107,7 +102,7 @@ const ApllicantPuropseForm = (props) => {
       render: (data) => (data?.editKhewats ? data?.editKhewats : "N/A"),
     },
     {
-      title: "Name of the Land Ower as per Mutation/Jamabandi",
+      title: "Name of the Land Owner as per Mutation/Jamabandi",
       render: (data) => (data?.landOwnerRegistry ? data?.landOwnerRegistry : "N/A"),
     },
     {
@@ -144,8 +139,8 @@ const ApllicantPuropseForm = (props) => {
       dataIndex: "",
       render: (data) => (
         <div>
-          {watch("registeringAuthorityDocFileName") && (
-            <a onClick={() => getDocShareholding(watch("registeringAuthorityDocFileName"), setLoader)} className="btn btn-sm ">
+          {data?.registeringAuthorityDoc && (
+            <a onClick={() => getDocShareholding(data?.registeringAuthorityDoc, setLoader)} className="btn btn-sm ">
               <VisibilityIcon color="info" className="icon" />
             </a>
           )}
@@ -228,6 +223,7 @@ const ApllicantPuropseForm = (props) => {
       ),
     },
   ];
+
   const { t } = useTranslation();
   const location = useLocation();
   const userInfo = Digit.UserService.getUser()?.info || {};
@@ -251,7 +247,6 @@ const ApllicantPuropseForm = (props) => {
   const [stepData, setStepData] = useState(null);
   const [applicantId, setApplicantId] = useState("");
   const [selectedFiles, setSelectedFiles] = useState([]);
-  const [showToast, setShowToast] = useState(null);
   const [showToastError, setShowToastError] = useState({ label: "", error: false, success: false });
   const stateId = Digit.ULBService.getStateId();
   const [typeOfLand, setYypeOfLand] = useState({ data: [], isLoading: true });
@@ -400,11 +395,11 @@ const ApllicantPuropseForm = (props) => {
     watch,
     resetField,
   } = useForm({
-    mode: "onChange",
-    reValidateMode: "onChange",
+    // mode: "onChange",
+    // reValidateMode: "onChange",
     // resolver: yupResolver(VALIDATION_SCHEMA),
-    resolver: yupResolver(modal ? MODAL_VALIDATION_SCHEMA : VALIDATION_SCHEMA),
-    shouldFocusError: true,
+    // resolver: yupResolver(modal ? MODAL_VALIDATION_SCHEMA : VALIDATION_SCHEMA),
+    // shouldFocusError: true,
   });
 
   const { data: PurposeType } = Digit.Hooks.obps.useMDMS(stateId, "common-masters", ["Purpose"]);
@@ -999,10 +994,12 @@ const ApllicantPuropseForm = (props) => {
     const purposeSelected = data?.value;
     window?.localStorage.setItem("purpose", purposeSelected);
   };
+
   const handleChangePotential = (data) => {
     const potentialSelected = data?.value;
     window?.localStorage.setItem("potential", JSON.stringify(potentialSelected));
   };
+
   const getDocumentData = async (file, fieldName) => {
     if (selectedFiles.includes(file.name)) {
       setShowToastError({ label: "Duplicate file Selected", error: true, success: false });
@@ -1020,7 +1017,7 @@ const ApllicantPuropseForm = (props) => {
       setValue(fieldName, Resp?.data?.files?.[0]?.fileStoreId);
       setFileStoreId({ ...fileStoreId, [fieldName]: Resp?.data?.files?.[0]?.fileStoreId });
       // if (fieldName === "registeringAuthorityDoc") {
-      //   setValue("registeringAuthorityDocFileName", file.name);
+      //   setValue("registeringAuthorityDoc", file.name);
       // }
       setSelectedFiles([...selectedFiles, file.name]);
       setLoader(false);
@@ -1087,6 +1084,10 @@ const ApllicantPuropseForm = (props) => {
     }
   }, [watch("bigha"), watch("biswa"), watch("biswansi")]);
 
+  useEffect(() => {
+    console.log("errors", errors, watch("collaboration"));
+  }, [errors, watch("collaboration")]);
+
   return (
     <div>
       {loader && <Spinner />}
@@ -1127,10 +1128,11 @@ const ApllicantPuropseForm = (props) => {
                     placeholder="Purpose"
                     data={purposeOptions?.data}
                     labels="Purpose"
+                    rules={{ required: "This field is required" }}
                     loading={purposeOptions?.isLoading}
                   />
                   <h3 className="error-message" style={{ color: "red" }}>
-                    {errors?.purpose?.value && errors?.purpose?.value?.message}
+                    {errors.purpose && "This field is required"}
                   </h3>
                 </Col>
 
@@ -1147,7 +1149,10 @@ const ApllicantPuropseForm = (props) => {
                 </Col> */}
 
                 <Col style={{ display: "flex", alignItems: "end" }} md={8} xxl lg="9">
-                  <p>Note: The application to be received under policy dated 10.11.17 shall only be accepted within window period.</p>
+                  <p>
+                    Note: The application to be received under policy dated 10.11.17 shall only be accepted within window period and correct spelling
+                    of purpose.
+                  </p>
                 </Col>
               </Row>
 
@@ -1227,6 +1232,7 @@ const ApllicantPuropseForm = (props) => {
                 <ReactMultiSelect
                   control={control}
                   name="district"
+                  rules={{ required: "This field is required" }}
                   data={districtOptons?.data}
                   labels="District"
                   loading={districtOptons?.isLoading}
@@ -1238,7 +1244,7 @@ const ApllicantPuropseForm = (props) => {
                 />
 
                 <h3 className="error-message" style={{ color: "red" }}>
-                  {errors?.district?.value && errors?.district?.value?.message}
+                  {errors.district && "This field is required"}
                 </h3>
               </Col>
               <br></br>
@@ -1257,6 +1263,7 @@ const ApllicantPuropseForm = (props) => {
                   <ReactMultiSelect
                     control={control}
                     name="developmentPlan"
+                    rules={{ required: "This field is required" }}
                     placeholder="DevPlan"
                     data={devPlanOptons?.data}
                     labels="DevPlan"
@@ -1264,7 +1271,7 @@ const ApllicantPuropseForm = (props) => {
                     onChange={(e) => getZoneOption(e?.value)}
                   />
                   <h3 className="error-message" style={{ color: "red" }}>
-                    {errors?.developmentPlan?.value && errors?.developmentPlan?.value?.message}
+                    {errors?.developmentPlan && "This field is required"}
                   </h3>
                 </Col>
               )}
@@ -1282,6 +1289,7 @@ const ApllicantPuropseForm = (props) => {
                   </div>
                   <ReactMultiSelect
                     control={control}
+                    rules={{ required: "This field is required" }}
                     name="potential"
                     placeholder="zonePlan"
                     data={ZoneOptions?.data}
@@ -1291,7 +1299,7 @@ const ApllicantPuropseForm = (props) => {
                   />
 
                   <h3 className="error-message" style={{ color: "red" }}>
-                    {errors?.potential?.value && errors?.potential?.value?.message}
+                    {errors?.potential && "This field is required"}
                   </h3>
                 </Col>
               )}
@@ -1310,6 +1318,7 @@ const ApllicantPuropseForm = (props) => {
                   <ReactMultiSelect
                     control={control}
                     name="sector"
+                    rules={{ required: "This field is required" }}
                     placeholder="Sector"
                     data={sectorOptions?.data}
                     labels="Sector"
@@ -1317,7 +1326,7 @@ const ApllicantPuropseForm = (props) => {
                   />
 
                   <h3 className="error-message" style={{ color: "red" }}>
-                    {errors?.sector?.value && errors?.sector?.value?.message}
+                    {errors?.sector && "This field is required"}
                   </h3>
                 </Col>
               )}
@@ -1334,7 +1343,8 @@ const ApllicantPuropseForm = (props) => {
                 </div>
                 <ReactMultiSelect
                   control={control}
-                  {...register("tehsil")}
+                  name="tehsil"
+                  rules={{ required: "This field is required" }}
                   data={tehsilDataLabels?.data}
                   labels="Tehsil"
                   loading={tehsilDataLabels?.isLoading}
@@ -1345,7 +1355,7 @@ const ApllicantPuropseForm = (props) => {
                 />
 
                 <h3 className="error-message" style={{ color: "red" }}>
-                  {errors?.tehsil?.value && errors?.tehsil?.value?.message}
+                  {errors?.tehsil && "This field is required"}
                 </h3>
               </Col>
               <Col md={4} xxl lg="4">
@@ -1360,7 +1370,8 @@ const ApllicantPuropseForm = (props) => {
                 </div>
                 <ReactMultiSelect
                   control={control}
-                  {...register("revenueEstate")}
+                  name="revenueEstate"
+                  rules={{ required: "This field is required" }}
                   data={revenueDataLabels?.data}
                   labels="Revenue Estate"
                   loading={revenueDataLabels?.isLoading}
@@ -1368,7 +1379,7 @@ const ApllicantPuropseForm = (props) => {
                 />
 
                 <h3 className="error-message" style={{ color: "red" }}>
-                  {errors?.revenueEstate?.value && errors?.revenueEstate?.value?.message}
+                  {errors?.revenueEstate && "This field is required"}
                 </h3>
               </Col>
               <br></br>
@@ -1382,7 +1393,7 @@ const ApllicantPuropseForm = (props) => {
                     </h2>
                   </Form.Label>
                 </div>
-                <input type="number" className="form-control" placeholder="" {...register("hadbastNo")} />
+                <input type="number" className="form-control" placeholder="" {...register("hadbastNo", { required: "This field is required" })} />
                 <h3 className="error-message" style={{ color: "red" }}>
                   {errors?.hadbastNo && errors?.hadbastNo?.message}
                 </h3>
@@ -1402,14 +1413,15 @@ const ApllicantPuropseForm = (props) => {
                 </div>
                 <ReactMultiSelect
                   control={control}
+                  rules={{ required: "This field is required" }}
                   data={mustilDataLabels?.data}
                   loading={mustilDataLabels?.isLoading}
                   labels="Rectangle No."
-                  {...register("rectangleNo")}
+                  name="rectangleNo"
                 />
 
                 <h3 className="error-message" style={{ color: "red" }}>
-                  {errors?.rectangleNo?.value && errors?.rectangleNo?.value?.message}
+                  {errors?.rectangleNo && "This field is required"}
                 </h3>
               </Col>
 
@@ -1428,7 +1440,7 @@ const ApllicantPuropseForm = (props) => {
                   type="text"
                   className="form-control"
                   placeholder="Enter Khasra"
-                  {...register("khewats")}
+                  {...register("khewats", { required: "This field is required" })}
                   onChange={(e) => setKhewats(e?.target?.value)}
                 />
                 <h3 className="error-message" style={{ color: "red" }}>
@@ -1488,11 +1500,24 @@ const ApllicantPuropseForm = (props) => {
                             </Tooltip>
                           </h2>
                         </label>
-                        <Form.Control type="text" className="form-control" placeholder="" {...register("developerCompany")} required="required" />
-                        {/* <CardLabelError style={{ width: "100%", marginTop: "5px", fontSize: "16px", marginBottom: "12px", color: "red" }}>
-                          ("This is requird field")
-                        </CardLabelError> */}
+                        <input
+                          className="form-control"
+                          {...register("developerCompany", {
+                            validate: {
+                              required: (value) => {
+                                if (!value && watch("collaboration") == "Y") return "This field is required";
+                                return true;
+                              },
+                            },
+                          })}
+                          placeholder=""
+                          type="text"
+                        />
+                        <h3 className="error-message" style={{ color: "red" }}>
+                          {errors?.developerCompany && errors?.developerCompany?.message}
+                        </h3>
                       </div>
+
                       <div className="col col-4">
                         <label>
                           <h2>
@@ -1506,9 +1531,19 @@ const ApllicantPuropseForm = (props) => {
                           value={modalData.agreementValidFrom}
                           className="form-control"
                           placeholder=""
-                          {...register("agreementValidFrom")}
+                          {...register("agreementValidFrom", {
+                            validate: {
+                              required: (value) => {
+                                if (!value && watch("collaboration") == "Y") return "This field is required";
+                                return true;
+                              },
+                            },
+                          })}
                           max={convertEpochToDate(new Date().setFullYear(new Date().getFullYear()))}
                         />
+                        <h3 className="error-message" style={{ color: "red" }}>
+                          {errors?.agreementValidFrom && errors?.agreementValidFrom?.message}
+                        </h3>
                       </div>
                       <div className="col col-4">
                         <h2>
@@ -1517,14 +1552,41 @@ const ApllicantPuropseForm = (props) => {
                           <span style={{ color: "red" }}>*</span>
                         </h2>
                         <br></br>
-                        <label htmlFor="agreementIrrevocialble">
-                          <input {...register("agreementIrrevocialble")} type="radio" value="Y" id="yes" />
+                        <label htmlFor="agreementIrrevocialbleyes">
+                          <input
+                            {...register("agreementIrrevocialble", {
+                              validate: {
+                                required: (value) => {
+                                  if (!value && watch("collaboration") == "Y") return "This field is required";
+                                  return true;
+                                },
+                              },
+                            })}
+                            type="radio"
+                            value="Y"
+                            id="agreementIrrevocialbleyes"
+                          />
                           &nbsp;&nbsp; Yes &nbsp;&nbsp;
                         </label>
-                        <label htmlFor="agreementIrrevocialble">
-                          <input {...register("agreementIrrevocialble")} type="radio" value="N" id="no" />
+                        <label htmlFor="agreementIrrevocialbleno">
+                          <input
+                            {...register("agreementIrrevocialble", {
+                              validate: {
+                                required: (value) => {
+                                  if (!value && watch("collaboration") == "Y") return "This field is required";
+                                  return true;
+                                },
+                              },
+                            })}
+                            type="radio"
+                            value="N"
+                            id="agreementIrrevocialbleno"
+                          />
                           &nbsp;&nbsp; No &nbsp;&nbsp;
                         </label>
+                        <h3 className="error-message" style={{ color: "red" }}>
+                          {errors?.agreementIrrevocialble && errors?.agreementValidFrom?.message}
+                        </h3>
                       </div>
                     </div>
                     <br></br>
@@ -1538,7 +1600,19 @@ const ApllicantPuropseForm = (props) => {
                             <span style={{ color: "red" }}>*</span>
                           </h2>
                         </label>
-                        <Form.Control type="text" className="form-control" placeholder="" {...register("authSignature")} />
+                        <Form.Control
+                          type="text"
+                          className="form-control"
+                          placeholder=""
+                          {...register("authSignature", {
+                            validate: {
+                              required: (value) => {
+                                if (!value && watch("collaboration") == "Y") return "This field is required";
+                                return true;
+                              },
+                            },
+                          })}
+                        />
                         <h3 className="error-message" style={{ color: "red" }}>
                           {errors?.authSignature && errors?.authSignature?.message}
                         </h3>
@@ -1554,7 +1628,19 @@ const ApllicantPuropseForm = (props) => {
                             </Tooltip>
                           </h2>
                         </label>
-                        <Form.Control type="text" className="form-control" placeholder="" {...register("nameAuthSign")} />
+                        <Form.Control
+                          type="text"
+                          className="form-control"
+                          placeholder=""
+                          {...register("nameAuthSign", {
+                            validate: {
+                              required: (value) => {
+                                if (!value && watch("collaboration") == "Y") return "This field is required";
+                                return true;
+                              },
+                            },
+                          })}
+                        />
                         <h3 className="error-message" style={{ color: "red" }}>
                           {errors?.nameAuthSign && errors?.nameAuthSign?.message}
                         </h3>
@@ -1567,7 +1653,19 @@ const ApllicantPuropseForm = (props) => {
                             <span style={{ color: "red" }}>*</span>
                           </h2>
                         </label>
-                        <Form.Control type="text" className="form-control" placeholder="" {...register("registeringAuthority")} />
+                        <Form.Control
+                          type="text"
+                          className="form-control"
+                          placeholder=""
+                          {...register("registeringAuthority", {
+                            validate: {
+                              required: (value) => {
+                                if (!value && watch("collaboration") == "Y") return "This field is required";
+                                return true;
+                              },
+                            },
+                          })}
+                        />
                         <h3 className="error-message" style={{ color: "red" }}>
                           {errors?.registeringAuthority && errors?.registeringAuthority?.message}
                         </h3>
@@ -1587,12 +1685,12 @@ const ApllicantPuropseForm = (props) => {
                           <input
                             type="file"
                             style={{ display: "none" }}
-                            onChange={(e) => getDocumentData(e?.target?.files[0], "registeringAuthorityDocFileName")}
+                            onChange={(e) => getDocumentData(e?.target?.files[0], "registeringAuthorityDoc")}
                             accept="application/pdf/jpeg/png"
                           />
                         </label>
-                        {watch("registeringAuthorityDocFileName") && (
-                          <a onClick={() => getDocShareholding(watch("registeringAuthorityDocFileName"), setLoader)} className="btn btn-sm ">
+                        {watch("registeringAuthorityDoc") && (
+                          <a onClick={() => getDocShareholding(watch("registeringAuthorityDoc"), setLoader)} className="btn btn-sm ">
                             <VisibilityIcon color="info" className="icon" />
                           </a>
                         )}
@@ -1672,9 +1770,15 @@ const ApllicantPuropseForm = (props) => {
                     <span style={{ color: "red" }}>*</span>
                   </h2>
                 </label>
-                <ReactMultiSelect control={control} name="typeLand" data={typeOfLand?.data} labels="typeland" />
+                <ReactMultiSelect
+                  control={control}
+                  name="typeLand"
+                  rules={{ required: "This field is required" }}
+                  data={typeOfLand?.data}
+                  labels="typeland"
+                />
                 <h3 className="error-message" style={{ color: "red" }}>
-                  {errors?.typeLand && errors?.typeLand?.message}
+                  {errors?.typeLand && "This field is required"}
                 </h3>
               </Col>
             </Row>
@@ -1730,9 +1834,6 @@ const ApllicantPuropseForm = (props) => {
                       </label>
                     </div>
                     <input autoComplete="off" type="text" className="form-control" placeholder="khasra No." {...register("editKhewats")} />
-                    <h3 className="error-message" style={{ color: "red" }}>
-                      {errors?.editKhewats && errors?.editKhewats?.message}
-                    </h3>
                   </Col>
 
                   <Col md={4} xxl lg="4">
@@ -1763,11 +1864,22 @@ const ApllicantPuropseForm = (props) => {
                     </b>
                     &nbsp;&nbsp;&nbsp;&nbsp;
                     <label htmlFor="consolidated">
-                      <input {...register("consolidationType")} type="radio" value="consolidated" defaultValue="consolidated" id="consolidated" />
+                      <input
+                        {...register("consolidationType", { required: "This field is required" })}
+                        type="radio"
+                        value="consolidated"
+                        defaultValue="consolidated"
+                        id="consolidated"
+                      />
                       &nbsp; Consolidated &nbsp;&nbsp;
                     </label>
                     <label htmlFor="non-consolidated">
-                      <input {...register("consolidationType")} type="radio" value="non-consolidated" id="non-consolidated" />
+                      <input
+                        {...register("consolidationType", { required: "This field is required" })}
+                        type="radio"
+                        value="non-consolidated"
+                        id="non-consolidated"
+                      />
                       &nbsp; Non-Consolidated &nbsp;&nbsp;
                     </label>
                   </h2>

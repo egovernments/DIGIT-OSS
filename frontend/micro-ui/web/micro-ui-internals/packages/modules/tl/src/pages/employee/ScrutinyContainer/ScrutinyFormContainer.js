@@ -48,6 +48,7 @@ const ScrutinyFormcontainer = (props) => {
   const [workflowDetails, setWorkflowDetails] = useState();
   const [applicationData, setApplicationData] = useState();
   const [mDMSData, setMDMSData] = useState();
+  const [dataProfrma , setDataProfrma] = useState([]);
   const [mDmsUpdate, SetMDmsUpdate] = useState();
   const { setBusinessService } = useContext(ScrutinyRemarksContext)
 
@@ -60,7 +61,7 @@ const ScrutinyFormcontainer = (props) => {
   const showRemarksSection = userRoles.includes("DTCP_HR")
 
   console.log("rolename" , filterDataRole);
-  console.log("rolename" , userRolesArray);
+  console.log("userRolesArray" , userRolesArray);
   const roleCodeUseAPi = userRolesArray.map((object) => `${object.code}`)
 
   let query = userRolesArray.map((object) => `@.role=='${object.code}'`).join("|| ")
@@ -134,6 +135,10 @@ const ScrutinyFormcontainer = (props) => {
       setBusinessService(Resp?.Licenses[0]?.businessService);
       setStatus(Resp?.Licenses[0]?.status);
       console.log("devStatus", Resp?.Licenses[0]?.status);
+      
+
+      
+      ////////////////////////////////////
       requestFiled = {
 
         RequestInfo: {
@@ -175,19 +180,87 @@ const ScrutinyFormcontainer = (props) => {
     }
     
     console.log("TCPaccess123", requestFiled)
-
-
-    try {
+    let requestProfrma = {}
+     try {
       const Resp = await axios.post(`/egov-mdms-service/v1/_search`, requestFiled).then((response) => {
         return response?.data;
       });
       setMDMSData(Resp?.MdmsRes?.ACCESSCONTROL_ROLESACCESS?.rolesaccess);
-      console.log("FileddataName", mDMSData);
 
+      console.log("FileddataName12", mDMSData);
+
+      requestProfrma = {
+
+        RequestInfo: {
+          apiId: "Rainmaker",
+          ver: "v1",
+          ts: 0,
+          action: "_search",
+          did: "",
+          key: "",
+          msgId: "090909",
+          requesterId: "",
+          authToken: authToken,
+          correlationId: null,
+    
+        },
+        MdmsCriteria: {
+          tenantId: "hr",
+          moduleDetails: [
+            {
+              moduleName: "common-masters",
+              tenantId: "hr",
+              masterDetails: [
+                {
+  
+                  "name": "PerformaNewLicence",
+  
+                  "filter":"[?(@.role=='AO')]"
+  
+              }
+              ]
+            }
+          ]
+        } 
+      } 
+    } 
+    catch (error) {
+      console.log(error);
+  
+    }
+    
+    console.log("TCPaccessrequestProfrma123", requestProfrma)
+     try {
+      const Resp = await axios.post(`/egov-mdms-service/v1/_search`, requestProfrma).then((response) => {
+        return response?.data;
+      });
+      setDataProfrma(Resp?.MdmsRes);
+      console.log("FileddataNamemDMSDataProfrma", dataProfrma , Resp);
+  
     } catch (error) {
       console.log(error);
-
+  
     }
+
+    // } catch (error) {
+    //   console.log(error);
+
+    // }
+
+   
+    
+
+    // try {
+    //   const Resp = await axios.post(`/egov-mdms-service/v1/_search`, requestFiled).then((response) => {
+    //     return response?.data;
+    //   });
+    //   setMDMSData(Resp?.MdmsRes?.ACCESSCONTROL_ROLESACCESS?.rolesaccess);
+    //   console.log("FileddataName", mDMSData);
+
+    // } catch (error) {
+    //   console.log(error);
+
+    // }
     // const applicationNo = id
     // console.log("applicationNo", applicationNo);
     const additionalDoc = {
@@ -503,7 +576,7 @@ const ScrutinyFormcontainer = (props) => {
           <div className="col-sm-2">
             <b><p className="head-font">TCP Application Number:</p></b>
             {/* {item.name.substring(0, 4)} */}
-            <b><p className="head-font">{applicationData?.tcpApplicationNumber}</p></b>
+            <b><p className="head-font">{applicationData?.tcpApplicationNumber.substring(7, 20)}</p></b>
           </div>
           <div className="col-sm-2">
             <b><p className="head-font">TCP Case Number:</p></b>
@@ -529,6 +602,7 @@ const ScrutinyFormcontainer = (props) => {
             applicationStatus={status}
             refreshScrutinyData={getScrutinyData}
             mDMSData={mDMSData}
+            dataMDMS={dataProfrma}
             applicationimp={applicationData}
           ></ScrutitnyForms>
         </div>

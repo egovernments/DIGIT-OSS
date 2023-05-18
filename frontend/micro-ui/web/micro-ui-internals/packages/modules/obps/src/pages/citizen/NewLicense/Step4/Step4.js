@@ -985,7 +985,9 @@ const AppliedDetailForm = (props) => {
                   </div> */}
 
                   <h6 className="text-black mt-4">
-                    <b>Documents</b>
+                    <b>
+                      Documents <span style={{ color: "#e47878", paddingLeft: "5px" }}>(Documents should be less than 25mb)</span>
+                    </b>
                   </h6>
                   <div className="row mt-3 ">
                     <div className="col col-3">

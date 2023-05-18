@@ -65,23 +65,92 @@ const StakeholderDocuments = ({ t, config, onSelect, userType, formData, setErro
       };
       const getDevDetails = await axios.get(`/user/developer/_getDeveloperById?id=${userInfo?.info?.id}&isAllData=true`, requestResp, {});
       const developerDataGet = getDevDetails?.data;
-      setTradeType(developerDataGet?.devDetail[0]?.applicantType?.licenceType);
+      setTradeType(developerDataGet?.devDetail[0]?.applicantType?.licenceTypeSelected);
       setDocumentsList(developerDataGet?.devDetail[0]?.licensesDoc);
       // console.log("TRADETYPE", documentsUploadList);
 
       let filtredBpaDocs = [];
       if (data?.StakeholderRegistraition?.TradeTypetoRoleMapping) {
+        console.log("logger4....", data, getDevDetails.data)
         filtredBpaDocs = data?.StakeholderRegistraition?.TradeTypetoRoleMapping?.filter(
-          (ob) => ob.tradeType === developerDataGet?.devDetail[0]?.applicantType?.licenceType
+          (ob) => ob.tradeType === developerDataGet?.devDetail[0]?.applicantType?.licenceTypeSelected
         );
       }
 
-      let documentsList = [];
-      filtredBpaDocs?.[0]?.docTypes?.forEach((doc) => {
-        documentsList.push(doc);
-      });
-      setBpaTaxDocuments(documentsList);
-      //   console.log("TRADETYPE",developerDataGet?.devDetail[0]?.applicantType?.licenceType);
+
+      if( getDevDetails.data.devDetail[0].applicantType.licenceTypeSelected === "CITIZEN.CLASSA" || getDevDetails.data.devDetail[0].applicantType.licenceTypeSelected === "BPA_DEVELOPER"){
+        let documentsList = [];
+        filtredBpaDocs?.[0]?.docTypes?.forEach((doc) => {
+          documentsList.push(doc);
+        });
+        setBpaTaxDocuments(documentsList);
+      } else {
+        const requestBody = {
+          "RequestInfo": {
+            "apiId": "Rainmaker",
+            "ver": "v1",
+            "ts": 0,
+            "action": "_search",
+            "did": "",
+            "key": "",
+            "msgId": "090909",
+            "requesterId": "",
+            "authToken": "408de886-cb18-487c-8e68-d171a5006b23",
+            "userInfo": {
+              "id": 1964,
+              "uuid": "ac14890e-ad92-42f8-b262-722773390672",
+              "userName": "8888854328",
+              "name": "Manik lal",
+              "mobileNumber": "8888854328",
+              "emailId": "manikl@gmail.com",
+              "locale": null,
+              "type": "CITIZEN",
+              "roles": [
+                {
+                  "name": "Developer",
+                  "code": "BPA_DEVELOPER",
+                  "tenantId": "hr"
+                },
+                {
+                  "name": "Builder",
+                  "code": "BPA_BUILDER",
+                  "tenantId": "hr"
+                },
+                {
+                  "name": "Citizen",
+                  "code": "CITIZEN",
+                  "tenantId": "hr"
+                }
+              ],
+              "active": true,
+              "tenantId": "hr",
+              "permanentCity": null
+            }
+          },
+          "MdmsCriteria": {
+            "tenantId": "hr",
+            "moduleDetails": [
+              {
+                "moduleName": "common-masters",
+                "tenantId": "hr",
+                "masterDetails": [
+                  {
+                    "name": "technicalProfessionalDocuments"
+                  }
+                ]
+              }
+            ]
+          }
+        }
+  
+        const response = await axios.post("/egov-mdms-service/v1/_search", requestBody);
+        console.log("TRADETYPE", response.data, response.data.MdmsRes["common-masters"].technicalProfessionalDocuments);
+        console.log("TRADETYPE", filtredBpaDocs, data?.StakeholderRegistraition?.TradeTypetoRoleMapping, developerDataGet?.devDetail[0]?.applicantType?.licenceTypeSelected);
+  
+        setBpaTaxDocuments(response.data.MdmsRes["common-masters"].technicalProfessionalDocuments.map(e => ({ code: e.documents, required: e?.required || true, info: e.documents })));
+
+      }
+
     } catch (error) {
       console.log(error);
     }
@@ -158,7 +227,7 @@ const StakeholderDocuments = ({ t, config, onSelect, userType, formData, setErro
     onSelect(config.key, documentStep);
   };
   const onSkip = () => onSelect();
-  function onAdd() {}
+  function onAdd() { }
 
   useEffect(() => {
     let count = 0;
@@ -211,7 +280,7 @@ const StakeholderDocuments = ({ t, config, onSelect, userType, formData, setErro
   const navigate = useHistory();
 
   const changeStep = (step) => {
-    if (tradeType === "ARCHITECT.CLASSA") {
+    if ((tradeType !== "CITIZEN.CLASSA" && tradeType !== "BPA_DEVELOPER")) {
       switch (step) {
         case 1:
           navigate.replace("/digit-ui/citizen/obps/stakeholder/apply/provide-license-type");
@@ -246,8 +315,8 @@ const StakeholderDocuments = ({ t, config, onSelect, userType, formData, setErro
       <div className={isopenlink ? "OpenlinkContainer" : ""}>
         {isopenlink && <BackButton style={{ border: "none" }}>{t("CS_COMMON_BACK")}</BackButton>}
         <Timeline
-          currentStep={tradeType === "ARCHITECT.CLASSA" ? 3 : 5}
-          flow={tradeType === "ARCHITECT.CLASSA" ? "ARCHITECT.CLASSA" : "STAKEHOLDER"}
+          currentStep={(tradeType !== "CITIZEN.CLASSA" && tradeType !== "BPA_DEVELOPER") ? 3 : 5}
+          flow={(tradeType !== "CITIZEN.CLASSA" && tradeType !== "BPA_DEVELOPER") ? "ARCHITECT.CLASSA" : "STAKEHOLDER"}
           onChangeStep={changeStep}
           isAPILoaded={tradeType ? true : false}
         />
@@ -320,8 +389,8 @@ function SelectDocument({ t, document: doc, setDocuments, documentsUploadList, e
     filteredDocument
       ? { ...filteredDocument, active: true, code: filteredDocument?.documentType, i18nKey: filteredDocument?.documentType }
       : doc?.dropdownData?.length === 1
-      ? doc?.dropdownData[0]
-      : {}
+        ? doc?.dropdownData[0]
+        : {}
   );
 
   const [file, setFile] = useState(null);

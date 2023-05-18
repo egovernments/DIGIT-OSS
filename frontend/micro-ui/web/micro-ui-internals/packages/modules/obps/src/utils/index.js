@@ -423,19 +423,22 @@ export const getapplicationdocstakeholder = (initial) => {
   return convertedDoc;
 };
 
-export const convertToStakeholderObject = (data) => {
+export const convertToStakeholderObject = (data,tradeType,businessService="") => {
   let userInfo = Digit.UserService.getUser();
   let formData = {
     Licenses: [
       {
         ...data?.result?.Licenses[0],
+        ...data,
         action: "INITIATE",
         applicationType:"RENEWAL",
         status:"INITIATED",
+        tenantId: "hr",
+        businessService: businessService,
         tradeLicenseDetail: {
           ...data?.result?.Licenses[0]?.tradeLicenseDetail,
           additionalDetail: { counsilForArchNo: data?.formData?.LicneseType?.ArchitectNo },
-          tradeType: "BPA_DEVELOPER.Company",
+          tradeType: tradeType,
           // tradeUnits: [
           //   {
           //     ...data?.result?.Licenses[0]?.tradeLicenseDetail?.tradeUnits?.[0],

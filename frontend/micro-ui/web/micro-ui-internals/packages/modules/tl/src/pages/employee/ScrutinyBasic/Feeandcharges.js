@@ -477,7 +477,7 @@ const feeandcharges = props.feeandchargesData
                             {/* Total Fee */}
                             {`${t("NWL_APPLICANT_FEE_TOTAL_FEE")}`}
                             </h4>
-                              <input type="text" className="form-control" placeholder={feeAndChargesData?.totalFee} disabled />
+                              <input type="text" className="form-control" placeholder={feeAndChargesData?.feesTypeCalculationDto?.totalFee} disabled />
                             </Col>
                           
                           
@@ -487,8 +487,8 @@ const feeandcharges = props.feeandchargesData
                             {/* Total Licence Fee */}
                             {`${t("NWL_APPLICANT_FEE_TOTAL_LICENCE_FEE")}`}
                             </h4>
-                              <input type="text" className="form-control" placeholder={feeAndChargesData?.totalLicenceFee} disabled />
-                            </Col>
+                              <input type="text" className="form-control" placeholder={feeAndChargesData?.feesTypeCalculationDto?.totalLicenceFee} disabled />
+                            </Col>s
                          
                           
                             <Col className="col col-4" >
@@ -496,7 +496,7 @@ const feeandcharges = props.feeandchargesData
                           {/* Total Scruitny Fee */}
                           {`${t("NWL_APPLICANT_FEE_TOTAL_SCRUITNY_FEE")}`}
                           </h4>
-                              <input type="text" className="form-control" placeholder={feeAndChargesData?.totalScruitnyFee} disabled />
+                              <input type="text" className="form-control" placeholder={feeAndChargesData?.feesTypeCalculationDto?.totalScruitnyFee} disabled />
                             </Col>
                           
                           </Row>
