@@ -5,8 +5,6 @@ import { Form } from "react-bootstrap";
 import { Card, Row, Col } from "react-bootstrap";
 import { Modal, ModalHeader, ModalBody, ModalFooter } from "reactstrap";
 import { convertEpochToDate } from "../../../../../../tl/src/utils";
-import CalculateIcon from "@mui/icons-material/Calculate";
-import ArrowCircleUpIcon from "@mui/icons-material/ArrowCircleUp";
 import ScrollToTop from "@egovernments/digit-ui-react-components/src/atoms/ScrollToTop";
 import axios from "axios";
 import ReactMultiSelect from "../../../../../../../react-components/src/atoms/ReactMultiSelect";
@@ -529,7 +527,7 @@ const LandScheduleForm = (props) => {
                       {watch("licenseApplied") === "Y" && (
                         <div>
                           <div className="row">
-                            <div className="col col-4">
+                            <div className="col col-lg-4 col-md-6 col-sm-6 mb-2">
                               <label>
                                 <h2>
                                   {`${t("NWL_APPLICANT_LICENCE_NUMBER_OF_PARENT_LICENCE")}`}
@@ -549,7 +547,7 @@ const LandScheduleForm = (props) => {
                                 {errors?.licenseNumber && errors?.licenseNumber?.message}
                               </h3>
                             </div>
-                            <div className="col col-4">
+                            <div className="col col-lg-4 col-md-6 col-sm-6 mb-2">
                               <label>
                                 <h2>
                                   {`${t("NWL_APPLICANT_DEVELOMENT_PLAN_ADDICATION_PLAN")}`}
@@ -569,7 +567,7 @@ const LandScheduleForm = (props) => {
                                 {errors?.potential && errors?.potential?.message}
                               </h3>
                             </div>
-                            <div className="col col-4">
+                            <div className="col col-lg-4 col-md-6 col-sm-6 mb-2">
                               <label>
                                 <h2>
                                   {`${t("NWL_APPLICANT_TYPE_OF_COLONY_ADDICATION_PLAN")}`}
@@ -589,23 +587,10 @@ const LandScheduleForm = (props) => {
                                 {errors?.siteLoc && errors?.siteLoc?.message}
                               </h3>
                             </div>
-                            {/* <div className="col col-12">
-                              {Purpose === "DDJAY_APHP" && <CommercialColonyInResidential watch={watch} register={register} />}
-                              {Purpose === "RPL" && <CommercialColonyInResidential watch={watch} register={register} />}
-                              {Purpose === "NILPC" && <CommercialColonyInResidential watch={watch} register={register} />}
-                              {Purpose === "AHP" && <CommercialColonyInResidential watch={watch} register={register} />}
-                              {Purpose === "CIC" && <CommercialLicense watch={watch} register={register} />}
-                              {Purpose === "LDEF" && <LowDensityEco watch={watch} register={register} />}
-                              {Purpose === "IPL" && <CyberPark watch={watch} register={register} />}
-                              {Purpose === "ITP" && <CyberPark watch={watch} register={register} />}
-                              {Purpose === "ITC" && <CyberPark watch={watch} register={register} />}
-                              {Purpose === "RHP" && <RetirementHousing watch={watch} register={register} />}
-
-                            </div> */}
                           </div>
-                          <br></br>
-                          <div className="row">
-                            <div className="col col-4">
+
+                          <div className="row mt-4">
+                            <div className="col col-lg-4 col-md-6 col-sm-6 mb-2">
                               <label>
                                 <h2>
                                   {`${t("NWL_APPLICANT_AREA_OF_PARENT_LICENCE_IN_ACRES_ADDICATION_PLAN")}`}
@@ -618,8 +603,7 @@ const LandScheduleForm = (props) => {
                                 {errors?.areaOfParentLicenceAcres && errors?.areaOfParentLicenceAcres?.message}
                               </h3>
                             </div>
-
-                            <div className="col col-4">
+                            <div className="col col-lg-4 col-md-6 col-sm-6 mb-2">
                               <h2>
                                 {`${t("NWL_APPLICANT_VALIDITY_OF_PARENT_LICENCES_ADDICATION_PLAN")}`}
                                 {/* Validity of parent licence  */}
@@ -662,8 +646,7 @@ const LandScheduleForm = (props) => {
                                 </div>
                               )}
                             </div>
-
-                            <div className="col col-4">
+                            <div className="col col-lg-4 col-md-6 col-sm-6 mb-2">
                               <label>
                                 <h2>
                                   {`${t("NWL_APPLICANT_WHETHER_ANY_OTHER_REMARKS_ADDICATION_PLAN")}`}
@@ -672,14 +655,12 @@ const LandScheduleForm = (props) => {
                               </label>
                               <input type="text" {...register("specify")} className="form-control" pattern="[A-Za-z]+" />
                             </div>
-
-                            <div className="col col-4 mt-2">
+                            <div className="col col-lg-4 col-md-6 col-sm-6 mb-2">
                               <h2>
                                 {`${t("NWL_APPLICANT_THIRD_PARTY_RIGHT_CREATED_ADDICATION_PLAN")}`}
                                 {/* Third-party right created */}
                                 <span style={{ color: "red" }}>*</span>&nbsp; &nbsp;&nbsp;
                               </h2>
-                              <br></br>
                               <label htmlFor="thirdPartyYes">
                                 <input {...register("thirdParty")} type="radio" value="Y" id="thirdPartyYes" />
                                 &nbsp; Yes &nbsp;&nbsp;
@@ -818,12 +799,10 @@ const LandScheduleForm = (props) => {
                       )}
                     </div>
                   </div>
-                  &nbsp;&nbsp;
-                  <div className="row">
+                  <div className="row mt-2 mb-4">
                     <div className="col col-12 ">
                       <div>
                         <h2>
-                          &nbsp;&nbsp;
                           {`${t("NWL_APPLICANT_WHETHER_LICENCE_APPLIED_UNDER_MIGRATION_POLICY")}`}
                           {/* Whether licence applied under Migration Policy ? */}
                           <span style={{ color: "red" }}>*</span>&nbsp;&nbsp;
@@ -861,10 +840,8 @@ const LandScheduleForm = (props) => {
                       )}
                     </div>
                   </div>
-                  <br></br>
                   <hr></hr>
-                  <br></br>
-                  <div>
+                  <div className="mt-4">
                     <h4 className="mb-2">
                       {`${t("NWL_APPLICANT_ANY_ENCUMBRANCE_WITH_RESPECT_TO_FOLLOWING")}`}
                       {/* Any encumbrance with respect to following  */}
@@ -1215,7 +1192,7 @@ const LandScheduleForm = (props) => {
                       </h3>
                     </h6>
                   </div>
-                  <div className="row">
+                  <div className="row mb-5">
                     <div className="col col-12 ">
                       {watch("insolvency") === "Y" && (
                         <div className="row ">
@@ -1260,13 +1237,10 @@ const LandScheduleForm = (props) => {
                       )}
                     </div>
                   </div>
-                  <br></br>
                   <hr />
-                  <br></br>
-                  <h5>3. Shajra Plan</h5>
-                  <br></br>
-                  <div className="row">
-                    <div className="col col-3 ">
+                  <h5 className="mt-4">3. Shajra Plan</h5>
+                  <div className="row mt-5">
+                    <div className="col col-lg-3 col-md-6 col-sm-6 mb-2">
                       <h2>
                         &nbsp;
                         {`${t("NWL_APPLICANT_AS_PER_APPLIED_LAND_SHAJRA_PLAN")}`}
@@ -1313,8 +1287,7 @@ const LandScheduleForm = (props) => {
                         </div>
                       )}
                     </div>
-
-                    <div className="col col-3 ">
+                    <div className="col col-lg-3 col-md-6 col-sm-6 mb-2">
                       <h2>
                         &nbsp;
                         {`${t("NWL_APPLICANT_REVENUE_RASTA_SHAJRA_PLAN")}`}
@@ -1360,7 +1333,7 @@ const LandScheduleForm = (props) => {
                         </div>
                       )}
                     </div>
-                    <div className="col col-3 ">
+                    <div className="col col-lg-3 col-md-6 col-sm-6 mb-2">
                       <h2>
                         &nbsp; (c) {`${t("NWL_APPLICANT_WATERCOURSE_SHAJRA_PLAN")}`}
                         {/* Watercourse */}
@@ -1400,8 +1373,7 @@ const LandScheduleForm = (props) => {
                         </div>
                       )}
                     </div>
-
-                    <div className="col col-3 ">
+                    <div className="col col-lg-3 col-md-6 col-sm-6 mb-2">
                       <label>
                         <h2>
                           {`${t("NWL_APPLICANT_WHETHER_IN_COMPACT_BLOCK_SHAJRA_PLAN")}`}
@@ -1481,9 +1453,9 @@ const LandScheduleForm = (props) => {
                       )}
                     </div>
                   </div>
-                  <br></br>
-                  <div className="row">
-                    <div className="col col-3 ">
+
+                  <div className="row mt-4">
+                    <div className="col col-lg-3 col-md-6 col-sm-6 mb-2">
                       <h2>
                         &nbsp;
                         {`${t("NWL_APPLICANT_ACQUISITION_STATUS_SHAJRA_PLAN")}`}
@@ -1585,7 +1557,7 @@ const LandScheduleForm = (props) => {
                         </h3>
                         {watch("orderUpload") === "Y" && (
                           <div className="row ">
-                            <div className="col col-3 ">
+                            <div className="col col-lg-3 col-md-6 col-sm-6 mb-2">
                               <h2>
                                 {`${t("NWL_APPLICANT_AQUSITION_Y_WHETER_LAND_COMPENSATION_SHAJRA_PLAN")}`}
                                 {/* Whether land compensation */}
@@ -1603,7 +1575,7 @@ const LandScheduleForm = (props) => {
                                 &nbsp; No &nbsp;&nbsp;
                               </label>
                             </div>
-                            <div className="col col-3">
+                            <div className="col col-lg-3 col-md-6 col-sm-6 mb-2">
                               <label>
                                 <h2>
                                   {`${t("NWL_APPLICANT_AQUSITION_Y_STATUS_OF_RELEASE_SHAJRA_PLAN")}`}
@@ -1620,7 +1592,7 @@ const LandScheduleForm = (props) => {
                               />
                               <div className="invalid-feedback">{errors?.releaseStatus?.message}</div>
                             </div>
-                            <div className="col col-3">
+                            <div className="col col-lg-3 col-md-6 col-sm-6 mb-2">
                               <label>
                                 <h2>
                                   {`${t("NWL_APPLICANT_AQUSITION_Y_DATE_OF_RELEASE_SHAJRA_PLAN")}`}
@@ -1630,7 +1602,7 @@ const LandScheduleForm = (props) => {
                               <input type="date" {...register("releaseDate")} className="form-control" />
                               <div className="invalid-feedback">{errors?.releaseDate?.message}</div>
                             </div>
-                            <div className="col col-3">
+                            <div className="col col-lg-3 col-md-6 col-sm-6 mb-2">
                               <label htmlFor="siteDetail">
                                 <h2>
                                   {`${t("NWL_APPLICANT_AQUSITION_Y_SITE_DETAILS_SHAJRA_PLAN")}`}
@@ -1640,8 +1612,7 @@ const LandScheduleForm = (props) => {
                               <input type="text" {...register("siteDetail")} className="form-control" minLength={2} maxLength={99} />
                               <div className="invalid-feedback">{errors?.siteDetail?.message}</div>
                             </div>
-
-                            <div className="col col-3">
+                            <div className="col col-lg-3 col-md-6 col-sm-6 mb-2">
                               <h6 style={{ display: "flex" }}>
                                 {`${t("NWL_APPLICANT_AQUSITION_Y_COPY_OF_RELEASE_ORDER_SHAJRA_PLAN")}`}
                                 {/* Copy of release order  */}
@@ -1662,8 +1633,7 @@ const LandScheduleForm = (props) => {
                                 </a>
                               )}
                             </div>
-
-                            <div className="col col-3 mt-2">
+                            <div className="col col-lg-3 col-md-6 col-sm-6 mb-2">
                               <h2>
                                 {`${t("NWL_APPLICANT_WHETHER_Y_WHETER_LITIGATION_REGARDING_RELEASE_OF_LAND_SHAJRA_PLAN")}`}
                                 {/* whether litigation regarding release of Land */}
@@ -1684,7 +1654,7 @@ const LandScheduleForm = (props) => {
                             </div>
                             {watch("litigationRegardingLandRelease") === "Y" && (
                               // should be alpha numeric with 15 characters
-                              <div className="col col-3 mt-2">
+                              <div className="col col-lg-3 col-md-6 col-sm-6 mb-2">
                                 <div>
                                   <label>
                                     <h2>
@@ -1711,15 +1681,14 @@ const LandScheduleForm = (props) => {
                   <div className="row">
                     <div className="col col-12">
                       <h2>
-                        &nbsp;&nbsp;
                         {`${t("NWL_APPLICANT_DETAILS_OF_EXISTING_APPROACH_AS_PER_POLICY_SHAJRA_PLAN")}`}
                         {/* Details of existing approach as per policy dated 20-10-20. */}
                         <span style={{ color: "red" }}>*</span> &nbsp;&nbsp;
-                        <label htmlFor="siteApproachableC">
+                        <label className="mt-2" htmlFor="siteApproachableC">
                           <input {...register("siteApproachable")} type="radio" value="Y" id="siteApproachableC" />
                           &nbsp; Category-I approach &nbsp;&nbsp;
                         </label>
-                        <label htmlFor="siteApproachableD">
+                        <label className="mt-2" htmlFor="siteApproachableD">
                           <input {...register("siteApproachable")} type="radio" value="N" id="siteApproachableD" />
                           &nbsp; Category-II approach &nbsp;&nbsp;
                         </label>
@@ -1733,7 +1702,6 @@ const LandScheduleForm = (props) => {
                         <div class="row">
                           <div class="col-sm-6 text-left">
                             <h2>
-                              &nbsp;
                               {`${t("NWL_APPLICANT_APPROACH_AVAILABLE_FROM_MINIMUN_KARAM_SHAJRA_PLAN")}`}
                               {/* Approach available from minimum 4 karam (22 ft) wide revenue rasta. */}
                               <span style={{ color: "red" }}>*</span>
@@ -1754,10 +1722,10 @@ const LandScheduleForm = (props) => {
                             </h3>
                           </div>
                         </div>
+                        &nbsp;&nbsp;
                         <div className="row">
                           <div class="col-sm-6 text-left">
                             <h2>
-                              &nbsp;&nbsp;
                               {`${t("NWL_APPLICANT_APPROACH_AVAILABLE_FROM_MINIMUN_FEET_WIDE_REVENUE_SHAJRA_PLAN")}`}
                               {/* Approach available from minimum 11 feet wide revenue rasta and applied site abuts acquired alignment of
                               the sector road and there is no stay regarding construction on the land falling under the abutting sector road. */}
@@ -1783,7 +1751,6 @@ const LandScheduleForm = (props) => {
                         <div className="row">
                           <div class="col-sm-6 text-left">
                             <h2>
-                              &nbsp;&nbsp;
                               {`${t("NWL_APPLICANT_APPLIED_SITE__ABOUTS_ALREADY_CONSTRUCTED_SECTOR_ROAD_SHAJRA_PLAN")}`}
                               {/* Applied site Abuts already constructed sector road or internal circulation road of approved sectoral plan
                               (of min. 18m/24m width as the case may be) provided its entire stretch required for approach is licenced and is further
@@ -1810,7 +1777,6 @@ const LandScheduleForm = (props) => {
                         <div className="row">
                           <div class="col-sm-6 text-left">
                             <h2>
-                              &nbsp;&nbsp;
                               {`${t("NWL_APPLICANT_APPLIED_LAND_IS_ACCESSIBLE_FROM_A_MINIMUN_THROUGH_ADJOINING_SHAJRA_PLAN")}`}
                               {/* Applied land is accessible from a minimum 4 karam wide rasta through adjoining own land of the applicant
                               (but not applied for licence). */}
@@ -1837,7 +1803,6 @@ const LandScheduleForm = (props) => {
                             <div className="row">
                               <div class="col-sm-6 text-left">
                                 <h2>
-                                  &nbsp;&nbsp;
                                   {`${t("NWL_APPLICANT_D_D1_IF_APPLICABLE_WHETHER_THE_APPLICATION_HAS_DONATED_SHAJRA_PLAN")}`}
                                   {/* If applicable, whether the applicant has donated at least 4 karam wide strip from its adjoining own
                                   land in favour of the Gram Panchayat/Municipality, in order to connect the applied site to existing 4 karam rasta?. */}
@@ -2338,7 +2303,7 @@ const LandScheduleForm = (props) => {
                   </h4>
                   <br></br>
                   <div className="row">
-                    <div className="col col-3">
+                    <div className="col col-lg-3 col-md-6 col-sm-6 mb-2">
                       <h2>
                         &nbsp;
                         {`${t("NWL_APPLICANT_4_A_VACANT_SHAJRA_PLAN")}`}
@@ -2357,14 +2322,14 @@ const LandScheduleForm = (props) => {
                       <h3 className="error-message" style={{ color: "red" }}>
                         {errors?.vacant && errors?.vacant?.message}
                       </h3>
-                      {watch("vacant") === "Y" && (
+                      {(watch("vacant") === "Y" || watch("vacant") === "N") && (
                         <div className="row ">
                           <div className="col col">
                             <label>
                               <h2>
                                 {`${t("NWL_APPLICANT_4_A_VACANT_REMARK_SHAJRA_PLAN")}`}
                                 {/* Vacant Remark  */}
-                                <span style={{ color: "red" }}>*</span>
+                                {watch("vacant") === "Y" && <span style={{ color: "red" }}>*</span>}
                               </h2>
                             </label>
                             <input type="text" className="form-control" {...register("vacantRemark")} />
@@ -2374,25 +2339,8 @@ const LandScheduleForm = (props) => {
                           </div>
                         </div>
                       )}
-                      {watch("vacant") === "N" && (
-                        <div className="row ">
-                          <div className="col col">
-                            <label>
-                              <h2>
-                                {`${t("NWL_APPLICANT_4_A_N_CONSTRUCTION_REMARK_SHAJRA_PLAN")}`}
-                                {/* Construction Remark */}
-                              </h2>
-                            </label>
-                            <input type="text" className="form-control" {...register("typeOfConstruction")} />
-                            <h3 className="error-message" style={{ color: "red" }}>
-                              {errors?.construction && errors?.construction?.message}
-                            </h3>
-                          </div>
-                        </div>
-                      )}
                     </div>
-
-                    <div className="col col-3">
+                    <div className="col col-lg-3 col-md-6 col-sm-6 mb-2">
                       <h2>
                         &nbsp;
                         {`${t("NWL_APPLICANT_4_B_HT_LINE_SHAJRA_PLAN")}`}
@@ -2411,14 +2359,14 @@ const LandScheduleForm = (props) => {
                       <h3 className="error-message" style={{ color: "red" }}>
                         {errors?.ht && errors?.ht?.message}
                       </h3>
-                      {watch("ht") === "Y" && (
+                      {(watch("ht") === "Y" || watch("ht") === "N") && (
                         <div className="row ">
                           <div className="col col">
                             <label>
                               <h2>
                                 {`${t("NWL_APPLICANT_4_B_HT_REMARKS_SHAJRA_PLAN")}`}
                                 {/* HT Line Remark  */}
-                                <span style={{ color: "red" }}>*</span>
+                                {watch("ht") === "Y" && <span style={{ color: "red" }}>*</span>}
                               </h2>
                             </label>
                             <input type="text" className="form-control" {...register("htRemark")} />
@@ -2428,22 +2376,8 @@ const LandScheduleForm = (props) => {
                           </div>
                         </div>
                       )}
-                      {watch("ht") === "N" && (
-                        <div className="row ">
-                          <div className="col col">
-                            <label>
-                              <h2>
-                                {`${t("NWL_APPLICANT_4_B_HT_REMARKS_SHAJRA_PLAN")}`}
-                                {/* HT Line Remark */}
-                              </h2>
-                            </label>
-                            <input type="text" className="form-control" {...register("htRemark")} />
-                          </div>
-                        </div>
-                      )}
                     </div>
-
-                    <div className="col col-3">
+                    <div className="col col-lg-3 col-md-6 col-sm-6 mb-2">
                       <h2>
                         &nbsp;
                         {`${t("NWL_APPLICANT_4_C_IOC_GAS_PIPELINE_SHAJRA_PLAN")}`}
@@ -2462,13 +2396,13 @@ const LandScheduleForm = (props) => {
                       <h3 className="error-message" style={{ color: "red" }}>
                         {errors?.gas && errors?.gas?.message}
                       </h3>
-                      {watch("gas") === "Y" && (
+                      {(watch("gas") === "Y" || watch("gas") === "N") && (
                         <div className="row ">
                           <div className="col col">
                             <label>
                               {`${t("NWL_APPLICANT_4_Y_IOC_REMARKS_SHAJRA_PLAN")}`}
                               {/* IOC Gas Pipeline Remark  */}
-                              <span style={{ color: "red" }}>*</span>
+                              {watch("gas") === "Y" && <span style={{ color: "red" }}>*</span>}
                             </label>
                             <input type="text" className="form-control" {...register("gasRemark")} />
                             <h3 className="error-message" style={{ color: "red" }}>
@@ -2477,19 +2411,8 @@ const LandScheduleForm = (props) => {
                           </div>
                         </div>
                       )}
-                      {watch("gas") === "N" && (
-                        <div className="row ">
-                          <div className="col col">
-                            <label>
-                              {`${t("NWL_APPLICANT_4_Y_IOC_REMARKS_SHAJRA_PLAN")}`}
-                              {/* IOC Gas Pipeline Remark */}
-                            </label>
-                            <input type="text" className="form-control" {...register("gasRemark")} />
-                          </div>
-                        </div>
-                      )}
                     </div>
-                    <div className="col col-3">
+                    <div className="col col-lg-3 col-md-6 col-sm-6 mb-2">
                       <h2>
                         &nbsp;
                         {`${t("NWL_APPLICANT_4_D_NALLAH_SHAJRA_PLAN")}`}
@@ -2508,13 +2431,13 @@ const LandScheduleForm = (props) => {
                       <h3 className="error-message" style={{ color: "red" }}>
                         {errors?.nallah && errors?.nallah?.message}
                       </h3>
-                      {watch("nallah") === "Y" && (
+                      {(watch("nallah") === "Y" || watch("nallah") === "N") && (
                         <div className="row ">
                           <div className="col col">
                             <label>
                               {`${t("NWL_APPLICANT_4_D_Y_NALLAH_REMARKS_SHAJRA_PLAN")}`}
                               {/* Nallah Remark  */}
-                              <span style={{ color: "red" }}>*</span>
+                              {watch("nallah") === "Y" && <span style={{ color: "red" }}>*</span>}
                             </label>
                             <input type="text" className="form-control" {...register("nallahRemark")} />
                             <h3 className="error-message" style={{ color: "red" }}>
@@ -2523,22 +2446,11 @@ const LandScheduleForm = (props) => {
                           </div>
                         </div>
                       )}
-                      {watch("nallah") === "N" && (
-                        <div className="row ">
-                          <div className="col col">
-                            <label>
-                              {`${t("NWL_APPLICANT_4_D_Y_NALLAH_REMARKS_SHAJRA_PLAN")}`}
-                              {/* Nallah Remark */}
-                            </label>
-                            <input type="text" className="form-control" {...register("nallahRemark")} />
-                          </div>
-                        </div>
-                      )}
                     </div>
                   </div>
                   <br></br>
                   <div className="row ">
-                    <div className="col col-3">
+                    <div className="col col-lg-3 col-md-6 col-sm-6 mb-2">
                       <h2>
                         &nbsp;
                         {`${t("NWL_APPLICANT_4_E_ANY_REVENUE_REVENUE_RASTA_ROAD_PASSING_THROUGH_PROPOSED_SITE_SHAJRA_PLAN")}`}
@@ -2568,10 +2480,6 @@ const LandScheduleForm = (props) => {
                                 {`${t("NWL_APPLICANT_4_WIDTH_OF_REVENUE_RASTA_ROAD_SHAJRA_PLAN")}`}
                                 {/* Width of Revenue rasta(in ft.) */}
                                 <span style={{ color: "red" }}>*</span>
-                                <Tooltip title=" Width of Revenue rasta/road (in ft.)">
-                                  <InfoIcon style={{ cursor: "pointer" }} color="primary"></InfoIcon>
-                                </Tooltip>
-                                <CalculateIcon color="primary" />
                               </h2>
                             </label>
                             <input type="number" className="form-control" {...register("roadWidth")} minLength={2} maxLength={20} />
@@ -2579,22 +2487,9 @@ const LandScheduleForm = (props) => {
                               {errors?.roadWidth && errors?.roadWidth?.message}
                             </h3>
                           </div>
-                          <div className="col col-12">
-                            <label>
-                              <h2>
-                                {`${t("NWL_APPLICANT_REMARKS_SHAJRA_PLAN")}`}
-                                {/* Remark  */}
-                                <span style={{ color: "red" }}>*</span>&nbsp;&nbsp;
-                              </h2>
-                            </label>
-                            <input type="text" className="form-control" {...register("roadRemark")} />
-                            <h3 className="error-message" style={{ color: "red" }}>
-                              {errors?.roadRemark && errors?.roadRemark?.message}
-                            </h3>
-                          </div>
                         </div>
                       )}
-                      {watch("road") === "N" && (
+                      {(watch("road") === "Y" || watch("road") === "N") && (
                         <div className="row ">
                           <div className="col col">
                             <label>
@@ -2608,48 +2503,7 @@ const LandScheduleForm = (props) => {
                         </div>
                       )}
                     </div>
-                    {/* <div className="col col-3">
-                      <h2>
-                        (f) &nbsp;Any marginal land:(Yes/No) <span style={{ color: "red" }}>*</span>
-                      </h2>
-                      &nbsp;&nbsp;&nbsp;&nbsp;
-                      <label htmlFor="marginalLand">
-                        <input {...register("marginalLand")} type="radio" value="Y" id="marginalLand" />
-                        &nbsp; Yes &nbsp;&nbsp;
-                      </label>
-                      <label htmlFor="marginalLand">
-                        <input {...register("marginalLand")} type="radio" value="N" id="marginalLand" />
-                        &nbsp; No &nbsp;&nbsp;
-                      </label>
-                      <h3 className="error-message" style={{ color: "red" }}>
-                        {errors?.marginalLand && errors?.marginalLand?.message}
-                      </h3>
-                      {watch("marginalLand") === "Y" && (
-                        <div className="row ">
-                          <div className="col col">
-                            <label>
-                              <h2>
-                                Remark of Marginal Land <span style={{ color: "red" }}>*</span>
-                              </h2>
-                            </label>
-                            <input type="text" className="form-control" {...register("marginalLandRemark")} />
-                          </div>
-                        </div>
-                      )}
-                      {watch("marginalLand") === "N" && (
-                        <div className="row ">
-                          <div className="col col">
-                            <label>
-                              <h2>
-                                Remark of Marginal Land <span style={{ color: "red" }}>*</span>
-                              </h2>
-                            </label>
-                            <input type="text" className="form-control" {...register("marginalLandRemark")} />
-                          </div>
-                        </div>
-                      )}
-                    </div> */}
-                    <div className="col col-3">
+                    <div className="col col-lg-3 col-md-6 col-sm-6 mb-2">
                       <h2>
                         &nbsp;
                         {`${t("NWL_APPLICANT_F_UTILITY_PERMIT_LINE_SHAJRA_PLAN")}`}
@@ -2679,7 +2533,6 @@ const LandScheduleForm = (props) => {
                                 {`${t("NWL_APPLICANT_F_Y_WIDTH_OF_ROW_SHAJRA_PLAN")}`}
                                 {/* Width of Row (in ft.) */}
                                 <span style={{ color: "red" }}>*</span>&nbsp;&nbsp;
-                                <CalculateIcon color="primary" />
                               </h2>
                             </label>
                             <input type="number" className="form-control" {...register("utilityWidth")} minLength={2} maxLength={99} />
@@ -2687,22 +2540,9 @@ const LandScheduleForm = (props) => {
                               {errors?.utilityWidth && errors?.utilityWidth?.message}
                             </h3>
                           </div>
-                          <div className="col col-12">
-                            <label>
-                              <h2>
-                                {`${t("NWL_APPLICANT_REMARKS_SHAJRA_PLAN")}`}
-                                {/* Remark  */}
-                                <span style={{ color: "red" }}>*</span>&nbsp;&nbsp;
-                              </h2>
-                            </label>
-                            <input type="text" className="form-control" {...register("utilityRemark")} />
-                            <h3 className="error-message" style={{ color: "red" }}>
-                              {errors?.utilityRemark && errors?.utilityRemark?.message}
-                            </h3>
-                          </div>
                         </div>
                       )}
-                      {watch("utilityLine") === "N" && (
+                      {(watch("utilityLine") === "Y" || watch("utilityLine") === "N") && (
                         <div className="row ">
                           <div className="col col">
                             <label>
@@ -2716,8 +2556,7 @@ const LandScheduleForm = (props) => {
                         </div>
                       )}
                     </div>
-
-                    <div className="col col-3">
+                    <div className="col col-lg-3 col-md-6 col-sm-6 mb-2">
                       <h2>
                         &nbsp;
                         {`${t("NWL_APPLICANT_G_COMPACT_BLOCK_SHAJRA_PLAN")}`}
@@ -2732,7 +2571,7 @@ const LandScheduleForm = (props) => {
                         <input {...register("compactBlock")} type="radio" value="N" id="compactBlockNo" />
                         &nbsp; No &nbsp;&nbsp;
                       </label>
-                      {watch("compactBlock") === "Y" && (
+                      {(watch("compactBlock") === "Y" || watch("compactBlock") === "N") && (
                         <div className="row ">
                           <div className="col col-12">
                             <label>
@@ -2745,22 +2584,8 @@ const LandScheduleForm = (props) => {
                           </div>
                         </div>
                       )}
-                      {watch("compactBlock") === "N" && (
-                        <div className="row ">
-                          <div className="col col">
-                            <label>
-                              <h2>
-                                {`${t("NWL_APPLICANT_REMARKS_SHAJRA_PLAN")}`}
-                                {/* Remark */}
-                              </h2>
-                            </label>
-                            <input type="text" className="form-control" {...register("compactBlockRemark")} />
-                          </div>
-                        </div>
-                      )}
                     </div>
-
-                    <div className="col col-3">
+                    <div className="col col-lg-3 col-md-6 col-sm-6 mb-2">
                       <h2>
                         &nbsp;
                         {`${t("NWL_APPLICANT_H_WHETHER_OTHERS_LAND_FALL_SHAJRA_PLAN")}`}
@@ -2775,7 +2600,7 @@ const LandScheduleForm = (props) => {
                         <input {...register("othersLandFall")} type="radio" value="N" id="othersLandFallNo" />
                         &nbsp; No &nbsp;&nbsp;
                       </label>
-                      {watch("othersLandFall") === "Y" && (
+                      {(watch("othersLandFall") === "Y" || watch("othersLandFall") === "N") && (
                         <div className="row ">
                           <div className="col col-12">
                             <label>
@@ -2788,21 +2613,7 @@ const LandScheduleForm = (props) => {
                           </div>
                         </div>
                       )}
-                      {watch("othersLandFall") === "N" && (
-                        <div className="row ">
-                          <div className="col col">
-                            <label>
-                              <h2>
-                                {`${t("NWL_APPLICANT_REMARKS_SHAJRA_PLAN")}`}
-                                {/* Remark */}
-                              </h2>
-                            </label>
-                            <input type="text" className="form-control" {...register("othersLandFallRemark")} />
-                          </div>
-                        </div>
-                      )}
                     </div>
-
                     <div className="col col-6 mt-3">
                       <h2>
                         &nbsp;
@@ -2810,108 +2621,6 @@ const LandScheduleForm = (props) => {
                         {/* Surroundings  */}
                         <span style={{ color: "red" }}>*</span>
                       </h2>
-
-                      {/* Render the data array according to the pocket */}
-                      {/* {watch("pocket") ? (
-                        [...Array(parseInt(watch("pocket")))].map((_, index) => {
-                          return (
-                            <div key={index} className="row mt-3">
-                              <div className="col col-3">
-                                <label>
-                                  <h2>
-                                    {`${t("NWL_APPLICANT_SURROUNDINGS_NORTH_SHAJRA_PLAN")}`}
-                                  </h2>
-                                </label>
-                                <input type="text" className="form-control" {...register(`northSurroundings${index}`)} />
-                                <h3 className="error-message" style={{ color: "red" }}>
-                                  {errors?.northSurroundings && errors?.northSurroundings?.message}
-                                </h3>
-                              </div>
-                              <div className="col col-3">
-                                <label>
-                                  <h2>
-                                    {`${t("NWL_APPLICANT_SURROUNDINGS_SOUTH_SHAJRA_PLAN")}`}
-                                  </h2>
-                                </label>
-                                <input type="text" className="form-control" {...register(`southSurroundings${index}`)} />
-                                <h3 className="error-message" style={{ color: "red" }}>
-                                  {errors?.southSurroundings && errors?.southSurroundings?.message}
-                                </h3>
-                              </div>
-                              <div className="col col-3">
-                                <label>
-                                  <h2>
-                                    {`${t("NWL_APPLICANT_SURROUNDINGS_EAST_SHAJRA_PLAN")}`}
-                                  </h2>
-                                </label>
-                                <input type="text" className="form-control" {...register(`eastSurroundings${index}`)} />
-                                <h3 className="error-message" style={{ color: "red" }}>
-                                  {errors?.eastSurroundings && errors?.eastSurroundings?.message}
-                                </h3>
-                              </div>
-                              <div className="col col-3">
-                                <label>
-                                  <h2>
-                                    {`${t("NWL_APPLICANT_SURROUNDINGS_WEST_SHAJRA_PLAN")}`}
-                                  </h2>
-                                </label>
-                                <input type="text" className="form-control" {...register(`westSurroundings${index}`)} />
-                                <h3 className="error-message" style={{ color: "red" }}>
-                                  {errors?.westSurroundings && errors?.westSurroundings?.message}
-                                </h3>
-                              </div>
-                            </div>
-                           
-                          );
-                        })
-                      ) : (
-                        <div className="row mt-3">
-                          <div className="col col-3">
-                            <label>
-                              <h2>
-                                {`${t("NWL_APPLICANT_SURROUNDINGS_NORTH_SHAJRA_PLAN")}`}
-                              </h2>
-                            </label>
-                            <input type="text" className="form-control" {...register("northSurroundings")} />
-                            <h3 className="error-message" style={{ color: "red" }}>
-                              {errors?.northSurroundings && errors?.northSurroundings?.message}
-                            </h3>
-                          </div>
-                          <div className="col col-3">
-                            <label>
-                              <h2>
-                                {`${t("NWL_APPLICANT_SURROUNDINGS_SOUTH_SHAJRA_PLAN")}`}
-                              </h2>
-                            </label>
-                            <input type="text" className="form-control" {...register("southSurroundings")} />
-                            <h3 className="error-message" style={{ color: "red" }}>
-                              {errors?.southSurroundings && errors?.southSurroundings?.message}
-                            </h3>
-                          </div>
-                          <div className="col col-3">
-                            <label>
-                              <h2>
-                                {`${t("NWL_APPLICANT_SURROUNDINGS_EAST_SHAJRA_PLAN")}`}
-                              </h2>
-                            </label>
-                            <input type="text" className="form-control" {...register("eastSurroundings")} />
-                            <h3 className="error-message" style={{ color: "red" }}>
-                              {errors?.eastSurroundings && errors?.eastSurroundings?.message}
-                            </h3>
-                          </div>
-                          <div className="col col-3">
-                            <label>
-                              <h2>
-                                {`${t("NWL_APPLICANT_SURROUNDINGS_WEST_SHAJRA_PLAN")}`}
-                              </h2>
-                            </label>
-                            <input type="text" className="form-control" {...register("westSurroundings")} />
-                            <h3 className="error-message" style={{ color: "red" }}>
-                              {errors?.westSurroundings && errors?.westSurroundings?.message}
-                            </h3>
-                          </div>
-                        </div>
-                      )} */}
                     </div>
 
                     {fields?.map((item, index) => (
@@ -2966,7 +2675,7 @@ const LandScheduleForm = (props) => {
                       </div>
                     ))}
 
-                    <div className="col col-4 mt-2">
+                    <div className="col col-lg-4 col-md-12 col-sm-12 mb-2 mt-4">
                       <h2>
                         &nbsp;
                         {`${t("NWL_APPLICANT_J_ANY_OTHERS_PASSING_THROUGH_SITE_SHAJRA_PLAN")}`}
@@ -2983,7 +2692,7 @@ const LandScheduleForm = (props) => {
                       </label>
                       {watch("passingOtherFeature") === "Y" && (
                         <div className="row ">
-                          <div className="col col-12">
+                          <div className="col col-lg-12 col-sm-6">
                             <label>
                               <h2>
                                 {`${t("NWL_APPLICANT_DETAILS_THEREOF_SHAJRA_PLAN")}`}
@@ -3007,7 +2716,7 @@ const LandScheduleForm = (props) => {
                   </h5>
                   <br></br>
                   <div className="row">
-                    <div className="col col-3">
+                    <div className="col col-lg-3 col-md-6 col-sm-6 mb-2">
                       <h2 style={{ display: "flex" }}>
                         {`${t("NWL_APPLICANT_LAND_SCHEDULE")}`}
                         {/* Land schedule  */}
@@ -3032,8 +2741,7 @@ const LandScheduleForm = (props) => {
                         </h3>
                       )}
                     </div>
-
-                    <div className="col col-3">
+                    <div className="col col-lg-3 col-md-6 col-sm-6 mb-2">
                       <h2 style={{ display: "flex" }}>
                         {`${t("NWL_APPLICANT_COPY_OF_MUTATIION")}`}
                         {/* Copy of Mutation  */}
@@ -3058,8 +2766,7 @@ const LandScheduleForm = (props) => {
                         </h3>
                       )}
                     </div>
-
-                    <div className="col col-3">
+                    <div className="col col-lg-3 col-md-6 col-sm-6 mb-2">
                       <h2 style={{ display: "flex" }}>
                         {`${t("NWL_APPLICANT_COPY_OF_JAMABANDI")}`}
                         {/* Copy of Jamabandi  */}
@@ -3084,7 +2791,7 @@ const LandScheduleForm = (props) => {
                         </h3>
                       )}
                     </div>
-                    <div className="col col-3">
+                    <div className="col col-lg-3 col-md-6 col-sm-6 mb-2">
                       <h2 style={{ display: "flex" }}>
                         {`${t("NWL_APPLICANT_DETAILS_OF_LEASE_PATTA")}`}
                         {/* Details of lease / patta */}
@@ -3108,10 +2815,7 @@ const LandScheduleForm = (props) => {
                         </h3>
                       )}
                     </div>
-                  </div>
-                  <br></br>
-                  <div className="row">
-                    <div className="col col-3">
+                    <div className="col col-lg-3 col-md-6 col-sm-6 mb-2">
                       <label>
                         <h2 style={{ display: "flex" }}>
                           {`${t("NWL_APPLICANT_SALES_DEED_EXCHANGE_DEED")}`}
@@ -3140,7 +2844,7 @@ const LandScheduleForm = (props) => {
                         )}
                       </label>
                     </div>
-                    <div className="col col-3">
+                    <div className="col col-lg-3 col-md-6 col-sm-6 mb-2">
                       <label>
                         <h2 style={{ display: "flex" }}>
                           {`${t("NWL_APPLICANT_COPY_OF_SPA_GPA_BOARD")}`}
@@ -3170,33 +2874,7 @@ const LandScheduleForm = (props) => {
                         )}
                       </label>
                     </div>
-                    {/* <div className="col col-3">
-                      <h2 style={{ display: "flex" }}>
-                        Revised Land Schedule <span style={{ color: "red" }}>*</span>
-                      </h2>
-                      <label>
-                        <FileUpload style={{ cursor: "pointer" }}  color="primary" />
-                        <input
-                          type="file"
-                          style={{ display: "none" }}
-                          accept="application/pdf/jpeg/png"
-                          onChange={(e) => getDocumentData(e?.target?.files[0], "revisedLanSchedule")}
-                        />
-                      </label>
-                      {fileStoreId?.revisedLanSchedule ? (
-                        <a onClick={() => getDocShareholding(fileStoreId?.revisedLanSchedule)} className="btn btn-sm ">
-                          <VisibilityIcon color="info" className="icon" />
-                        </a>
-                      ) : (
-                        <p></p>
-                      )}
-                      <h3 style={{}}>{watch("revisedLanScheduleFileName") ? watch("revisedLanScheduleFileName") : null}</h3>
-                      <h3 className="error-message" style={{ color: "red" }}>
-                        {errors?.revisedLanSchedule && errors?.revisedLanSchedule?.message}
-                      </h3>
-                    </div> */}
-
-                    <div className="col col-3">
+                    <div className="col col-lg-3 col-md-6 col-sm-6 mb-2">
                       <h2 style={{ display: "flex" }}>
                         {`${t("NWL_APPLICANT_SHAJRA_PLAN_DOCUMENT")}`}
                         {/* Shajra Plan  */}
