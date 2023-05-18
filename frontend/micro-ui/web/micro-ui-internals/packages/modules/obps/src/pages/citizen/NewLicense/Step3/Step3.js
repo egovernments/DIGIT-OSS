@@ -347,6 +347,11 @@ const LandScheduleForm = (props) => {
         if (item === "purpose" || item === "potential") return null;
         else setValue(item, valueData[item]);
       });
+
+      const filterSurrounding = compactBlockB.filter((item) => item?.value == valueData?.separatedBy);
+
+      setValue("separatedBy", { label: filterSurrounding?.[0]?.label, value: filterSurrounding?.[0]?.value });
+
       const data = purposeOptions?.data?.filter((item) => item?.value === stepData?.ApplicantPurpose?.purpose);
       const potientialData = getPotentialOptons?.data?.filter((item) => item?.value === stepData?.ApplicantPurpose?.potential);
       const typeLandData = typeOfLand?.data?.filter((item) => item?.value === stepData?.ApplicantPurpose?.typeLand);
@@ -905,8 +910,7 @@ const LandScheduleForm = (props) => {
                               {errors?.rehanRemark && errors?.rehanRemark?.message}
                             </h3>
                           </div>
-                          <div className="col col-6">
-                            <h2></h2>
+                          <div className="col col-6" style={{ display: "flex", alignSelf: "end" }}>
                             {`${t("NWL_APPLICANT_DOCUMENT_UPLOAD")}`}
                             {/* Document Upload */}
                             <span style={{ color: "red" }}>*</span>
@@ -942,8 +946,7 @@ const LandScheduleForm = (props) => {
                               {errors?.pattaRemark && errors?.pattaRemark?.message}
                             </h3>
                           </div>
-                          <div className="col col-6">
-                            <h2></h2>
+                          <div className="col col-6" style={{ display: "flex", alignSelf: "end" }}>
                             {`${t("NWL_APPLICANT_DOCUMENT_UPLOAD")}`}
                             {/* Document Upload  */}
                             <span style={{ color: "red" }}>*</span>
@@ -979,8 +982,7 @@ const LandScheduleForm = (props) => {
                               {errors?.gairRemark && errors?.gairRemark?.message}
                             </h3>
                           </div>
-                          <div className="col col-6">
-                            <h2></h2>
+                          <div className="col col-6" style={{ display: "flex", alignSelf: "end" }}>
                             {`${t("NWL_APPLICANT_DOCUMENT_UPLOAD")}`}
                             {/* Document Upload  */}
                             <span style={{ color: "red" }}>*</span>
@@ -1016,8 +1018,7 @@ const LandScheduleForm = (props) => {
                               {errors?.loanRemark && errors?.loanRemark?.message}
                             </h3>
                           </div>
-                          <div className="col col-6">
-                            <h2></h2>
+                          <div className="col col-6" style={{ display: "flex", alignSelf: "end" }}>
                             {`${t("NWL_APPLICANT_DOCUMENT_UPLOAD")}`}
                             {/* Document Upload  */}
                             <span style={{ color: "red" }}>*</span>
@@ -1053,8 +1054,7 @@ const LandScheduleForm = (props) => {
                               {errors?.anyOtherRemark && errors?.anyOtherRemark?.message}
                             </h3>
                           </div>
-                          <div className="col col-6">
-                            <h2></h2>
+                          <div className="col col-6" style={{ display: "flex", alignSelf: "end" }}>
                             {`${t("NWL_APPLICANT_DOCUMENT_UPLOAD")}`}
                             {/* Document Upload  */}
                             <span style={{ color: "red" }}>*</span>
@@ -1288,7 +1288,6 @@ const LandScheduleForm = (props) => {
                       {watch("appliedLand") === "N" && (
                         <div className="row ">
                           <div className="col col-12">
-                            <h6></h6>
                             {`${t("NWL_APPLICANT_AS_PER_APPLIED_LAND_N_DOWNLOAD_DOCUMENT_SHAJRA_PLAN")}`}
                             {/* Document Upload  */}
                             <span style={{ color: "red" }}>*</span>&nbsp;&nbsp;
@@ -2927,7 +2926,7 @@ const LandScheduleForm = (props) => {
                             </label>
                             <input type="text" className="form-control" {...register(`surroundingsObj.${index}.pocketName`)} />
                           </div>
-                          <div className="col col-3">
+                          <div className="col col-2">
                             <label>
                               <h2>
                                 {`${t("NWL_APPLICANT_SURROUNDINGS_NORTH_SHAJRA_PLAN")}`}
@@ -2936,7 +2935,7 @@ const LandScheduleForm = (props) => {
                             </label>
                             <input type="text" className="form-control" {...register(`surroundingsObj.${index}.north`)} />
                           </div>
-                          <div className="col col-3">
+                          <div className="col col-2">
                             <label>
                               <h2>
                                 {`${t("NWL_APPLICANT_SURROUNDINGS_SOUTH_SHAJRA_PLAN")}`}
@@ -2945,7 +2944,7 @@ const LandScheduleForm = (props) => {
                             </label>
                             <input type="text" className="form-control" {...register(`surroundingsObj.${index}.south`)} />
                           </div>
-                          <div className="col col-3">
+                          <div className="col col-2">
                             <label>
                               <h2>
                                 {`${t("NWL_APPLICANT_SURROUNDINGS_EAST_SHAJRA_PLAN")}`}
@@ -2954,7 +2953,7 @@ const LandScheduleForm = (props) => {
                             </label>
                             <input type="text" className="form-control" {...register(`surroundingsObj.${index}.east`)} />
                           </div>
-                          <div className="col col-3">
+                          <div className="col col-2">
                             <label>
                               <h2>
                                 {`${t("NWL_APPLICANT_SURROUNDINGS_WEST_SHAJRA_PLAN")}`}

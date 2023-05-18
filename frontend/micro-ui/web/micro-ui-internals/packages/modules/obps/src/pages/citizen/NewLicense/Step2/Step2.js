@@ -41,11 +41,11 @@ const ApllicantPuropseForm = (props) => {
   const columns = [
     {
       title: "District",
-      render: (data) => (data?.district ? data?.district : "N/A"),
+      render: (data) => (data?.district ? data?.district?.label : "N/A"),
     },
     {
       title: "Development Plan",
-      render: (data) => (data?.developmentPlan ? data?.developmentPlan : "N/A"),
+      render: (data) => (data?.developmentPlan ? data?.developmentPlan?.label : "N/A"),
     },
     {
       title: "Zone",
@@ -57,11 +57,11 @@ const ApllicantPuropseForm = (props) => {
     },
     {
       title: "Tehsil",
-      render: (data) => (data?.tehsil ? data?.tehsil : "N/A"),
+      render: (data) => (data?.tehsil ? data?.tehsil?.label : "N/A"),
     },
     {
       title: "Revenue Estate",
-      render: (data) => (data?.revenueEstate ? data?.revenueEstate : "N/A"),
+      render: (data) => (data?.revenueEstate ? data?.revenueEstate?.label : "N/A"),
     },
     {
       title: "Hadbast No.",
@@ -87,7 +87,7 @@ const ApllicantPuropseForm = (props) => {
     },
     {
       title: "Type of land",
-      render: (data) => (data?.typeLand ? data?.typeLand : "N/A"),
+      render: (data) => (data?.typeLand ? data?.typeLand?.label : "N/A"),
     },
     {
       title: "change in information",
@@ -322,25 +322,26 @@ const ApllicantPuropseForm = (props) => {
       setValue("registeringAuthorityDoc", specificTableData?.registeringAuthorityDoc);
       setValue("editRectangleNo", specificTableData?.editRectangleNo);
       setValue("editKhewats", specificTableData?.editKhewats);
+      setValue("acquistionStatus", specificTableData?.acquistionStatus);
       setValue("landOwnerRegistry", specificTableData?.landOwnerRegistry);
-      const districtValue = districtOptons?.data?.filter((item) => item?.value === specificTableData?.district);
+      const districtValue = districtOptons?.data?.filter((item) => item?.value === specificTableData?.district?.value);
       // getDevPlanOption(districtValue?.[0]?.distCodeTCP);
       setValue("district", { label: districtValue?.[0]?.label, value: districtValue?.[0]?.value });
       if (districtValue?.[0]?.distCodeTCP) setDTCP(districtValue?.[0]);
-      const tehsilValue = tehsilDataLabels?.data?.filter((item) => item?.value === specificTableData?.tehsil);
+      const tehsilValue = tehsilDataLabels?.data?.filter((item) => item?.value === specificTableData?.tehsil?.value);
       setNameRevenueState(tehsilValue?.[0]?.value);
       setValue("tehsil", { label: tehsilValue?.[0]?.label, value: tehsilValue?.[0]?.value });
       // dev plan
-      const devPlanValue = devPlanOptons?.data?.filter((item) => item?.value === specificTableData?.developmentPlan);
+      const devPlanValue = devPlanOptons?.data?.filter((item) => item?.value === specificTableData?.developmentPlan?.value);
       setDevPlanVal(devPlanValue?.[0]?.value);
       setValue("developmentPlan", { label: devPlanValue?.[0]?.label, value: devPlanValue?.[0]?.value });
       // revenue
-      const revenueValue = revenueDataLabels?.data?.filter((item) => item?.value === specificTableData?.revenueEstate);
+      const revenueValue = revenueDataLabels?.data?.filter((item) => item?.value === specificTableData?.revenueEstate?.value);
       setMustil(revenueValue?.[0]?.value);
       setValue("revenueEstate", { label: revenueValue?.[0]?.label, value: revenueValue?.[0]?.value });
       const mustilValue = mustilDataLabels?.data?.filter((item) => item?.value === specificTableData?.rectangleNo);
       setValue("rectangleNo", { label: mustilValue?.[0]?.label, value: mustilValue?.[0]?.value });
-      const typeOfLandValue = typeOfLand?.data?.filter((item) => item?.value === specificTableData?.typeLand);
+      const typeOfLandValue = typeOfLand?.data?.filter((item) => item?.value === specificTableData?.typeLand?.value);
       setValue("typeLand", { label: typeOfLandValue?.[0]?.label, value: typeOfLandValue?.[0]?.value });
       setValue("isChange", JSON.parse(specificTableData?.isChange));
     }

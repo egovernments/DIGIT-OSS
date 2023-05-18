@@ -149,15 +149,18 @@ const ApllicantFormStep1 = (props) => {
   }, []);
 
   useEffect(() => {
-    const data = developerDataLabel?.aurthorizedUserInfoArray?.filter((item) => item?.emailId === userInfo?.emailId);
-    setAuthUserData(data);
-    setValue("authorizedName", data?.[0]?.name);
-    setValue("authorizedMobile", data?.[0]?.mobileNumber);
-    setValue("authorizedEmail", data?.[0]?.emailId);
-    setValue("authorizedPan", data?.[0]?.pan);
+    if (userInfo) {
+      const data = developerDataLabel?.aurthorizedUserInfoArray?.filter((item) => item?.emailId === userInfo?.emailId);
+      setAuthUserData(data);
+      setValue("authorizedName", data?.[0]?.name);
+      setValue("authorizedMobile", data?.[0]?.mobileNumber);
+      setValue("authorizedEmail", data?.[0]?.emailId);
+      setValue("authorizedPan", data?.[0]?.pan);
+    }
+
     // const filteredObject = developerDataLabel?.aurthorizedUserInfoArray.filter()
     // developerDataLabel?.aurthorizedUserInfoArray?.[0]?.name
-  }, [userInfo, developerDataLabel]);
+  }, [developerDataLabel]);
 
   useEffect(() => {
     if (developerDataLabel) {
@@ -613,7 +616,6 @@ const ApllicantFormStep1 = (props) => {
                                     }}
                                     onClick={() => {
                                       if (item?.uploadPdf) getDocShareholding(item?.uploadPdf, setLoader);
-                                      else setShowToastError({ label: "No pdf here", error: true, success: false });
                                     }}
                                   >
                                     {item?.uploadPdf && <VisibilityIcon color="info" className="icon" />}
@@ -662,7 +664,6 @@ const ApllicantFormStep1 = (props) => {
                                     }}
                                     onClick={() => {
                                       if (it?.uploadPdf) getDocShareholding(it?.uploadPdf, setLoader);
-                                      else setShowToastError({ label: "No pdf here", error: true, success: false });
                                     }}
                                   >
                                     {it?.uploadPdf && <VisibilityIcon color="info" className="icon" />}
@@ -798,7 +799,6 @@ const ApllicantFormStep1 = (props) => {
                   onClick={() => {
                     if (getAuthUserData?.[0]?.uploadDigitalSignaturePdf)
                       getDocShareholding(getAuthUserData?.[0]?.uploadDigitalSignaturePdf, setLoader);
-                    else setShowToastError({ label: "No pdf here", error: true, success: false });
                   }}
                   id="btnSearch"
                   class=""
@@ -814,14 +814,13 @@ const ApllicantFormStep1 = (props) => {
                   style={{ cursor: "pointer" }}
                   onClick={() => {
                     if (getAuthUserData?.[0]?.uploadBoardResolution) getDocShareholding(getAuthUserData?.[0]?.uploadBoardResolution, setLoader);
-                    else setShowToastError({ label: "No pdf here", error: true, success: false });
                   }}
                   id="btnSearch"
                   class=""
                 >
                   {`${t("NWL_VIEW_UPLOAD_BOARD_RESOLUTION")}`}
                   {/* View Upload Board Resolution */}
-                  <VisibilityIcon color="info" className="icon" />
+                  {getAuthUserData?.[0]?.uploadBoardResolution && <VisibilityIcon color="info" className="icon" />}
                 </div>
               </FormControl>
               &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp;
@@ -835,7 +834,6 @@ const ApllicantFormStep1 = (props) => {
                         onClick={() => {
                           if (developerDataLabel?.licensesDoc?.[0]?.memorandumOfArticles)
                             getDocShareholding(developerDataLabel?.licensesDoc?.[0]?.memorandumOfArticles, setLoader);
-                          else setShowToastError({ label: "No pdf here", error: true, success: false });
                         }}
                         id="btnSearch"
                         class=""
