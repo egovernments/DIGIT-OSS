@@ -148,15 +148,17 @@ function ExtensionCom() {
   };
 
    const UpdateExtensionInConstruction = async (data) => {
+   const token = window?.localStorage?.getItem("token");
+    const userInfo = Digit.UserService.getUser()?.info || {};
     console.log("REQUEST LOG1 ====> ", data, JSON.stringify(data));
     try {
-      setLoading(true);
+      setLoader(true);
       const body = {
         RequestInfo: {
           apiId: "Rainmaker",
           msgId: "1669293303096|en_IN",
-          authToken: authToken,
-          userInfo: userInfo,
+         authToken: token,
+        userInfo: userInfo,
         },
         "constructionOfCommunity": [
           {
@@ -183,12 +185,12 @@ function ExtensionCom() {
 
       console.log("Update Response ====> ", response);
 
-      setLoading(false);
+      setLoader(false);
       setShowToastError({ label: "Surrender of License updated successfully", error: false, success: true });
       handleClose();
     } catch (err) {
       console.log("Update Error ====> ", err.message);
-      setLoading(false);
+      setLoader(false);
       setShowToastError({ label: err.message, error: true, success: false });
     }
   };
@@ -202,16 +204,18 @@ function ExtensionCom() {
   };
 
    const getLicenseData = async () => {
+      const token = window?.localStorage?.getItem("token");
+    const userInfo = Digit.UserService.getUser()?.info || {};
     try {
       let id = params.get("id");
-      setLoading(true);
+      setLoader(true);
 
       const requestData = {
         RequestInfo: {
           apiId: "Rainmaker",
-          authToken: authToken,
-          msgId: "1669293303096|en_IN",
-          userInfo: userInfo,
+          authToken: token,
+        userInfo: userInfo,
+          msgId: "1669293303096|en_IN"
         },
       };
       const response = await axios.post(`/tl-services/construction/_get?licenseNumber=${id}`, requestData);
@@ -251,10 +255,10 @@ function ExtensionCom() {
       // setValue("tehsil", details?.newAdditionalDetails?.tehsil);
       // setValue("validUpto", details?.newAdditionalDetails?.validUpto);
 
-      setLoading(false);
+      setLoader(false);
     } catch (error) {
       console.log("Get Error ====> ", error.message);
-      setLoading(false);
+      setLoader(false);
       setShowToastError({ label: error.message, error: true, success: false });
     }
   };
