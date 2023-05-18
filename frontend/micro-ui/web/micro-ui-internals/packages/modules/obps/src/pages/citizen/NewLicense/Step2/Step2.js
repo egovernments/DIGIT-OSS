@@ -11,7 +11,7 @@ import WorkingTable from "../../../../components/Table";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
-import { VALIDATION_SCHEMA, MODAL_VALIDATION_SCHEMA } from "../../../../utils/schema/step2";
+// import { VALIDATION_SCHEMA, MODAL_VALIDATION_SCHEMA } from "../../../../utils/schema/step2";
 import ReactMultiSelect from "../../../../../../../react-components/src/atoms/ReactMultiSelect";
 import Spinner from "../../../../components/Loader";
 import { getDocShareholding } from "../docView/docView.help";
@@ -771,14 +771,14 @@ const ApllicantPuropseForm = (props) => {
   }, [modalData]);
 
   const ApplicantPurposeModalData = (modaldata) => {
-    modaldata["district"] = modaldata?.district?.value;
+    // modaldata["district"] = modaldata?.district?.value;
     modaldata["potential"] = modaldata?.potential?.label;
     modaldata["sector"] = modaldata?.sector?.label;
-    modaldata["tehsil"] = modaldata?.tehsil?.value;
-    modaldata["revenueEstate"] = modaldata?.revenueEstate?.value;
+    // modaldata["tehsil"] = modaldata?.tehsil?.value;
+    // modaldata["revenueEstate"] = modaldata?.revenueEstate?.value;
     modaldata["rectangleNo"] = modaldata?.rectangleNo?.value;
-    modaldata["typeLand"] = modaldata?.typeLand?.value;
-    modaldata["developmentPlan"] = modaldata?.developmentPlan?.value;
+    // modaldata["typeLand"] = modaldata?.typeLand?.value;
+    // modaldata["developmentPlan"] = modaldata?.developmentPlan?.value;
     modaldata["isChange"] = showFields;
 
     // modaldata["registeringAuthorityDoc"] = docId;
@@ -1219,7 +1219,7 @@ const ApllicantPuropseForm = (props) => {
         <ModalBody>
           <form onSubmit={handleSubmit(ApplicantPurposeModalData)}>
             <Row className="ml-auto mb-3">
-              <Col md={4} xxl lg="4">
+              <Col className="mt-2" md={4} xxl lg="4">
                 <div>
                   <Form.Label>
                     <h2>
@@ -1249,7 +1249,7 @@ const ApllicantPuropseForm = (props) => {
               </Col>
               <br></br>
               {watch("district")?.value && (
-                <Col md={4} xxl lg="4">
+                <Col className="mt-2" md={4} xxl lg="4">
                   <div>
                     <Form.Label>
                       <h2>
@@ -1277,7 +1277,7 @@ const ApllicantPuropseForm = (props) => {
               )}
               <br></br>
               {watch("developmentPlan")?.value && (
-                <Col md={4} xxl lg="4">
+                <Col className="mt-2" md={4} xxl lg="4">
                   <div>
                     <Form.Label>
                       <h2>
@@ -1305,7 +1305,7 @@ const ApllicantPuropseForm = (props) => {
               )}
               <br></br>
               {watch("potential")?.value && (
-                <Col md={4} xxl lg="4">
+                <Col className="mt-2" md={4} xxl lg="4">
                   <div>
                     <Form.Label>
                       <h2>
@@ -1331,7 +1331,7 @@ const ApllicantPuropseForm = (props) => {
                 </Col>
               )}
               <br></br>
-              <Col md={4} xxl lg="4">
+              <Col className="mt-2" md={4} xxl lg="4">
                 <div>
                   <Form.Label>
                     <h2>
@@ -1358,7 +1358,7 @@ const ApllicantPuropseForm = (props) => {
                   {errors?.tehsil && "This field is required"}
                 </h3>
               </Col>
-              <Col md={4} xxl lg="4">
+              <Col className="mt-2" md={4} xxl lg="4">
                 <div>
                   <Form.Label>
                     <h2>
@@ -1383,7 +1383,7 @@ const ApllicantPuropseForm = (props) => {
                 </h3>
               </Col>
               <br></br>
-              <Col md={4} xxl lg="4">
+              <Col className="mt-2" md={4} xxl lg="4">
                 <div>
                   <Form.Label>
                     <h2>
@@ -1470,12 +1470,12 @@ const ApllicantPuropseForm = (props) => {
                     <span style={{ color: "red" }}>*</span>
                   </b>
                   &nbsp;&nbsp;
-                  <label htmlFor="collaboration">
-                    <input {...register("collaboration")} type="radio" value="Y" id="yes" />
+                  <label htmlFor="collaborationYes">
+                    <input {...register("collaboration")} type="radio" value="Y" id="collaborationYes" />
                     &nbsp;&nbsp; Yes &nbsp;&nbsp;
                   </label>
-                  <label htmlFor="collaboration">
-                    <input {...register("collaboration")} type="radio" value="N" id="no" />
+                  <label htmlFor="collaborationNo">
+                    <input {...register("collaboration")} type="radio" value="N" id="collaborationNo" />
                     &nbsp;&nbsp; No &nbsp;&nbsp;
                   </label>
                   <h3 className="error-message" style={{ color: "red" }}>
@@ -1863,22 +1863,22 @@ const ApllicantPuropseForm = (props) => {
                       <span style={{ color: "red" }}>*</span>{" "}
                     </b>
                     &nbsp;&nbsp;&nbsp;&nbsp;
-                    <label htmlFor="consolidated">
+                    <label htmlFor="consolidatedyes">
                       <input
                         {...register("consolidationType", { required: "This field is required" })}
                         type="radio"
                         value="consolidated"
                         defaultValue="consolidated"
-                        id="consolidated"
+                        id="consolidatedyes"
                       />
                       &nbsp; Consolidated &nbsp;&nbsp;
                     </label>
-                    <label htmlFor="non-consolidated">
+                    <label htmlFor="nonConsolidatedno">
                       <input
                         {...register("consolidationType", { required: "This field is required" })}
                         type="radio"
                         value="non-consolidated"
-                        id="non-consolidated"
+                        id="nonConsolidatedno"
                       />
                       &nbsp; Non-Consolidated &nbsp;&nbsp;
                     </label>
@@ -1908,12 +1908,12 @@ const ApllicantPuropseForm = (props) => {
                           Non Consolidation Type<span style={{ color: "red" }}>*</span>{" "}
                         </b>
                         &nbsp;&nbsp;&nbsp;&nbsp;
-                        <label htmlFor="nonConsolidationType">
-                          <input {...register("nonConsolidationType")} type="radio" value="kachha" id="nonConsolidationType" />
+                        <label htmlFor="nonConsolidationTypekacha">
+                          <input {...register("nonConsolidationType")} type="radio" value="kachha" id="nonConsolidationTypekacha" />
                           &nbsp; Kachha &nbsp;&nbsp;
                         </label>
-                        <label htmlFor="nonConsolidatedType">
-                          <input {...register("nonConsolidationType")} type="radio" value="pucka" id="nonConsolidatedType" />
+                        <label htmlFor="nonConsolidatedTypepucha">
+                          <input {...register("nonConsolidationType")} type="radio" value="pucka" id="nonConsolidatedTypepucha" />
                           &nbsp; Pucka &nbsp;&nbsp;
                         </label>
                       </h2>
