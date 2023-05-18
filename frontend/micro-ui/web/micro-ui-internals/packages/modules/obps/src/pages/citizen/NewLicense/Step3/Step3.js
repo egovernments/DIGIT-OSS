@@ -259,6 +259,7 @@ const LandScheduleForm = (props) => {
     defaultValues: {
       surroundingsObj: [
         {
+          pocketName: "",
           north: "",
           south: "",
           east: "",
@@ -275,7 +276,7 @@ const LandScheduleForm = (props) => {
 
   const handleFunction = (val) => {
     for (let i = 0; i < val - 1; i++) {
-      append({ north: "", south: "", east: "", west: "" });
+      append({ pocketName: "", north: "", south: "", east: "", west: "" });
     }
   };
 
@@ -2917,6 +2918,15 @@ const LandScheduleForm = (props) => {
                     {fields?.map((item, index) => (
                       <div key={item?.id}>
                         <div key={index} className="row mt-3">
+                          <div className="col col-3">
+                            <label>
+                              <h2>
+                                {`${t("NWL_APPLICANT_SURROUNDINGS_POCKET_NAME_SHAJRA_PLAN")}`}
+                                {/* Pocket Name */}
+                              </h2>
+                            </label>
+                            <input type="text" className="form-control" {...register(`surroundingsObj.${index}.pocketName`)} />
+                          </div>
                           <div className="col col-3">
                             <label>
                               <h2>
