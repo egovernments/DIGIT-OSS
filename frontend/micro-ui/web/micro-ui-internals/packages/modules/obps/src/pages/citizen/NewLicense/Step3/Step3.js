@@ -251,7 +251,7 @@ const LandScheduleForm = (props) => {
   } = useForm({
     mode: "onChange",
     reValidateMode: "onChange",
-    // resolver: yupResolver(VALIDATION_SCHEMA),
+    resolver: yupResolver(VALIDATION_SCHEMA),
     // resolver: yupResolver(modal ? MODAL_VALIDATION_SCHEMA : VALIDATION_SCHEMA),
     shouldFocusError: true,
     defaultValues: {
@@ -857,7 +857,7 @@ const LandScheduleForm = (props) => {
                     </label>
                     <label htmlFor="encumburanceg">
                       <input {...register("encumburance")} type="radio" value="gair" id="encumburanceg" />
-                      &nbsp;&nbsp; Gair/Marusi &nbsp;&nbsp;
+                      &nbsp;&nbsp; Gairmarusi &nbsp;&nbsp;
                     </label>
                     <label htmlFor="encumburancel">
                       <input {...register("encumburance")} type="radio" value="loan" id="encumburancel" />
@@ -1240,7 +1240,7 @@ const LandScheduleForm = (props) => {
                   <hr />
                   <h5 className="mt-4">3. Shajra Plan</h5>
                   <div className="row mt-5">
-                    <div className="col col-lg-3 col-md-6 col-sm-6 mb-2">
+                    <div className="col col-lg-3 col-md-6 col-sm-6 mb-4">
                       <h2>
                         &nbsp;
                         {`${t("NWL_APPLICANT_AS_PER_APPLIED_LAND_SHAJRA_PLAN")}`}
@@ -1259,9 +1259,46 @@ const LandScheduleForm = (props) => {
                       <h3 className="error-message" style={{ color: "red" }}>
                         {errors?.appliedLand && errors?.appliedLand?.message}
                       </h3>
+                      {watch("appliedLand") === "Y" && (
+                        <div className="row ">
+                          <div className="col col-12 mb-3 mt-3">
+                            <h2>
+                              &nbsp;
+                              {`${t("NWL_ORIGINAL_SHAJRA_PLAN")}`}
+                              {/* Original Shajra Plan by Patwari */}
+                            </h2>
+                            &nbsp;&nbsp;&nbsp;&nbsp;
+                            <label htmlFor="patwariOriginalShajraPlanyes">
+                              <input {...register("patwariOriginalShajraPlan")} type="radio" value="Y" id="patwariOriginalShajraPlanyes" />
+                              &nbsp; Yes &nbsp;&nbsp;
+                            </label>
+                            <label htmlFor="patwariOriginalShajraPlanno">
+                              <input {...register("patwariOriginalShajraPlan")} type="radio" value="N" id="patwariOriginalShajraPlanno" />
+                              &nbsp; No &nbsp;&nbsp;
+                            </label>
+                          </div>
+                          <div className="col col-12 mb-3">
+                            <h2>
+                              &nbsp;
+                              {`${t("NWL_SHAJRA_PLAN_OUTER_BOUNDARY")}`}
+                              {/* Shajra Plan Outer Boundary Marked for Applied Land */}
+                              <span style={{ color: "red" }}>*</span>
+                            </h2>
+                            &nbsp;&nbsp;&nbsp;&nbsp;
+                            <label htmlFor="shajraPlanOuterBoundaryYes">
+                              <input {...register("shajraPlanOuterBoundary")} type="radio" value="Y" id="shajraPlanOuterBoundaryYes" />
+                              &nbsp; Yes &nbsp;&nbsp;
+                            </label>
+                            <label htmlFor="shajraPlanOuterBoundaryNo">
+                              <input {...register("shajraPlanOuterBoundary")} type="radio" value="N" id="shajraPlanOuterBoundaryNo" />
+                              &nbsp; No &nbsp;&nbsp;
+                            </label>
+                          </div>
+                        </div>
+                      )}
                       {watch("appliedLand") === "N" && (
                         <div className="row ">
-                          <div className="col col-12">
+                          <div className="col col-12 mb-3">
                             {`${t("NWL_APPLICANT_AS_PER_APPLIED_LAND_N_DOWNLOAD_DOCUMENT_SHAJRA_PLAN")}`}
                             {/* Document Upload  */}
                             <span style={{ color: "red" }}>*</span>&nbsp;&nbsp;
@@ -1282,6 +1319,42 @@ const LandScheduleForm = (props) => {
                             {/* <h3>{watch("docUpload")}</h3> */}
                             <h3 className="error-message" style={{ color: "red" }}>
                               {errors?.docUpload && errors?.docUpload?.message}
+                            </h3>
+                          </div>
+                          <div className="col col-12 mb-3">
+                            <h2>
+                              &nbsp;
+                              {`${t("NWL_ORIGINAL_SHAJRA_PLAN")}`}
+                              {/* Original Shajra Plan by Patwari */}
+                            </h2>
+                            &nbsp;&nbsp;&nbsp;&nbsp;
+                            <label htmlFor="patwariOriginalShajraPlanyes">
+                              <input {...register("patwariOriginalShajraPlan")} type="radio" value="Y" id="patwariOriginalShajraPlanyes" />
+                              &nbsp; Yes &nbsp;&nbsp;
+                            </label>
+                            <label htmlFor="patwariOriginalShajraPlanno">
+                              <input {...register("patwariOriginalShajraPlan")} type="radio" value="N" id="patwariOriginalShajraPlanno" />
+                              &nbsp; No &nbsp;&nbsp;
+                            </label>
+                          </div>
+                          <div className="col col-12 mb-3">
+                            <h2>
+                              &nbsp;
+                              {`${t("NWL_SHAJRA_PLAN_OUTER_BOUNDARY")}`}
+                              {/* Shajra Plan Outer Boundary Marked for Applied Land */}
+                              <span style={{ color: "red" }}>*</span>
+                            </h2>
+                            &nbsp;&nbsp;&nbsp;&nbsp;
+                            <label htmlFor="shajraPlanOuterBoundaryYes">
+                              <input {...register("shajraPlanOuterBoundary")} type="radio" value="Y" id="shajraPlanOuterBoundaryYes" />
+                              &nbsp; Yes &nbsp;&nbsp;
+                            </label>
+                            <label htmlFor="shajraPlanOuterBoundaryNo">
+                              <input {...register("shajraPlanOuterBoundary")} type="radio" value="N" id="shajraPlanOuterBoundaryNo" />
+                              &nbsp; No &nbsp;&nbsp;
+                            </label>
+                            <h3 className="error-message" style={{ color: "red" }}>
+                              {errors?.appliedLand && errors?.appliedLand?.message}
                             </h3>
                           </div>
                         </div>
@@ -1946,11 +2019,15 @@ const LandScheduleForm = (props) => {
                                 &nbsp;&nbsp;
                                 {`${t("NWL_APPLICANT_N_A_ENTER_WIDTH_IN_METERS_SHAJRA_PLAN")}`}
                                 {/* Enter Width in Meters */}
+                                <span style={{ color: "red" }}>*</span>
                               </h2>
                             </label>
                           </div>
                           <div class="col-sm-3 text-right">
                             <input type="number" {...register("constructedRowWidth")} className="form-control" />
+                            <h3 className="error-message" style={{ color: "red" }}>
+                              {errors?.constructedRowWidth && errors?.constructedRowWidth?.message}
+                            </h3>
                           </div>
                         </div>
                         &nbsp;&nbsp;
@@ -2941,6 +3018,26 @@ const LandScheduleForm = (props) => {
                         <h3 className="error-message" style={{ color: "red" }}>
                           {errors?.copyOfShajraPlan && errors?.copyOfShajraPlan?.message}
                         </h3>
+                      )}
+                    </div>
+                    <div className="col col-lg-3 col-md-6 col-sm-6 mb-2">
+                      <h2 style={{ display: "flex" }}>
+                        {`${t("NWL_ANY_OTHER_DOCUMENT")}`}
+                        {/* Any other document  */}
+                      </h2>
+                      <label>
+                        <FileUpload style={{ cursor: "pointer" }} color="primary" />
+                        <input
+                          type="file"
+                          style={{ display: "none" }}
+                          onChange={(e) => getDocumentData(e?.target?.files[0], "anyOtherDoc")}
+                          accept="application/pdf/jpeg/png"
+                        />
+                      </label>
+                      {watch("anyOtherDoc") && (
+                        <a onClick={() => getDocShareholding(watch("anyOtherDoc"), setLoader)} className="btn btn-sm ">
+                          <VisibilityIcon color="info" className="icon" />
+                        </a>
                       )}
                     </div>
                   </div>
