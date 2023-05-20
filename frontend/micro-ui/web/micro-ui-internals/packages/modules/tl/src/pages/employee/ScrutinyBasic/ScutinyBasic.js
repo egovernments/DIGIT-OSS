@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect, useContext } from "react";
+import React, { useState, useRef, useEffect, useContext  } from "react";
 import Personalinfo from "./Personalinfo";
 import Genarelinfo from "./Generalinfo";
 import Developerinfo from "./Developerinfo";
@@ -25,7 +25,13 @@ import Addmoreinput from "../Complaince/Compliances";
 import ProformForRevenu from "../Proforma/ProformForRevenu";
 import AdditionalDocument from "./AdditionalDocument";
 import Component from "../Proforma/Index";
+
+import AddIcon from "@mui/icons-material/Add";
+import RemoveIcon from "@mui/icons-material/Remove";
+
+import Collapse from "react-bootstrap/Collapse";
 // import AddPost from "../Material/TextEditor";
+import {useForm} from "react-hook-form";
 
 const ScrutitnyForms = ({ apiResponse, applicationNumber, refreshScrutinyData , histeroyData,additionalDocResponData, applicationStatus ,mDMSData ,applicationimp , dataMDMS }) => {
   const personalInfoRef = useRef();
@@ -35,8 +41,11 @@ const ScrutitnyForms = ({ apiResponse, applicationNumber, refreshScrutinyData , 
   const feeandchargesInfoRef = useRef();
   // const feeandcharges = useRef();
   // const licenseDetailsInfoRef = useRef();
+  const dateTime = new Date();
   const [purpose, setPurpose] = useState("");
   const jeLandInfoRef = useRef();
+  const { register, handleSubmit , watch } = useForm();
+  
 
   const [displayPersonal, setDisplayPersonalInfo] = useState([]);
   const [displayPersonalCHeckedList, setDisplayCheckedPersonalList] = useState([]);
@@ -58,6 +67,7 @@ const { remarksData,iconStates,rolesDate,handleRoles,handleGetFiledsStatesById,h
   const [defaultheightApplied, setDefaultheightApplied] = useState(0);
   const [defaultheightFee, setDefaultheightFee] = useState(0);
   const [open, setOpen] = useState(false);
+  const [open2, setOpen2] = useState(false);
   // const [apiResponse, setApiResponse] = useState({});
   // const [remarksResponse, setRemarksResponse] = useState({});
   const [sumrol, setSumrol] = useState({});
@@ -68,8 +78,19 @@ const { remarksData,iconStates,rolesDate,handleRoles,handleGetFiledsStatesById,h
   // const [iconStates,setIconState]= useState(null)
   const [urlGetShareHoldingDoc, setDocShareHoldingUrl] = useState("");
 
-  const userInfo = Digit.UserService.getUser()?.info || {};
+  // const userInfo = Digit.UserService.getUser()?.info || {};
   const authToken = Digit.UserService.getUser()?.access_token || null;
+
+  const userInfo = Digit.UserService.getUser()?.info || {};
+ const userRolesArray = userInfo?.roles.filter((user) => user.code !=="EMPLOYEE" );
+  const filterDataRole = userRolesArray?.[0]?.code;
+  const designation = userRolesArray?.[0]?.name;
+  
+
+  console.log("usern23233" , userRolesArray );
+  console.log("usern23" , filterDataRole );
+  console.log("usern23434" , designation );
+
 
   const getUncheckedPersonalinfos = (data) => {
     setDisplayPersonalInfo(data.data);
@@ -305,14 +326,132 @@ const { remarksData,iconStates,rolesDate,handleRoles,handleGetFiledsStatesById,h
       setDefaultheightFee(0);
     }
   };
-  console.log("scrutiny form api get", apiResponse !== undefined ? apiResponse?.ApplicantInfo : apiResponse);
-  console.log("scrutiny form api get1", apiResponse !== undefined ? apiResponse?.ApplicantPurpose : apiResponse);
+//   console.log("scrutiny form api get", apiResponse !== undefined ? apiResponse?.ApplicantInfo : apiResponse);
+//   console.log("scrutiny form api get1", apiResponse !== undefined ? apiResponse?.ApplicantPurpose : apiResponse);
   
-  console.log("remarks api", remarksData.egScrutiny !== undefined ? remarksData.egScrutiny : null);
+//   console.log("remarks api", remarksData.egScrutiny !== undefined ? remarksData.egScrutiny : null);
 
-  console.log("remakes data parsnalinfo", remarksChanges);
-console.log("basiceData",iconStates )
-console.log("roleData",rolesDate )
+//   console.log("remakes data parsnalinfo", remarksChanges);
+// console.log("basiceData",iconStates )
+// console.log("roleData",rolesDate )
+// const handleData=(data)=>{
+//   console.log("savehandle" , data);
+// }
+
+function convertToObjectArray(obj) {
+  const result = [];
+
+  for (const key in obj) {
+    if (key.endsWith("Label")) {
+      const labelKey = key;
+      const valueKey = key.replace("Label", "");
+      const remarksKey = valueKey + "Remarks";
+
+      const item = {
+          fieldIdL: obj[labelKey] || "",
+          fieldValue: obj[valueKey] || null,
+          comment: obj[remarksKey] || null,
+          applicationId: applicationNumber,
+          isApproved: "Performa",
+          isLOIPart: "",
+          userid: userInfo?.id,
+          serviceId: "123",
+          documentId: null,
+          ts: dateTime.toUTCString(),
+          bussinessServiceName: "TL",
+          designation: designation,
+          name: userInfo?.name,
+          employeeName: userInfo?.name || null,
+          role: filterDataRole,
+          applicationStatus: applicationStatus
+      };
+
+      result.push(item);
+    }
+  }
+
+  return result;
+}
+
+const handleData = async (data) => {
+  
+  const payload = {
+  "requestInfo": {
+      "api_id": "1",
+      "ver": "1",
+      "ts": null,
+      "action": "create",
+      "did": "",
+      "key": "",
+      "msg_id": "",
+      "requester_id": "",
+      authToken: authToken,
+      userInfo: userInfo,
+  },
+  egScrutiny: convertToObjectArray(data || {}) || []
+      
+     
+  
+}
+
+const Resp = await axios.post(`/land-services/egscrutiny/_performa/_create?status=submit`, payload )
+console.log("savehandle" , data);
+console.log("savehandle" , Resp);
+}
+
+
+
+// console.log("Logger...",  convertToObjectArray(x))
+
+// const handleData = async (data) => {
+  
+//   const payload = {
+
+//   "RequestInfo": {
+
+//       "apiId": "Rainmaker",
+
+//       authToken: authToken,
+//        userInfo: userInfo,
+
+//       "msgId": "1684320117934|en_IN"
+
+//   },
+
+//   PerformaScruitny: {
+
+//       applicationNumber: applicationNumber,
+
+//       applicationStatus: applicationStatus,
+
+//       userName: userInfo?.name,
+
+//       userId: userInfo?.id,
+
+//       designation: designation ,
+
+//       createdOn: dateTime.toUTCString(),
+
+//       additionalDetails: {
+
+//         data
+
+//       }
+
+
+
+//   }
+
+// }
+// const Resp = await axios.post(`/tl-services/_performaScrutiny/_create`, payload )
+// console.log("savehandle" , data);
+// console.log("savehandle" , Resp);
+
+// }
+
+
+console.log("userInFODATA123" , userInfo);
+
   return (
     <div>
       <div style={{ position: "relative", maxWidth: "100%", padding: 2 }}>
@@ -427,11 +566,44 @@ console.log("roleData",rolesDate )
       </ProformaPatwari>
           </div>
           <div>
-          <Component 
-          dataMDMS = {dataMDMS}
+            <div
+            className="collapse-header"
+            onClick={() => setOpen2(!open2)}
+            aria-controls="example-collapse-text"
+            aria-expanded={open2}
+            style={{
+              background: "#f1f1f1",
+              padding: "0.25rem 1.25rem",
+              borderRadius: "0.25rem",
+              fontWeight: "600",
+              display: "flex",
+              cursor: "pointer",
+              color: "#817f7f",
+              justifyContent: "space-between",
+              alignContent: "center",
+            }}
           >
-      </Component>
+            <span style={{ color: "#817f7f", fontSize: 14 }} className="">
+              - Performa
+            </span>
+            {open2 ? <RemoveIcon></RemoveIcon> : <AddIcon></AddIcon>}
           </div>
+          <Collapse in={open2}>
+            <div id="example-collapse-text" style={{ marginTop: 12, paddingLeft: 12, paddingRight: 12 }}>
+            <form 
+            onSubmit={handleSubmit(handleData)}>
+            <Component 
+          dataMDMS = {dataMDMS}
+          register = {register}
+
+         />
+           {/* <input as="textarea" rows={1} type="text" className="form-control" placeholder="" {...register("landOwnerA")}/> */}
+          <button type="submit" >save</button>
+            </form>
+          </div>
+          </Collapse>
+          </div>
+          
           <div>
             
           </div>

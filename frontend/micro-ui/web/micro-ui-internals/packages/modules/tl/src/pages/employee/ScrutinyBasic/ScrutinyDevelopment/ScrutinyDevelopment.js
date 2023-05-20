@@ -180,6 +180,20 @@ const toggleshown3 = designation => {
   }
 }
 
+const [dataThree,setDataThree] = useState([]);
+const toggleshown4 = applicationStatus => {
+  const  showState = dataThree.slice();
+  const index = showState.indexOf(applicationStatus);
+  if(index >= 0 ){
+    showState.splice(index, 1);
+    setDataThree(showState);
+  }
+  else{
+    showState.push(applicationStatus);
+    setDataThree(showState);
+  }
+}
+
 console.log("log123Disrenu" ,id);
   return (
     <Container
@@ -468,8 +482,91 @@ console.log("log123Disrenu" ,id);
                                             }
                                          </tbody>
                                         </table>
-                                         )}     
-                        
+                                         )}   
+
+                                         {/* /////////////////////////////////   */}
+                                          
+                                         <p>
+                    <IconButton
+                           onClick={() => toggleshown4(el.applicationStatus)}
+                         >
+                           {dataThree.includes(index)? (
+                           
+                              <KeyboardArrowUpIcon /> 
+                            ) : (
+                           <p><KeyboardArrowDownIcon /><b style={{ color: "#ff0000" }}>{el.performaFieldDetail?.[0]?.isApproved}</b></p>
+                          
+                           )}
+                           
+                         </IconButton>
+                         </p>
+                          
+                              
+                             
+                             {dataThree.includes(el.applicationStatus) && (  
+                  <table colSpan = "2" className="table table-bordered" style={{ backgroundColor: "#ddf2cf" }}>
+                    <thead>
+
+                      <tr className="border-bottom-0">
+                        <th class="fw-normal pb-0 border-bottom-0 align-top">
+                          Sr.No
+                        </th>
+                        <th class="fw-normal pb-0 border-bottom-0 align-top">
+                          Filed Name
+                        </th>
+                        <th class="fw-normal pb-0 border-bottom-0 align-top">
+                          Filed value
+                        </th>
+                        <th class="fw-normal pb-0 border-bottom-0 align-top">
+                          Status
+                        </th>
+
+                        <th class="fw-normal pb-0 border-bottom-0 align-top">
+                          Remarks
+                        </th>
+                      </tr>
+                      <tr>
+
+                      </tr>
+
+
+                    </thead>
+                     <tbody>
+                 
+                     {el?.performaFieldDetail !== null ? (
+           el?.performaFieldDetail?.map((el, i) => {
+                      return (
+                    
+                           <tr >
+
+                                <td>
+                                  {i + 1}
+                                </td>
+                                <td>
+                                  <b>{el.name}</b>
+                                </td>
+                                <td>
+                                  <b>{el.value}</b>
+                                </td>
+
+                                <td>
+                                  <b>{el.isApproved}</b>
+                                </td>
+                                <td>
+                                  {/* <i>{<div dangerouslySetInnerHTML={createMarkup(el.remarks)}> </div>}</i> */}
+                                  <i>{<div dangerouslySetInnerHTML={{__html: el.remarks}}/>}</i>
+                                </td>
+
+                              </tr>
+                                 );
+                                })
+                              ) : (
+                                <p></p>
+                              )}
+                           </tbody>
+                          </table>
+                          )} 
+                    
                         
                       <Row style={{ margin: 4 }}>
                       <b style={{ textAlign: "right", marginRight: 2 }}>{el.designation}</b>
