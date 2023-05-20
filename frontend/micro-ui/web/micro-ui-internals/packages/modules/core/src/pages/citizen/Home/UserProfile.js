@@ -10,6 +10,7 @@ import {
   BreadCrumb,
   BackButton,
   Loader,
+  SubmitBar
 } from "@egovernments/digit-ui-react-components";
 import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -520,7 +521,7 @@ const UserProfile = ({ stateCode, userType, cityDetails }) => {
                     type={"text"}
                     isMandatory={false}
                     name="city"
-                    value={t(`TENANT_TENANTS_${city.toUpperCase()}`)}
+                    value={t(Digit.Utils.locale.getTransformedLocale(`TENANT_TENANTS_${tenant}`))}
                     onChange={(e) => setCity(e.target.value)}
                     placeholder="Enter Your City Name"
                     {...(validation = {
@@ -643,10 +644,10 @@ const UserProfile = ({ stateCode, userType, cityDetails }) => {
       </div>
 
       {userType === "employee" ? (
-        <div
-          style={{ height: "88px", backgroundColor: "#FFFFFF", display: "flex", justifyContent: "flex-end", marginTop: "64px", alignItems: "center" }}
-        >
-          <button
+        <div className="action-bar-wrap">
+      
+          <SubmitBar t={t} label={"CORE_COMMON_SAVE"} onSubmit={updateProfile} />
+          {/* <button
             onClick={updateProfile}
             style={{
               marginTop: "24px",
@@ -661,7 +662,8 @@ const UserProfile = ({ stateCode, userType, cityDetails }) => {
             }}
           >
             {t("CORE_COMMON_SAVE")}
-          </button>
+          </button> */}
+     
         </div>
       ) : (
         ""

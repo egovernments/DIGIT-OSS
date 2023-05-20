@@ -1,6 +1,6 @@
 {
   "name": "@egovernments/digit-ui-module-hrms",
-  "version": "1.5.7",
+  "version": "1.5.20",
   "description": "HRMS",
   "license": "MIT",
   "main": "dist/index.js",

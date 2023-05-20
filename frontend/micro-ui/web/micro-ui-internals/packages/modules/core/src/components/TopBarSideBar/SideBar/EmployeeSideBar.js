@@ -3,6 +3,10 @@ import SubMenu from "./SubMenu";
 import { Loader, SearchIcon } from "@egovernments/digit-ui-react-components";
 import { useTranslation } from "react-i18next";
 
+const checkMatch=(path="",searchCriteria="")=>(path.toLowerCase().includes(searchCriteria.toLowerCase()))
+
+
+
 const EmployeeSideBar = () => {
   const sidebarRef = useRef(null);
   const { isLoading, data } = Digit.Hooks.useAccessControl();
@@ -39,7 +43,7 @@ const EmployeeSideBar = () => {
   data?.actions
     .filter((e) => e.url === "url")
     .forEach((item) => {
-      let index = item.path.split(".")[0];
+      let index = item?.path?.split(".")?.[0] || "";
       if (search == "" && item.path !== "") {
         index = item.path.split(".")[0];
         if (!configEmployeeSideBar[index]) {
@@ -48,10 +52,7 @@ const EmployeeSideBar = () => {
           configEmployeeSideBar[index].push(item);
         }
       } else if (
-        item.path !== "" &&
-        t(`ACTION_TEST_${index?.toUpperCase()?.replace(/[ -]/g, "_")}`)
-          ?.toLowerCase()
-          .includes(search.toLowerCase())
+       checkMatch(t(`ACTION_TEST_${index?.toUpperCase()?.replace(/[ -]/g, "_")}`),search) || checkMatch(t(Digit.Utils.locale.getTransformedLocale(`ACTION_TEST_${item?.displayName}`)),search)
       ) {
         index = item.path.split(".")[0];
         if (!configEmployeeSideBar[index]) {

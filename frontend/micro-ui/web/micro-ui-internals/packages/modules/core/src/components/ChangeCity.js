@@ -43,7 +43,7 @@ const ChangeCity = (prop) => {
     let unique = teantsArray.filter((item, i, ar) => ar.indexOf(item) === i);
     unique?.forEach((uniCode) => {
       filteredArray.push({
-        label: prop?.t(`TENANT_TENANTS_${stringReplaceAll(uniCode, ".", "_")?.toUpperCase()}`),
+        label: `TENANT_TENANTS_${stringReplaceAll(uniCode, ".", "_")?.toUpperCase()}`,
         value: uniCode,
       });
     });
@@ -55,6 +55,7 @@ const ChangeCity = (prop) => {
   return (
     <div style={prop?.mobileView ? { color: "#767676" } : {}}>
       <Dropdown
+        t={prop?.t}
         option={selectCityData}
         selected={selectCityData.find((cityValue) => cityValue.value === dropDownData?.value)}
         optionKey={"label"}

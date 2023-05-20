@@ -57,7 +57,7 @@ const SubMenu = ({ item }) => {
     return (
       <div className="submenu-container">
         <div className={`sidebar-link  ${pathname === item?.navigationURL ? "active" : ""}`}>
-          <div className="actions">
+          <div className="actions" onClick={()=>window.location.href=`${getOrigin + "/employee/" + item.navigationURL}`}>
             {leftIcon}
             {item.navigationURL?.indexOf(`/${window?.contextPath}`) === -1 ? (
               <a
