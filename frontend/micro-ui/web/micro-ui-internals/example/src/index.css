@@ -21224,3 +21224,21 @@ color: #fff !important;
   100% { background: #f1f1f1;}
   
 }
+.registrationpage {
+  /* height:100%;
+ 
+  display:flex;
+  justify-content: center;
+  align-items: center; */
+  
+  width: 100%;
+  height: 100px;
+  padding: 12px 20px;
+  box-sizing: border-box;
+  border: 2px solid #ccc;
+  border-radius: 4px;
+  background-color: #f8f8f8;
+  font-size: 16px;
+  resize: none;
+  margin-left: 21px;
+}

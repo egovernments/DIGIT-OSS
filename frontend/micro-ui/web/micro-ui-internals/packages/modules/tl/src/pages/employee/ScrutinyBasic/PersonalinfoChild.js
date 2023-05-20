@@ -33,67 +33,67 @@ import { useTranslation } from "react-i18next";
 const PersonalinfoChild = (props) => {
   // useTranslation
 
-  const {t} = useTranslation();
+  const { t } = useTranslation();
   const { pathname: url } = useLocation();
 
   const classes = useStyles();
-  const applicationStatus = props.applicationStatus ;
+  const applicationStatus = props.applicationStatus;
   let user = Digit.UserService.getUser();
   const userInfo = Digit.UserService.getUser()?.info || {};
   const userRolesArray = userInfo?.roles.filter((user) => user.code !== "EMPLOYEE");
   const filterDataRole = userRolesArray?.[0]?.code;
   const userRoles = user?.info?.roles?.map((e) => e.code) || [];
-  
-  console.log("rolelogintime" , userRoles );
-  console.log("afterfilter12" , filterDataRole)
+
+  console.log("rolelogintime", userRoles);
+  console.log("afterfilter12", filterDataRole)
 
   const mDMSData = props.mDMSData;
   const mDMSDataRole = mDMSData?.map((e) => e.role) || [];
   const hideRemarks = mDMSDataRole.includes(filterDataRole);
-  const applicationStatusMdms = mDMSData?.map((e) => e.applicationStatus) || [] ;
+  const applicationStatusMdms = mDMSData?.map((e) => e.applicationStatus) || [];
   const hideRemarksPatwari = applicationStatusMdms.some((item) => item === applicationStatus) || [];
-  const [fileddataName, setFiledDataName] = useState ();
+  const [fileddataName, setFiledDataName] = useState();
 
- useEffect(() =>{
-    if(mDMSData&&mDMSData?.length){
-      console.log("filedDataMdms" , mDMSData,mDMSData?.[0]?.field , mDMSData?.[0]?.field.map((item , index) => item.fields ));
-      setFiledDataName(mDMSData?.[0]?.field.map((item , index) => item.fields ))
-       
+  useEffect(() => {
+    if (mDMSData && mDMSData?.length) {
+      console.log("filedDataMdms", mDMSData, mDMSData?.[0]?.field, mDMSData?.[0]?.field.map((item, index) => item.fields));
+      setFiledDataName(mDMSData?.[0]?.field.map((item, index) => item.fields))
+
     }
-    
- },[mDMSData]
- )
- const showReportProblemIcon=(filedName)=>{
-   if (fileddataName&&fileddataName.length) {
+
+  }, [mDMSData]
+  )
+  const showReportProblemIcon = (filedName) => {
+    if (fileddataName && fileddataName.length) {
       let show = fileddataName.includes(filedName)
-      return show ;
+      return show;
     } else {
-      return false ;
+      return false;
     }
- }
- 
+  }
+
   // mDMSData?.map((e) => e.role)||[]
-  console.log("happyRole" , userRoles);
-  console.log("happyDate" , mDMSData);
-  console.log("happyROLE" , mDMSDataRole);
-  console.log("happyapplicationStatusMdms" , applicationStatusMdms);
-  console.log("happyDateHIDE" , hideRemarksPatwari,showReportProblemIcon("Purpose of colony"),hideRemarks);
+  console.log("happyRole", userRoles);
+  console.log("happyDate", mDMSData);
+  console.log("happyROLE", mDMSDataRole);
+  console.log("happyapplicationStatusMdms", applicationStatusMdms);
+  console.log("happyDateHIDE", hideRemarksPatwari, showReportProblemIcon("Purpose of colony"), hideRemarks);
   const personalinfo = props.personalinfo;
   const iconStates = props.iconColorState;
 
-//   const [datailsShown , setDatailsShown] = useState([]);
-// const toggleshown = userID => {
-//   const  showState = datailsShown.slice();
-//   const index = showState.indexOf(userID);
-//   if(index >= 0 ){
-//     showState.splice(index, 1);
-//     setDatailsShown(showState);
-//   }
-//   else{
-//     showState.push(userID);
-//     setDatailsShown(showState);
-//   }
-// }
+  //   const [datailsShown , setDatailsShown] = useState([]);
+  // const toggleshown = userID => {
+  //   const  showState = datailsShown.slice();
+  //   const index = showState.indexOf(userID);
+  //   if(index >= 0 ){
+  //     showState.splice(index, 1);
+  //     setDatailsShown(showState);
+  //   }
+  //   else{
+  //     showState.push(userID);
+  //     setDatailsShown(showState);
+  //   }
+  // }
 
   // let users = Digit.UserService.getUser();
   // const userRole = users?.info?.roles?.map((e) => e.code) || [];
@@ -101,7 +101,7 @@ const PersonalinfoChild = (props) => {
   //   const [handleChange,setHandleChange] =useState("");
   //   const handleClose = () => setShow(false);
   // const [handleshow ,setHandleShow] = () => setShow(true);
- 
+
   const [smShow, setSmShow] = useState(false);
   const [docModal, setDocModal] = useState(false);
   const [labelValue, setLabelValue] = useState("");
@@ -109,7 +109,7 @@ const PersonalinfoChild = (props) => {
     Conditional: "#2874A6",
     approved: "#09cb3d",
     disapproved: "#ff0000",
-      info: "#FFB602"
+    info: "#FFB602"
   }
   const [selectedFieldData, setSelectedFieldData] = useState();
   const [fieldValue, setFieldValue] = useState("");
@@ -163,387 +163,387 @@ const PersonalinfoChild = (props) => {
 
 
 
-  
+
   console.log("RemarksColor", iconStates);
-  const getColorofFieldIcon=()=>{
+  const getColorofFieldIcon = () => {
     let tempFieldColorState = fieldIconColors;
-    fieldIdList.forEach((item)=>{
-      if (iconStates!==null && iconStates!==undefined) {
+    fieldIdList.forEach((item) => {
+      if (iconStates !== null && iconStates !== undefined) {
         console.log("color method called");
-        const fieldPresent = iconStates.egScrutiny.filter(ele => (ele.fieldIdL===item.label));
-        console.log("filteration value", fieldPresent,fieldPresent[0]?.isApproved);
-        if(fieldPresent && fieldPresent.length){
-          console.log("filteration value1", fieldPresent,fieldPresent[0]?.isApproved);
-          tempFieldColorState = {...tempFieldColorState,[item.key]:fieldPresent[0].isApproved === "In Order" ?Colors.approved: fieldPresent[0].isApproved === "Not In Order" ? Colors.disapproved:fieldPresent[0].isApproved === "Conditional" ? Colors.Conditional:Colors.info}
-         
+        const fieldPresent = iconStates.egScrutiny.filter(ele => (ele.fieldIdL === item.label));
+        console.log("filteration value", fieldPresent, fieldPresent[0]?.isApproved);
+        if (fieldPresent && fieldPresent.length) {
+          console.log("filteration value1", fieldPresent, fieldPresent[0]?.isApproved);
+          tempFieldColorState = { ...tempFieldColorState, [item.key]: fieldPresent[0].isApproved === "In Order" ? Colors.approved : fieldPresent[0].isApproved === "Not In Order" ? Colors.disapproved : fieldPresent[0].isApproved === "Conditional" ? Colors.Conditional : Colors.info }
+
         }
       }
     })
-  
+
     setFieldIconColors(tempFieldColorState);
-  
+
   };
-  
-  
-  useEffect(()=>{
+
+
+  useEffect(() => {
     getColorofFieldIcon();
     console.log("repeating1...",)
-  },[iconStates])
-  
-  useEffect(()=>{
-    if(labelValue){
-      const fieldPresent = iconStates.egScrutiny.filter(ele => (ele.fieldIdL===labelValue));
+  }, [iconStates])
+
+  useEffect(() => {
+    if (labelValue) {
+      const fieldPresent = iconStates.egScrutiny.filter(ele => (ele.fieldIdL === labelValue));
       setSelectedFieldData(fieldPresent[0]);
-    }else{
+    } else {
       setSelectedFieldData(null);
     }
-  },[labelValue])
-  
-  
-  
+  }, [labelValue])
+
+
+
   const currentRemarks = (data) => {
     showTable({ data: data.data });
   };
-  
+
   const handlemodaldData = (data) => {
     // setmodaldData(data.data);
     setSmShow(false);
-    console.log("here",openedModal,data);
-    if(openedModal && data){
-      setFieldIconColors({...fieldIconColors,[openedModal]:data.data.isApproved?Colors.approved:Colors.disapproved})
-  
-      
+    console.log("here", openedModal, data);
+    if (openedModal && data) {
+      setFieldIconColors({ ...fieldIconColors, [openedModal]: data.data.isApproved ? Colors.approved : Colors.disapproved })
+
+
       // fieldPresent[0].isApproved === "approved" ?Colors.approved: fieldPresent[0].isApproved === "disapproved" ? Colors.disapproved:fieldPresent[0].isApproved === "conditional" ? Colors.conditional:Colors.info
     }
-      setOpennedModal("");
-      setLabelValue("");
+    setOpennedModal("");
+    setLabelValue("");
   };
-//////////////////////////////////////////Old code 
-// const [uncheckedValue, setUncheckedVlue] = useState([]);
-// const [checkValue, setCheckedVAlue] = useState([]);
+  //////////////////////////////////////////Old code 
+  // const [uncheckedValue, setUncheckedVlue] = useState([]);
+  // const [checkValue, setCheckedVAlue] = useState([]);
 
-// const [modaldData, setmodaldData] = useState({ label: "", Remarks: "" });
-//   const [isyesOrNochecked, setYesorNochecked] = useState(true);
+  // const [modaldData, setmodaldData] = useState({ label: "", Remarks: "" });
+  //   const [isyesOrNochecked, setYesorNochecked] = useState(true);
 
-//   const handlemodaldData = (data) => {
-//     setmodaldData(data.data);
-//     setSmShow(false);
-//   };
+  //   const handlemodaldData = (data) => {
+  //     setmodaldData(data.data);
+  //     setSmShow(false);
+  //   };
 
-//   const handleYesOrNochecked = (data) => {
-//     setYesorNochecked(data.data);
-//   };
-//   const handlemodalsubmit = () => {
-//     console.log("here");
-//     const filteredObj = uncheckedValue.filter((obj) => {
-//       return obj.label == modaldData.label;
-//     });
+  //   const handleYesOrNochecked = (data) => {
+  //     setYesorNochecked(data.data);
+  //   };
+  //   const handlemodalsubmit = () => {
+  //     console.log("here");
+  //     const filteredObj = uncheckedValue.filter((obj) => {
+  //       return obj.label == modaldData.label;
+  //     });
 
-//     if (isyesOrNochecked === false) {
-//       if (modaldData.label !== "" || modaldData.Remarks !== "") {
-//         if (filteredObj.length === 0) {
-//           setUncheckedVlue((prev) => [...prev, modaldData]);
-//         }
-//       }
-//     }
-//   };
-//   useEffect(() => {
-//     console.log("called");
-//     handlemodalsubmit();
-//   }, [modaldData.Remarks]);
-//   useEffect(() => {
-//     props.passUncheckedList({ data: uncheckedValue });
-//   }, [uncheckedValue]);
-//   console.log("unchecked values", uncheckedValue);
+  //     if (isyesOrNochecked === false) {
+  //       if (modaldData.label !== "" || modaldData.Remarks !== "") {
+  //         if (filteredObj.length === 0) {
+  //           setUncheckedVlue((prev) => [...prev, modaldData]);
+  //         }
+  //       }
+  //     }
+  //   };
+  //   useEffect(() => {
+  //     console.log("called");
+  //     handlemodalsubmit();
+  //   }, [modaldData.Remarks]);
+  //   useEffect(() => {
+  //     props.passUncheckedList({ data: uncheckedValue });
+  //   }, [uncheckedValue]);
+  //   console.log("unchecked values", uncheckedValue);
 
-//   console.log(uncheckedValue.indexOf("developer"));
-const [loader, setLoader] = useState(false);
-const [showToastError, setShowToastError] = useState({ label: "", error: false, success: false });
-  
+  //   console.log(uncheckedValue.indexOf("developer"));
+  const [loader, setLoader] = useState(false);
+  const [showToastError, setShowToastError] = useState({ label: "", error: false, success: false });
+
 
   return (
     <Form.Group style={{ display: props.displayPersonal }} t={t} className={classes.formGroup}>
-       <ModalChild
-           
-           labelmodal={labelValue}
-           passmodalData={handlemodaldData}
-           displaymodal={smShow}
-           disPlayDoc={docModal}
-           onClose={() =>{setSmShow(false);setDocModal(false)}} 
-           selectedFieldData={selectedFieldData}
-           fieldValue={fieldValue}
-           remarksUpdate={currentRemarks}
-           applicationStatus = {applicationStatus} 
-         ></ModalChild>
-         <label  className="card-title fw-bold" style={{ margin: 10 }} htmlFor="Developer Details">
-                            {`${t("NWL_APPLICANT_DEVELOPER_INFORMATION")}`}
-                           
-                            
-                            {/* <span class="text-danger font-weight-bold mx-2">*</span> */}
-                          </label>
+      <ModalChild
+
+        labelmodal={labelValue}
+        passmodalData={handlemodaldData}
+        displaymodal={smShow}
+        disPlayDoc={docModal}
+        onClose={() => { setSmShow(false); setDocModal(false) }}
+        selectedFieldData={selectedFieldData}
+        fieldValue={fieldValue}
+        remarksUpdate={currentRemarks}
+        applicationStatus={applicationStatus}
+      ></ModalChild>
+      <label className="card-title fw-bold" style={{ margin: 10 }} htmlFor="Developer Details">
+        {`${t("NWL_APPLICANT_DEVELOPER_INFORMATION")}`}
+
+
+        {/* <span class="text-danger font-weight-bold mx-2">*</span> */}
+      </label>
       {/* <h5 className="card-title fw-bold" style={{ margin: 10 }}> &nbsp; Developer Information</h5> */}
       {/* "Limited Liability Partnership"  && "Hindu Undivided Family" && "Partnership Firm" &&  "Proprietorship Firm" && */}
       {/* {personalinfo?.devDetail?.addInfo?.showDevTypeFields === "Individual" && */}
-        
-        <div>
-          {/* <Card style={{ margin: 5 , padding: 4 }}> */}
-          {/* <label htmlFor="PanNumber">
+
+      <div>
+        {/* <Card style={{ margin: 5 , padding: 4 }}> */}
+        {/* <label htmlFor="PanNumber">
                             {`${t("NWL_APPLICANT_PAN_NO")}`}
                             <span class="text-danger font-weight-bold mx-2">*</span>
                           </label> */}
-            
-            
-            <Row className={[classes.row, "ms-auto"]}>
-            
-                          {/* <label htmlFor="Developer Details">
+
+
+        <Row className={[classes.row, "ms-auto"]}>
+
+          {/* <label htmlFor="Developer Details">
                             {`${t("NWL_APPLICANT_DEVELOPER_INFORMATION")}`}
                            
                           </label> */}
-            {personalinfo?.devDetail?.addInfo?.showDevTypeFields != "Individual" &&
+          {personalinfo?.devDetail?.addInfo?.showDevTypeFields != "Individual" &&
             personalinfo?.devDetail?.addInfo?.showDevTypeFields != "Proprietorship Firm" &&
-              <Col md={4} xxl lg="4">
-                <div>
+            <Col md={4} xxl lg="4">
+              <div>
                 <label htmlFor="Developer Details">
-                            {`${t("NWL_APPLICANT_DEVELOPER_NAME")}`}
-                            <span class="text-danger font-weight-bold mx-2">*</span>
-                          </label>
-                  {/* <Form.Label>
+                  {`${t("NWL_APPLICANT_DEVELOPER_NAME")}`}
+                  <span class="text-danger font-weight-bold mx-2">*</span>
+                </label>
+                {/* <Form.Label>
 
                     <h5 className={classes.formLabel}>Name &nbsp;</h5>
                   </Form.Label>
                   <span style={{ color: "red" }}>*</span> */}
-                </div>
+              </div>
 
-                <div style={{ display: "flex" }}>
-                  <Form.Control className={classes.formControl}
-                    placeholder={personalinfo !== null ? personalinfo?.devDetail?.addInfo?.companyName : null}
-                    disabled></Form.Control>
-                  &nbsp;&nbsp;
-                  <ReportProblemIcon
-                    style={{
-                      display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_DEVELOPER_NAME") ? "block" : "none",
-                      color: fieldIconColors.developerName
-                    }}
-                    onClick={() => {
-                      setOpennedModal("developerName")
-                      setLabelValue("Developer's Name"),
-                        setSmShow(true),
-                        setDocModal(false),
-                        console.log("modal open"),
-                        setFieldValue(personalinfo !== null ? personalinfo?.devDetail?.addInfo?.companyName : null);
-                    }}
-                  ></ReportProblemIcon>
+              <div style={{ display: "flex" }}>
+                <Form.Control className={classes.formControl}
+                  placeholder={personalinfo !== null ? personalinfo?.devDetail?.addInfo?.companyName : null}
+                  disabled></Form.Control>
+                &nbsp;&nbsp;
+                <ReportProblemIcon
+                  style={{
+                    display:  hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_DEVELOPER_NAME") ? "block" : "none",
+                    color: fieldIconColors.developerName
+                  }}
+                  onClick={() => {
+                    setOpennedModal("developerName")
+                    setLabelValue("Developer's Name"),
+                      setSmShow(true),
+                      setDocModal(false),
+                      console.log("modal open"),
+                      setFieldValue(personalinfo !== null ? personalinfo?.devDetail?.addInfo?.companyName : null);
+                  }}
+                ></ReportProblemIcon>
 
 
 
-                </div>
-              </Col>
-            }
-            <Col md={4} xxl lg="4">
-                <div>
-                <label htmlFor="Address">
-                            {`${t("NWL_APPLICANT_DEVELOPER_ADDRESS")}`}
-                            <span class="text-danger font-weight-bold mx-2">*</span>
-                          </label>
-                  {/* <Form.Label>
+              </div>
+            </Col>
+          }
+          <Col md={4} xxl lg="4">
+            <div>
+              <label htmlFor="Address">
+                {`${t("NWL_APPLICANT_DEVELOPER_ADDRESS")}`}
+                <span class="text-danger font-weight-bold mx-2">*</span>
+              </label>
+              {/* <Form.Label>
 
                     <h5 className={classes.formLabel}>Address &nbsp;</h5>
                   </Form.Label>
                   <span style={{ color: "red" }}>*</span> */}
-                </div>
+            </div>
 
-                <div style={{ display: "flex" }}>
-                  <Form.Control className={classes.formControl}
-                    placeholder={personalinfo !== null ? personalinfo?.devDetail?.addInfo?.registeredAddress : null}
-                    disabled></Form.Control>
-                  &nbsp;&nbsp;
-                  {/* {showReportProblemIcon("Purpose of colony")}
+            <div style={{ display: "flex" }}>
+              <Form.Control className={classes.formControl}
+                placeholder={personalinfo !== null ? personalinfo?.devDetail?.addInfo?.registeredAddress : null}
+                disabled></Form.Control>
+              &nbsp;&nbsp;
+              {/* {showReportProblemIcon("Purpose of colony")}
                   {hideRemarksPatwari}
                   {hideRemarks} */}
-                  <ReportProblemIcon
-                    style={{
-                      display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_DEVELOPER_ADDRESS") ? "block" : "none",
-                      color: fieldIconColors.registeredAddress2
-                    }}
-                    onClick={() => {
-                      setOpennedModal("registeredAddress2")
-                      setLabelValue("Registered Address"),
-                        setSmShow(true),
-                        setDocModal(false),
-                        console.log("modal open"),
-                        setFieldValue(personalinfo !== null ? personalinfo?.devDetail?.addInfo?.registeredAddress : null);
-                    }}
-                  ></ReportProblemIcon>
+              <ReportProblemIcon
+                style={{
+                  display: hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_DEVELOPER_ADDRESS") ? "block" : "none",
+                  color: fieldIconColors.registeredAddress2
+                }}
+                onClick={() => {
+                  setOpennedModal("registeredAddress2")
+                  setLabelValue("Registered Address"),
+                    setSmShow(true),
+                    setDocModal(false),
+                    console.log("modal open"),
+                    setFieldValue(personalinfo !== null ? personalinfo?.devDetail?.addInfo?.registeredAddress : null);
+                }}
+              ></ReportProblemIcon>
 
 
 
-                </div>
-              </Col>
-              <Col md={4} xxl lg="4">
-                <div>
-                <label htmlFor="EmailId">
-                            {`${t("NWL_APPLICANT_DEVELOPER_EMAILID")}`}
-                            <span class="text-danger font-weight-bold mx-2">*</span>
-                          </label>
-                  {/* <Form.Label>
+            </div>
+          </Col>
+          <Col md={4} xxl lg="4">
+            <div>
+              <label htmlFor="EmailId">
+                {`${t("NWL_APPLICANT_DEVELOPER_EMAILID")}`}
+                <span class="text-danger font-weight-bold mx-2">*</span>
+              </label>
+              {/* <Form.Label>
 
                     <h5 className={classes.formLabel}>EmailId &nbsp;</h5>
                   </Form.Label> */}
-                  {/* <span style={{ color: "red" }}>*</span> */}
-                </div>
+              {/* <span style={{ color: "red" }}>*</span> */}
+            </div>
 
-                <div style={{ display: "flex" }}>
-                  <Form.Control className={classes.formControl}
-                    placeholder={personalinfo !== null ? personalinfo?.devDetail?.addInfo?.email : null}
-                    disabled></Form.Control>
-                  &nbsp;&nbsp;
-                  <ReportProblemIcon
-                    style={{
-                     display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_DEVELOPER_EMAILID") ? "block" : "none",
-                      color: fieldIconColors.developerEmail
-                    }}
-                    onClick={() => {
-                      setOpennedModal("developerEmail")
-                      setLabelValue("Developer's Email"),
-                        setSmShow(true),
-                        setDocModal(false),
-                        console.log("modal open"),
-                        setFieldValue(personalinfo !== null ? personalinfo?.devDetail?.addInfo?.emailId : null);
-                    }}
-                  ></ReportProblemIcon>
-                </div>
-              </Col>
-              <Col md={4} xxl lg="4">
-  <div>
-  <label htmlFor="DeveloperType">
-                            {`${t("NWL_APPLICANT_DEVELOPER_TYPE")}`}
-                            <span class="text-danger font-weight-bold mx-2">*</span>
-                          </label>
-    {/* <Form.Label>
+            <div style={{ display: "flex" }}>
+              <Form.Control className={classes.formControl}
+                placeholder={personalinfo !== null ? personalinfo?.devDetail?.addInfo?.email : null}
+                disabled></Form.Control>
+              &nbsp;&nbsp;
+              <ReportProblemIcon
+                style={{
+                  display: hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_DEVELOPER_EMAILID") ? "block" : "none",
+                  color: fieldIconColors.developerEmail
+                }}
+                onClick={() => {
+                  setOpennedModal("developerEmail")
+                  setLabelValue("Developer's Email"),
+                    setSmShow(true),
+                    setDocModal(false),
+                    console.log("modal open"),
+                    setFieldValue(personalinfo !== null ? personalinfo?.devDetail?.addInfo?.emailId : null);
+                }}
+              ></ReportProblemIcon>
+            </div>
+          </Col>
+          <Col md={4} xxl lg="4">
+            <div>
+              <label htmlFor="DeveloperType">
+                {`${t("NWL_APPLICANT_DEVELOPER_TYPE")}`}
+                <span class="text-danger font-weight-bold mx-2">*</span>
+              </label>
+              {/* <Form.Label>
       <h5 className={classes.formLabel}>Developer Type &nbsp;</h5>
     </Form.Label>
     <span className={classes.required}>*</span> &nbsp;&nbsp; */}
-  </div>
-  <div className={classes.fieldContainer}>
-    <Form.Control
-      className={classes.formControl}
-      placeholder={personalinfo !== null ? personalinfo?.devDetail?.addInfo?.showDevTypeFields : null}
-      disabled
-    ></Form.Control>
-    &nbsp;&nbsp;
-    {/* {JSON.stringify(userRoles)} */}
-    {/* {JSON.stringify(hideRemarksPatwari)}  */}
-    <ReportProblemIcon
-      style={{
-       display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_DEVELOPER_TYPE") ? "block" : "none",
+            </div>
+            <div className={classes.fieldContainer}>
+              <Form.Control
+                className={classes.formControl}
+                placeholder={personalinfo !== null ? personalinfo?.devDetail?.addInfo?.showDevTypeFields : null}
+                disabled
+              ></Form.Control>
+              &nbsp;&nbsp;
+              {/* {JSON.stringify(userRoles)} */}
+              {/* {JSON.stringify(hideRemarksPatwari)}  */}
+              <ReportProblemIcon
+                style={{
+                  display: hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_DEVELOPER_TYPE") ? "block" : "none",
 
-        color: fieldIconColors.developerType
-      }}
-      onClick={() => {
-        setOpennedModal("developerType")
-        setLabelValue("Developer Type"),
-          setSmShow(true),
-          setDocModal(false),
-          console.log("modal open"),
-          setFieldValue(personalinfo !== null ? personalinfo?.devDetail?.addInfo?.showDevTypeFields : null);
-      }}
-    ></ReportProblemIcon>
+                  color: fieldIconColors.developerType
+                }}
+                onClick={() => {
+                  setOpennedModal("developerType")
+                  setLabelValue("Developer Type"),
+                    setSmShow(true),
+                    setDocModal(false),
+                    console.log("modal open"),
+                    setFieldValue(personalinfo !== null ? personalinfo?.devDetail?.addInfo?.showDevTypeFields : null);
+                }}
+              ></ReportProblemIcon>
 
-  </div>
-</Col>
-{personalinfo?.devDetail?.addInfo?.showDevTypeFields != "Individual" &&
+            </div>
+          </Col>
+          {personalinfo?.devDetail?.addInfo?.showDevTypeFields != "Individual" &&
             personalinfo?.devDetail?.addInfo?.showDevTypeFields != "Hindu Undivided Family" &&
-personalinfo?.devDetail?.addInfo?.showDevTypeFields != "Partnership Firm" &&
+            personalinfo?.devDetail?.addInfo?.showDevTypeFields != "Partnership Firm" &&
             personalinfo?.devDetail?.addInfo?.showDevTypeFields != "Limited Liability Partnership" &&
-<Col md={4} xxl lg="4">
-    <div>
-    <label htmlFor="CIN Number">
-                            {`${t("NWL_APPLICANT_CIN_NUMBER")}`}
-                            <span class="text-danger font-weight-bold mx-2">*</span>
-                          </label>
-      {/* <Form.Label>
+            <Col md={4} xxl lg="4">
+              <div>
+                <label htmlFor="CIN Number">
+                  {`${t("NWL_APPLICANT_CIN_NUMBER")}`}
+                  <span class="text-danger font-weight-bold mx-2">*</span>
+                </label>
+                {/* <Form.Label>
         <h5 className={classes.formLabel}>CIN Number &nbsp;</h5>
       </Form.Label>
       <span className={classes.required}>*</span> &nbsp;&nbsp; */}
-    </div>
-    <div className={classes.fieldContainer}>
-      <Form.Control
-        className={classes.formControl}
-        placeholder={personalinfo !== null ? personalinfo?.devDetail?.addInfo?.cin_Number : null}
-        disabled
-      ></Form.Control>
-      &nbsp;&nbsp;
+              </div>
+              <div className={classes.fieldContainer}>
+                <Form.Control
+                  className={classes.formControl}
+                  placeholder={personalinfo !== null ? personalinfo?.devDetail?.addInfo?.cin_Number : null}
+                  disabled
+                ></Form.Control>
+                &nbsp;&nbsp;
 
-      <ReportProblemIcon
-        style={{
-         display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_CIN_NUMBER") ? "block" : "none",
+                <ReportProblemIcon
+                  style={{
+                    display: hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_CIN_NUMBER") ? "block" : "none",
 
-          color: fieldIconColors.cin_Number
-        }}
-        onClick={() => {
-          setOpennedModal("cin_Number")
-          setLabelValue("CIN Number"),
-            setSmShow(true),
-            setDocModal(false),
-            console.log("modal open"),
-            setFieldValue(personalinfo !== null ? personalinfo?.devDetail?.addInfo?.cin_Number : null);
-        }}
-      ></ReportProblemIcon>
+                    color: fieldIconColors.cin_Number
+                  }}
+                  onClick={() => {
+                    setOpennedModal("cin_Number")
+                    setLabelValue("CIN Number"),
+                      setSmShow(true),
+                      setDocModal(false),
+                      console.log("modal open"),
+                      setFieldValue(personalinfo !== null ? personalinfo?.devDetail?.addInfo?.cin_Number : null);
+                  }}
+                ></ReportProblemIcon>
 
-    </div>
-  </Col>
-}
-{personalinfo?.devDetail?.addInfo?.showDevTypeFields != "Partnership Firm" &&
+              </div>
+            </Col>
+          }
+          {personalinfo?.devDetail?.addInfo?.showDevTypeFields != "Partnership Firm" &&
             personalinfo?.devDetail?.addInfo?.showDevTypeFields != "Company" &&
-            personalinfo?.devDetail?.addInfo?.showDevTypeFields !=  "Limited Liability Partnership" &&
-<Col md={4} xxl lg="4">
-                <div>
+            personalinfo?.devDetail?.addInfo?.showDevTypeFields != "Limited Liability Partnership" &&
+            <Col md={4} xxl lg="4">
+              <div>
                 <label htmlFor="PanNumber">
-                            {`${t("NWL_APPLICANT_PAN_NUMBER")}`}
-                            <span class="text-danger font-weight-bold mx-2">*</span>
-                          </label> 
+                  {`${t("NWL_APPLICANT_PAN_NUMBER")}`}
+                  <span class="text-danger font-weight-bold mx-2">*</span>
+                </label>
 
-{/*                   
+                {/*                   
                   <Form.Label>
 
                     <h5 className={classes.formLabel}>PAN Number &nbsp;</h5>
                   </Form.Label> */}
-                  <span style={{ color: "red" }}>*</span>
-                </div>
+                <span style={{ color: "red" }}>*</span>
+              </div>
 
-                <div style={{ display: "flex" }}>
-                  <Form.Control className={classes.formControl}
-                    placeholder={personalinfo !== null ? personalinfo?.devDetail?.addInfo?.PanNumber : null}
-                    disabled></Form.Control>
-                  &nbsp;&nbsp;
-                  <ReportProblemIcon
-                    style={{
-                     display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_PAN_NUMBER") ? "block" : "none",
-                      color: fieldIconColors.developerPan
-                    }}
-                    onClick={() => {
-                      setOpennedModal("developerPan")
-                      setLabelValue("Developer's PAN"),
-                        setSmShow(true),
-                        setDocModal(false),
-                        console.log("modal open"),
-                        setFieldValue(personalinfo !== null ? personalinfo?.devDetail?.addInfo?.PanNumber : null);
-                    }}
-                  ></ReportProblemIcon>
+              <div style={{ display: "flex" }}>
+                <Form.Control className={classes.formControl}
+                  placeholder={personalinfo !== null ? personalinfo?.devDetail?.addInfo?.PanNumber : null}
+                  disabled></Form.Control>
+                &nbsp;&nbsp;
+                <ReportProblemIcon
+                  style={{
+                    display: hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_PAN_NUMBER") ? "block" : "none",
+                    color: fieldIconColors.developerPan
+                  }}
+                  onClick={() => {
+                    setOpennedModal("developerPan")
+                    setLabelValue("Developer's PAN"),
+                      setSmShow(true),
+                      setDocModal(false),
+                      console.log("modal open"),
+                      setFieldValue(personalinfo !== null ? personalinfo?.devDetail?.addInfo?.PanNumber : null);
+                  }}
+                ></ReportProblemIcon>
 
 
 
-                </div>
-              </Col>
-}
-              { personalinfo?.devDetail?.addInfo?.showDevTypeFields != "Company" &&
-              <Col md={4} xxl lg="4">
+              </div>
+            </Col>
+          }
+          {personalinfo?.devDetail?.addInfo?.showDevTypeFields != "Company" &&
+            <Col md={4} xxl lg="4">
               <div>
 
-              <label htmlFor="PanNumber">
-                            {`${t("NWL_APPLICANT_GST_NUMBER")}`}
-                            <span class="text-danger font-weight-bold mx-2">*</span>
-                          </label> 
+                <label htmlFor="PanNumber">
+                  {`${t("NWL_APPLICANT_GST_NUMBER")}`}
+                  <span class="text-danger font-weight-bold mx-2">*</span>
+                </label>
 
                 {/* <Form.Label>
 
@@ -559,7 +559,7 @@ personalinfo?.devDetail?.addInfo?.showDevTypeFields != "Partnership Firm" &&
                 &nbsp;&nbsp;
                 <ReportProblemIcon
                   style={{
-                   display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_GST_NUMBER") ? "block" : "none",
+                    display: hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_GST_NUMBER") ? "block" : "none",
                     color: fieldIconColors.gst_Number
                   }}
                   onClick={() => {
@@ -576,51 +576,51 @@ personalinfo?.devDetail?.addInfo?.showDevTypeFields != "Partnership Firm" &&
 
               </div>
             </Col>
-}
-{personalinfo?.devDetail?.addInfo?.showDevTypeFields != "Individual" &&
+          }
+          {personalinfo?.devDetail?.addInfo?.showDevTypeFields != "Individual" &&
             personalinfo?.devDetail?.addInfo?.showDevTypeFields != "Hindu Undivided Family" &&
-personalinfo?.devDetail?.addInfo?.showDevTypeFields != "Partnership Firm" &&
+            personalinfo?.devDetail?.addInfo?.showDevTypeFields != "Partnership Firm" &&
             personalinfo?.devDetail?.addInfo?.showDevTypeFields != "Company" &&
             personalinfo?.devDetail?.addInfo?.showDevTypeFields != "Proprietorship Firm" &&
-<Col md={4} xxl lg="4">
-                <div>
+            <Col md={4} xxl lg="4">
+              <div>
                 <label htmlFor="LLP NUMBER">
-                            {`${t("NWL_APPLICANT_LLP_NUMBER")}`}
-                            <span class="text-danger font-weight-bold mx-2">*</span>
-                          </label> 
+                  {`${t("NWL_APPLICANT_LLP_NUMBER")}`}
+                  <span class="text-danger font-weight-bold mx-2">*</span>
+                </label>
 
-                  {/* <Form.Label>
+                {/* <Form.Label>
 
                     <h5 className={classes.formLabel}>LLP &nbsp;</h5>
                   </Form.Label> */}
-                  <span style={{ color: "red" }}>*</span>
-                </div>
+                <span style={{ color: "red" }}>*</span>
+              </div>
 
-                <div style={{ display: "flex" }}>
-                  <Form.Control className={classes.formControl}
-                    placeholder={personalinfo !== null ? personalinfo?.devDetail?.addInfo?.mobileNumberUser : null}
-                    disabled ></Form.Control>
-                  &nbsp;&nbsp;
-                  <ReportProblemIcon
-                    style={{
-                     display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_LLP_NUMBER") ? "block" : "none",
-                      color: fieldIconColors.developerMobileNo
-                    }}
-                    onClick={() => {
-                      setOpennedModal("developerMobileNo")
-                      setLabelValue("Developer's Mobile No"),
-                        setSmShow(true),
-                        setDocModal(false),
-                        console.log("modal open"),
-                        setFieldValue(personalinfo !== null ? personalinfo?.devDetail?.addInfo?.mobileNumberUser : null);
-                    }}
-                  ></ReportProblemIcon>
-                </div>
-              </Col>
-}
-            </Row>
-                 
-            {/* <Row>
+              <div style={{ display: "flex" }}>
+                <Form.Control className={classes.formControl}
+                  placeholder={personalinfo !== null ? personalinfo?.devDetail?.addInfo?.mobileNumberUser : null}
+                  disabled ></Form.Control>
+                &nbsp;&nbsp;
+                <ReportProblemIcon
+                  style={{
+                    display: hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_LLP_NUMBER") ? "block" : "none",
+                    color: fieldIconColors.developerMobileNo
+                  }}
+                  onClick={() => {
+                    setOpennedModal("developerMobileNo")
+                    setLabelValue("Developer's Mobile No"),
+                      setSmShow(true),
+                      setDocModal(false),
+                      console.log("modal open"),
+                      setFieldValue(personalinfo !== null ? personalinfo?.devDetail?.addInfo?.mobileNumberUser : null);
+                  }}
+                ></ReportProblemIcon>
+              </div>
+            </Col>
+          }
+        </Row>
+
+        {/* <Row>
          
               <Col md={4} xxl lg="4">
                 <div>
@@ -638,7 +638,7 @@ personalinfo?.devDetail?.addInfo?.showDevTypeFields != "Partnership Firm" &&
                   &nbsp;&nbsp;
                   <ReportProblemIcon
                     style={{
-                     display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("Address") ? "block" : "none",
+                     display: hideRemarksPatwari && showReportProblemIcon("Address") ? "block" : "none",
                       color: fieldIconColors.developerMobileNo
                     }}
                     onClick={() => {
@@ -667,7 +667,7 @@ personalinfo?.devDetail?.addInfo?.showDevTypeFields != "Partnership Firm" &&
                   &nbsp;&nbsp;
                   <ReportProblemIcon
                     style={{
-                     display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("Address") ? "block" : "none",
+                     display: hideRemarksPatwari && showReportProblemIcon("Address") ? "block" : "none",
                       color: fieldIconColors.developerdob
                     }}
                     onClick={() => {
@@ -686,30 +686,30 @@ personalinfo?.devDetail?.addInfo?.showDevTypeFields != "Partnership Firm" &&
               
               
             </Row> */}
-          
-          {/* </Card> */}
-        </div>
-     
+
+        {/* </Card> */}
+      </div>
+
       <br></br>
       {personalinfo?.devDetail?.addInfo?.showDevTypeFields != "Individual" &&
-            personalinfo?.devDetail?.addInfo?.showDevTypeFields != "Hindu Undivided Family" &&
-personalinfo?.devDetail?.addInfo?.showDevTypeFields != "Partnership Firm" &&
-            personalinfo?.devDetail?.addInfo?.showDevTypeFields != "Limited Liability Partnership" &&
-            personalinfo?.devDetail?.addInfo?.showDevTypeFields != "Proprietorship Firm"  &&
-          
+        personalinfo?.devDetail?.addInfo?.showDevTypeFields != "Hindu Undivided Family" &&
+        personalinfo?.devDetail?.addInfo?.showDevTypeFields != "Partnership Firm" &&
+        personalinfo?.devDetail?.addInfo?.showDevTypeFields != "Limited Liability Partnership" &&
+        personalinfo?.devDetail?.addInfo?.showDevTypeFields != "Proprietorship Firm" &&
+
         <div>
-       
-        <div style={{ display: "flex" }}>
+
+          <div style={{ display: "flex" }}>
             {/* <h5 className="card-title fw-bold" > &nbsp;&nbsp; 1. Director Information as per MCA &nbsp;&nbsp;</h5> */}
             <label htmlFor="LLP NUMBER" className="card-title fw-bold">
-                            {`${t("NWL_APPLICANT_1_DIRECTOR_INFOMATION_AS_PER_MCA")}`}
-                            <span class="text-danger font-weight-bold mx-2">*</span>
-                          </label>
+              {`${t("NWL_APPLICANT_1_DIRECTOR_INFOMATION_AS_PER_MCA")}`}
+              <span class="text-danger font-weight-bold mx-2">*</span>
+            </label>
 
             {/* <div className="btn btn-sm col-md-4"> */}
             <ReportProblemIcon
               style={{
-               display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_1_DIRECTOR_INFOMATION_AS_PER_MCA") ? "block" : "none",
+                display: hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_1_DIRECTOR_INFOMATION_AS_PER_MCA") ? "block" : "none",
                 color: fieldIconColors.DirectorsInformation
               }}
               onClick={() => {
@@ -731,18 +731,18 @@ personalinfo?.devDetail?.addInfo?.showDevTypeFields != "Partnership Firm" &&
                   <tr>
                     <th>
                       {/* Sr. No     */}
-                            {`${t("NWL_APPLICANT_SR_NO")}`}
-                            </th>
+                      {`${t("NWL_APPLICANT_SR_NO")}`}
+                    </th>
                     <th>
-                       {/* DIN Number  */}
-                       {`${t("NWL_APPLICANT_DIN_NUMBER")}`}</th>
+                      {/* DIN Number  */}
+                      {`${t("NWL_APPLICANT_DIN_NUMBER")}`}</th>
                     <th>
                       {/* Name */}
                       {`${t("NWL_APPLICANT_NAME")}`}
-                      </th>
+                    </th>
                     <th>
                       {/* Contact Number */}
-                    {`${t("NWL_APPLICANT_CONTACT_NUMBER")}`}
+                      {`${t("NWL_APPLICANT_CONTACT_NUMBER")}`}
                     </th>
                     {/* <th>View PDF</th> */}
                   </tr>
@@ -760,7 +760,7 @@ personalinfo?.devDetail?.addInfo?.showDevTypeFields != "Partnership Firm" &&
                         <Form.Control style={{ maxWidth: 200, marginRight: 5, height: 30 }} placeholder={item?.name} disabled></Form.Control>
                       </td>
                       <td>
-                <Form.Control style={{ maxWidth: 200, marginRight: 5, height: 30 }} placeholder={item?.contactNumber} disabled></Form.Control>
+                        <Form.Control style={{ maxWidth: 200, marginRight: 5, height: 30 }} placeholder={item?.contactNumber} disabled></Form.Control>
                       </td>
                       {/* <td>
                                 <div className="row">
@@ -786,10 +786,10 @@ personalinfo?.devDetail?.addInfo?.showDevTypeFields != "Partnership Firm" &&
               </table>
             </div>
           </div>
-                  <br></br>
+          <br></br>
           <div div style={{ display: "flex" }}>
-            <h5 className="card-title fw-bold" > &nbsp; &nbsp;&nbsp; {`${t("NWL_APPLICANT_1_DIRECTOR_INFOMATION_AS_PER_DEVELOPER")}`} 
-            {/* Directors Information &nbsp;&nbsp; */}
+            <h5 className="card-title fw-bold" > &nbsp; &nbsp;&nbsp; {`${t("NWL_APPLICANT_1_DIRECTOR_INFOMATION_AS_PER_DEVELOPER")}`}
+              {/* Directors Information &nbsp;&nbsp; */}
             </h5>
             {/* <label htmlFor="LLP NUMBER" className="card-title fw-bold">
                             {`${t("NWL_APPLICANT_1_DIRECTOR_INFOMATION_AS_PER_MCA")}`}
@@ -799,7 +799,7 @@ personalinfo?.devDetail?.addInfo?.showDevTypeFields != "Partnership Firm" &&
             {/* <div className="btn btn-sm col-md-4"> */}
             <ReportProblemIcon
               style={{
-               display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_1_DIRECTOR_INFOMATION_AS_PER_DEVELOPER") ? "block" : "none",
+                display: hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_1_DIRECTOR_INFOMATION_AS_PER_DEVELOPER") ? "block" : "none",
 
                 color: fieldIconColors.directorsInformation
               }}
@@ -824,9 +824,9 @@ personalinfo?.devDetail?.addInfo?.showDevTypeFields != "Partnership Firm" &&
                     <th> {`${t("NWL_APPLICANT_DIN_NUMBER")}`}</th>
                     <th>{`${t("NWL_APPLICANT_NAME")}`}</th>
                     <th> {`${t("NWL_APPLICANT_CONTACT_NUMBER")}`}</th>
-                    <th> 
+                    <th>
                       {/* View PDF  */}
-                       {`${t("NWL_APPLICANT_VIEW_PDF")}`}</th>
+                      {`${t("NWL_APPLICANT_VIEW_PDF")}`}</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -873,16 +873,16 @@ personalinfo?.devDetail?.addInfo?.showDevTypeFields != "Partnership Firm" &&
 
 
           <div div style={{ display: "flex" }}>
-            <h5 className="card-title fw-bold"> 
-            {`${t("NWL_APPLICANT_SHAREHOLDING_PATTERNS")}`}
-            {/* &nbsp;&nbsp;&nbsp; Shareholding Patterns &nbsp;&nbsp; */}
-             </h5>
-            
+            <h5 className="card-title fw-bold">
+              {`${t("NWL_APPLICANT_SHAREHOLDING_PATTERNS")}`}
+              {/* &nbsp;&nbsp;&nbsp; Shareholding Patterns &nbsp;&nbsp; */}
+            </h5>
+
 
             {/* <div className="btn btn-sm col-md-4"> */}
             <ReportProblemIcon
               style={{
-               display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_SHAREHOLDING_PATTERNS") ? "block" : "none",
+                display: hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_SHAREHOLDING_PATTERNS") ? "block" : "none",
 
                 color: fieldIconColors.shareholdingPatterns
               }}
@@ -902,16 +902,16 @@ personalinfo?.devDetail?.addInfo?.showDevTypeFields != "Partnership Firm" &&
               <table className="table table-bordered">
                 <thead>
                   <tr>
-                  <th> {`${t("NWL_APPLICANT_SR_NO")}`}</th>
-                  
+                    <th> {`${t("NWL_APPLICANT_SR_NO")}`}</th>
+
                     <th>{`${t("NWL_APPLICANT_NAME")}`}</th>
                     <th> {`${t("NWL_APPLICANT_DESIGNITION")}`}</th>
                     <th> {`${t("NWL_APPLICANT_PRECENTAGE")}`}</th>
-                    <th> 
-                    
-                       {`${t("NWL_APPLICANT_VIEW_PDF")}`}</th>
+                    <th>
+
+                      {`${t("NWL_APPLICANT_VIEW_PDF")}`}</th>
                   </tr>
-                    {/* <th>Sr. No</th>
+                  {/* <th>Sr. No</th>
                     <th>Name</th>
                     <th>Designition</th>
                     <th>Percentage</th>
@@ -959,15 +959,15 @@ personalinfo?.devDetail?.addInfo?.showDevTypeFields != "Partnership Firm" &&
           </div>
         </div>
       }
-     
 
-      <h5 className="card-title fw-bold" > 
-      {/* &nbsp; &nbsp;&nbsp; Authorized Person Information  &nbsp;&nbsp; */}
-      {`${t("NWL_APPLICANT_AUTHORIZED_PERSON_INFORMATION")}`} 
+
+      <h5 className="card-title fw-bold" >
+        {/* &nbsp; &nbsp;&nbsp; Authorized Person Information  &nbsp;&nbsp; */}
+        {`${t("NWL_APPLICANT_AUTHORIZED_PERSON_INFORMATION")}`}
       </h5>
       {/* <ReportProblemIcon
               style={{
-               display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("Authorized Person Information") ? "block" : "none",
+               display: hideRemarksPatwari && showReportProblemIcon("Authorized Person Information") ? "block" : "none",
 
                 color: fieldIconColors.authPersonName
               }}
@@ -979,7 +979,7 @@ personalinfo?.devDetail?.addInfo?.showDevTypeFields != "Partnership Firm" &&
                   setFieldValue(personalinfo !== null ? personalinfo?.devDetail?.aurthorizedUserInfoArray?.[0]?.name : null);
               }}
             ></ReportProblemIcon> */}
-            {/* </h5> */}
+      {/* </h5> */}
       <Row className={[classes.row, "ms-auto"]}>
         <Col className="ms-auto" md={4} xxl lg="4">
           {/* <Form.Label>
@@ -988,9 +988,9 @@ personalinfo?.devDetail?.addInfo?.showDevTypeFields != "Partnership Firm" &&
           </Form.Label>
           <span className={classes.required}>*</span> &nbsp;&nbsp; */}
           <label htmlFor="NAME" className="card-title fw-bold">
-                            {`${t("NWL_APPLICANT_AUTHORIZED_NAME")}`}
-                            <span class="text-danger font-weight-bold mx-2">*</span>
-                          </label>
+            {`${t("NWL_APPLICANT_AUTHORIZED_NAME")}`}
+            <span class="text-danger font-weight-bold mx-2">*</span>
+          </label>
           <div className={classes.fieldContainer}>
             <Form.Control
               className={classes.formControl}
@@ -1001,7 +1001,7 @@ personalinfo?.devDetail?.addInfo?.showDevTypeFields != "Partnership Firm" &&
             &nbsp;&nbsp;
             <ReportProblemIcon
               style={{
-               display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_AUTHORIZED_NAME") ? "block" : "none",
+                display: hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_AUTHORIZED_NAME") ? "block" : "none",
 
                 color: fieldIconColors.authPersonName
               }}
@@ -1027,9 +1027,9 @@ personalinfo?.devDetail?.addInfo?.showDevTypeFields != "Partnership Firm" &&
             {/* <ReportProblemIcon style={{ color: warningOrred }} onClick={() => setSmShow(true)}></ReportProblemIcon> */}
 
             <label htmlFor="NAME" className="card-title fw-bold">
-                            {`${t("NWL_APPLICANT_AUTHORIZED_MOBILE_NO")}`}
-                            <span class="text-danger font-weight-bold mx-2">*</span>
-                          </label>
+              {`${t("NWL_APPLICANT_AUTHORIZED_MOBILE_NO")}`}
+              <span class="text-danger font-weight-bold mx-2">*</span>
+            </label>
           </div>
           <div className={classes.fieldContainer}>
             <Form.Control
@@ -1059,10 +1059,10 @@ personalinfo?.devDetail?.addInfo?.showDevTypeFields != "Partnership Firm" &&
                         name="group41"
                         inline
                       ></Form.Check>  */}
-                       &nbsp;&nbsp;
+            &nbsp;&nbsp;
             <ReportProblemIcon
               style={{
-               display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_AUTHORIZED_MOBILE_NO") ? "block" : "none",
+                display: hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_AUTHORIZED_MOBILE_NO") ? "block" : "none",
 
                 color: fieldIconColors.authMobileNo1
               }}
@@ -1084,9 +1084,9 @@ personalinfo?.devDetail?.addInfo?.showDevTypeFields != "Partnership Firm" &&
               <h5 className={classes.formLabel} >Emailid for Authorized signatory &nbsp;</h5>
             </Form.Label> */}
             <label htmlFor="EMAIL" className="card-title fw-bold">
-                            {`${t("NWL_APPLICANT_EMAILID_FOR_AUTHORIZED_SINGNATORY")}`}
-                            <span class="text-danger font-weight-bold mx-2">*</span>
-                          </label>
+              {`${t("NWL_APPLICANT_EMAILID_FOR_AUTHORIZED_SINGNATORY")}`}
+              <span class="text-danger font-weight-bold mx-2">*</span>
+            </label>
           </div>
 
           <div className={classes.fieldContainer}>
@@ -1098,7 +1098,7 @@ personalinfo?.devDetail?.addInfo?.showDevTypeFields != "Partnership Firm" &&
             &nbsp;&nbsp;
             <ReportProblemIcon
               style={{
-               display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_EMAILID_FOR_AUTHORIZED_SINGNATORY") ? "block" : "none",
+                display: hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_EMAILID_FOR_AUTHORIZED_SINGNATORY") ? "block" : "none",
 
                 color: fieldIconColors.emailForCommunication
               }}
@@ -1124,9 +1124,9 @@ personalinfo?.devDetail?.addInfo?.showDevTypeFields != "Partnership Firm" &&
             <span className={classes.required}>*</span> */}
 
             <label htmlFor="PAN" className="card-title fw-bold">
-                            {`${t("NWL_APPLICANT_AUTHORIZED_PAN_NUMBER")}`}
-                            <span class="text-danger font-weight-bold mx-2">*</span>
-                          </label>
+              {`${t("NWL_APPLICANT_AUTHORIZED_PAN_NUMBER")}`}
+              <span class="text-danger font-weight-bold mx-2">*</span>
+            </label>
           </div>
 
           <div className={classes.fieldContainer}>
@@ -1138,7 +1138,7 @@ personalinfo?.devDetail?.addInfo?.showDevTypeFields != "Partnership Firm" &&
             &nbsp;&nbsp;
             <ReportProblemIcon
               style={{
-               display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_AUTHORIZED_PAN_NUMBER") ? "block" : "none",
+                display: hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_AUTHORIZED_PAN_NUMBER") ? "block" : "none",
 
                 color: fieldIconColors.authPan
               }}
@@ -1159,12 +1159,12 @@ personalinfo?.devDetail?.addInfo?.showDevTypeFields != "Partnership Firm" &&
 
               <h5 className={classes.formLabel} >Digital Signature &nbsp;</h5>
             </Form.Label> */}
-            
+
             <label htmlFor="PAN" className="card-title fw-bold">
-                            {`${t("NWL_APPLICANT_DIGITAL_SIGNATURE")}`}
-                            <span class="text-danger font-weight-bold mx-2">*</span>
-                          </label>
-            
+              {`${t("NWL_APPLICANT_DIGITAL_SIGNATURE")}`}
+              <span class="text-danger font-weight-bold mx-2">*</span>
+            </label>
+
           </div>
 
           <div className={classes.fieldContainer}>
@@ -1176,35 +1176,35 @@ personalinfo?.devDetail?.addInfo?.showDevTypeFields != "Partnership Firm" &&
             {/* <div className="row"> */}
 
             <div className="btn btn-sm col-md-2">
-              <IconButton 
-              style={{
-                color: " #1266af",
-                fontSize: " 12px",
-                fontWeight: "bold",
-                cursor: "pointer",
-                textDecorationLine: "underline",
-              }}
-              onClick={() => {
-                if (personalinfo?.devDetail?.aurthorizedUserInfoArray?.[0]?.uploadDigitalSignaturePdf) getDocShareholding(personalinfo?.devDetail?.aurthorizedUserInfoArray?.[0]?.uploadDigitalSignaturePdf, setLoader);
-                else setShowToastError({ label: "No pdf here", error: true, success: false });
-              }}>
+              <IconButton
+                style={{
+                  color: " #1266af",
+                  fontSize: " 12px",
+                  fontWeight: "bold",
+                  cursor: "pointer",
+                  textDecorationLine: "underline",
+                }}
+                onClick={() => {
+                  if (personalinfo?.devDetail?.aurthorizedUserInfoArray?.[0]?.uploadDigitalSignaturePdf) getDocShareholding(personalinfo?.devDetail?.aurthorizedUserInfoArray?.[0]?.uploadDigitalSignaturePdf, setLoader);
+                  else setShowToastError({ label: "No pdf here", error: true, success: false });
+                }}>
                 <Visibility color="info" className="icon" /></IconButton>
 
             </div>
             <div className="btn btn-sm col-md-5">
-              <IconButton 
-              // onClick={() => getDocShareholding(personalinfo?.devDetail?.aurthorizedUserInfoArray?.[0]?.uploadDigitalSignaturePdf)}
-               style={{
-                color: " #1266af",
-                fontSize: " 12px",
-                fontWeight: "bold",
-                cursor: "pointer",
-                textDecorationLine: "underline",
-              }}
-              onClick={() => {
-                if (personalinfo?.devDetail?.aurthorizedUserInfoArray?.[0]?.uploadDigitalSignaturePdf) getDocShareholding(personalinfo?.devDetail?.aurthorizedUserInfoArray?.[0]?.uploadDigitalSignaturePdf, setLoader);
-                else setShowToastError({ label: "No pdf here", error: true, success: false });
-              }}
+              <IconButton
+                // onClick={() => getDocShareholding(personalinfo?.devDetail?.aurthorizedUserInfoArray?.[0]?.uploadDigitalSignaturePdf)}
+                style={{
+                  color: " #1266af",
+                  fontSize: " 12px",
+                  fontWeight: "bold",
+                  cursor: "pointer",
+                  textDecorationLine: "underline",
+                }}
+                onClick={() => {
+                  if (personalinfo?.devDetail?.aurthorizedUserInfoArray?.[0]?.uploadDigitalSignaturePdf) getDocShareholding(personalinfo?.devDetail?.aurthorizedUserInfoArray?.[0]?.uploadDigitalSignaturePdf, setLoader);
+                  else setShowToastError({ label: "No pdf here", error: true, success: false });
+                }}
               >
                 <FileDownload color="primary" className="mx-1" />
               </IconButton>
@@ -1212,7 +1212,7 @@ personalinfo?.devDetail?.addInfo?.showDevTypeFields != "Partnership Firm" &&
             <div className="btn btn-sm col-md-5" >
               <ReportProblemIcon
                 style={{
-                 display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_DIGITAL_SIGNATURE") ? "block" : "none",
+                  display: hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_DIGITAL_SIGNATURE") ? "block" : "none",
 
                   color: fieldIconColors.uploadDigitalSignaturePdf
                 }}
@@ -1238,11 +1238,11 @@ personalinfo?.devDetail?.addInfo?.showDevTypeFields != "Partnership Firm" &&
               <h5 className={classes.formLabel} >Board Resolution &nbsp;</h5>
             </Form.Label>
             <span className={classes.required}>*</span> */}
-            
+
             <label htmlFor="PAN" className="card-title fw-bold">
-                            {`${t("NWL_APPLICANT_BOARD_RESOLUTION")}`}
-                            <span class="text-danger font-weight-bold mx-2">*</span>
-                          </label>
+              {`${t("NWL_APPLICANT_BOARD_RESOLUTION")}`}
+              <span class="text-danger font-weight-bold mx-2">*</span>
+            </label>
           </div>
 
           <div className={classes.fieldContainer}>
@@ -1254,36 +1254,36 @@ personalinfo?.devDetail?.addInfo?.showDevTypeFields != "Partnership Firm" &&
             {/* <div className="row"> */}
 
             <div className="btn btn-sm col-md-2">
-              <IconButton 
-              // onClick={() => getDocShareholding(personalinfo?.devDetail?.aurthorizedUserInfoArray?.[0]?.uploadBoardResolution)}
-              style={{
-                color: " #1266af",
-                fontSize: " 12px",
-                fontWeight: "bold",
-                cursor: "pointer",
-                textDecorationLine: "underline",
-              }}
-              onClick={() => {
-                if (personalinfo?.devDetail?.aurthorizedUserInfoArray?.[0]?.uploadBoardResolution) getDocShareholding(personalinfo?.devDetail?.aurthorizedUserInfoArray?.[0]?.uploadBoardResolution, setLoader);
-                else setShowToastError({ label: "No pdf here", error: true, success: false });
-              }}
+              <IconButton
+                // onClick={() => getDocShareholding(personalinfo?.devDetail?.aurthorizedUserInfoArray?.[0]?.uploadBoardResolution)}
+                style={{
+                  color: " #1266af",
+                  fontSize: " 12px",
+                  fontWeight: "bold",
+                  cursor: "pointer",
+                  textDecorationLine: "underline",
+                }}
+                onClick={() => {
+                  if (personalinfo?.devDetail?.aurthorizedUserInfoArray?.[0]?.uploadBoardResolution) getDocShareholding(personalinfo?.devDetail?.aurthorizedUserInfoArray?.[0]?.uploadBoardResolution, setLoader);
+                  else setShowToastError({ label: "No pdf here", error: true, success: false });
+                }}
               >
                 <Visibility color="info" className="icon" /></IconButton>
 
             </div>
             <div className="btn btn-sm col-md-5">
-              <IconButton 
-              style={{
-                color: " #1266af",
-                fontSize: " 12px",
-                fontWeight: "bold",
-                cursor: "pointer",
-                textDecorationLine: "underline",
-              }}
-              onClick={() => {
-                if (personalinfo?.devDetail?.aurthorizedUserInfoArray?.[0]?.uploadBoardResolution) getDocShareholding(personalinfo?.devDetail?.aurthorizedUserInfoArray?.[0]?.uploadBoardResolution, setLoader);
-                else setShowToastError({ label: "No pdf here", error: true, success: false });
-              }}
+              <IconButton
+                style={{
+                  color: " #1266af",
+                  fontSize: " 12px",
+                  fontWeight: "bold",
+                  cursor: "pointer",
+                  textDecorationLine: "underline",
+                }}
+                onClick={() => {
+                  if (personalinfo?.devDetail?.aurthorizedUserInfoArray?.[0]?.uploadBoardResolution) getDocShareholding(personalinfo?.devDetail?.aurthorizedUserInfoArray?.[0]?.uploadBoardResolution, setLoader);
+                  else setShowToastError({ label: "No pdf here", error: true, success: false });
+                }}
               >
                 <FileDownload color="primary" className="mx-1" />
               </IconButton>
@@ -1291,7 +1291,7 @@ personalinfo?.devDetail?.addInfo?.showDevTypeFields != "Partnership Firm" &&
             <div className="btn btn-sm col-md-5">
               <ReportProblemIcon
                 style={{
-                 display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_BOARD_RESOLUTION") ? "block" : "none",
+                  display: hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_BOARD_RESOLUTION") ? "block" : "none",
 
                   color: fieldIconColors.pin
                 }}
@@ -1366,7 +1366,7 @@ personalinfo?.devDetail?.addInfo?.showDevTypeFields != "Partnership Firm" &&
             <div className="btn btn-sm col-md-5">
               <ReportProblemIcon
                 style={{
-                 display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("Board resolution of authorised signatory (Upload copy)") ? "block" : "none",
+                 display: hideRemarksPatwari && showReportProblemIcon("Board resolution of authorised signatory (Upload copy)") ? "block" : "none",
 
                   color: fieldIconColors.pin
                 }}
