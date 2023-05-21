@@ -1,0 +1,158 @@
+.HomePageWrapper {
+  margin-top: -25px;
+
+  .BannerWithSearch {
+    margin-bottom: 40px;
+    width: 100%;
+    @apply relative;
+    .Search {
+      width: calc(100% - 32px);
+      bottom: -18px;
+      @apply mx-md absolute;
+    }
+    img {
+      height: 33vw;
+      @apply w-full object-cover;
+    }
+  }
+
+  .ServicesSection {
+    @apply flex flex-wrap;
+    padding: 40px 15px 0 15px;
+  }
+
+  @screen dt {
+    .ServicesSection {
+      @apply flex flex-wrap;
+      padding: 40px 15px 0 15px;
+      width: 100%;
+    }
+  }
+
+  .WhatsNewSection {
+    @apply m-sm;
+    padding: 0 15px;
+    .headSection {
+      @apply flex mb-sm justify-between;
+      h2 {
+        @apply text-heading-s font-bold text-text-primary pl-sm;
+      }
+      p {
+        @apply text-link text-primary-main font-medium cursor-pointer;
+      }
+    }
+    @media (min-width: 780px) {
+      padding: 0 15px;
+    }
+  }
+
+  .WhatsAppBanner{
+    width: 100%;
+    padding: 0px 20px 0px 20px;
+    margin: auto;
+    cursor: pointer;
+    img {
+      width: 100%;
+    }
+  }
+}
+
+@media (min-width: 780px) {
+  .SideBarStatic {
+    width: 219px;
+    background: theme(colors.white);
+  }
+}
+
+@media (max-width: 780px) {
+  .SideBarStatic {
+    display: none;
+  }
+}
+.HomePageContainer {
+  @media (min-width: 780px) {
+    display: flex;
+    width: calc(100% - 219px);
+    height: calc(100%-30px);
+  }
+}
+
+.moduleLinkHomePage {
+  @media (min-width: 780px) {
+    width: calc(100% - 219px);
+  }
+  margin-top: -25px;
+  img {
+    height: 33vw;
+    filter: grayscale(100%);
+    @apply w-full object-cover;
+  }
+  h1 {
+    position: absolute;
+    top: 100px;
+    left: 21px;
+    @apply text-heading-xl text-white font-bold;
+  }
+  .moduleLinkHomePageBackButton {
+    border: none;
+    top: 76px;
+    svg {
+      fill: theme(colors.white);
+    }
+    @apply absolute text-white text-heading-s ml-md;
+  }
+}
+
+.moduleLinkHomePageModuleLinks {
+  @apply mt-md;
+  .CitizenHomeCard {
+    .header {
+      @apply hidden;
+    }
+  }
+}
+
+@screen dt {
+  .HomePageWrapper {
+    width: 100%;
+    .BannerWithSearch {
+      margin-bottom: 56px;
+      width: 100% !important;
+      .Search {
+        width: 100%;
+        margin: 0;
+        padding: 0 15px 0 15px;
+      }
+      img {
+        height: 20vw;
+      }
+    }
+
+    .WhatsAppBanner {
+      width: 100%;
+      img{
+        height: 20vw;
+        width: 100%;
+      }
+    }
+
+  }
+  .moduleLinkHomePage {
+    img {
+      min-width: 100vw;
+      height: 20vw;
+    }
+    h1 {
+      top: calc(10vw + 40px);
+      left: 15.8rem;
+    }
+    .moduleLinkHomePageBackButton {
+      top: calc(10vw + 16px);
+      @apply ml-md;
+    }
+  }
+
+  .moduleLinkHomePageModuleLinks {
+    width: 100%;
+  }
+}

@@ -1,0 +1,114 @@
+.scroll-table-wrapper{
+    &::-webkit-scrollbar {
+        display: none;
+    }  
+    -ms-overflow-style: none;
+    scrollbar-width: none; 
+    @apply relative overflow-x-scroll overflow-y-visible pb-sm text-center;
+
+    .scroll-table-width-wrapper{
+        &::-webkit-scrollbar {
+            display: none;
+        }  
+        -ms-overflow-style: none;
+        scrollbar-width: none; 
+        width: calc(100% - 110px);
+        margin: auto;
+        @apply overflow-x-scroll;
+        table{
+             margin: auto;
+         }
+    }
+    
+    .first-col{
+        width:110px; 
+        @apply absolute left-0;
+    }
+    
+    .last-col{
+        width:110px; 
+        @apply absolute right-0;
+    }
+}
+
+@screen dt{
+    .scroll-table-wrapper{
+        width: 60%;
+    }
+}
+.table-switch-card-chip{
+    display: flex;
+    cursor: pointer;
+    padding-right: 10px;
+    width: 100%;
+}
+
+.table-search-wrapper{
+    display:flex;
+    width:100%;
+    align-items:center;
+}
+.table-switch-card-inactive{
+    /* Frame 58 */
+
+
+/* Auto layout */
+
+display: flex;
+flex-direction: row;
+align-items: flex-start;
+padding: 8px;
+
+position: static;
+height: 40px;
+left: 84px;
+top: 0px;
+
+/* Light Theme / Paper */
+
+background: theme(colors.white);
+box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.1);
+
+/* Inside auto layout */
+
+flex: none;
+flex-grow: 0;
+margin: 0px 0px;
+color: #B1B4B6;
+}
+.table-switch-card-inactive:hover{
+    background: #fffffc;
+    font-size: 17px;
+    color: theme(colors.text.secondary);
+}
+
+.table-switch-card-active{/* Frame 57 */
+
+
+    /* Auto layout */
+    
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    padding: 8px;
+    
+    position: static;
+    height: 40px;
+    left: 0px;
+    top: 0px;
+    
+    /* Light Theme / Paper */
+    
+    background: theme(colors.white);
+    /* Light Theme / Primary */
+    
+    border: 1px solid theme(colors.primary.main);
+    box-sizing: border-box;
+    box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.1);
+    
+    /* Inside auto layout */
+    
+    flex: none;
+    flex-grow: 0;
+    margin: 0px 0px;
+}

@@ -1,0 +1,17 @@
+.status-highlight {
+  --bg-opacity: 12% !important;
+  border-radius: 16px;
+  @apply h-8 w-20 bg-error mb-sm;
+
+  p {
+    padding-top: 6px;
+    @apply block text-center text-caption-m text-error cursor-pointer;
+  }
+
+  &.success {
+    @apply bg-success;
+    p {
+      @apply text-success;
+    }
+  }
+}

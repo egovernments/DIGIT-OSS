@@ -1,0 +1,142 @@
+body {
+  @apply bg-grey-bg;
+}
+
+.body-container {
+  @apply bg-grey-bg h-full min-h-screen overflow-x-hidden;
+}
+
+.navbar {
+  @apply text-white bg-secondary p-md w-full mb-md;
+  img {
+    height: 24px;
+  }
+}
+/* .navbar-header{
+    @apply text-navbarheader float-left px-sm
+}
+
+.navbar-subheader{
+    @apply font-light px-sm border-solid border-l border-white border-opacity-100
+}*/
+
+.h1 {
+  @apply text-heading-l text-text-primary font-bold mb-md ml-md;
+}
+
+.link-label {
+  @apply block text-link text-primary-main mb-md ml-md cursor-pointer;
+
+  &:hover {
+    @apply text-primary-main;
+  }
+}
+
+.back-btn {
+  width: fit-content;
+  @apply block border-solid border-b border-text-primary font-rc text-text-primary text-text-btn ml-sm mt-md;
+
+  label {
+    @apply inline mr-sm align-middle;
+  }
+
+  p {
+    @apply inline float-right;
+  }
+}
+
+.bread-crumb {
+  font-size: 14px;
+  color: theme(colors.text.secondary);
+  display: flex;
+  margin-bottom: 10px;
+}
+.bread-crumb--item {
+  margin-left: 5px;
+
+  &:not(:last-child):after {
+    content: "  /";
+  }
+
+  button {
+    outline: none;
+  }
+
+  .last {
+    color: theme(colors.text.primary);
+  }
+}
+
+.back-btn2 {
+  cursor: pointer;
+  width: fit-content;
+  @apply flex border-solid border-b border-text-primary font-rc text-text-primary text-text-btn ml-sm mb-md;
+
+  img {
+    @apply flex;
+  }
+
+  svg {
+    @apply flex;
+  }
+
+  p {
+    @apply flex;
+  }
+}
+
+@screen dt {
+  .employee-app-container {
+    @apply w-full;
+  }
+
+  .app-container {
+    width: 100%;
+    form {
+      .card {
+        max-width: 960px;
+        h2 {
+          text-align: left;
+        }
+        .field-container {
+          max-width: 540px;
+        }
+        button {
+          max-width: 240px;
+        }
+        .input-otp-wrap,
+        .card-text-button {
+          text-align: left;
+        }
+      }
+    }
+  }
+
+  .h1 {
+    margin-left: 0;
+    @apply text-heading-l-dt;
+  }
+
+  .link-label {
+    margin-left: 0;
+  }
+
+  .back-btn {
+    margin-left: 0;
+  }
+
+  .back-btn2 {
+    margin-left: 0;
+  }
+}
+
+.body-container::-webkit-scrollbar {
+  display: none;
+}
+.audit-card {
+  width: 80%;
+  margin-left: -21%;
+  margin-right: -27%;
+  max-height: 120px;
+  margin-top: 90px;
+}

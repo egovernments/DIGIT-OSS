@@ -1,0 +1,174 @@
+/*.select {
+
+  @apply mb-lg block border-2 border-input-border border-solid outline-none rounded-none w-full h-10 bg-white leading-10;
+
+  option {
+    @apply h-10 text-form-field text-text-primary align-top text-left;
+  }
+
+  }
+
+.select:active {
+  @apply border-focus border-2;
+}
+
+@screen dt {
+  .select {
+    @apply w-2/5;
+  }
+}
+*/
+.employee-select-wrap {
+  @apply mb-lg relative;
+
+  .select {
+    @apply relative block w-full h-10 border border-solid border-input-border;
+    &:hover {
+      @apply border-2 border-solid border-primary-main;
+    }
+    input[type="text"] {
+      width: calc(100% - 32px);
+      background-color: transparent;
+
+      @apply absolute z-10 w-full h-full outline-none text-text-primary text-form-field pl-sm;
+    }
+
+    p {
+      padding-top: 9px;
+      @apply text-form-field text-text-primary float-left ml-sm;
+    }
+
+    img {
+      @apply float-right h-6 w-6 mt-sm mr-sm;
+    }
+
+    svg {
+      @apply absolute right-0 float-right h-6 w-6 mt-sm mr-sm;
+    }
+  }
+
+  .select-active {
+    @apply relative block w-full h-10 border-2 border-solid border-primary-main;
+
+    input[type="text"] {
+      width: calc(100% - 32px);
+      background-color: transparent;
+
+      @apply absolute z-10 w-full h-full outline-none text-text-primary text-form-field pl-sm;
+    }
+
+    p {
+      @apply text-form-field text-text-primary float-left ml-sm;
+    }
+
+    p {
+      padding-top: 9px;
+    }
+
+    img {
+      @apply float-right h-6 w-6 mt-sm mr-sm;
+    }
+
+    svg {
+      @apply absolute right-0 float-right h-6 w-6 mt-sm mr-sm;
+    }
+  }
+
+  .options-card {
+    width: 100% !important;
+    box-shadow: 0 8px 10px 1px rgba(0, 0, 0, 0.14), 0 3px 14px 2px rgba(0, 0, 0, 0.12), 0 5px 5px -3px rgba(0, 0, 0, 0.2);
+    max-height: 400px;
+    overflow: auto;
+    @apply absolute z-20 mt-xs bg-white max-w-full;
+
+    p {
+      padding-top: 14px;
+      @apply w-full h-12 pl-sm text-text-primary text-form-field;
+
+      &:hover {
+        @apply bg-grey-mid;
+      }
+    }
+  }
+}
+
+.employee-select-wrap--elipses {
+  width: 85% !important;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.select-wrap {
+  @apply mb-lg relative;
+  max-width: 540px;
+
+  .select {
+    @apply relative block w-full h-10 border border-solid border-input-border;
+
+    input[type="text"] {
+      width: calc(100% - 32px);
+      background-color: transparent;
+
+      @apply absolute z-10 w-full h-full outline-none text-text-primary text-form-field pl-sm;
+    }
+
+    p {
+      padding-top: 9px;
+      @apply text-form-field text-text-primary float-left ml-sm;
+    }
+
+    img {
+      @apply float-right h-6 w-6 mt-sm mr-sm;
+    }
+
+    svg {
+      @apply absolute right-0 float-right h-6 w-6 mt-sm mr-sm;
+    }
+  }
+
+  .select-active {
+    @apply relative block w-full h-10 border-2 border-solid border-primary-main;
+
+    input[type="text"] {
+      width: calc(100% - 32px);
+      background-color: transparent;
+
+      @apply absolute z-10 w-full h-full outline-none text-text-primary text-form-field pl-sm;
+    }
+
+    p {
+      @apply text-form-field text-text-primary float-left ml-sm;
+    }
+
+    p {
+      padding-top: 9px;
+    }
+
+    img {
+      @apply float-right h-6 w-6 mt-sm mr-sm;
+    }
+
+    svg {
+      @apply absolute right-0 float-right h-6 w-6 mt-sm mr-sm;
+    }
+  }
+
+  .options-card {
+    width: 100% !important;
+    box-shadow: 0 8px 10px 1px rgba(0, 0, 0, 0.14), 0 3px 14px 2px rgba(0, 0, 0, 0.12), 0 5px 5px -3px rgba(0, 0, 0, 0.2);
+    @apply absolute z-20 mt-xs bg-white;
+
+    p {
+      padding-top: 14px;
+      @apply w-full h-12 pl-sm text-text-primary text-form-field;
+
+      &:hover {
+        @apply bg-grey-mid;
+      }
+    }
+  }
+}
+
+@screen dt {
+}

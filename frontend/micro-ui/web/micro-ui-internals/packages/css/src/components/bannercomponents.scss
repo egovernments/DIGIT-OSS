@@ -1,0 +1,136 @@
+.success-wrap,
+.emp-success-wrap {
+  @apply block bg-success w-full text-center text-white pt-md pb-sm mb-md;
+
+  header {
+    @apply block mb-sm font-rc font-bold text-heading-xl;
+  }
+
+  div {
+    img {
+      padding: 13.67px;
+      margin-left: auto;
+      margin-right: auto;
+      @apply border border-solid border-white rounded-full h-16 w-16 bg-white mb-md;
+    }
+
+    svg {
+      padding: 13.67px;
+      margin-left: auto;
+      margin-right: auto;
+      @apply border border-solid border-white rounded-full h-16 w-16 bg-white mb-md;
+    }
+
+    svg.payment-svg {
+      border: unset;
+      background-color: unset;
+      @apply rounded-full;
+    }
+
+    h2 {
+      @apply font-bold text-caption-m mb-sm;
+    }
+
+    p {
+      @apply font-bold text-caption-l;
+    }
+  }
+}
+
+.error-wrap,
+.emp-error-wrap {
+  @apply block bg-error w-full text-center text-white pt-md pb-sm mb-md;
+
+  header {
+    @apply block mb-sm font-rc font-bold text-heading-xl;
+  }
+
+  img {
+    margin-left: auto;
+    margin-right: auto;
+    padding: 13.67px;
+    @apply border border-solid border-white rounded-full bg-white h-16 w-16 mb-md;
+  }
+
+  svg {
+    margin-left: auto;
+    margin-right: auto;
+    padding: 13.67px;
+    @apply border border-solid border-white rounded-full bg-white h-16 w-16 mb-md;
+  }
+}
+
+@screen dt {
+  .success-wrap {
+    header {
+      @apply text-heading-xl-dt;
+    }
+  }
+  .emp-success-wrap {
+    width: calc(100%);
+    header {
+      @apply text-heading-xl-dt;
+    }
+  }
+
+  .error-wrap {
+    width: 100%;
+    header {
+      @apply text-heading-xl-dt;
+    }
+  }
+
+  .emp-error-wrap {
+    width: calc(100%);
+    header {
+      @apply text-heading-xl-dt;
+    }
+  }
+}
+
+.photos-wrap {
+  max-width: 640px;
+  @apply flex pt-md;
+
+  img {
+    width: calc(33% - 9.333px);
+    margin-right: 14px;
+  }
+
+  svg {
+    width: calc(33% - 9.333px);
+    margin-right: 14px;
+  }
+
+  .last {
+    width: calc(33% - 9.333px);
+  }
+}
+
+.banner {
+  @apply flex justify-center items-center;
+  height: calc(100vh - 80px);
+  background: linear-gradient(rgba(11, 75, 102, 0.8), rgba(11, 75, 102, 0.8)), var(--banner-url) center center;
+
+  .bannerCard {
+    min-width: 400px;
+  }
+  .bannerLogo {
+    width: 80px;
+    height: 40px;
+    object-fit: contain;
+    padding-right: 10px;
+    margin-right: 10px;
+    border-right: 1px solid theme(colors.text.primary);
+  }
+  .bannerHeader {
+    @apply flex justify-center items-center;
+    margin-bottom: 24px;
+  }
+}
+
+.banner-container {
+  flex-direction: column;
+  justify-content: center;
+  align-items: center !important;
+}

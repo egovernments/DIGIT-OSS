@@ -1,0 +1,66 @@
+body {
+    margin: 0;
+    padding: 0;
+    font-family: "Roboto";
+    background: #f4f7fb;
+  }
+  
+  
+  .app-container-iframe {
+    border-width: 0px;
+    div[class^="MuiCircularProgress"] {
+      position: sticky;
+      top: 90%;
+      left: 50%;
+    }
+    div[role^="progressbar"] {
+      left: 50%;
+      position: sticky;
+    }
+  }
+  
+  @media only screen and (min-width: 953px) {
+    .app-container-iframe {
+      border-width: 0px;
+      position: fixed;
+      width: 83.5%;
+      height: calc(100vh - 64px);
+    }
+  }
+
+  
+  @media (max-width: 768px) {
+    .app-container-iframe {
+        border-width: 0;
+        width: 100vw;
+        height: 100vh;
+        margin: 32px 0 0 0;
+    }
+  }
+  @media (max-width: 375px) {
+  .app-container-iframe {
+        border-width: 0;
+        width: 100vw;
+        height: 100vh;
+        margin: 32px 0 0 0;
+    }
+  }
+  
+.app-iframe-wrapper{
+  left: 64px;
+   border-width: 0;
+    position: fixed;
+    top: 80px;
+}
+  .app-iframe{
+    width: 97%;
+    height: calc(100vh - 90px);
+    border-width: 0;
+    position: fixed;
+  }
+  @media (max-width: 768px) {
+    
+  .app-iframe-wrapper{
+  left: 0px;
+  }
+  }

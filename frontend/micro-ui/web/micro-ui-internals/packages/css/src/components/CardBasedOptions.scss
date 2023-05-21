@@ -1,0 +1,46 @@
+.CardBasedOptions {
+  box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.16);
+  @apply bg-white mb-md px-sm py-md mx-sm rounded w-full;
+  .headContent {
+    @apply flex justify-between mb-lg;
+    h2 {
+      @apply text-heading-s font-bold text-text-primary;
+    }
+    p {
+      @apply text-link text-primary-main font-medium cursor-pointer;
+    }
+  }
+
+  .mainContent {
+    @apply flex justify-evenly;
+    .CardBasedOptionsMainChildOption {
+      width: 25%;
+      @apply text-center;
+      .ChildOptionImageWrapper {
+        margin: auto !important;
+        background: rgba(244, 119, 56, 0.12);
+        mix-blend-mode: normal;
+        padding-top: 14px;
+        @apply h-12 w-12 rounded-full cursor-pointer;
+        svg {
+          height: 20px;
+          width: 20px;
+          fill: theme(colors.primary.main);
+          margin: auto;
+        }
+      }
+      .ChildOptionName {
+        font-size: 12px;
+        line-height: 14px;
+        padding-top: 1rem;
+      }
+    }
+  }
+}
+
+@screen dt {
+  .CardBasedOptions {
+    width: calc(50% - 16px);
+    @apply p-md;
+  }
+}

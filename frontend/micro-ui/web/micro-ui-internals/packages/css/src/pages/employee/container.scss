@@ -1,0 +1,72 @@
+.icon-bg-secondary {
+  @apply flex bg-secondary w-12 h-12;
+
+  svg {
+    margin: auto;
+    @apply w-6 h-6;
+  }
+}
+
+.heading-m {
+  @apply font-bold text-text-primary text-heading-m ml-md pt-sm;
+}
+.BPAheading-m {
+  margin-left: 22px;
+}
+
+.break-line {
+  @apply border-border my-lg;
+}
+
+.employee-home-footer {
+  @apply flex  h-10 bg-grey-bg pb-md pt-sm justify-center w-full;
+  img {
+    height: 100%;
+  }
+}
+.employee-login-home-footer{
+  @apply flex fixed bottom-0 h-10 bg-grey-bg pb-md pt-sm justify-center w-full;
+  img{
+    @apply ml-sm
+  }
+}
+.fieldInspectionWrapper{
+  border: 1px solid theme(colors.border);
+  padding: 16px;
+  margin-top: 8px;
+  background: theme(colors.grey.light);
+}
+
+.fieldInsepctionInsideWrapper {
+  border: 1px solid theme(colors.border);
+  padding: 16px;
+  margin-top: 8px;
+  background: theme(colors.white);
+  max-width: 70%;
+  min-width: 280px;
+}
+
+@screen dt {
+  .ground-container {
+    margin-bottom: 56px;
+    @apply p-md;
+  }
+  .heading-m {
+    @apply text-heading-m-dt;
+  }
+  .BPAheading-m {
+    margin-left: 22px;
+  }
+  .break-line {
+    margin-top: 40px;
+    margin-bottom: 40px;
+  }
+  .employee-home-footer {
+  }
+  .moduleCardWrapper {
+    @apply flex flex-row flex-wrap !important;
+  }
+  .gridModuleWrapper {
+    @apply grid grid-cols-4 gap-4;
+  }
+}

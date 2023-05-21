@@ -1,0 +1,305 @@
+.wrapper {
+  margin: 20px auto;
+}
+.accordion-wrapper {
+  & + * {
+    margin-top: 0.5em;
+  }
+}
+.accordion-item {
+  overflow: hidden;
+  transition: max-height 0.3s cubic-bezier(1, 0, 1, 0);
+  height: auto;
+  max-height: 9999px;
+}
+.accordion-item.collapsed {
+  max-height: 0;
+  transition: max-height 0.35s cubic-bezier(0, 1, 0, 1);
+}
+.accordion-title {
+  font-weight: 600;
+  cursor: pointer;
+  color: #666;
+  padding: 0.5em 0em;
+  border-radius: 1.5em;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  &.open svg {
+    transform: rotate(-90deg);
+  }
+  &:hover,
+  &.open {
+    color: black;
+  }
+}
+.accordion-content {
+  padding: 1em 0em;
+}
+.document_list_searchbar {
+  border: 1px solid theme(colors.text.secondary) !important;
+  border-radius: 0px !important;
+  margin: 20px 0;
+}
+.notices_circular_searchbox {
+  margin-top: 50px;
+}
+.notice_and_circular_main {
+  @apply flex bg-white my-md px-md pt-md pb-lg shadow-card relative;
+  border-radius: 4px;
+}
+.gap-ten {
+  @apply gap-10;
+}
+.notice_and_circular_heading_mb {
+  display: flex;
+  justify-content: space-between;
+  padding: 2px;
+}
+.notice_and_circular_heading_mb header {
+  font-weight: bold;
+  font-size: 16px !important;
+  line-height: 24px;
+  margin-right: 50px;
+}
+.notice_and_circular_heading_mb .card-caption {
+  padding-left: 30px;
+  font-weight: normal;
+  font-size: 12px;
+  line-height: 24px;
+  color: theme(colors.text.secondary);
+  padding-right: 5px;
+  padding-left: 15px;
+  min-width: 80px;
+  position: absolute;
+  right: 20px;
+}
+.notice_and_circular_text {
+  padding-bottom: 20px;
+}
+.notice_and_circular_text p {
+  font-weight: normal;
+  font-size: 12px;
+  line-height: 14px;
+  color: theme(colors.text.secondary);
+}
+.notice_and_circular_caption {
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+.notice_and_circular_caption .card-caption {
+  font-weight: normal;
+  font-size: 10px;
+  line-height: 18px;
+  color: #A3A3A3;
+}
+.view_download_main {
+  display: flex;
+  flex-wrap: wrap;
+  gap:8px;
+  align-items: end;
+  span {
+    padding-right: 20px;
+    & .views {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      p {
+        padding-left: 10px;
+        font-weight: normal;
+        font-size: 16px;
+        line-height: 19px;
+        color: theme(colors.primary.main);
+      }
+    }
+  }
+  & .download_views_padding{
+      padding-top: 8px;
+  }
+}
+@screen dt{
+  .view_download_main {
+    span{
+      & .views {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        p {
+          padding-left: 10px;
+          font-weight: normal;
+          font-size: 16px;
+          line-height: 19px;
+          color: theme(colors.primary.main);
+        }
+      }
+    }
+  }
+
+  .notice_and_circular_heading_mb .card-caption {
+    font-size: 16px;
+    line-height: 24px;
+    min-width : 150px;
+    padding-left: 50px;
+  }
+
+  .view_download_main span{
+    padding-right: 30px;
+  }
+  .view_download_main span .views p {
+    padding-left: 8px;
+    font-size: 16px;
+  }
+  .notice_and_circular_text p {
+    font-size: 16px !important;
+    line-height : 24px;
+  }
+  .documentDetails_row {
+    grid-gap: 0 !important;
+    gap: 0 !important;
+  }
+  .notice_and_circular_heading_mb header{
+    font-size: 24px !important;
+    line-height: 28px;
+    margin-right : 100px;
+  }
+  .notice_and_circular_caption .card-caption {
+    font-size: 14px;
+    line-height: 21px;
+  }
+  
+}
+.documentDetails {
+  &_wrapper {
+    @apply flex flex-col gap-10 items-start;
+  }
+  &_row {
+    @apply flex gap-20;
+  }
+  &_title {
+    @apply w-48 font-bold;
+  }
+  &_description {
+    @apply max-w-lg;
+    text-overflow: clip;
+  }
+  &_pdf {
+    @apply flex flex-col gap-5;
+  }
+  &_subheader {
+    @apply font-bold;
+    font-size: large;
+  }
+}
+
+.documentDetails_pdf {
+  @apply flex gap-10 cursor-pointer;
+}
+.grid_section {
+  @apply grid grid-cols-4 gap-4;
+  & .document_notification_form_section {
+    @apply col-span-3;
+  }
+}
+.document_notification_first_grid {
+  @apply grid grid-cols-4 gap-4;
+  & .form_section,
+  .document_notification_table_section {
+    @apply col-span-3;
+  }
+}
+.new_document_section_flex {
+  @apply flex items-center;
+  & .card-section-header {
+    @apply pl-lg;
+  }
+}
+.new_document_para_color {
+  @apply text-primary-light;
+  margin-bottom: 42px;
+}
+.document_notification_second_grid {
+  @apply grid grid-cols-3 gap-4;
+}
+.document_notification_clear_search_btn {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  & .document_notification_clear_search_btn_align {
+    display: flex;
+    align-items: center;
+  }
+}
+.new_document_clear_search_alignment {
+  @apply mb-md mr-lg;
+}
+.document_notification_filter_header {
+  @apply flex justify-between items-center;
+}
+.document_notification_filter_icon {
+  @apply flex items-center;
+  & .card-caption {
+    @apply ml-lg;
+  }
+}
+.document-table-docs-columns {
+  @apply flex items-center gap-5;
+}
+.filter_section_main {
+  padding-bottom: 300px;
+}
+.new_document_card {
+  @apply w-full h-56 bg-white p-xl;
+}
+.filter_table_section_margin {
+  margin-top: 30px;
+}
+.filter_card_employee {
+  @apply w-full h-auto bg-white p-xl;
+  padding-bottom: 100px;
+}
+.filter_section_document_categories {
+  padding-top: 20px;
+}
+.new_document_card_table {
+  @apply w-full h-auto bg-white p-xl;
+}
+.employee_document_inbox_table_main {
+  .table {
+    tbody {
+      tr {
+        @apply py-md;
+      }
+    }
+  }
+}
+.confirmation_box {
+  height: 130px;
+  display: flex;
+  align-items: center;
+  padding-left: 8px;
+  gap: 10px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.Docs_CardWrapper{
+  @apply bg-white m-sm px-md pt-md pb-lg shadow-card;
+  border-radius: 4px;
+}
+
+.mobileInbox_attachments{
+  display:flex;
+  gap:10px;
+}
+
+.documentDetails_row_items {
+  display:flex;
+  flex-direction: row;
+  align-self: flex-start;
+}
+
+@media screen and (max-width : 768px){
+  .documentDetails_row_items{
+    @apply grid grid-cols-2 gap-4;
+  }
+}

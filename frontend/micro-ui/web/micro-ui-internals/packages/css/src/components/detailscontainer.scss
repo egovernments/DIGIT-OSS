@@ -1,0 +1,13 @@
+.details-container {
+  @apply flex flex-col m-sm pt-md pb-md pl-sm pr-sm bg-white rounded;
+  .detail {
+    @apply grid grid-cols-2 gap-2 items-baseline;
+    .label {
+      width: 138px;
+      @apply font-bold text-heading-s text-text-primary mb-md;
+    }
+    .name {
+      @apply pt-md;
+    }
+  }
+}

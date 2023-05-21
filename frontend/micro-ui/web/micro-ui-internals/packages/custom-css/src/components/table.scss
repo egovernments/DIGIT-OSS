@@ -1,0 +1,363 @@
+.table {
+  @apply bg-white w-full;
+
+  thead {
+    th {
+      padding: 20px 18px;
+      @apply font-bold align-middle text-left;
+      &:first-child {
+        min-width: 256px;
+      }
+    }
+  }
+
+  tbody {
+    border: none;
+    padding: 0;
+    margin: 0;
+    td {
+      @apply  border-border text-left align-middle;
+      padding: "20px 18px";
+    }
+  }
+}
+
+.pagination {
+  display: flex;
+  justify-content: flex-end;
+  background-color: rgba(255, 255, 255, var(--bg-opacity));
+  border-top: 1px solid rgb(214, 213, 212);
+  padding: 20px 40px 20px 0px;
+  color: rgb(80, 90, 95);
+
+  svg {
+    fill: #505a5f;
+    @apply ml-md;
+  }
+}
+
+.pagination button:nth-child(1) span::after {
+  content: "\f105";
+}
+
+.fullWidth {
+  width: 100% !important;
+}
+
+.customTable {
+  width: 100%;
+  th {
+    font-weight: bold;
+  }
+
+  th,
+  td {
+    text-align: left;
+    border-bottom: 1px solid #b1b4b6;
+    padding: 15px 10px;
+  }
+
+  tr:nth-child(odd) {
+    background-color: #eeeeee;
+  }
+  tr:nth-child(even) {
+    background-color: #fff;
+  }
+
+  thead {
+    tr:first-child {
+      background-color: unset;
+    }
+  }
+}
+
+.table-fixed-first-column {
+  thead {
+    th:first-child {
+      position: sticky;
+      background: #fff;
+      left: 0;
+      border-right: 1px solid #b1b4b6;
+      border-top-left-radius: 4px;
+    }
+  }
+  tbody {
+    td:first-child {
+      position: sticky;
+      background: #fff;
+      color: #f47738;
+      left: 0;
+      border-right: 1px solid #b1b4b6;
+    }
+  }
+}
+.table-fixed-column-common-pay {
+  thead {
+    th:first-child {
+      position: sticky;
+      background: rgb(238, 238, 238);
+      left: 0;
+      border-top-left-radius: 4px;
+    }
+    th:last-child {
+      position: sticky;
+      background: rgb(238, 238, 238);
+      right: 0;
+      border-top-left-radius: 4px;
+    }
+  }
+  tbody {
+    td:first-child {
+      position: sticky;
+      background: rgb(238, 238, 238);
+      left: 0;
+    }
+    td:last-child {
+      position: sticky;
+      background: rgb(238, 238, 238);
+      right: 0;
+    }
+  }
+}
+
+.table-fixed-first-second-column {
+  thead {
+    th:nth-child(2) {
+      position: sticky;
+      left: 0;
+      background-color: white;
+    }
+  }
+  tbody {
+    td:nth-child(2) {
+      position: sticky;
+      left: 0;
+      background-color: inherit;
+    }
+  }
+}
+.table-border-style {
+  border: 1px solid #b1b4b6;
+  border-radius: 4px;
+  border-spacing: 0;
+  border-collapse: separate;
+}
+.dss-table-wrapper {
+  width: 100%;
+  display: block;
+  overflow-x: auto;
+  table {
+    th {
+      .tooltip {
+        min-width: 80px;
+      }
+    }
+    tr {
+      td {
+        span {
+          white-space: pre;
+          min-width: 80px;
+        }
+      }
+    }
+  }
+}
+
+.reports-table {
+  margin-top: 2rem;
+  thead {
+    th {
+      &:first-child {
+        min-width: unset;
+      }
+    }
+  }
+}
+
+.sub-work-table {
+  justify-content: center;
+  padding: 0;
+  border-collapse: collapse;
+  border: 1px solid #ddd;
+  td,
+  th {
+    color: #0b0c0c;
+    border: 1px solid #ddd;
+    padding: 12px;
+  }
+  tr:hover {
+    background-color: #efefef;
+  }
+  th {
+    padding: 10px;
+    text-align: center;
+    background-color: #efefef;
+    color: #0b0c0c;
+  }
+
+  tr {
+    td {
+      span:hover {
+        cursor: pointer;
+      }
+    }
+  }
+}
+
+.table-fixed-first-column-wage-seekers {
+  thead {
+    th:first-child {
+      position: sticky;
+      background: #fff;
+      left: 0;
+      border-right: 1px solid #b1b4b6;
+      border-top-left-radius: 4px;
+    }
+  }
+
+  tbody {
+    td:first-child {
+      position: sticky;
+      background: #fff;
+      left: 0;
+      border-right: 1px solid #b1b4b6;
+    }
+  }
+}
+.table-wrapper {
+  &.attendence-table {
+    display: block;
+    overflow-x: scroll;
+  }
+  .wage-seekers-table {
+    width: 100%;
+    justify-content: center;
+    padding: 0;
+    border-collapse: collapse;
+    border: 1px solid #ddd;
+  
+    &.week-table {    
+      border: 1px solid #A6A6A6;
+      thead {
+        background-color: #EEEEEE;
+      }
+      tbody tr {
+        border-bottom: 1px solid #ddd;
+        text-align: center;
+      }
+      tbody tr .total-attendence-label {
+        font-weight: bolder;
+      }
+      tbody tr td[data-radio-selection=last-radio] {
+        border: none;
+      }
+      tbody tr:nth-child(even) td[data-radio-selection=last-radio] {
+        border: none;
+        background-color: #EEEEEE;
+      }
+      tbody tr td:nth-child(11) {
+        border: none;
+        border-right: 1px solid #A6A6A6;
+      }
+      tbody tr td[colspan="4"] {
+        text-align: left;
+      }
+      tbody tr td[data-modified-amt=modified-amt] {
+        background-color: #F5F5F5;
+      }
+      tbody tr td[data-last-row-cell=last-row] {
+        font-weight: bolder;
+        border: none;
+        background-color: #EEEEEE;
+      }
+      tbody tr td[data-last-row-cell=last-row]:nth-child(1), :nth-child(11) {
+        border-right: 1px solid #ddd !important;
+      }
+      .modified-amount {
+        border: 1px solid;
+        padding: 5px;
+      }
+    }
+    td,
+    th {
+      color: #0b0c0c;
+      border: 1px solid #ddd;
+      padding: 12px;
+    }
+  
+    tr:hover {
+      background-color: #efefef;
+    }
+  
+    th {
+      padding: 10px;
+      text-align: center;
+      color: #0b0c0c;
+    }
+  
+    tr {
+      td {
+        span:hover {
+          cursor: pointer;
+        }
+      }
+    }
+  }
+}
+
+
+.percent-input {
+  display: flex;
+  flex-direction: row;
+  /* This bit draws the box around it */
+
+  /* I've used padding so you can see the edges of the elements. */
+  padding: 4px;
+  input {
+    /* Tell the input to use all the available space */
+    flex-grow: 2;
+    /* And hide the input's outline, so the form looks like the outline */
+
+    height: 40px;
+  }
+  input:focus {
+    /* removing the input focus blue box. Put this on the form if you like. */
+    outline: none;
+  }
+  button {
+    /* Just a little styling to make it pretty */
+    border: 1px solid #505a5f;
+    background: #eeeeee;
+    color: white;
+    align-items: flex-start;
+  }
+}
+
+.contractor-table {
+  border-collapse: collapse;
+  width: 100%;
+  table,
+    th,
+    td {
+        border: 1.5px solid black;
+    }
+    th {
+      background-color: #ECECEC;
+    }
+}
+
+.column-attendence {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.day-attendence {
+  margin-left: 0.3rem;
+  font-weight: 550;
+}
+
+.date-attendence {
+  opacity: 0.6;
+  font-weight: 200;
+}

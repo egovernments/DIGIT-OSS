@@ -1,12 +1,5 @@
 .radio-wrap {
-  @apply my-sm block leading-6 mb-md;
-
-  &.flex-row {
-    display: flex;
-    .mg-sm {
-      margin-right: 1rem;
-    }
-  }
+  @apply my-sm block leading-10 mb-lg;
 
   div {
     @apply block mb-md;
@@ -22,11 +15,11 @@
   }
 
   .radio-btn {
-    @apply opacity-0 absolute cursor-pointer h-6 w-6;
+    @apply opacity-0 absolute cursor-pointer h-10 w-10;
   }
 
   .radio-btn-checkmark {
-    @apply h-6 w-6  border-input-border border-solid rounded-full block;
+    @apply h-10 w-10 border border-input-border border-solid rounded-full block;
   }
 
   label {
@@ -42,18 +35,9 @@
   }
 
   .radio-btn-wrap input:checked ~ .radio-btn-checkmark:after {
-    @apply block bg-primary-main h-3 w-3 rounded-full absolute top-6 left-6;
+    @apply block bg-primary-main h-5 w-5 rounded-full absolute top-10 left-10;
   }
 }
-
-
-@screen sm {
-  .radio-wrap {
-    @apply flex-col;
-    gap : 0px !important;
-  }
-}
-
 .reverse-radio-selection-wrapper{
   div{
     @apply flex flex-row-reverse place-content-between items-center;    ;

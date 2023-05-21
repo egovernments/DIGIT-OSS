@@ -25,6 +25,7 @@ module.exports = {
         hover: "#003078",
       },
       border: "#D6D5D4",
+      inputBorder:"#464646",
       "input-border": "#464646",
       focus: "#F47738",
       error: "#D4351C",

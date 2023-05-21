@@ -1,0 +1,273 @@
+.surveydetailsform-wrapper {
+  @apply grid gap-6 py-md;
+
+  label {
+    @apply font-medium;
+  }
+  .surveyformfield {
+    @apply grid gap-4;
+  }
+
+  .employee-select-wrap,
+  .employee-card-input {
+    margin-bottom: 0;
+  }
+}
+
+.newSurveyForm_wrapper {
+  @apply grid p-md bg-grey-light border border-border rounded gap-6 ;
+  .newSurveyForm_questions {
+  }
+  .newSurveyForm_answer {
+  }
+  .newSurveyForm_actions {
+    @apply flex justify-end  gap-4 py-md;
+    .checkbox-wrap .label {
+      margin-left: 40px;
+    }
+  }
+  .newSurveyForm_seprator {
+    @apply w-px h-6 border border-border;
+  }
+}
+
+.surveyformslist_wrapper,
+.surveydetailsform-wrapper {
+  .heading {
+    @apply text-heading-l font-medium py-md;
+  }
+}
+
+.surveyformslist_wrapper {
+  @apply grid gap-6 py-md;
+}
+
+.options_checkboxes {
+  @apply flex flex-col gap-4;
+}
+
+.optioncheckboxwrapper {
+  @apply flex;
+}
+
+.simple_editable-input {
+  outline-width: 0;
+  border: 0;
+  border-bottom: 2px solid black;
+}
+
+.simple_readonly-input {
+  outline-width: 0;
+  border: 0;
+  background: transparent;
+}
+
+.pointer {
+  cursor: pointer;
+}
+
+.disabled-btn {
+  @apply pointer-events-none cursor-not-allowed;
+}
+
+.optionradiobtnwrapper {
+  @apply flex gap-2;
+
+  .customradiobutton {
+    @apply w-6 h-6;
+  }
+}
+
+.edit-action-btn {
+  @apply flex justify-end;
+}
+
+.surveyQuestion-wrapper{
+  @apply grid gap-6;
+}
+
+.question-title {
+  font-size: 18px;
+  line-height: 21px;
+  color: theme(colors.text.primary);
+  font-weight: 700;
+}
+
+.responses-container {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 8px 4px; 
+  background-color: theme(colors.grey.light);
+  border: 1px solid theme(colors.border);
+  box-sizing: border-box;
+  border-radius: 4px;
+  margin-top: 20px;
+  margin-bottom: 20px;
+  position: relative;
+}
+
+.responses-container-date {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 8px 8px 0px 8px;
+  position: static;
+  left: 0px;
+  top: 41px;
+  background: theme(colors.grey.light);
+  border: 1px solid theme(colors.border);
+  box-sizing: border-box;
+  border-radius: 4px;
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+.responses-container-line {
+  width: 100%;
+  margin-bottom: -12px;
+}
+
+.date-time{
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+.response-result {
+  flex: none;
+  order: 1;
+  flex-grow: 0;
+  margin: 0px 0px -20px;
+  display: inline-block;
+}
+
+.date-container {
+  display: flex;
+flex-direction: column;
+justify-content: center;
+align-items: center;
+padding: 16px 8px;
+background: theme(colors.grey.light);
+border: 1px solid theme(colors.border);
+box-sizing: border-box;
+border-radius: 4px;
+@apply gap-y-6;
+}
+
+.date-response {
+display: flex;
+flex-direction: row;
+font-weight: bold;
+@apply gap-10 ;
+}
+.divide {
+  --tw-divide-x-reverse: 0;
+border-right-width: calc(2px * var(--tw-divide-x-reverse));
+border-left-width: calc(2px * calc(1 - var(--tw-divide-x-reverse)));
+}
+
+.circle {
+    background-color:red;
+    height:40px;
+    border-radius:50%;
+    -moz-border-radius:50%;
+    -webkit-border-radius:50%;
+    width:40px;
+}
+
+.align-columns{
+  @apply grid gap-4;
+}
+
+
+@screen dt {
+  .surveydetailsform-wrapper {
+    .surveyformfield {
+      @apply items-center;
+      grid-template-columns: 1fr 2fr 1fr;
+
+      .radio-wrap {
+        @apply flex gap-20;
+        margin-bottom: 0;
+      }
+      .radio-wrap div {
+        @apply flex items-center;
+      }
+
+      .radio-btn {
+        @apply w-6 h-6;
+      }
+
+      .radio-btn-checkmark {
+        height: 1.75rem;
+        width: 1.75rem;
+        --border-opacity: 1;
+        border: 1px solid theme(colors.inputBorder);
+        border-color: rgba(70, 70, 70, var(--border-opacity));
+        border-radius: 9999px;
+        display: block;
+      }
+
+      .radio-wrap .radio-btn-wrap input:checked ~ .radio-btn-checkmark:after {
+        display: block;
+        --bg-opacity: 1;
+        background-color: theme(colors.primary.main);
+        background-color: rgba(244, 119, 56, var(--bg-opacity));
+        height: 1.25rem;
+        width: 1.25rem;
+        border-radius: 9999px;
+        position: absolute;
+        top: 4px;
+        left: 4px;
+      }
+    }
+  }
+
+  .newSurveyForm_wrapper {
+    @apply grid p-md bg-grey-light border border-border rounded;
+    grid-template-columns: 33% 1fr;
+
+    .newSurveyForm_quesno {
+      @apply text-heading-m font-medium;
+    }
+
+    .newSurveyForm_mainsection {
+    }
+    .newSurveyForm_questions {
+      @apply flex gap-4;
+
+      .text-input {
+        @apply w-3/4;
+      }
+      .employee-select-wrap {
+        @apply flex-1;
+      }
+    }
+    .newSurveyForm_answer {
+    }
+    .newSurveyForm_actions {
+      @apply flex justify-end gap-2;
+      .checkbox-wrap {
+        @apply items-center;
+        margin-bottom: 0;
+      }
+      .checkbox-wrap .label {
+        margin-left: 40px;
+      }
+    }
+    .newSurveyForm_seprator {
+      @apply w-px h-6 border border-border;
+    }
+  }
+
+  .surveyformslist_wrapper {
+    @apply w-3/4 grid gap-6 py-md;
+  }
+}
+
+.unstyled-button {
+  border: none;
+  padding: 0;
+  background: none;
+}

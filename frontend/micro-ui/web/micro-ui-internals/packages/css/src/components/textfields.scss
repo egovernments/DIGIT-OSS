@@ -1,0 +1,96 @@
+.card-input {
+  @apply mb-lg pl-sm outline-none mt-sm block border w-full h-10 border-input-border border-solid bg-white leading-10 text-form-field text-text-primary;
+}
+
+.card-input-error {
+  @apply mb-lg pl-sm block w-full h-10 outline-none border-2 border-error border-solid bg-white leading-10 text-form-field text-text-primary;
+}
+
+.employee-card-input {
+  @apply mb-lg pl-sm outline-none block border w-full h-10 border-input-border border-solid bg-white leading-10 text-form-field text-text-primary;
+}
+.employee-card-input:disabled {
+  @apply border-grey-dark text-grey-dark !important;
+  pointer-events: none !important;
+}
+.employee-card-input--front {
+  width: fit-content !important;
+  display: flex;
+  align-items: center;
+  background: theme(colors.grey.mid);
+  border-right: 0;
+  padding-right: 5px;
+}
+.employee-card-input-error {
+  @apply mb-lg pl-sm block w-full h-10 outline-none border-2 border-error border-solid bg-white leading-10 text-form-field text-text-primary;
+}
+
+.card-textarea,
+.employee-card-textarea {
+  @apply block outline-none mt-md mb-lg border w-full border-input-border border-solid bg-white h-24 text-form-field text-text-primary p-sm;
+}
+
+.inputWrapper {
+  display: flex;
+  justify-content: flex-start;
+  max-width: 500px;
+
+  div {
+    max-width: 80px;
+  }
+
+  span {
+    margin-top: 16px;
+    margin-left: 10%;
+    margin-right: 10%;
+  }
+}
+
+@screen dt {
+  .card-input {
+    width: 480px;
+  }
+
+  .card-input-emp {
+    width: 240px;
+  }
+
+  .card-input-error {
+    width: 480px;
+  }
+
+  .employee-card-input {
+    @apply w-full;
+  }
+
+  .employee-card-input-error {
+    @apply w-full;
+  }
+
+  .card-textarea {
+   /* //width: 480px; */
+    @apply w-full;
+    max-width:540px;
+  }
+
+  .employee-card-textarea {
+    @apply w-full;
+  }
+
+  .card-input-emp {
+    width: 240px;
+  }
+}
+
+.citizen-card-input {
+  @apply mb-lg pl-sm outline-none block border w-full h-10 border-input-border border-solid bg-white leading-10 text-form-field text-text-primary;
+}
+
+.citizen-card-input--front {
+  width: fit-content !important;
+  display: flex;
+  align-items: center;
+  background: theme(colors.grey.mid);
+  border-right: 0;
+  padding-right: 5px;
+}

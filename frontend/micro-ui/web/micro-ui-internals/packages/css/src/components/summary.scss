@@ -1,0 +1,29 @@
+.summary-wrapper {
+  @apply flex justify-around;
+
+  .wrapper-child {
+    @apply flex flex-col justify-center flex-grow;
+  }
+
+  .blocks {
+    display: flex;
+    margin-bottom: 25px;
+
+    p:only-child {
+      font-weight: bold;
+      font-size: 24px;
+    }
+
+    div {
+      margin-right: 25px;
+
+      p:not(:first-child) {
+        font-weight: bold;
+        font-size: 24px;
+      }
+    }
+  }
+}
+.summary-card-margin{
+  margin:0 24px 20px 0px !important;
+}

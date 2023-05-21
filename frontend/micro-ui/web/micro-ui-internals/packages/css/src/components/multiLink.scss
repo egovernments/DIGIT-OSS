@@ -1,0 +1,88 @@
+.multilink-labelWrap{
+    top: 73px;
+    @apply flex items-center align-middle text-center m-md absolute right-0 z-10;
+}
+
+.multilink-link-button{
+    margin: 0;
+    @apply text-heading-s text-primary-light
+}
+
+.multilink-optionWrap{
+    right: 0;
+    top:110px;
+    width: max-content;
+    @apply absolute shadow-card bg-white m-md z-10;
+
+    .multilink-option{
+
+        svg{
+            margin-top: auto;
+            margin-bottom: auto;
+            @apply mx-sm
+        }
+
+        &:hover{
+            @apply bg-grey-mid cursor-pointer;
+        }
+        @apply p-md;
+    }
+}
+.overCard{
+    top: 23px;
+}
+
+.multilink-block-wrapper{
+    @apply relative;
+    .multilink-labelWrap{
+        margin: 0 !important;
+        top: unset;
+        @apply relative text-text-primary !important;
+        svg{
+            fill: theme(colors.text.secondary);
+        }
+        span{
+            @apply text-text-primary !important;
+        }
+    }
+    .multilink-optionWrap{
+        top: 8px;
+        right: -50%;
+        @apply block !important;
+    }
+}
+
+@screen dt {
+
+    .multilink-block-wrapper{
+        .multilink-optionWrap{
+            right: 0 !important;
+        }
+    }
+
+    .multilink-labelWrap{
+        right: 20%;
+        top: 80px;
+    }
+
+    .multilink-optionWrap{
+        right: 20%;
+        top: 110px;
+        @apply shadow-card rounded-sm;
+    }
+}
+
+.reports-download-btn{
+    justify-content: flex-end;
+    position: unset;
+}
+
+.reports-options-download{
+    position: absolute;
+    justify-content: flex-end;
+    float: right;
+    right:0%;
+    display: flex;
+    flex-direction: row;
+    top:2rem;
+}

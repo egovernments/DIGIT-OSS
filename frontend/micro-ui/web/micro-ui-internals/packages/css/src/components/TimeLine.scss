@@ -1,0 +1,68 @@
+.timeline-container {
+  @apply flex;
+  margin: 0px 8px 15px;
+  .timeline-checkpoint {
+    @apply relative flex-1;
+    z-index: 1;
+  }
+
+  .timeline-content {
+    @apply flex flex-col items-center;
+
+    span {
+      text-align: center;
+      color: white;
+    }
+
+    .secondary-color {
+      color: theme(colors.text.primary);
+      padding: 5px;
+      font-size: small;
+    }
+  }
+
+  .line {
+    @apply absolute;
+    top: 12px;
+    left: calc(50% + 8px);
+    right: calc(-50% + 8px);
+    border-top: 4px solid theme(colors.border);
+    z-index: -1;
+  }
+
+  .circle {
+    width: 24px;
+    height: 24px;
+    background-color: #B1B4B6;
+    border-radius: 50%;
+    text-align: center;
+  }
+
+  .active {
+    background-color: theme(colors.primary.main);
+    border-color: theme(colors.primary.main);
+  }
+} 
+
+.TLComments{
+  max-width: 360px;
+  @apply mb-sm p-sm bg-grey-light;
+  h3{
+    @apply font-bold text-caption-m;
+  }
+  p{
+    @apply text-body-l;
+  }
+}
+
+@screen dt{
+  .TLComments{
+    width: 360px;
+    h3{
+      @apply text-caption-m-dt;
+    }
+    p{
+      @apply text-body-l-dt;
+    }
+  }
+}

@@ -1,0 +1,246 @@
+.dss-switch-tabs{/* Card / Primary */
+
+/* Light Theme / Paper */
+
+background: #FFFFFF;
+/* Card-Shadow */
+
+box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.16);
+border-radius: 4px;
+margin-bottom:3%;
+margin-right:25px;
+}
+
+.dss-header-label{
+  font-weight: 600 !important;
+  font-size: 22px !important;
+  white-space: pre-line;
+}
+.dss-switch-tab-wrapper{
+    cursor:pointer;
+    display: flex;
+    flex-direction: row;
+    height: 50px;
+    align-items: center;
+}
+
+.dss-switch-tab-selected{
+  /* Revenue */
+  border-bottom: 3px solid #f47738;
+  font-family: Roboto;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 22px;
+  color: #f47738;
+  padding: 7px 24px;
+
+}
+.dss-switch-tab-unselected{
+
+font-family: Roboto;
+font-style: normal;
+font-weight: 500;
+font-size: 22px;
+color: #505A5F;
+padding: 8px 24px;
+
+}
+
+.dss-table-subheader{
+  position: relative;
+    top: -7px;
+    font-size: 13px;
+    font-weight: 400;
+    color: rgba(80, 90, 95, 1);
+}
+
+.dss-pie-subheader{
+  position: relative;
+    top: -7px;
+    font-size: 13px;
+    font-weight: 400;
+    color: rgba(80, 90, 95, 1);
+}
+
+.recharts-legend-item{
+  margin-bottom: 20px !important;
+  white-space: pre;
+}
+
+.dss-white-pre{
+  white-space: pre;
+
+}
+.dss-white-pre-line{
+  white-space: pre-line;
+
+}
+.dss-white-pre-temp{
+  white-space: pre-line;
+
+}
+
+.multi-select-dropdown-wrap{
+  .master{
+    .label{
+      p{
+        white-space:pre;
+      }
+    }
+  }
+}
+
+.divToBeHidden{
+  display:block;
+}
+
+.divWillGetHidden{
+  display:none;
+}
+
+.dss-temp-white-pre{
+  white-space: pre;
+}
+
+.dss-input-active-border{
+--border-opacity: 1;
+border: 1px solid #f47738 !important;
+border-color: rgba(244, 119, 56, var(--border-opacity));
+}
+
+.dss-card {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.dss-card-parent {
+  display: flex;
+  flex-direction: column;
+  width: 31%;
+  border-radius: 6px;
+  padding: 25px;
+  margin: 15px 11.5px;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  cursor: pointer;
+}
+
+.dss-card-body {
+  display: flex;
+  flex-wrap: wrap;
+  cursor: pointer;
+}
+
+.dss-card-header {
+  display: flex;
+  margin-bottom: 30px;
+  align-items: center;
+
+  p {
+    font-size: 24px;
+    font-family: "Roboto", sans-serif;
+    font-weight: 500;
+    color: #000000;
+  }
+
+  svg {
+    width: 50px;
+    height: 50px;
+  }
+}
+
+
+.dss-insight-card {
+  margin: 10px 0;
+
+  p {
+    font-family: "Roboto", sans-serif;
+  }
+
+  .p1 {
+    font-size: 16px; 
+    color: #585858;
+  }
+
+  .p3 {
+    font-size: 16px; 
+    font-weight: 400; 
+  }
+
+  .p2 {
+    font-size: 24px;
+    font-weight: 500; 
+    color: #000000;
+  }
+
+  .color-green {
+    color: #00703C;
+  }
+
+  .color-red {
+    color: #D4351C;
+  }
+}
+.w-100 {
+  width: 100%;
+}
+.dss-w-100 {
+  width: 97%;
+}
+
+.h-100{
+  width: 100%;
+  height: 100%;
+}
+
+.dss-h-100{
+  width: 97%;
+  height: 100%;
+}
+
+.tab-rows{
+  display: flex;
+  justify-content:space-between;
+  height: 30px;
+  align-items: center;
+  width: 60%;
+  margin-left: 13%;
+}
+.tab-header{
+  font-weight: 700;
+  font-size: 16px;
+  line-height: 19px;
+  border-bottom: 1px solid #b1b4b6;
+  color: #2a3340;
+}
+.map-status{
+  position: relative;
+  width: 33%;
+  left: 50%;
+  bottom: 130px;
+}
+.map-row{
+  display: flex;
+  align-items: center;
+  margin-top: 5px;
+}
+.map-box{
+  display: inline-block;
+  height: 10px;
+  width: 10px;
+}
+.map-text{
+  margin-left: 5px;
+  color: #636363;
+  font-size: 14px;
+}
+
+
+@media screen and (max-width: 768px) {
+  .dss-switch-tabs{/* Card / Primary */
+    margin-right:0px;
+  }
+
+  .dss-card-parent{
+    width:100%;
+  }
+}

@@ -1,0 +1,111 @@
+.filters-wrapper {
+  display: none;
+  padding: 20px 0px 0px;
+  z-index: 1;
+
+  .filters-input {
+    flex-basis: 22%;
+  }
+
+  .filters-input:not(:first-of-type) {
+    margin-left: 5%;
+  }
+
+  .switch-wrapper {
+    display: flex;
+    justify-content: space-between;
+    max-width: 200px;
+
+    .radio-switch {
+      display: none;
+
+      &:checked ~ label {
+        border-color: #F47738;
+        color: #F47738;
+      }
+    }
+
+    label {
+      border: 1px solid;
+      padding: 6px 10px;
+      display: block;
+      @apply  border-solid border-input-border;
+      &:hover{
+        @apply border-2 border-solid border-primary-main;
+      }
+    }
+  }
+}
+
+.pickerShadow {
+  box-shadow: 0 8px 10px 1px rgba(0, 0, 0, 0.14), 0 3px 14px 2px rgba(0, 0, 0, 0.12), 0 5px 5px -3px rgba(0, 0, 0, 0.2);
+  width: inherit;
+}
+
+.rdrNextPrevButton {
+  margin: 5px;
+}
+
+.rdrNextButton i {
+	margin: 0 0 0 4px;
+}
+
+.rdrMonth {
+	width: inherit;
+}
+
+.filter-close {
+  @apply flex justify-end;
+}
+
+.filter-header {
+  @apply flex;
+
+  p {
+    font-weight: bold;
+    font-size: 24px;
+    line-height: 1;
+    margin: 0 12px 20px 8px;
+  }
+}
+
+.clearText {
+  display: none;
+}
+
+@screen dt {
+  .filters-wrapper {
+    display: flex;
+  }
+
+  .filter-close,
+  .filter-header {
+    display: none;
+  }
+
+  .clearText {
+    display: block;
+    text-align: right;
+    color: #f47738;
+    margin-top: 20px;
+    margin-left: 10px;
+  }
+}
+
+@media (max-width: 780px) {
+  .filters-modal {
+    display: block;
+    position: fixed;
+    width: 100%;
+    height: 100vh;
+    left: 0;
+    top: 130px;
+    padding: 16px;
+    background-color: #fff;
+    z-index: 99;
+  }
+
+  .rdrDefinedRangesWrapper {
+    display: none;
+  }
+}

@@ -1,0 +1,388 @@
+.card {
+  @apply bg-white m-sm px-md pt-md pb-lg shadow-card;
+  border-radius: 4px;
+  max-width: 960px;
+
+  .card-header {
+    @apply text-text-primary text-heading-xl font-bold font-rc align-middle text-left mb-md;
+  }
+
+  .card-sub-header {
+    @apply text-text-primary text-caption-xl font-bold align-middle text-left mb-sm;
+  }
+
+  .card-caption {
+    @apply text-text-secondary text-caption-xl mb-sm;
+  }
+
+  .card-text {
+    @apply text-text-secondary text-body-l align-middle text-left mb-lg;
+
+    span {
+      @apply text-text-primary;
+    }
+  }
+
+  .card-text-primary {
+    @apply text-text-primary text-body-l;
+  }
+
+  .card-text-button {
+    @apply text-primary-main text-text-btn;
+  }
+
+  .card-label {
+    @apply text-legend text-text-primary mb-sm;
+  }
+
+  .card-label-error {
+    @apply block text-body-s text-error mb-md;
+  }
+
+  .card-label-desc {
+    @apply font-bold text-text-secondary text-heading-s mb-md;
+  }
+
+  .card-link {
+    @apply block text-center text-link text-primary-main mt-md cursor-pointer;
+  }
+}
+
+.validation-error {
+  @apply block text-body-s text-error;
+}
+
+.docsDescription {
+  color: theme(colors.text.primary) !important;
+}
+
+.field-container {
+  @apply flex  items-center;
+  /*@apply flex  justify-center items-center;*/
+}
+
+.employeeCard {
+  @apply bg-white shadow-card p-md mb-xl;
+  border-radius: 4px;
+
+  .card-header {
+    @apply text-text-primary text-heading-xl font-bold font-rc align-middle text-left mb-md;
+  }
+
+  .card-sub-header,
+  .employee-card-sub-header {
+    @apply text-text-primary text-caption-xl font-bold align-middle text-left;
+  }
+
+  .card-section-header {
+    @apply text-text-primary text-heading-m font-bold;
+  }
+
+  .card-section-sub-text{
+    @apply text-text-primary text-body-s;
+  }
+
+  .card-caption {
+    @apply text-text-secondary text-caption-xl mb-sm;
+  }
+
+  .card-text {
+    @apply text-text-secondary text-body-l align-middle text-left mb-lg;
+
+    span {
+      @apply text-text-primary;
+    }
+  }
+
+  .card-text-primary {
+    @apply text-text-primary text-body-l;
+  }
+
+  .card-text-button {
+    @apply text-primary-main text-text-btn;
+  }
+
+  .card-label {
+    @apply text-legend text-text-primary mb-md;
+  }
+
+  .card-label-error {
+    @apply block text-body-s text-error mb-md;
+  }
+
+  .card-label-desc {
+    @apply font-bold text-text-secondary text-heading-s mb-md;
+  }
+
+  .card-link {
+    @apply block text-center text-link text-link-normal mt-md;
+  }
+
+  .card-search-heading {
+    margin-right: 0px !important;
+    margin-left: 0px !important;
+    margin-bottom: 0px !important;
+    padding-bottom: 0px;
+    padding-left: 25px;
+  }
+}
+
+.header-wrap {
+  @apply flex mb-md;
+
+  .header-start {
+    margin-right: auto;
+  }
+
+  .header-content {
+  }
+
+  .header-end {
+    margin-left: auto;
+  }
+}
+
+.card-emp {
+  @extend .card;
+  padding-right: 0;
+  padding-top: 0;
+  padding-left: 0;
+  @apply bg-white m-sm;
+}
+
+.submit-bar {
+  @apply h-10 bg-primary-main text-center w-full outline-none;
+  box-shadow: inset 0px -2px 0px theme(colors.text.primary);
+
+  &:focus {
+    @apply outline-none;
+  }
+
+  header {
+    @apply font-rc font-medium text-legend text-white leading-10;
+  }
+}
+
+.submit-bar-disabled {
+  @apply h-10 bg-primary-main text-center w-full outline-none opacity-50;
+
+  &:focus {
+    @apply outline-none;
+  }
+
+  header {
+    @apply font-rc font-medium text-legend text-white leading-10;
+  }
+}
+
+@screen dt {
+  .submit-bar,
+  .submit-bar-disabled {
+    width: 240px;
+  }
+
+  .card {
+    display: flex;
+    flex-direction: column;
+
+    .card-header {
+      @apply text-heading-xl-dt;
+    }
+
+    .card-sub-header {
+      @apply text-heading-l-dt;
+    }
+
+    .card-caption {
+      @apply text-caption-xl-dt;
+    }
+
+    .card-text,
+    .card-text-primary {
+      @apply text-body-l-dt;
+    }
+
+    .card-link {
+      @apply text-left;
+    }
+  }
+
+  .employeeCard {
+    @apply mb-md mx-md !important;
+
+    &.filter {
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .card-header {
+      @apply text-heading-xl-dt;
+    }
+
+    .card-sub-header {
+      @apply text-heading-l-dt;
+    }
+
+    .employee-card-sub-header {
+      margin-bottom: 40px;
+      @apply text-heading-l-dt;
+    }
+
+    .card-section-header {
+      margin-bottom: 40px;
+      @apply text-heading-m-dt;
+    }
+
+    .card-section-sub-text{
+      @apply text-text-primary text-body-s-dt;
+    }
+
+    .card-search-heading {
+      margin-right: 0px !important;
+      margin-left: 0px !important;
+      margin-bottom: 0px !important;
+      padding-bottom: 0px;
+      padding-left: 25px;
+    }
+
+    .card-caption {
+      @apply text-caption-xl-dt;
+    }
+
+    .card-text,
+    .card-text-primary {
+      @apply text-body-l-dt;
+    }
+
+    .card-link {
+      @apply text-left;
+    }
+
+    .label-field-pair {
+      @apply flex items-center;
+
+      h2 {
+        width: 30%;
+      }
+
+      .field {
+        width: 50%;
+        margin-right: 20%;
+        .field {
+          margin-right: unset;
+        }
+      }
+    }
+
+    .field-container {
+      span {
+        border: 2px solid black;
+        background: rgb(247, 247, 247);
+        width: 40px;
+        height: 40px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-top: -16px;
+        border-right: none;
+      }
+    }
+  }
+
+  .header-wrap {
+    @apply flex mb-md;
+
+    .header-start {
+      margin-right: auto;
+    }
+
+    .header-content {
+    }
+
+    .header-end {
+      margin-left: auto;
+    }
+  }
+}
+
+.card-section-header {
+  @apply text-text-primary text-heading-m font-bold;
+}
+
+.card-search-heading {
+  margin-right: 0px !important;
+  margin-left: 0px !important;
+  margin-bottom: 0px !important;
+  padding-bottom: 0px;
+  padding-left: 25px;
+}
+
+.button-sub-text {
+  width: 100%;
+}
+
+.home-page-info-banner-wrap {
+  margin: "0px 16px 24px 16px";
+}
+
+@media (min-width: 780px) {
+  .button-sub-text {
+    width: 240px;
+  }
+  .home-page-info-banner-wrap {
+    max-width: 45%;
+    min-width: 40%;
+    margin-left: 0;
+    margin-right: 24px;
+    margin-bottom: 24px;
+  }
+  .info-banner-wrap-citizen-override {
+  }
+  .oc-aknowledgement-screen {
+    width: auto;
+    min-width: 240px;
+    max-width: 100%;
+    padding: 0px 10px;
+  }
+}
+
+.card-label-error {
+  @apply block text-body-s text-error mb-md;
+}
+
+.employeeCard-override {
+  margin-left: 0px !important;
+}
+
+.BPAemployeeCard {
+  margin-left: 0px !important;
+  margin-right: 0px !important;
+  margin-bottom: 64px !important;
+}
+
+.employee-application-details {
+  display: flex !important;
+  justify-content: space-between !important;
+  max-height: 60px !important;
+  height: 60px !important;
+}
+.employee-main-application-details {
+  padding: 10px !important;
+}
+
+.employee-mulitlink-main-div {
+  z-index: 10 !important;
+  max-width: 41% !important;
+}
+
+.employee-download-btn-className {
+  position: unset !important;
+  display: flex !important;
+  justify-content: flex-end !important;
+}
+
+.employee-options-btn-className {
+  position: unset !important;
+  margin: 0 !important;
+  width: 100% !important;
+}

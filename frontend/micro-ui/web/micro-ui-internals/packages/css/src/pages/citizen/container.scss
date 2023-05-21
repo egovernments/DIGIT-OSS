@@ -1,0 +1,19 @@
+.citizen-home-footer {
+  @apply flex  w-full  h-10 bg-grey-bg pb-md pt-sm justify-center;
+  img {
+    @apply ml-sm;
+  }
+}
+
+.employee .citizen-home-footer {
+  @apply fixed bottom-0;
+}
+.fill-path-primary-main {
+  path {
+    fill: theme(colors.primary.main);
+  }
+}
+
+.obps-search {
+  margin: 8px;
+}

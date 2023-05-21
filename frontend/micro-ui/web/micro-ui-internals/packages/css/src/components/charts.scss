@@ -1,0 +1,186 @@
+.chartHeader {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+
+  .sideContent {
+    @apply flex justify-around items-center ;
+
+  }
+}
+
+.searchInput {
+  @apply mr-lg;
+  input{
+    margin-bottom: 0;
+    @apply pr-xl;
+  }
+}
+
+.signature-img{
+  top: 8px;
+  right: 8px;
+  fill: theme(colors.text.secondary);
+  @apply absolute;
+}
+
+.column-direction {
+  flex-direction: column;
+}
+
+.chart-wrapper {
+  padding: 0 10px;
+  margin-top: 60px;
+}
+
+.chart-row {
+  @apply flex justify-between flex-wrap;
+  .chart-item {
+    flex-grow: 1;
+    margin-bottom: 15px;
+    width: 100%;
+
+    &:last-child {
+      margin-right: 0px;
+    }
+  }
+}
+
+.cursorPointer {
+  @apply cursor-pointer;
+}
+
+.options {
+  @apply flex justify-between items-center;
+  div {
+    display: none;
+  }
+}
+
+.options-m {
+  width: 95%;
+  margin: 0 auto 15px;
+  @apply flex justify-between;
+
+  svg {
+    margin-right: 10px;
+  }
+}
+
+.options-m {
+  div {
+    @apply flex;
+  }
+}
+.no-data {
+  @apply flex justify-center items-center;
+  height: 90%;
+  margin-bottom: 40px;
+  white-space:pre;
+}
+
+@screen dt {
+  .chart-wrapper {
+    padding-left: 15px;
+    margin-top: 10px;
+
+    .chart-item {
+      margin-right: 25px !important;
+      margin-bottom: 25px !important;
+      margin-left: 0 !important;
+      width: 31%;
+    }
+  }
+  .column-direction {
+    flex-direction: row;
+  }
+  .options-m {
+    display: none;
+  }
+
+  .options {
+    div {
+      @apply flex cursor-pointer;
+    }
+  }
+}
+
+.showMore {
+  @apply text-right cursor-pointer;
+  color: theme(colors.primary.main);
+}
+
+@media (max-width: 420px) { 
+  .recharts-default-tooltip {
+    width: 85%;
+    ul {
+      width: 100% !important;
+    }
+    ul li {
+      width: 100%;
+      display: flex !important;
+      flex-wrap: wrap;
+    }
+  }  
+}
+
+
+@media print{
+  .page-break {
+    margin-top: 1rem;
+    display: block;
+    page-break-before: auto;
+  }
+  .chart-wrapper {
+   @media print{
+    .chart-row {
+      @media print{
+      @apply flex justify-between flex-wrap;
+        .chart-item {
+          @media print{
+            flex-grow: 1;
+            margin-right: 25px;
+            margin-bottom: 25px;
+            width: 31%;
+        
+            &:last-child {
+              margin-right: 0px;
+            }
+            .chartHeader {
+              display: flex;
+              justify-content: space-between;
+            
+              .sideContent {
+                @apply flex justify-around items-center ;
+            
+                .searchInput {
+                  @apply mr-lg;
+                  input{
+                    margin-bottom: 0;
+                    @apply pr-xl;
+                  }
+                }
+            
+                .signature-img{
+                  top: 8px;
+                  right: 8px;
+                  fill: theme(colors.text.secondary);
+                  @apply absolute;
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+        
+    .options {
+      @apply flex justify-end;
+    }
+
+    .options-m {
+      display: none;
+    }
+  }
+}
+}

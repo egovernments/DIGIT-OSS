@@ -1,3 +1,4 @@
+@import "./login.scss";
 /* TODO: convert using tailwind */
 .employee {
   .breadcrumb {
@@ -52,7 +53,7 @@
       margin-top: 12px;
 
       .user-img-txt {
-        background: #f47738;
+        background: theme(colors.primary.main);
         padding: 10px 15px;
         border-radius: 50%;
         color: white;
@@ -74,7 +75,7 @@
   }
 
   .react-time-picker__wrapper {
-    border: 1px solid #464646;
+    border: 1px solid theme(colors.inputBorder);
   }
 
   .react-time-picker__clock {
@@ -110,9 +111,9 @@
   .sidebar {
     position: fixed;
     left: 0;
-    background: #22394d;
+    background: theme(colors.secondary);
     height: 100%;
-    color: #ffffff;
+    color: theme(colors.white);
     margin-top: 80px;
     z-index: 10;
     transition: 0.3s ease all;
@@ -132,24 +133,24 @@
     svg {
       width: 24px;
       height: 24px;
-      fill: #ffffff;
+      fill: theme(colors.white);
     }
     a {
       display: flex;
     }
     .sidebar-link {
       display: flex;
-      color: #ffffff;
+      color: theme(colors.white);
       justify-content: space-between;
       align-items: center;
       padding: 20px;
       font-size: 14px;
       &.active {
-        color: #f47738 !important;
+        color: theme(colors.primary.main) !important;
 
-        border-right: 4px solid #f47738;
+        border-right: 4px solid theme(colors.primary.main);
         svg {
-          fill: #f47738 !important;
+          fill: theme(colors.primary.main) !important;
         }
       }
       .employee-search-input {
@@ -169,27 +170,27 @@
       }
 
       svg {
-        fill: #ffffff !important;
+        fill: theme(colors.white) !important;
         width: 21px;
         height: 21px;
       }
 
       &:hover {
-        color: #f47738 !important;
+        color: theme(colors.primary.main) !important;
         background-color: #486480;
 
         cursor: pointer;
         svg {
-          fill: #f47738 !important;
+          fill: theme(colors.primary.main) !important;
         }
       }
       .search-icon-wrapper {
         svg {
-          fill: #ffffff !important;
+          fill: theme(colors.white) !important;
           width: 21px;
           height: 21px;
           path {
-            fill: #ffffff !important;
+            fill: theme(colors.white) !important;
           }
         }
       }
@@ -200,7 +201,7 @@
       margin-left: 40px;
       align-items: center;
       text-decoration: none;
-      color: #ffffff;
+      color: theme(colors.white);
       font-size: 14px;
       .actions {
         .tooltiptext {
@@ -211,7 +212,7 @@
       svg {
         width: 20px;
         height: 20px;
-        fill: #ffffff;
+        fill: theme(colors.white);
       }
       &:hover {
         color: #fe7a51 !important;
@@ -222,11 +223,11 @@
         }
       }
       &.active {
-        color: #f47738 !important;
+        color: theme(colors.primary.main) !important;
 
-        border-right: 4px solid #f47738;
+        border-right: 4px solid theme(colors.primary.main);
         svg {
-          fill: #f47738 !important;
+          fill: theme(colors.primary.main) !important;
         }
       }
     }
@@ -244,7 +245,7 @@
     padding-top: 10px;
 
     .containerStyles {
-      border: 1px solid #505a5f;
+      border: 1px solid theme(colors.text.secondary);
       padding: 16px;
       margin-bottom: 20px;
     }
@@ -259,7 +260,7 @@
   }
 
   .tableContainerStyles {
-    border: 1px solid #505a5f;
+    border: 1px solid theme(colors.text.secondary);
     padding: 16px;
     margin-bottom: 20px;
   }
@@ -364,7 +365,7 @@
   .select-wrap {
     margin-bottom: unset;
     svg {
-      fill: #ffffff;
+      fill: theme(colors.white);
     }
   }
 }
@@ -372,7 +373,7 @@
 @media (min-width: 640px) {
   .employee {
     .ground-container {
-      @apply block;
+      @apply block ml-md;
     }
     .breadcrumb {
       @apply mb-lg;
@@ -392,8 +393,9 @@
     .main {
       display: flex;
       flex-direction: column;
-      margin-left: 55px;
-      width: calc(100%-55px);
+      padding-top: 80px;
+      margin-left: 72px;
+      width: calc(100%-83px);
     }
     .citizen-home-container {
       display: flex;
@@ -463,10 +465,10 @@
 
   .top-back-btn {
     margin-bottom: 0px;
-    color: #ffffff;
+    color: theme(colors.white);
     margin-right: 1em;
     & svg {
-      fill: #ffffff;
+      fill: theme(colors.white);
     }
   }
   .hambuger-back-wrapper {
@@ -492,35 +494,4 @@
     margin-left: 16px;
     margin-right: 16px;
   }
-}
-
-.status-row-radio-wrapper {
-  margin-right: 1rem;
-  input[type="radio"] {
-    margin-right: 1rem;
-  }
-}
-.total-value-wrapper {
-  display: flex;
-  flex-direction: column;
-}
-
-.total-wrapper {
-  margin: 1rem 0;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  font-weight: bolder;
-}
-
-.total-wrapper .label {
-  text-align: left;
-}
-
-.total-wrapper .value {
-  text-align: right;
-}
-
-
-.resend-otp{
-  cursor: pointer;
 }

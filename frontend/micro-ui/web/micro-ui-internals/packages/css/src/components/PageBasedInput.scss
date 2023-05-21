@@ -1,0 +1,29 @@
+.PageBasedInputWrapper {
+  .SubmitBar {
+    z-index: 60;
+    @apply p-sm fixed w-full bottom-0 left-0 text-right bg-white;
+  }
+  .SubmitBarInCardInDesktopView {
+    @apply hidden;
+  }
+  label {
+    margin-left: 0 !important;
+  }
+}
+
+@screen dt {
+  .PageBasedInputWrapper {
+    .SubmitBar {
+      @apply hidden;
+    }
+    .SubmitBarInCardInDesktopView {
+      @apply block;
+    }
+    .card {
+      max-width: 960px;
+    }
+    button {
+      max-width: 240px;
+    }
+  }
+}

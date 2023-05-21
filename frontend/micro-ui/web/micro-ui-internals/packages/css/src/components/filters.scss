@@ -20,8 +20,8 @@
       display: none;
 
       &:checked ~ label {
-        border-color: #F47738;
-        color: #F47738;
+        border-color: theme(colors.primary.main);
+        color: theme(colors.primary.main);
       }
     }
 
@@ -29,7 +29,7 @@
       border: 1px solid;
       padding: 6px 10px;
       display: block;
-      @apply  border-solid border-input-border;
+      @apply border border-solid border-input-border;
       &:hover{
         @apply border-2 border-solid border-primary-main;
       }
@@ -39,19 +39,6 @@
 
 .pickerShadow {
   box-shadow: 0 8px 10px 1px rgba(0, 0, 0, 0.14), 0 3px 14px 2px rgba(0, 0, 0, 0.12), 0 5px 5px -3px rgba(0, 0, 0, 0.2);
-  width: inherit;
-}
-
-.rdrNextPrevButton {
-  margin: 5px;
-}
-
-.rdrNextButton i {
-	margin: 0 0 0 4px;
-}
-
-.rdrMonth {
-	width: inherit;
 }
 
 .filter-close {
@@ -86,7 +73,7 @@
   .clearText {
     display: block;
     text-align: right;
-    color: #f47738;
+    color: theme(colors.primary.main);
     margin-top: 20px;
     margin-left: 10px;
   }

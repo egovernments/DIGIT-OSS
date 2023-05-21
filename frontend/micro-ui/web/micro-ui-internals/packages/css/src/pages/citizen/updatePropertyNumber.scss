@@ -1,0 +1,46 @@
+.updatenumber-warper-citizen{
+  min-height: 95vh;
+  height: unset;
+}
+.updatePropertyNumber {
+  .pt-update-no-popup-wrapper {
+    @apply m-md;
+  }
+  .search-form-wrapper {
+    display: inherit;
+    padding: 16px;
+    .submit-bar {
+      position: absolute;
+      bottom: 25px;
+      width: 90%;
+    }
+    .submit-bar-disabled {
+      position: absolute;
+      bottom: 25px;
+      width: 90%;
+    }
+  }
+}
+
+@screen dt {
+  .updatenumber-warper-citizen{
+    min-height: 100vh;
+    height: unset;
+  }
+  .updatePropertyNumber {
+    .h1 {
+      @apply m-md;
+    }
+    .search-form-wrapper {
+      .submit-bar {
+        width: 100% !important;
+        position: unset !important;
+      }
+      .submit-bar-disabled {
+        position: absolute;
+        bottom: 25px;
+        width: 90%;
+      }
+    }
+  }
+}

@@ -1,0 +1,20 @@
+.searchBox {
+  @apply flex m-sm justify-between;
+  .searchAction {
+    position: relative;
+    @apply flex flex-row text-focus;
+    .searchText {
+      @apply ml-sm;
+    }
+  }
+}
+
+.svgPrimaryH16px{
+  svg{
+    width: 18px;
+    @apply h-6;
+    path{
+      fill: theme(colors.primary.main);
+    }
+  }
+}
