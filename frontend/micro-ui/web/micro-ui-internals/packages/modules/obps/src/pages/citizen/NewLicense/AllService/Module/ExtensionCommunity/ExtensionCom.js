@@ -150,6 +150,7 @@ function ExtensionCom() {
    const UpdateExtensionInConstruction = async (data) => {
    const token = window?.localStorage?.getItem("token");
     const userInfo = Digit.UserService.getUser()?.info || {};
+     const numberLic = data?.licenceNo;
     console.log("REQUEST LOG1 ====> ", data, JSON.stringify(data));
     try {
       setLoader(true);
@@ -163,7 +164,7 @@ function ExtensionCom() {
         "constructionOfCommunity": [
           {
             ...licenseData,
-            licenseNumber: data?.licenseNumber,
+             licenseNumber: numberLic,
             appliedBy: data?.appliedBy,
             areaInAcers: data?.areaInAcers,
             validUpTo: data?.validUpTo,
@@ -186,8 +187,7 @@ function ExtensionCom() {
       console.log("Update Response ====> ", response);
 
       setLoader(false);
-      setShowToastError({ label: "Surrender of License updated successfully", error: false, success: true });
-      handleClose();
+      setApplicationNumber(response?.data?.constructionOfCommunity?.[0]?.applicationNumber);
     } catch (err) {
       console.log("Update Error ====> ", err.message);
       setLoader(false);
@@ -218,7 +218,7 @@ function ExtensionCom() {
           msgId: "1669293303096|en_IN"
         },
       };
-      const response = await axios.post(`/tl-services/construction/_get?licenseNumber=${id}`, requestData);
+      const response = await axios.post(`/tl-services/construction/_get?applicationNumber=${id}`, requestData);
       console.log("Response ====> ", response);
       setLicenseData(response?.data?.constructionOfCommunity?.[0]);
       const details = response?.data?.constructionOfCommunity?.[0];
@@ -323,7 +323,7 @@ function ExtensionCom() {
                   <span style={{ color: "red" }}>*</span>
                 </h2>
 
-                <OutlinedInput type="number" className="Inputcontrol" placeholder="" {...register("typeOfCommunitySite")} />
+                <OutlinedInput type="text" className="Inputcontrol" placeholder="" {...register("typeOfCommunitySite")} />
               </FormControl>
                &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
                 {watch("appliedBy")?.value == "1" && (

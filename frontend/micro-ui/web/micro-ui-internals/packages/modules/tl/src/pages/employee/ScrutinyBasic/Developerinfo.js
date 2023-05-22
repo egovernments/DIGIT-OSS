@@ -461,7 +461,7 @@ const Developerinfo = (props) => {
 
   useEffect(() => {
     if (labelValue) {
-      const fieldPresent = dataIcons.egScrutiny.filter(ele => (ele.fieldIdL === labelValue));
+      const fieldPresent = dataIcons.egScrutiny.filter(ele => (ele.fieldIdL === labelValue)); 
       setSelectedFieldData(fieldPresent[0]);
     } else {
       setSelectedFieldData(null);
