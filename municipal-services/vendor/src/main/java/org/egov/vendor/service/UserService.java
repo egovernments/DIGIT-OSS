@@ -83,7 +83,7 @@ public class UserService {
 						foundOwner = userDetailResponse.getUser().get(i);
 					}
 				}
-				foundOwnerDetails(userDetailResponse, foundOwner, requestInfo);
+				owner = foundOwnerDetails(userDetailResponse, foundOwner, requestInfo);
 
 			} else {
 				owner = createVendorOwner(owner, vendorRequest.getRequestInfo());
