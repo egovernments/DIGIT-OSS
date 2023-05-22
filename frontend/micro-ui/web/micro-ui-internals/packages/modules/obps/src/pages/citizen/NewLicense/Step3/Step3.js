@@ -9,11 +9,6 @@ import ScrollToTop from "@egovernments/digit-ui-react-components/src/atoms/Scrol
 import axios from "axios";
 import ReactMultiSelect from "../../../../../../../react-components/src/atoms/ReactMultiSelect";
 import Spinner from "../../../../components/Loader";
-import CommercialColonyInResidential from "./CommercialColonyResidential";
-import CommercialLicense from "./CommercialLicense";
-import LowDensityEco from "./LowDensityEco";
-import CyberPark from "./CyberPark";
-import RetirementHousing from "./RetirementHousing";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import { getDocShareholding } from "../docView/docView.help";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -24,12 +19,9 @@ import EditIcon from "@mui/icons-material/Edit";
 import InfoIcon from "@mui/icons-material/Info";
 import Tooltip from "@mui/material/Tooltip";
 import { useLocation } from "react-router-dom";
-import { Toast } from "@egovernments/digit-ui-react-components";
 import WorkingTable from "../../../../components/Table";
 import CusToaster from "../../../../components/Toaster";
 import { useTranslation } from "react-i18next";
-
-const dataSet = [{ name: "test" }];
 
 const compactBlockA = [
   { label: "Private Road", value: "privateRoad" },
@@ -41,62 +33,6 @@ const compactBlockA = [
 const compactBlockB = [
   { label: "Private Land", value: "privateLand" },
   { label: "Any other", value: "anyOther" },
-];
-
-const test = {
-  area: null,
-  code: "RPL",
-  far: null,
-  name: "Residential Plotted Colony",
-  purposeDetail: [
-    {
-      area: null,
-      code: "RPL",
-      far: null,
-      name: "Residential Plotted Colony",
-    },
-    {
-      area: null,
-      code: "RPL",
-      far: null,
-      name: "Residential Plotted Colony",
-      purposeDetail: [
-        {
-          area: "811.100",
-          code: "RPL",
-          far: null,
-          name: "Residential Plotted Colony",
-        },
-      ],
-    },
-  ],
-};
-
-const potentialOptons = [
-  {
-    label: "Hyper",
-    value: "K.Mishra",
-  },
-  {
-    label: "High I",
-    value: "potential 2",
-  },
-  {
-    label: "High II",
-    value: "potential 2",
-  },
-  {
-    label: "Medium",
-    value: "potential 2",
-  },
-  {
-    label: "Low I",
-    value: "potential 2",
-  },
-  {
-    label: "Low II",
-    value: "potential 2",
-  },
 ];
 
 const releaseStatus = [
@@ -141,7 +77,6 @@ const LandScheduleForm = (props) => {
   const [applicantId, setApplicantId] = useState("");
   const [modalData, setModalData] = useState([]);
   const [getData, setData] = useState({ caseNumber: "", dairyNumber: "" });
-  const [toastError, setToastError] = useState("");
   const [fileStoreId, setFileStoreId] = useState({});
   const [specificTableData, setSpecificTableData] = useState(null);
 
@@ -331,10 +266,6 @@ const LandScheduleForm = (props) => {
       props.Step3Continue(useData);
     } catch (error) {
       setLoader(false);
-      setToastError(error?.response?.data?.Errors?.[0]?.code);
-      setTimeout(() => {
-        setToastError(null);
-      }, 2000);
       return error.message;
     }
   };
@@ -1052,26 +983,6 @@ const LandScheduleForm = (props) => {
                           </div>
                         </div>
                       )}
-                      {/* {watch("encumburance") !== "none" && (
-                        <div className="col col-6">
-                          <h2 data-toggle="tooltip" data-placement="top" title="Upload Document"></h2> Document Upload{" "}
-                          <span style={{ color: "red" }}>*</span>
-                          <label>
-                            <FileUpload style={{ cursor: "pointer" }} color="primary" />
-                            <input
-                              type="file"
-                              style={{ display: "none" }}
-                              accept="application/pdf/jpeg/png"
-                              onChange={(e) => getDocumentData(e?.target?.files[0], "encumburanceDoc")}
-                            />
-                          </label>
-                          {watch("encumburanceDoc") && (
-                            <a onClick={() => getDocShareholding(watch("encumburanceDoc"), setLoader)} className="btn btn-sm ">
-                              <VisibilityIcon color="info" className="icon" />
-                            </a>
-                          )}
-                        </div>
-                      )} */}
                     </div>
 
                     <h3 className="error-message" style={{ color: "red" }}>
@@ -2956,9 +2867,6 @@ const LandScheduleForm = (props) => {
                         {`${t("NWL_APPLICANT_SHAJRA_PLAN_DOCUMENT")}`}
                         {/* Shajra Plan  */}
                         <span style={{ color: "red" }}>*</span>
-                        {/* <Tooltip title=" Click here for instructions to Upload Copy of Shajra Plan.">
-                          <InfoIcon style={{ cursor: "pointer" }} color="primary"></InfoIcon>
-                        </Tooltip> */}
                       </h2>
                       <span>
                         {" "}
@@ -3380,26 +3288,6 @@ const LandScheduleForm = (props) => {
         </ModalBody>
         <ModalFooter toggle={() => setmodal(!modal)}></ModalFooter>
       </Modal>
-      {/* {toastError && (
-        <Toast
-          error={"error" ? true : false}
-          label={toastError}
-          isDleteBtn={true}
-          onClose={() => {
-            setToastError(null);
-          }}
-        />
-      )} */}
-      {/* {showToast && (
-        <Toast
-          success={showToast?.key === "success" ? true : false}
-          label="Document Uploaded Successfully"
-          isDleteBtn={true}
-          onClose={() => {
-            setShowToast(null);
-          }}
-        />
-      )} */}
       {showToastError && (
         <CusToaster
           label={showToastError?.label}

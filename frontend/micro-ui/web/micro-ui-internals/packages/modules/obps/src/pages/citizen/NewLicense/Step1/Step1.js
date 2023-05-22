@@ -1,13 +1,9 @@
 import React, { useState, useEffect } from "react";
-import { Button } from "@material-ui/core";
 import FormControl from "@mui/material/FormControl";
-import OutlinedInput from "@mui/material/OutlinedInput";
 import axios from "axios";
-import { Row, Col, Form } from "react-bootstrap";
 import { useForm, Controller } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useLocation, useHistory } from "react-router-dom";
-import { Toast } from "@egovernments/digit-ui-react-components";
 import Spinner from "../../../../components/Loader";
 import { getDocShareholding } from "../docView/docView.help";
 import { VALIDATION_SCHEMA } from "../../../../utils/schema/step1";
@@ -40,8 +36,6 @@ const ApllicantFormStep1 = (props) => {
     formState: { errors },
     control,
     setValue,
-    getValues,
-    trigger,
   } = useForm({
     mode: "onChange",
     reValidateMode: "onChange",
@@ -50,8 +44,6 @@ const ApllicantFormStep1 = (props) => {
   });
   const token = window?.localStorage?.getItem("token");
   const ApplicantFormSubmitHandlerForm = async (data) => {
-    // props.Step1Continue("6", "userInfo", "licData");
-
     delete data?.developerName;
     delete data?.developerNameA;
     delete data?.developerAddress;
@@ -76,10 +68,6 @@ const ApllicantFormStep1 = (props) => {
     delete data?.authorizedAddress;
 
     const testingData = developerDataLabel;
-
-    // testingData?.aurthorizedUserInfoArray = developerDataLabel?.aurthorizedUserInfoArray?.filter((item) => item?.emailId === userInfo?.emailId);
-
-    // data["notSigned"] = data?.notSigned?.value;
     const postDistrict = {
       pageName: "ApplicantInfo",
       action: "INITIATE",
@@ -157,9 +145,6 @@ const ApllicantFormStep1 = (props) => {
       setValue("authorizedEmail", data?.[0]?.emailId);
       setValue("authorizedPan", data?.[0]?.pan);
     }
-
-    // const filteredObject = developerDataLabel?.aurthorizedUserInfoArray.filter()
-    // developerDataLabel?.aurthorizedUserInfoArray?.[0]?.name
   }, [developerDataLabel]);
 
   useEffect(() => {
@@ -173,19 +158,6 @@ const ApllicantFormStep1 = (props) => {
       setValue("developerPanNo", developerDataLabel?.addInfo?.PanNumber);
       setValue("developerGstNo", developerDataLabel?.addInfo?.gst_Number);
       setValue("developerLlpNo", developerDataLabel?.addInfo?.llp_Number);
-
-      // setValue("directorDinNo", developerDataLabel?.addInfo?.DirectorsInformation?.[0]?.din);
-      // setValue("directorName", developerDataLabel?.addInfo?.DirectorsInformation?.[0]?.name);
-      // setValue("directorContactNumber", developerDataLabel?.addInfo?.DirectorsInformation?.[0]?.contactNumber);
-      // setValue("directorDoc", developerDataLabel?.licenceDetails?.pincode);
-      // setValue("shareholdingName", developerDataLabel?.addInfo?.shareHoldingPatterens?.[0]?.name);
-      // setValue("shareholdingDesignition", developerDataLabel?.addInfo?.shareHoldingPatterens?.[0]?.designition);
-      // setValue("shareholdingPercentage", developerDataLabel?.addInfo?.shareHoldingPatterens?.[0]?.percentage);
-      // setValue("shareholdingDoc", developerDataLabel?.addInfo?.showDevTypeFields);
-      // setValue("authorizedName", developerDataLabel?.aurthorizedUserInfoArray?.[0]?.name);
-      // setValue("authorizedMobile", developerDataLabel?.aurthorizedUserInfoArray?.[0]?.mobileNumber);
-      // setValue("authorizedEmail", developerDataLabel?.aurthorizedUserInfoArray?.[0]?.emailId);
-      // setValue("authorizedPan", developerDataLabel?.aurthorizedUserInfoArray?.[0]?.pan);
       setValue("authorizedAddress", developerDataLabel?.aurthorizedUserInfoArray?.[0]?.permaneneAddress);
       setValue(
         "permanentAddress",
@@ -279,10 +251,6 @@ const ApllicantFormStep1 = (props) => {
             </h5>
             <div className="row-12">
               <div className="col md={4} xxl lg-4">
-                {/* {developerDataLabel?.addInfo?.showDevTypeFields != "Individual" &&
-                  developerDataLabel?.addInfo?.showDevTypeFields != "Proprietorship Firm" && (
-                    
-                  )} */}
                 {developerDataLabel?.addInfo?.showDevTypeFields == "Individual" ||
                 developerDataLabel?.addInfo?.showDevTypeFields == "Proprietorship Firm" ||
                 developerDataLabel?.addInfo?.showDevTypeFields == "Hindu Undivided Family" ? (
@@ -345,7 +313,6 @@ const ApllicantFormStep1 = (props) => {
                         value={value}
                         name="developerAddress"
                       />
-                      // <OutlinedInput type="text" value={value} className="form-control" placeholder="N/A" disabled name="developerAddress" />
                     )}
                   />
                   <h3 className="error-message" style={{ color: "red" }}>
@@ -375,7 +342,6 @@ const ApllicantFormStep1 = (props) => {
                         value={value}
                         name="developerEmail"
                       />
-                      // <OutlinedInput type="text" value={value} className="form-control" disabled name="developerEmail" />
                     )}
                   />
                   <h3 className="error-message" style={{ color: "red" }}>
@@ -404,7 +370,6 @@ const ApllicantFormStep1 = (props) => {
                         value={value}
                         name="developerType"
                       />
-                      // <input type="text" value={value} className="form-control" placeholder="N/A" disabled name="developerType" />
                     )}
                   />
                   <h3 className="error-message" style={{ color: "red" }}>
@@ -960,18 +925,6 @@ const ApllicantFormStep1 = (props) => {
           }}
         />
       )}
-
-      {/* {showToastError && (
-        <Toast
-          error={showToastError?.key === "error" ? true : false}
-          label="No Pdf here"
-          isDleteBtn={true}
-          onClose={() => {
-            setShowToastError(null);
-            setError(null);
-          }}
-        />
-      )} */}
     </div>
   );
 };
