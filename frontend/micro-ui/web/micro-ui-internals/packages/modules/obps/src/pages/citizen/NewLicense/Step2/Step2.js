@@ -76,6 +76,10 @@ const ApllicantPuropseForm = (props) => {
       render: (data) => (data?.khewats ? data?.khewats : "N/A"),
     },
     {
+      title: "Min",
+      render: (data) => (data?.min ? "Yes" : "No"),
+    },
+    {
       key: "landOwner",
       title: "Name of Land Owner",
       dataIndex: "landOwner",
@@ -156,20 +160,20 @@ const ApllicantPuropseForm = (props) => {
       render: (data) => (data?.kanal ? data?.kanal : "N/A"),
     },
     {
-      title: "Bigha",
-      render: (data) => (data?.bigha ? data?.bigha : "N/A"),
-    },
-    {
       title: "Marla",
       render: (data) => (data?.marla ? data?.marla : "N/A"),
     },
     {
-      title: "Biswa",
-      render: (data) => (data?.biswa ? data?.biswa : "N/A"),
-    },
-    {
       title: "Sarsai",
       render: (data) => (data?.sarsai ? data?.sarsai : "N/A"),
+    },
+    {
+      title: "Bigha",
+      render: (data) => (data?.bigha ? data?.bigha : "N/A"),
+    },
+    {
+      title: "Biswa",
+      render: (data) => (data?.biswa ? data?.biswa : "N/A"),
     },
     {
       title: "Biswansi",
@@ -413,20 +417,6 @@ const ApllicantPuropseForm = (props) => {
     setPurposeOptions({ data: purpose, isLoading: false });
   }, [PurposeType]);
 
-  // useEffect(() => {
-  //   const potential = PotentialType?.["common-masters"]?.PotentialZone?.map(function (data) {
-  //     return { value: data?.code, label: data?.zone };
-  //   });
-  //   setPotentialOptions({ data: potential, isLoading: false });
-  // }, [PotentialType]);
-
-  // useEffect(() => {
-  //   const district = DistrictType?.["common-masters"]?.District?.map(function (data) {
-  //     return { value: data?.districtCode, label: data?.name, distCodeTCP: data?.distCodeTCP };
-  //   });
-  //   setDistrictOptions({ data: district, isLoading: false });
-  // }, [DistrictType]);
-
   useEffect(() => {
     const district = DistrictType?.["common-masters"]?.District?.map(function (data) {
       return { value: data?.disCode, label: data?.disName, distCodeTCP: data?.distCodeTCP, applicationTenantId: data?.tenantId };
@@ -514,13 +504,6 @@ const ApllicantPuropseForm = (props) => {
     }
   };
 
-  // useEffect(() => {
-  //   const zonePlan = ZoneType?.["common-masters"]?.PotentialZone?.map(function (data) {
-  //     return { value: data?.code, label: data?.potentialZone };
-  //   });
-  //   setZoneOptions({ data: zonePlan, isLoading: false });
-  // }, [ZoneType]);
-
   const getSectorOptions = async (val) => {
     const payload = {
       RequestInfo: {
@@ -561,64 +544,6 @@ const ApllicantPuropseForm = (props) => {
     }
   };
 
-  const getToptions = async (val) => {
-    const payload = {
-      RequestInfo: {
-        apiId: "Rainmaker",
-        ver: "v1",
-        ts: 0,
-        action: "_search",
-        did: "",
-        key: "",
-        msgId: "090909",
-        authToken: "",
-        correlationId: null,
-      },
-      MdmsCriteria: {
-        tenantId: "hr",
-        moduleDetails: [
-          {
-            tenantId: "hr",
-            moduleName: "common-masters",
-            masterDetails: [
-              {
-                name: "tehsil",
-                filter: `[?(@.tehCode=="${val}")]`,
-              },
-            ],
-          },
-        ],
-      },
-    };
-    try {
-      const Resp = await axios.post("/egov-mdms-service/v1/_search", payload);
-      const sectorPlan = Resp?.data?.MdmsRes?.["common-masters"]?.Sector?.map(function (data) {
-        return { value: data?.sectorCode, label: data?.sectorNo };
-      });
-    } catch (error) {
-      return error;
-    }
-  };
-
-  // useEffect(() => {
-  //   const sectorPlan = sectorType?.["common-masters"]?.Sector?.map(function (data) {
-  //     return { value: data?.devPlanCode, label: data?.sectorNo };
-  //   });
-  //   setSectorOptions({ data: sectorPlan, isLoading: false });
-  // }, [sectorType]);
-
-  // const DistrictApiCall = async () => {
-  //   try {
-  //     const Resp = await axios.post("/egov-mdms-service/v1/_district", datapost);
-  //     const distData = Resp?.data?.map((el) => {
-  //       return { label: el?.name, id: el?.distCode, value: el?.distCode };
-  //     });
-  //     setDistrictDataLabels({ data: distData, isLoading: false });
-  //   } catch (error) {
-  //     return error;
-  //   }
-  // };
-
   const getTehslidata = async (data) => {
     const payload = {
       RequestInfo: {
@@ -658,17 +583,6 @@ const ApllicantPuropseForm = (props) => {
       return error;
     }
   };
-  // const getTehslidata = async (data) => {
-  //   try {
-  //     const Resp = await axios.post("/egov-mdms-service/v1/_tehsil?dCode=" + data, datapost, {});
-  //     const tehsilData = Resp?.data?.map((el) => {
-  //       return { label: el?.name, id: el?.code, value: el?.code };
-  //     });
-  //     setTehsilDataLabels({ data: tehsilData, isLoading: false });
-  //   } catch (error) {
-  //     return error;
-  //   }
-  // };
 
   const getRevenuStateData = async (data) => {
     const payload = {
@@ -709,18 +623,6 @@ const ApllicantPuropseForm = (props) => {
       return error;
     }
   };
-
-  // const getRevenuStateData = async (code) => {
-  //   try {
-  //     const Resp = await axios.post("/egov-mdms-service/v1/_village?" + "dCode=" + district + "&" + "tCode=" + code, datapost, {});
-  //     const revenData = Resp?.data?.map((el) => {
-  //       return { label: el?.name, id: el?.khewats, value: el?.code, khewats: el?.khewats, code: el?.code };
-  //     });
-  //     setRevenueDataLabels({ data: revenData, isLoading: false });
-  //   } catch (error) {
-  //     return error;
-  //   }
-  // };
 
   const getMustilData = async (code) => {
     try {
@@ -763,28 +665,16 @@ const ApllicantPuropseForm = (props) => {
     }
   };
 
-  // useEffect(() => {
-  //   DistrictApiCall();
-  // }, []);
-
   useEffect(() => {
     console.log("modalData", modalData);
   }, [modalData]);
 
   const ApplicantPurposeModalData = (modaldata) => {
-    // modaldata["district"] = modaldata?.district?.value;
     modaldata["potential"] = modaldata?.potential?.label;
     modaldata["sector"] = modaldata?.sector?.label;
-    // modaldata["tehsil"] = modaldata?.tehsil?.value;
-    // modaldata["revenueEstate"] = modaldata?.revenueEstate?.value;
     modaldata["rectangleNo"] = modaldata?.rectangleNo?.value;
-    // modaldata["typeLand"] = modaldata?.typeLand?.value;
-    // modaldata["developmentPlan"] = modaldata?.developmentPlan?.value;
     modaldata["isChange"] = showFields;
-
-    // modaldata["registeringAuthorityDoc"] = docId;
     delete modaldata?.purpose;
-
     if (modaldata?.consolidationType === "consolidated") {
       delete modaldata?.bigha;
       delete modaldata?.biswa;
@@ -821,9 +711,6 @@ const ApllicantPuropseForm = (props) => {
   const PurposeFormSubmitHandler = async (data) => {
     const token = window?.localStorage?.getItem("token");
     data["purpose"] = data?.purpose?.value;
-    // data["potential"] = data?.potential?.value;
-    // data["district"] = watch("district")?.value;
-    // data["state"] = "Haryana";
     data["totalArea"] = getTotalArea;
     delete data?.district;
     delete data?.developmentPlan;
@@ -975,10 +862,7 @@ const ApllicantPuropseForm = (props) => {
   useEffect(() => {
     if (stepData) {
       const data = purposeOptions?.data?.filter((item) => item?.value === stepData?.purpose);
-      // const districtData = districtDataLabels?.data?.filter((item) => item?.value === stepData?.district);
       setValue("purpose", { label: data?.[0]?.label, value: data?.[0]?.value });
-      // setDistrict(districtData?.[0]?.distCode);
-      // if (districtData?.[0]?.distCode) getTehslidata(districtData?.[0]?.distCode);
     }
   }, [stepData, purposeOptions]);
 
@@ -994,11 +878,6 @@ const ApllicantPuropseForm = (props) => {
   const handleChangePurpose = (data) => {
     const purposeSelected = data?.value;
     window?.localStorage.setItem("purpose", purposeSelected);
-  };
-
-  const handleChangePotential = (data) => {
-    const potentialSelected = data?.value;
-    window?.localStorage.setItem("potential", JSON.stringify(potentialSelected));
   };
 
   const getDocumentData = async (file, fieldName) => {
@@ -1017,9 +896,7 @@ const ApllicantPuropseForm = (props) => {
       const Resp = await axios.post("/filestore/v1/files", formData, {});
       setValue(fieldName, Resp?.data?.files?.[0]?.fileStoreId);
       setFileStoreId({ ...fileStoreId, [fieldName]: Resp?.data?.files?.[0]?.fileStoreId });
-      // if (fieldName === "registeringAuthorityDoc") {
-      //   setValue("registeringAuthorityDoc", file.name);
-      // }
+
       setSelectedFiles([...selectedFiles, file.name]);
       setLoader(false);
       setShowToastError({ label: "File Uploaded Successfully", error: false, success: true });
@@ -1136,18 +1013,6 @@ const ApllicantPuropseForm = (props) => {
                     {errors.purpose && "This field is required"}
                   </h3>
                 </Col>
-
-                {/* <Col md={4} xxl lg="3">
-                  <div>
-                    <Form.Label>
-                      <h2>
-                        Type of application
-                        <span style={{ color: "red" }}>*</span>
-                      </h2>
-                    </Form.Label>
-                  </div>
-                  <ReactMultiSelect control={control} name="migration" placeholder="" data={migrationData} labels="Migration" />
-                </Col> */}
 
                 <Col style={{ display: "flex", alignItems: "end" }} md={8} xxl lg="9">
                   <p>
@@ -1448,7 +1313,18 @@ const ApllicantPuropseForm = (props) => {
                   {errors?.khewats && errors?.khewats?.message}
                 </h3>
               </Col>
-              <Col md={4} xxl lg="4">
+
+              <Col style={{ display: "flex", alignItems: "center" }} md={4} xxl lg="4">
+                <div className="form-check">
+                  <label style={{ marginRight: "23px" }} className="checkbox" for="selectMIN">
+                    {`${t("NWL_APPLICANT_MIN")}`}
+                    {/* MIN */}
+                  </label>
+                  <input className="form-check-input" formControlName="agreeCheck" type="checkbox" value="" id="selectMIN" {...register("min")} />
+                </div>
+              </Col>
+
+              <Col className="mt-3" md={4} xxl lg="4">
                 <div>
                   <label>
                     <h2>
@@ -1918,9 +1794,6 @@ const ApllicantPuropseForm = (props) => {
                           &nbsp; Pucka &nbsp;&nbsp;
                         </label>
                       </h2>
-                      {/* <h3 className="error-message" style={{ color: "red" }}>
-                      {errors?.nonConsolidationType && errors?.nonConsolidationType?.message}
-                    </h3> */}
                     </div>
                   </div>
                 )}
@@ -1935,9 +1808,6 @@ const ApllicantPuropseForm = (props) => {
                         </h2>
                       </label>
                       <Form.Control type="text" className="form-control" placeholder="" {...register("acquistionStatus")} />
-                      {/* <h3 className="error-message" style={{ color: "red" }}>
-                          {errors?.registeringAuthority && errors?.registeringAuthority?.message}
-                        </h3> */}
                     </div>
 
                     <table className="table table-bordered" style={{ backgroundColor: "rgb(251 251 253))" }}>
@@ -2048,9 +1918,6 @@ const ApllicantPuropseForm = (props) => {
                         </td>
                         <td>
                           <input disabled type="number" className="form-control" {...register("nonConsolidatedTotal")} />
-                          {/* <label htmlFor="asumsarsai">
-                            Total: {(watch("bigha") * 1008 + watch("biswa") * 50.41 + watch("biswansi") * 2.52)?.toFixed(3)}
-                          </label> */}
                           &nbsp;&nbsp;
                         </td>
                       </tr>
@@ -2109,9 +1976,6 @@ const ApllicantPuropseForm = (props) => {
                         </td>
                         <td>
                           <input disabled type="number" className="form-control" {...register("nonConsolidatedTotal")} />
-                          {/* <label htmlFor="sumsarsaia">
-                            Total: {(watch("bigha") * 3025 + watch("biswa") * 151.25 + watch("biswansi") * 7.56)?.toFixed(3)}
-                          </label> */}
                           &nbsp;&nbsp;
                         </td>
                       </tr>
