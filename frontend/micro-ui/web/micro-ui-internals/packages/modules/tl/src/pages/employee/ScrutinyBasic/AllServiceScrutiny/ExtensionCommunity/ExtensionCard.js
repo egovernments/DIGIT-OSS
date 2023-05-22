@@ -33,15 +33,15 @@ const ExtensionCard = (props) => {
   const [businessService, setBusinessService] = useState("CONSTRUCTION_OF_COMMUNITY");
   const [moduleCode, setModuleCode] = useState("TL");
   const [scrutinyDetails, setScrutinyDetails] = useState();
-  // const [applicationNumber,setApplicationNumber] = useState("");
+  const [status , setStatus] = useState();
   const [applicationDetails, setApplicationDetails] = useState();
   const [workflowDetails, setWorkflowDetails] = useState();
   const [applicationData, setApplicationData] = useState();
   const [additionalDetails, setAdditionalDetails] = useState({});
-  const [loiNumberSet, setLOINumberSet] = useState("");
-  const [edcDataTreade, setEdcDataTreade] = useState("");
-  const [idwDataTreade, setIdwDataTreade] = useState("");
-  const [applicationStatus,setApplicationStatus] = useState();
+//   const [loiNumberSet, setLOINumberSet] = useState("");
+//   const [edcDataTreade, setEdcDataTreade] = useState("");
+//   const [idwDataTreade, setIdwDataTreade] = useState("");
+//   const [applicationStatus,setApplicationStatus] = useState();
 
   //   const authToken = Digit.UserService.getUser()?.access_token || null;
 
@@ -75,48 +75,20 @@ const ExtensionCard = (props) => {
         return response?.data;
       });
         console.log("Response From API1", Resp, Resp?.constructionOfCommunity);
-      setScrutinyDetails(Resp?.constructionOfCommunity?.[0]);
-
+      setScrutinyDetails(Resp?.constructionOfCommunity?.[0]?.status);
+setStatus(Resp?.constructionOfCommunity?.[0]?.status);
       console.log("devDel1234", Resp?.constructionOfCommunity?.[0]);
-      const loiNumber = Resp?.constructionOfCommunity?.[0]?.loiNumber;
+    //   const loiNumber = Resp?.constructionOfCommunity?.[0]?.loiNumber;
       setApplicationData(Resp?.constructionOfCommunity?.[0]);
-      setApplicationStatus(Resp?.constructionOfCommunity?.[0]?.status);
+    //   setApplicationStatus(Resp?.constructionOfCommunity?.[0]?.status);
       setApplicationDetails({
         applicationData: Resp?.constructionOfCommunity?.[0],
-        workflowCode: Resp?.constructionOfCommunity?.[0].businessService,
-      });
-      // console.log("Loi1234787", userInfo );
-      // console.log("Loi1234", loiNumber );
-      const loiRequest = {
-        requestInfo: {
-          api_id: "Rainmaker",
-          ver: "1",
-          ts: 0,
-          action: "_search",
-          did: "",
-          key: "",
-          msg_id: "090909",
-          requesterId: "",
-          authToken: authToken,
-          userInfo: userInfo,
-        },
-      };
-
-      const Resploi = await axios.post(`/tl-services/v1/_search?loiNumber=${loiNumber}`, loiRequest);
-      // console.log("Afterloi", Resploi );
-      console.log("EDCR1234", Resploi?.data?.Licenses?.[0]?.tradeLicenseDetail?.EDC);
-      setEdcDataTreade(Resploi?.data?.Licenses?.[0]?.tradeLicenseDetail?.EDC);
-      setIdwDataTreade(Resploi?.data?.Licenses?.[0]?.tradeLicenseDetail?.IDW);
-
-      // setScrutinyDetails(Resp?.changeBeneficial?.[0]);
-
-      console.log(setIdwDataTreade);
-      // setApplicationData(Resp?.changeBeneficial?.[0]);
+        workflowCode: Resp?.constructionOfCommunity?.[0].businessService
+        })
     } catch (error) {
       console.log(error);
     }
-  };
-
+      };
   let EditRenewalApplastModifiedTime = Digit.SessionStorage.get("EditRenewalApplastModifiedTime");
 
   let workflowDetailsTemp = Digit.Hooks.useWorkflowDetails({
@@ -171,7 +143,7 @@ const ExtensionCard = (props) => {
     // setTimeout(() => {
       setSelectedAction(null);
       setShowModal(false);
-      window.location.href = `/digit-ui/employee/tl/CommunityInbox`;
+    //   window.location.href = `/digit-ui/employee/tl/CommunityInbox`;
     // }, 3000);
   };
 
@@ -180,8 +152,8 @@ const ExtensionCard = (props) => {
   };
 
   const submitAction = async (data = {}, nocData = false, isOBPS = {}) => {
-    let tempdata = data || {};
-    tempdata.changeBeneficial[0].additionalDetails = additionalDetails;
+    // let tempdata = data || {};
+    // tempdata.changeBeneficial[0].additionalDetails = additionalDetails;
     console.log("logger log1223", tempdata,additionalDetails);
 
     try {
@@ -202,7 +174,7 @@ const ExtensionCard = (props) => {
         },
       };
       console.log("logger log1223 body", body);
-      const response = await axios.post("/tl-services/beneficial/_update", body);
+      const response = await axios.post("/tl-services/construction/_update", body);
       console.log("Update API Response ====> ", response.data);
       closeModal();
     } catch (error) {
@@ -212,7 +184,7 @@ const ExtensionCard = (props) => {
     closeModal();
     setTimeout(() => {
       setShowToast();
-      window.location.href = `/digit-ui/employee/tl/BeneficialCard`
+      window.location.href = `/digit-ui/employee/tl/CommunityInbox`
     }, 3000);
   };
 
@@ -243,48 +215,88 @@ const ExtensionCard = (props) => {
 
   return (
     <Card>
-      <Card.Header class="fw-normal" style={{ top: 5, padding: 5, fontSize: 14, height: 90, lineHeight: 2 }}>
-        <div className="row">
-          <div className="col-md-3">
-            {loiNumberSet}
-            <p>Application Number:</p>
-            <p class="fw-normal">{id}</p>
+     <Card.Header className="head-application" >
+        <div className="row fw-normal">
+          <div className="col-sm-2">
+            <b><p className="head-font">Application Number:</p></b>
+            <b><p className="head-font">{id}</p></b>
           </div>
-          <div className="col-md-2">
-            <p>Service Id: </p>
-            <p class="fw-normal">{applicationData?.businessService}</p>
+          <div className="col-sm-2">
+            <b><p className="head-font">Service Id: </p></b>
+            <b><p className="head-font">
+              {applicationData?.businessService}
+           
+            </p></b>
           </div>
-          <div className="col-md-3">
-            <p>TCP Application Number:</p>
-            <p class="fw-normal">{applicationData?.tcpApplicationNumber}</p>
+          <div className="col-sm-2">
+            <b><p className="head-font">TCP Application Number:</p></b>
+        
+            <b><p className="head-font">{applicationData?.tcpApplicationNumber}</p></b>
           </div>
-          <div className="col-md-2">
-            <p>TCP Case Number:</p>
-            <p class="fw-normal">{applicationData?.tcpCaseNumber}</p>
+          <div className="col-sm-2">
+            <b><p className="head-font">TCP Case Number:</p></b>
+            <b><p className="head-font">{applicationData?.tcpCaseNumber}</p></b>
           </div>
-          <div className="col-md-2">
-            <p>TCP Dairy Number: </p>
-            <p class="fw-normal">{applicationData?.tcpDairyNumber}</p>
+          <div className="col-sm-2">
+            <b><p className="head-font">TCP Dairy Number: </p></b>
+            <b><p className="head-font">{applicationData?.tcpDairyNumber}</p></b>
+
           </div>
+          
         </div>
       </Card.Header>
       <Row style={{ top: 10, padding: 10 }}>
-        <BeneficialBasic
+        <ExtensionBasic
           apiResponse={scrutinyDetails}
           histeroyData={workflowDetailsTemp}
           applicationNumber={id}
           refreshScrutinyData={getScrutinyData}
           setAdditionalDetails={setAdditionalDetails}
-          applicationStatus={applicationStatus}
-        ></BeneficialBasic>
+        applicationStatus={status}
+        ></ExtensionBasic>
       </Row>
       {/* <Row style={{ top: 10, padding: "10px 22px" }}> */}
       <Row style={{ top: 10, padding: "10px 22px" }}>
-        <Card>
-          <Card.Header class="fw-normal" style={{ top: 5, padding: 5, fontSize: 20, height: 55, lineHeight: 2 }}>
-            <p class="fw-normal text-center">Remarks History </p>
-          </Card.Header>
-        </Card>
+         <div class="col-md-10 bg-light text-right" style={{ position: "relative", marginBottom: 30 }}>
+           {showModal ? (
+            <ActionModal
+              t={t}
+              action={selectedAction}
+              tenantId={tenantId}
+              state={state}
+              id={id}
+              applicationDetails={applicationDetails}
+              applicationData={{...applicationDetails?.applicationData,workflowCode:applicationDetails?.applicationData?.workflowCode || "CONSTRUCTION_OF_COMMUNITY"}}
+              closeModal={closeModal}
+              submitAction={submitAction}
+              actionData={workflowDetails?.data?.timeline}
+              businessService={businessService}
+              workflowDetails={workflowDetails}
+              moduleCode={moduleCode}
+            />
+          ) : null}
+          {isWarningPop ? (
+            <ApplicationDetailsWarningPopup 
+            action={selectedAction}
+            workflowDetails={workflowDetails}
+            businessService={businessService}
+            isWarningPop={isWarningPop}
+            closeWarningPopup={closeWarningPopup}
+            />
+          ) : null}
+          
+          <ApplicationDetailsActionBar
+            workflowDetails={workflowDetails}
+            displayMenu={displayMenu}
+            onActionSelect={onActionSelect}
+            setDisplayMenu={setDisplayMenu}
+            businessService={businessService}
+            ActionBarStyle={{}}
+            MenuStyle={{}}
+          />
+   </div>
+       
+       
       </Row>
 
       <Row>
