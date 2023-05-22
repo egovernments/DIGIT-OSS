@@ -28,6 +28,7 @@ const EmployeePayment = ({ stateCode, cityCode, moduleCode }) => {
     <React.Fragment>
       <p className="breadcrumb" style={{ marginLeft: "15px" }}>
         <Link to={`/${window?.contextPath}/employee`}>{t("ES_COMMON_HOME")}</Link>
+        {isFsm ? <Link to={`/${window?.contextPath}/employee/fsm/home`}>/ {t("ES_TITLE_FSM")} </Link> : null}
         {isFsm ? <Link to={`/${window?.contextPath}/employee/fsm/inbox`}>/ {t("ES_TITLE_INBOX")}</Link> : null}/ {link}
       </p>
       <Switch>

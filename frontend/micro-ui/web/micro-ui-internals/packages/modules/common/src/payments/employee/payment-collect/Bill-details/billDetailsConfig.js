@@ -110,7 +110,7 @@ export const BillDetailsKeyNoteConfig = () => ({
     heading: "COMMON_PAY_SCREEN_HEADER",
     details: [
       {
-        keyValue: "WS_COMMON_TABLE_COL_CONSUMER_NO_LABEL",
+        keyValue: "WS_COMMON_TABLE_APP_NO_LABEL",
         keyPath: ["consumerCode"],
         fallback: "",
       },
@@ -120,7 +120,7 @@ export const BillDetailsKeyNoteConfig = () => ({
     heading: "COMMON_PAY_SCREEN_HEADER",
     details: [
       {
-        keyValue: "WS_COMMON_TABLE_COL_CONSUMER_NO_LABEL",
+        keyValue: "WS_COMMON_TABLE_APP_NO_LABEL",
         keyPath: ["consumerCode"],
         fallback: "",
       },
@@ -209,6 +209,21 @@ export const BillDetailsKeyNoteConfig = () => ({
             } else return "N/A";
           },
         ],
+        fallback: "N/A",
+      },
+    ],
+  },
+  FSM: {
+    heading: "COMMON_PAY_SCREEN_HEADER",
+    details: [
+      {
+        keyValue: "ADV_TOTAL_AMOUNT",
+        keyPath: ["totalAmount"],
+        fallback: "",
+      },
+      {
+        keyValue: "ADV_COLLECTION",
+        keyPath: ["totalAmountPaid"],
         fallback: "N/A",
       },
     ],

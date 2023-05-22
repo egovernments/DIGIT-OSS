@@ -28,8 +28,9 @@ export const SelectPaymentType = (props) => {
   const history = useHistory();
   const { pathname, search } = useLocation();
   // const menu = ["AXIS"];
-  const { consumerCode, businessService } = useParams();
+  let { consumerCode, businessService } = useParams();
   const tenantId = state?.tenantId || __tenantId || Digit.ULBService.getCurrentTenantId();
+  const propertyId = state?.propertyId;
   const stateTenant = Digit.ULBService.getStateId();
   const { control, handleSubmit } = useForm();
   const { data: menu, isLoading } = Digit.Hooks.useCommonMDMS(stateTenant, "DIGIT-UI", "PaymentGateway");
@@ -37,6 +38,8 @@ export const SelectPaymentType = (props) => {
     { tenantId: tenantId, consumerCode: wrkflow === "WNS" ? connectionNo : consumerCode, businessService },
     {}
   );
+  if (window.location.href.includes("ISWSCON") || wrkflow === "WNS") consumerCode = decodeURIComponent(consumerCode);
+  if( wrkflow === "WNS") consumerCode = stringReplaceAll(consumerCode,"+","/")
   useEffect(() => {
     if (paymentdetails?.Bill && paymentdetails.Bill.length == 0) {
       setShowToast({ key: true, label: "CS_BILL_NOT_FOUND" });
@@ -56,7 +59,7 @@ export const SelectPaymentType = (props) => {
         txnAmount: paymentAmount || billDetails.totalAmount,
         module: businessService,
         billId: billDetails.id,
-        consumerCode: wrkflow === "WNS" ? stringReplaceAll(consumerCode, "+", "/") : consumerCode,
+        consumerCode: consumerCode,
         productInfo: "Common Payment",
         gateway: d.paymentType,
         taxAndPayments: [
@@ -73,7 +76,7 @@ export const SelectPaymentType = (props) => {
         // success
         callbackUrl: window.location.href.includes("mcollect") || wrkflow === "WNS"
           ? `${window.location.protocol}//${window.location.host}/${window?.contextPath}/citizen/payment/success/${businessService}/${wrkflow === "WNS"? encodeURIComponent(consumerCode):consumerCode}/${tenantId}?workflow=${wrkflow === "WNS"? wrkflow : "mcollect"}`
-          : `${window.location.protocol}//${window.location.host}/${window?.contextPath}/citizen/payment/success/${businessService}/${wrkflow === "WNS"? encodeURIComponent(consumerCode):consumerCode}/${tenantId}`,
+          : `${window.location.protocol}//${window.location.host}/${window?.contextPath}/citizen/payment/success/${businessService}/${wrkflow === "WNS"? encodeURIComponent(consumerCode):consumerCode}/${tenantId}?propertyId=${propertyId}`,
         additionalDetails: {
           isWhatsapp: false,
         },
@@ -97,7 +100,7 @@ export const SelectPaymentType = (props) => {
   if (authorization === "true" && !userInfo.access_token) {
     localStorage.clear();
     sessionStorage.clear();
-    return <Redirect to={`/${window?.contextPath}/citizen/login?from=${encodeURIComponent(pathname + search)}`} />;
+    window.location.href = `/${window?.contextPath}/citizen/login?from=${encodeURIComponent(pathname + search)}`;
   }
 
   if (isLoading || paymentLoading) {
