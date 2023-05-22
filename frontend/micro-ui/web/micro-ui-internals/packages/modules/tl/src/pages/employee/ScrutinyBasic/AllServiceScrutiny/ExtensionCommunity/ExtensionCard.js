@@ -11,7 +11,7 @@ import ApplicationDetailsActionBar from "../../../../../../../templates/Applicat
 import ActionModal from "../../../../../../../templates/ApplicationDetails/Modal/index";
 import ExtensionBasic from "./ExtensionCommunityBasic";
 
-const ExtensionCard = (props) => {
+const ExtensionComCard = (props) => {
   const { id } = useParams();
 
   const userInfo = Digit.UserService.getUser()?.info || {};
@@ -364,4 +364,4 @@ setStatus(Resp?.constructionOfCommunity?.[0]?.status);
   );
 };
 
-export default ExtensionCard;
+export default ExtensionComCard;

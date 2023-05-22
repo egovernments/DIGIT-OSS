@@ -48,6 +48,24 @@ function ExtensionCom(props) {
 useEffect(() => {
     if (apiData) {
       setValue("licenseNo", apiData?.licenseNo);
+      setValue("anyOtherDoc", apiData?.anyOtherDoc);
+      setValue("licenseNo", apiData?.licenseNo);
+      setValue("selectType", apiData?.additionalDetails?.selectType);
+      setValue("affidavitFixedChargesForAdm", apiData?.additionalDetails?.affidavitFixedChargesForAdm);
+      setValue("affidavitForLicencedArea", apiData?.additionalDetails?.affidavitForLicencedArea);
+      setValue("affidavitForLicencedArea", apiData?.additionalDetails?.affidavitOfAdmCharges);
+      setValue("amount", apiData?.newAdditionalDetails?.amount);
+      setValue("validUpto", apiData?.newAdditionalDetails?.validUpto);
+      setValue("renewalRequiredUpto", apiData?.newAdditionalDetails?.renewalRequiredUpto);
+      setValue("renewalRequiredUpto", apiData?.newAdditionalDetails?.renewalRequiredUpto);
+      setValue("colonizerName", apiData?.newAdditionalDetails?.colonizerName);
+      setValue("sectorNo", apiData?.newAdditionalDetails?.sectorNo);
+      setValue("colonyType", apiData?.newAdditionalDetails?.colonyType);
+      setValue("tehsil", apiData?.newAdditionalDetails?.tehsil);
+      setValue("district", apiData?.newAdditionalDetails?.district);
+      setValue("selectLicence", apiData?.newAdditionalDetails?.selectLicence);
+      setValue("revenueEstate", apiData?.newAdditionalDetails?.revenueEstate);
+      setValue("developmentPlan", apiData?.newAdditionalDetails?.developmentPlan);
       // setValue("anyOtherDoc", apiData?.anyOtherDoc);
       // setValue("licenseNo", apiData?.licenseNo);
       // setValue("selectType", apiData?.additionalDetails?.selectType);

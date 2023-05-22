@@ -33,6 +33,7 @@ import BankGuaranteePlan from "../employee/BankGuarantee/Inbox/index";
 import ElectricalPlanInbox from "../employee/ElectricPlan/Inbox/index";
 import ScrutinyForm from "./ScrutinyBasic/AllServiceScrutiny/BankGuarantee/FormBankScrutniy/cardBank";
 import ExtensionCard from "./ScrutinyBasic/AllServiceScrutiny/BankGuarantee/Extensionbank/Extensioncard";
+import ExtensionComCard from "./ScrutinyBasic/AllServiceScrutiny/ExtensionCommunity/ExtensionCard";
 import ReplaceCard from "./ScrutinyBasic/AllServiceScrutiny/BankGuarantee/Replacebank/ReplaceCard";
 import ReleaseCard from "./ScrutinyBasic/AllServiceScrutiny/BankGuarantee/ReleaseBank/ReleaseCard";
 import { TLContextProvider } from "../../../context";
@@ -253,7 +254,8 @@ const EmployeeApp = ({ path, url, userType }) => {
             <PrivateRoute path={`${path}/TransferScrutiny/:id`} component={TransferScrutiny} />
             <PrivateRoute path={`${path}/SurrenderScrutiny/:id`} component={SurrenderScrutiny} />
             <PrivateRoute path={`${path}/ExtensionCluCard/:id`} component={ExtensionCluCard} />
-            <PrivateRoute path={`${path}/ExtensionCom/:id`} component={ExtensionCom} />
+            {/* <PrivateRoute path={`${path}/ExtensionComCard/:id`} component={ExtensionComCard} /> */}
+            <PrivateRoute path={`${path}/ExtensionCom/:id`} component={ExtensionComCard} />
             <PrivateRoute path={`${path}/LayoutPlanScritny/:id`} component={LayoutPlanScritny} />
             <PrivateRoute path={`${path}/StandardDesign/:id`} component={StandardDesignCard} />
             <PrivateRoute path={`${path}/CompositionClu/:id`} component={CompositionClu} />
