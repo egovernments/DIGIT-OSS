@@ -237,7 +237,9 @@ const DesktopInbox = ({
         getCellProps={(cellInfo) => {
           return {
             style: {
-              minWidth: cellInfo.column.Header === t("ES_INBOX_APPLICATION_NO") ? "240px" : "",
+               minWidth: cellInfo.column.Header === t("ES_INBOX_APPLICATION_NO") ? "240px" : "",
+               backgroundColor: cellInfo.column.Header === t("ES_INBOX_APPLICATION_NO") ? "red":" " ,
+              //  backgroundColor: cellInfo.column === t("WF_INBOX_HEADER_APPLICATION_NO") ? "red":" " ,
               padding: "20px 18px",
               fontSize: "16px",
             },

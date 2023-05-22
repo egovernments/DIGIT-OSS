@@ -230,7 +230,7 @@ const ApllicantPuropseForm = (props) => {
   const [district, setDistrict] = useState("");
   const [modalData, setModalData] = useState([]);
   const [specificTableData, setSpecificTableData] = useState(null);
-  const [districtDataLabels, setDistrictDataLabels] = useState({ data: [], isLoading: true });
+  // const [districtDataLabels, setDistrictDataLabels] = useState({ data: [], isLoading: true });
   const [tehsilDataLabels, setTehsilDataLabels] = useState({ data: [], isLoading: true });
   const [revenueDataLabels, setRevenueDataLabels] = useState({ data: [], isLoading: true });
   const [mustilDataLabels, setMustilDataLabels] = useState({ data: [], isLoading: true });
@@ -429,7 +429,7 @@ const ApllicantPuropseForm = (props) => {
 
   useEffect(() => {
     const district = DistrictType?.["common-masters"]?.District?.map(function (data) {
-      return { value: data?.disCode, label: data?.disName, distCodeTCP: data?.distCodeTCP };
+      return { value: data?.disCode, label: data?.disName, distCodeTCP: data?.distCodeTCP, applicationTenantId: data?.tenantId };
     });
     setDistrictOptions({ data: district, isLoading: false });
   }, [DistrictType]);
@@ -607,17 +607,17 @@ const ApllicantPuropseForm = (props) => {
   //   setSectorOptions({ data: sectorPlan, isLoading: false });
   // }, [sectorType]);
 
-  const DistrictApiCall = async () => {
-    try {
-      const Resp = await axios.post("/egov-mdms-service/v1/_district", datapost);
-      const distData = Resp?.data?.map((el) => {
-        return { label: el?.name, id: el?.distCode, value: el?.distCode };
-      });
-      setDistrictDataLabels({ data: distData, isLoading: false });
-    } catch (error) {
-      return error;
-    }
-  };
+  // const DistrictApiCall = async () => {
+  //   try {
+  //     const Resp = await axios.post("/egov-mdms-service/v1/_district", datapost);
+  //     const distData = Resp?.data?.map((el) => {
+  //       return { label: el?.name, id: el?.distCode, value: el?.distCode };
+  //     });
+  //     setDistrictDataLabels({ data: distData, isLoading: false });
+  //   } catch (error) {
+  //     return error;
+  //   }
+  // };
 
   const getTehslidata = async (data) => {
     const payload = {
@@ -763,9 +763,9 @@ const ApllicantPuropseForm = (props) => {
     }
   };
 
-  useEffect(() => {
-    DistrictApiCall();
-  }, []);
+  // useEffect(() => {
+  //   DistrictApiCall();
+  // }, []);
 
   useEffect(() => {
     console.log("modalData", modalData);
@@ -975,12 +975,12 @@ const ApllicantPuropseForm = (props) => {
   useEffect(() => {
     if (stepData) {
       const data = purposeOptions?.data?.filter((item) => item?.value === stepData?.purpose);
-      const districtData = districtDataLabels?.data?.filter((item) => item?.value === stepData?.district);
+      // const districtData = districtDataLabels?.data?.filter((item) => item?.value === stepData?.district);
       setValue("purpose", { label: data?.[0]?.label, value: data?.[0]?.value });
       // setDistrict(districtData?.[0]?.distCode);
       // if (districtData?.[0]?.distCode) getTehslidata(districtData?.[0]?.distCode);
     }
-  }, [stepData, purposeOptions, districtDataLabels]);
+  }, [stepData, purposeOptions]);
 
   const { data: LandData } = Digit.Hooks.obps.useMDMS(stateId, "common-masters", ["LandType"]);
 
@@ -1066,22 +1066,22 @@ const ApllicantPuropseForm = (props) => {
   }, []);
 
   useEffect(() => {
-    const val = watch("marla") * 0.0062 + watch("sarsai") * 0.00069 + watch("kanal") * 0.125;
-    setValue("consolidatedTotal", isNaN(val) ? "N/A" : val?.toFixed(3));
-  }, [watch("sarsai"), watch("marla"), watch("kanal")]);
-
-  useEffect(() => {
     if (watch("consolidationType") == "consolidated") resetField("nonConsolidationType");
   }, [watch("consolidationType")]);
 
   useEffect(() => {
+    const val = watch("marla") * 0.0062 + watch("sarsai") * 0.00069 + watch("kanal") * 0.125;
+    setValue("consolidatedTotal", isNaN(val) ? "N/A" : val?.toFixed(5));
+  }, [watch("sarsai"), watch("marla"), watch("kanal")]);
+
+  useEffect(() => {
     if (watch("nonConsolidationType") == "kachha") {
       const valueA = watch("bigha") * 1008 + watch("biswa") * 50.41 + watch("biswansi") * 2.52;
-      setValue("nonConsolidatedTotal", isNaN(valueA) ? "N/A" : (valueA / 4840)?.toFixed(3));
+      setValue("nonConsolidatedTotal", isNaN(valueA) ? "N/A" : (valueA / 4840)?.toFixed(5));
     }
     if (watch("nonConsolidationType") == "pucka") {
       const valueB = watch("bigha") * 3025 + watch("biswa") * 151.25 + watch("biswansi") * 7.56;
-      setValue("nonConsolidatedTotal", isNaN(valueB) ? "N/A" : (valueB / 4840)?.toFixed(3));
+      setValue("nonConsolidatedTotal", isNaN(valueB) ? "N/A" : (valueB / 4840)?.toFixed(5));
     }
   }, [watch("bigha"), watch("biswa"), watch("biswansi")]);
 

@@ -291,7 +291,7 @@ const ScrutinyFormcontainer = (props) => {
     },
      
     }
-    const additionalDocRespon = await axios.post(`/tl-services/_additionalDocuments/_search?licenceNumber=${id}&businessService=NewTL&type=licenceNumber`, additionalDoc)
+    const additionalDocRespon = await axios.post(`/tl-services/_additionalDocuments/_search?licenceNumber=${id}&businessService=NewTL&type=applicationNumber`, additionalDoc)
     SetAdditionalDocResponData(additionalDocRespon?.data);
     console.log("Datafee", additionalDocRespon);
 
