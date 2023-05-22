@@ -139,4 +139,5 @@ public class VendorConfiguration {
 
 	@Value("${vendor.driver.mobile.number}")
 	private String driverMobileNumberIncrement;
+
 }

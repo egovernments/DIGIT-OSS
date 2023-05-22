@@ -156,7 +156,7 @@ public class VendorQueryBuilder {
 		int limit = config.getDefaultLimit();
 		int offset = config.getDefaultOffset();
 		String finalQuery = PAGINATION_WRAPPER.replace("{}", query);
-
+		
 		if (criteria.getSortBy() != null && criteria.getSortBy().toString() == "createdTime") {
 			finalQuery = finalQuery.replace("SORT_BY", "vendor_createdTime");
 		} else if (criteria.getSortBy() != null) {

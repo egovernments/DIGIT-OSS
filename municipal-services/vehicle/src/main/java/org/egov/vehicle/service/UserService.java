@@ -18,6 +18,7 @@ import org.egov.common.contract.request.Role;
 import org.egov.tracer.model.CustomException;
 import org.egov.vehicle.config.VehicleConfiguration;
 import org.egov.vehicle.repository.ServiceRequestRepository;
+import org.egov.vehicle.repository.VehicleRepository;
 import org.egov.vehicle.trip.util.VehicleTripConstants;
 import org.egov.vehicle.util.Constants;
 import org.egov.vehicle.util.VehicleErrorConstants;
@@ -50,23 +51,51 @@ public class UserService {
 	@Autowired
 	private ObjectMapper mapper;
 
+	@Autowired
+	private VehicleRepository repository;
+
 	/**
 	 * 
 	 * @param vendorRequest
 	 */
 	@SuppressWarnings("null")
-	public void manageOwner(VehicleRequest vendorRequest) {
+	public void manageOwner(VehicleRequest vehicleRequest, boolean isUpdate) {
 
-		Vehicle vehicle = vendorRequest.getVehicle();
+		Vehicle vehicle = vehicleRequest.getVehicle();
 		User owner = vehicle.getOwner();
 
 		UserDetailResponse userDetailResponse = null;
 		if (owner != null) {
 			userDetailResponse = userExists(owner);
+
 			if (userDetailResponse != null && !CollectionUtils.isEmpty(userDetailResponse.getUser())) {
 				owner = userDetailResponse.getUser().get(0);
+				Integer count = repository.getVehicleCount(vehicleRequest, "ACTIVE");
+
+				for (int i = 0; i < userDetailResponse.getUser().size(); i++) {
+					if (count > 0
+							&& vehicleRequest.getVehicle().getOwner().getMobileNumber()
+									.equals(userDetailResponse.getUser().get(i).getMobileNumber())
+							&& !userDetailResponse.getUser().get(i).getUuid()
+									.equals(vehicleRequest.getVehicle().getOwner().getUuid())) {
+
+						throw new CustomException(VehicleErrorConstants.ALREADY_DRIVER_EXIST,
+								VehicleErrorConstants.VEHICLE_ERROR_MESSAGE);
+
+					}
+				}
+			}
+			if (!isUpdate) {
+				if (userDetailResponse != null && !CollectionUtils.isEmpty(userDetailResponse.getUser())) {
+					throw new CustomException(VehicleErrorConstants.ALREADY_DRIVER_EXIST,
+							VehicleErrorConstants.VEHICLE_ERROR_MESSAGE);
+				}
+				owner = createVehicleOwner(owner, vehicleRequest.getRequestInfo());
 			} else {
-				owner = createVehicleOwner(owner, vendorRequest.getRequestInfo());
+
+				HashMap<String, String> errorMap = new HashMap<>();
+				updateUserDetails(owner, vehicleRequest.getRequestInfo(), errorMap);
+
 			}
 			vehicle.setOwner(owner);
 
@@ -74,6 +103,30 @@ public class UserService {
 			log.debug("MobileNo is not existed in Application.");
 			throw new CustomException(VehicleErrorConstants.INVALID_OWNER_ERROR, "MobileNo is mandatory for ownerInfo");
 		}
+
+	}
+
+	/**
+	 * Update Vehicle Details
+	 * 
+	 * @param vehicleInfo
+	 * @param requestInfo
+	 * @param errorMap
+	 * @return
+	 */
+	private User updateUserDetails(User vehicleInfo, RequestInfo requestInfo, HashMap<String, String> errorMap) {
+		User userUpdated = new User();
+		UserRequest userRequest = UserRequest.builder().user(vehicleInfo).requestInfo(requestInfo).build();
+		StringBuilder uri = new StringBuilder();
+		uri.append(config.getUserHost()).append(config.getUserContextPath()).append(config.getUserUpdateEndpoint());
+		UserDetailResponse userResponse = ownerCall(userRequest, uri);
+		if (userResponse != null && !userResponse.getUser().isEmpty()) {
+			userUpdated = userResponse.getUser().get(0);
+		} else {
+			errorMap.put(VehicleErrorConstants.INVALID_VEHICLE_OWNER,
+					"Unable to Update UserDetails to the existing Vehicle !");
+		}
+		return userUpdated;
 
 	}
 

@@ -36,7 +36,7 @@ public class VendorDriverContoller {
 	private ResponseInfoFactory responseInfoFactory;
 
 	@PostMapping(value = "/_create")
-	public ResponseEntity<DriverResponse> create(@Valid @RequestBody DriverRequest driverRequest) {
+	public ResponseEntity<DriverResponse> create(@Valid @RequestBody DriverRequest driverRequest) throws Exception {
 		vendorUtil.defaultJsonPathConfig();
 		Driver driver = driverService.create(driverRequest);
 		List<Driver> driverList = new ArrayList<>();

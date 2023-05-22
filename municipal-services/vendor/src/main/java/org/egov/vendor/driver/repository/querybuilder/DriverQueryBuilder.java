@@ -23,7 +23,6 @@ public class DriverQueryBuilder {
 			+ "(SELECT *, DENSE_RANK() OVER (ORDER BY SORT_BY SORT_ORDER) offset_ FROM " + "({})"
 			+ " result) result_offset " + "limit ? offset ?";
 	private static final String DRIVER_NO_VENDOR_QUERY = " SELECT DISTINCT (driver.id) FROM EG_DRIVER driver LEFT JOIN eg_vendor_driver vendor_driver ON driver.id=vendor_driver.driver_id";
-
 	private static final String DRIVER_SEQ_MOBILE_NUMBER_QUERY = " SELECT nextval";
 
 	public String getDriverSearchQuery(DriverSearchCriteria criteria, List<Object> preparedStmtList) {
@@ -61,7 +60,7 @@ public class DriverQueryBuilder {
 				}
 
 			}
-			
+
 			List<String> ownerIds = criteria.getOwnerIds();
 			if (!CollectionUtils.isEmpty(ownerIds)) {
 				addClauseIfRequired(preparedStmtList, builder);
@@ -171,4 +170,5 @@ public class DriverQueryBuilder {
 		builder.append("('" + seqDriverMobileNumber + "')");
 		return builder.toString();
 	}
+
 }

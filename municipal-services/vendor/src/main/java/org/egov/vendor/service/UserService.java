@@ -98,6 +98,47 @@ public class UserService {
 
 	}
 
+	/**
+	 * 
+	 * @param vendorRequest
+	 * @param requestInfo
+	 */
+	@SuppressWarnings("null")
+	public void vendorMobileExistanceCheck(VendorRequest vendorRequest, RequestInfo requestInfo) {
+
+		Vendor vendor = vendorRequest.getVendor();
+		User owner = vendor.getOwner();
+
+		UserDetailResponse userDetailResponse = null;
+
+		if (owner != null) {
+
+			userDetailResponse = userExists(owner);
+			if (userDetailResponse != null && !CollectionUtils.isEmpty(userDetailResponse.getUser())) {
+
+				// validateVendorExists(userDetailResponse.getUser());
+				List<String> ownerIds = userDetailResponse.getUser().stream().map(User::getUuid)
+						.collect(Collectors.toList());
+				int count = vendorRepository.getExistingVenodrsCount(ownerIds);
+				log.debug("userDetailResponse SIZE==>" + userDetailResponse.getUser().size());
+
+				for (int i = 0; i < userDetailResponse.getUser().size(); i++) {
+					if (count > 0
+							&& vendorRequest.getVendor().getOwner().getMobileNumber()
+									.equals(userDetailResponse.getUser().get(i).getMobileNumber())
+							&& !userDetailResponse.getUser().get(i).getUuid()
+									.equals(vendorRequest.getVendor().getOwner().getUuid())) {
+
+						throw new CustomException(VendorErrorConstants.ALREADY_VENDOR_EXIST,
+								VendorErrorConstants.VENDOR_ERROR_MESSAGE);
+
+					}
+				}
+			}
+		}
+
+	}
+
 	private User foundOwnerDetails(UserDetailResponse userDetailResponse, User foundOwner, RequestInfo requestInfo) {
 		User owner = new User();
 		if (!userDetailResponse.getUser().isEmpty() && foundOwner == null) {
@@ -120,7 +161,7 @@ public class UserService {
 		return owner;
 	}
 
-	private void validateVendorExists(List<User> user) {
+	public void validateVendorExists(List<User> user) {
 		List<String> ownerIds = user.stream().map(User::getUuid).collect(Collectors.toList());
 		int count = vendorRepository.getExistingVenodrsCount(ownerIds);
 
@@ -220,7 +261,6 @@ public class UserService {
 
 		if (owner.getRoles() != null) {
 			owner.getRoles().add(getRolObj(config.getDsoRole(), config.getDsoRoleName()));
-			owner.getRoles().add(getRolObj(config.getCitizenRole(), config.getCitizenRoleName()));
 		} else {
 			List<Role> roles = new ArrayList<>();
 			roles.add(getRolObj(config.getDsoRole(), config.getDsoRoleName()));
@@ -298,7 +338,7 @@ public class UserService {
 	/**
 	 * create Employee in HRMS for Vendor owner
 	 * 
-	 * @param owner
+	 * @param driver
 	 * @param requestInfo
 	 * @return
 	 */
