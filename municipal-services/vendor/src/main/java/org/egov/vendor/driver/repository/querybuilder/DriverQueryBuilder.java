@@ -4,9 +4,9 @@ import java.util.List;
 
 import javax.validation.Valid;
 
+import org.apache.commons.lang3.StringUtils;
 import org.egov.vendor.config.VendorConfiguration;
 import org.egov.vendor.driver.web.model.DriverSearchCriteria;
-import org.egov.vendor.web.model.VendorSearchCriteria;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
@@ -40,13 +40,28 @@ public class DriverQueryBuilder {
 				preparedStmtList.add(criteria.getTenantId());
 			}
 
+			/*
+			 * Enable part search with DriverName
+			 */
+
 			List<String> driverName = criteria.getName();
-			if (!CollectionUtils.isEmpty(driverName)) {
+			if (!CollectionUtils.isEmpty(driverName)
+					&& (driverName.stream().filter(name -> name.length() > 0).findFirst().orElse(null) != null)) {
+				boolean flag = false;
 				addClauseIfRequired(preparedStmtList, builder);
-				builder.append(" driver.name IN (").append(createQuery(driverName)).append(")");
-				addToPreparedStatement(preparedStmtList, driverName);
+				for (String drivername : driverName) {
+
+					if (flag)
+						builder.append(" OR ");
+					builder.append(" LOWER(driver.name) like ?");
+					preparedStmtList.add('%' + StringUtils.lowerCase(drivername) + '%');
+					builder.append(" ESCAPE '_' ");
+					flag = true;
+
+				}
 
 			}
+			
 			List<String> ownerIds = criteria.getOwnerIds();
 			if (!CollectionUtils.isEmpty(ownerIds)) {
 				addClauseIfRequired(preparedStmtList, builder);
