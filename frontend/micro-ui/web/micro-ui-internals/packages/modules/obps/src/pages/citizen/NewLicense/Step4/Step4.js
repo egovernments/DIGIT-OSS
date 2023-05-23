@@ -657,7 +657,7 @@ const AppliedDetailForm = (props) => {
                     <div className="col col-3">
                       <h6 style={{ display: "flex" }}>
                         {`${t("NWL_APPLICANT_DGPS_DOCUMENTS_LAYOUT_PLAN_PDF")}`}
-                        {/* Layout Plan in pdf */}
+                        {/* Layout Plan pdf */}
                         <span style={{ color: "red" }}>*</span>
                       </h6>
                       <label>
@@ -665,7 +665,12 @@ const AppliedDetailForm = (props) => {
                         <input
                           type="file"
                           style={{ display: "none" }}
-                          onChange={(e) => getDocumentData(e?.target?.files[0], "layoutPlanPdf")}
+                          onChange={(e) => {
+                            const chechType = e?.target?.files[0]?.type;
+                            if (chechType != "application/pdf") {
+                              setShowToastError({ label: "Please select given file format", error: true, success: false });
+                            } else getDocumentData(e?.target?.files[0], "layoutPlanPdf");
+                          }}
                           accept="application/pdf"
                         />
                       </label>
@@ -686,7 +691,15 @@ const AppliedDetailForm = (props) => {
                         <input
                           type="file"
                           style={{ display: "none" }}
-                          onChange={(e) => getDocumentData(e?.target?.files[0], "layoutPlanDxf")}
+                          onChange={async (e) => {
+                            var fileName = e?.target?.files[0]?.name;
+                            var fileExtension = fileName?.split(".")?.pop();
+                            if (fileExtension?.toLowerCase() == "dxf") {
+                              getDocumentData(e?.target?.files[0], "layoutPlanDxf");
+                            } else {
+                              setShowToastError({ label: "Please select given file format", error: true, success: false });
+                            }
+                          }}
                           accept=".dxf"
                         />
                       </label>
