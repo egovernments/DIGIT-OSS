@@ -34,6 +34,7 @@ const AdditionalDocument = () => {
   const [services, setServices] = useState([]);
   const [getData, setData] = useState([]);
   const [open, setOpen] = useState(false);
+  const [DataSection , setDataSection] = useState([]);
 
   const {
     watch,
@@ -73,6 +74,7 @@ const AdditionalDocument = () => {
     setLoader(true);
 
     data["businessService"] = data?.allservices?.value;
+    data["applicationSection"] = data?.applicationSection?.value;
     data["type"] = data?.numberType?.value;
 
     if (data?.numberType?.value == "loiNumber") {
@@ -93,6 +95,7 @@ const AdditionalDocument = () => {
     data["developerName"] = userInfo?.name;
     delete data?.numberType;
     delete data?.allservices;
+    delete data?.applicationSections;
     delete data?.number;
 
     const payload = {
@@ -151,16 +154,78 @@ const AdditionalDocument = () => {
         ],
       },
     };
+    let requestProfrma = {}
     try {
       const Resp = await axios.post("/egov-mdms-service/v1/_search", payload);
       // console.log("asdasdasd", Resp?.data?.MdmsRes?.["common-masters"]?.services?.[0]?.businessService?.);
       const devPlan = Resp?.data?.MdmsRes?.["common-masters"]?.services?.[0]?.businessService?.map(function (data) {
-        return { value: data?.name, label: data?.name };
+        return { value: data?.name, label: data?.name , };
       });
       setServices(devPlan);
-    } catch (error) {
-      return error;
+      requestProfrma = {
+
+        RequestInfo: {
+          apiId: "Rainmaker",
+          ver: "v1",
+          ts: 0,
+          action: "_search",
+          did: "",
+          key: "",
+          msgId: "090909",
+          requesterId: "",
+          authToken: "",
+        correlationId: null,
+    
+        },
+        MdmsCriteria: {
+          tenantId: "hr",
+          moduleDetails: [
+
+            {
+
+                moduleName: "common-masters",
+
+                tenantId: "hr",
+
+                masterDetails: [
+
+                    {
+
+                        name: "ApplicationSection",
+
+                    }
+
+                ]
+
+            }
+
+        ]
+        } 
+      }
+    } 
+    catch (error) {
+      console.log(error);
+  
     }
+    
+    console.log("TCPaccessrequestProfrma123", requestProfrma)
+     try {
+      const Resp = await axios.post(`/egov-mdms-service/v1/_search`, requestProfrma);
+      // .then((response) => {
+      //   return response?.data;
+        
+      // });
+      const section = Resp?.data?.MdmsRes?.["common-masters"]?.ApplicationSection?.map(function (data) {
+        return { value: data?.type, label: data?.type };
+      });
+      setDataSection(section);
+      console.log("FileddataNamemDMSD", section);
+  
+    } catch (error) {
+      console.log(error);
+  
+    }
+
   };
 
   useEffect(() => {
@@ -314,6 +379,10 @@ const AdditionalDocument = () => {
                         {/* Sr. No */}
                       </th>
                       <th>
+                        {`${t("AD_APPLICATION_SECETION")}`}
+                        {/* Upload Document */}
+                      </th>
+                      <th>
                         {`${t("AD_DOCUMENT_DESCRIPTION")}`}
                         {/* Document Description */}
                       </th>
@@ -321,6 +390,7 @@ const AdditionalDocument = () => {
                         {`${t("AD_UPLOAD_DOCUMENT")}`}
                         {/* Upload Document */}
                       </th>
+                      
                       <th>
                         {`${t("AD_ACTION")}`}
                         {/* Action */}
@@ -331,6 +401,15 @@ const AdditionalDocument = () => {
                     {fields?.map((item, index) => (
                       <tr key={item?.id}>
                         <td>{index + 1}</td>
+                        <td>
+                          <ReactMultiSelect
+                  control={control}
+                  name="applicationSection"
+                  placeholder="Select Section"
+                  data={DataSection}
+                  labels=""
+                  onChange={() => setValue("applicationSections", { label: "", value: "" })}
+                /></td>
                         <td>
                           <div>
                             {/* <label>Document Description</label> */}

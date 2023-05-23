@@ -1,11 +1,4 @@
 import React, { useState, useRef, useEffect, useContext } from "react";
-
-// import ServicePlanCivil from "./ServicePlanCivilEng";
-// import ServicePlanExternal from "./ServicePlanExternal";
-// import ServicePlanService from "./ServicePlan";
-// import JeLandinfo from "./Scrutiny LOI/JE/JE";
-// import DisApprovalList from "./DisApprovalList";
-// import HistoryList from "./History";
 import ScrutinyDevelopment from "../../ScrutinyDevelopment/ScrutinyDevelopment";
 import { ScrutinyRemarksContext } from "../../../../../../context/remarks-data-context/index";
 
@@ -149,12 +142,17 @@ const { remarksData,iconStates,handleGetFiledsStatesById,handleGetRemarkssValues
     }
   }, [applicationNumber]);
 
-  useEffect(()=>{
-    setBusinessService("CONSTRUCTION_OF_COMMUNITY");
+    useEffect(()=>{
     if(applicationNumber){
       handleGetFiledsStatesById(applicationNumber);
     }
   },[applicationNumber]);
+//   useEffect(()=>{
+//     setBusinessService("CONSTRUCTION_OF_COMMUNITY");
+//     if(applicationNumber){
+//       handleGetFiledsStatesById(applicationNumber);
+//     }
+//   },[applicationNumber]);
 
   const curentDataPersonal = (data) => {
     setRemarksChanges(data.data);
@@ -251,10 +249,7 @@ const { remarksData,iconStates,handleGetFiledsStatesById,handleGetRemarkssValues
         
         </div>
       </div>
-      <div style={{ position: "relative", width: "100%", display: "flex", marginBottom: 2 }}>
-        
-      </div>
-
+      
       <div style={{ position: "relative", width: "100%", height: "100%", display: "flex" }}>
         <ScrutinyDevelopment
           remarkData={remarksData.egScrutiny !== undefined ? remarksData.egScrutiny : null}

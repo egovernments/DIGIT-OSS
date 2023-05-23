@@ -13937,5 +13937,12 @@ input[type=number], .checkbox-wrap .input-emp[type=number] {
 .employee-app-wrapper {
   min-height: calc(100vh - 8em); }
 
-
+  #registrationpage {
+    height:100%;
+    background:#78a7ba; 
+    display:flex;
+    justify-content: center;
+    align-items: center;
+    overflow:scroll;
+  }
 
