@@ -18,6 +18,7 @@ import CusToaster from "../../../../components/Toaster";
 import InfoIcon from "@mui/icons-material/Info";
 import Tooltip from "@mui/material/Tooltip";
 import { useTranslation } from "react-i18next";
+import { CardLabelError } from "@egovernments/digit-ui-react-components";
 
 const AppliedDetailForm = (props) => {
   const location = useLocation();
@@ -29,7 +30,7 @@ const AppliedDetailForm = (props) => {
   const userInfo = Digit.UserService.getUser()?.info || {};
   const [applicantId, setApplicantId] = useState("");
   const [modalData, setModalData] = useState([]);
-  // const [error, setError] = useState({});
+  const [showError, setShowError] = useState({});
   // const [isValid, setIsValid] = useState(false);
   const [getData, setData] = useState({ caseNumber: "", dairyNumber: "" });
   const [newDataA, setNewDataA] = useState({});
@@ -48,6 +49,7 @@ const AppliedDetailForm = (props) => {
     mode: "onChange",
     reValidateMode: "onChange",
     resolver: yupResolver(VALIDATION_SCHEMA),
+    validationSchema: VALIDATION_SCHEMA,
     shouldFocusError: true,
     defaultValues: {
       dgpsDetails: [
@@ -82,10 +84,28 @@ const AppliedDetailForm = (props) => {
     name: "dgpsDetails",
   });
 
+  const validateDgpsPoint = () => {
+    const data = getValues("dgpsDetails");
+    let temp = {};
+    data.forEach((ele, index) => {
+      temp = { ...temp, [`dgpsPointLatitude${index}`]: true, [`dgpsPointLongitude${index}`]: true };
+    });
+    setShowError({ ...showError, ...temp });
+    if (
+      data.every((item) => {
+        return validateXvalue(item.longitude) && validateYvalue(item.latitude);
+      })
+    ) {
+      return true;
+    } else {
+      return false;
+    }
+  };
+
   const AppliedDetailFormSubmitHandler = async (data) => {
-    // if (!validateDgpsPoint()) {
-    //   return;
-    // }
+    if (!validateDgpsPoint()) {
+      return;
+    }
     // console.log("data", newDataA);
     // return;
     setLoader(true);
@@ -498,6 +518,26 @@ const AppliedDetailForm = (props) => {
   //   setIsValid(check);
   // }, [error]);
 
+  const validateXvalue = (value) => {
+    if (value >= 432100.0 && value <= 751900.0 && value.toString().includes(".")) {
+      const decimalPlaces = value.toString().split(".")[1];
+      if (decimalPlaces.length === 3) {
+        return true;
+      }
+    }
+    return false;
+  };
+
+  const validateYvalue = (value) => {
+    if (value >= 3054400.0 && value <= 3425500.0 && value.toString().includes(".")) {
+      const decimalPlaces = value.toString().split(".")[1];
+      if (decimalPlaces.length === 3) {
+        return true;
+      }
+    }
+    return false;
+  };
+
   let Tree = ({ data }) => {
     return (
       <div>
@@ -615,6 +655,12 @@ const AppliedDetailForm = (props) => {
                           style={{ float: "right", marginRight: 15 }}
                           className="btn btn-primary"
                           onClick={() => {
+                            if (!_.isEmpty(showError)) {
+                          const status = Object.keys(showError).every((k) => showError[k]);
+                          console.log(status);
+                          setShowToastError({ key: "error" });
+                          setToastMessage("Please fill enter all DGPS Points");
+                        } else
                             window.open(
                               `/digit-ui/WNS/wmsmap.html?latlngs=${item?.map((element) => `${element.latitude},${element.longitude}`).join(":")}`
                             );
@@ -911,11 +957,23 @@ const AppliedDetailForm = (props) => {
                       <div className="row ">
                         <div className="col col-4">
                           <label>X:Longitude</label>
-                          <input type="number" className="form-control" {...register(`dgpsDetails.${index}.longitude`)} />
+                          <input type="number" className="form-control" {...register(`dgpsDetails.${index}.longitude`)} 
+                          onBlur={() => setShowError({ ...showError, [`dgpsPointLongitude${index}`]: true })}/>
+                           {showError?.[`dgpsPointLongitude${index}`] && !validateXvalue(watch("dgpsDetails")[index].longitude) ? (
+                              <CardLabelError style={{ color: "red" }}>
+                                X:Longitude{index + 1} is not valid. It should be in between 432100.000 and 751900.000
+                              </CardLabelError>
+                            ) : null}
                         </div>
                         <div className="col col-4">
                           <label>Y:Latitude</label>
-                          <input type="number" className="form-control" {...register(`dgpsDetails.${index}.latitude`)} />
+                          <input type="number" className="form-control" {...register(`dgpsDetails.${index}.latitude`)} 
+                           onBlur={() => setShowError({ ...showError, [`dgpsPointLatitude${index}`]: true })}/>
+                           {showError?.[`dgpsPointLatitude${index}`] && !validateYvalue(watch("dgpsDetails")[index].latitude) ? (
+                              <CardLabelError style={{ color: "red" }}>
+                                Y:Latitude{index + 1} is not valid. It should be in between 3054400.000 and 3425500.000
+                              </CardLabelError>
+                            ) : null}
                         </div>
                       </div>
                       {index > 3 && (
@@ -930,6 +988,7 @@ const AppliedDetailForm = (props) => {
                     style={{ float: "right", marginRight: 15 }}
                     className="btn btn-primary"
                     onClick={() => append({ longitude: "", latitude: "" })}
+                   
                   >
                     Add
                   </button>
@@ -937,7 +996,9 @@ const AppliedDetailForm = (props) => {
               </Col>
             </Row>
             <div className="row m-0" style={{ width: "100%", justifyContent: "center" }}>
-              <button type="submit" style={{ width: "190px" }} class="btn btn-primary btn-md center-block mt-3">
+              <button type="button" style={{ width: "190px" }} class="btn btn-primary btn-md center-block mt-3"   onClick={() => {
+                        validateDgpsPoint();
+                      }}>
                 Submit
               </button>
             </div>
