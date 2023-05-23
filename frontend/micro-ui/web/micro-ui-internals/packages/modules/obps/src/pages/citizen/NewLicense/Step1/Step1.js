@@ -511,6 +511,7 @@ const ApllicantFormStep1 = (props) => {
             {developerDataLabel?.addInfo?.showDevTypeFields != "Individual" &&
               developerDataLabel?.addInfo?.showDevTypeFields != "Limited Liability Partnership" &&
               developerDataLabel?.addInfo?.showDevTypeFields != "Hindu Undivided Family" &&
+              developerDataLabel?.addInfo?.showDevTypeFields != "Partnership Firm" &&
               developerDataLabel?.addInfo?.showDevTypeFields != "Proprietorship Firm" && (
                 <div>
                   <h5 className="card-title fw-bold">
@@ -789,9 +790,11 @@ const ApllicantFormStep1 = (props) => {
                 </div>
               </FormControl>
               &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp;
-              {developerDataLabel?.addInfo?.showDevTypeFields != "Hindu Undivided Family" &&
-                developerDataLabel?.addInfo?.showDevTypeFields != "Proprietorship Firm" &&
-                developerDataLabel?.addInfo?.showDevTypeFields != "Partnership Firm" && (
+              {developerDataLabel?.addInfo?.showDevTypeFields == "Company" &&
+                developerDataLabel?.addInfo?.showDevTypeFields == "Trust" &&
+                developerDataLabel?.addInfo?.showDevTypeFields == "Limited Liability Partnership" &&
+                developerDataLabel?.addInfo?.showDevTypeFields == "Firm" &&
+                developerDataLabel?.addInfo?.showDevTypeFields == "Institution" && (
                   <FormControl>
                     {developerDataLabel?.licensesDoc?.[0]?.memorandumOfArticles && (
                       <div
