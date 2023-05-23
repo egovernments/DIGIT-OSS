@@ -28,6 +28,7 @@ import InfoIcon from "@mui/icons-material/Info";
 import Tooltip from "@mui/material/Tooltip";
 import { useTranslation } from "react-i18next";
 import { useLocation } from "react-router-dom";
+import Visibility from "@mui/icons-material/Visibility";
 // import CommercialPlottedForm from "./Puropse/CommercialPlottedForm";
 
 const Developerinfo = (props) => {
@@ -292,6 +293,7 @@ const Developerinfo = (props) => {
     existinglitigation: Colors.info,
     courtOrders: Colors.info,
     anyInsolvency: Colors.info,
+    insolvencyRemark: Colors.info,
     asPerAppliedLand: Colors.info,
     revenueRasta: Colors.info,
     waterCourseRunning: Colors.info,
@@ -366,6 +368,7 @@ const Developerinfo = (props) => {
   { label: "Existing litigation, if any, concerning applied land including co-sharers and collaborator", key: "existinglitigation" },
   { label: "Court orders, if any, affecting applied land", key: "courtOrders" },
   { label: "Any insolvency/liquidation proceedings against the land owner(s)/ collaborating developed", key: "anyInsolvency" },
+  { label: "Remark", key: "insolvencyRemark" },
   { label: "As per applied land", key: "asPerAppliedLand" }, { label: "Revenue rasta", key: "revenueRasta" },
   { label: "Watercourse running", key: "waterCourseRunning" },
   { label: "Whether in Compact Block", key: "whetherInCompactBlock" },
@@ -980,7 +983,7 @@ const Developerinfo = (props) => {
             </Row>
 
             <Row className={classes.formLabel}>
-              <Col md={4} xxl lg="12">
+              <Col md={6} xxl lg="12">
                 {
                   landScheduleData?.migrationLic === "Y" &&
 
@@ -1728,7 +1731,7 @@ const Developerinfo = (props) => {
             <Row className={classes.formLabel}>
 
               {
-                landScheduleData?.court === "Y" && (
+                landScheduleData?.court === "N" && (
                   <div className="row" >
                     <Col className="ms-auto" md={4} xxl lg="4">
                       {/* <label>
@@ -1804,7 +1807,7 @@ const Developerinfo = (props) => {
 
             <Row className={classes.formLabel}>
               {
-                landScheduleData?.insolvency === "Y" && (
+                landScheduleData?.insolvency === "N" && (
                   <div className="row" >
                     <Col className="ms-auto" md={4} xxl lg="4">
                       {/* <label>
@@ -1820,6 +1823,21 @@ const Developerinfo = (props) => {
 
                         className={classes.formLabel}
                         disabled></Form.Control>
+
+<ReportProblemIcon
+                      style={{
+                        display: hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_ANY_INSOLVENCY_Y_REMARKS_LAND_OWING") ? "block" : "none",
+                        color: fieldIconColors.insolvencyRemark
+                      }}
+                      onClick={() => {
+                        setLabelValue("Remark"),
+                          setOpennedModal("insolvencyRemark")
+                        setSmShow(true),
+                          setDocModal(false),
+                          console.log("modal open"),
+                          setFieldValue(landScheduleData !== null ? landScheduleData?.insolvencyRemark : null);
+                      }}
+                    ></ReportProblemIcon>
 
                     </Col>
                     <Col className="ms-auto" md={4} xxl lg="4">
@@ -1852,7 +1870,7 @@ const Developerinfo = (props) => {
               <span class="text-danger font-weight-bold mx-2">*</span>
             </label>
             <div className="row mx-1">
-              <div className="col col-4 p-1">
+              <div className="col col-3 p-1">
                 <h6>
                   {/* (a) As per applied land */}
                   {`${t("NWL_APPLICANT_AS_PER_APPLIED_LAND_SHAJRA_PLAN")}`}
@@ -1892,6 +1910,11 @@ const Developerinfo = (props) => {
                           <DownloadForOfflineIcon color="primary" className="mx-1" />
                         </IconButton>
                       </div>
+                      <div className="d-flex flex-row align-items-center my-1 ">
+                        <IconButton onClick={() => getDocShareholding(landScheduleData?.appliedLand)}>
+                          <Visibility color="primary" className="mx-1" />
+                        </IconButton>
+                      </div>
                     </div>
                   </div>
 
@@ -1899,7 +1922,7 @@ const Developerinfo = (props) => {
 
               </div>
 
-              <div className="col col-4 p-1">
+              <div className="col col-3 p-1">
                 <h6 >
                   {/* (b) Revenue rasta */}
                   {`${t("NWL_APPLICANT_REVENUE_RASTA_SHAJRA_PLAN")}`}
@@ -1943,7 +1966,7 @@ const Developerinfo = (props) => {
                 )}
               </div>
 
-              <div className="col col-4 p-1">
+              <div className="col col-3 p-1">
                 <h6 >
                   {`${t("NWL_APPLICANT_WATERCOURSE_SHAJRA_PLAN")}`}
                   {/* (c) Watercourse */}
@@ -1985,7 +2008,7 @@ const Developerinfo = (props) => {
                   </div>
                 )}
               </div>
-              <div className="col col-4 p-1">
+              <div className="col col-3 p-1">
                 {/* <h6>
                   (d)&nbsp;Whether in Compact Block
                 </h6> */}
@@ -2017,8 +2040,9 @@ const Developerinfo = (props) => {
                 {landScheduleData?.compactBlock === "Y" && (
                   <div className="row ml-1 mr-2">
                     <div className="col col p-1">
-                      {`${t("NWL_APPLICANT_WHETHER_IN_COMPACT_BLOCK_Y_REMARK_SHAJRA_PLAN")}`}
-                      {/* <label> Remark </label> */}
+                      {`${t("NWL_APPLICANT_WHETHER_IN_COMPACT_BLOCK_SEPARATED_SHAJRA_PLAN")}`}
+                      {/* <label> Remark Separated by </label> */}
+                      Separated by
 
                       <Form.Control placeholder={landScheduleData?.compactBlockRemark}
                         // height={30} style={{ maxWidth: 200, marginRight: 5 }} 
@@ -2028,12 +2052,31 @@ const Developerinfo = (props) => {
                   </div>
                 )}
 
+{landScheduleData?.compactBlock === "N" && (
+                  <div className="row ml-1 mr-2">
+                    <div className="col col p-1">
+                      {`${t("NWL_APPLICANT_WHETHER_IN_COMPACT_BLOCK_SEPARATED_SHAJRA_PLAN")}`}
+                      {/* <label> Remark </label> */}
 
+                      <Form.Control placeholder={landScheduleData?.compactBlockRemark}
+                        // height={30} style={{ maxWidth: 200, marginRight: 5 }} 
+                        className={classes.formLabel}
+                        disabled></Form.Control>
+                    </div>
+                    <div className="col col-4">
+                    {`${t("NWL_APPLICANT_WHETHER_IN_COMPACT_BLOCK_POCKET_SHAJRA_PLAN")}`}
+                   
+                    <Form.Control placeholder={landScheduleData?.compactBlockRemark}
+                      className={classes.formLabel}
+                        disabled></Form.Control>
+                            </div>
+                  </div>
+                )}
               </div>
 
               {/* <br></br> */}
 
-              <div className="col col-4 p-1">
+              <div className="col col-3 p-1">
                 <h6 >
                   {/* (e) Whether Others Land fall */}
                   {`${t("NWL_APPLICANT_WHETHER_OTHERS_LAND_FALL_SHAJRA_PLAN")}`}
@@ -2079,7 +2122,7 @@ const Developerinfo = (props) => {
                 )}
 
               </div>
-              <div className="col col-4 p-1">
+              <div className="col col-3 p-1">
                 {/* <h6>
                   (f) Acquisition status
                 </h6> */}

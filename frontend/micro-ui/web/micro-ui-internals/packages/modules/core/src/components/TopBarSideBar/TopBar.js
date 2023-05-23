@@ -25,6 +25,10 @@ const TopBar = ({
   showLanguageChange = true,
 }) => {
   const [profilePic, setProfilePic] = React.useState(null);
+  const userInfo = Digit.UserService.getUser()?.info || {};
+  const userRolesArray = userInfo?.roles.filter((user) => user.code !=="EMPLOYEE" );
+  const filterDataRole = userRolesArray?.[0]?.code;
+  const designation = userRolesArray?.[0]?.name;
 
   React.useEffect(async () => {
     const tenant = Digit.ULBService.getCurrentTenantId();
@@ -102,7 +106,13 @@ const TopBar = ({
     <div className="topbar">
       {mobileView ? <Hamburger handleClick={toggleSidebar} color="#9E9E9E" /> : null}
       
-      <img className="city" src={loggedin ? cityDetails?.logoId : stateInfo?.statelogo} />
+      {/* <img className="city" src={loggedin ? cityDetails?.logoId : stateInfo?.statelogo} /> */}
+      <img
+              className="stateEmployee"
+              id="topbar-logo"
+              src={"https://filesuploadbucket1aws.s3.amazonaws.com/tcp-haryana/tcp-logo-hr3.png"}
+              alt="TCP"
+            />
      
       <span style={{ display: "flex", alignItems: "center", justifyContent: "space-between", width: "100%" }}>
         {loggedin &&
@@ -122,11 +132,16 @@ const TopBar = ({
         {!mobileView && (
           <div className={mobileView ? "right" : "flex-right right w-80 column-gap-15"} style={!loggedin ? { width: "80%" } : {}}>
             <div className="left">
-              {!window.location.href.includes("employee/user/login") && !window.location.href.includes("employee/user/language-selection") && (
-                <ChangeCity dropdown={true} t={t} />
-              )}
+              {!window.location.href.includes("employee/user/login") 
+              // && !window.location.href.includes("employee/user/language-selection")
+              //  && (
+              //   <ChangeCity dropdown={true} t={t} />
+              // )
+              
+              }
+             <b style={{fontSize:18}}>{designation}</b> 
             </div>
-            <div className="left">{showLanguageChange && <ChangeLanguage dropdown={true} />}</div>
+            {/* <div className="left">{showLanguageChange && <ChangeLanguage dropdown={true} />}</div> */}
             {userDetails?.access_token && (
               <div className="left">
                 <Dropdown
@@ -147,7 +162,23 @@ const TopBar = ({
                 />
               </div>
             )}
-            <img className="state" src={logoUrl} />
+            {/* <img className="state" src={logoUrl} /> */}
+            {/* <img
+              className="city"
+              id="topbar-logo"
+              src={"https://filesuploadbucket1aws.s3.amazonaws.com/tcp-haryana/tcp-logo-hr2.png"}
+              height="100px"
+              alt="TCP"
+            /> */}
+            <img
+              className="state"
+              id="topbar-logo"
+              src={"https://filesuploadbucket1aws.s3.amazonaws.com/tcp-haryana/tcp-logo-hr3.png"}
+              height="70px"
+              width="70px"
+              backgroundColor="currentColor"
+              alt="TCP"
+            />
           </div>
         )}
       </span>
