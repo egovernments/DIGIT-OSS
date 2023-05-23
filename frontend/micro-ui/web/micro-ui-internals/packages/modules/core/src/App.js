@@ -11,6 +11,7 @@ export const DigitApp = ({ stateCode, modules, appTenants, logoUrl, initData ,de
   const userDetails = Digit.UserService.getUser();
   const { data: storeData } = Digit.Hooks.useStore.getInitData();
   const { stateInfo } = storeData || {};
+  
   const DSO = Digit.UserService.hasAccess(["FSM_DSO"]);
   let CITIZEN = userDetails?.info?.type === "CITIZEN" || !window.location.pathname.split("/").includes("employee") ? true : false;
 

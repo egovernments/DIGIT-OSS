@@ -14,7 +14,10 @@ import { pgrCustomizations } from "./pgr";
 
 var Digit = window.Digit || {};
 
-const enabledModules = ["Payment", "QuickPayLinks", "DSS", "HRMS", "Engagement", "NDSS"];
+const enabledModules = ["Payment", "QuickPayLinks", "DSS", "HRMS", "Engagement", "NDSS",
+//added to check fsm
+"FSM"
+];
 
 const initTokens = (stateCode) => {
   const userType = window.sessionStorage.getItem("userType") || process.env.REACT_APP_USER_TYPE || "CITIZEN";
