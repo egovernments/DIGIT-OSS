@@ -19,14 +19,14 @@ export const SuccessfulPayment = (props) => {
   let { consumerCode, receiptNumber, businessService } = useParams();
   const tenantId = Digit.ULBService.getCurrentTenantId();
   receiptNumber = receiptNumber.replace(/%2F/g, "/");
-  const { data = {}, isLoading: isBpaSearchLoading, isSuccess: isBpaSuccess, error: bpaerror } = Digit.Hooks.obps.useOBPSSearch(
+  const { data = {}, isLoading: isBpaSearchLoading, isSuccess: isBpaSuccess, error: bpaerror } = Digit?.Hooks?.obps?.useOBPSSearch(
     "",
     {},
     tenantId,
     { applicationNo: consumerCode },
     {},
     { enabled: businessService?.includes("BPA") ? true : false }
-  );
+  )||{};
   const FSM_EDITOR = Digit.UserService.hasAccess("FSM_EDITOR_EMP") || false;
 
   function onActionSelect(action) {

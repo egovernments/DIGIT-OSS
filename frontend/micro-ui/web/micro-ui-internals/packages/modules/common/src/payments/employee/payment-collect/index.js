@@ -346,7 +346,7 @@ export const CollectPayment = (props) => {
         config={getFormConfig()}
         onSubmit={onSubmit}
         formState={formState}
-        defaultValues={getDefaultValues()}
+        defaultValues={getDefaultValues().trim()}
         isDisabled={IsDisconnectionFlow ? false : bill?.totalAmount ? !bill.totalAmount > 0 : true}
         // isDisabled={BillDetailsFormConfig({ consumerCode }, t)[businessService] ? !}
         onFormValueChange={(setValue, formValue) => {

@@ -1,6 +1,6 @@
 {
   "name": "@egovernments/digit-ui-module-common",
-  "version": "1.5.21",
+  "version": "1.5.24",
   "license": "MIT",
   "main": "dist/index.js",
   "module": "dist/index.modern.js",
