@@ -11,6 +11,8 @@ import { getDocShareholding } from "../ScrutinyDevelopment/docview.helper";
 import Visibility from "@mui/icons-material/Visibility";
 // import FileDownload from "@mui/icons-material/FileDownload";
 import { IconButton } from "@mui/material";
+import { useTranslation } from "react-i18next";
+import { useLocation } from "react-router-dom";
 
 
 function ModalChild(props) {
@@ -32,6 +34,8 @@ function ModalChild(props) {
   const userRolesArray = userInfo?.roles.filter((user) => user.code !=="EMPLOYEE" );
   const filterDataRole = userRolesArray?.[0]?.code;
   const designation = userRolesArray?.[0]?.name;
+  const { t } = useTranslation();
+  const { pathname: url } = useLocation();
   
 
   console.log("usern23233" , userRolesArray );
@@ -126,7 +130,8 @@ function ModalChild(props) {
       <Modal.Header closeButton>
         <Modal.Title id="example-modal-sizes-title-sm">
           <div>
-            <h3>{props.labelmodal}</h3>
+            <h3>{props.labelmodal}
+            </h3>
             { docModal === false &&
             <p className={classes.subHead}>{inputFieldValue}</p>
             }

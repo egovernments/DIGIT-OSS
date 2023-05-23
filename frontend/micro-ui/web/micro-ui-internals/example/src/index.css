@@ -21247,3 +21247,17 @@ color: #fff !important;
   resize: none;
   margin-left: 21px;
 }
+
+.stateEmployee{
+  height:50px;
+    width:50px;
+    margin:-25px auto 0 -25px;
+    background:grey;
+    /* position:absolute; */
+    margin-top: 5px;
+    margin-right: 10px;
+    margin-left: -15px;
+    
+    /* top:50%;
+    left:50%; */
+}

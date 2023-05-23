@@ -595,10 +595,13 @@ console.log("userInFODATA123" , userInfo);
             <Component 
           dataMDMS = {dataMDMS}
           register = {register}
-
+              // style={{}}
          />
            {/* <input as="textarea" rows={1} type="text" className="form-control" placeholder="" {...register("landOwnerA")}/> */}
-          <button type="submit" >save</button>
+          {/* <button type="submit" >save</button> */}
+          <div className="col-sm-2">
+            <Button style={{ textAlign: "right" }} value="Submit" id="Submit" type="submit">Submit</Button>
+          </div>
             </form>
           </div>
           </Collapse>
