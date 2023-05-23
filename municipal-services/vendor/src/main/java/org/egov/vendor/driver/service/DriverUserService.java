@@ -83,12 +83,15 @@ public class DriverUserService {
 
 	private void licenseExistCheck(DriverRequest driverRequest) {
 		DriverResponse driverResponse = driverRepository.getDriverData(new DriverSearchCriteria());
-
-		Optional<Driver> driver = driverResponse.getDriver().stream()
-				.filter(driverIdAndLicenseNumCheck -> driverIdAndLicenseNumCheck.getLicenseNumber()
-						.equalsIgnoreCase(driverRequest.getDriver().getLicenseNumber())
-						&& !driverIdAndLicenseNumCheck.getId().equalsIgnoreCase(driverRequest.getDriver().getId()))
-				.findFirst();
+		
+		Optional<Driver> driver = Optional.ofNullable(driverResponse)
+		        .map(DriverResponse::getDriver)
+		        .orElse(Collections.emptyList())
+		        .stream()
+		        .filter(driverIdAndLicenseNumCheck ->
+		                driverIdAndLicenseNumCheck.getLicenseNumber().equalsIgnoreCase(driverRequest.getDriver().getLicenseNumber())
+		                && !driverIdAndLicenseNumCheck.getId().equalsIgnoreCase(driverRequest.getDriver().getId()))
+		        .findFirst();
 
 		if (driver.isPresent()) {
 			throw new CustomException("Invalid LicenseNumber", " Driver with the same license number already exist");
