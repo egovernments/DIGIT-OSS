@@ -8,6 +8,7 @@ const MultiSelect = ({ options, optionsKey, selected = [], onSelect, defaultLabe
   const [optionIndex, setOptionIndex] = useState(-1);
   const dropdownRef = useRef();
   const { t } = useTranslation();
+  // console.log("searchQuery", searchQuery);
   Digit.Hooks.useClickOutside(dropdownRef, () => setActive(false), active);
   const filtOptns =
       searchQuery?.length > 0 ? options.filter((option) => t(option[optionsKey]&&typeof option[optionsKey]=="string" && option[optionsKey].toUpperCase()).toLowerCase().indexOf(searchQuery.toLowerCase()) >= 0) : options;
