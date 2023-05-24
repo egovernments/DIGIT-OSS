@@ -26,9 +26,11 @@ const TopBar = ({
 }) => {
   const [profilePic, setProfilePic] = React.useState(null);
   const userInfo = Digit.UserService.getUser()?.info || {};
-  const userRolesArray = userInfo?.roles.filter((user) => user.code !=="EMPLOYEE" );
-  const filterDataRole = userRolesArray?.[0]?.code;
-  const designation = userRolesArray?.[0]?.name;
+  // const userRolesArray = userInfo?.roles.filter((user) => user.code !=="EMPLOYEE" );
+  // const filterDataRole = userRolesArray?.[0]?.code;
+  const designation = userInfo?.name;
+  console.log("userInfodesignation" ,designation);
+  
 
   React.useEffect(async () => {
     const tenant = Digit.ULBService.getCurrentTenantId();
@@ -107,12 +109,12 @@ const TopBar = ({
       {mobileView ? <Hamburger handleClick={toggleSidebar} color="#9E9E9E" /> : null}
       
       {/* <img className="city" src={loggedin ? cityDetails?.logoId : stateInfo?.statelogo} /> */}
-      <img
+      {/* <img
               className="stateEmployee"
               id="topbar-logo"
               src={"https://filesuploadbucket1aws.s3.amazonaws.com/tcp-haryana/tcp-logo-hr3.png"}
               alt="TCP"
-            />
+            /> */}
      
       <span style={{ display: "flex", alignItems: "center", justifyContent: "space-between", width: "100%" }}>
         {loggedin &&
@@ -171,12 +173,10 @@ const TopBar = ({
               alt="TCP"
             /> */}
             <img
-              className="state"
+              className="stateEmployee"
               id="topbar-logo"
               src={"https://filesuploadbucket1aws.s3.amazonaws.com/tcp-haryana/tcp-logo-hr3.png"}
-              height="70px"
-              width="70px"
-              backgroundColor="currentColor"
+              
               alt="TCP"
             />
           </div>
