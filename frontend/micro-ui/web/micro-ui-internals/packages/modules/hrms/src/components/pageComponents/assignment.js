@@ -257,6 +257,7 @@ function Assignment({
             optionKey={"i18key"}
             option={getdepartmentdata(department) || []}
             select={selectDepartment}
+            optionCardStyles={{maxHeight:"300px"}}
             t={t}
           />
         </LabelFieldPair>
@@ -269,6 +270,7 @@ function Assignment({
             disable={assignment?.id ? true : false}
             option={getdesignationdata(designation) || []}
             select={selectDesignation}
+            optionCardStyles={{maxHeight:"250px"}}
             optionKey={"i18key"}
             t={t}
           />

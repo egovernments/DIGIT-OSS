@@ -13,7 +13,7 @@ export const configEmployeeApplication = ({ t, action, selectFile, uploadedFile,
         body: [
           {
             label: t("HR_DEACTIVATION_REASON"),
-            type: "dropdown",
+            //type: "dropdown",
             isMandatory: true,
             name: "reasonForDeactivation",
             populators: <Dropdown isMandatory selected={selectedReason} optionKey="i18key" option={Reasons} select={selectReason} t={t} />,

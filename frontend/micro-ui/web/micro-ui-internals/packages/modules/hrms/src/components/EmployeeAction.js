@@ -13,9 +13,11 @@ const EmployeeAction = ({ t, action, tenantId, closeModal, submitAction, applica
   const [error, setError] = useState(null);
   const [Reasons, setReasons] = useState([]);
   const [selectedReason, selecteReason] = useState("");
-  const { isLoading, isError, errors, data, ...rest } = Digit.Hooks.hrms.useHrmsMDMS(tenantId, "egov-hrms", "DeactivationReason");
+  const tenant = Digit.ULBService.getStateId() || tenantId?.split(".")?.[0];
+  const { isLoading, isError, errors, data, ...rest } = Digit.Hooks.hrms.useHrmsMDMS(tenant, "egov-hrms", "DeactivationReason");
 
   useEffect(() => {
+    if(Reasons?.length > 0)
     switch (action) {
       case "DEACTIVATE_EMPLOYEE_HEAD":
         return setConfig(
@@ -81,7 +83,7 @@ const EmployeeAction = ({ t, action, tenantId, closeModal, submitAction, applica
         return ele;
       })
     );
-  }, [data]);
+  }, [data, isLoading]);
 
   useEffect(() => {
     (async () => {
