@@ -1,0 +1,33 @@
+/* otp */
+.otp-text {
+  margin-bottom: 12px;
+}
+
+.otp-heading {
+  margin-bottom: 24px;
+}
+
+.otp-prompt,
+.otp-resend {
+  display: inline-block;
+  margin-left: 10px;
+}
+
+.otp-resend .label-text {
+  color: #f89a3f;
+}
+
+.citizen-otp-sent-message .label-container,
+.citizen-otp-sent-message .label-text {
+  display: inline;
+}
+
+.force-padding-0 {
+  padding: 0 !important;
+}
+
+/* duplication */
+input#otp {
+  height: 56px !important;
+  padding-bottom: 0px !important;
+}

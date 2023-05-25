@@ -1,0 +1,9 @@
+# Elasticsearch 6.x
+elasticsearch>=6.0.0,<7.0.0
+
+requests==2.23.0
+Psycopg2==2.8.4
+
+kafka-python==2.0.1
+pykafka==2.8.0
+kubernetes==11.0.0

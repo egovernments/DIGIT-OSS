@@ -1,0 +1,60 @@
+.dialog-content {
+    color: rgba(0, 0, 0, 0.87);
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 19px;
+    text-align: left;
+  }
+  
+  .date-of-transfer {
+    color: rgba(0, 0, 0, 0.87);
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 17px;
+    text-align: left;
+    display: inline-block;
+  }
+  
+  .owner-history {
+    color: rgba(0, 0, 0, 0.87);
+    font-size: 20px;
+    font-weight: 500;
+    line-height: 28px;
+    text-align: left;
+  }
+  
+  .oval-class {
+    background-color: #fe7a51;
+    border-radius: 100%;
+    width: 18px;
+    height: 18px;
+    display: inline-block;
+    position: relative;
+    left: -9px;
+    top: 4px;
+  }
+  
+  .dialog-close-button {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    float: right;
+    margin-bottom: -15px;
+    cursor: pointer;
+  }
+
+  .view-history-dialog {
+    width: 100% !important;
+  }
+
+  @media only screen and (max-width: 768px) {
+    .view-history-dialog {
+      max-width: 90% !important;
+    }
+  }
+  @media only screen and (min-width: 768px) {
+    .view-history-dialog {
+      max-width: 75% !important;
+    }
+  }
+  

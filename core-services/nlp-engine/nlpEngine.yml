@@ -1,0 +1,33 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: flask-nlp-Service
+spec:
+  selector:
+    app: nlp-engine
+  ports:
+  - protocol: "TCP"
+    port: 6000
+    targetPort: 8080
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nlp-engine
+spec:
+  selector:
+    matchLabels:
+      app: nlp-engine
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: nlp-engine
+    spec:
+      containers:
+      - name: nlp-engine
+        image: talele08/nlp-engine:alpha
+        imagePullPolicy: Never
+        ports:
+        - containerPort: 8080    

@@ -1,0 +1,294 @@
+openapi: 3.0.1
+info:
+  title: PDF-Service APIs
+  description: |
+    APIs available in PDF-Service
+  contact:
+    name: eGovernments Foundation
+  version: 1.1.0
+servers:
+- url: /pdf-service/v1/
+paths:
+  /_create:
+    post:
+      tags:
+      - PDF-Service endpoints
+      summary: Generate PDF and store output pdfs to filestore and return their filestoreids.
+        The information is also saved into DB so that using _search endpoint we can
+        retrieve already generated pdfs.
+      description: Generate pdfs and return their filestoreids
+      parameters:
+      - name: tenantId
+        in: query
+        description: tenantId for pdf
+        required: true
+        schema:
+          type: string
+      - name: key
+        in: query
+        description: key to identify correct PDF configurarion
+        required: true
+        schema:
+          type: string
+      requestBody:
+        description: requestinfo object with input json for pdf
+        content:
+          '*/*':
+            schema:
+              $ref: '#/components/schemas/PDFRequest'
+        required: false
+      responses:
+        201:
+          description: PDF successfully created and response sent back
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/PDFResponse'
+        400:
+          description: Incorrect request
+          content: {}
+        404:
+          description: PDF with search parameters was not found
+          content: {}
+        500:
+          description: Error happened at server
+          content: {}
+      x-codegen-request-body-name: requestbody
+  /_createnosave:
+    post:
+      tags:
+      - PDF-Service endpoints
+      summary: Generates pdf without storing any information on filestore or in DB.
+        The generated pdf would be returned as binary response
+      description: Generate pdf and return as binary response
+      parameters:
+      - name: tenantId
+        in: query
+        description: tenantId for pdf
+        required: true
+        schema:
+          type: string
+      - name: key
+        in: query
+        description: key to identify correct PDF configurarion
+        required: true
+        schema:
+          type: string
+      requestBody:
+        description: requestinfo object with input json for pdf
+        content:
+          '*/*':
+            schema:
+              $ref: '#/components/schemas/PDFRequest'
+        required: false
+      responses:
+        201:
+          description: PDF created and returned in binary
+          content: {}
+        400:
+          description: If correct request not sent
+          content: {}
+        500:
+          description: Error occurred at server
+          content: {}
+      x-codegen-request-body-name: requestbody
+  /_search:
+    post:
+      tags:
+      - PDF-Service endpoints
+      summary: Get filestoreids and other information about already generated pdf
+        by searching on jobid or entityid with other optional search parameters
+      description: Get details for already generated PDF
+      parameters:
+      - name: tenantid
+        in: query
+        description: tenantId for pdf
+        schema:
+          type: string
+      - name: jobid
+        in: query
+        description: search based on unique id of pdf job.
+        required: true
+        schema:
+          type: string
+      - name: entityid
+        in: query
+        description: search based on unique id of a document
+        required: true
+        schema:
+          type: string
+      - name: isconsolidated
+        in: query
+        description: Whether single object or multiobject pdf required
+        schema:
+          type: string
+      requestBody:
+        description: requestinfo object
+        content:
+          '*/*':
+            schema:
+              $ref: '#/components/schemas/RequestInfo'
+        required: false
+      responses:
+        200:
+          description: Pdf information successfully retrieved
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/PDFResponse'
+        400:
+          description: Incorrect request
+          content: {}
+        404:
+          description: PDF with search parameters was not found
+          content: {}
+        500:
+          description: Error happened at server
+          content: {}
+      x-codegen-request-body-name: requestInfo
+components:
+  schemas:
+    PDFResponse:
+      type: object
+      properties:
+        ResponseInfo:
+          $ref: '#/components/schemas/ResponseInfo'
+        message:
+          type: string
+        filestoreIds:
+          type: array
+          description: filestoreids of PDFs from filestore service
+          items:
+            type: string
+        jobid:
+          type: string
+          description: jobid of pdf create reques
+        createdtime:
+          type: number
+          description: start time of job
+        endtime:
+          type: number
+          description: end time of job
+        tenantid:
+          type: string
+        totalcount:
+          type: number
+        key:
+          type: string
+          description: key to be used to pick pdf configs
+        documentType:
+          type: string
+          description: documentype defined in pdf config
+        moduleName:
+          type: string
+          description: modulename defined in pdf config
+    Role:
+      required:
+      - code
+      - id
+      - name
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        name:
+          type: string
+        code:
+          type: string
+    User:
+      required:
+      - emailId
+      - id
+      - mobileNumber
+      - name
+      - roles
+      - tenantId
+      - type
+      - userName
+      - uuid
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        userName:
+          type: string
+        name:
+          type: string
+        type:
+          type: string
+        mobileNumber:
+          type: string
+        emailId:
+          type: string
+        roles:
+          type: array
+          items:
+            $ref: '#/components/schemas/Role'
+        tenantId:
+          type: string
+        uuid:
+          type: string
+    ResponseInfo:
+      type: object
+      properties:
+        apiId:
+          type: string
+        ver:
+          type: string
+        ts:
+          type: number
+        resMsgId:
+          type: string
+        msgId:
+          type: string
+        status:
+          type: string
+        correlationId:
+          type: string
+        userInfo:
+          $ref: '#/components/schemas/User'
+    RequestInfo:
+      required:
+      - action
+      - apiId
+      - authToken
+      - correlationId
+      - did
+      - key
+      - msgId
+      - ts
+      - userInfo
+      - ver
+      type: object
+      properties:
+        apiId:
+          type: string
+        ver:
+          type: string
+        ts:
+          type: integer
+          format: int64
+        action:
+          type: string
+        did:
+          type: string
+        key:
+          type: string
+        msgId:
+          type: string
+        authToken:
+          type: string
+        correlationId:
+          type: string
+        userInfo:
+          $ref: '#/components/schemas/User'
+    PDFRequest:
+      type: object
+      properties:
+        ResponseInfo:
+          $ref: '#/components/schemas/RequestInfo'
+        moduleObjectWithName:
+          type: object
+          properties: {}

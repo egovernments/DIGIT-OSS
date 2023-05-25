@@ -1,0 +1,44 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "title": "Health Details",
+  "description": "JSON representation of Health Details object",
+  "type": "array",
+  "minItems": 1,
+  "items": {
+    "$ref": "#/definitions/healthDetails"
+  },
+  "additionalProperties": false,
+  "definitions": {
+    "healthDetails": {
+      "title": "healthDetails",
+      "description": "JSON representation of Health Details object",
+      "type": "object",
+      "properties": {
+        "temperature": {
+          "type": ["number", "string"]
+        },
+        "fever": {
+          "type": ["string", "boolean"],
+          "enum": ["true", "false", true, false]
+        },
+        "breathingIssues": {
+          "type": ["string", "boolean"],
+          "enum": ["true", "false", true, false]
+        },
+        "dryCough": {
+          "type": ["string", "boolean"],
+          "enum": ["true", "false", true, false]
+        },
+        "symptoms": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 256
+        }
+      },
+      "required": [
+        "temperature"
+      ],
+      "additionalItems": true
+    }
+  }
+}

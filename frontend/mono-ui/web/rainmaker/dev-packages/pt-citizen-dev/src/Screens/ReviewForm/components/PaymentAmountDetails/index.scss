@@ -1,0 +1,21 @@
+.property-amount-radio,
+.amt-radio {
+  display: inline-flex;
+}
+#amount-to-be-paid{
+  margin-top:0px !important;
+  background-color: rgb(242, 242, 242) !important;
+}
+.amt-radio {
+  margin-right: 15px;
+  input {
+    margin-right: 8px;
+    cursor: pointer;
+  }
+}
+
+@media only screen and (max-width:768px){
+  .amt-radio{
+    margin-right: 15px;
+  }
+}

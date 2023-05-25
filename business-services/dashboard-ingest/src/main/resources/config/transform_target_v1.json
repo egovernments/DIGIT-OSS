@@ -1,0 +1,20 @@
+[
+	{
+		"operation": "shift",
+		"spec": {
+			"*": {
+				"S. No.": "[&1].snoForMunicipalCorporation",
+				"Tenant Id": "[&1].tenantIdForMunicipalCorporation",
+				"ULB Name": "[&1].ulbName",
+				"Actual Collection (in Lakhs)": "[&1].actualCollectionForMunicipalCorporation",
+				"Budget Proposed (in Lakhs)": "[&1].budgetProposedForMunicipalCorporation",
+				"% Actual Collection over Budgeted": "[&1].actualCollectionBudgetedForMunicipalCorporation",
+				"Financial Year": "[&1].financialYear",
+				"Timestamp": "[&1].Timestamp",
+				"Sheet Name": "[&1].businessService"
+			}
+		}
+	}
+]
+
+

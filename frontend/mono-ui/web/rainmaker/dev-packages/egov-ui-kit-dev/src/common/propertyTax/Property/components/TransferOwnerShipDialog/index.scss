@@ -1,0 +1,47 @@
+.document-header {
+    font-weight: 400;
+    color: rgba(0, 0, 0, 0.87); }
+  
+  .transfer-doc-required-content {
+    width: 90%; }
+  
+  .transfer-ownership-dialog-content {
+    max-height:calc(100vh - 240px);
+    overflow-y: scroll; 
+  overflow-x:hidden}
+  
+  .pt-custom-dialog-gray-card {
+    background-color: #f2f2f2;
+    margin: 1rem 0;
+    padding: 12px 8px; }
+  
+  .pt-custom-dialog-container {
+    display: flex;
+    flex-wrap: wrap; }
+  
+  .pt-custom-dialog-item {
+    margin-right: 1rem; }
+  
+  .footer-button {
+    margin: 1rem; }
+  
+  .transfer-doc-required-content .transfer-ownership-dialog-footer {
+    text-align: right;
+    background: white; }
+  
+  @media only screen and (max-width: 768px) {
+    .transfer-ownership-dialog-content {
+      max-height: 350px;
+      overflow-y: scroll; }
+    .pt-custom-dialog-container {
+      display: block; }
+    .footer-button {
+      margin: 0; }
+    .footer-button button div div span {
+      padding-left: 0;
+      padding-right: 0; }
+    .transfer-doc-required-content .transfer-ownership-dialog-footer {
+      display: flex;
+      text-align: center;
+      background: white; } }
+  

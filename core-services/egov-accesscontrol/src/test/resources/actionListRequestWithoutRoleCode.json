@@ -1,0 +1,18 @@
+{
+   "RequestInfo": {
+       "apiId" : "emp",
+       "ver" : "1.0",
+       "ts" : "10-03-2017 00:00:00",
+       "action" : "create",
+       "did" : "1",
+       "key" : "abcdkey",
+       "msgId" : "20170310130900",
+       "requesterId" : "rajesh",
+       "authToken" : "3f4f7ec4-6541-4a64-955a-b69ea5549053"
+
+   },
+   
+   
+   
+"tenantId" : "default" 
+}

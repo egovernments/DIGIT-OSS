@@ -1,0 +1,110 @@
+.pending-amount-due {
+    color: rgba(0, 0, 0, 0.87);
+    font-family: Roboto;
+    font-size: 20px;
+    font-weight: 500;
+    line-height: 28px;
+    text-align: left;
+  }
+
+.dialog-content {
+    color: rgba(0, 0, 0, 0.87);
+    font-family: Roboto;
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 19px;
+    text-align: left;
+  }
+
+  .footer-amount {
+    color: rgba(0, 0, 0, 0.87);
+    font-family: Roboto;
+    font-size: 24px;
+    font-weight: 500;
+    line-height: 29px;
+    text-align: left;
+    position: relative;
+    display: inline-block;
+    top: 0.07em;
+  }
+
+  .footer-amount-no {
+    font-size: 24px;
+    color: rgba(0, 0, 0, 0.87);
+    position: relative;
+    top: 5px;
+    font-weight: 500;
+  }
+
+.footer-button {
+    background-color: #FE7A51;
+    border-radius: 2px;
+    box-shadow: 0 8px 8px 0 rgba(0, 0, 0, 0.24), 0 0 8px 0 rgba(0, 0, 0, 0.12), 0 2px 2px 0 rgba(0, 0, 0, 0.24), 0 0 2px 0 rgba(0, 0, 0, 0.12);
+    width: 180px;
+    height: 48px;
+  }
+
+.footer-button-label {
+    color: rgba(255, 255, 255, 0.87);
+    font-family: Roboto;
+    font-size: 16px;
+    font-weight: 500;
+    letter-spacing: 0.67px;
+    line-height: 19px;
+    text-align: center;
+  }
+
+  .dialog-content-label {
+    display: inline-block;
+    font-weight: 500;
+    color: rgba(0, 0, 0, 0.87); }
+
+    .dialog-content-amount {
+      display: inline-block;
+      font-size: 18px;
+      font-weight: 500;
+      position: relative;
+      top: 0.15em;
+      color: rgba(0, 0, 0, 0.87); }
+
+      .amount-due-dialog-content {
+        width: 100% !important;
+      }
+
+      @media only screen and (max-width: 768px) {
+        .amount-due-dialog-content {
+          max-width: 90% !important;
+        }
+        .footer-amount {
+          top: 0.04em;
+        }
+      }
+      @media only screen and (min-width: 768px) {
+        .amount-due-dialog-content {
+          max-width: 45% !important;
+        }
+      }
+      .pending-dues {
+        button {
+          cursor: pointer !important;
+          div {
+              div, div:hover {
+                  height: auto !important;
+                  background-color: transparent !important;
+              }
+          }
+        }
+      }
+
+      .pending-dues {
+        button[disabled] {
+          background-color: transparent !important;
+          cursor: default !important;
+        }
+      }
+
+      .rupees-label {
+        color: rgba(0, 0, 0, 1);
+        font-weight: bold;
+        padding-right: 10px;
+      }

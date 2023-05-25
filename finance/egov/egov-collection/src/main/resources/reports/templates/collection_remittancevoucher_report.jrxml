@@ -1,0 +1,1095 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~    eGov  SmartCity eGovernance suite aims to improve the internal efficiency,transparency,
+  ~    accountability and the service delivery of the government  organizations.
+  ~
+  ~     Copyright (C) 2017  eGovernments Foundation
+  ~
+  ~     The updated version of eGov suite of products as by eGovernments Foundation
+  ~     is available at http://www.egovernments.org
+  ~
+  ~     This program is free software: you can redistribute it and/or modify
+  ~     it under the terms of the GNU General Public License as published by
+  ~     the Free Software Foundation, either version 3 of the License, or
+  ~     any later version.
+  ~
+  ~     This program is distributed in the hope that it will be useful,
+  ~     but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~     GNU General Public License for more details.
+  ~
+  ~     You should have received a copy of the GNU General Public License
+  ~     along with this program. If not, see http://www.gnu.org/licenses/ or
+  ~     http://www.gnu.org/licenses/gpl.html .
+  ~
+  ~     In addition to the terms of the GPL license to be adhered to in using this
+  ~     program, the following additional terms are to be complied with:
+  ~
+  ~         1) All versions of this program, verbatim or modified must carry this
+  ~            Legal Notice.
+  ~            Further, all user interfaces, including but not limited to citizen facing interfaces,
+  ~            Urban Local Bodies interfaces, dashboards, mobile applications, of the program and any
+  ~            derived works should carry eGovernments Foundation logo on the top right corner.
+  ~
+  ~            For the logo, please refer http://egovernments.org/html/logo/egov_logo.png.
+  ~            For any further queries on attribution, including queries on brand guidelines,
+  ~            please contact contact@egovernments.org
+  ~
+  ~         2) Any misrepresentation of the origin of the material is prohibited. It
+  ~            is required that all modified versions of this material be marked in
+  ~            reasonable ways as different from the original version.
+  ~
+  ~         3) This license does not grant any rights to any user of the program
+  ~            with regards to rights under trademark law for use of the trade names
+  ~            or trademarks of eGovernments Foundation.
+  ~
+  ~   In case of any queries, you can reach eGovernments Foundation at contact@egovernments.org.
+  ~
+  -->
+<!-- Created with Jaspersoft Studio version 6.3.1.final using JasperReports Library version 6.3.1  -->
+<!-- 2018-03-12T13:12:50 -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="remittance_voucher_report" language="groovy" pageWidth="842" pageHeight="595" orientation="Landscape" whenNoDataType="NoDataSection" columnWidth="822" leftMargin="10" rightMargin="10" topMargin="20" bottomMargin="20" uuid="b76bdff0-f9b9-4afd-886d-d310a7b060b2">
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
+	<import value="java.lang.*"/>
+	<import value="org.egov.infra.reporting.util.*"/>
+	<import value="java.util.*"/>
+	<import value="java.math.*"/>
+	<style name="Title" fontName="Arial" fontSize="26" isBold="true" pdfFontName="Helvetica-Bold"/>
+	<style name="SubTitle" forecolor="#666666" fontName="Arial" fontSize="18"/>
+	<style name="Column header" forecolor="#666666" fontName="Arial" fontSize="12" isBold="true"/>
+	<style name="Detail" fontName="Arial" fontSize="12"/>
+	<parameter name="EGOV_REMITTANCE_DATE" class="java.util.Date">
+		<parameterDescription><![CDATA[Remittance Date]]></parameterDescription>
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="EGOV_REMITTANCE_DATE_PLUS_ONE" class="java.util.Date" isForPrompting="false">
+		<parameterDescription><![CDATA[Actual to date used in the query - it is calculated by adding one to the to date passed]]></parameterDescription>
+		<defaultValueExpression><![CDATA[ReportUtil.add($P{EGOV_REMITTANCE_DATE}, Calendar.DAY_OF_MONTH, 1)]]></defaultValueExpression>
+	</parameter>
+	<parameter name="Q_REMITTANCE_DATE" class="java.lang.String" isForPrompting="false">
+		<parameterDescription><![CDATA[Where clause for remittance date]]></parameterDescription>
+		<defaultValueExpression><![CDATA[($P{EGOV_REMITTANCE_DATE} == null || $P{EGOV_REMITTANCE_DATE} == -1) ? "" : " AND date(vh.voucherdate) ='" + $P{EGOV_REMITTANCE_DATE}+"'"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="EGOV_BANKACCOUNT_ID" class="java.lang.Integer">
+		<parameterDescription><![CDATA[BankAccount ID]]></parameterDescription>
+		<defaultValueExpression><![CDATA[-1]]></defaultValueExpression>
+	</parameter>
+	<parameter name="Q_BANKACCOUNT_ID" class="java.lang.String" isForPrompting="false">
+		<parameterDescription><![CDATA[Where clause for bank account id]]></parameterDescription>
+		<defaultValueExpression><![CDATA[($P{EGOV_BANKACCOUNT_ID} == null || $P{EGOV_BANKACCOUNT_ID} == -1) ? "" : " AND bc.ID = " + $P{EGOV_BANKACCOUNT_ID}]]></defaultValueExpression>
+	</parameter>
+	<parameter name="EGOV_BRANCH_ID" class="java.lang.Integer">
+		<parameterDescription><![CDATA[BankBranch ID]]></parameterDescription>
+		<defaultValueExpression><![CDATA[-1]]></defaultValueExpression>
+	</parameter>
+	<parameter name="Q_BRANCH_ID" class="java.lang.String">
+		<parameterDescription><![CDATA[Where clause for bankbranch id]]></parameterDescription>
+		<defaultValueExpression><![CDATA[($P{EGOV_BRANCH_ID} == null || $P{EGOV_BRANCH_ID} == -1) ? "" : "AND br.id = " + $P{EGOV_BRANCH_ID}]]></defaultValueExpression>
+	</parameter>
+	<parameter name="EGOV_RECEIPT_NUMBER" class="java.lang.String">
+		<parameterDescription><![CDATA[Receipt Number]]></parameterDescription>
+	</parameter>
+	<parameter name="Q_RECEIPT_NUMBER" class="java.lang.String">
+		<parameterDescription><![CDATA[Where clause for receipt number]]></parameterDescription>
+		<defaultValueExpression><![CDATA[($P{EGOV_RECEIPT_NUMBER} == null || $P{EGOV_RECEIPT_NUMBER} == "") ? "" : "AND ch.receiptnumber = '" + $P{EGOV_RECEIPT_NUMBER} + "'"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="EGOV_VOUCHER_NUMBER" class="java.lang.String">
+		<parameterDescription><![CDATA[Remittance voucher name]]></parameterDescription>
+	</parameter>
+	<parameter name="Q_VOUCHER_NUMBER" class="java.lang.String">
+		<parameterDescription><![CDATA[Where clause for voucher number]]></parameterDescription>
+		<defaultValueExpression><![CDATA[($P{EGOV_VOUCHER_NUMBER} == null || $P{EGOV_VOUCHER_NUMBER} == "") ? "" : "AND vh.vouchernumber = '" + $P{EGOV_VOUCHER_NUMBER} + "'"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="EGOV_REMITTANCE_NUMBER" class="java.lang.String">
+		<parameterDescription><![CDATA[Remittance Number]]></parameterDescription>
+	</parameter>
+	<parameter name="Q_REMITTANCE_NUMBER" class="java.lang.String">
+		<parameterDescription><![CDATA[Where clause for remittance number]]></parameterDescription>
+		<defaultValueExpression><![CDATA[($P{EGOV_REMITTANCE_NUMBER} == null || $P{EGOV_REMITTANCE_NUMBER} == "") ? "" : "AND rem.referencenumber = '" + $P{EGOV_REMITTANCE_NUMBER} + "'"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="CITY_LOGO_PATH" class="java.io.InputStream"/>
+	<queryString>
+		<![CDATA[select vh.vouchernumber AS VOUCHER_NUMBER,rem.referencenumber AS REM_NUMBER,vh.voucherdate AS REM_DATE, sd.name AS SERVICE_NAME,
+		 br.branchname||'-'|| bc.accountnumber as BANK_ACCOUNT_NUMBER,  rd.debitamount AS VOUCHER_AMOUNT, usr.name AS REMITTED_BY,
+		ch.receiptnumber AS RECEIPT_NUMBER,TO_CHAR(ch.receiptdate,'dd/MM/yyyy') AS RECEIPT_DATE,ch.totalamount AS RECEIPT_AMOUNT,vh.id AS VOUCHER_ID 
+from voucherheader vh inner join  egcl_remittance rem on vh.id=rem.voucherheader
+inner join egcl_collectionremittance cr on cr.remittance =rem.id
+inner join egcl_collectionheader ch on cr.collectionheader = ch.id
+inner join egcl_remittancedetails rd on rem.id=rd.remittance
+inner join eg_user usr on rem.createdby =  usr.id
+inner join egcl_servicedetails sd on ch.servicedetails=sd.id
+inner join bankaccount bc on rem.bankaccount=bc.id
+inner join bankbranch br on bc.branchid=br.id
+where rd.debitamount<>0  
+and vh.status=0
+$P!{Q_BANKACCOUNT_ID}
+$P!{Q_BRANCH_ID}
+$P!{Q_RECEIPT_NUMBER}
+$P!{Q_VOUCHER_NUMBER}
+$P!{Q_REMITTANCE_NUMBER}
+$P!{Q_REMITTANCE_DATE}
+GROUP BY 
+     REM_DATE,VOUCHER_NUMBER,VOUCHER_ID,REM_NUMBER,SERVICE_NAME,BANK_ACCOUNT_NUMBER,VOUCHER_AMOUNT,REMITTED_BY,RECEIPT_NUMBER,RECEIPT_DATE,RECEIPT_AMOUNT 
+ORDER BY
+     REM_DATE]]>
+	</queryString>
+	<field name="VOUCHER_NUMBER" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="SERVICE_NAME" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="REM_NUMBER" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="BANK_ACCOUNT_NUMBER" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="REM_DATE" class="java.util.Date">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="VOUCHER_AMOUNT" class="java.math.BigDecimal">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="REMITTED_BY" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="RECEIPT_NUMBER" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="RECEIPT_DATE" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="RECEIPT_AMOUNT" class="java.math.BigDecimal">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="VOUCHER_ID" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<variable name="TOTAL_AMOUNT" class="java.math.BigDecimal" calculation="Sum">
+		<variableExpression><![CDATA[$F{RECEIPT_AMOUNT}]]></variableExpression>
+		<initialValueExpression><![CDATA[BigDecimal.ZERO]]></initialValueExpression>
+	</variable>
+	<group name="remittancegroup">
+		<groupExpression><![CDATA[]]></groupExpression>
+		<groupHeader>
+			<band height="58">
+				<staticText>
+					<reportElement x="0" y="28" width="25" height="30" uuid="53840303-18e8-4096-823c-94b4367cd406">
+						<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
+					</reportElement>
+					<box leftPadding="5" rightPadding="5">
+						<pen lineWidth="0.5"/>
+						<topPen lineWidth="0.5"/>
+						<leftPen lineWidth="0.5"/>
+						<bottomPen lineWidth="0.5"/>
+						<rightPen lineWidth="0.5"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Times New Roman" isBold="true" pdfFontName="Times-Bold" isPdfEmbedded="true"/>
+					</textElement>
+					<text><![CDATA[Sl. No.]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="25" y="28" width="60" height="30" uuid="b693b167-dede-4812-b596-0f4c018df595">
+						<property name="com.jaspersoft.studio.unit.x" value="pixel"/>
+						<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
+					</reportElement>
+					<box leftPadding="5" rightPadding="5">
+						<pen lineWidth="0.5"/>
+						<topPen lineWidth="0.5"/>
+						<leftPen lineWidth="0.5"/>
+						<bottomPen lineWidth="0.5"/>
+						<rightPen lineWidth="0.5"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Times New Roman" isBold="true" pdfFontName="Times-Bold" isPdfEmbedded="true"/>
+					</textElement>
+					<text><![CDATA[Remittance date]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="85" y="28" width="95" height="30" uuid="431b7433-0af4-4349-a5e1-94a2a4c4c8dc">
+						<property name="com.jaspersoft.studio.unit.x" value="pixel"/>
+					</reportElement>
+					<box leftPadding="5" rightPadding="5">
+						<pen lineWidth="0.5"/>
+						<topPen lineWidth="0.5"/>
+						<leftPen lineWidth="0.5"/>
+						<bottomPen lineWidth="0.5"/>
+						<rightPen lineWidth="0.5"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Times New Roman" isBold="true" pdfFontName="Times-Bold" isPdfEmbedded="true"/>
+					</textElement>
+					<text><![CDATA[Remittance voucher number]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="180" y="28" width="75" height="30" uuid="50072f40-a52d-4472-b275-e0d3140577dd">
+						<property name="com.jaspersoft.studio.unit.x" value="pixel"/>
+					</reportElement>
+					<box leftPadding="5" rightPadding="5">
+						<pen lineWidth="0.5"/>
+						<topPen lineWidth="0.5"/>
+						<leftPen lineWidth="0.5"/>
+						<bottomPen lineWidth="0.5"/>
+						<rightPen lineWidth="0.5"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Times New Roman" isBold="true" pdfFontName="Times-Bold" isPdfEmbedded="true"/>
+					</textElement>
+					<text><![CDATA[Remittance number]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="255" y="28" width="70" height="30" uuid="98bb7876-ad03-4d87-a186-18ab0f56455f">
+						<property name="com.jaspersoft.studio.unit.x" value="pixel"/>
+						<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
+					</reportElement>
+					<box leftPadding="5" rightPadding="5">
+						<pen lineWidth="0.5"/>
+						<topPen lineWidth="0.5"/>
+						<leftPen lineWidth="0.5"/>
+						<bottomPen lineWidth="0.5"/>
+						<rightPen lineWidth="0.5"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Times New Roman" isBold="true" pdfFontName="Times-Bold" isPdfEmbedded="true"/>
+					</textElement>
+					<text><![CDATA[Remittance amount]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="325" y="28" width="150" height="30" uuid="7d229eb1-7350-46c5-858f-5fb4c0cd2857">
+						<property name="com.jaspersoft.studio.unit.x" value="pixel"/>
+					</reportElement>
+					<box leftPadding="5" rightPadding="5">
+						<pen lineWidth="0.5"/>
+						<topPen lineWidth="0.5"/>
+						<leftPen lineWidth="0.5"/>
+						<bottomPen lineWidth="0.5"/>
+						<rightPen lineWidth="0.5"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Times New Roman" isBold="true" pdfFontName="Times-Bold" isPdfEmbedded="true"/>
+					</textElement>
+					<text><![CDATA[Bank branch A/C Number]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="475" y="28" width="60" height="30" uuid="b6db9656-c898-47a8-8e05-2d45ea7f770d">
+						<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
+						<property name="com.jaspersoft.studio.unit.x" value="pixel"/>
+					</reportElement>
+					<box leftPadding="5" rightPadding="5">
+						<pen lineWidth="0.5"/>
+						<topPen lineWidth="0.5"/>
+						<leftPen lineWidth="0.5"/>
+						<bottomPen lineWidth="0.5"/>
+						<rightPen lineWidth="0.5"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Times New Roman" isBold="true" pdfFontName="Times-Bold" isPdfEmbedded="true"/>
+					</textElement>
+					<text><![CDATA[Remitted by]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="755" y="28" width="65" height="30" uuid="8a7cfa57-3234-412a-9676-45176caaf13b">
+						<property name="com.jaspersoft.studio.unit.x" value="pixel"/>
+						<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
+						<property name="com.jaspersoft.studio.unit.y" value="pixel"/>
+					</reportElement>
+					<box leftPadding="5" rightPadding="5">
+						<pen lineWidth="0.5"/>
+						<topPen lineWidth="0.5"/>
+						<leftPen lineWidth="0.5"/>
+						<bottomPen lineWidth="0.5"/>
+						<rightPen lineWidth="0.5"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Times New Roman" isBold="true" pdfFontName="Times-Bold" isPdfEmbedded="true"/>
+					</textElement>
+					<text><![CDATA[Receipt amount(Rs)]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="535" y="28" width="85" height="30" uuid="f08663ed-11ac-489e-8dda-3a694c928d16">
+						<property name="com.jaspersoft.studio.unit.x" value="pixel"/>
+						<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
+						<property name="com.jaspersoft.studio.unit.y" value="pixel"/>
+					</reportElement>
+					<box leftPadding="5" rightPadding="5">
+						<pen lineWidth="0.5"/>
+						<topPen lineWidth="0.5"/>
+						<leftPen lineWidth="0.5"/>
+						<bottomPen lineWidth="0.5"/>
+						<rightPen lineWidth="0.5"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Times New Roman" isBold="true" pdfFontName="Times-Bold" isPdfEmbedded="true"/>
+					</textElement>
+					<text><![CDATA[Receipt number ]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="620" y="28" width="70" height="30" uuid="a390ae50-e069-4517-a12b-54ee015d2200">
+						<property name="com.jaspersoft.studio.unit.x" value="pixel"/>
+						<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
+					</reportElement>
+					<box leftPadding="5" rightPadding="5">
+						<pen lineWidth="0.5"/>
+						<topPen lineWidth="0.5"/>
+						<leftPen lineWidth="0.5"/>
+						<bottomPen lineWidth="0.5"/>
+						<rightPen lineWidth="0.5"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Times New Roman" isBold="true" pdfFontName="Times-Bold" isPdfEmbedded="true"/>
+					</textElement>
+					<text><![CDATA[Receipt date ]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="690" y="28" width="65" height="30" uuid="96efa888-57b5-4d17-9c7e-831ab87d558b">
+						<property name="com.jaspersoft.studio.unit.x" value="pixel"/>
+						<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
+						<property name="com.jaspersoft.studio.unit.y" value="pixel"/>
+					</reportElement>
+					<box leftPadding="5" rightPadding="5">
+						<pen lineWidth="0.5"/>
+						<topPen lineWidth="0.5"/>
+						<leftPen lineWidth="0.5"/>
+						<bottomPen lineWidth="0.5"/>
+						<rightPen lineWidth="0.5"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Times New Roman" isBold="true" pdfFontName="Times-Bold" isPdfEmbedded="true"/>
+					</textElement>
+					<text><![CDATA[Service ]]></text>
+				</staticText>
+			</band>
+		</groupHeader>
+		<groupFooter>
+			<band height="20">
+				<staticText>
+					<reportElement x="0" y="0" width="755" height="20" uuid="34db8ca7-761a-482c-9769-bf6a8054227c">
+						<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
+					</reportElement>
+					<box leftPadding="5" rightPadding="5">
+						<pen lineWidth="0.5"/>
+						<topPen lineWidth="0.5"/>
+						<leftPen lineWidth="0.5"/>
+						<bottomPen lineWidth="0.5"/>
+						<rightPen lineWidth="0.5"/>
+					</box>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font fontName="Times New Roman" isBold="true" pdfFontName="Times-Bold" isPdfEmbedded="true"/>
+					</textElement>
+					<text><![CDATA[Total:]]></text>
+				</staticText>
+				<textField isStretchWithOverflow="true" pattern="###0.00;-###0.00">
+					<reportElement stretchType="RelativeToTallestObject" x="755" y="0" width="65" height="20" isPrintWhenDetailOverflows="true" uuid="2a91040e-25b4-4228-a3a0-deeeb4eb29b1">
+						<property name="com.jaspersoft.studio.unit.x" value="pixel"/>
+						<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
+					</reportElement>
+					<box leftPadding="5" rightPadding="5">
+						<pen lineWidth="0.5"/>
+						<topPen lineWidth="0.5"/>
+						<leftPen lineWidth="0.5"/>
+						<bottomPen lineWidth="0.5"/>
+						<rightPen lineWidth="0.5"/>
+					</box>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font fontName="Times New Roman" pdfFontName="Times-Roman" isPdfEmbedded="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{TOTAL_AMOUNT}]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupFooter>
+	</group>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="238">
+			<staticText>
+				<reportElement style="Title" x="130" y="10" width="520" height="45" uuid="6b0d24c9-2a8e-47ef-80ca-d2fca40e4c09"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" pdfFontName="Times-Bold" isPdfEmbedded="true"/>
+				</textElement>
+				<text><![CDATA[Remittance Voucher Report]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="51" y="135" width="144" height="20" uuid="9e0a5840-2be1-4764-b74d-ff6f5c8663d2"/>
+				<box leftPadding="5" rightPadding="5">
+					<pen lineWidth="0.0"/>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Times New Roman" isBold="true" pdfFontName="Times-Roman"/>
+				</textElement>
+				<text><![CDATA[Remittance Voucher Number:]]></text>
+			</staticText>
+			<textField pattern="dd/MM/yyyy">
+				<reportElement x="584" y="135" width="130" height="20" uuid="3410f866-eb63-4f3b-940a-e60e33b96759"/>
+				<box leftPadding="5" rightPadding="5">
+					<pen lineWidth="0.0"/>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Times New Roman" isBold="true" pdfFontName="Times-Roman"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($P{EGOV_REMITTANCE_DATE} == null || $P{EGOV_REMITTANCE_DATE} =="")? "NA" : $P{EGOV_REMITTANCE_DATE}]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd/MM/yyyy">
+				<reportElement x="195" y="135" width="140" height="20" uuid="dcbd907d-bc5a-41c7-8b3a-73144083f3f0">
+					<property name="com.jaspersoft.studio.unit.x" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.y" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
+				</reportElement>
+				<box leftPadding="5" rightPadding="5">
+					<pen lineWidth="0.0"/>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Times New Roman" isBold="true" pdfFontName="Times-Roman"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($P{EGOV_VOUCHER_NUMBER} == null || $P{EGOV_VOUCHER_NUMBER} == "") ? "NA" : $P{EGOV_VOUCHER_NUMBER}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="479" y="135" width="105" height="20" uuid="40c03bb3-d584-41bb-a5df-a6f32fd2e1d7">
+					<property name="com.jaspersoft.studio.unit.x" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.y" value="pixel"/>
+				</reportElement>
+				<box leftPadding="5" rightPadding="5">
+					<pen lineWidth="0.0"/>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Times New Roman" isBold="true" pdfFontName="Times-Roman"/>
+				</textElement>
+				<text><![CDATA[Remittance Date:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="51" y="115" width="144" height="20" uuid="52247029-fe2d-44a1-bc4e-c69108414d50"/>
+				<box leftPadding="5" rightPadding="5">
+					<pen lineWidth="0.0"/>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Times New Roman" isBold="true" pdfFontName="Times-Roman"/>
+				</textElement>
+				<text><![CDATA[Receipt Number:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="195" y="115" width="140" height="20" uuid="39c0e32d-7ac3-47bd-85ef-d82850b91b56">
+					<property name="com.jaspersoft.studio.unit.y" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
+				</reportElement>
+				<box leftPadding="5" rightPadding="5">
+					<pen lineWidth="0.0"/>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Times New Roman" isBold="true" pdfFontName="Times-Roman"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($P{EGOV_RECEIPT_NUMBER} == null || $P{EGOV_RECEIPT_NUMBER} == "") ? "NA" :$P{EGOV_RECEIPT_NUMBER}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="479" y="155" width="105" height="20" uuid="5ac32a18-7dfa-4cc8-aac1-06ee4e1fb028">
+					<property name="com.jaspersoft.studio.unit.x" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.y" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
+				</reportElement>
+				<box leftPadding="5" rightPadding="5">
+					<pen lineWidth="0.0"/>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Times New Roman" isBold="true" pdfFontName="Times-Roman"/>
+				</textElement>
+				<text><![CDATA[Bank Account:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="584" y="155" width="228" height="20" uuid="1d0accb7-8c1c-4e15-82de-91d29f4ed490">
+					<property name="com.jaspersoft.studio.unit.x" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.y" value="pixel"/>
+				</reportElement>
+				<box leftPadding="5" rightPadding="5">
+					<pen lineWidth="0.0"/>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Times New Roman" isBold="true" pdfFontName="Times-Roman"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($P{EGOV_BANKACCOUNT_ID} == null || $P{EGOV_BANKACCOUNT_ID} == -1) ? "All Accounts" : ReportUtil.fetchFromDBSql($P{REPORT_CONNECTION}, "SELECT BANKACCOUNT.ACCOUNTNUMBER FROM  BANKACCOUNT WHERE  BANKACCOUNT.ID=" + $P{EGOV_BANKACCOUNT_ID})]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="479" y="115" width="105" height="20" uuid="0257acb7-0219-4baa-b120-21ee2b63e8ea">
+					<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.y" value="pixel"/>
+				</reportElement>
+				<box leftPadding="5" rightPadding="5">
+					<pen lineWidth="0.0"/>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Times New Roman" isBold="true" pdfFontName="Times-Roman"/>
+				</textElement>
+				<text><![CDATA[Remittance Number:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="584" y="115" width="130" height="20" uuid="4e245512-5900-4afa-a123-dbcd74aa874d">
+					<property name="com.jaspersoft.studio.unit.y" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
+				</reportElement>
+				<box leftPadding="5" rightPadding="5">
+					<pen lineWidth="0.0"/>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Times New Roman" isBold="true" pdfFontName="Times-Roman"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($P{EGOV_REMITTANCE_NUMBER} == null || $P{EGOV_REMITTANCE_NUMBER} == "") ? "NA" : $P{EGOV_REMITTANCE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="51" y="155" width="144" height="20" uuid="56bb9d4b-20d5-4156-b965-de915ab65b8e">
+					<property name="com.jaspersoft.studio.unit.y" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
+				</reportElement>
+				<box leftPadding="5" rightPadding="5">
+					<pen lineWidth="0.0"/>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Times New Roman" isBold="true" pdfFontName="Times-Roman"/>
+				</textElement>
+				<text><![CDATA[Bank Branch:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="195" y="155" width="140" height="20" uuid="17c671ad-c541-46f3-a7e5-2e1519ef3b3b">
+					<property name="com.jaspersoft.studio.unit.y" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.x" value="pixel"/>
+				</reportElement>
+				<box leftPadding="5" rightPadding="5">
+					<pen lineWidth="0.0"/>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Times New Roman" isBold="true" pdfFontName="Times-Roman"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($P{EGOV_BRANCH_ID} == null || $P{EGOV_BRANCH_ID} == -1) ? "All Banks" : ReportUtil.fetchFromDBSql($P{REPORT_CONNECTION}, "SELECT BANK.NAME FROM BANK,BANKBRANCH WHERE BANKBRANCH.BANKID = BANK.ID and BANKBRANCH.ID=" + $P{EGOV_BRANCH_ID})]]></textFieldExpression>
+			</textField>
+			<image onErrorType="Blank">
+				<reportElement stretchType="RelativeToBandHeight" x="33" y="10" width="91" height="92" isRemoveLineWhenBlank="true" uuid="bd413854-a8d2-4a66-8117-3b8e843ce498"/>
+				<imageExpression><![CDATA[$P{CITY_LOGO_PATH}]]></imageExpression>
+			</image>
+		</band>
+	</title>
+	<detail>
+		<band height="21" splitType="Prevent">
+			<textField isStretchWithOverflow="true">
+				<reportElement stretchType="RelativeToTallestObject" x="180" y="0" width="75" height="21" isPrintWhenDetailOverflows="true" uuid="e702dcfc-7b9c-46d6-bd23-5f512175971f">
+					<property name="com.jaspersoft.studio.unit.x" value="pixel"/>
+				</reportElement>
+				<box leftPadding="5" rightPadding="5">
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" pdfFontName="Times-Roman" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{REM_NUMBER}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement stretchType="RelativeToTallestObject" x="0" y="0" width="25" height="21" isPrintWhenDetailOverflows="true" uuid="b57ae9ab-2445-4c57-9d5f-475b7af27be7">
+					<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
+				</reportElement>
+				<box leftPadding="5" rightPadding="5">
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" pdfFontName="Times-Roman"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{REPORT_COUNT}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" hyperlinkType="Reference">
+				<reportElement stretchType="RelativeToTallestObject" mode="Opaque" x="85" y="0" width="95" height="21" isPrintWhenDetailOverflows="true" forecolor="#271FC2" uuid="db90df99-337c-4c0f-9f37-42df4d74a2a9"/>
+				<box leftPadding="5" rightPadding="5">
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" isBold="true" isItalic="true" isUnderline="true" pdfFontName="Times-Roman" isPdfEmbedded="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{VOUCHER_NUMBER}]]></textFieldExpression>
+				<hyperlinkReferenceExpression><![CDATA["/services/EGF/voucher/preApprovedVoucher-loadvoucherview.action?vhid="+$F{VOUCHER_ID}]]></hyperlinkReferenceExpression>
+				<hyperlinkTooltipExpression><![CDATA[$F{VOUCHER_NUMBER}]]></hyperlinkTooltipExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="dd/MM/yyyy" isBlankWhenNull="true">
+				<reportElement stretchType="RelativeToTallestObject" x="25" y="0" width="60" height="21" isPrintWhenDetailOverflows="true" uuid="2618ec66-70fb-43cb-b8ac-3445c2f43da7">
+					<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.x" value="pixel"/>
+				</reportElement>
+				<box leftPadding="5" rightPadding="5">
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" pdfFontName="Times-Roman" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{REM_DATE}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement stretchType="RelativeToTallestObject" x="255" y="0" width="70" height="21" isPrintWhenDetailOverflows="true" uuid="16934e12-0b25-46aa-bba9-06250abd99c2">
+					<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.x" value="pixel"/>
+				</reportElement>
+				<box leftPadding="5" rightPadding="5">
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" pdfFontName="Times-Roman" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{VOUCHER_AMOUNT}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement stretchType="RelativeToTallestObject" x="325" y="0" width="150" height="21" isPrintWhenDetailOverflows="true" uuid="30871a6e-5cb5-40e1-ac28-392fb1a669cd">
+					<property name="com.jaspersoft.studio.unit.x" value="pixel"/>
+				</reportElement>
+				<box leftPadding="5" rightPadding="5">
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" pdfFontName="Times-Roman" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{BANK_ACCOUNT_NUMBER}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement stretchType="RelativeToTallestObject" x="475" y="0" width="60" height="21" isPrintWhenDetailOverflows="true" uuid="080dfad6-d930-4540-a75d-958a44bf2676">
+					<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.x" value="pixel"/>
+				</reportElement>
+				<box leftPadding="5" rightPadding="5">
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" pdfFontName="Times-Roman" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{REMITTED_BY}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="dd/MM/yyyy">
+				<reportElement stretchType="RelativeToTallestObject" x="535" y="0" width="85" height="21" isPrintWhenDetailOverflows="true" uuid="4e9d1144-99b3-4acd-b10c-f7c4c304ec0e">
+					<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.x" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.y" value="pixel"/>
+				</reportElement>
+				<box leftPadding="5" rightPadding="5">
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" pdfFontName="Times-Roman" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{RECEIPT_NUMBER}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement stretchType="RelativeToTallestObject" x="755" y="0" width="65" height="21" isPrintWhenDetailOverflows="true" uuid="895f1609-9e53-419a-8277-6027cb667262">
+					<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.x" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.y" value="pixel"/>
+				</reportElement>
+				<box leftPadding="5" rightPadding="5">
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" pdfFontName="Times-Roman" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{RECEIPT_AMOUNT}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement stretchType="RelativeToTallestObject" x="620" y="0" width="70" height="21" isPrintWhenDetailOverflows="true" uuid="6399d658-b7bd-42b7-b814-0449b7f82e3d">
+					<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.x" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.y" value="pixel"/>
+				</reportElement>
+				<box leftPadding="5" rightPadding="5">
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" pdfFontName="Times-Roman" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{RECEIPT_DATE}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement stretchType="RelativeToTallestObject" x="690" y="0" width="65" height="21" isPrintWhenDetailOverflows="true" uuid="d24ef332-5df8-494c-8c18-c7e1b8c210d5">
+					<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.x" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.y" value="pixel"/>
+				</reportElement>
+				<box leftPadding="5" rightPadding="5">
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" pdfFontName="Times-Roman" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{SERVICE_NAME}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<pageFooter>
+		<band height="41" splitType="Stretch">
+			<textField evaluationTime="Report">
+				<reportElement style="Column header" x="762" y="0" width="40" height="20" uuid="d6b99f26-b943-4160-a351-8a467e297801"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="10" isBold="false" pdfFontName="Times-Roman" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement style="Column header" x="682" y="0" width="80" height="20" uuid="e0bdcab7-d607-449c-a482-388b263e165c"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="10" isBold="false" pdfFontName="Times-Roman" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Page "+$V{PAGE_NUMBER}+" of"]]></textFieldExpression>
+			</textField>
+			<textField pattern="MMM d, yyyy h:mm:ss a">
+				<reportElement style="Column header" x="0" y="2" width="120" height="20" uuid="c2938b61-df32-4c61-81eb-c575c5a1ad91"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="10" isBold="false" pdfFontName="Times-Roman" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+	<lastPageFooter>
+		<band height="28">
+			<textField pattern="MMM d, yyyy h:mm:ss a">
+				<reportElement style="Column header" x="0" y="0" width="120" height="20" uuid="fdc90c9b-bd7c-4591-a12c-8df86f1dbd31"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="10" isBold="false" pdfFontName="Times-Roman" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement style="Column header" x="762" y="0" width="40" height="20" uuid="9997137b-70b3-497a-a89b-66c1026c0a34"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="10" isBold="false" pdfFontName="Times-Roman" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement style="Column header" x="682" y="0" width="80" height="20" uuid="0f4b898e-ba51-4fc4-88c2-e1c98a800426"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="10" isBold="false" pdfFontName="Times-Roman" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Page "+$V{PAGE_NUMBER}+" of"]]></textFieldExpression>
+			</textField>
+		</band>
+	</lastPageFooter>
+	<summary>
+		<band height="30" splitType="Stretch"/>
+	</summary>
+	<noData>
+		<band height="211">
+			<staticText>
+				<reportElement x="210" y="180" width="368" height="31" uuid="3490a797-b4b4-4a2f-8578-9476c0e58480"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="24" isBold="true" pdfFontName="Times-Bold"/>
+				</textElement>
+				<text><![CDATA[No data found!]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Title" x="241" y="4" width="329" height="38" uuid="98777fb9-57fd-44a1-89ba-4d8ad5ec61c7"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" pdfFontName="Times-Bold" isPdfEmbedded="true"/>
+				</textElement>
+				<text><![CDATA[Remittance Voucher Report]]></text>
+			</staticText>
+			<image>
+				<reportElement x="163" y="6" width="60" height="60" uuid="7656e2d9-ac25-4067-82e2-674dd7225153"/>
+				<imageExpression><![CDATA[$P{CITY_LOGO_PATH}]]></imageExpression>
+			</image>
+			<staticText>
+				<reportElement x="51" y="89" width="144" height="20" uuid="2e28db94-90e7-414f-bc0b-9d5b165ce2b5">
+					<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
+				</reportElement>
+				<box leftPadding="5" rightPadding="5">
+					<pen lineWidth="0.0"/>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Times New Roman" isBold="true" pdfFontName="Times-Roman"/>
+				</textElement>
+				<text><![CDATA[Receipt Number:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="195" y="89" width="140" height="20" uuid="8cf19a5e-76b0-420c-b3bd-1c7002487080">
+					<property name="com.jaspersoft.studio.unit.y" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.x" value="pixel"/>
+				</reportElement>
+				<box leftPadding="5" rightPadding="5">
+					<pen lineWidth="0.0"/>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Times New Roman" isBold="true" pdfFontName="Times-Roman"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($P{EGOV_RECEIPT_NUMBER} == null || $P{EGOV_RECEIPT_NUMBER} == "") ? "NA" :$P{EGOV_RECEIPT_NUMBER}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="51" y="109" width="144" height="20" uuid="5ac3023f-0ff9-4ae2-a9f7-3effc60aab44">
+					<property name="com.jaspersoft.studio.unit.y" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
+				</reportElement>
+				<box leftPadding="5" rightPadding="5">
+					<pen lineWidth="0.0"/>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Times New Roman" isBold="true" pdfFontName="Times-Roman"/>
+				</textElement>
+				<text><![CDATA[Remittance Voucher Number:]]></text>
+			</staticText>
+			<textField pattern="dd/MM/yyyy">
+				<reportElement x="195" y="109" width="140" height="20" uuid="e24331ee-9072-4754-9f74-c0aa317e5369">
+					<property name="com.jaspersoft.studio.unit.x" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.y" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
+				</reportElement>
+				<box leftPadding="5" rightPadding="5">
+					<pen lineWidth="0.0"/>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Times New Roman" isBold="true" pdfFontName="Times-Roman"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($P{EGOV_VOUCHER_NUMBER} == null || $P{EGOV_VOUCHER_NUMBER} == "") ? "NA" : $P{EGOV_VOUCHER_NUMBER}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="51" y="129" width="144" height="20" uuid="5e9f4384-598d-42a4-bd4a-2545a5611358">
+					<property name="com.jaspersoft.studio.unit.y" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
+				</reportElement>
+				<box leftPadding="5" rightPadding="5">
+					<pen lineWidth="0.0"/>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Times New Roman" isBold="true" pdfFontName="Times-Roman"/>
+				</textElement>
+				<text><![CDATA[Bank Branch:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="195" y="129" width="140" height="20" uuid="26559305-109b-4d6c-b445-8c19afa2b8d7">
+					<property name="com.jaspersoft.studio.unit.y" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.x" value="pixel"/>
+				</reportElement>
+				<box leftPadding="5" rightPadding="5">
+					<pen lineWidth="0.0"/>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Times New Roman" isBold="true" pdfFontName="Times-Roman"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($P{EGOV_BRANCH_ID} == null || $P{EGOV_BRANCH_ID} == -1) ? "All Banks" : ReportUtil.fetchFromDBSql($P{REPORT_CONNECTION}, "SELECT BANK.NAME FROM BANK,BANKBRANCH WHERE BANKBRANCH.BANKID = BANK.ID and BANKBRANCH.ID=" + $P{EGOV_BRANCH_ID})]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="479" y="129" width="105" height="20" uuid="9ef9edcf-09db-4355-b2dd-48fd9150b986">
+					<property name="com.jaspersoft.studio.unit.x" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.y" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
+				</reportElement>
+				<box leftPadding="5" rightPadding="5">
+					<pen lineWidth="0.0"/>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Times New Roman" isBold="true" pdfFontName="Times-Roman"/>
+				</textElement>
+				<text><![CDATA[Bank Account:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="584" y="129" width="228" height="20" uuid="71be2c1b-eb7f-45e4-99c3-87db94f72d3c">
+					<property name="com.jaspersoft.studio.unit.x" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.y" value="pixel"/>
+				</reportElement>
+				<box leftPadding="5" rightPadding="5">
+					<pen lineWidth="0.0"/>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Times New Roman" isBold="true" pdfFontName="Times-Roman"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($P{EGOV_BANKACCOUNT_ID} == null || $P{EGOV_BANKACCOUNT_ID} == -1) ? "All Accounts" : ReportUtil.fetchFromDBSql($P{REPORT_CONNECTION}, "SELECT BANK.NAME||'-'||BANKACCOUNT.ACCOUNTNUMBER FROM BANK, BANKACCOUNT,BANKBRANCH WHERE BANKACCOUNT.BRANCHID=BANKBRANCH.ID AND BANKBRANCH.BANKID=BANK.ID AND BANKACCOUNT.ID=" + $P{EGOV_BANKACCOUNT_ID})]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd/MM/yyyy">
+				<reportElement x="584" y="109" width="130" height="20" uuid="3530ba28-c52e-4744-b761-55db7f5192ed">
+					<property name="com.jaspersoft.studio.unit.y" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.x" value="pixel"/>
+				</reportElement>
+				<box leftPadding="5" rightPadding="5">
+					<pen lineWidth="0.0"/>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Times New Roman" isBold="true" pdfFontName="Times-Roman"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{EGOV_REMITTANCE_DATE} == null ? "NA" : $P{EGOV_REMITTANCE_DATE}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="479" y="109" width="105" height="20" uuid="47b4449c-28c5-408d-ab7e-4534c31a7762">
+					<property name="com.jaspersoft.studio.unit.x" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.y" value="pixel"/>
+				</reportElement>
+				<box leftPadding="5" rightPadding="5">
+					<pen lineWidth="0.0"/>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Times New Roman" isBold="true" pdfFontName="Times-Roman"/>
+				</textElement>
+				<text><![CDATA[Remittance Date:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="479" y="89" width="105" height="20" uuid="b13a6ccf-e62e-46c0-8761-ff70acff9099">
+					<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.y" value="pixel"/>
+				</reportElement>
+				<box leftPadding="5" rightPadding="5">
+					<pen lineWidth="0.0"/>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Times New Roman" isBold="true" pdfFontName="Times-Roman"/>
+				</textElement>
+				<text><![CDATA[Remittance Number:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="584" y="89" width="130" height="20" uuid="25dc0917-2a35-44a9-bd08-417857ed00be">
+					<property name="com.jaspersoft.studio.unit.y" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
+				</reportElement>
+				<box leftPadding="5" rightPadding="5">
+					<pen lineWidth="0.0"/>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Times New Roman" isBold="true" pdfFontName="Times-Roman"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($P{EGOV_REMITTANCE_NUMBER} == null || $P{EGOV_REMITTANCE_NUMBER} == "") ? "NA" : $P{EGOV_REMITTANCE_NUMBER}]]></textFieldExpression>
+			</textField>
+		</band>
+	</noData>
+</jasperReport>

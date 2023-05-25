@@ -1,0 +1,15 @@
+  "chartOfAccounts": 
+	   [
+		   	{
+			    "glcode":"GLCode",
+		   		"name":"AadharBank",
+		   		"isActiveForPosting":true,
+		   		"type":"B",
+		   		"classification":123456,
+		   		"functionRequired":true,
+		   		"budgetCheckRequired":true,
+		   		"tenantId":"default"
+		   	}
+	   	
+	   ]
+ 

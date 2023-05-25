@@ -5,6 +5,7 @@ import java.util.List;
 import javax.validation.Valid;
 
 import org.egov.vehicle.config.VehicleConfiguration;
+import org.egov.vehicle.trip.web.model.VehicleTripSearchCriteria;
 import org.egov.vehicle.web.model.Vehicle;
 import org.egov.vehicle.web.model.VehicleRequest;
 import org.egov.vehicle.web.model.VehicleSearchCriteria;
@@ -217,4 +218,39 @@ public class QueryBuilder {
 		preparedStmtList.add(vehicle.getRegistrationNumber());
 		return VEH_EXISTS_QUERY;
 	}
+
+
+	public String getVehicleLikeQuery(VehicleSearchCriteria criteria, List<Object> preparedStmtList) {
+
+		StringBuilder builder = new StringBuilder(Query);
+
+		List<String> ids = criteria.getIds();
+		if (!CollectionUtils.isEmpty(ids)) {
+			addClauseIfRequired(preparedStmtList, builder);
+			builder.append(" id IN (").append(createQuery(ids)).append(")");
+			addToPreparedStatement(preparedStmtList, ids);
+		}
+
+		return addPaginationClause(builder, preparedStmtList, criteria);
+	}
+	
+	private String addPaginationClause(StringBuilder builder, List<Object> preparedStmtList,
+			VehicleSearchCriteria criteria) {
+
+		if (criteria.getLimit()!=null && criteria.getLimit() != 0) {
+			builder.append("and vehicle.id in (select id from eg_vehicle where tenantid= ? order by id offset ? limit ?)");
+			preparedStmtList.add(criteria.getTenantId());
+			preparedStmtList.add(criteria.getOffset());
+			preparedStmtList.add(criteria.getLimit());
+
+			 addOrderByClause(builder, criteria);
+
+		} else {
+			 addOrderByClause(builder, criteria);
+		}
+		return builder.toString();
+	}
+
+
+
 }

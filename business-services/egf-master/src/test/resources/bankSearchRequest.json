@@ -1,0 +1,16 @@
+ {
+    "action": "_search",
+    "did": "",
+    "msgid": "",
+    "requesterId": "1",
+    "authToken": "",
+    "apiId": "org.egov.egf.bank",
+    "ver": "1",
+    "ts": "",
+    "key": null,
+    "tenantId": "ap.kurnool",
+    "userInfo":{
+    	
+    }
+  }
+ 

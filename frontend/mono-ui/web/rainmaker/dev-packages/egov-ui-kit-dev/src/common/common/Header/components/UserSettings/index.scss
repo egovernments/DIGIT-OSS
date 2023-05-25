@@ -1,0 +1,30 @@
+.userSettingsContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.userSettingsInnerContainer {
+  margin-right: 60px;
+  display: flex;
+  .img-responsive {
+    height: 33px !important;
+  }
+}
+.user-acc-info {
+  width: 150px;
+  position: fixed;
+  top: 55px;
+  box-shadow: rgba(0, 0, 0, 0.12) 0px 1px 6px, rgba(0, 0, 0, 0.12) 0px 1px 4px;
+}
+.user-acc-info .label-container {
+  margin-left: 10px;
+  color: rgba(0, 0, 0, 0.87) !important;
+}
+.customMenuItem {
+  position: unset !important;
+  margin: 0 !important;
+  fill: rgba(0, 0, 0, 0.6) !important;
+}
+.menuStyle .label-container .label-text {
+  color: rgba(0, 0, 0, 0.87) !important;
+}

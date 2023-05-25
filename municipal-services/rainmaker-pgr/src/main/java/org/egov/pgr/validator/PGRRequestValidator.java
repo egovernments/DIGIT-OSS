@@ -38,6 +38,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jayway.jsonpath.JsonPath;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.util.ObjectUtils;
 
 @org.springframework.stereotype.Service
 @Slf4j
@@ -85,6 +86,11 @@ public class PGRRequestValidator {
 	 */
 	public void validateCreate(ServiceRequest serviceRequest) {
 		log.info("Validating create request");
+		if(!ObjectUtils.isEmpty(serviceRequest.getServices().get(0).getCitizen()) && !ObjectUtils.isEmpty(serviceRequest.getServices().get(0).getCitizen().getEmailId())) {
+			String emailId = serviceRequest.getServices().get(0).getCitizen().getEmailId();
+			if (StringUtils.isNotBlank(emailId))
+				serviceRequest.getServices().get(0).getCitizen().setEmailId(emailId.trim());
+		}
 		Map<String, String> errorMap = new HashMap<>();
 		validateDataSanity(serviceRequest, errorMap, true);
 		validateUserRBACProxy(errorMap, serviceRequest.getRequestInfo());
@@ -109,6 +115,11 @@ public class PGRRequestValidator {
 	 */
 	public void validateUpdate(ServiceRequest serviceRequest) {
 		log.info("Validating update request");
+		if(!ObjectUtils.isEmpty(serviceRequest.getServices().get(0).getCitizen()) && !ObjectUtils.isEmpty(serviceRequest.getServices().get(0).getCitizen().getEmailId())) {
+			String emailId = serviceRequest.getServices().get(0).getCitizen().getEmailId();
+			if (StringUtils.isNotBlank(emailId))
+				serviceRequest.getServices().get(0).getCitizen().setEmailId(emailId);
+		}
 		Map<String, String> errorMap = new HashMap<>();
 		validateDataSanity(serviceRequest, errorMap, false);
 		validateIfArraysEqual(serviceRequest, errorMap);

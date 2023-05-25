@@ -1,0 +1,15 @@
+{
+    "responseInfo": null,
+    "error": {
+        "code": 400,
+        "message": "OTP request for register failed",
+        "description": null,
+        "fields": [
+            {
+                "code": "OTP.MOBILENUMBER",
+                "message": "This MobileNumber Already Register as UserName in System. Pls try Another UserName",
+                "field": "otp.mobileNumber"
+            }
+        ]
+    }
+}

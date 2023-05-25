@@ -1,0 +1,14 @@
+{
+    "ResponseInfo": null,
+    "Errors": [
+        {
+            "code": "",
+            "message": "Required String parameter 'tenantId' is not present",
+            "description": null,
+            "params": [
+                "tenantId"
+            ]
+        }
+    ]
+
+}

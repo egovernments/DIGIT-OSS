@@ -1,0 +1,50 @@
+.custom-table-pt > thead > tr > th,
+.custom-table-pt > thead > tr > td {
+  border-bottom-width: 1px;
+}
+
+.custom-table-pt > thead > tr > th,
+.custom-table-pt > tbody > tr > th,
+.custom-table-pt > tfoot > tr > th,
+.custom-table-pt > thead > tr > td,
+.custom-table-pt > tbody > tr > td,
+.custom-table-pt > tfoot > tr > td {
+  border: 1px solid #979797;
+}
+
+.custom-table-pt {
+  border: 1px solid #979797;
+  margin-bottom: 10px;
+}
+
+.custom-table-pt > thead > tr > td.active,
+.custom-table-pt > tbody > tr > td.active,
+.custom-table-pt > tfoot > tr > td.active,
+.custom-table-pt > thead > tr > th.active,
+.custom-table-pt > tbody > tr > th.active,
+.custom-table-pt > tfoot > tr > th.active,
+.custom-table-pt > thead > tr.active > td,
+.custom-table-pt > tbody > tr.active > td,
+.custom-table-pt > tfoot > tr.active > td,
+.custom-table-pt > thead > tr.active > th,
+.custom-table-pt > tbody > tr.active > th,
+.custom-table-pt > tfoot > tr.active > th {
+  background-color: rgba(216, 216, 216, 0.49);
+}
+
+.custom-table-pt > thead > tr > th {
+  color: #484848;
+  font-weight: 500;
+  letter-spacing: 0;
+}
+
+.custom-table-pt > tbody > tr > td {
+  color: #484848;
+  letter-spacing: 0;
+}
+
+@media screen and (max-width: 767px) {
+  .custom-table-pt-container {
+    border: 1px solid #979797;
+  }
+}

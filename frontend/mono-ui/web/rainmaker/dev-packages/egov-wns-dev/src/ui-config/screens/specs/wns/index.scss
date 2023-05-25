@@ -1,0 +1,201 @@
+#material-ui-showSearches {
+  background-color: transparent !important;
+  box-shadow: none !important;
+  margin-top: 0px !important;
+
+  div {
+    background-color: transparent;
+
+    div {
+      background-color: transparent;
+    }
+  }
+}
+
+#material-ui-popup {
+  height: 100%;
+}
+
+#material-ui-yearDetailsContainer {
+  div {
+    div {
+      fieldset {
+        div {
+          label {
+            span:nth-child(1) {
+              height: 20px !important;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+#material-ui-yearDetailsContainer {
+  div {
+    div {
+      fieldset {
+        label {
+          span:nth-child(1) {
+            font-size: 15px;
+            font-weight: bolder;
+          }
+        }
+      }
+    }
+  }
+}
+
+#material-ui-yearDetailsContainer {
+  div {
+    div {
+      fieldset {
+        label {
+          padding-bottom: 10px;
+        }
+      }
+    }
+  }
+}
+
+#material-ui-searchApplications {
+  margin-top: 10px;
+  background-color: white !important;
+}
+
+#material-ui-wnsApplication {
+  margin-top: 10px;
+  background-color: white !important;
+}
+
+.property-buttons {
+  display: block;
+}
+
+@media only screen and (max-width: 768px) {
+  #material-ui-showSearches {div {div {button{ span{ span {span {span {
+    font-size:12px !important;
+  }}}}}}}}
+
+  #material-ui-resetButton {
+    float: none !important;
+    margin: 0px 20px 10px !important;
+  }
+
+  #material-ui-searchButton {
+    margin: 0px 20px !important;
+  }
+
+  .ack-body,
+  .ack-tail {
+    display: contents;
+    text-align: center;
+  }
+
+  .wns-stepper {
+    div {
+      padding: 15px 0px 0px !important;
+    }
+  }
+
+  .property-buttons {
+    display: flex;
+    flex-direction: column;
+
+  }
+}
+
+@media only screen and (min-width: 768px) {
+
+  .downloadprint-menu {
+    float: right;
+    margin-top: -50px;
+
+  }
+
+  .search-preview {
+    .wns-stepper {
+      div {
+        padding: 15px 0px 0px !important;
+      }
+    }
+
+    #custom-containers-genderRadioGroup {
+      div {
+        display: inline-flex !important;
+      }
+    }
+
+    .property-buttons {
+      display: block;
+
+    }
+  }
+}
+
+
+#material-ui-searchApplications div div div div div div button span span span span {
+  font-size: 14px !important;
+}
+
+.public-domain-search {
+
+  #material-ui-resetButton,
+  #material-ui-searchButton {
+    width: 100% !important;
+    margin: 8px 0px !important;
+  }
+}
+
+
+#custom-containers-local-locality div div p{
+  font-size: 1.4rem;
+}
+
+
+#custom-containers-local-ulbCity div div p{
+  font-size: 1.4rem;
+}
+.pds-search div div p{
+  font-size: 1.4rem;
+}
+#material-ui-searchPropertyContainer div div div div div p {
+  font-size: 1.4rem  }
+
+  @media only screen and (max-width: 600px) {
+    .public-domain-search-position {
+      top: 50px !important;
+      position: relative !important;
+    }
+  }
+
+  .autocomplete-dropdown {
+    min-width: 80% !important;
+    position: absolute !important;
+    z-index: 1900 !important;
+    max-height: 150px !important;
+    overflow: hidden !important;
+  }
+  .autocomplete-dropdown div {
+    min-width: 80% !important;
+    max-height: 150px !important;
+    overflow: auto !important;
+  }
+
+  #material-ui-OwnerInfoCard,
+  #material-ui-roadCuttingChargeContainer {
+    overflow: visible !important;
+  }
+  #custom-containers-local-applicationType,
+  #custom-containers-local-applicationstatus {
+    background-color: white !important;
+  }
+  #custom-containers-local-applicationType div,
+  #custom-containers-local-applicationstatus div {
+    background-color: white !important;
+  }
+  #custom-containers-local-applicationType div div,
+  #custom-containers-local-applicationstatus div div {
+    background-color: white !important;
+  }

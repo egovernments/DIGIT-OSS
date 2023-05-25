@@ -1,0 +1,42 @@
+@media only screen and (max-width: 551px) {
+  .apply-wizard-footer {
+    background-color: #ffffff;
+    -webkit-box-shadow: 0 -2px 4px 0 rgba(0, 0, 0, 0.24);
+    box-shadow: 0 -2px 4px 0 rgba(0, 0, 0, 0.24);
+    /* padding: 8px; */
+    position: fixed !important;
+    bottom: 0;
+    left: 0;
+    width: 100vw;
+    text-align: right;
+    display: block;
+    padding: initial;
+    overflow: auto; }
+  .apply-wizard-footer button {
+    width: 100% !important;
+    margin: initial;
+    border: none;
+    margin: 0 !important;
+    border-radius: none !important; } }
+
+.tl-trade-type div {
+  color: rgba(0, 0, 0, 0.87); }
+
+.applicant-details-error p {
+  font-size: 14px; }
+
+#custom-containers-local-tradeSubType div p {
+  font-size: 14px; }
+
+#custom-containers-local-tradeLocMohalla div p {
+  font-size: 14px; }
+#custom-atoms-roadCuttingChargeInfoCard {
+    width: 100% !important;
+  }
+#custom-atoms-roadCuttingChargeInfoCard div div div div button[aria-label="Remove"] {
+  display: block !important;
+  margin-top: 20px !important;
+  }
+#custom-atoms-roadCuttingChargeInfoCard div[id^="material-ui-item"] div[id^="material-ui-cardContent"] {
+    padding: 16px 24px !important;
+  }

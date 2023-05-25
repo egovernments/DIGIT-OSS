@@ -1,0 +1,18 @@
+.home-search-input-style {
+  border-radius: 28 !important;
+  z-index: 1100;
+  top: -22px;
+}
+
+.dashboard-search-main-cont {
+  width: 95.5% !important;
+}
+
+@media only screen and (min-width: 768px) {
+  .dashboard-search-main-cont {
+    width: 82.5% !important;
+  }
+  .desktopboxalign{
+    margin-left: 8px !important;
+  }
+}

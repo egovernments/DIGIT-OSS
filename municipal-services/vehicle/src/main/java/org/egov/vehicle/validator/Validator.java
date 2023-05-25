@@ -49,7 +49,7 @@ public class Validator {
 		}
 		validateVehicle(vehicleRequest);
 		mdmsValidator.validateMdmsData(vehicleRequest, mdmsData);
-		mdmsValidator.validateVehicleType(vehicle.getType());
+		mdmsValidator.validateVehicleType(vehicleRequest);
 		mdmsValidator.validateSuctionType(vehicle.getSuctionType());
 		userService.manageOwner(vehicleRequest);
 		

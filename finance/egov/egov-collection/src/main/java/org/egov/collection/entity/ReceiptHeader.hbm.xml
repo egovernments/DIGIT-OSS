@@ -1,0 +1,288 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~    eGov  SmartCity eGovernance suite aims to improve the internal efficiency,transparency,
+  ~    accountability and the service delivery of the government  organizations.
+  ~
+  ~     Copyright (C) 2017  eGovernments Foundation
+  ~
+  ~     The updated version of eGov suite of products as by eGovernments Foundation
+  ~     is available at http://www.egovernments.org
+  ~
+  ~     This program is free software: you can redistribute it and/or modify
+  ~     it under the terms of the GNU General Public License as published by
+  ~     the Free Software Foundation, either version 3 of the License, or
+  ~     any later version.
+  ~
+  ~     This program is distributed in the hope that it will be useful,
+  ~     but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~     GNU General Public License for more details.
+  ~
+  ~     You should have received a copy of the GNU General Public License
+  ~     along with this program. If not, see http://www.gnu.org/licenses/ or
+  ~     http://www.gnu.org/licenses/gpl.html .
+  ~
+  ~     In addition to the terms of the GPL license to be adhered to in using this
+  ~     program, the following additional terms are to be complied with:
+  ~
+  ~         1) All versions of this program, verbatim or modified must carry this
+  ~            Legal Notice.
+  ~            Further, all user interfaces, including but not limited to citizen facing interfaces,
+  ~            Urban Local Bodies interfaces, dashboards, mobile applications, of the program and any
+  ~            derived works should carry eGovernments Foundation logo on the top right corner.
+  ~
+  ~            For the logo, please refer http://egovernments.org/html/logo/egov_logo.png.
+  ~            For any further queries on attribution, including queries on brand guidelines,
+  ~            please contact contact@egovernments.org
+  ~
+  ~         2) Any misrepresentation of the origin of the material is prohibited. It
+  ~            is required that all modified versions of this material be marked in
+  ~            reasonable ways as different from the original version.
+  ~
+  ~         3) This license does not grant any rights to any user of the program
+  ~            with regards to rights under trademark law for use of the trade names
+  ~            or trademarks of eGovernments Foundation.
+  ~
+  ~   In case of any queries, you can reach eGovernments Foundation at contact@egovernments.org.
+  ~
+  -->
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+	<!-- Generated 10 Sep, 2009 12:59:28 PM by Hibernate Tools 3.2.0.CR1 -->
+<hibernate-mapping>
+	<class name="org.egov.collection.entity.ReceiptHeader" table="EGCL_COLLECTIONHEADER">
+		<id name="id" type="long">
+			<column name="ID" precision="22" scale="0" />
+			<generator class="org.hibernate.id.enhanced.SequenceStyleGenerator">
+				<param name="sequence_name">SEQ_EGCL_COLLECTIONHEADER</param>
+			</generator>
+		</id>
+		<version name="version" column="VERSION" type="long" />
+		<many-to-one name="receiptHeader" class="org.egov.collection.entity.ReceiptHeader" fetch="select">
+            <column name="REFERENCE_CH_ID" precision="22" scale="0" />
+        </many-to-one>
+        <set name="receiptHeaders" inverse="true">
+            <key>
+                <column name="REFERENCE_CH_ID" precision="22" scale="0" />
+            </key>
+            <one-to-many class="org.egov.collection.entity.ReceiptHeader" />
+        </set>
+		<property name="referencenumber" type="string">
+			<column name="REFERENCENUMBER" length="50" />
+		</property>
+		<property name="referencedate"  type="timestamp">
+			<column name="REFERENCEDATE" length="7" />
+		</property>
+		<property name="referenceDesc" type="string">
+			<column name="REFERENCEDESC" length="250" />
+		</property>
+		<property name="receipttype" type="char">
+			<column name="RECEIPTTYPE" length="1" not-null="true" />
+		</property>
+		<property name="receiptnumber" type="string">
+			<column name="RECEIPTNUMBER" length="50" />
+		</property>
+		<property name="receiptdate" type="timestamp">
+			<column name="RECEIPTDATE" length="50" />
+		</property>
+		<property name="manualreceiptnumber" type="string">
+			<column name="MANUALRECEIPTNUMBER" length="50" />
+		</property>
+		<property name="manualreceiptdate" type="timestamp">
+			<column name="MANUALRECEIPTDATE" length="7" />
+		</property>
+		<property name="isModifiable" type="java.lang.Boolean">
+			<column name="ismodifiable" precision="1" scale="0" />
+		</property>
+		<property name="service" type="string">
+			<column name="servicedetails" length="80" />
+		</property>
+		<property name="collectiontype" type="java.lang.Character">
+			<column name="COLLECTIONTYPE" length="1" />
+		</property>
+		<property name="reasonForCancellation" type="string">
+			<column name="REASONFORCANCELLATION" length="50" />
+		</property>
+		<property name="createdDate" column="CREATEDDATE" type="timestamp"/>
+		<property name="lastModifiedDate" column="LASTMODIFIEDDATE" type="timestamp" />
+		<many-to-one name="state" class="org.egov.infra.workflow.entity.State"
+			cascade="all">
+			<column name="STATE_ID" />
+		</many-to-one>
+		<property name="createdBy" type="long">
+			<column name="createdBy" />
+		</property>
+		<property name="lastModifiedBy" type="long">
+			<column name="lastModifiedBy" />
+		</property>
+
+		<set name="receiptDetails" inverse="true" cascade="all,delete-orphan" order-by="ordernumber">
+			<key>
+				<column name="collectionheader" precision="22" scale="0" />
+			</key>
+			<one-to-many class="org.egov.collection.entity.ReceiptDetail" />
+		</set>
+		
+		<one-to-one name="receiptMisc" class="org.egov.collection.entity.ReceiptMisc" property-ref="receiptHeader" cascade="all" />
+		<one-to-one name="onlinePayment" class="org.egov.collection.entity.OnlinePayment" property-ref="receiptHeader" cascade="all" />
+		<one-to-one name="challan" class="org.egov.collection.entity.Challan" property-ref="receiptHeader" cascade="all" />
+
+		<set name="receiptInstrument" table="EGCL_COLLECTIONINSTRUMENT">
+			<key> 
+				<column name="collectionheader" precision="22" scale="0" />
+			</key>
+			<many-to-many class="org.egov.model.instrument.InstrumentHeader" column="instrumentheader" />
+		</set>
+
+		<many-to-one name="location"
+					 class="org.egov.infra.admin.master.entity.Location" fetch="select">
+			<column name="location" precision="22" scale="0" />
+		</many-to-one>
+
+		<set name="receiptVoucher" inverse="true" cascade="all,delete-orphan">
+			<key>
+				<column name="collectionheader" precision="22" scale="0" />
+			</key>
+			<one-to-many class="org.egov.collection.entity.ReceiptVoucher" />
+		</set>
+		<property name="isReconciled" type="java.lang.Boolean">
+			<column name="isreconciled" precision="1" scale="0" />
+		</property>
+		<many-to-one name="status" class="org.egov.commons.EgwStatus"
+			fetch="select">
+			<column name="status" precision="22" scale="0" not-null="true" />
+		</many-to-one>
+		<property name="paidBy" type="string">
+			<column name="PAIDBY" length="100" />
+		</property>
+		
+		<property name="overrideAccountHeads" type="java.lang.Boolean">
+			<column name="OVERRIDEACCOUNTHEADS" precision="1" scale="0" />
+		</property>
+		<property name="partPaymentAllowed" type="java.lang.Boolean">
+			<column name="PARTPAYMENTALLOWED" precision="1" scale="0" />
+		</property>
+		<property name="callbackForApportioning" type="java.lang.Boolean">
+			<column name="CALLBACKFORAPPORTIONING" precision="1" scale="0" />
+		</property>
+		<property name="displayMsg" type="string">
+			<column name="DISPLAYMSG" length="256" />
+		</property>
+		<property name="minimumAmount" type="big_decimal">
+			<column name="MINIMUMAMOUNT" precision="22" scale="0" />
+		</property>
+		<property name="totalAmount" type="big_decimal">
+			<column name="TOTALAMOUNT" />
+		</property>
+		<property name="collModesNotAllwd" type="string">
+			<column name="COLLMODESNOTALLWD" length="256" />
+		</property>
+		<property name="consumerCode" type="string">
+			<column name="CONSUMERCODE" length="256" />
+		</property>
+		<property name="payeeName" type="string">
+			<column name="payeename" length="256" />
+		</property>
+		<property name="payeeAddress" type="string">
+			<column name="payeeaddress" length="1024" />
+		</property>
+		<property name="source" type="string">
+			<column name="source" length="20" />
+		</property>
+		<property name="payeeEmail" type="string">
+			<column name="payeeemail" length="254" />
+		</property>
+		<property name="consumerType" type="string">
+			<column name="consumertype" length="100" />
+		</property>	
+	</class>
+	<query name="RECEIPTS_FOR_VOUCHERS">
+	<![CDATA[select receiptHeader from org.egov.collection.entity.ReceiptVoucher rv where rv.voucherheader.id in (:param_0)]]></query>
+	
+	<query name="RECEIPTS_FOR_BOUNCED_INSTRUMENTS">
+	<![CDATA[select rh from org.egov.collection.entity.ReceiptHeader rh join rh.receiptVoucher as rv where rh.status.code<>? and rv.voucherheader.id in (:param_1)]]></query>
+
+    <query name="RECEIPTS_BY_RECEIPTNUM">
+    <![CDATA[select rh from org.egov.collection.entity.ReceiptHeader rh where rh.receiptnumber=?]]></query>
+
+	<query name="RECEIPTS_BY_RECEIPTNUM_AND_SERVICECODE">
+    <![CDATA[select rh from org.egov.collection.entity.ReceiptHeader rh where rh.service=? and (rh.receiptnumber=? or rh.manualreceiptnumber=?)]]></query>
+
+	<query name="RECEIPTS_BY_REFNUM_AND_SERVICECODE">
+    <![CDATA[select rh from org.egov.collection.entity.ReceiptHeader rh where rh.referencenumber=? and rh.service=?]]></query>
+
+	<query name="RECEIPTS_BY_INSTRUMENTNO_AND_SERVICECODE">
+    <![CDATA[select rh from org.egov.collection.entity.ReceiptHeader rh left join rh.receiptInstrument as ri where ri.instrumentNumber=?  and rh.service=?]]></query>
+    
+   	<query name="RECEIPTS_BY_RECONSTATUS">
+    <![CDATA[select receipt from org.egov.collection.entity.ReceiptHeader receipt where receipt.isReconciled = ?]]></query>
+        
+   <!--  <query name="CREATEDBYUSERS_OF_RECEIPTS">
+    <![CDATA[select distinct createdBy from org.egov.collection.entity.ReceiptHeader rh where rh.createdBy.type not in ('CITIZEN','SYSTEM')]]></query> -->
+    
+    <query name="RECEIPT_BY_CHALLANID">
+    <![CDATA[select receipt from org.egov.collection.entity.ReceiptHeader receipt, org.egov.collection.entity.Challan cl WHERE cl.receiptHeader.id = receipt.id and cl.id = ?]]></query>
+    
+    <query name="VALIDRECEIPT_BY_CHALLANNO">
+    <![CDATA[select receipt from org.egov.collection.entity.ReceiptHeader as receipt left join receipt.challan as challan where challan.challanNumber=? and challan.state.value='END' and challan.challanDate <= current_date and challan.validUpto >= current_date]]></query>
+    
+    <query name="CHALLANRECEIPT_BY_REFERENCEID">
+    <![CDATA[select receipt2 from org.egov.collection.entity.ReceiptHeader as receipt1,org.egov.collection.entity.ReceiptHeader as receipt2 left join receipt2.challan as challan where receipt2.receiptHeader.id=receipt1.id and receipt1.id = ?]]></query>
+
+    <query name="QUERY_ONLINE_PENDING_RECEIPTS_BY_CONSUMERCODE_AND_SERVICECODE">
+    <![CDATA[select rh from org.egov.collection.entity.ReceiptHeader rh, org.egov.collection.entity.OnlinePayment online where rh.id = online.receiptHeader.id and rh.service=? and rh.consumerCode=? and online.status.code = ?]]></query>
+    
+    <query name="RECEIPT_BY_SERVICE_RECEIPTNUMBER_CONSUMERCODE">
+    <![CDATA[select rh from org.egov.collection.entity.ReceiptHeader rh where (rh.receiptnumber=? or rh.manualreceiptnumber=?) and rh.consumerCode=?]]></query>
+    
+    <query name="RECEIPT_BY_RECEIPTID_AND_REFERENCENUMBER">
+    <![CDATA[select rh from org.egov.collection.entity.ReceiptHeader rh, org.egov.collection.entity.OnlinePayment online where rh.id = online.receiptHeader.id and rh.id=? and rh.referencenumber = ? ]]></query>
+    
+    <query name="RECEIPT_BY_SERVICE_MANUALRECEIPTNO_AND_DATE">
+    <![CDATA[select rh from org.egov.collection.entity.ReceiptHeader rh where rh.manualreceiptnumber = ? and rh.service = ? and rh.manualreceiptdate between ? and ? and rh.status.code<>? ]]></query>
+    
+    <query name="QUERY_RECEIPT_BY_ID_AND_CONSUMERCODE">
+	<![CDATA[
+	select rh from org.egov.collection.entity.ReceiptHeader rh where rh.id = ? and replace(replace(rh.consumerCode,'-',''),'/','') = ?
+	]]>
+	</query>
+	
+	<query name="QUERY_RECEIPT_BY_ID_AND_CITYCODE">
+	<![CDATA[
+	select rh from org.egov.collection.entity.ReceiptHeader rh, org.egov.infra.admin.master.entity.City city where rh.id = ? and city.code = ?
+	]]>
+	</query>
+	
+	<query name="RECEIPTS_BY_DATE_AND_SERVICECODE">
+	<![CDATA[select rh from org.egov.collection.entity.ReceiptHeader rh where date(rh.receiptdate) between ? and ? and rh.service = ? and  rh.source=? and rh.status.code in ('TO_BE_SUBMITTED','SUBMITTED','APPROVED','REMITTED') ]]>
+	</query>
+
+	<query name="RECEIPTS_BY_INSTRUMENTHEADER_AND_SERVICECODE">
+    <![CDATA[select rh from org.egov.collection.entity.ReceiptHeader rh left join rh.receiptInstrument as ri where  rh.service=? and ri.id in (:param_1)  ]]>
+    </query>
+	
+	<query name="STATUS_OF_RECEIPTS">
+    <![CDATA[select distinct rh.status from org.egov.collection.entity.ReceiptHeader rh where rh.status.code<>'CANCELLED']]>
+    </query>
+	
+	<query name="RECEIPT_BY_ID_AND_STATUSNOTCANCELLED">
+	<![CDATA[
+	select rh from org.egov.collection.entity.ReceiptHeader rh where rh.id = ? and rh.status.code<>'CANCELLED']]>
+	</query>
+  	
+  	<query name="DISTINCT_SERVICE_DETAILS">
+    <![CDATA[select distinct rh.service from org.egov.collection.entity.ReceiptHeader rh where rh.status.code<>'CANCELLED']]>
+    </query> 
+    
+    <query name="QUERY_PENDING_RECEIPT_BY_ID_AND_CONSUMERCODE">
+	<![CDATA[
+	select rh from org.egov.collection.entity.ReceiptHeader rh where rh.status.code ='PENDING' and rh.id = ? and replace(replace(rh.consumerCode,'-',''),'/','') = ?
+	]]>
+	</query>
+	
+	<query name="QUERY_PENDING_RECEIPT_BY_ID_AND_CITYCODE">
+	<![CDATA[
+	select rh from org.egov.collection.entity.ReceiptHeader rh, org.egov.infra.admin.master.entity.City city where rh.status.code ='PENDING' and rh.id = ? and city.code = ?
+	]]>
+	</query>
+</hibernate-mapping>

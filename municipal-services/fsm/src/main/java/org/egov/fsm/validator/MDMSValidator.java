@@ -6,6 +6,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.egov.fsm.plantmapping.util.PlantMappingConstants;
+import org.egov.fsm.plantmapping.web.model.PlantMappingRequest;
 import org.egov.fsm.util.FSMConstants;
 import org.egov.fsm.util.FSMErrorConstants;
 import org.egov.fsm.web.model.FSMRequest;
@@ -71,6 +73,11 @@ public class MDMSValidator {
 		if( !((List<String>) this.mdmsResMap.get(FSMConstants.MDMS_PROPERTY_TYPE)).contains(propertyType) ) {
 			errorMap.put(FSMErrorConstants.INVALID_PROPERTY_TYPE," Property Type is invalid");
 		}
+		
+		if (propertyType.split("\\.").length <= 1) {
+			errorMap.put(FSMErrorConstants.INVALID_PROPERTY_TYPE,
+					" Property Type And Sub property type Both are mandetory.");
+		}
 
 		if (!errorMap.isEmpty())
 			throw new CustomException(errorMap);
@@ -131,6 +138,32 @@ public class MDMSValidator {
 		if (!errorMap.isEmpty())
 			throw new CustomException(errorMap);
 		
+	}
+	public void validateMdmsData(PlantMappingRequest request, Object mdmsData) {
+
+		this.mdmsResMap = getAttributeValues(mdmsData);
+		String[] masterArray = { PlantMappingConstants.MDMS_FSTP_PLANT_INFO };
+
+		validateIfMasterPresent(masterArray, this.mdmsResMap);
+
+	}
+
+	public void validateFSTPPlantInfo(String plantCode, String tenantId) throws CustomException {
+		Map<String, String> errorMap = new HashMap<>();
+		List<Map<String, String>> plantMap = (List<Map<String, String>>) this.mdmsResMap
+				.get(PlantMappingConstants.MDMS_FSTP_PLANT_INFO);
+		List<Map<String, String>> fstpmap = (List<Map<String, String>>) JsonPath.parse(plantMap)
+				.read("$.[?(@.PlantCode=='" + plantCode + "')]");
+		if (fstpmap != null && fstpmap.size() > 0) {
+			Map<String, String> planMapData = fstpmap.get(0);
+			if (!(planMapData.get("PlantCode").equals(plantCode)) || !(planMapData.get("ULBS").contains(tenantId))) {
+				errorMap.put(FSMErrorConstants.INVALID_FSTP_CODE, "Invalid FSTP code");
+			}
+		} else {
+			errorMap.put(FSMErrorConstants.INVALID_FSTP_CODE, "Invalid FSTP code");
+		}
+		if (!errorMap.isEmpty())
+			throw new CustomException(errorMap);
 	}
 
 }

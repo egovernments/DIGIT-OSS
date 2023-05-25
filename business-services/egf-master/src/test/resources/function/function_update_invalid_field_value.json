@@ -1,0 +1,21 @@
+{
+  "requestInfo": {
+	    "action": "action",
+	    "did": "did",
+	    "msgId": "msgId",
+	    "requesterId": "requesterId",
+	    "ts": "01-01-2017 01:01:01",
+	    "authToken": null
+    },
+   "functions": 
+	   [
+		   	{
+		   	    "id":"2",
+			    "name":"functionUaa",
+		   		"tenantId":"default",
+		   		"code":"003",
+		   		"active":true
+		   	}
+	   	
+	   ]
+}

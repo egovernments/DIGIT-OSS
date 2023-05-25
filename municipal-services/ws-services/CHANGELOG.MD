@@ -1,6 +1,10 @@
 # Change log
 All notable changes to this module will be documented in this file.
 
+## 1.4.1 - 2021-07-26
+
+- RAIN-3046: updated businessService query param name
+
 ## 1.4.0 - 2021-05-11
 
 - Fixed security issue of untrusted data pass as user input.

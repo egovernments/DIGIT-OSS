@@ -1,0 +1,53 @@
+.property-amount-radio,
+.amt-radio {
+  display: inline-flex;
+  margin-left: 5px;
+}
+#amount-to-be-paid{
+  margin-top:0px !important;
+  background-color: rgb(242, 242, 242) !important;
+}
+.amt-radio {
+  margin-right: 15px;
+  input {
+    margin-right: 10px!important;
+    cursor: pointer;
+  }
+}
+
+@media only screen and (max-width:768px){
+  .amt-radio{
+    margin-right: 15px;
+  }
+}
+
+input[type="radio"] {
+  -webkit-appearance: none;
+  width: 17px;
+  height: 17px;
+  border: 1px solid grey;
+  border-radius: 50%;
+  outline: none;
+}
+
+input[type="radio"]:before {
+  content: "";
+  display: block;
+  width: 60%;
+  height: 60%;
+  margin: 20% auto;
+  border-radius: 50%;
+}
+
+input[type="radio"]:checked {
+  border: 1px solid #fe7a51;
+}
+
+input[type="radio"]:checked:before {
+  background: #fe7a51;
+}
+
+input[type="checkbox"]:focus, input[type="radio"]:focus {
+  outline: none !important;
+}
+

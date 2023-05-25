@@ -1,0 +1,18 @@
+[
+    {
+        "responseInfo": null,
+        "error": {
+            "code": 400,
+            "message": "Role is invalid",
+            "description": null,
+            "errorFields": [
+                {
+                    "code": "accesscontrol.0012",
+                    "message": "role",
+                    "field": "Atleast One Role is Required"
+                }
+            ],
+            "fields": null
+        }
+    }
+]

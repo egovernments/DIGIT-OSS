@@ -1,0 +1,11 @@
+{
+    "ResponseInfo": null,
+    "Errors": [
+        {
+            "code": "ConstraintViolationException",
+            "message": "An unhandled exception occurred on the server",
+            "description": "createMessages.messageRequest.messages[1].message: may not be empty, createMessages.messageRequest.messages[1].module: may not be empty, createMessages.messageRequest.messages[1].code: may not be empty, createMessages.messageRequest.messages[1].locale: may not be empty, createMessages.messageRequest.tenantId: may not be empty",
+            "params": null
+        }
+    ]
+}

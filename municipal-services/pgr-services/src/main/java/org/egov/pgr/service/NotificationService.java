@@ -228,7 +228,7 @@ public class NotificationService {
 
         String localisationMessageForPlaceholder =  notificationUtil.getLocalizationMessages(request.getService().getTenantId(), request.getRequestInfo(),COMMON_MODULE);
         //HRSMS CALL
-        StringBuilder url = hrmsUtils.getHRMSURI(request.getService().getTenantId(), request.getWorkflow().getAssignes());
+        StringBuilder url = hrmsUtils.getHRMSURI(request.getWorkflow().getAssignes());
         RequestInfoWrapper requestInfoWrapper = RequestInfoWrapper.builder().requestInfo(request.getRequestInfo()).build();
         Object response = serviceRequestRepository.fetchResult(url, requestInfoWrapper);
 

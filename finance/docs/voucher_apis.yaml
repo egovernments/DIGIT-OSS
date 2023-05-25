@@ -1,0 +1,491 @@
+---
+swagger: "2.0"
+info:
+  description: The api's which are exposed from finance erp system to search, create and cancel voucher
+  version: 1.0.0
+  title: Exposed APIs for voucher in Finance ERP
+  contact:
+    name: eGovernments Foundation
+    email: contact@egovernments.org
+host: "HOSTNAME"
+basePath: /services/EGF
+tags:
+- name: voucher
+  description: APIs to search, create and cancel voucher
+  externalDocs:
+    description: Find out more
+    url: http://swagger.io
+schemes:
+- https
+
+paths:
+  /rest/voucher/_search:
+    post:
+      tags:
+      - voucher
+      summary: endpoint to search the voucher
+      description: ""
+      operationId: searchVoucher
+      consumes:
+      - application/json
+      - application/xml
+      produces:
+      - application/xml
+      - application/json
+      parameters:
+        - name: VoucherSearchRequest
+          in: body
+          required: true
+          description: VoucherSearchRequest needs to be added while search
+          schema:
+            $ref: '#/definitions/VoucherRequest'
+        - $ref: "#/parameters/requestInfo"  
+        - $ref: '#/parameters/tenantId'
+        - name: voucherNumbers
+          in: query
+          required: true
+          description: voucher numbers should be in comma separated.
+          type: array
+          items:
+            type: string
+      responses:
+        '200':
+          description: Status OK.
+          schema:
+            $ref: '#/definitions/VoucherResponse'
+        '400':
+          description: Invalid input.
+  /rest/voucher/_create:
+    post:
+      tags:
+      - voucher
+      summary: endpoint to create the voucher
+      description: ""
+      operationId: createVoucher
+      consumes:
+      - application/json
+      - application/xml
+      produces:
+      - application/xml
+      - application/json
+      parameters:
+      - in: body
+        name: VoucherRequest
+        description: VoucherSearchRequest needs to be added while search
+        required: true
+        schema:
+          $ref: '#/definitions/VoucherRequest'
+      responses:
+        '201':
+          description: Voucher created successfully.
+          schema:
+            $ref: '#/definitions/VoucherResponse'
+        '400':
+          description: Invalid input.
+  /rest/voucher/_cancel:
+    post:
+      tags:
+      - voucher
+      summary: endpoint to cancel the voucher
+      description: ""
+      operationId: cancelVoucher
+      consumes:
+      - application/json
+      - application/xml
+      produces:
+      - application/xml
+      - application/json
+      parameters:
+      - in: body
+        name: body
+        description: VoucherSearchRequest needs to be added while search
+        required: true
+        schema:
+          $ref: '#/definitions/VoucherSearchRequest'
+      responses:
+        '200':
+          description: Status OK.
+          schema:
+            $ref: '#/definitions/VoucherResponse'
+        '400':
+          description: Invalid input.
+          
+    
+definitions:
+  VoucherRequest:
+    type: object
+    properties:
+      tenantId:
+        type: string
+      requestInfo:
+        $ref: '#/definitions/RequestInfo'
+      vouchers:
+        type: array
+        xml:
+          name: tag
+          wrapped: true
+        items:
+          $ref: '#/definitions/Voucher'
+  Voucher:
+    type: object
+    properties:
+      id:
+        type: number
+      name:
+        type: string
+      type:
+        type: string
+      voucherNumber:
+        type: string
+      fund:
+        $ref: '#/definitions/FundContract'
+      function:
+        $ref: '#/definitions/FunctionContract'
+      fiscalPeriod:
+        $ref: '#/definitions/FiscalPeriodContract'
+      status:
+        $ref: '#/definitions/EgwStatusContract'
+      originalVhId:
+        type: number
+      refVhId:
+        type: number
+      cgvn:
+        type: string
+      moduleId:
+        type: number
+      department:
+        type: object
+        properties: {}
+      source:
+        type: object
+        properties: {}
+      scheme:
+        $ref: '#/definitions/SchemeContract'
+      subScheme:
+        $ref: '#/definitions/SubSchemeContract'
+      functionary:
+        $ref: '#/definitions/FunctionaryContract'
+      fundsource:
+        $ref: '#/definitions/FundsourceContract'
+      ledgers:
+        type: array
+        items:
+          $ref: '#/definitions/AccountDetailContract'
+      tenantId:
+        type: object
+        properties: {}
+      serviceName:
+        type: string
+      referenceDocument:
+        type: string
+  AccountDetailContract:
+    type: object
+    properties:
+      id:
+        type: number
+      orderId:
+        type: number
+      glcode:
+        type: string
+      debitAmount:
+        type: number
+      creditAmount:
+        type: number
+      function:
+        $ref: '#/definitions/FunctionContract'
+      subledgerDetails:
+        type: array
+        items:
+          $ref: '#/definitions/SubledgerDetailContract'
+  SubledgerDetailContract:
+    type: object
+    properties:
+      id:
+        type: number
+      accountDetailType:
+        $ref: '#/definitions/AccountDetailTypeContract'
+      accountDetailKey:
+        $ref: '#/definitions/AccountDetailKeyContract'
+      amount:
+        type: number
+  AccountDetailKeyContract:
+    type: object
+    properties:
+      id:
+        type: integer
+      accountDetailType:
+        $ref: '#/definitions/AccountDetailTypeContract'
+  AccountDetailTypeContract:
+    type: object
+    properties:
+      id:
+        type: integer
+      name:
+        type: string
+      description:
+        type: string
+      tableName:
+        type: string
+      active:
+        type: boolean
+      fullyQualifiedName:
+        type: string
+  FunctionaryContract:
+    type: object
+    properties:
+      id:
+        type: number
+      code:
+        type: string
+  FundsourceContract:
+    type: object
+    properties:
+      id:
+        type: number
+      code:
+        type: string
+  SubSchemeContract:
+    type: object
+    properties:
+      id:
+        type: number
+      scheme:
+        $ref: '#/definitions/SchemeContract'
+      code:
+        type: string
+      name:
+        type: string
+      validFrom:
+        type: string
+        format: date-time
+      validTo:
+        type: string
+        format: date-time
+      active:
+        type: boolean
+      departmentId:
+        type: string
+  SchemeContract:
+    type: object
+    properties:
+      id:
+        type: number
+      code:
+        type: string
+  EgwStatusContract:
+    type: object
+    properties:
+      id:
+        type: number
+      moduleType:
+        type: string
+      code:
+        type: string
+      description:
+        type: string
+  FundContract:
+    type: object
+    properties:
+      id:
+        type: number
+      name:
+        type: string
+      code:
+        type: string
+      identifier:
+        type: string
+      level:
+        type: number
+      parentId:
+        type: number
+      isParent:
+        type: boolean
+      active:
+        type: boolean
+  FunctionContract:
+    type: object
+    properties:
+      id:
+        type: number
+      name:
+        type: string
+      code:
+        type: string
+      level:
+        type: number
+      parentId:
+        type: number
+      isParent:
+        type: boolean
+      active:
+        type: boolean
+  FiscalPeriodContract:
+    type: object
+    properties:
+      id:
+        type: number
+      name:
+        type: string
+      financialYear:
+        $ref: '#/definitions/FinancialYearContract'
+      startingDate:
+        type: string
+        format: date-time
+      endingDate:
+        type: string
+        format: date-time
+      active:
+        type: boolean
+      isActiveForPosting:
+        type: boolean
+      isClosed:
+        type: boolean
+  FinancialYearContract:
+    type: object
+    properties:
+      id:
+        type: number
+      finYearRange:
+        type: string
+      startingDate:
+        type: string
+        format: date-time
+      endingDate:
+        type: string
+        format: date-time
+      active:
+        type: boolean
+      isActiveForPosting:
+        type: boolean
+      isClosed:
+        type: boolean
+      transferClosingBalance:
+        type: boolean
+  VoucherSearchRequest:
+    type: object
+    properties:
+      tenantId:
+        type: string
+      voucherNumbers:
+        type: string
+        description: more than on voucher should be in comma seperated.
+      requestInfo:
+        $ref: '#/definitions/RequestInfo'
+  RequestInfo:
+    type: object
+    properties:
+      apiId:
+        type: string
+      ver:
+        type: string
+      action:
+        type: string
+      did:
+        type: string
+      key:
+        type: string
+      msgId:
+        type: string
+      authToken:
+        type: string
+      correlationId:
+        type: string
+      userInfo:
+        $ref: '#/definitions/UserInfo'
+  UserInfo:
+    type: object
+    properties:
+      id:
+        type: integer
+        format: int64
+      uuid:
+        type: string
+      userName:
+        type: string
+      name:
+        type: string
+      type:
+        type: string
+      mobileNumber:
+        type: string
+      emailId:
+        type: string
+      roles:
+        type: object
+        properties: {}
+      tenantId:
+        type: string
+  VoucherResponse:
+    type: "object"
+    properties:
+      Vouchers:
+        type: "array"
+        items:
+          $ref: "#/definitions/Voucher"
+      ResponseInfo:
+        $ref: "#/definitions/ResponseInfo"
+      page:
+        $ref: "#/definitions/PageContract"
+  ResponseInfo:
+    type: "object"
+    properties:
+      apiId:
+        type: "string"
+      ver:
+        type: "string"
+      ts:
+        type: "string"
+      resMsgId:
+        type: "string"
+      msgId:
+        type: "string"
+      status:
+        type: "string"
+  PageContract:
+    type: "object"
+    properties:
+      totalResults:
+        type: "integer"
+      totalPages:
+        type: "integer"
+      pageSize:
+        type: "integer"
+      currentPage:
+        type: "integer"
+      offSet:
+        type: "integer"
+    
+        
+parameters:
+  requestInfo:
+    name: requestInfo
+    description: Parameter to carry Request metadata in the request body
+    in: body
+    required: true
+    schema:
+      $ref: '#/definitions/RequestInfo'
+  tenantId:
+    name: tenantId
+    in: query
+    description: Unique id for a tenant.
+    required: true
+    type: string
+    format: varchar
+  pageSize:
+    name: pageSize
+    in: query
+    description: Number of records returned.
+    type: integer
+    minimum: 0
+    exclusiveMinimum: true
+    maximum: 100
+    exclusiveMaximum: false
+    multipleOf: 10
+    default: 20
+  pageNumber:
+    name: pageNumber
+    in: query
+    description: Page number
+    type: integer
+    default: 1
+

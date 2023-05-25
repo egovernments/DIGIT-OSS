@@ -79,5 +79,8 @@ public class FSMErrorConstants {
 	public static final String INVALID_SLUM = "INVALID_SLUM";
 	public static final String INVALID_NO_OF_TRIPS = "INVALID_NO_OF_TRIPS";
 	public static final String INVALID_WASTER_COLLECTED = "INVALID_WASTER_COLLECTED";
+	public static final String FSTP_EMPLOYEE_MAP_EXISTS_ERROR ="FSTP_EMPLOYEE_MAP_EXISTS_ERROR";
+	public static final String FSTP_EMPLOYEE_INVALID_ERROR ="FSTP_EMPLOYEE_INVALID_ERROR";
+	public static final String INVALID_FSTP_CODE ="INVALID_FSTP_CODE";
 
 }

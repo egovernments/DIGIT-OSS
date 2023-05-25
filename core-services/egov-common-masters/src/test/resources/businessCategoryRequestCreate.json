@@ -1,0 +1,33 @@
+{
+    "RequestInfo":{
+        "apiId":"org.egov.collection",
+        "ver":"1.0",
+        "action":"POST",
+        "did":"4354648646",
+        "key":"xyz",
+        "msgId":"654654",
+        "authToken":"345678f",
+        "userInfo":
+        {
+        "id":1
+       
+        }
+    
+       },
+    "BusinessCategory":[{
+        "id":"",
+        "name":"Trade Licence",
+        "code":"TL",
+        "active":true,
+        "tenantId":"default"
+        
+    },
+      {
+        "id":"",
+        "name":"Property Tax",
+        "code":"PT",
+        "active":true,
+        "tenantId":"default"
+
+      }]
+}

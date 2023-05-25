@@ -143,6 +143,8 @@ public class FSMConstants {
 	public static final ArrayList<String> pitDetailList= new ArrayList<String>( Arrays.asList("height", "length", "width", "diameter", "distanceFromRoad") );
 
 	public static final String RECEIPT_KEY = "fsm-receipt";
+	
+	public static final String MDMS_FSTP_PLANT_INFO = "FSTPPlantInfo";
 
 
 

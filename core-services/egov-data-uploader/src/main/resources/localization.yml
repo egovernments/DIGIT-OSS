@@ -1,0 +1,38 @@
+curl -X POST \
+  http://egov-indexer.egov:8080/egov-indexer/index-operations/_reindex \
+  -H 'Cache-Control: no-cache' \
+  -H 'Content-Type: application/json' \
+  -H 'Postman-Token: 13cc2773-0932-4471-036c-a6a37b4c2583' \
+  -d '{
+  "RequestInfo": {
+    "apiId": "string",
+    "ver": "string",
+    "ts": 0,
+    "action": "string",
+    "did": "string",
+    "key": "string",
+    "msgId": "string",
+    "authToken": "4bf0bdb8-269d-48f9-8249-926f4e5d9a35",
+    "correlationId": "e721639b-c095-40b3-86e2-acecb2cb6efb",
+    "userInfo": {
+      "id": 23299,
+      "uuid":"e721639b-c095-40b3-86e2-acecb2cb6efb",
+      "userName": "9337682030",
+      "name": "Abhilash Seth",
+      "type": "CITIZEN",
+      "mobileNumber": "9337682030",
+      "emailId": "abhilash.seth@gmail.com",
+      "roles": [
+        {
+          "id": 281,
+          "name": "Citizen"
+        }
+      ]
+    }
+  },
+  "index":"egovtelemetry",
+  "type":"general",
+  "reindexTopic":"telemetry-reindex",
+  "tenantId":"pb",
+  "batchSize":1000
+}'

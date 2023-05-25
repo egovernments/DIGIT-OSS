@@ -1,0 +1,21 @@
+.citizen-city-picker {
+  width: "80%";
+  max-height: "200px";
+  overflow-y: "scroll";
+}
+.autocomplete-dropdown {
+  min-width: 100%;
+  position: absolute;
+  z-index: 1900;
+  max-height: 150px;
+  overflow: auto; }
+
+.autocomplete-dropdown div {
+  min-width: 100%;
+  height: auto;
+  overflow: auto;
+  white-space: pre-line; }
+
+
+    p[class^="MuiFormHelperText-root"] {
+      font-size: 14px !important; }

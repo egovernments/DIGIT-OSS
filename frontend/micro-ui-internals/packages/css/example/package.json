@@ -1,0 +1,24 @@
+{
+  "name": "@egovernments/digit-ui.css-example",
+  "homepage": ".",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "start": "hs ./"
+  },
+  "dependencies": {
+    "@egovernments/digit-ui.css": "link:.."
+  },
+  "devDependencies": {
+    "http-server": "^0.12.3"
+  },
+  "eslintConfig": {
+    "extends": "react-app"
+  },
+  "browserslist": [
+    ">0.2%",
+    "not dead",
+    "not ie <= 11",
+    "not op_mini all"
+  ]
+}

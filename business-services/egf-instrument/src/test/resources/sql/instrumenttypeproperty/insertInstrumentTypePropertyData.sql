@@ -1,0 +1,2 @@
+insert into egf_instrumenttypeproperty (id,transactionType,reconciledOncreate,statusOnCreateId,statusOnUpdateId,statusOnReconcileId,instrumentTypeId,createdby,createddate,lastmodifiedby,lastmodifieddate,tenantid)
+values('1','Credit',true,'created','updated','reconciled','1',1,now(),1,now(),'default');

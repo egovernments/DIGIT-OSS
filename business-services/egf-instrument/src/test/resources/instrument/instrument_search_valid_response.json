@@ -1,0 +1,25 @@
+"instruments": [
+   	{
+   			"id":"1",
+            "transactionNumber": "transactionNumber",
+            "amount": 1,
+            "transactionType":"Credit",
+            "instrumentType": 
+            	{
+            		"name":"instrumenttype"
+            	}
+            ,
+            "serialNo":"serialNo",
+            "tenantId": "default"
+   	}
+   	
+   	],
+    "page":
+    {
+        "totalResults": 1,
+        "totalPages": 1,
+        "pageSize": 500,
+        "currentPage": 0,
+        "offset": 0
+    }
+    

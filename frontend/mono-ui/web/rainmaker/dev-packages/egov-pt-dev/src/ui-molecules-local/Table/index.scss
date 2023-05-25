@@ -1,0 +1,68 @@
+div[class^="MUIDataTable-responsiveScroll"] thead {
+  background: #f2f2f2;
+}
+
+div[class^="MUIDataTableHeadCell-data"] {
+  color: rgba(0, 0, 0, 0.8700000048);
+  font-family: Roboto;
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 17px;
+  text-align: left;
+}
+
+table {
+  tbody {
+    tr {
+      td {
+        padding: 4px 8px 4px 24px !important;
+      }
+    }
+  }
+}
+
+@media only screen and (max-width: 960px) {
+  table {
+    tbody {
+      tr {
+        td {
+          width: 45% !important;
+          padding: 4px 8px 4px 10px !important;
+          font-size: 13px !important;
+          height: auto !important;
+          text-overflow: ellipsis!important;
+          white-space: nowrap!important;
+          overflow: hidden!important;
+          p{
+   
+            margin: 0px !important;
+          }
+          div 
+          {
+            a{
+  
+            font-size: 11px !important;
+            }
+          }
+        }
+
+      }
+    }
+  }
+
+}
+@media only screen and (max-width: 960px) {
+  table {
+    tbody {
+      tr {
+        td:nth-child(odd) {
+          font-weight: 600;
+        }
+      }
+    }
+  }
+}
+
+div[role="tooltip"] {
+  display: none;
+}

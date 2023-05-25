@@ -1,0 +1,1 @@
+insert into egf_accountentity (id, accountdetailtypeid,code,name,active,description, createdby, createddate, lastmodifiedby, lastmodifieddate, version, tenantid) values('1', '1', 'code', 'name',true,'entity','1', 'now()', '1', 'now()', 0, 'default');

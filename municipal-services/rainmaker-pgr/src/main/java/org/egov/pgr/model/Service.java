@@ -169,7 +169,10 @@ public class Service   {
     
     CSC("csc"),
     
-    WEB("web");
+    WEB("web"),
+	  
+	RBBOT("RB Bot");	  
+	 	  
 
     private String value;
 

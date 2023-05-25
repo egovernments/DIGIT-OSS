@@ -1,0 +1,8 @@
+name : ws.lastbill.end
+nodeType : endpoint
+
+class : org.egov.chat.xternal.restendpoint.WSFetchLastBill
+
+nodes : [  ]
+params :
+  mobileNumber: /user/mobileNumber

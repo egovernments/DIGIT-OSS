@@ -1,0 +1,279 @@
+swagger: '2.0'
+info:
+  version: 1.0.0
+  title: eGov Billing Service Amemdment APIs
+  description: |-
+    The Bill amendement service manages head wise demand detail addition to the existing demands based on an external stimuli such as Court case settlement/One time waiver and so on.It manages
+    * The alteration to the demand data for a revenue module with category of tax for a defined *period.
+    * The Demand data with period and head wise dues and its payment details.
+    * Service APIs supports single tenant only
+  contact:
+    name: eGovernments Foundation
+schemes:
+  - https
+basePath: /billingservice/
+x-common-path: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml'
+paths:
+  /amendment/_search:
+    post:
+      description: 'Returns an amendment along with its list of demand details which are being amended into the existing entity. Along with tenantId, any one parameter is mandatory. In case search is performed based on the demand amounts, then demandFrom and demandTo parameters will be mandatory.'
+      parameters:
+        - $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/parameters/requestInfo'
+        - $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/parameters/tenantId'
+        - name: demandId
+          in: query
+          description: Id of the Demand related to the amendment object to be returned
+          required: false
+          type: string
+        - name: consumerCode
+          in: query
+          description: Unique identification provided by business details.
+          required: false
+          type: string
+        - name: businessService
+          in: query
+          description: 'Billing system details e.g., PropertyTax,Water Charges etc.'
+          required: true
+          type: string
+      tags:
+        - Amendment
+      responses:
+        '200':
+          description: returns a amendment along with its demand details.
+          schema:
+            $ref: '#/definitions/AmendmentResponse'
+        '400':
+          description: Invalid input
+          schema:
+            $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/ErrorRes'
+  /amendment/_create:
+    post:
+      description: Creates a Amendment.
+      parameters:
+        - name: Amendment
+          in: body
+          description: Request header for the Amendment.
+          required: true
+          schema:
+            $ref: '#/definitions/AmendmentRequest'
+      tags:
+        - Amendment
+      responses:
+        '201':
+          description: Created Amendment successfully.
+          schema:
+            $ref: '#/definitions/AmendmentResponse'
+        '400':
+          description: Invalid input
+          schema:
+            $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/ErrorRes'
+  /amendment/_update:
+    post:
+      description: Updates the workflow status of Amendment.
+      parameters:
+        - name: AmendmentUpdate
+          in: body
+          description: Request header for the Amendment.
+          required: true
+          schema:
+            $ref: '#/definitions/AmendmentUpdateRequest'
+      tags:
+        - Amendment
+      responses:
+        '200':
+          description: updated the workflow/status for amendment.
+          schema:
+            $ref: '#/definitions/AmendmentResponse'
+        '400':
+          description: Invalid input
+          schema:
+            $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/ErrorRes'
+definitions:
+  Amendment:
+    type: object
+    description: 'A Object which holds the basic info about the revenue assessment for which the demand is generated like module name, consumercode, owner, etc.'
+    properties:
+      id:
+        type: string
+        description: uuid.
+      demandIds:
+        type: array
+        items:
+          type: string
+        description: uuid of the demands to which the order is being amended.
+      amendedDemandId:
+        type: string
+        description: uuid of the new demand created to implement the amendment.
+      tenantId:
+        type: string
+        description: Unique Identifier of the tenant
+        maxLength: 128
+        minLength: 4
+      consumerCode:
+        type: string
+        description: Unique identification of billing entity.
+      amendmentId:
+        type: string
+        description: functional/formatted id generated from the id gen service.
+      businessService:
+        type: string
+        description: 'Billing system e.g., Property Tax, Water Charges etc.'
+        maxLength: 256
+        minLength: 4
+      amendmentReason:
+        type: string
+        enum:
+          - COURT_CASE_SETTLEMENT
+          - ARREAR_WRITE_OFF
+          - DCB_CORRECTION
+          - ONE_TIME_SETTLEMENT
+          - REMISSION_FOR_PROPERTY_TAX
+          - OTHERS
+      reasonDocumentNumber:
+        type: string
+        description: 'unique is provided in the physical document or govt order related to the amendment reason. Can be order number in case of court order, govt notice number in case of tax write off and document number for other scenarios.'
+      status:
+        type: string
+        enum:
+          - ACTIVE
+          - CANCELLED
+          - INWORKFLOW
+      workflow:
+        $ref: 'https://raw.githubusercontent.com/egovernments/core-services/master/docs/worfklow-2.0.yml#/definitions/ProcessInstance'
+      demandDetails:
+        type: array
+        items:
+          $ref: '#/definitions/DemandDetail'
+      documents:
+        type: array
+        items:
+          $ref: '#/definitions/Document'
+        description: documents based on requirment related to amendment type/Reason.
+      effectiveFrom:
+        type: number
+        format: int64
+        description: starting date of the amendment effect on the revenue entity. can be required or not based on the amendment reason.
+      effectiveTill:
+        type: number
+        format: int64
+        description: ending date of the amendment effect on the revenue entity. can be null in some cases even when there is a effective from.
+      auditDetails:
+        $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/AuditDetails'
+      additionalDetails:
+        type: object
+        description: field for capturing any additional details.
+    required:
+      - demandDetails
+      - consumerCode
+      - businessService
+      - tenantId
+      - amendmentreason
+      - documents
+  AmendmentUpdate:
+    type: object
+    description: The update object which carries the workflow action info along with the amendment id
+    properties:
+      id:
+        type: string
+        description: uuid of the amendment object.
+      amendmentId:
+        type: string
+        description: functional/formatted id of the amendment object.
+      workflow:
+        $ref: 'https://raw.githubusercontent.com/egovernments/core-services/master/docs/worfklow-2.0#/definitons/ProcessInstance'
+      auditDetails:
+        $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/AuditDetails'
+      additionalDetails:
+        type: object
+        description: field for capturing any additional details.
+      documents:
+        type: array
+        items:
+          $ref: '#/definitions/Document'
+        description: documents based on requirment related to amendment type/Reason.
+    required:
+      - amendmentId
+      - tenantId
+  DemandDetail:
+    type: object
+    description: A object holds a demand and collection values for a tax head and period.
+    properties:
+      id:
+        type: string
+        description: primary key of a DemandDetails.
+      demandId:
+        type: string
+        description: foriegn key of a DemandDetails from demand.
+      taxHeadMasterCode:
+        type: string
+        description: Tax Head code.
+        maxLength: 64
+        minLength: 2
+      taxAmount:
+        type: number
+        format: BigDecimal
+        description: demand amount.
+      collectionAmount:
+        type: number
+        default: 0
+        description: collection against taxAmount.
+      additionalDetails:
+        type: object
+        description: field for capturing any additional details.
+      auditDetails:
+        $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/AuditDetails'
+      tenantId:
+        type: string
+        description: Unique Identifier of the tenant
+        maxLength: 128
+        minLength: 4
+    required:
+      - taxHead
+      - taxAmount
+      - collectionAmount
+  Document:
+    title: Document
+    type: object
+    properties:
+      id:
+        maxLength: 64
+        type: string
+        description: system id of the Document.
+      documentType:
+        type: string
+        description: 'unique document type code, should be validated with document type master'
+      fileStore:
+        type: string
+        description: File store reference key.
+      documentUid:
+        maxLength: 64
+        type: string
+        description: 'The unique id(Pancard Number,Adhar etc.) of the given Document.'
+      additionalDetails:
+        type: object
+        description: Json object to capture any extra information which is not accommodated by model
+    description: This object holds list of documents attached during the transaciton for a property
+  AmendmentRequest:
+    properties:
+      RequestInfo:
+        $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/RequestInfo'
+      Amendment:
+        $ref: '#/definitions/Amendment'
+    type: object
+  AmendmentUpdateRequest:
+    properties:
+      RequestInfo:
+        $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/RequestInfo'
+      AmendmentUpdate:
+        $ref: '#/definitions/AmendmentUpdate'
+    type: object
+  AmendmentResponse:
+    properties:
+      ResponseInfo:
+        $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/ResponseInfo'
+      Amendments:
+        type: array
+        maximum: 500
+        items:
+          $ref: '#/definitions/Amendment'
+    type: object

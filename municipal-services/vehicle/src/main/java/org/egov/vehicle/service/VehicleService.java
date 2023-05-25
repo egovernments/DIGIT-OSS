@@ -1,6 +1,7 @@
 package org.egov.vehicle.service;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -8,6 +9,7 @@ import javax.validation.Valid;
 
 import org.egov.common.contract.request.RequestInfo;
 import org.egov.tracer.model.CustomException;
+import org.egov.vehicle.config.VehicleConfiguration;
 import org.egov.vehicle.repository.VehicleRepository;
 import org.egov.vehicle.util.VehicleErrorConstants;
 import org.egov.vehicle.util.VehicleUtil;
@@ -43,6 +45,9 @@ public class VehicleService {
     
     @Autowired
     private UserService userService;
+    
+    @Autowired
+    private VehicleConfiguration config;
 
     public Vehicle create(VehicleRequest vehicleRequest) {
     		
@@ -85,6 +90,31 @@ public class VehicleService {
 			enrichmentService.enrichSearchData(response.getVehicle(),requestInfo);
 		}
 		return response;
+	}
+
+	public List<Vehicle> vehiclePlainSearch(@Valid VehicleSearchCriteria criteria, RequestInfo requestInfo) {
+		List<Vehicle> vehicleList = getVehiclePlainSearch(criteria, requestInfo);
+		return vehicleList;
+	}
+
+	private List<Vehicle> getVehiclePlainSearch(@Valid VehicleSearchCriteria criteria, RequestInfo requestInfo) {
+		if (criteria.getLimit() != null && criteria.getLimit() > config.getMaxSearchLimit())
+            criteria.setLimit(config.getMaxSearchLimit());
+
+        List<String> ids = null;
+
+        if(criteria.getIds() != null && !criteria.getIds().isEmpty())
+            ids = criteria.getIds();
+        else
+            ids = repository.fetchVehicleIds(criteria);
+
+        if(ids.isEmpty())
+            return Collections.emptyList();
+
+        VehicleSearchCriteria Vehiclecriteria = VehicleSearchCriteria.builder().ids(ids).build();
+
+        List<Vehicle> vehicleList = repository.getVehiclePlainSearch(Vehiclecriteria);
+        return vehicleList;
 	}
 
 }

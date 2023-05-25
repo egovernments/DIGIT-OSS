@@ -304,6 +304,8 @@ public class EnrichmentService {
 	public void enrichAssignes(BPA bpa) {
 		Workflow wf = bpa.getWorkflow();
 		Set<String> assignes = new HashSet<>();
+		if (wf != null && wf.getAssignes() != null)
+			assignes.addAll(wf.getAssignes());
 		if (wf != null && wf.getAction().equalsIgnoreCase(BPAConstants.ACTION_SENDBACKTOCITIZEN)
 				|| wf.getAction().equalsIgnoreCase(BPAConstants.ACTION_SEND_TO_CITIZEN)) {
 
@@ -324,7 +326,7 @@ public class EnrichmentService {
 			if (bpa.getAccountId() != null)
 				assignes.add(bpa.getAccountId());
 		}
-		if(bpa.getWorkflow() == null) {
+		if (bpa.getWorkflow() == null) {
 			Workflow wfNew = new Workflow();
 			wfNew.setAssignes(new LinkedList<>(assignes));
 			bpa.setWorkflow(wfNew);

@@ -1,0 +1,1 @@
+CREATE INDEX IF NOT EXISTS  idx_eg_wf_assignee_v2_assignee on eg_wf_assignee_v2(tenantid, assignee);

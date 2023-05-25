@@ -36,7 +36,9 @@ Workflow or Service-specific workflow can be enabled at the challan service leve
 
 `_search` : This API is used to search the echallan in the system based on various search parameters like mobile number, echallan number etc.
 
-`_update` : The API is used to update / cancel the eChallan present in the system.
+`_update` : This API is used to update / cancel the eChallan present in the system.
+
+`_count`  : This API is used to get count of challan's present in the system.
 
 
 ### Reference Document

@@ -1,0 +1,101 @@
+.property-info-access-btn {
+  width: 50%;
+  cursor: pointer;
+}
+.flexbox-container {
+  display: flex;
+  width: 100%;
+  position: fixed;
+  bottom: 0;
+}
+.flex-item {
+  width: 50%;
+}
+@media only screen and (max-width: 768px) {
+  .flex-item {
+    width: 100%;
+  }
+}
+.flex-container {
+  margin-right: 10px;
+  display: flex;
+  flex-direction: row-reverse;
+}
+.flex-container>div {
+  margin: 10px;
+  text-align: right;
+}
+@media only screen and (max-width: 768px) {
+  .flex-container>div {
+    margin: 10px;
+    text-align: center;
+    background-color: rgb(254, 122, 81);
+  }
+  .property-info-access-btn {
+    width: 100%;
+  }
+}
+#tax-wizard-buttons {
+  height: 64px;
+  padding: 8px;
+}
+.wizard-footer {
+  background-color: #ffffff;
+  box-shadow: 0 -2px 4px 0 rgba(0, 0, 0, 0.24);
+  padding: 16px 16px 16px;
+  position: fixed !important;
+  bottom: 0;
+  left: 0;
+  width: 100vw;
+  z-index: 1000;
+}
+@media only screen and (max-width: 768px) {
+  #tax-wizard-buttons {
+    text-align: initial;
+    text-align: initial;
+    margin: 0;
+    padding: 0;
+    height: initial;
+  }
+  .button-container {
+    float: none;
+    display: flex;
+    width: 100%;
+    margin: initial;
+    padding: initial;
+
+  }
+}
+
+
+
+#tax-wizard-buttons {
+  height: 64px;
+  padding: 8px;
+}
+
+@media only screen and (max-width: 768px) {
+  #tax-wizard-buttons {
+    text-align: initial;
+    text-align: initial;
+    margin: 0;
+    padding: 0;
+    height: initial;
+    .button-container {
+      float: none;
+      display: flex;
+      width: 100%;
+      margin: initial;
+      padding: initial;
+      div:nth-of-type(1),
+      div:nth-of-type(2) {
+        width: 100% !important;
+        margin: 0 !important;
+        white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-size: 12px!important;
+      }
+    }
+  }
+}

@@ -1,0 +1,98 @@
+[
+  {
+    "operation": "shift",
+    "spec": {
+      "tenantId": "tenantId",
+      "transactionId": "transactionId",
+      "@timestamp": "@timestamp",
+      "Bill": {
+        "$i": {
+          "billDetails": {
+            "$j": {
+              "voucherHeader": "Bill.billDetails.voucherHeader",
+              "boundary": "Bill.billDetails.boundary",
+              "collectedAmount": "Bill.billDetails.collectedAmount",
+              "channel": "Bill.billDetails.channel",
+              "manualReceiptDate": "Bill.billDetails.manualReceiptDate",
+              "expiryDate": "Bill.billDetails.expiryDate",
+              "demandId": "Bill.billDetails.demandId",
+              "amountPaid": "Bill.billDetails.amountPaid",
+              "consumerCode": "Bill.billDetails.consumerCode",
+              "id": "Bill.billDetails.id",
+              "department": "Bill.billDetails.department",
+              "receiptNumber": "Bill.billDetails.receiptNumber",
+              "businessService": "Bill.billDetails.businessService",
+              "receiptType": "Bill.billDetails.receiptType",
+              "fromPeriod": "Bill.billDetails.fromPeriod",
+              "stateId": "Bill.billDetails.stateId",
+              "receiptDate": "Bill.billDetails.receiptDate",
+              "bill": "Bill.billDetails.bill",
+              "billDate": "Bill.billDetails.billDate",
+              "consumerType": "Bill.billDetails.consumerType",
+              "totalAmount": "Bill.billDetails.totalAmount",
+              "collectionType": "Bill.billDetails.collectionType",
+              "fund": "Bill.billDetails.fund",
+              "manualReceiptNumber": "Bill.billDetails.manualReceiptNumber",
+              "tenantId": "Bill.billDetails.tenantId",
+              "toPeriod": "Bill.billDetails.toPeriod",
+              "partPaymentAllowed": "Bill.billDetails.partPaymentAllowed",
+              "billNumber": "Bill.billDetails.billNumber",
+              "status": "Bill.billDetails.status",
+              "billAccountDetails": {
+                "*": {
+                  "taxHeadCode": "Bill.billDetails.billAccountDetails.[&1].taxHeadCode",
+                  "glcode": "Bill.billDetails.billAccountDetails.[&1].glcode",
+                  "amount": "Bill.billDetails.billAccountDetails.[&1].amount",
+                  "billDetail": "Bill.billDetails.billAccountDetails.[&1].billDetail",
+                  "purpose": "Bill.billDetails.billAccountDetails.[&1].purpose",
+                  "adjustedAmount": "Bill.billDetails.billAccountDetails.[&1].adjustedAmount",
+                  "tenantId": "Bill.billDetails.billAccountDetails.[&1].tenantId",
+                  "id": "Bill.billDetails.billAccountDetails.[&1].id",
+                  "demandDetailId": "Bill.billDetails.billAccountDetails.[&1].demandDetailId"
+                }
+              }
+            }
+          },
+          "isCancelled": "Bill.isCancelled",
+          "paidBy": "Bill.paidBy",
+          "mobileNumber": "Bill.mobileNumber",
+          "payerId": "Bill.payerId",
+          "isActive": "Bill.isActive",
+          "additionalDetails": "Bill.additionalDetails",
+          "payerAddress": "Bill.payerAddress",
+          "taxAndPayments": "Bill.taxAndPayments",
+          "auditDetails": "Bill.auditDetails",
+          "tenantId": "Bill.tenantId",
+          "payerName": "Bill.payerName",
+          "id": "Bill.id",
+          "payerEmail": "Bill.payerEmail"
+        }
+      },
+      "instrument": {
+        "bankAccount": "instrument.bankAccount",
+        "transactionDateInput": "instrument.transactionDateInput",
+        "amount": "instrument.amount",
+        "instrumentType": {
+          "instrumentTypeProperties": "instrument.typeProperties",
+          "name": "instrument.typeName",
+          "id": "instrument.typeId"
+        },
+        "instrumentNumber": "instrument.number"
+      },
+      "tenantData": {
+        "code": "tenantData.code",
+        "name": "tenantData.name",
+        "type": "tenantData.type",
+        "city": {
+          "name": "tenantData.cityName",
+          "localName": "tenantData.cityLocalName",
+          "districtCode": "tenantData.cityDistrictCode",
+          "districtName": "tenantData.cityDistrictName",
+          "regionName": "tenantData.cityRegionName",
+          "ulbGrade": "tenantData.cityUlbGrade",
+          "code": "tenantData.cityCode"
+        }
+      }
+    }
+  }
+]

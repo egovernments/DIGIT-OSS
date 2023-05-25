@@ -216,7 +216,12 @@ public class EnrichmentService {
 	 */
 	private void enrichBoundarys(List<FSM> fsms, RequestInfo requestInfo) {
 		fsms.forEach(fsm -> {
-			boundaryService.getAreaType(new FSMRequest(requestInfo, fsm, null), config.getHierarchyTypeCode());
+			try {
+				boundaryService.getAreaType(new FSMRequest(requestInfo, fsm, null), config.getHierarchyTypeCode());
+			} catch (CustomException ce) {
+				log.debug(ce.getMessage());
+				log.info("Bound data not found for FSM" + fsm.getApplicationNo());
+			}
 		});
 		
 			

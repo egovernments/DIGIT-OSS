@@ -1,0 +1,18 @@
+UploadDefinitions: 
+ moduleName: dummy
+ summary: Testing phase 2 use case
+ version: 1.0.0
+ definitions:
+ - defName: dummycreation
+   apiRequest: {"RequestInfo": {},"Dummy": [{"name": "Vishal","code": "VISH","address": [{"house": 1,"street": "Koramangala"}],"companies": [{"name": "tarento","offices": [{"name": "R and D","location": "koramangala"}]}]}]}
+
+   headerJsonPathMap: {"Name": ["$.Dummy.*.name"], "Code": ["$.Dummy.*.code"], "HouseNo": ["$.Dummy.*.address.*.house"], "Street": ["$.Dummy.*.address.*.street"], 
+"Company": ["$.Dummy.*.companies.*.name"], "officeType":["$.Dummy.*.companies.*.offices.*.name"], "officeLocation":["$.Dummy.*.companies.*.offices.*.location"]}
+   isBulkApi: true
+   arrayPath: $.Dummy.*
+   isParentChild: true
+   uniqueParentKeys: ["Name", "Code"]
+   tenantIdPaths: []
+   uri: /asset-services-maha/assets/_create
+   uniqueKeysForInnerObject: ["Company"]
+   additionalResFields:

@@ -129,15 +129,17 @@ public class TLQueryBuilder {
             }
 
             if (criteria.getApplicationNumber() != null) {
+                List<String> applicationNumber = Arrays.asList(criteria.getApplicationNumber().split(","));
                 addClauseIfRequired(preparedStmtList, builder);
-                builder.append("  LOWER(tl.applicationnumber) = LOWER(?) ");
-                preparedStmtList.add(criteria.getApplicationNumber());
+                builder.append(" LOWER(tl.applicationnumber) IN (").append(createQuery(applicationNumber)).append(")");
+                addToPreparedStatement(preparedStmtList, applicationNumber);
             }
 
-            if (criteria.getStatus() != null) {
+            List<String> status = criteria.getStatus();
+            if (!CollectionUtils.isEmpty(status)) {
                 addClauseIfRequired(preparedStmtList, builder);
-                builder.append("  tl.status = ? ");
-                preparedStmtList.add(criteria.getStatus());
+                builder.append(" LOWER(tl.status) IN (").append(createQuery(status)).append(")");
+                addToPreparedStatement(preparedStmtList, status);
             }
 
             if (criteria.getApplicationType() != null) {
@@ -182,6 +184,30 @@ public class TLQueryBuilder {
                 addClauseIfRequired(preparedStmtList, builder);
                 builder.append("  tl.validTo <= ? ");
                 preparedStmtList.add(criteria.getValidTo());
+            }
+
+            if(criteria.getLocality() != null) {
+                addClauseIfRequired(preparedStmtList, builder);
+                builder.append("  tladdress.locality = ? ");
+                preparedStmtList.add(criteria.getLocality());
+            }
+
+            if(criteria.getTradeName() != null) {
+                addClauseIfRequired(preparedStmtList, builder);
+                builder.append("  LOWER(tl.tradename) = LOWER(?) ");
+                preparedStmtList.add(criteria.getTradeName());
+            }
+
+            if (criteria.getIssuedFrom() != null) {
+                addClauseIfRequired(preparedStmtList, builder);
+                builder.append("  tl.issueddate >= ? ");
+                preparedStmtList.add(criteria.getIssuedFrom());
+            }
+
+            if (criteria.getIssuedTo() != null) {
+                addClauseIfRequired(preparedStmtList, builder);
+                builder.append("  tl.issueddate <= ? ");
+                preparedStmtList.add(criteria.getIssuedTo());
             }
 
         }

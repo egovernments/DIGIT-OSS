@@ -1,0 +1,14 @@
+{
+  "topicContextConfigurations": [
+    {
+      "topic": "dss-collection-update",
+      "dataContext": "collection",
+      "dataContextVersion": "v1"
+    },
+    {
+      "topic": "topicTwo",
+      "dataContext": "billing",
+      "dataContextVersion": "v1"
+    }
+  ]
+}

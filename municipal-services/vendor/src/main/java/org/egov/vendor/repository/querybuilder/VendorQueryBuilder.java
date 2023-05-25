@@ -36,6 +36,8 @@ public class VendorQueryBuilder {
 	private static final String VENDOR_ID = "vendor_id";
 	private static final String VENDOR_DRIVER = "eg_vendor_driver";
 	private static final String VENDOR_VEHICLE = "eg_vendor_vehicle";
+	
+	public static final String VENDOR_COUNT="select count(*) from eg_vendor where owner_id IN ";
 
 	public String getDriverSearchQuery() {
 		return String.format(DRIVER_VEHICLE_QUERY, DRIVER_ID, VENDOR_DRIVER, VENDOR_ID);
@@ -52,6 +54,13 @@ public class VendorQueryBuilder {
 		return builder.toString();
 	}
 
+	public String getvendorCount(List<String> ownerList,List<Object> preparedStmtList) {
+		StringBuilder builder = new StringBuilder(VENDOR_COUNT);		
+		builder.append("(").append(createQuery(ownerList)).append(")");
+		addToPreparedStatement(preparedStmtList, ownerList);
+		return builder.toString();
+
+	}
 
 
 	public String getVendorSearchQuery(VendorSearchCriteria criteria, List<Object> preparedStmtList) {
@@ -142,6 +151,51 @@ public class VendorQueryBuilder {
 				builder.append(",");
 		}
 		return builder.toString();
+	}
+
+	public String getVendorLikeQuery(VendorSearchCriteria criteria, List<Object> preparedStmtList) {
+
+		StringBuilder builder = new StringBuilder(Query);
+
+		List<String> ids = criteria.getIds();
+		if (!CollectionUtils.isEmpty(ids)) {
+
+			addClauseIfRequired(preparedStmtList, builder);
+			builder.append(" vendor.id IN (").append(createQuery(ids)).append(")");
+			addToPreparedStatement(preparedStmtList, ids);
+		}
+
+		return addPaginationClause(builder, preparedStmtList, criteria);
+
+	}
+
+	private String addPaginationClause(StringBuilder builder, List<Object> preparedStmtList,
+			VendorSearchCriteria criteria) {
+
+		if (criteria.getLimit()!=null && criteria.getLimit() != 0) {
+			builder.append("and vendor.id in (select id from eg_vendor where tenantid like ? order by id offset ? limit ?)");
+			if (criteria.getTenantId() != null) {
+				if (criteria.getTenantId().split("\\.").length == 1) {
+					
+					preparedStmtList.add('%' + criteria.getTenantId() + '%');
+				} else {
+					
+					preparedStmtList.add(criteria.getTenantId());
+				}
+			}
+			preparedStmtList.add(criteria.getOffset());
+			preparedStmtList.add(criteria.getLimit());
+
+			 addOrderByClause(builder, criteria);
+
+		} else {
+			 addOrderByClause(builder, criteria);
+		}
+		return builder.toString();
+	}
+
+	private void addOrderByClause(StringBuilder builder, VendorSearchCriteria criteria) {
+		builder.append(" ORDER BY vendor.id DESC ").toString();
 	}
 
 }

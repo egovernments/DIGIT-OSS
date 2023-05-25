@@ -1,0 +1,18 @@
+.landingPageUser .label-text {
+  color: rgba(0, 0, 0, 0.8700000047683716);
+  font-size: 24px !important;
+  padding-top: 20px;
+  padding-left: 15px;
+}
+.landingPageHeader .label-text {
+  color: rgba(0, 0, 0, 0.8700000047683716);
+  font-size: 24px !important;
+  padding-top: 20px;
+  
+}
+
+@media only screen and (max-width: 768px) {
+  .landing-page-main-container {
+    padding-top: 60px !important;
+  }
+}

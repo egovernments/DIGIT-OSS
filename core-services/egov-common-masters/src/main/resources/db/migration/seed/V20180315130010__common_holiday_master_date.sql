@@ -1,0 +1,56 @@
+--Calendaryear
+
+insert into eg_calendaryear (id,name,startdate,enddate,active,tenantid) select nextval('seq_eg_calendarYear'),
+'2018','2018-01-01','2018-12-31',true,'default' where  not exists(select * from eg_calendaryear where name='2018' and tenantid='default');
+
+
+---General Holiday
+
+
+insert into eg_holiday(id,calendaryear,name,applicableon,tenantid,holidaytype) values (nextval('seq_eg_holiday'),'2018','BHOGI','2018-01-14','default',(select id from eg_holidaytype where name='General Holiday' and tenantid='default'));
+insert into eg_holiday(id,calendaryear,name,applicableon,tenantid,holidaytype) values (nextval('seq_eg_holiday'),'2018','SANKRANTI/PONGAL ','2018-01-15','default',(select id from eg_holidaytype where name='General Holiday' and tenantid='default'));
+insert into eg_holiday(id,calendaryear,name,applicableon,tenantid,holidaytype) values (nextval('seq_eg_holiday'),'2018','KANUMU ','2018-01-16','default',(select id from eg_holidaytype where name='General Holiday' and tenantid='default'));
+insert into eg_holiday(id,calendaryear,name,applicableon,tenantid,holidaytype) values (nextval('seq_eg_holiday'),'2018','REPUBLIC DAY ','2018-01-26','default',(select id from eg_holidaytype where name='General Holiday' and tenantid='default'));
+insert into eg_holiday(id,calendaryear,name,applicableon,tenantid,holidaytype) values (nextval('seq_eg_holiday'),'2018','MAHA SHIVARATRI ','2018-02-13','default',(select id from eg_holidaytype where name='General Holiday' and tenantid='default'));
+insert into eg_holiday(id,calendaryear,name,applicableon,tenantid,holidaytype) values (nextval('seq_eg_holiday'),'2018','HOLI','2018-03-02','default',(select id from eg_holidaytype where name='General Holiday' and tenantid='default'));
+insert into eg_holiday(id,calendaryear,name,applicableon,tenantid,holidaytype) values (nextval('seq_eg_holiday'),'2018','UGADI','2018-03-18','default',(select id from eg_holidaytype where name='General Holiday' and tenantid='default'));
+insert into eg_holiday(id,calendaryear,name,applicableon,tenantid,holidaytype) values (nextval('seq_eg_holiday'),'2018','SRIRAMANAVAMI','2018-03-25','default',(select id from eg_holidaytype where name='General Holiday' and tenantid='default'));
+insert into eg_holiday(id,calendaryear,name,applicableon,tenantid,holidaytype) values (nextval('seq_eg_holiday'),'2018','GOOD FRIDAY ','2018-03-30','default',(select id from eg_holidaytype where name='General Holiday' and tenantid='default'));
+insert into eg_holiday(id,calendaryear,name,applicableon,tenantid,holidaytype) values (nextval('seq_eg_holiday'),'2018','BABU JAGIVAN RAMS BIRTHDAY','2018-04-05','default',(select id from eg_holidaytype where name='General Holiday' and tenantid='default'));
+insert into eg_holiday(id,calendaryear,name,applicableon,tenantid,holidaytype) values (nextval('seq_eg_holiday'),'2018','AMBEDKAR BIRTHDAY','2018-04-14','default',(select id from eg_holidaytype where name='General Holiday' and tenantid='default'));
+insert into eg_holiday(id,calendaryear,name,applicableon,tenantid,holidaytype) values (nextval('seq_eg_holiday'),'2018','IDUL FITR ','2018-06-16','default',(select id from eg_holidaytype where name='General Holiday' and tenantid='default'));
+insert into eg_holiday(id,calendaryear,name,applicableon,tenantid,holidaytype) values (nextval('seq_eg_holiday'),'2018','INDEPENDENCE DAY ','2018-08-15','default',(select id from eg_holidaytype where name='General Holiday' and tenantid='default'));
+insert into eg_holiday(id,calendaryear,name,applicableon,tenantid,holidaytype) values (nextval('seq_eg_holiday'),'2018','BAKRID (ID-UL-AZHA)','2018-08-22','default',(select id from eg_holidaytype where name='General Holiday' and tenantid='default'));
+insert into eg_holiday(id,calendaryear,name,applicableon,tenantid,holidaytype) values (nextval('seq_eg_holiday'),'2018','SRI KRISHNA ASTAMI ','2018-09-03','default',(select id from eg_holidaytype where name='General Holiday' and tenantid='default'));
+insert into eg_holiday(id,calendaryear,name,applicableon,tenantid,holidaytype) values (nextval('seq_eg_holiday'),'2018','VINAYAKA CHAVITHI ','2018-09-13','default',(select id from eg_holidaytype where name='General Holiday' and tenantid='default'));
+insert into eg_holiday(id,calendaryear,name,applicableon,tenantid,holidaytype) values (nextval('seq_eg_holiday'),'2018','SHAHADAT IMAM HUSSAIN (R.A.) – MUHARRAM ','2018-09-21','default',(select id from eg_holidaytype where name='General Holiday' and tenantid='default'));
+insert into eg_holiday(id,calendaryear,name,applicableon,tenantid,holidaytype) values (nextval('seq_eg_holiday'),'2018','MAHTMA GANDHI JAYANTHI','2018-10-02','default',(select id from eg_holidaytype where name='General Holiday' and tenantid='default'));
+insert into eg_holiday(id,calendaryear,name,applicableon,tenantid,holidaytype) values (nextval('seq_eg_holiday'),'2018','DURGASTAMI/Maharnavami','2018-10-17','default',(select id from eg_holidaytype where name='General Holiday' and tenantid='default'));
+insert into eg_holiday(id,calendaryear,name,applicableon,tenantid,holidaytype) values (nextval('seq_eg_holiday'),'2018','VIJAYA DASAMI/DASARA ','2018-10-18','default',(select id from eg_holidaytype where name='General Holiday' and tenantid='default'));
+insert into eg_holiday(id,calendaryear,name,applicableon,tenantid,holidaytype) values (nextval('seq_eg_holiday'),'2018','DEEPAVALI','2018-11-07','default',(select id from eg_holidaytype where name='General Holiday' and tenantid='default'));
+insert into eg_holiday(id,calendaryear,name,applicableon,tenantid,holidaytype) values (nextval('seq_eg_holiday'),'2018','EID MILADUN NABI (S.A.W.S) (1140 HIJRI) ','2018-11-21','default',(select id from eg_holidaytype where name='General Holiday' and tenantid='default'));
+insert into eg_holiday(id,calendaryear,name,applicableon,tenantid,holidaytype) values (nextval('seq_eg_holiday'),'2018','CHRISTMAS ','2018-12-25','default',(select id from eg_holidaytype where name='General Holiday' and tenantid='default'));
+
+
+---Optional Holiday
+
+insert into eg_holiday(id,calendaryear,name,applicableon,tenantid,holidaytype) values (nextval('seq_eg_holiday'),'2018','NEW YEAR','2018-01-01','default',(select id from eg_holidaytype where name='Optional Holiday' and tenantid='default'));
+insert into eg_holiday(id,calendaryear,name,applicableon,tenantid,holidaytype) values (nextval('seq_eg_holiday'),'2018','SRI PANCHAMI','2018-01-22','default',(select id from eg_holidaytype where name='Optional Holiday' and tenantid='default'));
+insert into eg_holiday(id,calendaryear,name,applicableon,tenantid,holidaytype) values (nextval('seq_eg_holiday'),'2018','BIRTHDAY OF HZT.SYED MOHAMMED JUVANPURI MAHDI','2018-02-01','default',(select id from eg_holidaytype where name='Optional Holiday' and tenantid='default'));
+insert into eg_holiday(id,calendaryear,name,applicableon,tenantid,holidaytype) values (nextval('seq_eg_holiday'),'2018','MAHAVEER JAYANTHI','2018-03-29','default',(select id from eg_holidaytype where name='Optional Holiday' and tenantid='default'));
+insert into eg_holiday(id,calendaryear,name,applicableon,tenantid,holidaytype) values (nextval('seq_eg_holiday'),'2018','BASAVA JAYANTHI','2018-04-18','default',(select id from eg_holidaytype where name='Optional Holiday' and tenantid='default'));
+insert into eg_holiday(id,calendaryear,name,applicableon,tenantid,holidaytype) values (nextval('seq_eg_holiday'),'2018','BUDDHA PURNIMA','2018-04-30','default',(select id from eg_holidaytype where name='Optional Holiday' and tenantid='default'));
+insert into eg_holiday(id,calendaryear,name,applicableon,tenantid,holidaytype) values (nextval('seq_eg_holiday'),'2018','SHAB-E-BARAT','2018-05-02','default',(select id from eg_holidaytype where name='Optional Holiday' and tenantid='default'));
+insert into eg_holiday(id,calendaryear,name,applicableon,tenantid,holidaytype) values (nextval('seq_eg_holiday'),'2018','SHAHAD HAZRATH ALI','2018-06-05','default',(select id from eg_holidaytype where name='Optional Holiday' and tenantid='default'));
+insert into eg_holiday(id,calendaryear,name,applicableon,tenantid,holidaytype) values (nextval('seq_eg_holiday'),'2018','SHAB-E-QADER','2018-06-12','default',(select id from eg_holidaytype where name='Optional Holiday' and tenantid='default'));
+insert into eg_holiday(id,calendaryear,name,applicableon,tenantid,holidaytype) values (nextval('seq_eg_holiday'),'2018','JUMMA TUL WADA','2018-06-15','default',(select id from eg_holidaytype where name='Optional Holiday' and tenantid='default'));
+insert into eg_holiday(id,calendaryear,name,applicableon,tenantid,holidaytype) values (nextval('seq_eg_holiday'),'2018','PARSI NEW YEARS DAY','2018-08-17','default',(select id from eg_holidaytype where name='Optional Holiday' and tenantid='default'));
+insert into eg_holiday(id,calendaryear,name,applicableon,tenantid,holidaytype) values (nextval('seq_eg_holiday'),'2018','VARALAKSHMI VRATAM','2018-08-24','default',(select id from eg_holidaytype where name='Optional Holiday' and tenantid='default'));
+insert into eg_holiday(id,calendaryear,name,applicableon,tenantid,holidaytype) values (nextval('seq_eg_holiday'),'2018','EID-E-GHADEER','2018-08-30','default',(select id from eg_holidaytype where name='Optional Holiday' and tenantid='default'));
+insert into eg_holiday(id,calendaryear,name,applicableon,tenantid,holidaytype) values (nextval('seq_eg_holiday'),'2018','9TH MUHARRAM','2018-09-20','default',(select id from eg_holidaytype where name='Optional Holiday' and tenantid='default'));
+insert into eg_holiday(id,calendaryear,name,applicableon,tenantid,holidaytype) values (nextval('seq_eg_holiday'),'2018','MAHALAYA AMAVASYA','2018-10-08','default',(select id from eg_holidaytype where name='Optional Holiday' and tenantid='default'));
+insert into eg_holiday(id,calendaryear,name,applicableon,tenantid,holidaytype) values (nextval('seq_eg_holiday'),'2018','ARBAYEEN','2018-10-30','default',(select id from eg_holidaytype where name='Optional Holiday' and tenantid='default'));
+insert into eg_holiday(id,calendaryear,name,applicableon,tenantid,holidaytype) values (nextval('seq_eg_holiday'),'2018','NARAKA CHATURDHI','2018-11-06','default',(select id from eg_holidaytype where name='Optional Holiday' and tenantid='default'));
+insert into eg_holiday(id,calendaryear,name,applicableon,tenantid,holidaytype) values (nextval('seq_eg_holiday'),'2018','KARTHIKA PURNIMA/GURUNANAK JAYANTHI','2018-11-23','default',(select id from eg_holidaytype where name='Optional Holiday' and tenantid='default'));
+insert into eg_holiday(id,calendaryear,name,applicableon,tenantid,holidaytype) values (nextval('seq_eg_holiday'),'2018','CHRISTAMAS EVE','2018-12-24','default',(select id from eg_holidaytype where name='Optional Holiday' and tenantid='default'));
+insert into eg_holiday(id,calendaryear,name,applicableon,tenantid,holidaytype) values (nextval('seq_eg_holiday'),'2018','BOXING DAY','2018-12-26','default',(select id from eg_holidaytype where name='Optional Holiday' and tenantid='default'));

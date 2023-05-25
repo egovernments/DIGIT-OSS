@@ -1,0 +1,19 @@
+"chartOfAccounts": [
+        {
+            "name": "AadharBank",
+            "isActiveForPosting": true,
+            "type": "B",
+            "classification": 123456,
+            "functionRequired": true,
+            "budgetCheckRequired": true,
+            "majorCode": "GLC",
+            "tenantId": "default"
+        }
+        ],
+    "page": {
+        "totalResults": 1,
+        "totalPages": 1,
+        "pageSize": 500,
+        "currentPage": 0,
+        "offset": 0
+    }

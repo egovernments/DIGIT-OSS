@@ -8,6 +8,7 @@ import java.util.Map;
 
 import com.jayway.jsonpath.JsonPath;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.egov.common.contract.request.RequestInfo;
 import org.egov.echallan.config.ChallanConfiguration;
 import org.egov.echallan.model.Amount;
@@ -19,6 +20,7 @@ import org.egov.echallan.repository.ServiceRequestRepository;
 import org.egov.tracer.model.CustomException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.util.CollectionUtils;
 
 import static org.egov.echallan.util.ChallanConstants.*;
 
@@ -142,5 +144,15 @@ public class ChallanValidator {
 		if (!errorMap.isEmpty())
             throw new CustomException(errorMap);
 		
+	}
+
+	public void validateChallanCountRequest(String tenantId){
+		Map<String, String> errorMap = new HashMap<>();
+		if(StringUtils.isEmpty(tenantId))
+			errorMap.put("INVALID_CHALLAN_COUNT_REQ", "Please provide tenant id to get count details");
+
+		if(!CollectionUtils.isEmpty(errorMap.keySet())) {
+			throw new CustomException(errorMap);
+		}
 	}
 }

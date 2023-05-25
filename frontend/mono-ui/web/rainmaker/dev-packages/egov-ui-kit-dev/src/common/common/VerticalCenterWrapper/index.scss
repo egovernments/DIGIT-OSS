@@ -1,0 +1,12 @@
+.wrapper {
+  display: table !important;
+  width: 100%;
+}
+
+.wrapper .left,
+.wrapper .left > *,
+.wrapper .right,
+.wrapper .right > * {
+  display: table-cell !important;
+  vertical-align: middle !important;
+}

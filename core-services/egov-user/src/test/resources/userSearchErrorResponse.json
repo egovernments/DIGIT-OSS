@@ -1,0 +1,15 @@
+{
+  "responseInfo": null,
+  "error": {
+    "code": 400,
+    "message": "User search request is invalid",
+    "description": null,
+    "fields": [
+      {
+        "code": "USER.TENANT_ID_MANDATORY",
+        "message": "Tenant id is mandatory",
+        "field": "tenantId"
+      }
+    ]
+  }
+}

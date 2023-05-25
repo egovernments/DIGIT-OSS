@@ -109,6 +109,9 @@ public class ChallanConfiguration {
 
     @Value("${egov.demand.search.endpoint}")
     private String demandSearchEndpoint;
+
+    @Value("${egov.cancel.bill.endpoint}")
+    private String cancelBillEndpoint;
     
 
     //SMS

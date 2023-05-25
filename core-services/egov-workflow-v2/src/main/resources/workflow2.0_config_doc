@@ -1,0 +1,89 @@
+Migration:
+    In workflow 2.0 assignee is changed from a object to list of objects. To accommodate this change a new table named 'eg_wf_assignee_v2' is added which maps the processInstaceIds to assignee uuids. To deploy workflow 2.0 in environment where workflow is already running assignee column needs to be migrated to eg_wf_assignee_v2 table. The following query does this migration:
+
+	 INSERT INTO eg_wf_assignee_v2(processinstanceid, tenantid, assignee, createdBy,    	lastModifiedBy, createdTime, lastModifiedTime) SELECT id, tenantid,assignee, createdBy, 	lastModifiedBy ,createdTime,lastModifiedTime FROM eg_wf_processinstance_v2 WHERE 	assignee IS NOT NULL;
+
+Config:
+    Persister:
+     	Persister config for egov-workflow-v2 is updated. Insert query for the table eg_wf_assignee_v2 	is  added in egov-workflow-v2-persister.yml.
+       	The latest updated config can be referred from the below link:
+
+            	https://github.com/egovernments/configs/blob/master/egov-persister/egov-workflow-v2-	persister.yml
+
+    Searcher:
+     	The employee inbox has added column to display the locality of the applications. This mapping 	of the application number to locality is fetched by calling searcher API for the respective 	module. If new module is integrated with workflow it's searcher config should be added in the 	locality searcher yaml with module code as name in definition. The format of the url is as 	follows:
+
+	            /egov-searcher/locality/{BUSINESSSERVICE}/_get
+
+        Sample request for TL:
+
+                    curl -X POST \
+                        https://egov-micro-dev.egovernments.org/egov-searcher/locality/TL/_get \
+                        -H 'Content-Type: application/json' \
+                        -H 'Postman-Token: 1c2adbb9-004f-42ce-8aab-a29a2b0df7a7' \
+                        -H 'cache-control: no-cache' \
+                        -d '{
+                        "RequestInfo": {
+                            "apiId": "Rainmaker",
+                            "ver": ".01",
+                            "ts": 0,
+                            "action": "_create",
+                            "did": "1",
+                            "key": "",
+                            "msgId": "20170310130900|en_IN",
+                            "authToken": "5cb9019c-f690-4c88-850d-d15cbc2c6e54",
+                            "correlationId": "a2e4642e-8cb5-483b-8ea2-827cbe822c5f"
+                        },
+                        "searchCriteria": {
+                            "referenceNumber":[ "PB-TL-2019-04-24-001768","PB-TL-2019-04-22-001764"]
+                        }Migration
+                        }'
+
+         The searcher yaml can be referred from the below link:
+
+            https://github.com/egovernments/configs/blob/master/egov-searcher/localitySearcher.yml
+
+
+    BusinessService:
+     	For sending back the application to citizen the action with key 'SENDBACKTOCITIZEN' has 	to added. The exact key should be used. The resultant state of the action should be a new state. 	If pointed to existing state the action in that state will be visible to CITIZEN even when the 	application reaches the state without send back as the workflow is role based. To update the 	businessService for send back feature add the following state and action in the search response 	at required places and add call businessService update API it will assign uuid to the new state 	and action and will create the required references.
+
+            State json:
+
+                    {
+                        "sla": null,
+                        "state": "CITIZENACTIONREQUIRED",
+                        "applicationStatus": "CITIZENACTIONREQUIRED",
+                        "docUploadRequired": false,
+                        "isStartState": false,
+                        "isTerminateState": false,
+                        "isStateUpdatable": true,
+                        "actions": [
+                            {
+                                "action": "FORWARD",
+                                "nextState": "FIELDINSPECTION",
+                                "roles": [
+                                    "CITIZEN"
+                                ]
+                            }
+                        ]
+                    }
+
+            Action json:
+
+                    {
+                        "action": "SENDBACKTOCITIZEN",
+                        "nextState": "CITIZENACTIONREQUIRED",
+                        "roles": [
+                            "TL_FIELD_INSPECTOR"
+                        ]
+                    }
+
+
+
+Integration changes:
+    For API /egov-workflow-v2/egov-wf/process/_transition :
+     	The field assignee of type User in ProcessInstance object is changed to list of User called 	assignes.
+	            User assignee --> List<User> assignes
+
+    For Citizen Sendback:
+     	When the action SENDBACKTOCITIZEN is called on the entity the module has to enrich the 	assignes with the uuids of the owners and creator of the entity.

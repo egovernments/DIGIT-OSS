@@ -214,4 +214,37 @@ public class FSMQueryBuilder {
 
 	}
 
+	public String getFSMLikeQuery(FSMSearchCriteria criteria, List<Object> preparedStmtList) {
+		// TODO Auto-generated method stub
+
+		StringBuilder builder = new StringBuilder(Query);
+
+		List<String> ids = criteria.getIds();
+		if (!CollectionUtils.isEmpty(ids)) {
+
+			addClauseIfRequired(preparedStmtList, builder);
+			builder.append(" fsm.id IN (").append(createQuery(ids)).append(")");
+			addToPreparedStatement(preparedStmtList, ids);
+		}
+
+		return addPaginationClause(builder, preparedStmtList, criteria);
+
+	}
+
+	private String addPaginationClause(StringBuilder builder, List<Object> preparedStmtList,
+			FSMSearchCriteria criteria) {
+
+		if (criteria.getLimit()!=null && criteria.getLimit() != 0) {
+			builder.append("and fsm.id in (select id from eg_fsm_application where tenantid= ? order by id offset ? limit ?)");
+			preparedStmtList.add(criteria.getTenantId());
+			preparedStmtList.add(criteria.getOffset());
+			preparedStmtList.add(criteria.getLimit());
+
+			 addOrderByClause(builder, criteria);
+
+		} else {
+			 addOrderByClause(builder, criteria);
+		}
+		return builder.toString();
+	}
 }

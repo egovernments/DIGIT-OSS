@@ -126,6 +126,7 @@ config:
       - work-dir: "bpa-services/src/main/resources/db"
         image-name: "bpa-services-db"         
 
+
   - name: "builds/municipal-services/bpa-calculator"
     build:
       - work-dir: "bpa-calculator"
@@ -139,6 +140,7 @@ config:
         dockerfile: "build/maven/Dockerfile"
       - work-dir: "land-services/src/main/resources/db"
         image-name: "land-services-db"
+
 
   - name: "builds/municipal-services/noc-services"
     build:
@@ -171,6 +173,7 @@ config:
         image-name: "fsm-db"
 
 
+
   - name: "builds/municipal-services/vehicle"
     build:
       - work-dir: "vehicle"
@@ -178,6 +181,7 @@ config:
         dockerfile: "build/maven/Dockerfile"
       - work-dir: "vehicle/src/main/resources/db"
         image-name: "vehicle-db"
+
 
   - name: "builds/municipal-services/vendor"
     build:
@@ -195,8 +199,7 @@ config:
       - work-dir: "fsm-calculator/src/main/resources/db"
         image-name: "fsm-calculator-db"
         
-  - name: "builds/municipal-services/turn-io-adapter"
-    build:
+  - name: "builds/digit-impel-builds/municipal-services/turn-io-adapter"
       - work-dir: "turn-io-adapter"
         image-name: "turn-io-adapter"
         dockerfile: "build/maven/Dockerfile"

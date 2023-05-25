@@ -1,0 +1,32 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "title": "transaction",
+  "description": "Each Transaction has to go through this validation conditions",
+  "type": "object",
+  "items": {
+    "type": "object",
+    "properties": {
+      "rating": {
+        "type": "object",
+        "items": {
+          "type": "object",
+          "properties": {
+            "primary": {
+              "type": "object",
+              "properties": {
+                "value": {
+                  "type": "integer",
+                  "minimum": 1,
+                  "maximum": 5
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "required": [
+    "rating"
+  ]
+}

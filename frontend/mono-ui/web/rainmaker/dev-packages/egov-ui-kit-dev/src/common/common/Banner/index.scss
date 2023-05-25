@@ -1,0 +1,124 @@
+.user-screens-wrapper {
+  width: 100%;
+}
+
+.banner-image {
+  position: relative;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+}
+
+.banner-back-button {
+  left: 20px;
+  top: 20px;
+  z-index: 1;
+  color: #fff !important;
+  position: absolute;
+}
+
+.banner-overlay {
+  position: absolute;
+  background: rgba(52, 73, 94, 0.9);
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}
+
+.banner-image {
+  // background-image: url(../../../assets/images/banner.png);
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+}
+
+.logo-wrapper {
+  width: 100%;
+  padding: 10px;
+
+  .imageloader {
+    text-align: center;
+    margin: 0 auto;
+    width: 200px;
+  }
+}
+
+.mseva-logo {
+  display: block;
+  margin: 0 auto;
+}
+
+.user-screens-wrapper .user-screens-card {
+  padding: 24px 16px;
+  overflow-y: scroll;
+  overflow-x: hidden;
+}
+
+.banner-main-content {
+  position: relative;
+  min-height: 100vh;
+  padding-top: 50px;
+  width: 100%;
+}
+
+.banner-form-cont {
+  position: absolute;
+  bottom: 10px;
+  width: 100%;
+  padding: 0 8px;
+}
+
+@media only screen and (min-width: 768px) {
+  .user-screens-wrapper {
+    height: 100vh;
+  }
+
+  .user-logo-wrapper {
+    display: none;
+  }
+
+  .banner-back-button {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+  }
+
+  .banner-logo-home .user-logo-wrapper {
+    display: block !important;
+  }
+
+  // .banner-overlay {
+  //   background: transparent;
+  // }
+  .banner-image,
+  .banner-overlay {
+    // background-image: url(../../../assets/images/Banner_image.jpg);
+    position: absolute;
+    height: 100%;
+    background: rgba(52, 73, 94, 0.9);
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+  }
+
+  .banner-main-content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .banner-form-cont {
+    position: relative;
+    width: 100%;
+    padding: 0 8px;
+  }
+  .logo-wrapper {
+    position: absolute;
+  }
+  .user-screens-wrapper .user-screens-card {
+    overflow-y: unset;
+  }
+}

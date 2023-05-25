@@ -1,0 +1,1 @@
+delete from eg_boundary where name = 'Block No 5' and boundaryNum='7' and boundaryType = '5' and tenantId = 'default';

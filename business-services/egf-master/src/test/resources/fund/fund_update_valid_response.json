@@ -1,0 +1,15 @@
+ 
+ "funds": 
+	   [
+		   	{
+		   	    "id":"1",
+			    "name":"nameupdate",
+		   		"tenantId":"default",
+		   		"code":"code",
+		   		"active":true,
+		   		"identifier":"U",
+		   		"level":1234
+		   	}
+	   	
+	   ]
+ 

@@ -1,0 +1,28 @@
+ServiceMaps:
+  serviceName: Uploader
+  version: 1.0.0
+  mappings:
+  - topic: save-upload-jobs
+    configKey: INDEX
+    indexes:
+    - name: uploaderindex-v1
+      type: jobs
+      id: $.code
+      isBulk: false
+      jsonPath: $.UploadJob
+      timeStampField: $.auditDetails.createdTime
+
+  - topic: update-upload-jobs
+    configKey: INDEX
+    indexes:
+    - name: uploaderindex-v1
+      type: jobs
+      id: $.code
+      isBulk: false
+      jsonPath: $.UploadJob
+      timeStampField: $.auditDetails.createdTime
+
+
+#JOURNEY: egovtelemetry -> egovtelemetryreindex
+#configKey=INDEX: Index that currently receives live data from the services
+#configKey=REINDEX: Configuration for reindexing that will be enabled only during reindexing activity.

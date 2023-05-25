@@ -123,7 +123,11 @@ public class NotificationUtil {
 	 */
 	public String getCustomizedMsg(RequestInfo requestInfo, Noc noc, String localizationMessage) {
 		String message = null, messageTemplate;
-		String messageCode = noc.getWorkflow().getAction() + "_" + noc.getApplicationStatus();
+		String messageCode;
+		if(noc.getWorkflow() == null)
+			messageCode = noc.getWorkflow() + "_" + noc.getApplicationStatus();
+		else 
+			messageCode = noc.getWorkflow().getAction() + "_" + noc.getApplicationStatus();
 		switch (messageCode) {
 		case ACTION_STATUS_CREATED:
 			messageTemplate = getMessageTemplate(messageCode, localizationMessage);

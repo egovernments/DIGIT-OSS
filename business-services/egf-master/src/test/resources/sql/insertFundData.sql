@@ -1,0 +1,2 @@
+insert into egf_fund (id,name,code,identifier,level,parentid,active,createdby,createddate,lastmodifiedby,lastmodifieddate,tenantid)
+values('2','name','code','F',1,'1',true,1,now(),null,null,'default');

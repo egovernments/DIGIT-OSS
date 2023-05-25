@@ -3,6 +3,10 @@
 # Changelog
 All notable changes to this module will be documented in this file.
 
+## 1.3.1 - 2021-07-26
+- Added missing state in workflow config of firenoc service
+- Added OTHERS in gender validation 
+
 ## 1.3.0 - 2021-05-11
 
 - Fixed security issue of untrusted data pass as user input.

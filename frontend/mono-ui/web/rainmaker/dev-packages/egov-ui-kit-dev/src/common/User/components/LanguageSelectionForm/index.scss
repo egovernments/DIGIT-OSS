@@ -1,0 +1,38 @@
+.language-selection .banner-back-button {
+  display: none !important;
+}
+
+/* Language Selection  */
+.language-label > div {
+  color: #484848;
+  font-size: 14px;
+  font-weight: normal;
+}
+
+.lang-continue-button>button{
+  background-color: #FE7A51 !important;
+} 
+.lang-continue-button:hover>button>div{
+      background-color: #D86845 !important;
+}
+.language-label {
+  display: inline-block!important;
+  padding: 0px 5px;
+}
+
+.button-toggle-container {
+  padding: 25px 0px;
+  display: flex;
+  justify-content: center;
+}
+
+@media only screen and (max-width: 360px) {
+  .button-toggle-container button {
+    padding: 0 10px !important;
+  }
+
+  .button-toggle-container span {
+    font-size: 13px !important;
+  }
+}
+

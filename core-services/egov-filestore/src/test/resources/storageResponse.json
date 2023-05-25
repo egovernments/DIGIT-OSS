@@ -1,0 +1,10 @@
+{
+  "files": [
+    {
+      "fileStoreId": "fileStoreId1"
+    },
+    {
+      "fileStoreId": "fileStoreId2"
+    }
+  ]
+}

@@ -1,0 +1,52 @@
+#
+# config:
+# -   name: < Name of the job, foo/bar would create job named bar inside folder foo >
+#     build:
+#     - work-dir: < Working directory of the app to be built >
+#       dockerfile: < Path to the dockerfile, optional, assumes dockerfile in working directory if not provided >
+#       image-name: < Docker image name  >
+# -
+# -
+
+config:
+-   name: builds/digit-impel-builds/frontend/citizen
+    build:
+    - work-dir: web/rainmaker/
+      dockerfile: web/rainmaker/docker/citizen/Dockerfile
+      image-name: citizen
+
+-   name: builds/digit-impel-builds/frontend/employee
+    build:
+    - work-dir: web/rainmaker/
+      dockerfile: web/rainmaker/docker/employee/Dockerfile
+      image-name: employee
+
+-   name: builds/digit-impel-builds/frontend/employee-mcs
+    build:
+    - work-dir: web/rainmaker/
+      dockerfile: web/rainmaker/docker/employee-mcs/Dockerfile
+      image-name: employee-mcs
+
+-   name: builds/digit-impel-builds/frontend/localization
+    build:
+    - work-dir: web/rainmaker/
+      dockerfile: web/rainmaker/docker/localization/Dockerfile
+      image-name: ui-localisation
+
+-   name: builds/digit-impel-builds/frontend/ui-uploader
+
+    build:
+    - work-dir: web/ui-uploader/
+      image-name: ui-uploader
+
+-   name: builds/digit-impel-builds/frontend/dss-dashboard
+    build:
+    - work-dir: web/dss-dashboard/
+      dockerfile: web/dss-dashboard/docker/Dockerfile
+      image-name: dss-dashboard
+      
+-   name: builds/digit-impel-builds/frontend/common-screen
+    build:
+    - work-dir: web/egov-common-screen/
+      dockerfile: web/egov-common-screen/docker/Dockerfile
+      image-name: common-screen

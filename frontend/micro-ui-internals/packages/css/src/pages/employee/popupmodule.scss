@@ -1,0 +1,34 @@
+.popup-module {
+  width: 480px;
+  margin: 0 auto;
+  @apply bg-white;
+
+  .popup-module-main {
+    @apply px-lg pb-lg;
+  }
+
+  .popup-module-action-bar {
+    gap: 16px;
+    @apply flex flex-row justify-end;
+  }
+}
+
+@screen dt {
+  .popup-module {
+    width: 480px;
+    margin: auto;
+    @apply bg-white;
+
+    .popup-module-main {
+      @apply px-lg pb-lg;
+    }
+    .popup-module-main {
+      @apply w-full p-sm h-full;
+    }
+
+    .popup-module-action-bar {
+      gap: 16px;
+      @apply flex flex-row justify-end;
+    }
+  }
+}

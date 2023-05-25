@@ -36,7 +36,7 @@ public class WorkflowService {
 		} catch (IllegalArgumentException e) {
 			throw new CustomException("PARSING ERROR", "Failed to parse response");
 		}
-		return response.getBusinessServices().get(0);
+		return response.getBusinessServices().isEmpty() ? null : response.getBusinessServices().get(0);
 	}
 	
 	private StringBuilder getSearchURLWithParams(String bussinessServiceValue, String tenantId) {
@@ -66,6 +66,5 @@ public class WorkflowService {
 		}
 		return Boolean.FALSE;
 	}
-
-
+	
 }

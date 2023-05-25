@@ -1,0 +1,1946 @@
+serviceMaps:
+ serviceName: User Service
+ mappings:
+ - version: 1.0
+   name: User
+   description: Persists User details in eg_user and eg_user_address table
+   fromTopic: egov.persist
+   isTransaction: true
+   queryMaps: 
+    - query: INSERT INTO eg_user(title, salutation, dob, locale, username, password, pwdexpirydate, mobilenumber, altcontactnumber, emailid, createddate, lastmodifieddate, createdby, lastmodifiedby, active, name, gender, pan, aadhaarnumber, type, version, guardian, guardianrelation, signature, accountlocked, bloodgroup, photo, identificationmark, tenantid, id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
+      rootObject: Users.*
+      jsonMaps:
+       - jsonPath: $.Users.*.salutation #title
+         type: STRING
+
+       - jsonPath: $.Users.*.salutation
+         type: STRING
+       
+       - jsonPath: $.Users.*.userDetails.dob
+         type: DATE
+
+       - jsonPath: $.Users.*.locale
+         type: STRING
+
+       - jsonPath: $.Users.*.username
+         type: STRING
+       
+       - jsonPath: $.Users.*.password
+         type: STRING
+
+       - jsonPath: $.Users.*.pwdExpiryDate
+         type: LONG
+         dbType: DATE
+         format: dd/MM/yyyy
+
+       - jsonPath: $.Users.*.mobile
+         type: STRING
+
+       - jsonPath: $.Users.*.userDetails.altContactNumber
+         type: STRING
+       
+       - jsonPath: $.Users.*.email
+         type: STRING
+
+       - jsonPath: current
+         type: CURRENTDATE
+         dbType: DATE
+
+       - jsonPath: current
+         type: CURRENTDATE
+         dbType: DATE
+
+       - jsonPath: $.RequestInfo.userInfo.id
+         type: LONG
+
+       - jsonPath: $.RequestInfo.userInfo.id
+         type: LONG
+       
+       - jsonPath: $.Users.*.active
+         type: BOOLEAN  
+
+       - jsonPath: $.Users.*.name
+         type: STRING
+
+       - jsonPath: $.Users.*.gender
+         type: INT
+
+       - jsonPath: $.Users.*.userDetails.pan
+         type: STRING
+
+       - jsonPath: $.Users.*.aadhaarNumber
+         type: STRING
+
+       - jsonPath: $.Users.*.type
+         type: STRING
+
+       - jsonPath: default.value.0 #version
+         type: INT
+
+       - jsonPath: default.value.guardian #guardian
+         type: STRING
+
+       - jsonPath: default.value.guardianrelation #guardianrelation
+         type: STRING
+
+       - jsonPath: $.Users.*.userDetails.signature 
+         type: STRING
+
+       - jsonPath: $.Users.*.accountLocked
+         type: BOOLEAN
+
+       - jsonPath: $.Users.*.userDetails.bloodGroup 
+         type: STRING
+
+       - jsonPath: $.Users.*.userDetails.photo
+         type: STRING
+
+       - jsonPath: $.Users.*.userDetails.identificationMark
+         type: STRING
+
+       - jsonPath: $.Users.*.tenantId
+         type: STRING
+
+       - jsonPath: $.Users.*.id
+         type: LONG
+    
+    - query: INSERT INTO eg_user_address(id, version, createddate, lastmodifieddate, createdby, lastmodifiedby, type, address, city, pincode, userid, tenantid) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
+      rootObject: Users.*.userDetails.addresses.*
+      jsonMaps:
+       - jsonPath: $.Users.*.userDetails.addresses.*.id
+         type: STRING
+
+       - jsonPath: default
+         type: LONG
+       
+       - type: CURRENTDATE
+         dbType: DATE
+
+       - type: CURRENTDATE
+         dbType: DATE
+
+       - jsonPath: $.RequestInfo.userInfo.id
+         type: LONG
+
+       - jsonPath: $.RequestInfo.userInfo.id
+         type: LONG
+       
+       - jsonPath: $.Users.*.userDetails.addresses.*.addressType
+         type: STRING  
+
+       - jsonPath: $.Users.*.userDetails.addresses.*.addressLine1
+         type: STRING
+
+       - jsonPath: $.Users.*.userDetails.addresses.*.city
+         type: STRING
+
+       - jsonPath: $.Users.*.userDetails.addresses.*.pincode
+         type: STRING
+
+       - jsonPath: $.Users.*.userDetails.addresses.*.userId
+         type: STRING
+
+       - jsonPath: $.Users.*.userDetails.addresses.*.tenantId
+         type: STRING
+         
+ - version: 1.0
+   name: citizen_service_create
+   description: Persists citizen service details egov_citizen_service_req table
+   fromTopic: save-service-db
+   isTransaction: true
+   queryMaps: 
+    - query: INSERT INTO egov_citizen_service_req(id, tenantid, userid, servicecode, consumercode, email, mobilenumber, assignedto, createddate, lastmodifiedddate, createdby, lastmodifiedby, jsonvalue) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
+      rootObject: $.serviceReq
+      jsonMaps:
+       - jsonPath: $.serviceReq.serviceRequestId
+         type: STRING
+
+       - jsonPath: $.serviceReq.tenantId
+         type: STRING
+       
+       - jsonPath: $.RequestInfo.userInfo.id
+         type: LONG
+
+       - jsonPath: $.serviceReq.serviceCode
+         type: STRING
+
+       - jsonPath: $.serviceReq.consumerCode
+         type: STRING
+
+       - jsonPath: $.serviceReq.email
+         type: STRING
+       
+       - jsonPath: $.serviceReq.phone
+         type: LONG
+
+       - jsonPath: $.serviceReq.assignedTo
+         type: STRING
+
+       - jsonPath: current
+         type: CURRENTDATE
+         dbType: LONG         
+
+       - jsonPath: current
+         type: CURRENTDATE
+         dbType: LONG        
+
+       - jsonPath: $.RequestInfo.userInfo.id
+         type: LONG
+         
+       - jsonPath: $.RequestInfo.userInfo.id
+         type: LONG
+  
+       - jsonPath: $.serviceReq
+         type: JSON
+         
+ - version: 1.0
+   name: citizen_service_update
+   description: Updates citizen service details egov_citizen_service_req table for specified id and tenantId
+   fromTopic: update-service-db
+   isTransaction: true
+   queryMaps: 
+    - query: UPDATE egov_citizen_service_req SET  userid=?, servicecode=?, consumercode=?, email=?, mobilenumber=?, assignedto=?,  lastmodifiedddate=?, lastmodifiedby=?, jsonvalue=? WHERE id=? and tenantid=?;
+      rootObject: $.serviceReq
+      jsonMaps:
+       
+       - jsonPath: $.RequestInfo.userInfo.id
+         type: LONG
+
+       - jsonPath: $.serviceReq.serviceCode
+         type: STRING
+
+       - jsonPath: $.serviceReq.consumerCode
+         type: STRING
+
+       - jsonPath: $.serviceReq.email
+         type: STRING
+       
+       - jsonPath: $.serviceReq.phone
+         type: LONG
+
+       - jsonPath: $.serviceReq.assignedTo
+         type: STRING
+
+       - jsonPath: current
+         type: CURRENTDATE
+         dbType: LONG        
+         
+       - jsonPath: $.RequestInfo.userInfo.id
+         type: LONG
+  
+       - jsonPath: $.serviceReq
+         type: JSON
+       
+       - jsonPath: $.serviceReq.serviceRequestId
+         type: STRING
+
+       - jsonPath: $.serviceReq.tenantId
+         type: STRING
+ 
+ - version: 1.0
+   name: marriage_regn_create
+   description: Persists Marriage registration details in db with witnesses, bride and bridegrrom details in in following tables 1.Marriage registration details in egmr_marriage_regn table 2.witnesses details in egmr_marriageregn_witness table 3.bride and bridegrrom details in egmr_marrying_person tables
+   fromTopic: egov.marriageregn.create
+   isTransaction: true
+   queryMaps: 
+    - query: INSERT INTO egmr_marriage_regn(id, regnunitid,marriagedate, venue, street, placeofmarriage,locality,   city, marriagephoto, bridegroomid, brideid, priestname,priestreligion, priestaddress, priestaadhaar, priestmobileno, priestemail, serialno, volumeno, applicationnumber, regnnumber, regndate, status, source, stateid, isactive, tenantid, feeid, demandid, approvaldepartment, approvaldesignation, approvalassignee, approvalaction, approvalstatus, approvalcomments, createdby,lastmodifiedby, createdtime, lastmodifiedtime) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
+      rootObject: $.MarriageRegn
+      jsonMaps:
+       - jsonPath: $.MarriageRegn.id 
+         type: STRING
+
+       - jsonPath: $.MarriageRegn.regnUnit.id
+         type: LONG
+       
+       - jsonPath: $.MarriageRegn.marriageDate
+         type: LONG
+
+       - jsonPath: $.MarriageRegn.venue
+         type: STRING
+
+       - jsonPath: $.MarriageRegn.street
+         type: STRING
+       
+       - jsonPath: $.MarriageRegn.placeOfMarriage
+         type: STRING
+
+       - jsonPath: $.MarriageRegn.locality
+         type: STRING
+
+       - jsonPath: $.MarriageRegn.city
+         type: STRING
+
+       - jsonPath: $.MarriageRegn.marriagePhoto 
+         type: STRING
+       
+       - jsonPath: $.MarriageRegn.bridegroom.id
+         type: LONG
+
+       - jsonPath: $.MarriageRegn.bride.id
+         type: LONG
+
+       - jsonPath: $.MarriageRegn.priest.name
+         type: STRING
+
+       - jsonPath: $.MarriageRegn.priest.religion 
+         type: LONG
+       
+       - jsonPath: $.MarriageRegn.priest.address
+         type: STRING
+
+       - jsonPath: $.MarriageRegn.priest.aadhaar
+         type: STRING
+
+       - jsonPath: $.MarriageRegn.priest.mobileNo 
+         type: STRING
+       
+       - jsonPath: $.MarriageRegn.priest.email
+         type: STRING   
+
+       - jsonPath: $.MarriageRegn.serialNo
+         type: STRING
+
+       - jsonPath: $.MarriageRegn.volumeNo
+         type: STRING
+
+       - jsonPath: $.MarriageRegn.applicationNumber 
+         type: STRING
+       
+       - jsonPath: $.MarriageRegn.regnNumber
+         type: STRING
+
+       - jsonPath: $.MarriageRegn.regnDate
+         type: LONG
+
+       - jsonPath: $.MarriageRegn.status  
+         type: STRING
+       
+       - jsonPath: $.MarriageRegn.source
+         type: STRING
+
+       - jsonPath: $.MarriageRegn.stateId
+         type: STRING
+
+       - jsonPath: $.MarriageRegn.isActive  
+         type: BOOLEAN
+       
+       - jsonPath: $.MarriageRegn.tenantId
+         type: STRING   
+
+       - jsonPath: $.MarriageRegn.fee.id
+         type: STRING
+
+       - jsonPath: $.MarriageRegn.demands.*.id
+         type: STRING
+
+       - jsonPath: $.MarriageRegn.approvalDetails.department
+         type: LONG
+       
+       - jsonPath: $.MarriageRegn.approvalDetails.designation
+         type: LONG
+
+       - jsonPath: $.MarriageRegn.approvalDetails.assignee
+         type: STRING
+       
+       - jsonPath: $.MarriageRegn.approvalDetails.action
+         type: STRING
+       
+       - jsonPath: $.MarriageRegn.approvalDetails.status
+         type: STRING
+       
+       - jsonPath: $.MarriageRegn.approvalDetails.comments
+         type: STRING
+
+       - jsonPath: $.RequestInfo.userInfo.id
+         type: LONG
+
+       - jsonPath: $.RequestInfo.userInfo.id
+         type: LONG
+       
+       - type: CURRENTDATE
+         dbType: LONG
+
+       - type: CURRENTDATE
+         dbType: LONG
+         
+    - query: INSERT INTO egmr_marriageregn_witness(id, applicationnumber, tenantid, witnessno, name, relation, relatedto, dob, address, relationshipwithapplicants, occupation, aadhaar, mobileno, email) VALUES (?,?, ?, ?, ?, ?, ?, ?, ?, ?, ? , ?, ?, ?);
+      rootObject: $.MarriageRegn.witnesses.*
+      jsonMaps:
+       - jsonPath: $.MarriageRegn.witnesses.*.id
+         type: LONG
+
+       - jsonPath: $.MarriageRegn.applicationNumber
+         type: STRING
+       
+       - jsonPath: $.MarriageRegn.tenantId
+         type: STRING
+
+       - jsonPath: $.MarriageRegn.witnesses.*.witnessNo
+         type: INT
+
+       - jsonPath: $.MarriageRegn.witnesses.*.name
+         type: STRING
+       
+       - jsonPath: $.MarriageRegn.witnesses.*.relationForIdentification
+         type: STRING
+
+       - jsonPath: $.MarriageRegn.witnesses.*.relatedTo
+         type: STRING
+
+       - jsonPath: $.MarriageRegn.witnesses.*.dob
+         type: LONG
+
+       - jsonPath: $.MarriageRegn.witnesses.*.address
+         type: STRING
+       
+       - jsonPath: $.MarriageRegn.witnesses.*.relationshipWithApplicants
+         type: STRING
+
+       - jsonPath: $.MarriageRegn.witnesses.*.occupation
+         type: STRING
+
+       - jsonPath: $.MarriageRegn.witnesses.*.aadhaar
+         type: STRING
+
+       - jsonPath: $.MarriageRegn.witnesses.*.mobileNo
+         type: STRING
+       
+       - jsonPath: $.MarriageRegn.witnesses.*.email
+         type: STRING
+         
+    - query: INSERT INTO egmr_marrying_person(id, name, parentname, street, locality, city, dob, status, aadhaar, mobileno, email, religion, religionpractice, education, occupation, handicapped, residenceaddress, photo, nationality, tenantid, officeaddress) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
+      rootObject: $.MarriageRegn.bridegroom
+      jsonMaps:
+       - jsonPath: $.MarriageRegn.bridegroom.id
+         type: LONG
+
+       - jsonPath: $.MarriageRegn.bridegroom.name
+         type: STRING
+         
+       - jsonPath: $.MarriageRegn.bridegroom.parentName
+         type: STRING
+       
+       - jsonPath: $.MarriageRegn.bridegroom.street
+         type: STRING
+
+       - jsonPath: $.MarriageRegn.bridegroom.locality
+         type: STRING
+
+       - jsonPath: $.MarriageRegn.bridegroom.city
+         type: STRING
+       
+       - jsonPath: $.MarriageRegn.bridegroom.dob
+         type: LONG
+
+       - jsonPath: $.MarriageRegn.bridegroom.status
+         type: STRING
+
+       - jsonPath: $.MarriageRegn.bridegroom.aadhaar
+         type: STRING
+
+       - jsonPath: $.MarriageRegn.bridegroom.mobileNo
+         type: STRING
+       
+       - jsonPath: $.MarriageRegn.bridegroom.email
+         type: STRING
+
+       - jsonPath: $.MarriageRegn.bridegroom.religion
+         type: LONG
+
+       - jsonPath: $.MarriageRegn.bridegroom.religionPractice
+         type: STRING
+
+       - jsonPath: $.MarriageRegn.bridegroom.education
+         type: STRING
+       
+       - jsonPath: $.MarriageRegn.bridegroom.occupation
+         type: STRING  
+             
+       - jsonPath: $.MarriageRegn.bridegroom.handicapped
+         type: STRING
+       
+       - jsonPath: $.MarriageRegn.bridegroom.residenceAddress
+         type: STRING
+
+       - jsonPath: $.MarriageRegn.bridegroom.photo
+         type: STRING
+
+       - jsonPath: $.MarriageRegn.bridegroom.nationality
+         type: STRING
+         
+       - jsonPath: $.MarriageRegn.tenantId
+         type: STRING
+
+       - jsonPath: $.MarriageRegn.bridegroom.officeAddress
+         type: STRING
+
+    - query: INSERT INTO egmr_marrying_person(id, name, parentname, street, locality, city, dob, status, aadhaar, mobileno, email, religion, religionpractice, education, occupation, handicapped, residenceaddress, photo, nationality, tenantid, officeaddress) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
+      rootObject: $.MarriageRegn.bride
+      jsonMaps:
+       - jsonPath: $.MarriageRegn.bride.id
+         type: LONG
+
+       - jsonPath: $.MarriageRegn.bride.name
+         type: STRING
+         
+       - jsonPath: $.MarriageRegn.bride.parentName
+         type: STRING
+       
+       - jsonPath: $.MarriageRegn.bride.street
+         type: STRING
+
+       - jsonPath: $.MarriageRegn.bride.locality
+         type: STRING
+
+       - jsonPath: $.MarriageRegn.bride.city
+         type: STRING
+       
+       - jsonPath: $.MarriageRegn.bride.dob
+         type: LONG
+
+       - jsonPath: $.MarriageRegn.bride.status
+         type: STRING
+
+       - jsonPath: $.MarriageRegn.bride.aadhaar
+         type: STRING
+
+       - jsonPath: $.MarriageRegn.bride.mobileNo
+         type: STRING
+       
+       - jsonPath: $.MarriageRegn.bride.email
+         type: STRING
+
+       - jsonPath: $.MarriageRegn.bride.religion
+         type: LONG
+
+       - jsonPath: $.MarriageRegn.bride.religionPractice
+         type: STRING
+
+       - jsonPath: $.MarriageRegn.bride.education
+         type: STRING
+       
+       - jsonPath: $.MarriageRegn.bride.occupation
+         type: STRING  
+             
+       - jsonPath: $.MarriageRegn.bride.handicapped
+         type: STRING
+       
+       - jsonPath: $.MarriageRegn.bride.residenceAddress
+         type: STRING
+
+       - jsonPath: $.MarriageRegn.bride.photo
+         type: STRING
+
+       - jsonPath: $.MarriageRegn.bride.nationality
+         type: STRING
+         
+       - jsonPath: $.MarriageRegn.tenantId
+         type: STRING
+
+       - jsonPath: $.MarriageRegn.bride.officeAddress
+         type: STRING
+         
+ - version: 1.0
+   name: marriage_regn_update
+   description: Updates Marriage registration details in db with witnesses, bride and bridegrrom details in in following tables 1.Marriage registration details in egmr_marriage_regn table 2.witnesses details in egmr_marriageregn_witness table 3.bride and bridegrrom details in egmr_marrying_person tables
+   fromTopic: egov.marriageregn.update
+   isTransaction: true
+   queryMaps: 
+    - query: UPDATE egmr_marriage_regn SET  regnunitid=?, marriagedate=?, venue=?, street=?, placeofmarriage=?, locality=?, city=?, marriagephoto=?, bridegroomid=?, brideid=?, priestname=?, priestreligion=?, priestaddress=?, priestaadhaar=?, priestmobileno=?, priestemail=?, serialno=?, volumeno=?, regnnumber=?, regndate=?, status=?, source=?, stateid=?, isactive=?, feeid=?, demandid=?, approvaldepartment=?, approvaldesignation=?, approvalassignee=?, approvalaction=?, approvalstatus=?, approvalcomments=?, lastmodifiedby=?, lastmodifiedtime=? WHERE tenantid=? AND applicationnumber=? ;
+      rootObject: $.MarriageRegn
+      jsonMaps:
+
+       - jsonPath: $.MarriageRegn.regnUnit.id
+         type: LONG
+       
+       - jsonPath: $.MarriageRegn.marriageDate
+         type: LONG
+
+       - jsonPath: $.MarriageRegn.venue
+         type: STRING
+
+       - jsonPath: $.MarriageRegn.street
+         type: STRING
+       
+       - jsonPath: $.MarriageRegn.placeOfMarriage
+         type: STRING
+
+       - jsonPath: $.MarriageRegn.locality
+         type: STRING
+
+       - jsonPath: $.MarriageRegn.city
+         type: STRING
+
+       - jsonPath: $.MarriageRegn.marriagePhoto 
+         type: STRING
+       
+       - jsonPath: $.MarriageRegn.bridegroom.id
+         type: LONG
+
+       - jsonPath: $.MarriageRegn.bride.id
+         type: LONG
+
+       - jsonPath: $.MarriageRegn.priest.name
+         type: STRING
+
+       - jsonPath: $.MarriageRegn.priest.religion 
+         type: LONG
+       
+       - jsonPath: $.MarriageRegn.priest.address
+         type: STRING
+
+       - jsonPath: $.MarriageRegn.priest.aadhaar
+         type: STRING
+
+       - jsonPath: $.MarriageRegn.priest.mobileNo 
+         type: STRING
+       
+       - jsonPath: $.MarriageRegn.priest.email
+         type: STRING   
+
+       - jsonPath: $.MarriageRegn.serialNo
+         type: STRING
+
+       - jsonPath: $.MarriageRegn.volumeNo
+         type: STRING
+
+       - jsonPath: $.MarriageRegn.regnNumber
+         type: STRING
+
+       - jsonPath: $.MarriageRegn.regnDate
+         type: LONG
+
+       - jsonPath: $.MarriageRegn.status  
+         type: STRING
+       
+       - jsonPath: $.MarriageRegn.source
+         type: STRING
+
+       - jsonPath: $.MarriageRegn.stateId
+         type: STRING
+
+       - jsonPath: $.MarriageRegn.isActive  
+         type: BOOLEAN
+       
+       - jsonPath: $.MarriageRegn.fee.id
+         type: STRING
+
+       - jsonPath: $.MarriageRegn.demands.*.id
+         type: STRING
+
+       - jsonPath: $.MarriageRegn.approvalDetails.department
+         type: LONG
+       
+       - jsonPath: $.MarriageRegn.approvalDetails.designation
+         type: LONG
+
+       - jsonPath: $.MarriageRegn.approvalDetails.assignee
+         type: STRING
+       
+       - jsonPath: $.MarriageRegn.approvalDetails.action
+         type: STRING
+       
+       - jsonPath: $.MarriageRegn.approvalDetails.status
+         type: STRING
+       
+       - jsonPath: $.MarriageRegn.approvalDetails.comments
+         type: STRING
+
+       - jsonPath: $.RequestInfo.userInfo.id
+         type: LONG
+
+       - jsonPath: current
+         type: CURRENTDATE
+         dbType: LONG
+
+       - jsonPath: $.MarriageRegn.tenantId
+         type: STRING
+         
+       - jsonPath: $.MarriageRegn.applicationNumber 
+         type: STRING
+
+    - query: UPDATE egmr_marriageregn_witness SET id=?, witnessno=?, name=?, relation=?, relatedto=?, address=?, relationshipwithapplicants=?, occupation=?, aadhaar=?, mobileno=?, email=?, dob=? WHERE tenantid=? AND applicationnumber=?;
+      rootObject: $.MarriageRegn.witnesses.*
+      jsonMaps:
+       - jsonPath: $.MarriageRegn.witnesses.*.id
+         type: LONG
+
+       - jsonPath: $.MarriageRegn.witnesses.*.witnessNo
+         type: INT
+
+       - jsonPath: $.MarriageRegn.witnesses.*.name
+         type: STRING
+       
+       - jsonPath: $.MarriageRegn.witnesses.*.relationForIdentification
+         type: STRING
+
+       - jsonPath: $.MarriageRegn.witnesses.*.relatedTo
+         type: STRING
+
+       - jsonPath: $.MarriageRegn.witnesses.*.address
+         type: STRING
+       
+       - jsonPath: $.MarriageRegn.witnesses.*.relationshipWithApplicants
+         type: STRING
+
+       - jsonPath: $.MarriageRegn.witnesses.*.occupation
+         type: STRING
+
+       - jsonPath: $.MarriageRegn.witnesses.*.aadhaar
+         type: STRING
+
+       - jsonPath: $.MarriageRegn.witnesses.*.mobileNo
+         type: STRING
+       
+       - jsonPath: $.MarriageRegn.witnesses.*.email
+         type: STRING
+        
+       - jsonPath: $.MarriageRegn.witnesses.*.dob
+         type: LONG
+          
+       - jsonPath: $.MarriageRegn.tenantId
+         type: STRING
+          
+       - jsonPath: $.MarriageRegn.applicationNumber
+         type: STRING
+         
+    - query: UPDATE egmr_marrying_person  SET name=?, parentname=?, street=?, locality=?, city=?, dob=?, status=?, aadhaar=?, mobileno=?, email=?, religion=?, religionpractice=?, education=?, occupation=?, handicapped=?, residenceaddress=?, photo=?, nationality=?, officeaddress=? WHERE id=? AND tenantid=? ;
+      rootObject: $.MarriageRegn.bridegroom
+      jsonMaps:
+
+       - jsonPath: $.MarriageRegn.bridegroom.name
+         type: STRING
+         
+       - jsonPath: $.MarriageRegn.bridegroom.parentName
+         type: STRING
+       
+       - jsonPath: $.MarriageRegn.bridegroom.street
+         type: STRING
+
+       - jsonPath: $.MarriageRegn.bridegroom.locality
+         type: STRING
+
+       - jsonPath: $.MarriageRegn.bridegroom.city
+         type: STRING
+       
+       - jsonPath: $.MarriageRegn.bridegroom.dob
+         type: LONG
+
+       - jsonPath: $.MarriageRegn.bridegroom.status
+         type: STRING
+
+       - jsonPath: $.MarriageRegn.bridegroom.aadhaar
+         type: STRING
+
+       - jsonPath: $.MarriageRegn.bridegroom.mobileNo
+         type: STRING
+       
+       - jsonPath: $.MarriageRegn.bridegroom.email
+         type: STRING
+
+       - jsonPath: $.MarriageRegn.bridegroom.religion
+         type: LONG
+
+       - jsonPath: $.MarriageRegn.bridegroom.religionPractice
+         type: STRING
+
+       - jsonPath: $.MarriageRegn.bridegroom.education
+         type: STRING
+       
+       - jsonPath: $.MarriageRegn.bridegroom.occupation
+         type: STRING  
+             
+       - jsonPath: $.MarriageRegn.bridegroom.handicapped
+         type: STRING
+       
+       - jsonPath: $.MarriageRegn.bridegroom.residenceAddress
+         type: STRING
+
+       - jsonPath: $.MarriageRegn.bridegroom.photo
+         type: STRING
+
+       - jsonPath: $.MarriageRegn.bridegroom.nationality
+         type: STRING
+         
+       - jsonPath: $.MarriageRegn.bridegroom.officeAddress
+         type: STRING
+         
+       - jsonPath: $.MarriageRegn.bridegroom.id
+         type: LONG
+         
+       - jsonPath: $.MarriageRegn.tenantId
+         type: STRING
+
+    - query: UPDATE egmr_marrying_person  SET name=?, parentname=?, street=?, locality=?, city=?, dob=?, status=?, aadhaar=?, mobileno=?, email=?, religion=?, religionpractice=?, education=?, occupation=?, handicapped=?, residenceaddress=?, photo=?, nationality=?, officeaddress=? WHERE id=? AND tenantid=? ;
+      rootObject: $.MarriageRegn.bride
+      jsonMaps:
+
+       - jsonPath: $.MarriageRegn.bride.name
+         type: STRING
+         
+       - jsonPath: $.MarriageRegn.bride.parentName
+         type: STRING
+       
+       - jsonPath: $.MarriageRegn.bride.street
+         type: STRING
+
+       - jsonPath: $.MarriageRegn.bride.locality
+         type: STRING
+
+       - jsonPath: $.MarriageRegn.bride.city
+         type: STRING
+       
+       - jsonPath: $.MarriageRegn.bride.dob
+         type: LONG
+
+       - jsonPath: $.MarriageRegn.bride.status
+         type: STRING
+
+       - jsonPath: $.MarriageRegn.bride.aadhaar
+         type: STRING
+
+       - jsonPath: $.MarriageRegn.bride.mobileNo
+         type: STRING
+       
+       - jsonPath: $.MarriageRegn.bride.email
+         type: STRING
+
+       - jsonPath: $.MarriageRegn.bride.religion
+         type: LONG
+
+       - jsonPath: $.MarriageRegn.bride.religionPractice
+         type: STRING
+
+       - jsonPath: $.MarriageRegn.bride.education
+         type: STRING
+       
+       - jsonPath: $.MarriageRegn.bride.occupation
+         type: STRING  
+             
+       - jsonPath: $.MarriageRegn.bride.handicapped
+         type: STRING
+       
+       - jsonPath: $.MarriageRegn.bride.residenceAddress
+         type: STRING
+
+       - jsonPath: $.MarriageRegn.bride.photo
+         type: STRING
+
+       - jsonPath: $.MarriageRegn.bride.nationality
+         type: STRING
+         
+       - jsonPath: $.MarriageRegn.bride.officeAddress
+         type: STRING
+       
+       - jsonPath: $.MarriageRegn.bride.id
+         type: LONG
+         
+       - jsonPath: $.MarriageRegn.tenantId
+         type: STRING 
+
+ - version: 1.0
+   name: registration_unit_create
+   description: Persists units details where all user can register Marriage in egmr_registration_unit table
+   fromTopic: egov.regnunit.create
+   isTransaction: true
+   queryMaps: 
+    - query: INSERT INTO egmr_registration_unit(id, name, isactive, tenantid, locality, zone, revenueward, block, street, electionward, doorno, pincode, ismainregistrationunit, createdby, lastmodifiedby, createdtime, lastmodifiedtime) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
+      rootObject: $.regnUnit
+      jsonMaps:
+
+       - jsonPath: $.regnUnit.id
+         type: LONG
+       
+       - jsonPath: $.regnUnit.name
+         type: STRING
+
+       - jsonPath: $.regnUnit.isActive
+         type: BOOLEAN
+
+       - jsonPath: $.regnUnit.tenantId
+         type: STRING
+       
+       - jsonPath: $.regnUnit.address.locality
+         type: LONG
+
+       - jsonPath: $.regnUnit.address.zone
+         type: LONG
+
+       - jsonPath: $.regnUnit.address.revenueWard
+         type: LONG
+
+       - jsonPath: $.regnUnit.address.block 
+         type: LONG
+       
+       - jsonPath: $.regnUnit.address.street
+         type: LONG
+
+       - jsonPath: $.regnUnit.address.electionWard
+         type: LONG
+
+       - jsonPath: $.regnUnit.address.doorNo
+         type: STRING
+
+       - jsonPath: $.regnUnit.address.pinCode
+         type: INT
+       
+       - jsonPath: $.regnUnit.isMainRegistrationUnit
+         type: BOOLEAN
+
+       - jsonPath: $.requestInfo.userInfo.id
+         type: LONG
+         
+       - jsonPath: $.requestInfo.userInfo.id
+         type: LONG
+
+       - jsonPath: current
+         type: CURRENTDATE
+         dbType: LONG
+         
+       - jsonPath: current
+         type: CURRENTDATE
+         dbType: LONG
+
+ - version: 1.0
+   name: registration_unit_update
+   description: Updates units details where all user can register Marriage in egmr_registration_unit table
+   fromTopic: egov.regnunit.update
+   isTransaction: true
+   queryMaps:         
+    - query: UPDATE egmr_registration_unit SET  name=?, isactive=?, locality=?, zone=?, revenueward=?, block=?, street=?, electionward=?, doorno=?, pincode=?, ismainregistrationunit=?, lastmodifiedby=?, lastmodifiedtime=? WHERE id=? AND tenantid=?;
+      rootObject: $.regnUnit
+      jsonMaps:
+
+       - jsonPath: $.regnUnit.name
+         type: STRING
+
+       - jsonPath: $.regnUnit.isActive
+         type: BOOLEAN
+
+       - jsonPath: $.regnUnit.address.locality
+         type: LONG
+
+       - jsonPath: $.regnUnit.address.zone
+         type: LONG
+
+       - jsonPath: $.regnUnit.address.revenueWard
+         type: LONG
+
+       - jsonPath: $.regnUnit.address.block 
+         type: LONG
+       
+       - jsonPath: $.regnUnit.address.street
+         type: LONG
+
+       - jsonPath: $.regnUnit.address.electionWard
+         type: LONG
+
+       - jsonPath: $.regnUnit.address.doorNo
+         type: STRING
+
+       - jsonPath: $.regnUnit.address.pinCode
+         type: INT
+       
+       - jsonPath: $.regnUnit.isMainRegistrationUnit
+         type: BOOLEAN
+
+       - jsonPath: $.requestInfo.userInfo.id
+         type: LONG
+         
+       - jsonPath: current
+         type: CURRENTDATE
+         dbType: LONG
+         
+       - jsonPath: $.regnUnit.id
+         type: LONG       
+         
+       - jsonPath: $.regnUnit.tenantId
+         type: STRING  
+         
+ - version: 1.0
+   name: marriage_document_type_create
+   description: persists types of Document related to marriage in  egmr_marriage_document_type
+   fromTopic: mr.marriagedocumenttype.create
+   isTransaction: true
+   queryMaps:         
+    - query: INSERT INTO egmr_marriage_document_type(id,name,code,isactive,isindividual,isrequired,proof,appltype,tenantid,createdby,lastmodifiedby,createdtime,lastmodifiedtime) values (?,?,?,?,?,?,?,?,?,?,?,?,?);
+      rootObject: $.MarriageDocumentType.*
+      jsonMaps:
+
+       - jsonPath: $.MarriageDocumentType.*.id
+         type: LONG
+
+       - jsonPath: $.MarriageDocumentType.*.name
+         type: STRING
+
+       - jsonPath: $.MarriageDocumentType.*.code
+         type: LONG
+
+       - jsonPath: $.MarriageDocumentType.*.isActive
+         type: BOOLEAN
+
+       - jsonPath: $.MarriageDocumentType.*.isIndividual
+         type: BOOLEAN
+
+       - jsonPath: $.MarriageDocumentType.*.isRequired
+         type: BOOLEAN
+       
+       - jsonPath: $.MarriageDocumentType.*.proof
+         type: STRING
+
+       - jsonPath: $.MarriageDocumentType.*.applicationType
+         type: STRING
+
+       - jsonPath: $.MarriageDocumentType.*.tenantId
+         type: STRING
+
+       - jsonPath: $.RequestInfo.userInfo.id
+         type: LONG
+
+       - jsonPath: $.RequestInfo.userInfo.id
+         type: LONG
+                  
+       - jsonPath: current
+         type: CURRENTDATE
+         dbType: LONG 
+          
+       - jsonPath: current
+         type: CURRENTDATE
+         dbType: LONG 
+
+ - version: 1.0
+   name: marriage_document_type_update
+   description: persists types of Document related to marriage in  egmr_marriage_document_type
+   fromTopic: mr.marriagedocumenttype.update
+   isTransaction: true
+   queryMaps:         
+    - query: UPDATE egmr_marriage_document_type SET name=?, isactive=?, isindividual=?, isrequired=?, proof=?, appltype=? ,lastmodifiedby=?, lastmodifiedtime=? WHERE id=? AND code=? AND tenantid=?;
+      rootObject: $.MarriageDocumentType.*
+      jsonMaps:
+       - jsonPath: $.MarriageDocumentType.*.name
+         type: STRING
+
+       - jsonPath: $.MarriageDocumentType.*.isActive
+         type: BOOLEAN
+
+       - jsonPath: $.MarriageDocumentType.*.isIndividual
+         type: BOOLEAN
+
+       - jsonPath: $.MarriageDocumentType.*.isRequired
+         type: BOOLEAN
+       
+       - jsonPath: $.MarriageDocumentType.*.proof
+         type: STRING
+
+       - jsonPath: $.MarriageDocumentType.*.applicationType
+         type: STRING
+
+       - jsonPath: $.RequestInfo.userInfo.id
+         type: LONG
+
+       - jsonPath: current
+         type: CURRENTDATE
+         dbType: LONG
+          
+       - jsonPath: $.MarriageDocumentType.*.id
+         type: LONG
+           
+       - jsonPath: $.MarriageDocumentType.*.code
+         type: LONG  
+         
+       - jsonPath: $.MarriageDocumentType.*.tenantId
+         type: STRING  
+         
+ - version: 1.0
+   name: fee_create
+   description: persists fees details corresponding to criteria for marriage registration in  egmr_marriage_document_type
+   fromTopic: egov-fee-create
+   isTransaction: true
+   queryMaps:         
+    - query: INSERT INTO egmr_fee(createddate,tenantid, feecriteria, fee, fromdate, todate, lastmodifieddate, createdby, lastmodifiedby, id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
+      rootObject: $.Fee.*
+      jsonMaps:
+      
+       - type: CURRENTDATE
+         dbType: LONG
+         
+       - jsonPath: $.Fee.*.tenantId
+         type: STRING
+         
+       - jsonPath: $.Fee.*.feeCriteria
+         type: BOOLEAN
+
+       - jsonPath: $.Fee.*.fee
+         type: BOOLEAN
+
+       - jsonPath: $.Fee.*.fromDate
+         type: BOOLEAN
+       
+       - jsonPath: $.Fee.*.toDate
+         type: STRING
+
+       - type: CURRENTDATE
+         dbType: LONG
+         
+       - jsonPath: $.RequestInfo.userInfo.id
+         type: LONG
+         
+       - jsonPath: $.RequestInfo.userInfo.id
+         type: LONG
+             
+       - jsonPath: $.Fee.*.id
+         type: LONG          
+
+ - version: 1.0
+   name: fee_update
+   description: updates fees details corresponding to criteria for marriage registration in  egmr_marriage_document_type
+   fromTopic: egov-fee-update
+   isTransaction: true
+   queryMaps:         
+    - query: UPDATE egmr_fee SET  feecriteria=?, fee=?, fromdate=?, todate=?, lastmodifieddate=?, lastmodifiedby=? WHERE id=? AND tenantid=? ;
+      rootObject: $.Fee.*
+      jsonMaps:
+       - jsonPath: $.Fee.*.feeCriteria
+         type: BOOLEAN
+
+       - jsonPath: $.Fee.*.fee
+         type: BOOLEAN
+
+       - jsonPath: $.Fee.*.fromDate
+         type: BOOLEAN
+       
+       - jsonPath: $.Fee.*.toDate
+         type: STRING
+
+       - jsonPath: current
+         type: CURRENTDATE
+         dbType: LONG
+         
+       - jsonPath: $.RequestInfo.userInfo.id
+         type: LONG
+         
+       - jsonPath: $.Fee.*.id
+         type: LONG 
+         
+       - jsonPath: $.Fee.*.tenantId
+         type: STRING  
+         
+ - version: 1.0
+   name: Reissue_Application
+   description: Persists Marriage reissue application details in db in egmr_reissuecertificate table
+   fromTopic: egov-reissue-create
+   isTransaction: true
+   queryMaps:         
+    - query: INSERT INTO egmr_reissuecertificate(id, regnno, applicantname, applicantaddress, applicantmobileno,applicantfee, applicantaadhaar, applicationnumber, reissueapplstatus, stateid, approvaldepartment, approvaldesignation, approvalassignee, approvalaction, approvalstatus, approvalcomments, demands,rejectionreason, remarks, isactive, createdby, createdtime, lastmodifiedby, lastmodifiedtime, tenantid, applsubmisiondate, regnunit_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
+      rootObject: $.ReissueApplication
+      jsonMaps:
+
+       - jsonPath: $.ReissueApplication.id
+         type: STRING
+
+       - jsonPath: $.ReissueApplication.regnNo
+         type: STRING
+
+       - jsonPath: $.ReissueApplication.applicantInfo.name
+         type: STRING
+       
+       - jsonPath: $.ReissueApplication.applicantInfo.address
+         type: STRING
+         
+       - jsonPath: $.ReissueApplication.applicantInfo.mobileNo
+         type: STRING
+       
+       - jsonPath: $.ReissueApplication.applicantInfo.fee
+         type: DOUBLE
+       
+       - jsonPath: $.ReissueApplication.applicantInfo.aadhaar
+         type: STRING
+         
+       - jsonPath: $.ReissueApplication.applicationNumber
+         type: STRING
+
+       - jsonPath: $.ReissueApplication.reissueApplStatus
+         type: STRING
+         
+       - jsonPath: $.ReissueApplication.stateId
+         type: STRING
+
+       - jsonPath: $.ReissueApplication.approvalDetails.department
+         type: LONG
+         
+       - jsonPath: $.ReissueApplication.approvalDetails.designation
+         type: LONG
+
+       - jsonPath: $.ReissueApplication.approvalDetails.assignee
+         type: LONG 
+         
+       - jsonPath: $.ReissueApplication.approvalDetails.action
+         type: LONG
+         
+       - jsonPath: $.ReissueApplication.approvalDetails.status
+         type: LONG
+
+       - jsonPath: $.ReissueApplication.approvalDetails.comments
+         type: LONG   
+         
+       - jsonPath: $.ReissueApplication.demands.*.id
+         type: STRING          
+         
+       - jsonPath: $.ReissueApplication.rejectionReason
+         type: STRING
+         
+       - jsonPath: $.ReissueApplication.remarks
+         type: STRING
+           
+       - jsonPath: $.ReissueApplication.isActive
+         type: BOOLEAN  
+         
+       - jsonPath: $.RequestInfo.userInfo.id
+         type: LONG  
+
+       - jsonPath: current
+         type: CURRENTDATE
+         dbType: LONG
+         
+       - jsonPath: $.RequestInfo.userInfo.id
+         type: LONG
+         
+       - jsonPath: current
+         type: CURRENTDATE
+         dbType: LONG
+           
+       - jsonPath: $.ReissueApplication.tenantId
+         type: STRING 
+         
+       - jsonPath: $.ReissueApplication.applSubmisionDate
+         type: LONG
+         
+       - jsonPath: $.ReissueApplication.regnUnit.id
+         type: LONG                  
+
+ - version: 1.0
+   name: demand create
+   description: create demand in  egbs_demand
+   fromTopic: save-demand
+   isTransaction: true
+   queryMaps: 
+    - query: INSERT INTO egbs_demand (id,consumerCode,consumerType,businessService,owner,taxPeriodFrom,taxPeriodTo,minimumAmountPayable,createdby,lastModifiedby,createdtime,lastModifiedtime,tenantid) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?);
+      rootObject: $.Demands.*
+      jsonMaps:
+       
+       - jsonPath: $.Demands.*.id
+         type: STRING
+
+       - jsonPath: $.Demands.*.consumerCode
+         type: STRING
+         
+       - jsonPath: $.Demands.*.consumerType
+         type: STRING
+         
+       - jsonPath: $.Demands.*.businessService
+         type: STRING
+
+       - jsonPath: $.Demands.*.owner.id
+         type: STRING
+         
+       - jsonPath: $.Demands.*.taxPeriodFrom
+         type: LONG                  
+       
+       - jsonPath: $.Demands.*.taxPeriodTo
+         type: LONG
+
+       - jsonPath: $.Demands.*.minimumAmountPayable
+         type: DOUBLE
+         
+       - jsonPath: $.Demands.*.auditDetail.createdBy
+         type: STRING
+         
+       - jsonPath: $.Demands.*.auditDetail.lastModifiedBy
+         type: STRING
+         
+       - jsonPath: $.Demands.*.auditDetail.createdTime
+         type: LONG
+         
+       - jsonPath: $.Demands.*.auditDetail.lastModifiedTime
+         type: LONG
+
+       - jsonPath: $.Demands.*.tenantId
+         type: STRING                
+
+    - query: INSERT INTO egbs_demanddetail (id,demandid,taxHeadCode,taxamount,collectionamount,createdby,lastModifiedby,createdtime,lastModifiedtime,tenantid) VALUES (?,?,?,?,?,?,?,?,?,?);
+      rootObject: $.Demands.*.demandDetails.*
+      jsonMaps:
+       - jsonPath: $.Demands.*.demandDetails.*.id
+         type: STRING
+
+       - jsonPath: $.Demands.*.demandDetails.*.demandId
+         type: STRING
+         
+       - jsonPath: $.Demands.*.demandDetails.*.taxHeadMasterCode
+         type: STRING
+         
+       - jsonPath: $.Demands.*.demandDetails.*.taxAmount
+         type: DOUBLE
+
+       - jsonPath: $.Demands.*.demandDetails.*.collectionAmount
+         type: DOUBLE
+         
+       - jsonPath: $.Demands.*.demandDetails.*.auditDetail.createdBy
+         type: STRING
+         
+       - jsonPath: $.Demands.*.demandDetails.*.auditDetail.lastModifiedBy
+         type: STRING
+         
+       - jsonPath: $.Demands.*.demandDetails.*.auditDetail.createdTime
+         type: LONG
+         
+       - jsonPath: $.Demands.*.demandDetails.*.auditDetail.lastModifiedTime
+         type: LONG
+
+       - jsonPath: $.Demands.*.demandDetails.*.tenantId
+         type: STRING 
+         
+ - version: 1.0
+   name: bill create
+   description: create bill in egbs_bill
+   fromTopic: save-bill-db
+   isTransaction: true
+   queryMaps: 
+    - query: INSERT into egbs_bill (id, tenantid, payeename, payeeaddress, payeeemail, isactive, iscancelled, createdby, createddate, lastmodifiedby, lastmodifieddate) values(?,?,?,?,?,?,?,?,?,?,?)
+      rootObject: $.Bills.*
+      jsonMaps:
+       
+       - jsonPath: $.Bills.*.id
+         type: STRING
+
+       - jsonPath: $.Bills.*.tenantId
+         type: STRING
+         
+       - jsonPath: $.Bills.*.payeeName
+         type: STRING
+         
+       - jsonPath: $.Bills.*.payeeAddress
+         type: STRING
+
+       - jsonPath: $.Bills.*.payeeEmail
+         type: STRING
+         
+       - jsonPath: $.Bills.*.isActive
+         type: BOOLEAN                  
+       
+       - jsonPath: $.Bills.*.isCancelled
+         type: BOOLEAN
+
+       - jsonPath: $.RequestInfo.userInfo.id
+         type: LONG
+         
+       - type: CURRENTDATE
+         dbType: LONG
+         
+       - jsonPath: $.RequestInfo.userInfo.id
+         type: STRING
+         
+       - type: CURRENTDATE
+         dbType: LONG
+         
+    - query: INSERT into egbs_billdetail (id, tenantid, billid, businessservice, billno, billdate, consumercode, consumertype, billdescription, displaymessage, minimumamount, totalamount, callbackforapportioning, partpaymentallowed, collectionmodesnotallowed, createdby, createddate, lastmodifiedby, lastmodifieddate) values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);
+      rootObject: $.Bills.*.billDetails.*
+      jsonMaps:
+       - jsonPath: $.Bills.*.billDetails.*.id
+         type: STRING
+
+       - jsonPath: $.Bills.*.billDetails.*.tenantId
+         type: STRING
+         
+       - jsonPath: $.Bills.*.billDetails.*.bill
+         type: STRING
+         
+       - jsonPath: $.Bills.*.billDetails.*.businessService
+         type: DOUBLE
+
+       - jsonPath: $.Bills.*.billDetails.*.billNumber
+         type: DOUBLE
+         
+       - jsonPath: $.Bills.*.billDetails.*.billDate
+         type: LONG
+         
+       - jsonPath: $.Bills.*.billDetails.*.consumerCode
+         type: STRING
+         
+       - jsonPath: $.Bills.*.billDetails.*.consumerType
+         type: STRING
+         
+       - jsonPath: $.Bills.*.billDetails.*.billDescription
+         type: STRING
+
+       - jsonPath: $.Bills.*.billDetails.*.displayMessage
+         type: STRING 
+         
+       - jsonPath: $.Bills.*.billDetails.*.minimumAmount
+         type: DOUBLE
+         
+       - jsonPath: $.Bills.*.billDetails.*.totalAmount
+         type: DOUBLE
+
+       - jsonPath: $.Bills.*.billDetails.*.callBackForApportioning
+         type: BOOLEAN
+         
+       - jsonPath: $.Bills.*.billDetails.*.partPaymentAllowed
+         type: BOOLEAN
+         
+       - jsonPath: $.Bills.*.billDetails.*.collectionModesNotAllowed
+         type: ARRAY
+         dbType: STRING
+         
+       - jsonPath: $.RequestInfo.userInfo.id
+         type: LONG
+         
+       - type: CURRENTDATE
+         dbType: LONG
+         
+       - jsonPath: $.RequestInfo.userInfo.id
+         type: STRING
+         
+       - type: CURRENTDATE
+         dbType: LONG 
+         
+    - query: INSERT into egbs_billaccountdetail(id, tenantid, billdetail, glcode, orderno, accountdescription, cramounttobepaid, creditamount, debitamount, isactualdemand, purpose, createdby, createddate, lastmodifiedby, lastmodifieddate) values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);
+      rootObject: $.Bills.*.billDetails.*.billAccountDetails.*
+      jsonMaps:
+       - jsonPath: $.Bills.*.billDetails.*.billAccountDetails.*.id
+         type: STRING
+
+       - jsonPath: $.Bills.*.billDetails.*.billAccountDetails.*.tenantId
+         type: STRING
+         
+       - jsonPath: $.Bills.*.billDetails.*.billAccountDetails.*.billDetail
+         type: LONG
+           
+       - jsonPath: $.Bills.*.billDetails.*.billAccountDetails.*.glcode
+         type: STRING
+         
+       - jsonPath: $.Bills.*.billDetails.*.billAccountDetails.*.order
+         type: INT
+
+       - jsonPath: $.Bills.*.billDetails.*.billAccountDetails.*.accountDescription
+         type: STRING
+         
+       - jsonPath: $.Bills.*.billDetails.*.billAccountDetails.*.crAmountToBePaid
+         type: DOUBLE
+         
+       - jsonPath: $.Bills.*.billDetails.*.billAccountDetails.*.creditAmount
+         type: DOUBLE
+         
+       - jsonPath: $.Bills.*.billDetails.*.billAccountDetails.*.debitAmount
+         type: DOUBLE
+         
+       - jsonPath: $.Bills.*.billDetails.*.billAccountDetails.*.isActualDemand
+         type: BOOLEAN
+
+       - jsonPath: $.Bills.*.billDetails.*.billAccountDetails.*.purpose
+         type: STRING 
+         
+       - jsonPath: $.RequestInfo.userInfo.id
+         type: LONG
+         
+       - type: CURRENTDATE
+         dbType: LONG
+         
+       - jsonPath: $.RequestInfo.userInfo.id
+         type: STRING
+         
+       - type: CURRENTDATE
+         dbType: LONG 
+         
+         
+ - version: 1.0
+   name: property tax create
+   description: create property tax in egbs_bill
+   fromTopic: property-create-validatedf
+   isTransaction: true
+   queryMaps: 
+    - query: INSERT INTO egpt_property (id,tenantId, upicNumber, oldUpicNumber, vltUpicNumber,creationReason, assessmentDate,occupancyDate, gisRefNo,isAuthorised, isUnderWorkflow, channel, createdBy,lastModifiedBy, createdTime,lastModifiedTime,sequenceNo)VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);
+      rootObject: $.properties.*
+      jsonMaps:
+       
+       - jsonPath: $.properties.*.id
+         type: LONG
+         
+       - jsonPath: $.properties.*.tenantId
+         type: STRING
+
+       - jsonPath: $.properties.*.upicNumber
+         type: STRING
+         
+       - jsonPath: $.properties.*.oldUpicNumber
+         type: STRING
+         
+       - jsonPath: $.properties.*.vltUpicNumber
+         type: STRING
+
+       - jsonPath: $.properties.*.creationReason
+         type: STRING
+         
+       - jsonPath: $.properties.*.assessmentDate
+         type: DATE
+         dbType: DATE
+         #format: dd/MM/yyyy                  
+       
+       - jsonPath: $.properties.*.occupancyDate
+         type: DATE
+         dbType: DATE
+         #format: dd/MM/yyyy
+
+       - jsonPath: $.properties.*.gisRefNo
+         type: STRING
+         
+       - jsonPath: $.properties.*.isAuthorised
+         type: BOOLEAN
+         
+       - jsonPath: $.properties.*.isUnderWorkflow
+         type: BOOLEAN
+         
+       - jsonPath: $.properties.*.channel
+         type: STRING
+         
+       - jsonPath: $.properties.*.auditDetails.createdBy
+         type: STRING
+
+       - jsonPath: $.properties.*.auditDetails.lastModifiedBy
+         type: STRING  
+         
+       - jsonPath: $.properties.*.auditDetails.createdTime
+         type: LONG
+
+       - jsonPath: $.properties.*.auditDetails.lastModifiedTime
+         type: LONG 
+         
+       - jsonPath: $.properties.*.sequenceNo
+         type: INT    
+
+    - query: INSERT INTO egpt_propertydetails (source, regdDocNo, regdDocDate,reason, status, isVerified,verificationDate, isExempted, exemptionReason, propertyType, category, usage,department, apartment, siteLength, siteBreadth, sitalArea,totalBuiltupArea, undividedShare, noOfFloors, isSuperStructure, landOwner, floorType,woodType, roofType, wallType, stateId, applicationNo, createdBy, lastModifiedBy,createdTime, lastModifiedTime, property, taxCalculations,factors,assessmentDates,builderDetails,bpaNo,bpaDate,subUsage)VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);
+      rootObject: $.properties.*.propertyDetail
+      jsonMaps:
+       
+       - jsonPath: $.properties.*.propertyDetail.source
+         type: STRING
+         
+       - jsonPath: $.properties.*.propertyDetail.regdDocNo
+         type: STRING
+
+       - jsonPath: $.properties.*.propertyDetail.regdDocDate
+         type: DATE
+         dbType: DATE
+         
+       - jsonPath: $.properties.*.propertyDetail.reason
+         type: STRING
+         
+       - jsonPath: $.properties.*.propertyDetail.status
+         type: STRING
+
+       - jsonPath: $.properties.*.propertyDetail.isVerified
+         type: BOOLEAN
+         
+       - jsonPath: $.properties.*.propertyDetail.verificationDate
+         type: DATE
+         dbType: DATE
+       
+       - jsonPath: $.properties.*.propertyDetail.isExempted
+         type: BOOLEAN
+
+       - jsonPath: $.properties.*.propertyDetail.exemptionReason
+         type: STRING
+         
+       - jsonPath: $.properties.*.propertyDetail.propertyType
+         type: STRING
+         
+       - jsonPath: $.properties.*.propertyDetail.category
+         type: STRING
+         
+       - jsonPath: $.properties.*.propertyDetail.usage
+         type: STRING
+         
+       - jsonPath: $.properties.*.propertyDetail.department
+         type: STRING
+         
+       - jsonPath: $.properties.*.propertyDetail.apartment
+         type: STRING
+
+       - jsonPath: $.properties.*.propertyDetail.siteLength
+         type: DOUBLE
+         
+       - jsonPath: $.properties.*.propertyDetail.siteBreadth
+         type: DOUBLE
+         
+       - jsonPath: $.properties.*.propertyDetail.sitalArea
+         type: DOUBLE
+
+       - jsonPath: $.properties.*.propertyDetail.totalBuiltupArea
+         type: DOUBLE
+         
+       - jsonPath: $.properties.*.propertyDetail.undividedShare
+         type: DOUBLE
+       
+       - jsonPath: $.properties.*.propertyDetail.noOfFloors
+         type: LONG
+
+       - jsonPath: $.properties.*.propertyDetail.isSuperStructure
+         type: BOOLEAN
+         
+       - jsonPath: $.properties.*.propertyDetail.landOwner
+         type: STRING
+         
+       - jsonPath: $.properties.*.propertyDetail.floorType
+         type: STRING
+         
+       - jsonPath: $.properties.*.propertyDetail.woodType
+         type: STRING 
+         
+       - jsonPath: $.properties.*.propertyDetail.roofType
+         type: STRING
+         
+       - jsonPath: $.properties.*.propertyDetail.wallType
+         type: STRING
+         
+       - jsonPath: $.properties.*.propertyDetail.stateId
+         type: STRING
+
+       - jsonPath: $.properties.*.propertyDetail.applicationNo
+         type: STRING
+         
+       - jsonPath: $.properties.*.propertyDetail.auditDetails.createdBy
+         type: STRING
+       
+       - jsonPath: $.properties.*.propertyDetail.auditDetails.lastModifiedBy
+         type: STRING
+
+       - jsonPath: $.properties.*.propertyDetail.auditDetails.createdTime
+         type: LONG
+         
+       - jsonPath: $.properties.*.propertyDetail.auditDetails.lastModifiedTime
+         type: LONG
+         
+       - jsonPath: $.properties.*.id
+         type: STRING
+         
+       - jsonPath: $.properties.*.propertyDetail.taxCalculations
+         type: STRING   
+         
+       - jsonPath: $.properties.*.propertyDetail.factors
+         type: JSON
+         dbType: JSONB
+
+       - jsonPath: $.properties.*.propertyDetail.assessmentDates
+         type: JSON
+         dbType: JSONB  
+         
+       - jsonPath: $.properties.*.propertyDetail.builderDetails
+         type: JSON
+         dbType: JSONB
+
+       - jsonPath: $.properties.*.propertyDetail.bpaNo
+         type: STRING
+         
+       - jsonPath: $.properties.*.propertyDetail.bpaDate
+         type: STRING
+
+       - jsonPath: $.properties.*.propertyDetail.subUsage
+         type: STRING  
+
+    - query: INSERT INTO egpt_floors (floorNo,createdBy, lastModifiedBy, createdTime, lastModifiedTime, propertydetails)VALUES(?,?,?,?,?,?);
+      rootObject: $.properties.*.propertyDetail.floors.*
+      jsonMaps:
+       
+       - jsonPath: $.properties.*.propertyDetail.floors.*.floorNo
+         type: STRING
+         
+       - jsonPath: $.properties.*.propertyDetail.floors.*.auditDetails.createdBy
+         type: STRING
+
+       - jsonPath: $.properties.*.propertyDetail.floors.*.auditDetails.lastModifiedBy
+         type: STRING
+         
+       - jsonPath: $.properties.*.propertyDetail.floors.*.auditDetails.createdTime
+         type: LONG
+         
+       - jsonPath: $.properties.*.propertyDetail.floors.*.auditDetails.lastModifiedTime
+         type: LONG
+
+       - jsonPath: $.properties.*.propertyDetail.id
+         type: LONG
+         
+    - query: INSERT INTO egpt_unit (unitNo, unitType, length,width,builtupArea,assessableArea,bpaBuiltupArea,bpaNo,bpaDate,usage,occupancytype,occupierName,firmName,rentCollected, structure, age,exemptionReason, isStructured, occupancyDate, constCompletionDate, manualArv, arv,electricMeterNo, waterMeterNo, createdBy, lastModifiedBy, createdTime, lastModifiedTime,floor,isAuthorised,constructionStartDate,landCost,buildingCost,subusage,carpetArea,exemptionArea,rv) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);
+      rootObject: $.properties.*.propertyDetail.floors.*.units.*
+      jsonMaps:
+       
+       - jsonPath: $.properties.*.propertyDetail.floors.*.units.*.unitNo
+         type: STRING
+         
+       - jsonPath: $.properties.*.propertyDetail.floors.*.units.*.unitType
+         type: STRING
+
+       - jsonPath: $.properties.*.propertyDetail.floors.*.units.*.length
+         type: DOUBLE
+         
+       - jsonPath: $.properties.*.propertyDetail.floors.*.units.*.width
+         type: DOUBLE
+         
+       - jsonPath: $.properties.*.propertyDetail.floors.*.units.*.builtupArea
+         type: DOUBLE
+
+       - jsonPath: $.properties.*.propertyDetail.floors.*.units.*.assessableArea
+         type: DOUBLE    
+        
+       - jsonPath: $.properties.*.propertyDetail.floors.*.units.*.bpaBuiltupArea
+         type: DOUBLE
+         
+       - jsonPath: $.properties.*.propertyDetail.floors.*.units.*.bpaNo
+         type: STRING
+
+       - jsonPath: $.properties.*.propertyDetail.floors.*.units.*.bpaDate
+         type: STRING
+         
+       - jsonPath: $.properties.*.propertyDetail.floors.*.units.*.usage
+         type: STRING
+         
+       - jsonPath: $.properties.*.propertyDetail.floors.*.units.*.occupancyType
+         type: STRING
+
+       - jsonPath: $.properties.*.propertyDetail.floors.*.units.*.occupierName
+         type: STRING 
+         
+       - jsonPath: $.properties.*.propertyDetail.floors.*.units.*.firmName
+         type: STRING
+         
+       - jsonPath: $.properties.*.propertyDetail.floors.*.units.*.rentCollected
+         type: DOUBLE
+
+       - jsonPath: $.properties.*.propertyDetail.floors.*.units.*.structure
+         type: STRING
+         
+       - jsonPath: $.properties.*.propertyDetail.floors.*.units.*.age
+         type: STRING
+         
+       - jsonPath: $.properties.*.propertyDetail.floors.*.units.*.exemptionReason
+         type: STRING
+
+       - jsonPath: $.properties.*.propertyDetail.floors.*.units.*.isStructured
+         type: BOOLEAN 
+         
+       - jsonPath: $.properties.*.propertyDetail.floors.*.units.*.occupancyDate
+         type: DATE
+         dbType: DATE
+         
+       - jsonPath: $.properties.*.propertyDetail.floors.*.units.*.constCompletionDate
+         type: DATE
+         dbType: DATE
+
+       - jsonPath: $.properties.*.propertyDetail.floors.*.units.*.manualArv
+         type: DOUBLE
+         
+       - jsonPath: $.properties.*.propertyDetail.floors.*.units.*.arv
+         type: DOUBLE
+         
+       - jsonPath: $.properties.*.propertyDetail.floors.*.units.*.electricMeterNo
+         type: STRING
+
+       - jsonPath: $.properties.*.propertyDetail.floors.*.units.*.waterMeterNo
+         type: STRING       
+         
+       - jsonPath: $.properties.*.propertyDetail.floors.*.units.*.auditDetails.createdBy
+         type: STRING
+         
+       - jsonPath: $.properties.*.propertyDetail.floors.*.units.*.auditDetails.lastModifiedBy
+         type: LONG
+
+       - jsonPath: $.properties.*.propertyDetail.floors.*.units.*.auditDetails.createdTime
+         type: LONG 
+         
+       - jsonPath: $.properties.*.propertyDetail.floors.*.units.*.auditDetails.lastModifiedTime
+         type: LONG
+         
+       - jsonPath: $.properties.*.propertyDetail.floors.*.id
+         type: LONG
+
+       - jsonPath: $.properties.*.propertyDetail.floors.*.units.*.isAuthorised
+         type: BOOLEAN 
+         
+       - jsonPath: $.properties.*.propertyDetail.floors.*.units.*.constructionStartDate
+         type: DATE
+         dbType: DATE
+         
+       - jsonPath: $.properties.*.propertyDetail.floors.*.units.*.landCost
+         type: DOUBLE
+
+       - jsonPath: $.properties.*.propertyDetail.floors.*.units.*.buildingCost
+         type: DOUBLE  
+         
+       - jsonPath: $.properties.*.propertyDetail.floors.*.units.*.subUsage
+         type: STRING 
+         
+       - jsonPath: $.properties.*.propertyDetail.floors.*.units.*.carpetArea
+         type: DOUBLE
+         
+       - jsonPath: $.properties.*.propertyDetail.floors.*.units.*.exemptionArea
+         type: DOUBLE
+
+       - jsonPath: $.properties.*.propertyDetail.floors.*.units.*.rv
+         type: DOUBLE     
+         
+    - query: INSERT INTO egpt_document (fileStore, createdBy, lastModifiedBy, createdTime, lastModifiedTime,propertydetails,documenttype) VALUES(?,?,?,?,?,?,?);
+      rootObject: $.properties.*.propertyDetail.documents.*
+      jsonMaps:
+       
+       - jsonPath: $.properties.*.propertyDetail.documents.*.fileStore
+         type: STRING
+         
+       - jsonPath: $.properties.*.propertyDetail.documents.*.auditDetails.createdBy
+         type: STRING
+         
+       - jsonPath: $.properties.*.propertyDetail.documents.*.auditDetails.lastModifiedBy
+         type: STRING
+
+       - jsonPath: $.properties.*.propertyDetail.documents.*.auditDetails.createdTime
+         type: LONG                    
+         
+       - jsonPath: $.properties.*.propertyDetail.documents.*.auditDetails.lastModifiedTime
+         type: LONG
+
+       - jsonPath: $.properties.*.propertyDetail.id
+         type: LONG
+         
+       - jsonPath: $.properties.*.propertyDetail.documents.*.documentType
+         type: STRING
+         
+
+    - query: INSERT INTO egpt_propertylocation (revenueBoundary, locationBoundary, adminBoundary, northBoundedBy,eastBoundedBy, westBoundedBy, southBoundedBy,createdBy, lastModifiedBy, createdTime,lastModifiedTime,property,guidanceValueBoundary) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?);
+      rootObject: $.properties.*.boundary
+      jsonMaps:
+       
+       - jsonPath: $.properties.*.revenueBoundary.id
+         type: LONG
+         
+       - jsonPath: $.properties.*.owners.*.locationBoundary.id
+         type: LONG
+
+       - jsonPath: $.properties.*.owners.*.adminBoundary.id
+         type: BOOLEAN
+         
+       - jsonPath: $.properties.*.owners.*.northBoundedBy
+         type: STRING
+         
+       - jsonPath: $.properties.*.owners.*.eastBoundedBy
+         type: STRING
+
+       - jsonPath: $.properties.*.owners.*.westBoundedBy
+         type: STRING
+         
+       - jsonPath: $.properties.*.owners.*.southBoundedBy
+         type: STRING
+         
+       - jsonPath: $.properties.*.owners.*.auditDetails.createdBy
+         type: STRING
+         
+       - jsonPath: $.properties.*.owners.*.auditDetails.lastModifiedBy
+         type: STRING
+
+       - jsonPath: $.properties.*.owners.*.auditDetails.createdTime
+         type: LONG                    
+         
+       - jsonPath: $.properties.*.owners.*.auditDetails.lastModifiedTime
+         type: LONG   
+         
+       - jsonPath: $.properties.*.id
+         type: LONG
+         
+       - jsonPath: $.properties.*.owners.*.guidanceValueBoundary
+         type: LONG      
+         
+    - query: INSERT INTO egpt_property_owner (owner,property,isPrimaryOwner, isSecondaryOwner,ownerShipPercentage, ownerType,createdBy, lastModifiedBy, createdTime, lastModifiedTime ) VALUES(?,?,?,?,?,?,?,?,?,?);
+      rootObject: $.properties.*.owners.*
+      jsonMaps:
+       
+       - jsonPath: $.properties.*.owners.*.owner
+         type: LONG
+         
+       - jsonPath: $.properties.*.id
+         type: STRING  
+
+       - jsonPath: $.properties.*.owners.*.isPrimaryOwner
+         type: BOOLEAN
+         
+       - jsonPath: $.properties.*.owners.*.isSecondaryOwner
+         type: BOOLEAN
+         
+       - jsonPath: $.properties.*.owners.*.ownerShipPercentage
+         type: DOUBLE
+
+       - jsonPath: $.properties.*.owners.*.ownerType
+         type: STRING    
+        
+       - jsonPath: $.properties.*.owners.*.auditDetails.createdBy
+         type: STRING
+         
+       - jsonPath: $.properties.*.owners.*.auditDetails.lastModifiedBy
+         type: STRING
+
+       - jsonPath: $.properties.*.owners.*.auditDetails.createdTime
+         type: LONG                    
+         
+       - jsonPath: $.properties.*.owners.*.auditDetails.lastModifiedTime
+         type: LONG   
+         
+    - query: INSERT INTO egpt_Address (tenantId, latitude, longitude, addressNumber, addressLine1, addressLine2, landmark, city, pincode, detail,createdBy, lastModifiedBy, createdTime, lastModifiedTime, property, surveyNo, plotNo )VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);
+      rootObject: $.properties.*.address
+      jsonMaps:
+      
+       - jsonPath: $.properties.*.address.tenantId
+         type: STRING
+
+       - jsonPath: $.properties.*.address.latitude
+         type: DOUBLE
+
+       - jsonPath: $.properties.*.address.longitude
+         type: DOUBLE
+
+       - jsonPath: $.properties.*.address.addressNumber
+         type: STRING
+      
+       - jsonPath: $.properties.*.address.addressLine1
+         type: STRING
+
+       - jsonPath: $.properties.*.address.addressLine2
+         type: STRING
+
+       - jsonPath: $.properties.*.address.landmark
+         type: STRING
+        
+       - jsonPath: $.properties.*.address.city
+         type: STRING
+  
+       - jsonPath: $.properties.*.address.pincode
+         type: STRING
+      
+       - jsonPath: $.properties.*.address.detail
+         type: STRING
+
+       - jsonPath: $.properties.*.address.auditDetails.createdBy
+         type: STRING
+
+       - jsonPath: $.properties.*.address.auditDetails.lastModifiedBy
+         type: STRING
+
+       - jsonPath: $.properties.*.address.auditDetails.createdTime
+         type: LONG
+
+       - jsonPath: $.properties.*.address.auditDetails.lastModifiedTime
+         type: LONG
+
+       - jsonPath: $.properties.*.id
+         type: LONG
+
+       - jsonPath: $.properties.*.address.surveyNo
+         type: STRING
+
+       - jsonPath: $.properties.*.address.plotNo
+         type: STRING            

@@ -1,0 +1,27 @@
+ServiceMaps:
+ serviceName: Tracer
+ version: 1.0.0
+ mappings:
+  - topic: tracer-error-queue-index
+    configKey: INDEX
+    indexes:
+    - name: egovtracer
+      type: errors
+      id: $.id
+      isBulk: false
+      timeStampField: $.ts
+      
+  - topic: tracer-error-queue-reindex
+    configKey: REINDEX
+    indexes:
+    - name: egovtracerreindex
+      type: errors
+      id: $.id
+      isBulk: true
+      jsonPath: $.hits
+      timeStampField: $.ts
+      
+      
+#JOURNEY: egovtracer
+#configKey=INDEX: Index that currently receives live data from the services
+#configKey=REINDEX: Configuration for reindexing that will be enabled only during reindexing activity.

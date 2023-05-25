@@ -1,0 +1,18 @@
+[
+    {
+        "responseInfo": null,
+        "error": {
+            "code": 400,
+            "message": "Action is invalid",
+            "description": null,
+            "errorFields": [
+                {
+                    "code": "accesscontrol.0011",
+                    "message": "Atleast One Action is Required ",
+                    "field": "action"
+                }
+            ],
+            "fields": null
+        }
+    }
+]

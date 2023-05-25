@@ -1,0 +1,1672 @@
+{
+    "apistatus": {
+        "progress": false,
+        "error": false,
+        "message": null
+    },
+    "firstReducer": {
+        "dashboardConfigData": [],
+        "name": "",
+        "isLoaded": false
+    },
+    "ulbFilters": [
+        {
+            "label": "Date Range",
+            "label_locale": "DSS_DATE_RANGE",
+            "type": "dropdown",
+            "values": ""
+        },
+        {
+            "label": "ULBS",
+            "label_locale": "DSS_ULBS",
+            "type": "dropdown",
+            "values": ""
+        },
+        {
+            "label": "Wards",
+            "label_locale": "DSS_WARDS",
+            "type": "dropdown",
+            "values": ""
+        },
+        {
+            "label": "Denomination",
+            "label_locale": "DSS_DENOMINATION",
+            "type": "switch",
+            "values": [
+                "Cr",
+                "Lac",
+                "Unit"
+            ]
+        }
+    ],
+    "ulbOverViewFilters": [
+        {
+            "label": "Date Range",
+            "label_locale": "DSS_DATE_RANGE",
+            "type": "dropdown",
+            "values": ""
+        },
+        {
+            "label": "ULBS",
+            "label_locale": "DSS_ULBS",
+            "type": "dropdown",
+            "values": ""
+        },
+        {
+            "label": "Services",
+            "label_locale": "DSS_SERVICES",
+            "type": "dropdown",
+            "values": [
+                "Property Tax",
+                "Trade licence",
+                "PGR"
+            ]
+        },
+        {
+            "label": "Denomination",
+            "label_locale": "DSS_DENOMINATION",
+            "type": "switch",
+            "values": [
+                "Cr",
+                "Lac",
+                "Unit"
+            ]
+        }
+    ],
+    "globalFilter": [{
+            "label": "Date Range",
+            "label_locale": "DSS_DATE_RANGE",
+            "type": "dropdown",
+            "values": ""
+        },
+        {
+            "label": "DDRs",
+            "label_locale": "DSS_DDRS",
+            "type": "dropdown",
+            "values": [ "Ferozepur-DDR",
+                          "Jalandhar-DDR",
+                          "Patiala-DDR",
+                          "Amritsar-DDR",
+                          "Ludhiana-DDR",
+                          "Amritsar-MC",
+                          "Bathinda-DDR",
+                          "Bathinda-MC",
+                          "Hoshiarpur-MC",
+                          "Jalandhar-MC",
+                          "Ludhiana-MC",
+                          "Moga-MC",
+                          "Mohali-MC",
+                          "Pathankot-MC",
+                          "Patiala-MC",
+                          "Phagwara-MC",
+                          "Janaagraha-DDR" ],
+            "master": { "Ferozepur-DDR":
+                               [ "pb.abohar",
+                                 "pb.arniwala",
+                                 "pb.badhnikalan",
+                                 "pb.baghapurana",
+                                 "pb.dharamkot",
+                                 "pb.faridkot",
+                                 "pb.fatehgarhpanjtoor",
+                                 "pb.fazilka",
+                                 "pb.ferozepur",
+                                 "pb.guruharsahai",
+                                 "pb.jaitu",
+                                 "pb.jalalabad",
+                                 "pb.kotissekhan",
+                                 "pb.kotkapura",
+                                 "pb.makhu",
+                                 "pb.mallanwala",
+                                 "pb.mamdot",
+                                 "pb.mudki",
+                                 "pb.nihalsinghwala",
+                                 "pb.talwandibhai",
+                                 "pb.zira" ],
+                              "Jalandhar-DDR":
+                               [ "pb.adampur",
+                                 "pb.alawalpur",
+                                 "pb.balachaur",
+                                 "pb.banga",
+                                 "pb.begowal",
+                                 "pb.bhogpur",
+                                 "pb.bhulath",
+                                 "pb.bilga",
+                                 "pb.dasuya",
+                                 "pb.dhilwan",
+                                 "pb.garhdiwala",
+                                 "pb.garhshankar",
+                                 "pb.goraya",
+                                 "pb.hariana",
+                                 "pb.kapurthala",
+                                 "pb.kartarpur",
+                                 "pb.lohiankhas",
+                                 "pb.mahilpur",
+                                 "pb.mehatpur",
+                                 "pb.mukerian",
+                                 "pb.nadala",
+                                 "pb.nakodar",
+                                 "pb.nawanshahr",
+                                 "pb.nurmahal",
+                                 "pb.phillaur",
+                                 "pb.rahon",
+                                 "pb.shahkot",
+                                 "pb.shamchurasi",
+                                 "pb.sultanpurlodhi",
+                                 "pb.talwara",
+                                 "pb.urmartanda" ],
+                              "Patiala-DDR":
+                               [ "pb.ahmedgarh",
+                                 "pb.amargarh",
+                                 "pb.banur",
+                                 "pb.barnala",
+                                 "pb.bhadaur",
+                                 "pb.bhadson",
+                                 "pb.bhawanigarh",
+                                 "pb.cheema",
+                                 "pb.derabassi",
+                                 "pb.dhanaula",
+                                 "pb.dhuri",
+                                 "pb.dirba",
+                                 "pb.ghagga",
+                                 "pb.ghanaur",
+                                 "pb.handiaya",
+                                 "pb.khanauri",
+                                 "pb.kharar",
+                                 "pb.kurali",
+                                 "pb.lalru",
+                                 "pb.lehragaga",
+                                 "pb.longowal",
+                                 "pb.malerkotla",
+                                 "pb.moonak",
+                                 "pb.nabha",
+                                 "pb.nayagaon",
+                                 "pb.patran",
+                                 "pb.rajpura",
+                                 "pb.samana",
+                                 "pb.sanaur",
+                                 "pb.sangrur",
+                                 "pb.sunam",
+                                 "pb.tapa",
+                                 "pb.zirakpur" ],
+                              "Amritsar-DDR":
+                               [ "pb.ajnala",
+                                 "pb.batala",
+                                 "pb.bhikhi",
+                                 "pb.derababananak",
+                                 "pb.dhariwal",
+                                 "pb.dinanagar",
+                                 "pb.fatehgarhchurian",
+                                 "pb.gurdaspur",
+                                 "pb.jandialaguru",
+                                 "pb.khemkaran",
+                                 "pb.majitha",
+                                 "pb.narotjaimalsingh",
+                                 "pb.patti",
+                                 "pb.quadian",
+                                 "pb.rajasansi",
+                                 "pb.ramdass",
+                                 "pb.rayya",
+                                 "pb.srihargobindpur",
+                                 "pb.sujanpur",
+                                 "pb.tarntaran" ],
+                              "Ludhiana-DDR":
+                               [ "pb.amloh",
+                                 "pb.anandpursahib",
+                                 "pb.bassipathana",
+                                 "pb.chamkaursahib",
+                                 "pb.doraha",
+                                 "pb.jagraon",
+                                 "pb.khamano",
+                                 "pb.khanna",
+                                 "pb.kiratpur",
+                                 "pb.machhiwara",
+                                 "pb.maloud",
+                                 "pb.mandigobindgarh",
+                                 "pb.morinda",
+                                 "pb.mullanpur",
+                                 "pb.nangal",
+                                 "pb.payal",
+                                 "pb.raikot",
+                                 "pb.ropar",
+                                 "pb.sahnewal",
+                                 "pb.samrala",
+                                 "pb.sirhind" ],
+                              "Amritsar-MC": [ "pb.amritsar" ],
+                              "Bathinda-DDR":
+                               [ "pb.balianwali",
+                                 "pb.bareta",
+                                 "pb.bariwala",
+                                 "pb.bhagtabhai",
+                                 "pb.bhairoopa",
+                                 "pb.bhikhiwind",
+                                 "pb.bhuchomandi",
+                                 "pb.boha",
+                                 "pb.budhlada",
+                                 "pb.chaunke",
+                                 "pb.gidderbaha",
+                                 "pb.goniana",
+                                 "pb.joga",
+                                 "pb.kotfatta",
+                                 "pb.kothaguru",
+                                 "pb.kotshamir",
+                                 "pb.lehramohabbat",
+                                 "pb.malout",
+                                 "pb.maluka",
+                                 "pb.mandikalan",
+                                 "pb.mansa",
+                                 "pb.maur",
+                                 "pb.mehraj",
+                                 "pb.muktsar",
+                                 "pb.nathana",
+                                 "pb.raman",
+                                 "pb.rampura",
+                                 "pb.rampuraphul",
+                                 "pb.sangatmandi",
+                                 "pb.sardulgarh",
+                                 "pb.talwandisabo" ],
+                              "Bathinda-MC": [ "pb.bathinda" ],
+                              "Hoshiarpur-MC": [ "pb.hoshiarpur" ],
+                              "Jalandhar-MC": [ "pb.jalandhar" ],
+                              "Ludhiana-MC": [ "pb.ludhiana" ],
+                              "Moga-MC": [ "pb.moga" ],
+                              "Mohali-MC": [ "pb.mohali" ],
+                              "Pathankot-MC": [ "pb.pathankot" ],
+                              "Patiala-MC": [ "pb.patiala" ],
+                              "Phagwara-MC": [ "pb.phagwara" ],
+                              "Janaagraha-DDR": [ "pb.janaagraha" ] }
+            ,"tentantLogo" : { "pb.abohar":
+                               "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.abohar/logo.png",
+                              "pb.adampur":
+                               "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.adampur/logo.png",
+                              "pb.ahmedgarh":
+                               "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.ahmedgarh/logo.png",
+                              "pb.ajnala":
+                               "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.ajnala/logo.png",
+                              "pb.alawalpur":
+                               "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.alawalpur/logo.png",
+                              "pb.amargarh":
+                               "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.amargarh/logo.png",
+                              "pb.amloh":
+                               "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.amloh/logo.png",
+                              "pb.amritsar":
+                               "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.amritsar/logo.png",
+                              "pb.anandpursahib":
+                               "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.anandpursahib/logo.png",
+                              "pb.arniwala":
+                               "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.arniwala/logo.png",
+                              "pb.badhnikalan":
+                               "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.badhnikalan/logo.png",
+                              "pb.baghapurana":
+                               "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.baghapurana/logo.png",
+                              "pb.balachaur":
+                               "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.balachaur/logo.png",
+                              "pb.balianwali":
+                               "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.balianwali/logo.png",
+                              "pb.banga":
+                               "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.banga/logo.png",
+                              "pb.banur":
+                               "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.banur/logo.png",
+                              "pb.bareta":
+                               "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.bareta/logo.png",
+                              "pb.bariwala":
+                               "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.bariwala/logo.png",
+                              "pb.barnala":
+                               "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.barnala/logo.png",
+                              "pb.bassipathana":
+                               "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.bassipathana/logo.png",
+                              "pb.batala":
+                               "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.batala/logo.png",
+                              "pb.bathinda":
+                               "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.bathinda/logo.png",
+                              "pb.begowal":
+                               "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.begowal/logo.png",
+                              "pb.bhadaur":
+                               "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.bhadaur/logo.png",
+                              "pb.bhadson":
+                               "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.bhadson/logo.png",
+                              "pb.bhagtabhai":
+                               "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.bhagtabhai/logo.png",
+                              "pb.bhairoopa":
+                               "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.bhairoopa/logo.png",
+                              "pb.bhawanigarh":
+                               "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.bhawanigarh/logo.png",
+                              "pb.bhikhi":
+                               "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.bhikhi/logo.png",
+                              "pb.bhikhiwind":
+                               "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.bhikhiwind/logo.png",
+                              "pb.bhogpur":
+                               "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.bhogpur/logo.png",
+                              "pb.bhuchomandi":
+                               "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.bhuchomandi/logo.png",
+                              "pb.bhulath":
+                               "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.bhulath/logo.png",
+                              "pb.bilga":
+                               "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.bilga/logo.png",
+                              "pb.boha":
+                               "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.boha/logo.png",
+                              "pb.budhlada":
+                               "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.budhlada/logo.png",
+                              "pb.chamkaursahib":
+                               "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.chamkaursahib/logo.png",
+                              "pb.chaunke":
+                               "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.chaunke/logo.png",
+                              "pb.cheema":
+                               "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.cheema/logo.png",
+                              "pb.dasuya":
+                               "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.dasuya/logo.png",
+                              "pb.derababananak":
+                               "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.derababananak/logo.png",
+                              "pb.derabassi":
+                               "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.derabassi/logo.png",
+                              "pb.dhanaula":
+                               "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.dhanaula/logo.png",
+                              "pb.dharamkot":
+                               "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.dharamkot/logo.png",
+                              "pb.dhariwal":
+                               "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.dhariwal/logo.png",
+                              "pb.dhilwan":
+                               "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.dhilwan/logo.png",
+                              "pb.dhuri":
+                               "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.dhuri/logo.png",
+                              "pb.dinanagar":
+                               "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.dinanagar/logo.png",
+                              "pb.dirba":
+                               "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.dirba/logo.png",
+                              "pb.doraha":
+                               "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.doraha/logo.png",
+                              "pb.faridkot":
+                               "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.faridkot/logo.png",
+                              "pb.fatehgarhchurian":
+                               "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.fatehgarhchurian/logo.png",
+                              "pb.fatehgarhpanjtoor":
+                               "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.fatehgarhpanjtoor/logo.png",
+                              "pb.fazilka":
+                               "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.fazilka/logo.png",
+                              "pb.ferozepur":
+                               "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.ferozepur/logo.png",
+                              "pb.garhdiwala":
+                               "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.garhdiwala/logo.png",
+                              "pb.garhshankar":
+                               "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.garhshankar/logo.png",
+                              "pb.ghagga":
+                               "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.ghagga/logo.png",
+                              "pb.ghanaur":
+                               "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.ghanaur/logo.png",
+                              "pb.gidderbaha":
+                               "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.gidderbaha/logo.png",
+                              "pb.goniana":
+                               "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.goniana/logo.png",
+                              "pb.goraya":
+                               "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.goraya/logo.png",
+                              "pb.gurdaspur":
+                               "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.gurdaspur/logo.png",
+                              "pb.guruharsahai":
+                               "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.guruharsahai/logo.png",
+                              "pb.handiaya":
+                               "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.handiaya/logo.png",
+                              "pb.hariana":
+                               "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.hariana/logo.png",
+                              "pb.hoshiarpur":
+                               "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.hoshiarpur/logo.png",
+                              "pb.jagraon":
+                               "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.jagraon/logo.png",
+                              "pb.jaitu":
+                               "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.jaitu/logo.png",
+                              "pb.jalalabad":
+                               "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.jalalabad/logo.png",
+                              "pb.jalandhar":
+                               "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.jalandhar/logo.png",
+                              "pb.jandialaguru":
+                               "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.jandialaguru/logo.png",
+                              "pb.joga":
+                               "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.joga/logo.png",
+                              "pb.kapurthala":
+                               "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.kapurthala/logo.png",
+                              "pb.kartarpur":
+                               "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.kartarpur/logo.png",
+                              "pb.khamano":
+                               "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.khamano/logo.png",
+                              "pb.khanauri":
+                               "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.khanauri/logo.png",
+                              "pb.khanna":
+                               "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.khanna/logo.png",
+                              "pb.kharar":
+                               "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.kharar/logo.png",
+                              "pb.khemkaran":
+                               "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.khemkaran/logo.png",
+                              "pb.kiratpur":
+                               "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.kiratpur/logo.png",
+                              "pb.kotfatta":
+                               "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.kotfatta/logo.png",
+                              "pb.kothaguru":
+                               "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.kothaguru/logo.png",
+                              "pb.kotissekhan":
+                               "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.kotissekhan/logo.png",
+                              "pb.kotkapura":
+                               "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.kotkapura/logo.png",
+                              "pb.kotshamir":
+                               "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.kotshamir/logo.png",
+                              "pb.kurali":
+                               "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.kurali/logo.png",
+                              "pb.lalru":
+                               "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.lalru/logo.png",
+                              "pb.lehragaga":
+                               "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.lehragaga/logo.png",
+                              "pb.lehramohabbat":
+                               "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.lehramohabbat/logo.png",
+                              "pb.lohiankhas":
+                               "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.lohiankhas/logo.png",
+                              "pb.longowal":
+                               "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.longowal/logo.png",
+                              "pb.ludhiana":
+                               "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.ludhiana/logo.png",
+                              "pb.machhiwara":
+                               "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.machhiwara/logo.png",
+                              "pb.mahilpur":
+                               "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.mahilpur/logo.png",
+                              "pb.majitha":
+                               "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.majitha/logo.png",
+                              "pb.makhu":
+                               "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.makhu/logo.png",
+                              "pb.malerkotla":
+                               "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.malerkotla/logo.png",
+                              "pb.mallanwala":
+                               "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.mallanwala/logo.png",
+                              "pb.maloud":
+                               "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.maloud/logo.png",
+                              "pb.malout":
+                               "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.malout/logo.png",
+                              "pb.maluka":
+                               "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.maluka/logo.png",
+                              "pb.mamdot":
+                               "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.mamdot/logo.png",
+                              "pb.mandigobindgarh":
+                               "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.mandigobindgarh/logo.png",
+                              "pb.mandikalan":
+                               "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.mandikalan/logo.png",
+                              "pb.mansa":
+                               "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.mansa/logo.png",
+                              "pb.maur":
+                               "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.maur/logo.png",
+                              "pb.mehatpur":
+                               "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.mehatpur/logo.png",
+                              "pb.mehraj":
+                               "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.mehraj/logo.png",
+                              "pb.moga":
+                               "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.moga/logo.png",
+                              "pb.mohali":
+                               "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.mohali/logo.png",
+                              "pb.moonak":
+                               "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.moonak/logo.png",
+                              "pb.morinda":
+                               "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.morinda/logo.png",
+                              "pb.mudki":
+                               "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.mudki/logo.png",
+                              "pb.mukerian":
+                               "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.mukerian/logo.png",
+                              "pb.muktsar":
+                               "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.muktsar/logo.png",
+                              "pb.mullanpur":
+                               "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.mullanpur/logo.png",
+                              "pb.nabha":
+                               "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.nabha/logo.png",
+                              "pb.nadala":
+                               "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.nadala/logo.png",
+                              "pb.nakodar":
+                               "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.nakodar/logo.png",
+                              "pb.nangal":
+                               "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.nangal/logo.png",
+                              "pb.narotjaimalsingh":
+                               "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.narotjaimalsingh/logo.png",
+                              "pb.nathana":
+                               "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.nathana/logo.png",
+                              "pb.nawanshahr":
+                               "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.nawanshahr/logo.png",
+                              "pb.nayagaon":
+                               "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.nayagaon/logo.png",
+                              "pb.nihalsinghwala":
+                               "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.nihalsinghwala/logo.png",
+                              "pb.nurmahal":
+                               "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.nurmahal/logo.png",
+                              "pb.pathankot":
+                               "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.pathankot/logo.png",
+                              "pb.patiala":
+                               "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.patiala/logo.png",
+                              "pb.patran":
+                               "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.patran/logo.png",
+                              "pb.patti":
+                               "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.patti/logo.png",
+                              "pb.payal":
+                               "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.payal/logo.png",
+                              "pb.phagwara":
+                               "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.phagwara/logo.png",
+                              "pb.phillaur":
+                               "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.phillaur/logo.png",
+                              "pb.punjab":
+                               "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.punjab/logo.png",
+                              "pb.quadian":
+                               "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.quadian/logo.png",
+                              "pb.rahon":
+                               "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.rahon/logo.png",
+                              "pb.raikot":
+                               "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.raikot/logo.png",
+                              "pb.rajasansi":
+                               "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.rajasansi/logo.png",
+                              "pb.rajpura":
+                               "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.rajpura/logo.png",
+                              "pb.raman":
+                               "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.raman/logo.png",
+                              "pb.ramdass":
+                               "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.ramdass/logo.png",
+                              "pb.rampura":
+                               "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.rampura/logo.png",
+                              "pb.rampuraphul":
+                               "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.rampuraphul/logo.png",
+                              "pb.rayya":
+                               "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.rayya/logo.png",
+                              "pb.ropar":
+                               "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.ropar/logo.png",
+                              "pb.sahnewal":
+                               "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.sahnewal/logo.png",
+                              "pb.samana":
+                               "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.samana/logo.png",
+                              "pb.samrala":
+                               "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.samrala/logo.png",
+                              "pb.sanaur":
+                               "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.sanaur/logo.png",
+                              "pb.sangatmandi":
+                               "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.sangatmandi/logo.png",
+                              "pb.sangrur":
+                               "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.sangrur/logo.png",
+                              "pb.sardulgarh":
+                               "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.sardulgarh/logo.png",
+                              "pb.shahkot":
+                               "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.shahkot/logo.png",
+                              "pb.shamchurasi":
+                               "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.shamchurasi/logo.png",
+                              "pb.sirhind":
+                               "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.sirhind/logo.png",
+                              "pb.srihargobindpur":
+                               "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.srihargobindpur/logo.png",
+                              "pb.sujanpur":
+                               "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.sujanpur/logo.png",
+                              "pb.sultanpurlodhi":
+                               "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.sultanpurlodhi/logo.png",
+                              "pb.sunam":
+                               "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.sunam/logo.png",
+                              "pb.talwandibhai":
+                               "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.talwandibhai/logo.png",
+                              "pb.talwandisabo":
+                               "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.talwandisabo/logo.png",
+                              "pb.talwara":
+                               "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.talwara/logo.png",
+                              "pb.tapa":
+                               "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.tapa/logo.png",
+                              "pb.tarntaran":
+                               "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.tarntaran/logo.png",
+                              "pb.testing":
+                               "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.testing/logo.png",
+                              "pb.urmartanda":
+                               "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.urmartanda/logo.png",
+                              "pb.zira":
+                               "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.zira/logo.png",
+                              "pb.zirakpur":
+                               "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.zirakpur/logo.png",
+                              "pb.janaagraha":
+                               "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.janaagraha/logo.png" 
+                            }
+        },
+        {
+            "label": "ULBS",
+            "label_locale": "DSS_ULBS",
+            "type": "dropdown",
+            "values": [
+                "Boha",
+                "Gurdaspur",
+                "Derabassi",
+                "Shahkot",
+                "Fazilka",
+                "Rajpura",
+                "Batala",
+                "Majitha",
+                "Bilga",
+                "Raikot",
+                "Tapa",
+                "Jandialaguru",
+                "Badhnikalan",
+                "Hoshiarpur",
+                "Nadala",
+                "Dinanagar",
+                "Morinda",
+                "Maluka",
+                "Ghagga",
+                "Budhlada",
+                "Tarntaran",
+                "Phillaur",
+                "Hariana",
+                "Rahon",
+                "Baghapurana",
+                "Jalandhar",
+                "Sultanpurlodhi",
+                "Handiaya",
+                "Patti",
+                "Arniwala",
+                "Mahilpur",
+                "Ahmedgarh",
+                "Bassipathana",
+                "Ramdass",
+                "Kartarpur",
+                "Patiala",
+                "Bhadaur",
+                "Fatehgarhpanjtoor",
+                "Phagwara",
+                "Faridkot",
+                "Lehramohabbat",
+                "Goniana",
+                "Bhulath",
+                "Mansa",
+                "Nathana",
+                "Chaunke",
+                "Dirba",
+                "Makhu",
+                "Rampura",
+                "Shamchurasi",
+                "Sahnewal",
+                "Samrala",
+                "Bhikhiwind",
+                "Dharamkot",
+                "Ludhiana",
+                "Quadian",
+                "Jaitu",
+                "Kapurthala",
+                "Sangrur",
+                "Machhiwara",
+                "Nurmahal",
+                "Sujanpur",
+                "Doraha",
+                "Maur",
+                "Dhanaula",
+                "Bhikhi",
+                "Rayya",
+                "Bhogpur",
+                "Lohiankhas",
+                "Banga",
+                "Srihargobindpur",
+                "Jagraon",
+                "Zira",
+                "Joga",
+                "Kotshamir",
+                "Bariwala",
+                "Garhdiwala",
+                "Abohar",
+                "Bhawanigarh",
+                "Mukerian",
+                "Raman",
+                "Kotfatta",
+                "Nawanshahr",
+                "Balianwali",
+                "Nangal",
+                "Kurali",
+                "Nihalsinghwala",
+                "Patran",
+                "Goraya",
+                "Rajasansi",
+                "Sardulgarh",
+                "Sirhind",
+                "Mamdot",
+                "Derababananak",
+                "Garhshankar",
+                "Zirakpur",
+                "Bhadson",
+                "Mudki",
+                "Bathinda",
+                "Nakodar",
+                "Khanna",
+                "Mallanwala",
+                "Rampuraphul",
+                "Muktsar",
+                "Maloud",
+                "Nabha",
+                "Mandigobindgarh",
+                "Mohali",
+                "Khemkaran",
+                "Sangatmandi",
+                "Sunam",
+                "Dasuya",
+                "Kotissekhan",
+                "Begowal",
+                "Mandikalan",
+                "Malout",
+                "Gidderbaha",
+                "Punjab",
+                "Khamano",
+                "Fatehgarhchurian",
+                "Mehraj",
+                "Banur",
+                "Cheema",
+                "Lalru",
+                "Longowal",
+                "Talwandibhai",
+                "Amargarh",
+                "Khanauri",
+                "Sanaur",
+                "Urmartanda",
+                "Moga",
+                "Talwandisabo",
+                "Ajnala",
+                "Payal",
+                "Amloh",
+                "Bhairoopa",
+                "Malerkotla",
+                "Bareta",
+                "Kharar",
+                "Narotjaimailsingh",
+                "Ferozepur",
+                "Bhagtabhai",
+                "Ghanaur",
+                "Amritsar",
+                "Dhilwan",
+                "Kothaguru",
+                "Mehatpur",
+                "Guruharsahai",
+                "Mullanpur",
+                "Samana",
+                "Adampur",
+                "Alawalpur",
+                "Barnala",
+                "Kiratpur Sahib",
+                "Balachaur",
+                "Kotkapura",
+                "Talwara",
+                "Dhuri",
+                "Ropar",
+                "Nayagaon",
+                "Jalalabad",
+                "Moonak",
+                "Testing",
+                "Chamkaursahib",
+                "Bhuchomandi",
+                "Dhariwal",
+                "Lehragaga",
+                "Pathankot",
+                "Anandpursahib"
+            ]
+        },
+        {
+            "label": "Services",
+            "label_locale": "DSS_SERVICES",
+            "type": "dropdown",
+            "values": [
+                "Property Tax",
+                "Trade licence",
+                "PGR"
+            ]
+        },
+        {
+            "label": "Denomination",
+            "label_locale": "DSS_DENOMINATION",
+            "type": "switch",
+            "values": [
+                "Cr",
+                "Lac",
+                "Unit"
+            ]
+        }
+    ],
+    "GFilterData": {"Denomination": "Lac",
+        "ULBS": [],
+        "DDRs": [],
+        "Services": "",
+        "duration": {
+            "title": "",
+            "value": {
+                "startDate": "",
+                "endDate": "",
+                "interval": "month"
+                
+            }
+        }
+    },
+    "DemandAndCollectionData": [{
+            "headerName": "SNO-1",
+            "headerValue": 1,
+            "headerSymbol": null,
+            "plots": [{
+                    "label": null,
+                    "name": "Total Collection",
+                    "value": 343.0,
+                    "symbol": "amount"
+                },
+                {
+                    "label": null,
+                    "name": "Transactions",
+                    "value": 2.0,
+                    "symbol": "number"
+                },
+                {
+                    "label": null,
+                    "name": "Assessed Properties",
+                    "value": 6.0,
+                    "symbol": "number"
+                },
+                {
+                    "label": null,
+                    "name": "Target Collection",
+                    "value": 0.0,
+                    "symbol": "amount"
+                },
+                {
+                    "label": "1",
+                    "name": "Sl no",
+                    "value": null,
+                    "symbol": "text"
+                },
+                {
+                    "label": "pb.goraya",
+                    "name": "Boundary",
+                    "value": null,
+                    "symbol": "text"
+                }
+            ]
+        },
+        {
+            "headerName": "SNO-2",
+            "headerValue": 2,
+            "headerSymbol": null,
+            "plots": [{
+                    "label": null,
+                    "name": "Total Collection",
+                    "value": 944.0,
+                    "symbol": "amount"
+                },
+                {
+                    "label": null,
+                    "name": "Transactions",
+                    "value": 2.0,
+                    "symbol": "number"
+                },
+                {
+                    "label": null,
+                    "name": "Assessed Properties",
+                    "value": 2.0,
+                    "symbol": "number"
+                },
+                {
+                    "label": null,
+                    "name": "Target Collection",
+                    "value": 0.0,
+                    "symbol": "amount"
+                },
+                {
+                    "label": "2",
+                    "name": "Sl no",
+                    "value": null,
+                    "symbol": "text"
+                },
+                {
+                    "label": "pb.sirhind",
+                    "name": "Boundary",
+                    "value": null,
+                    "symbol": "text"
+                }
+            ]
+        },
+        {
+            "headerName": "SNO-3",
+            "headerValue": 3,
+            "headerSymbol": null,
+            "plots": [{
+                    "label": null,
+                    "name": "Total Collection",
+                    "value": 863.0,
+                    "symbol": "amount"
+                },
+                {
+                    "label": null,
+                    "name": "Transactions",
+                    "value": 1.0,
+                    "symbol": "number"
+                },
+                {
+                    "label": null,
+                    "name": "Assessed Properties",
+                    "value": 4.0,
+                    "symbol": "number"
+                },
+                {
+                    "label": null,
+                    "name": "Target Collection",
+                    "value": 0.0,
+                    "symbol": "amount"
+                },
+                {
+                    "label": "3",
+                    "name": "Sl no",
+                    "value": null,
+                    "symbol": "text"
+                },
+                {
+                    "label": "pb.abohar",
+                    "name": "Boundary",
+                    "value": null,
+                    "symbol": "text"
+                }
+            ]
+        },
+        {
+            "headerName": "SNO-4",
+            "headerValue": 4,
+            "headerSymbol": null,
+            "plots": [{
+                    "label": null,
+                    "name": "Total Collection",
+                    "value": 956.0,
+                    "symbol": "amount"
+                },
+                {
+                    "label": null,
+                    "name": "Transactions",
+                    "value": 1.0,
+                    "symbol": "number"
+                },
+                {
+                    "label": null,
+                    "name": "Assessed Properties",
+                    "value": 1.0,
+                    "symbol": "number"
+                },
+                {
+                    "label": null,
+                    "name": "Target Collection",
+                    "value": 0.0,
+                    "symbol": "amount"
+                },
+                {
+                    "label": "4",
+                    "name": "Sl no",
+                    "value": null,
+                    "symbol": "text"
+                },
+                {
+                    "label": "pb.derabassi",
+                    "name": "Boundary",
+                    "value": null,
+                    "symbol": "text"
+                }
+            ]
+        },
+        {
+            "headerName": "SNO-5",
+            "headerValue": 5,
+            "headerSymbol": null,
+            "plots": [{
+                    "label": null,
+                    "name": "Total Collection",
+                    "value": 407.0,
+                    "symbol": "amount"
+                },
+                {
+                    "label": null,
+                    "name": "Transactions",
+                    "value": 1.0,
+                    "symbol": "number"
+                },
+                {
+                    "label": null,
+                    "name": "Assessed Properties",
+                    "value": 1.0,
+                    "symbol": "number"
+                },
+                {
+                    "label": null,
+                    "name": "Target Collection",
+                    "value": 0.0,
+                    "symbol": "amount"
+                },
+                {
+                    "label": "5",
+                    "name": "Sl no",
+                    "value": null,
+                    "symbol": "text"
+                },
+                {
+                    "label": "pb.doraha",
+                    "name": "Boundary",
+                    "value": null,
+                    "symbol": "text"
+                }
+            ]
+        },
+        {
+            "headerName": "SNO-6",
+            "headerValue": 6,
+            "headerSymbol": null,
+            "plots": [{
+                    "label": null,
+                    "name": "Total Collection",
+                    "value": 0.0,
+                    "symbol": "amount"
+                },
+                {
+                    "label": null,
+                    "name": "Transactions",
+                    "value": 1.0,
+                    "symbol": "number"
+                },
+                {
+                    "label": null,
+                    "name": "Assessed Properties",
+                    "value": 1.0,
+                    "symbol": "number"
+                },
+                {
+                    "label": null,
+                    "name": "Target Collection",
+                    "value": 0.0,
+                    "symbol": "amount"
+                },
+                {
+                    "label": "6",
+                    "name": "Sl no",
+                    "value": null,
+                    "symbol": "text"
+                },
+                {
+                    "label": "pb.ferozepur",
+                    "name": "Boundary",
+                    "value": null,
+                    "symbol": "text"
+                }
+            ]
+        },
+        {
+            "headerName": "SNO-7",
+            "headerValue": 7,
+            "headerSymbol": null,
+            "plots": [{
+                    "label": null,
+                    "name": "Total Collection",
+                    "value": 22087.0,
+                    "symbol": "amount"
+                },
+                {
+                    "label": null,
+                    "name": "Transactions",
+                    "value": 1.0,
+                    "symbol": "number"
+                },
+                {
+                    "label": null,
+                    "name": "Assessed Properties",
+                    "value": 1.0,
+                    "symbol": "number"
+                },
+                {
+                    "label": null,
+                    "name": "Target Collection",
+                    "value": 0.0,
+                    "symbol": "amount"
+                },
+                {
+                    "label": "7",
+                    "name": "Sl no",
+                    "value": null,
+                    "symbol": "text"
+                },
+                {
+                    "label": "pb.hoshiarpur",
+                    "name": "Boundary",
+                    "value": null,
+                    "symbol": "text"
+                },
+                {
+                    "label": null,
+                    "name": "Total Collection",
+                    "value": 0.0,
+                    "symbol": "amount"
+                },
+                {
+                    "label": null,
+                    "name": "Transactions",
+                    "value": 0.0,
+                    "symbol": "number"
+                },
+                {
+                    "label": null,
+                    "name": "Assessed Properties",
+                    "value": 0.0,
+                    "symbol": "number"
+                },
+                {
+                    "label": null,
+                    "name": "Target Collection",
+                    "value": 1079.6000003814697,
+                    "symbol": "amount"
+                }
+            ]
+        },
+        {
+            "headerName": "SNO-8",
+            "headerValue": 8,
+            "headerSymbol": null,
+            "plots": [{
+                    "label": null,
+                    "name": "Total Collection",
+                    "value": 396.0,
+                    "symbol": "amount"
+                },
+                {
+                    "label": null,
+                    "name": "Transactions",
+                    "value": 1.0,
+                    "symbol": "number"
+                },
+                {
+                    "label": null,
+                    "name": "Assessed Properties",
+                    "value": 1.0,
+                    "symbol": "number"
+                },
+                {
+                    "label": null,
+                    "name": "Target Collection",
+                    "value": 0.0,
+                    "symbol": "amount"
+                },
+                {
+                    "label": "8",
+                    "name": "Sl no",
+                    "value": null,
+                    "symbol": "text"
+                },
+                {
+                    "label": "pb.mansa",
+                    "name": "Boundary",
+                    "value": null,
+                    "symbol": "text"
+                }
+            ]
+        },
+        {
+            "headerName": "SNO-9",
+            "headerValue": 9,
+            "headerSymbol": null,
+            "plots": [{
+                    "label": null,
+                    "name": "Total Collection",
+                    "value": 592.0,
+                    "symbol": "amount"
+                },
+                {
+                    "label": null,
+                    "name": "Transactions",
+                    "value": 1.0,
+                    "symbol": "number"
+                },
+                {
+                    "label": null,
+                    "name": "Assessed Properties",
+                    "value": 6.0,
+                    "symbol": "number"
+                },
+                {
+                    "label": null,
+                    "name": "Target Collection",
+                    "value": 0.0,
+                    "symbol": "amount"
+                },
+                {
+                    "label": "9",
+                    "name": "Sl no",
+                    "value": null,
+                    "symbol": "text"
+                },
+                {
+                    "label": "pb.nurmahal",
+                    "name": "Boundary",
+                    "value": null,
+                    "symbol": "text"
+                }
+            ]
+        },
+        {
+            "headerName": "SNO-10",
+            "headerValue": 10,
+            "headerSymbol": null,
+            "plots": [{
+                    "label": null,
+                    "name": "Total Collection",
+                    "value": 604.0,
+                    "symbol": "amount"
+                },
+                {
+                    "label": null,
+                    "name": "Transactions",
+                    "value": 1.0,
+                    "symbol": "number"
+                },
+                {
+                    "label": null,
+                    "name": "Assessed Properties",
+                    "value": 7.0,
+                    "symbol": "number"
+                },
+                {
+                    "label": null,
+                    "name": "Target Collection",
+                    "value": 0.0,
+                    "symbol": "amount"
+                },
+                {
+                    "label": "10",
+                    "name": "Sl no",
+                    "value": null,
+                    "symbol": "text"
+                },
+                {
+                    "label": "pb.zirakpur",
+                    "name": "Boundary",
+                    "value": null,
+                    "symbol": "text"
+                }
+            ]
+        },
+        {
+            "headerName": "SNO-11",
+            "headerValue": 11,
+            "headerSymbol": null,
+            "plots": [{
+                    "label": null,
+                    "name": "Total Collection",
+                    "value": 0.0,
+                    "symbol": "amount"
+                },
+                {
+                    "label": null,
+                    "name": "Transactions",
+                    "value": 0.0,
+                    "symbol": "number"
+                },
+                {
+                    "label": null,
+                    "name": "Assessed Properties",
+                    "value": 0.0,
+                    "symbol": "number"
+                },
+                {
+                    "label": null,
+                    "name": "Target Collection",
+                    "value": 16790.0,
+                    "symbol": "amount"
+                },
+                {
+                    "label": "11",
+                    "name": "Sl no",
+                    "value": null,
+                    "symbol": "text"
+                },
+                {
+                    "label": "pb.amritsar",
+                    "name": "Boundary",
+                    "value": null,
+                    "symbol": "text"
+                }
+            ]
+        },
+        {
+            "headerName": "SNO-12",
+            "headerValue": 12,
+            "headerSymbol": null,
+            "plots": [{
+                    "label": null,
+                    "name": "Total Collection",
+                    "value": 0.0,
+                    "symbol": "amount"
+                },
+                {
+                    "label": null,
+                    "name": "Transactions",
+                    "value": 0.0,
+                    "symbol": "number"
+                },
+                {
+                    "label": null,
+                    "name": "Assessed Properties",
+                    "value": 0.0,
+                    "symbol": "number"
+                },
+                {
+                    "label": null,
+                    "name": "Target Collection",
+                    "value": 5580.0,
+                    "symbol": "amount"
+                },
+                {
+                    "label": "12",
+                    "name": "Sl no",
+                    "value": null,
+                    "symbol": "text"
+                },
+                {
+                    "label": "pb.bathinda",
+                    "name": "Boundary",
+                    "value": null,
+                    "symbol": "text"
+                }
+            ]
+        },
+        {
+            "headerName": "SNO-13",
+            "headerValue": 13,
+            "headerSymbol": null,
+            "plots": [{
+                    "label": null,
+                    "name": "Total Collection",
+                    "value": 0.0,
+                    "symbol": "amount"
+                },
+                {
+                    "label": null,
+                    "name": "Transactions",
+                    "value": 0.0,
+                    "symbol": "number"
+                },
+                {
+                    "label": null,
+                    "name": "Assessed Properties",
+                    "value": 0.0,
+                    "symbol": "number"
+                },
+                {
+                    "label": null,
+                    "name": "Target Collection",
+                    "value": 16885.0,
+                    "symbol": "amount"
+                },
+                {
+                    "label": "13",
+                    "name": "Sl no",
+                    "value": null,
+                    "symbol": "text"
+                },
+                {
+                    "label": "pb.jalandhar",
+                    "name": "Boundary",
+                    "value": null,
+                    "symbol": "text"
+                }
+            ]
+        },
+        {
+            "headerName": "SNO-14",
+            "headerValue": 14,
+            "headerSymbol": null,
+            "plots": [{
+                    "label": null,
+                    "name": "Total Collection",
+                    "value": 0.0,
+                    "symbol": "amount"
+                },
+                {
+                    "label": null,
+                    "name": "Transactions",
+                    "value": 0.0,
+                    "symbol": "number"
+                },
+                {
+                    "label": null,
+                    "name": "Assessed Properties",
+                    "value": 0.0,
+                    "symbol": "number"
+                },
+                {
+                    "label": null,
+                    "name": "Target Collection",
+                    "value": 33323.0,
+                    "symbol": "amount"
+                },
+                {
+                    "label": "14",
+                    "name": "Sl no",
+                    "value": null,
+                    "symbol": "text"
+                },
+                {
+                    "label": "pb.ludhiana",
+                    "name": "Boundary",
+                    "value": null,
+                    "symbol": "text"
+                }
+            ]
+        },
+        {
+            "headerName": "SNO-15",
+            "headerValue": 15,
+            "headerSymbol": null,
+            "plots": [{
+                    "label": null,
+                    "name": "Total Collection",
+                    "value": 0.0,
+                    "symbol": "amount"
+                },
+                {
+                    "label": null,
+                    "name": "Transactions",
+                    "value": 0.0,
+                    "symbol": "number"
+                },
+                {
+                    "label": null,
+                    "name": "Assessed Properties",
+                    "value": 0.0,
+                    "symbol": "number"
+                },
+                {
+                    "label": null,
+                    "name": "Target Collection",
+                    "value": 1355.0,
+                    "symbol": "amount"
+                },
+                {
+                    "label": "15",
+                    "name": "Sl no",
+                    "value": null,
+                    "symbol": "text"
+                },
+                {
+                    "label": "pb.moga",
+                    "name": "Boundary",
+                    "value": null,
+                    "symbol": "text"
+                }
+            ]
+        },
+        {
+            "headerName": "SNO-16",
+            "headerValue": 16,
+            "headerSymbol": null,
+            "plots": [{
+                    "label": null,
+                    "name": "Total Collection",
+                    "value": 0.0,
+                    "symbol": "amount"
+                },
+                {
+                    "label": null,
+                    "name": "Transactions",
+                    "value": 0.0,
+                    "symbol": "number"
+                },
+                {
+                    "label": null,
+                    "name": "Assessed Properties",
+                    "value": 0.0,
+                    "symbol": "number"
+                },
+                {
+                    "label": null,
+                    "name": "Target Collection",
+                    "value": 5100.0,
+                    "symbol": "amount"
+                },
+                {
+                    "label": "16",
+                    "name": "Sl no",
+                    "value": null,
+                    "symbol": "text"
+                },
+                {
+                    "label": "pb.mohali",
+                    "name": "Boundary",
+                    "value": null,
+                    "symbol": "text"
+                }
+            ]
+        },
+        {
+            "headerName": "SNO-17",
+            "headerValue": 17,
+            "headerSymbol": null,
+            "plots": [{
+                    "label": null,
+                    "name": "Total Collection",
+                    "value": 0.0,
+                    "symbol": "amount"
+                },
+                {
+                    "label": null,
+                    "name": "Transactions",
+                    "value": 0.0,
+                    "symbol": "number"
+                },
+                {
+                    "label": null,
+                    "name": "Assessed Properties",
+                    "value": 0.0,
+                    "symbol": "number"
+                },
+                {
+                    "label": null,
+                    "name": "Target Collection",
+                    "value": 1972.0,
+                    "symbol": "amount"
+                },
+                {
+                    "label": "17",
+                    "name": "Sl no",
+                    "value": null,
+                    "symbol": "text"
+                },
+                {
+                    "label": "pb.pathankot",
+                    "name": "Boundary",
+                    "value": null,
+                    "symbol": "text"
+                }
+            ]
+        },
+        {
+            "headerName": "SNO-18",
+            "headerValue": 18,
+            "headerSymbol": null,
+            "plots": [{
+                    "label": null,
+                    "name": "Total Collection",
+                    "value": 0.0,
+                    "symbol": "amount"
+                },
+                {
+                    "label": null,
+                    "name": "Transactions",
+                    "value": 0.0,
+                    "symbol": "number"
+                },
+                {
+                    "label": null,
+                    "name": "Assessed Properties",
+                    "value": 0.0,
+                    "symbol": "number"
+                },
+                {
+                    "label": null,
+                    "name": "Target Collection",
+                    "value": 7360.0,
+                    "symbol": "amount"
+                },
+                {
+                    "label": "18",
+                    "name": "Sl no",
+                    "value": null,
+                    "symbol": "text"
+                },
+                {
+                    "label": "pb.patiala",
+                    "name": "Boundary",
+                    "value": null,
+                    "symbol": "text"
+                }
+            ]
+        },
+        {
+            "headerName": "SNO-19",
+            "headerValue": 19,
+            "headerSymbol": null,
+            "plots": [{
+                    "label": null,
+                    "name": "Total Collection",
+                    "value": 0.0,
+                    "symbol": "amount"
+                },
+                {
+                    "label": null,
+                    "name": "Transactions",
+                    "value": 0.0,
+                    "symbol": "number"
+                },
+                {
+                    "label": null,
+                    "name": "Assessed Properties",
+                    "value": 0.0,
+                    "symbol": "number"
+                },
+                {
+                    "label": null,
+                    "name": "Target Collection",
+                    "value": 823.0,
+                    "symbol": "amount"
+                },
+                {
+                    "label": "19",
+                    "name": "Sl no",
+                    "value": null,
+                    "symbol": "text"
+                },
+                {
+                    "label": "pb.phagwara",
+                    "name": "Boundary",
+                    "value": null,
+                    "symbol": "text"
+                }
+            ]
+        }
+    ],
+    "chartsData": {},
+    "lang": {
+        "en": {
+            "Total Collection": "Total Collection",
+            "title": "DSS Dashboard",
+            "how": "How do you want your egg today?",
+            "boiledEgg": "Boiled egg",
+            "softBoiledEgg": "Soft-boiled egg",
+            "choice": "How to choose the egg"
+        },
+        "it": {
+            "Total Collection": "Total Collection it",
+            "title": "DSS Dashboard1",
+            "how": "Come vuoi il tuo uovo oggi?",
+            "boiledEgg": "Uovo sodo",
+            "softBoiledEgg": "Uovo alla coque",
+            "choice": "Come scegliere l'uovo"
+        }
+    }
+}

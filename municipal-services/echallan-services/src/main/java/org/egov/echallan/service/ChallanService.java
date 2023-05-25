@@ -1,17 +1,18 @@
 package org.egov.echallan.service;
 
-import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 import org.egov.common.contract.request.RequestInfo;
+import org.egov.common.contract.response.ResponseInfo;
 import org.egov.echallan.model.Challan;
 import org.egov.echallan.model.ChallanRequest;
 import org.egov.echallan.model.SearchCriteria;
 import org.egov.echallan.repository.ChallanRepository;
 import org.egov.echallan.util.CommonUtils;
+import org.egov.echallan.util.ResponseInfoFactory;
 import org.egov.echallan.validator.ChallanValidator;
 import org.egov.echallan.web.models.user.UserDetailResponse;
+import org.egov.tracer.model.CustomException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
@@ -22,6 +23,9 @@ public class ChallanService {
 
     @Autowired
     private EnrichmentService enrichmentService;
+
+	@Autowired
+	private ResponseInfoFactory responseInfoFactory;
 
     private UserService userService;
     
@@ -127,6 +131,23 @@ public class ChallanService {
 		 repository.update(request);
 		 return request.getChallan();
 		}
+
+	 public Map<String,Object>  getChallanCountResponse(RequestInfo requestInfo, String tenantId){
+		 validator.validateChallanCountRequest(tenantId);
+
+		 Map<String,Object> response = new HashMap<>();
+		 Map<String,String> results = new HashMap<>();
+		 ResponseInfo responseInfo = responseInfoFactory.createResponseInfoFromRequestInfo(requestInfo, true);
+
+		 response.put("ResponseInfo",responseInfo);
+		 results	= repository.fetchChallanCount(tenantId);
+
+		 if(CollectionUtils.isEmpty(results) || results.get("totalChallan").equalsIgnoreCase("0"))
+			 throw new CustomException("NO_RECORDS","No records found for the tenantId: "+tenantId);
+
+		 response.put("ChallanCount",results);
+		 return  response;
+	 }
 
 	
 }

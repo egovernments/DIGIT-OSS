@@ -62,11 +62,18 @@ public class PropertyRepository {
 	public List<Property> getProperties(PropertyCriteria criteria, Boolean isApiOpen, Boolean isPlainSearch) {
 
 		List<Object> preparedStmtList = new ArrayList<>();
-		String query = queryBuilder.getPropertySearchQuery(criteria, preparedStmtList, isPlainSearch);
+		String query = queryBuilder.getPropertySearchQuery(criteria, preparedStmtList, isPlainSearch, false);
 		if (isApiOpen)
 			return jdbcTemplate.query(query, preparedStmtList.toArray(), openRowMapper);
 		else
 			return jdbcTemplate.query(query, preparedStmtList.toArray(), rowMapper);
+	}
+
+	public List<String> getPropertyIds(PropertyCriteria criteria) {
+
+		List<Object> preparedStmtList = new ArrayList<>();
+		String query = queryBuilder.getPropertySearchQuery(criteria, preparedStmtList, false, true);
+		return jdbcTemplate.query(query, preparedStmtList.toArray(), new SingleColumnRowMapper<>());
 	}
 
 	public List<Property> getPropertiesForBulkSearch(PropertyCriteria criteria, Boolean isPlainSearch) {

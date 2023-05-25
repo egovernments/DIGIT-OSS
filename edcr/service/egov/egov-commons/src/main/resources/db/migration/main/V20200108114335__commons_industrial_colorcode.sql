@@ -1,0 +1,1 @@
+update egbpa_occupancy set colorcode=14 where name='Industrial' and code = 'G';

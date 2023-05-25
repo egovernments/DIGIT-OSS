@@ -1,0 +1,22 @@
+{
+  "actions": [
+    {
+      "name": "GetallReceivingMode",
+      "url": "/pgr/receivingmode",
+      "displayName": "GetallReceivingMode",
+      "orderNumber": "0",
+      "queryParams": "tenantId=",
+      "parentModule": "1",
+      "serviceCode": "PGR"
+    },
+    {
+      "name": "GetallReceivingCenters",
+      "url": "/pgr/receivingcenters",
+      "displayName": "GetallReceivingCenters",
+      "orderNumber": "0",
+      "queryParams": "tenantId=",
+      "parentModule": "1",
+      "serviceCode": "PGR"
+    }
+  ]
+}

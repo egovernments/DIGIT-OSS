@@ -1,0 +1,18 @@
+{
+  "RequestInfo": {
+    "apiId": null,
+    "ver": null,
+    "ts": null,
+    "action": null,
+    "did": null,
+    "key": null,
+    "msgId": null,
+    "authToken": null,
+    "correlationId": null,
+    "userInfo": null
+  },
+  "roleCodes": [
+    "EMPLOYEE"
+  ],
+  "tenantId": "default"
+}

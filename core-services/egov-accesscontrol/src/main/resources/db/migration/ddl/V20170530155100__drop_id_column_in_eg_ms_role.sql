@@ -1,0 +1,1 @@
+ALTER TABLE eg_ms_role DROP COLUMN id;
