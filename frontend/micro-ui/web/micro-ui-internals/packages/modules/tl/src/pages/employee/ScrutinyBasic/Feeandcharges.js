@@ -471,15 +471,14 @@ const feeandcharges = props.feeandchargesData
                       </div> */}
 </Row>
 <Row>
-                  
-                            <Col className="col col-4" >
+<Col className="col col-4" >
                             <h4 >
-                            {/* Total Fee */}
-                            {`${t("NWL_APPLICANT_FEE_TOTAL_FEE")}`}
-                            </h4>
-                              <input type="text" className="form-control" placeholder={feeAndChargesData?.feesTypeCalculationDto?.totalFee} disabled />
+                          {/* Total Scruitny Fee */}
+                          {`${t("NWL_APPLICANT_FEE_TOTAL_SCRUITNY_FEE")}`}
+                          </h4>
+                              <input type="text" className="form-control" placeholder={feeAndChargesData?.feesTypeCalculationDto?.[0]?.totalScruitnyFee} disabled />
                             </Col>
-                          
+                            
                           
 
                             <Col className="col col-4" >
@@ -487,17 +486,18 @@ const feeandcharges = props.feeandchargesData
                             {/* Total Licence Fee */}
                             {`${t("NWL_APPLICANT_FEE_TOTAL_LICENCE_FEE")}`}
                             </h4>
-                              <input type="text" className="form-control" placeholder={feeAndChargesData?.feesTypeCalculationDto?.totalLicenceFee} disabled />
-                            </Col>s
+                              <input type="text" className="form-control" placeholder={feeAndChargesData?.feesTypeCalculationDto?.[0]?.totalLicenceFee} disabled />
+                            </Col>
                          
-                          
                             <Col className="col col-4" >
                             <h4 >
-                          {/* Total Scruitny Fee */}
-                          {`${t("NWL_APPLICANT_FEE_TOTAL_SCRUITNY_FEE")}`}
-                          </h4>
-                              <input type="text" className="form-control" placeholder={feeAndChargesData?.feesTypeCalculationDto?.totalScruitnyFee} disabled />
+                            {/* Total Fee */}
+                            {`${t("NWL_APPLICANT_FEE_TOTAL_FEE")}`}
+                            </h4>
+                              <input type="text" className="form-control" placeholder={feeAndChargesData?.feesTypeCalculationDto?.[0]?.totalFee} disabled />
                             </Col>
+                          
+                            
                           
                           </Row>
 

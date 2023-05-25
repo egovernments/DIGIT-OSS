@@ -533,19 +533,8 @@ const Developerinfo = (props) => {
             style={{ display: props.displayGeneral, border: "2px solid #e9ecef", margin: 15, padding: 15 }}
             className={`justify-content-center ${classes.formLabel}`}
           >
-            <Row className={classes.formLabel}>
+            {/* <Row className={classes.formLabel}>
               <Col md={4} xxl lg="12">
-                {/* {JSON.stringify(userRoles)}
-                    {JSON.stringify(hideRemarks)} */}
-                {/* <Form.Label >
-                 
-                  (i)Whether licence applied for additional area ?
-                </Form.Label> */}
-                {/* <label  className="card-title fw-bold" style={{ margin: 10 }} htmlFor="Developer Details">
-                            {`${t("NWL_APPLICANT_WHETHER_LICENCE_APPLIED_FOR_ADDITIONAL_AREA")}`}
-                            <span class="text-danger font-weight-bold mx-2">*</span>
-                          </label> */}
-
                 <label htmlFor="Developer Details">
                   {`${t("NWL_APPLICANT_WHETHER_LICENCE_APPLIED_FOR_ADDITIONAL_AREA")}`}
                   <span class="text-danger font-weight-bold mx-2">*</span>
@@ -572,17 +561,15 @@ const Developerinfo = (props) => {
                   ></ReportProblemIcon>
                 </div>
               </Col>
-            </Row>
+            </Row> */}
 
-            {
+            {/* {
               landScheduleData?.licenseApplied === "Y" && (
 
                 <div>
                   <Row className={classes.formLabel} style={{ marginBottom: 15 }} >
                     <Col className="ms-auto" md={4} xxl lg="4">
-                      {/* <label>
-                        <h5>Licence No. of Parent Licence &nbsp;</h5>
-                      </label> */}
+                     
                       <label htmlFor="Developer Details">
                         {`${t("NWL_APPLICANT_LICENCE_NUMBER_OF_PARENT_LICENCE")}`}
                         <span class="text-danger font-weight-bold mx-2">*</span>
@@ -614,7 +601,7 @@ const Developerinfo = (props) => {
                     <Col className="ms-auto" md={4} xxl lg="4">
                       <label htmlFor="potential">
 
-                        {/* <h5>Development Plan &nbsp;</h5> */}
+                     
                         <label htmlFor="Developer Details">
                           {`${t("NWL_APPLICANT_DEVELOMENT_PLAN_ADDICATION_PLAN")}`}
                           <span class="text-danger font-weight-bold mx-2">*</span>
@@ -646,11 +633,7 @@ const Developerinfo = (props) => {
                       </div>
                     </Col>
                     <Col className="ms-auto" md={4} xxl lg="4">
-                      {/* <label>
-
-                        <h5>Type of colony  &nbsp;</h5>
-                        
-                      </label> */}
+                    
                       <label htmlFor="Developer Details">
                         {`${t("NWL_APPLICANT_TYPE_OF_COLONY_ADDICATION_PLAN")}`}
                         <span class="text-danger font-weight-bold mx-2">*</span>
@@ -718,10 +701,7 @@ const Developerinfo = (props) => {
                   </Row >
                   <Row className={classes.formLabel} style={{ marginBottom: 15 }}>
                     <Col className="ms-auto" md={4} xxl lg="4">
-                      {/* <label>
-                        <h6>Area of parent licence in acres </h6>{" "}
-
-                      </label> */}
+                    
                       <label htmlFor="Developer Details">
                         {`${t("NWL_APPLICANT_AREA_OF_PARENT_LICENCE_IN_ACRES_ADDICATION_PLAN")}`}
                         <span class="text-danger font-weight-bold mx-2">*</span>
@@ -747,9 +727,7 @@ const Developerinfo = (props) => {
                       </div>
                     </Col>
                     <Col className="ms-auto" md={4} xxl lg="4">
-                      {/* <label>
-                        <h6>Validity of parent licences</h6>
-                      </label> */}
+                      
                       <label htmlFor="Developer Details">
                         {`${t("NWL_APPLICANT_VALIDITY_OF_PARENT_LICENCES_ADDICATION_PLAN")}`}
                         <span class="text-danger font-weight-bold mx-2">*</span>
@@ -786,7 +764,7 @@ const Developerinfo = (props) => {
                       {landScheduleData?.thirdParty === "N" && (
                         <div>
                           <label htmlFor="Developer Details">
-                            {/* Whether renewal licence fee submitted  */}
+                            
                             {`${t("NWL_APPLICANT_WHETHER_RENEWAL_LICENCES_FEE_SUBMITTED_ADDICATION_PLAN")}`}
                             <span class="text-danger font-weight-bold mx-2">*</span>
                           </label>
@@ -805,7 +783,7 @@ const Developerinfo = (props) => {
                             <ReportProblemIcon
                               style={{
                                 display: hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_WHETHER_RENEWAL_LICENCES_FEE_SUBMITTED_ADDICATION_PLAN") ? "block" : "none",
-                                // display: hideRemarksPatwari?"none":"block",
+                        
                                 color: fieldIconColors.thirdPartyRightCreated
                               }}
                               onClick={() => {
@@ -824,7 +802,7 @@ const Developerinfo = (props) => {
                     </Col>
                     <Col className="ms-auto" md={4} xxl lg="4">
                       <label htmlFor="Developer Details">
-                        {/* Any Other Remark  */}
+                  
                         {`${t("NWL_APPLICANT_WHETHER_ANY_OTHER_REMARKS_ADDICATION_PLAN")}`}
                         <span class="text-danger font-weight-bold mx-2">*</span>
                       </label>
@@ -838,8 +816,7 @@ const Developerinfo = (props) => {
                         <span class="text-danger font-weight-bold mx-2">*</span>
                       </label>
 
-                      {/* <h6>Third-party right created&nbsp; </h6> */}
-
+            
                       <div className="d-flex flex-row align-items-center my-1 ">
                         <input type="radio" disabled value="Yes" checked={landScheduleData?.thirdParty === "Y" ? true : false} />
                         &nbsp;&nbsp;
@@ -855,7 +832,7 @@ const Developerinfo = (props) => {
                         <ReportProblemIcon
                           style={{
                             display: hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_THIRD_PARTY_RIGHT_CREATED_ADDICATION_PLAN") ? "block" : "none",
-                            // display: hideRemarksPatwari?"none":"block",
+                            
                             color: fieldIconColors.thirdPartyRightCreated
                           }}
                           onClick={() => {
@@ -869,22 +846,7 @@ const Developerinfo = (props) => {
                         ></ReportProblemIcon>
 
                       </div>
-                      {/* </div> */}
-                      {/* <div className="col col-8">
-                      
-                    </div> */}
-                      {/* <div className="col col-4">
-                      {landScheduleData?.thirdParty === "N" && (
-                        <div className="row ">
-                          <div className="col col-4">
-                            <label> Document Download </label>
-                            <IconButton onClick={() => getDocShareholding(landScheduleData?.thirdPartyDoc)}>
-                              <DownloadForOfflineIcon color="primary" className="mx-1" />
-                            </IconButton>
-                          </div>
-                        </div>
-                      )}
-                    </div> */}
+                     
                     </Col>
                     <Col className="ms-auto" md={6} xxl lg="12">
                       {landScheduleData?.thirdParty === "N" && (
@@ -898,21 +860,7 @@ const Developerinfo = (props) => {
 
                                 className={classes.formLabel}
                                 disabled></Form.Control>
-                              {/* <ReportProblemIcon
-                                style={{
-                                 display: hideRemarksPatwari && showReportProblemIcon("Remark") ? "block" : "none",
-                                  // display: hideRemarksPatwari?"none":"block",
-                                  color: fieldIconColors.thirdPartyRemark
-                                }}
-                                onClick={() => {
-                                  setLabelValue("Third Party Remark"),
-                                    setOpennedModal("thirdPartyRemark")
-                                   setSmShow(true),
-                     setDocModal(false),
-                                    console.log("modal open"),
-                                    setFieldValue(landScheduleData !== null ? landScheduleData?.thirdPartyRemark : null);
-                                }}
-                              ></ReportProblemIcon> */}
+                              
                             </div>
                           </div>
                           <div className="col col-4">
@@ -924,21 +872,7 @@ const Developerinfo = (props) => {
                               <IconButton onClick={() => getDocShareholding(landScheduleData?.thirdPartyDoc)}>
                                 <DownloadForOfflineIcon color="primary" className="mx-1" />
                               </IconButton>
-                              {/* <ReportProblemIcon
-                                style={{
-                                 display: hideRemarksPatwari && showReportProblemIcon("Address") ? "block" : "none",
-                               
-                                  color: fieldIconColors.thirdPartyDoc
-                                }}
-                                onClick={() => {
-                                  setLabelValue("Third Party Document"),
-                                    setOpennedModal("thirdPartyDoc")
-                                   setSmShow(true),
-                     setDocModal(false),
-                                    console.log("modal open"),
-                                    setFieldValue(landScheduleData !== null ? landScheduleData?.thirdPartyDoc : null);
-                                }}
-                              ></ReportProblemIcon> */}
+                              
                             </div>
 
                           </div>
@@ -947,11 +881,11 @@ const Developerinfo = (props) => {
                     </Col>
                   </Row>
                 </div>
-              )}
+              )} */}
 
-            <Row className={classes.formLabel}>
+            {/* <Row className={classes.formLabel}>
               <Col className="ms-auto" md={4} xxl lg="12">
-                {/* <Form.Label> (ii)Whether licence applied under Migration Policy ?</Form.Label> */}
+              
                 <label htmlFor="Developer Details">
                   {`${t("NWL_APPLICANT_WHETHER_LICENCE_APPLIED_UNDER_MIGRATION_POLICY")}`}
                   <span class="text-danger font-weight-bold mx-2">*</span>
@@ -980,9 +914,9 @@ const Developerinfo = (props) => {
                   ></ReportProblemIcon>
                 </div>
               </Col>
-            </Row>
+            </Row> */}
 
-            <Row className={classes.formLabel}>
+            {/* <Row className={classes.formLabel}>
               <Col md={6} xxl lg="12">
                 {
                   landScheduleData?.migrationLic === "Y" &&
@@ -994,39 +928,39 @@ const Developerinfo = (props) => {
 
                           <tr className="border-bottom-0">
                             <th class="fw-normal pb-0 border-bottom-0 align-top">
-                              {/* Previous Licence Number */}
+                            
                               {`${t("NWL_APPLICANT_PREVIOUS_LICENCE_MGINATIONLIC")}`}
                             </th>
                             <th class="fw-normal pb-0 border-bottom-0 align-top">
-                              {/* Area of parent licence */}
+                            
                               {`${t("NWL_APPLICANT_AREA_OF_PARENT_LICENCE_MGINATIONLIC")}`}
                             </th>
                             <th class="fw-normal pb-0 border-bottom-0 align-top">
-                              {/* Purpose of parent licence */}
+                            
                               {`${t("NWL_APPLICANT_PURPOSE_OF_PAREMENT_LICENCE_MGINATIONLIC")}`}
                             </th>
                             <th class="fw-normal pb-0 border-bottom-0 align-top">
-                              {/* Validity of parent licence */}
+                             
                               {`${t("NWL_APPLICANT_VALIDITY_OF_PARENT_LICENCE_MGINATIONLIC")}`}
                             </th>
                             <th class="fw-normal pb-0 border-bottom-0 align-top">
-                              {/* Date */}
+                             
                               {`${t("NWL_APPLICANT_DATE_MGINATIONLIC")}`}
                             </th>
                             <th class="fw-normal pb-0 border-bottom-0 align-top">
-                              {/* Area applied under migration in acres */}
+                            
                               {`${t("NWL_APPLICANT_AREA_APPLIED_UNDER_MGINATIONLIC")}`}
                             </th>
                             <th class="fw-normal pb-0 border-bottom-0 align-top">
-                              {/* Applied Khasra number */}
+                             
                               {`${t("NWL_APPLICANT_APPLIED_KHASRS_NUMBER_GINATIONLIC")}`}
                             </th>
                             <th class="fw-normal pb-0 border-bottom-0 align-top">
-                              {/* Area */}
+                           
                               {`${t("NWL_APPLICANT_AREA_LICENCE_MGINATIONLIC")}`}
                             </th>
                             <th class="fw-normal pb-0 border-bottom-0 align-top">
-                              {/* Balance of Parent Licence */}
+                        
                               {`${t("NWL_APPLICANT_BALANCE_OF_PARENT_LICENCE_MGINATIONLIC")}`}
                             </th>
 
@@ -1232,20 +1166,7 @@ const Developerinfo = (props) => {
                                     disabled />
                                 </td>
 
-                                {/* <td class="text-center">
-                    <div className="btn btn-sm col-md-6">
-                                    <IconButton onClick={()=>getDocShareholding(item?.registeringAuthorityDoc)}>
-                                      <Visibility color="info" className="icon" /></IconButton>
-                                  
-                                  </div>
-                                  <div className="btn btn-sm col-md-6">
-                                    <IconButton onClick={()=>getDocShareholding(item?.registeringAuthorityDoc)}>
-                                <FileDownload color="primary" className="mx-1" />
-                        </IconButton>
-                        </div>
-                      <input type="text" className="form-control" title={item?.registeringAuthorityDoc} placeholder={item?.registeringAuthorityDoc} disabled />
-                    </td>
-                    */}
+                               
 
                               </tr>
                             ))
@@ -1253,300 +1174,13 @@ const Developerinfo = (props) => {
                         </tbody>
                       </table>
                     </div>
-                    {/* <Row className={classes.formLabel} style={{ marginBottom: 20 }}> */}
-                    {/* <Col className="ms-auto" md={4} xxl lg="4">
-                        <label>
-                      
-                          <h5>Area Applied under Migration</h5>
-                        </label>
-
-                        <div className="d-flex flex-row align-items-center my-1 ">
-                          <Form.Control
-                           
-                            placeholder={landScheduleData !== null ? landScheduleData?.areaUnderMigration : null}
-                            disabled
-                          ></Form.Control>
-                          <ReportProblemIcon
-                            style={{
-                              display: hideRemarks?"none":"block",
-                              color: fieldIconColors.areaAppliedUnderMigration
-                            }}
-                            onClick={() => {
-                              setLabelValue("Area Applied under Migration"),
-                                setOpennedModal("areaAppliedUnderMigration")
-                               setSmShow(true),
-                     setDocModal(false),
-                                console.log("modal open"),
-                         setFieldValue(landScheduleData !== null ? landScheduleData?.areaAppliedUnderMigration : null);
-                            }}
-                          ></ReportProblemIcon>
-                        </div>
-                        
-                      </Col>
-                      <Col className="ms-auto" md={4} xxl lg="4">
-                        <label htmlFor="potential">
-                          <h6>
-                         
-                            <h5>Purpose of Parent Licence</h5>
-                          </h6>
-                        </label>
-
-                        <div className="d-flex flex-row  align-items-center">
-                          <Form.Control
-                            
-                            placeholder={landScheduleData !== null ? landScheduleData?.purposeParentLic : null}
-                            disabled
-                          ></Form.Control>
-                          <ReportProblemIcon
-                            style={{
-                              display: hideRemarks?"none":"block",
-                              color: fieldIconColors.purposeOfParentLicence
-                            }}
-                            onClick={() => {
-                              setLabelValue("Purpose of Parent Licence"),
-                                setOpennedModal("purposeOfParentLicence")
-                               setSmShow(true),
-                     setDocModal(false),
-                                console.log("modal open"),
-                                setFieldValue(landScheduleData !== null ? landScheduleData?.parentLicPurpose : null);
-                            }}
-                          ></ReportProblemIcon>
-                        </div>
-                      </Col>
-                      <Col className="ms-auto" md={4} xxl lg="4">
-                        <label>
-                          
-                          <h5>Licence No.</h5>
-                        </label>
-                        <div className="d-flex flex-row  align-items-center">
-                          <Form.Control placeholder={landScheduleData !== null ? landScheduleData?.licNo : null} 
-                        
-                          disabled></Form.Control>
-                          <ReportProblemIcon
-                            style={{
-                              display: hideRemarks?"none":"block",
-                              color: fieldIconColors.licenceNo
-                            }}
-                            onClick={() => {
-                              setLabelValue("Licence No."),
-                                setOpennedModal("licenceNo")
-                               setSmShow(true),
-                     setDocModal(false),
-                                console.log("modal open"),
-                                setFieldValue(landScheduleData !== null ? landScheduleData?.licNo : null);
-                            }}
-                          ></ReportProblemIcon>
-                        </div>
-                      </Col> */}
-
-                    {/* <Col className="ms-auto" md={4} xxl lg="4">
-                        <label>
-                         
-                          <h5>Area of Parent Licence</h5>
-                        </label>
-
-                        <div className="d-flex flex-row  align-items-center">
-                          <Form.Control placeholder={landScheduleData !== null ? landScheduleData?.areaofParentLic : null}
-                          
-                           disabled></Form.Control>
-                          <ReportProblemIcon
-                            style={{
-                              display: hideRemarks?"none":"block",
-                              color: fieldIconColors.areaOfParentLicence
-                            }}
-                            onClick={() => {
-                              setLabelValue("Area of Parent Licence"),
-                                setOpennedModal("areaOfParentLicence")
-                               setSmShow(true),
-                     setDocModal(false),
-                                console.log("modal open"),
-                                setFieldValue(landScheduleData !== null ? landScheduleData?.parentLicArea : null);
-                            }}
-                          ></ReportProblemIcon>
-                        </div>
-                      </Col> */}
-                    {/* <Col className="ms-auto" md={4} xxl lg="4">
-                        <label>
-                          <h6>Validity of Parent Licence</h6>
-                        </label>
-                        <div className="d-flex flex-row align-items-center my-1 ">
-                          
-                          <input type="radio" disabled value="Yes" checked={landScheduleData?.validityOfParentLic === "Y" ? true : false} />
-                          <label className="m-0  mx-2" for="Yes">Yes</label>&nbsp;&nbsp;
-                          <input type="radio" disabled value="No" checked={landScheduleData?.validityOfParentLic === "N" ? true : false} />
-                          <label className="m-0 mx-2" for="No">No</label>
-                          <ReportProblemIcon
-                            style={{
-                              display: hideRemarks?"none":"block",
-                              color: fieldIconColors.validityOfParentLicence
-                            }}
-                            onClick={() => {
-                              setLabelValue("Validity of Parent Licence")
-                              setOpennedModal("validityOfParentLicence")
-                               setSmShow(true),
-                     setDocModal(false),
-                                console.log("modal open"),
-                                setFieldValue(landScheduleData?.validityOfParentLic === "Y" ? "Yes" : landScheduleData?.validityOfParentLic === "N" ? "No" : null);
-                            }}
-                          ></ReportProblemIcon>
-                        </div>
-                      </Col>  */}
-                    {/* <Col className="ms-auto" md={4} xxl lg="4">
-                     
-                      <h6>Type of land</h6>{" "}
-                      <div className="d-flex flex-row  align-items-center">
-                        <Form.Control placeholder={landScheduleData !== null ? landScheduleData?.typeLand : null} 
-                         
-                        disabled></Form.Control>
-                        <ReportProblemIcon
-                          style={{
-                            display: hideRemarks?"none":"block",
-                            color: fieldIconColors.typeOfLand
-                          }}
-                          onClick={() => {
-                            setLabelValue("Type of land"),
-                              setOpennedModal("typeOfLand")
-                             setSmShow(true),
-                     setDocModal(false),
-                              console.log("modal open"),
-                              setFieldValue(landScheduleData !== null ? landScheduleData?.typeLand : null);
-                          }}
-                        ></ReportProblemIcon>
-                      </div>
-                  
-                      </Col>
-                      <Col className="ms-auto" md={4} xxl lg="4">
-                      <label>
-                        <h6>Approach Road Width&nbsp;&nbsp;</h6>{" "}
-                      </label>
-                      <div className="d-flex flex-row  align-items-center">
-                        <Form.Control placeholder={landScheduleData !== null ? landScheduleData?.approachRoadWidth : null} 
-                       
-                         disabled></Form.Control>
-                        <ReportProblemIcon
-                          style={{
-                            display: hideRemarks?"none":"block",
-                            color: fieldIconColors.approachRoadWidth
-                          }}
-                          onClick={() => {
-                            setLabelValue("Approach Road Width"),
-                              setOpennedModal("approachRoadWidth")
-                             setSmShow(true),
-                     setDocModal(false),
-                              console.log("modal open"),
-                              setFieldValue(landScheduleData !== null ? landScheduleData?.approachRoadWidth : null);
-                          }}
-                        ></ReportProblemIcon>
-                      </div>
-                    </Col>
-                    <Col className="ms-auto" md={4} xxl lg="4">
-                      <label>
-                        <h6>Area other than Licence&nbsp;&nbsp;</h6>{" "}
-                      </label>
-                      <div className="d-flex flex-row  align-items-center">
-                        <Form.Control placeholder={landScheduleData !== null ? landScheduleData?.approachRoadWidth : null} 
-                        
-                        disabled></Form.Control>
-                        <ReportProblemIcon
-                          style={{
-                            display: hideRemarks?"none":"block",
-                            color: fieldIconColors.approachRoadWidth
-                          }}
-                          onClick={() => {
-                            setLabelValue("Approach Road Width"),
-                              setOpennedModal("approachRoadWidth")
-                             setSmShow(true),
-                     setDocModal(false),
-                              console.log("modal open"),
-                              setFieldValue(landScheduleData !== null ? landScheduleData?.approachRoadWidth : null);
-                          }}
-                        ></ReportProblemIcon>
-                      </div>
-                    </Col>
-                      <Col className="ms-auto" md={4} xxl lg="4">
-                        <h6>Approved Layout of Plan/ Site plan for(GH)Showing Area(s)/Proposed migration</h6>
-                       
-                        <div className="d-flex flex-row align-items-center my-1 ">
-                          <IconButton onClick={() => getDocShareholding(landScheduleData?.approvedLayoutPlan)}>
-                            <DownloadForOfflineIcon color="primary" className="mx-1" />
-                          </IconButton>
-
-                          <ReportProblemIcon
-                            style={{
-                              display: hideRemarks?"none":"block",
-                              color: fieldIconColors.approvedLayoutOfPlan
-                            }}
-                            onClick={() => {
-                              setLabelValue("Approved Layout of Plan/ Site plan for(GH)Showing Area(s)/Proposed migration"),
-                                setOpennedModal("approvedLayoutOfPlan")
-                               setSmShow(true),
-                     setDocModal(false),
-                                console.log("modal open"),
-                                setFieldValue("");
-                            }}
-                          ></ReportProblemIcon>
-                        </div>
-                      </Col> */}
-                    {/* </Row> */}
-                    {/* <Row className="ms-auto" style={{ marginBottom: 20 }}>
-                      <div className="col col-4">
-                        <h6>Proposed Layout of Plan /site plan for area applied for migration.</h6>
-                        
-                        <div className="d-flex flex-row align-items-center my-1 ">
-
-                          <IconButton onClick={() => getDocShareholding(landScheduleData?.proposedLayoutPlan)}>
-                            <DownloadForOfflineIcon color="primary" className="mx-1" />
-                          </IconButton>
-
-                          <ReportProblemIcon
-                            style={{
-                              display: hideRemarks?"none":"block",
-                              color: fieldIconColors.proposedLayoutOfPlan
-                            }}
-                            onClick={() => {
-                              setLabelValue("Proposed Layout of Plan /site plan for area applied for migration."),
-                                setOpennedModal("proposedLayoutOfPlan")
-                               setSmShow(true),
-                     setDocModal(false),
-                                console.log("modal open"),
-                                setFieldValue("");
-                            }}
-                          ></ReportProblemIcon>
-                        </div>
-                      </div>
-
-                      <div className="col col-4">
-                        <h6>Download Previously approved Layout Plan</h6>
-                        
-                        <div className="d-flex flex-row align-items-center my-1 ">
-
-                          <IconButton onClick={() => getDocShareholding(landScheduleData?.uploadPreviouslyLayoutPlan)}>
-                            <DownloadForOfflineIcon color="primary" className="mx-1" />
-                          </IconButton>
-
-                          <ReportProblemIcon
-                            style={{
-                              display: hideRemarks?"none":"block",
-                              color: fieldIconColors.uploadPreviouslyLayoutPlan
-                            }}
-                            onClick={() => {
-                              setLabelValue("Download Previously approved Layout Plan"),
-                                setOpennedModal("uploadPreviouslyLayoutPlan")
-                               setSmShow(true),
-                     setDocModal(false),
-                                console.log("modal open"),
-                                setFieldValue("");
-                            }}
-                          ></ReportProblemIcon>
-                        </div>
-                      </div>
-                    </Row> */}
+                   
                   </div>
                 }
               </Col>
-            </Row>
+            </Row> */}
 
-            <hr className="mb-3"></hr>
+            {/* <hr className="mb-3"></hr> */}
             <Row className={classes.formLabel}>
 
 
@@ -1554,7 +1188,7 @@ const Developerinfo = (props) => {
                 2. Any encumbrance with respect to following :&nbsp;&nbsp;
               </h5> */}
               <label htmlFor="Developer Details">
-                {`${t("NWL_APPLICANT_ANY_ENCUMBRANCE_WITH_RESPECT_TO_FOLLOWING")}`}
+              {`${t("NWL_APPLICANT_ANY_ENCUMBRANCE_WITH_RESPECT_TO_FOLLOWING")}`}
                 <span class="text-danger font-weight-bold mx-2">*</span>
               </label>
               <div className="d-flex mt-2 align-items-center">
@@ -1773,14 +1407,15 @@ const Developerinfo = (props) => {
             <hr className="mb-3" />
 
             <Row className={classes.formLabel}>
+            <label htmlFor="Developer Details">
+                  {`${t("NWL_APPLICANT_ANY_INSOLVENCY_LIQUIDATION_PROCEESSDING_AGAINST_THE_LAND_OWING")}`}
+                  <span class="text-danger font-weight-bold mx-2">*</span>
+                </label>
               <Col md={4} xxl lg="12">
                 {/* <h6 >
                   (iii) Any insolvency/liquidation proceedings against the Land Owing Company/Develping Company :
                 </h6> */}
-                <label htmlFor="Developer Details">
-                  {`${t("NWL_APPLICANT_ANY_INSOLVENCY_LIQUIDATION_PROCEESSDING_AGAINST_THE_LAND_OWING")}`}
-                  <span class="text-danger font-weight-bold mx-2">*</span>
-                </label>
+              
                 <div className="d-flex mt-2">
 
                   <input type="radio" disabled value="Yes" checked={landScheduleData?.insolvency === "Y" ? true : false} />
@@ -1899,7 +1534,7 @@ const Developerinfo = (props) => {
                 </h6>
 
                 {
-                  landScheduleData?.appliedLand === "N" &&
+                  landScheduleData?.appliedLand === "Y" &&
                   <div className="row ml-1 mr-2">
                     <div className="col  p-1" >
                       {/* <h6>Download Document</h6> */}
@@ -1909,16 +1544,58 @@ const Developerinfo = (props) => {
                         <IconButton onClick={() => getDocShareholding(landScheduleData?.appliedLand)}>
                           <DownloadForOfflineIcon color="primary" className="mx-1" />
                         </IconButton>
-                      </div>
-                      <div className="d-flex flex-row align-items-center my-1 ">
+
                         <IconButton onClick={() => getDocShareholding(landScheduleData?.appliedLand)}>
                           <Visibility color="primary" className="mx-1" />
                         </IconButton>
                       </div>
+                      
                     </div>
                   </div>
 
                 }
+
+
+{
+                  landScheduleData?.appliedLand === "N" &&
+                  <div className="row ml-1 mr-2">
+                    <div className="col  p-1" >
+                      {/* <h6>Download Document</h6> */}
+                      {`${t("NWL_APPLICANT_APPLIED_LAND_Y_ORIGINAL_SHAJRA_PLAN_BY_PATWARI_SHAJRA_PLAN")}`}
+
+                      <div className="d-flex flex-row align-items-center my-1 ">
+                      <input type="radio" disabled value="Yes" checked={landScheduleData?.patwariOriginalShajraPlan === "Y" ? true : false} />
+                      <label className="m-0  mx-2" for="Yes">Yes</label>&nbsp;&nbsp;
+                     <input type="radio" disabled value="No" checked={landScheduleData?.patwariOriginalShajraPlan === "N" ? true : false} />
+                    <label className="m-0 mx-2" for="No">No</label>
+                      </div>
+                      
+                    </div>
+                  
+                  </div>
+
+                }
+{
+                  landScheduleData?.appliedLand === "N" &&
+                  <div className="row ml-1 mr-2">
+                      <div className="col  p-1" >
+                      {/* <h6>Download Document</h6> */}
+                      {`${t("NWL_APPLICANT_APPLIED_LAND_Y_ORIGINAL_BOUNDARY_SHAJRA_PLAN")}`}
+
+                      <div className="d-flex flex-row align-items-center my-1 ">
+                      <input type="radio" disabled value="Yes" checked={landScheduleData?.patwariOriginalShajraPlan === "Y" ? true : false} />
+                      <label className="m-0  mx-2" for="Yes">Yes</label>&nbsp;&nbsp;
+                     <input type="radio" disabled value="No" checked={landScheduleData?.patwariOriginalShajraPlan === "N" ? true : false} />
+                    <label className="m-0 mx-2" for="No">No</label>
+                      </div>
+                      
+                    </div>
+                      
+                    </div>
+                 
+
+                }
+                 
 
               </div>
 
@@ -2042,7 +1719,7 @@ const Developerinfo = (props) => {
                     <div className="col col p-1">
                       {`${t("NWL_APPLICANT_WHETHER_IN_COMPACT_BLOCK_SEPARATED_SHAJRA_PLAN")}`}
                       {/* <label> Remark Separated by </label> */}
-                      Separated by
+                      {/* Separated by */}
 
                       <Form.Control placeholder={landScheduleData?.compactBlockRemark}
                         // height={30} style={{ maxWidth: 200, marginRight: 5 }} 
@@ -2054,7 +1731,7 @@ const Developerinfo = (props) => {
 
 {landScheduleData?.compactBlock === "N" && (
                   <div className="row ml-1 mr-2">
-                    <div className="col col p-1">
+                    <div className="col">
                       {`${t("NWL_APPLICANT_WHETHER_IN_COMPACT_BLOCK_SEPARATED_SHAJRA_PLAN")}`}
                       {/* <label> Remark </label> */}
 
@@ -2076,9 +1753,9 @@ const Developerinfo = (props) => {
 
               {/* <br></br> */}
 
-              <div className="col col-3 p-1">
+              {/* <div className="col col-3 p-1">
                 <h6 >
-                  {/* (e) Whether Others Land fall */}
+                
                   {`${t("NWL_APPLICANT_WHETHER_OTHERS_LAND_FALL_SHAJRA_PLAN")}`}
 
                   <Tooltip title="Whether Others Land fall within Applied Land">
@@ -2110,18 +1787,18 @@ const Developerinfo = (props) => {
                 {landScheduleData?.landSandwiched === "Y" && (
                   <div className="row ml-1 mr-2">
                     <div className="col col p-1">
-                      {/* <label> Enter Kharsa No. </label> */}
+                  
                       {`${t("NWL_APPLICANT_WHETHER_OTHERS_LAND_Y_ENTER_KHARSA_NUMBER_SHAJRA_PLAN")}`}
 
                       <Form.Control placeholder={landScheduleData?.landSandwichedRemark}
-                        // height={30} style={{ maxWidth: 200, marginRight: 5 }} 
+                
                         className={classes.formLabel}
                         disabled></Form.Control>
                     </div>
                   </div>
                 )}
 
-              </div>
+              </div> */}
               <div className="col col-3 p-1">
                 {/* <h6>
                   (f) Acquisition status
@@ -2540,16 +2217,23 @@ const Developerinfo = (props) => {
 
             <div className="row mx-1">
               <div className="col col-12 p-1">
+              <div className="row">
+              <div class="col-sm-7 text-left">
                 <h6>
                   {/* (h)  Details of existing approach as per policy dated 20-10-20. */}
 
                   {`${t("NWL_APPLICANT_DETAILS_OF_EXISTING_APPROACH_AS_PER_POLICY_SHAJRA_PLAN")}`}
                 </h6>
+                </div>
+               <div class="col-sm-4 text-right">
                 <div className="d-flex flex-row align-items-center my-1 ">
                   <input type="radio" disabled value="Yes" checked={landScheduleData?.siteApproachable === "Y" ? true : false} />
                   <label className="m-0  mx-2" for="Yes">Category-I approach</label>&nbsp;&nbsp;
                   <input type="radio" disabled value="No" checked={landScheduleData?.siteApproachable === "N" ? true : false} />
                   <label className="m-0 mx-2" for="No">Category-II approach</label>
+                  </div>
+                  </div>
+                  <div class="col-sm-1 text-right">
                   <ReportProblemIcon
                     style={{
                       display: hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_DETAILS_OF_EXISTING_APPROACH_AS_PER_POLICY_SHAJRA_PLAN") ? "block" : "none",
@@ -2564,7 +2248,9 @@ const Developerinfo = (props) => {
                         setFieldValue(landScheduleData?.siteApproachable === "Y" ? "Category-I approach" : landScheduleData?.siteApproachable === "N" ? "Category-II approach" : null);
                     }}
                   ></ReportProblemIcon>
+                  </div>
                 </div>
+              
                 {landScheduleData?.siteApproachable === "Y" && (
                   <div className="my-2 mx-2">
                     <div className="row">

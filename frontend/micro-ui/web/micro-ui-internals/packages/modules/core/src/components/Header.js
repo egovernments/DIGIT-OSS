@@ -11,8 +11,15 @@ const Header = () => {
 
   return (
     <div className="bannerHeader">
-      <img className="bannerLogo" src={stateInfo?.logoUrl} />
-      <p>{t(`TENANT_TENANTS_${stateInfo?.code.toUpperCase()}`)}</p>
+      {/* <img className="bannerLogo" src={stateInfo?.logoUrl} /> */}
+      {/* <p>{t(`TENANT_TENANTS_${stateInfo?.code.toUpperCase()}`)}</p> */}
+      <img
+              className="stateEmployeeLogin"
+              id="topbar-logo"
+              src={"https://filesuploadbucket1aws.s3.amazonaws.com/tcp-haryana/tcp-logo-hr3.png"}
+              
+              alt="TCP"
+            />
     </div>
   );
 }

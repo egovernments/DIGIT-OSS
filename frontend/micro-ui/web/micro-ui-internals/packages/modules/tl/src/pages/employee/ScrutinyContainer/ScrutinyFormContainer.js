@@ -564,8 +564,9 @@ const ScrutinyFormcontainer = (props) => {
   console.log("meri update34", lastUpdate)
   return (
     <Card className="formColorEmp">
-      <Card.Header  className="head-application">
-        <div className="row fw-normal">
+      
+      <Card className="head-application">
+      <div className="row fw-normal">
           <div className="col-sm-2">
             <b><p className="head-font">Application Number:</p></b>
             <b><p className="head-font">{id}</p></b>
@@ -595,7 +596,7 @@ const ScrutinyFormcontainer = (props) => {
             <Button style={{ textAlign: "right" }} value="Submit" id="Submit" onChange1={handleChange} name="Submit" onClick={handleshow19}>Views PDF</Button>
           </div>
         </div>
-      </Card.Header>
+      </Card>
       <Row >
         <div className="formlist">
           <ScrutitnyForms
