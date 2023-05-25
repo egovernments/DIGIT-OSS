@@ -17,7 +17,6 @@ const Header = () => {
               className="stateEmployeeLogin"
               id="topbar-logo"
               src={"https://filesuploadbucket1aws.s3.amazonaws.com/tcp-haryana/tcp-logo-hr3.png"}
-              
               alt="TCP"
             />
     </div>

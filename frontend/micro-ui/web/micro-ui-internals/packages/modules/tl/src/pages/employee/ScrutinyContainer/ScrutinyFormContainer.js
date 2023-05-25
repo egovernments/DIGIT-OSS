@@ -564,8 +564,7 @@ const ScrutinyFormcontainer = (props) => {
   console.log("meri update34", lastUpdate)
   return (
     <Card className="formColorEmp">
-      
-      <Card className="head-application">
+    <Card className="head-application">
       <div className="row fw-normal">
           <div className="col-sm-2">
             <b><p className="head-font">Application Number:</p></b>
