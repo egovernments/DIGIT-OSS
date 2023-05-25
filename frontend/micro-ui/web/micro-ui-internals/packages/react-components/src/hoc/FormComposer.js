@@ -119,17 +119,17 @@ export const FormComposer = (props) => {
       case "number":
       case "password":
       case "time":
-        // if (populators.defaultValue) setTimeout(setValue(populators?.name, populators.defaultValue));
+         // if (populators.defaultValue) setTimeout(setValue(populators?.name, populators.defaultValue));
         return (
           <div className="field-container">
             {populators?.componentInFront ? (
               <span className={`component-in-front ${disable && "disabled"}`}>{populators.componentInFront}</span>
             ) : null}
             <Controller
-              defaultValue={formData?.[populators.name]}
+              defaultValue={formData?.[populators.name] || populators.defaultValue}
               render={({ onChange, ref, value }) => (
                 <TextInput
-                  value={formData?.[populators.name]}
+                  value={formData?.[populators.name] || populators.defaultValue}
                   type={type}
                   name={populators.name}
                   onChange={onChange}

@@ -210,7 +210,7 @@ const UploadFile = (props) => {
                 <RemoveableTag extraStyles={extraStyles} key={index} text={file[0]} onClick={(e) => props?.removeTargetedFile(fileDetailsData, e)} />
               </div>
             })}
-          {props?.uploadedFiles?.length === 0 && <h2 className="file-upload-status">{props.message}</h2>}
+          {props?.uploadedFiles?.length === 0 || !(props?.uploadedFiles) && <h2 className="file-upload-status">{props.message}</h2>}
         </div>
         <input
           className={props.disabled ? "disabled" : "" + "input-mirror-selector-button"}
