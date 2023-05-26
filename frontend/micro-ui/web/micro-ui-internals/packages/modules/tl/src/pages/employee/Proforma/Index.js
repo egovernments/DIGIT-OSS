@@ -1,5 +1,6 @@
 import React from "react";
 import { Button, Form } from "react-bootstrap";
+import AddPost from "../Material/TextEditor";
 
 
 
@@ -65,6 +66,7 @@ const getDynamicFileds = (type , data) => {
                 placeholder={data?.placeholder}
                 {...register(data?.name)}
               />
+              {/* <AddPost></AddPost> */}
               {/* <Form.Control as="textarea" rows={1} type="text" className="form-control" placeholder="" {...register("landOwner")}/> */}
               <br></br>
             </div>

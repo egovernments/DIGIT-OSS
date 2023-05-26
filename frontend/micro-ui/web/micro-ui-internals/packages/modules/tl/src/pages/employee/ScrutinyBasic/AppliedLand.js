@@ -1310,14 +1310,15 @@ let Tree = ({ data }) => {
                     <h4>
                       <b>
                         {/* Bifurcation Of Purpose */}
-                      {`${t("NWL_APPLICANT_BIFURCATION_OF_PURPOSE_")}`}
+                      {`${t("NWL_APPLICANT_BIFURCATION_OF_PURPOSE")}`}
                       </b>
                     </h4>
                     <h4 className="mt-3">
                       <b>
                         {/* Total Applied Area: */}
-                        {`${t("NWL_APPLICANT_DGPS_TOTAL_APPLIED_AREA")}`}
+                        {`${t("NWL_APPLICANT_DGPS_TOTAL_APPLIED_AREA")}`} 
                          </b>
+
                       {DetailsofAppliedLand?.DetailsAppliedLandPlot?.totalAreaScheme}
                     </h4>
                     {/* <h4 className="mt-3">

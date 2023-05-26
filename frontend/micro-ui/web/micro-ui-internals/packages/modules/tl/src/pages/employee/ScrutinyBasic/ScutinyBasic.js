@@ -42,6 +42,7 @@ const ScrutitnyForms = ({ apiResponse, applicationNumber, refreshScrutinyData , 
   // const feeandcharges = useRef();
   // const licenseDetailsInfoRef = useRef();
   const dateTime = new Date();
+  
   const [purpose, setPurpose] = useState("");
   const jeLandInfoRef = useRef();
   const { register, handleSubmit , watch } = useForm();
@@ -374,8 +375,9 @@ function convertToObjectArray(obj) {
 }
 
 const handleData = async (data) => {
-  
-  const payload = {
+  if (data) {
+   
+ const payload = {
   "requestInfo": {
       "api_id": "1",
       "ver": "1",
@@ -394,12 +396,28 @@ const handleData = async (data) => {
   
 }
 
-const Resp = await axios.post(`/land-services/egscrutiny/_performa/_create?status=submit`, payload )
-console.log("savehandle" , data);
-console.log("savehandle" , Resp);
+// const Resp = await axios.post(`/land-services/egscrutiny/_performa/_create?status=submit`, payload )
+// console.log("savehandle" , data);
+// console.log("savehandle" , Resp);
+// } catch (error) {
+//   console.log(error);
+// }
+try {
+  const Resp = await axios.post("/land-services/egscrutiny/_performa/_create?status=submit", payload, {}).then((response) => {
+    return response.data;
+  });
+} catch (error) {
+  console.log(error);
 }
-
-
+// handleGetFiledsStatesById(id);
+// handleGetRemarkssValues(id);
+// handleRoles(id)
+console.log("response from API3242526277", Resp);
+// props?.remarksUpdate({ data: RemarksDeveloper.data });
+} else {
+// props?.passmodalData();
+}
+};
 
 // console.log("Logger...",  convertToObjectArray(x))
 
@@ -467,6 +485,7 @@ console.log("userInFODATA123" , userInfo);
               dataForIcons={iconStates}
               applicationStatus={applicationStatus}
               mDMSData={mDMSData}
+              additionalDocRespon={additionalDocResponData}
             ></Personalinfo>
           </div>
           <div>
@@ -479,6 +498,7 @@ console.log("userInFODATA123" , userInfo);
               dataForIcons={iconStates}
               applicationStatus={applicationStatus}
               mDMSData={mDMSData}
+              additionalDocRespon={additionalDocResponData}
             ></Genarelinfo>
             {/* </Col> */}
           </div>
@@ -524,15 +544,16 @@ console.log("userInFODATA123" , userInfo);
             ></Feeandcharges>
          
           </div>
-          <div>
+          {/* <div>
             <AdditionalDocument
             additionalDocRespon={additionalDocResponData}
            
             >
               
             </AdditionalDocument>
-          </div>
-          <div>
+          </div> */}
+
+          {/* <div>
             <ProformForRevenu></ProformForRevenu>
           </div>
           <div>
@@ -554,9 +575,9 @@ console.log("userInFODATA123" , userInfo);
           <div>
           <DrawingBranch>
       </DrawingBranch>
-          </div>
+          </div> */}
          
-          <div>
+          {/* <div>
           <ProformaPatwari
            apiResponseData ={applicationimp}
            applicationStatus={applicationStatus}
@@ -564,7 +585,7 @@ console.log("userInFODATA123" , userInfo);
            >
            
       </ProformaPatwari>
-          </div>
+          </div> */}
           <div>
             <div
             className="collapse-header"
@@ -583,8 +604,9 @@ console.log("userInFODATA123" , userInfo);
               alignContent: "center",
             }}
           >
-            <span style={{ color: "#817f7f", fontSize: 14 }} className="">
-              - Performa
+            <span style={{ color: "#817f7f", fontSize: 16 }} className="">
+              - Performa For Scruitny {designation} 
+              {/* {applicationStatus} */}
             </span>
             {open2 ? <RemoveIcon></RemoveIcon> : <AddIcon></AddIcon>}
           </div>

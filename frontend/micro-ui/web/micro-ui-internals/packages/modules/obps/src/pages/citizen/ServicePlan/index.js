@@ -76,6 +76,7 @@ const ServicePlanService = () => {
   const [spaction, setSPAction] = useState("");
   const [comment, setComment] = useState("");
   const [spopen, setSPOpen] = useState(false);
+  const userInfo = Digit.UserService.getUser()?.info || {};
 
   const {
     register,
@@ -89,7 +90,7 @@ const ServicePlanService = () => {
 
     shouldFocusError: true,
   });
-  const userInfo = Digit.UserService.getUser();
+  // const userInfo = Digit.UserService.getUser();
 
   const getLoiPattern = (loiNumber) => {
     const pattern = /^(?=\D*\d)(?=.*[/])(?=.*[-])[a-zA-Z0-9\/-]{15,30}$/;
@@ -366,36 +367,8 @@ const ServicePlanService = () => {
         msgId: "090909",
         requesterId: "",
         authToken: "408de886-cb18-487c-8e68-d171a5006b23",
-        userInfo: {
-          id: 1964,
-          uuid: "ac14890e-ad92-42f8-b262-722773390672",
-          userName: "8888854328",
-          name: "Manik lal",
-          mobileNumber: "8888854328",
-          emailId: "manikl@gmail.com",
-          locale: null,
-          type: "CITIZEN",
-          roles: [
-            {
-              name: "Developer",
-              code: "BPA_DEVELOPER",
-              tenantId: "hr",
-            },
-            {
-              name: "Builder",
-              code: "BPA_BUILDER",
-              tenantId: "hr",
-            },
-            {
-              name: "Citizen",
-              code: "CITIZEN",
-              tenantId: "hr",
-            },
-          ],
-          active: true,
-          tenantId: "hr",
-          permanentCity: null,
-        },
+        userInfo: userInfo.info,
+        
       },
     };
     const Resp = await axios.post(`/tl-services/new/_generateTcpNumbers?loiNumber=${LOINumber}&businessService=SERVICE_PLAN`, payload);

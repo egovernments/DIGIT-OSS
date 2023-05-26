@@ -78,9 +78,12 @@ console.log("additionalDocResponData" , additionalDocResponData);
          }}
          
       >
-        <span style={{ color: "#817f7f" }} className="">
+        {/* <span style={{ color: "#817f7f" }} className="">
           AdditionalDocument
-        </span>
+        </span> */}
+        <span style={{ color: "#817f7f", fontSize: 14 }} className="">
+              - Additional Document
+            </span>
         {open ? <RemoveIcon></RemoveIcon> : <AddIcon></AddIcon>}
       </div>
 
