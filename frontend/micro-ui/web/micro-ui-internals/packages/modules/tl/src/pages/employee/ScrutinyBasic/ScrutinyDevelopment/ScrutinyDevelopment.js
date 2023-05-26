@@ -616,6 +616,8 @@ console.log("log123Disrenu" ,id);
                   
                   {/* {item.comment} */}
                   {<div dangerouslySetInnerHTML={{__html: item.comment}}/>}
+                  <div>{item.action}</div>
+
                   <div className="text-right">
                    
                     <div class="font-weight-bold">

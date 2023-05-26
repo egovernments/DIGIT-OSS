@@ -19,6 +19,7 @@ import { getDocShareholding } from "./ScrutinyDevelopment/docview.helper";
 import { useTranslation } from "react-i18next";
 import { useLocation } from "react-router-dom";
 import AdditionalDocument from "./AdditionalDocument";
+import CusToaster from "../../../components/Toaster";
 
 const Genarelinfo = (props) => {
   // useTranslation
@@ -1489,7 +1490,16 @@ Note: The term “Collaboration agreement" shall include all Development agreeme
           
    </div>
       </Collapse>
-      {/* </Card> */}
+      {showToastError && (
+        <CusToaster
+          label={showToastError?.label}
+          success={showToastError?.success}
+          error={showToastError?.error}
+          onClose={() => {
+            setShowToastError({ label: "", success: false, error: false });
+          }}
+        />
+      )}
     </Form>
   );
 };
