@@ -45,57 +45,7 @@ function ExtensionCom(props) {
     setValue,
   } = useForm({});
 
-useEffect(() => {
-    if (apiData) {
-      setValue("licenseNo", apiData?.licenseNo);
-      setValue("anyOtherDoc", apiData?.anyOtherDoc);
-      setValue("licenseNo", apiData?.licenseNo);
-      setValue("selectType", apiData?.additionalDetails?.selectType);
-      setValue("affidavitFixedChargesForAdm", apiData?.additionalDetails?.affidavitFixedChargesForAdm);
-      setValue("affidavitForLicencedArea", apiData?.additionalDetails?.affidavitForLicencedArea);
-      setValue("affidavitForLicencedArea", apiData?.additionalDetails?.affidavitOfAdmCharges);
-      setValue("amount", apiData?.newAdditionalDetails?.amount);
-      setValue("validUpto", apiData?.newAdditionalDetails?.validUpto);
-      setValue("renewalRequiredUpto", apiData?.newAdditionalDetails?.renewalRequiredUpto);
-      setValue("renewalRequiredUpto", apiData?.newAdditionalDetails?.renewalRequiredUpto);
-      setValue("colonizerName", apiData?.newAdditionalDetails?.colonizerName);
-      setValue("sectorNo", apiData?.newAdditionalDetails?.sectorNo);
-      setValue("colonyType", apiData?.newAdditionalDetails?.colonyType);
-      setValue("tehsil", apiData?.newAdditionalDetails?.tehsil);
-      setValue("district", apiData?.newAdditionalDetails?.district);
-      setValue("selectLicence", apiData?.newAdditionalDetails?.selectLicence);
-      setValue("revenueEstate", apiData?.newAdditionalDetails?.revenueEstate);
-      setValue("developmentPlan", apiData?.newAdditionalDetails?.developmentPlan);
-      // setValue("anyOtherDoc", apiData?.anyOtherDoc);
-      // setValue("licenseNo", apiData?.licenseNo);
-      // setValue("selectType", apiData?.additionalDetails?.selectType);
-      // setValue("affidavitFixedChargesForAdm", apiData?.additionalDetails?.affidavitFixedChargesForAdm);
-      // setValue("affidavitForLicencedArea", apiData?.additionalDetails?.affidavitForLicencedArea);
-      // setValue("affidavitForLicencedArea", apiData?.additionalDetails?.affidavitOfAdmCharges);
-      // setValue("amount", apiData?.newAdditionalDetails?.amount);
-      // setValue("validUpto", apiData?.newAdditionalDetails?.validUpto);
-      // setValue("renewalRequiredUpto", apiData?.newAdditionalDetails?.renewalRequiredUpto);
-      // setValue("renewalRequiredUpto", apiData?.newAdditionalDetails?.renewalRequiredUpto);
-      // setValue("colonizerName", apiData?.newAdditionalDetails?.colonizerName);
-      // setValue("sectorNo", apiData?.newAdditionalDetails?.sectorNo);
-      // setValue("colonyType", apiData?.newAdditionalDetails?.colonyType);
-      // setValue("tehsil", apiData?.newAdditionalDetails?.tehsil);
-      // setValue("district", apiData?.newAdditionalDetails?.district);
-      // setValue("selectLicence", apiData?.newAdditionalDetails?.selectLicence);
-      // setValue("revenueEstate", apiData?.newAdditionalDetails?.revenueEstate);
-      // setValue("developmentPlan", apiData?.newAdditionalDetails?.developmentPlan);
-      // setValue("anyOtherDoc", apiData?.additionalDetails?.anyOtherDoc);
-      // setValue("areaInAcres", apiData?.additionalDetails?.areaInAcres);
-      // setValue("areaAcres", apiData?.newAdditionalDetails?.areaAcres);
-      // setValue("boardResolutionDoc", apiData?.additionalDetails?.boardResolutionDoc);
-      // setValue("changeOfDeveloper", apiData?.additionalDetails?.changeOfDeveloper);
-      // setValue("colonizerSeekingTransferLicence", apiData?.additionalDetails?.colonizerSeekingTransferLicence);
-      // setValue("consentLetterDoc", apiData?.additionalDetails?.consentLetterDoc);
-      // setValue("justificationForRequest", apiData?.additionalDetails?.justificationForRequest);
-      // setValue("licenceTransferredFromLandOwn", apiData?.additionalDetails?.licenceTransferredFromLandOwn);
-      
-    }
-  }, [apiData]);
+
   const extensionCom = (data) => console.log(data);
    
   const classes = useStyles();
@@ -119,7 +69,7 @@ useEffect(() => {
   //   setSmShow(false);
   //   console.log("here",openedModal,data);
   //   if(openedModal && data){
-  //     setFieldIconColors({...fieldIconColors,[openedModal]:data.data.isApproved?Colors.approved:Colors.disapproved})
+  //     setgetIconColor({...getIconColor,[openedModal]:data.data.isApproved?Colors.approved:Colors.disapproved})
   //   }
   //     setOpennedModal("");
   //     setLabelValue("");
@@ -193,7 +143,7 @@ useEffect(() => {
     {label:"Any other document which the director may require for the said purpose.",key:"anyOtherDocumentByDirector"}]
 
   const getColorofFieldIcon = () => {
-    let tempFieldColorState = fieldIconColors;
+    let tempFieldColorState = getIconColor;
     fieldIdList.forEach((item) => {
       if (dataIcons !== null && dataIcons !== undefined) {
         console.log("color method called");
@@ -216,7 +166,7 @@ useEffect(() => {
       }
     });
 
-    setFieldIconColors(tempFieldColorState);
+    setgetIconColor(tempFieldColorState);
   };
 
   useEffect(() => {
@@ -245,7 +195,61 @@ const handlemodaldData = (data) => {
     setOpennedModal("");
     setLabelValue("");
 };
+useEffect(() => {
+    if (apiResponse) {
+      setCOMData(apiResponse)
+    }
+  }, [apiResponse])
 
+const setCOMData = (details) => {
+     setValue("licenceNo", details?.newAdditionalDetails?.licenseNo);
+      setValue("appliedBy", details?.appliedBy);
+      setValue("outstandingDues", details?.outstandingDues);
+      setValue("typeOfCommunitySite", details?.typeOfCommunitySite);
+      setValue("licenceRenewd", details?.licenceRenewd);
+      setValue("areaInAcers", details?.areaInAcers);
+      setValue("validUpTo", details?.validUpTo);
+      setValue("applyedForExtentionPerioud", details?.applyedForExtentionPerioud);
+      setValue("amount", details?.amount);
+      setValue("copyOfBoardResolution", details?.copyOfBoardResolution);
+      setValue("justificationForExtention", details?.justificationForExtention);
+      setValue("proofOfOwnershipOfCommunity", details?.proofOfOwnershipOfCommunity);
+      setValue("proofOfOnlinePaymentOfExtention", details?.proofOfOnlinePaymentOfExtention);
+      setValue("explonatoryNotForExtention", details?.explonatoryNotForExtention);
+      setValue("uploadRenewalLicenseCopy", details?.uploadRenewalLicenseCopy);
+      setValue("locationOfApplied", details?.locationOfApplied);
+      setValue("anyOtherDocumentByDirector", details?.anyOtherDocumentByDirector);
+      setValue("areaAcres", details?.newAdditionalDetails?.areaAcres);
+      setValue("licenceGrantDate", details?.newAdditionalDetails?.licenceGrantDate);
+      setValue("colonizerName", details?.newAdditionalDetails?.colonizerName);
+      setValue("colonyType", details?.newAdditionalDetails?.colonyType);
+      setValue("developmentPlan", details?.newAdditionalDetails?.developmentPlan);
+      setValue("district", details?.newAdditionalDetails?.district);
+      setValue("periodOfRenewal", details?.newAdditionalDetails?.periodOfRenewal);
+      setValue("renewalRequiredUpto", details?.newAdditionalDetails?.renewalRequiredUpto);
+      setValue("revenueEstate", details?.newAdditionalDetails?.revenueEstate);
+      setValue("sectorNo", details?.newAdditionalDetails?.sectorNo);
+      setValue("selectLicence", details?.newAdditionalDetails?.selectLicence);
+      setValue("tehsil", details?.newAdditionalDetails?.tehsil);
+      setValue("validUpto", details?.newAdditionalDetails?.validUpto);
+  }
+
+  const getIconColor = (label) => {
+    if (findfisrtObj(dataForIcons?.egScrutiny, label)?.isApproved === 'In Order') {
+      return Colors.approved;
+    }
+    if (findfisrtObj(dataForIcons?.egScrutiny, label)?.isApproved === 'Not In Order') {
+      return Colors.disapproved;
+    }
+    if (findfisrtObj(dataForIcons?.egScrutiny, label)?.isApproved === "Conditional") {
+      return Colors.conditional;
+    }
+    return Colors.info
+  }
+
+  const findfisrtObj = (list = [], label) => {
+    return list?.filter((item, index) => item.fieldIdL === label)?.[0] || {}
+  }
 
   return (
     <form onSubmit={handleSubmit(extensionCom)}>
@@ -300,7 +304,7 @@ const handlemodaldData = (data) => {
             <div>
               <ReportProblemIcon
                       style={{
-                        color: fieldIconColors.licenseNo,
+                        color: getIconColor.licenseNo,
                       }}
                       onClick={() => {
                         setOpennedModal("licenseNo");
@@ -326,7 +330,7 @@ const handlemodaldData = (data) => {
             <div>
               <ReportProblemIcon
                       style={{
-                        color: fieldIconColors.selectLicence,
+                        color: getIconColor.selectLicence,
                       }}
                       onClick={() => {
                         setOpennedModal("selectLicence");
@@ -361,7 +365,7 @@ const handlemodaldData = (data) => {
            <div>
               <ReportProblemIcon
                       style={{
-                        color: fieldIconColors.validUpto,
+                        color: getIconColor.validUpto,
                       }}
                       onClick={() => {
                         setOpennedModal("validUpto");
@@ -393,7 +397,7 @@ const handlemodaldData = (data) => {
             <div>
               <ReportProblemIcon
                       style={{
-                        color: fieldIconColors.colonizerName,
+                        color: getIconColor.colonizerName,
                       }}
                       onClick={() => {
                         setOpennedModal("colonizerName");
@@ -431,7 +435,7 @@ const handlemodaldData = (data) => {
             <div>
               <ReportProblemIcon
                       style={{
-                        color: fieldIconColors.colonyType,
+                        color: getIconColor.colonyType,
                       }}
                       onClick={() => {
                         setOpennedModal("colonyType");
@@ -465,7 +469,7 @@ const handlemodaldData = (data) => {
             <div>
               <ReportProblemIcon
                       style={{
-                        color: fieldIconColors.areaAcres,
+                        color: getIconColor.areaAcres,
                       }}
                       onClick={() => {
                         setOpennedModal("areaAcres");
@@ -498,7 +502,7 @@ const handlemodaldData = (data) => {
             <div>
               <ReportProblemIcon
                       style={{
-                        color: fieldIconColors.sectorNo,
+                        color: getIconColor.sectorNo,
                       }}
                       onClick={() => {
                         setOpennedModal("sectorNo");
@@ -527,7 +531,7 @@ const handlemodaldData = (data) => {
             <div>
               <ReportProblemIcon
                       style={{
-                        color: fieldIconColors.revenueEstate,
+                        color: getIconColor.revenueEstate,
                       }}
                       onClick={() => {
                         setOpennedModal("selectLicence");
@@ -554,7 +558,7 @@ const handlemodaldData = (data) => {
             <div>
               <ReportProblemIcon
                       style={{
-                        color: fieldIconColors.developmentPlan,
+                        color: getIconColor.developmentPlan,
                       }}
                       onClick={() => {
                         setOpennedModal("developmentPlan");
@@ -586,7 +590,7 @@ const handlemodaldData = (data) => {
             <div>
               <ReportProblemIcon
                       style={{
-                        color: fieldIconColors.tehsil,
+                        color: getIconColor.tehsil,
                       }}
                       onClick={() => {
                         setOpennedModal("tehsil");
@@ -612,7 +616,7 @@ const handlemodaldData = (data) => {
           <div>
               <ReportProblemIcon
                       style={{
-                        color: fieldIconColors.district,
+                        color: getIconColor.district,
                       }}
                       onClick={() => {
                         setOpennedModal("district");
@@ -638,7 +642,7 @@ const handlemodaldData = (data) => {
           <div>
                 <ReportProblemIcon
               style={{
-                color:fieldIconColors.appliedBy}}
+                color:getIconColor.appliedBy}}
               onClick={() => {
                   setOpennedModal("appliedBy")
                   setLabelValue("Applied by"),
@@ -659,7 +663,7 @@ const handlemodaldData = (data) => {
           <div>
                 <ReportProblemIcon
               style={{
-                color:fieldIconColors.outstandingDues}}
+                color:getIconColor.outstandingDues}}
               onClick={() => {
                   setOpennedModal("outstandingDues")
                   setLabelValue("Outstanding dues if any"),
@@ -680,7 +684,7 @@ const handlemodaldData = (data) => {
           <div>
                 <ReportProblemIcon
               style={{
-                color:fieldIconColors.typeOfCommunitySite}}
+                color:getIconColor.typeOfCommunitySite}}
               onClick={() => {
                   setOpennedModal("typeOfCommunitySite")
                   setLabelValue("Type of community site"),
@@ -701,7 +705,7 @@ const handlemodaldData = (data) => {
           <div>
                 <ReportProblemIcon
               style={{
-                color:fieldIconColors.areaInAcers}}
+                color:getIconColor.areaInAcers}}
               onClick={() => {
                   setOpennedModal("areaInAcers")
                   setLabelValue("Area in Acres"),
@@ -724,7 +728,7 @@ const handlemodaldData = (data) => {
           <div>
                 <ReportProblemIcon
               style={{
-                color:fieldIconColors.validUpTo}}
+                color:getIconColor.validUpTo}}
               onClick={() => {
                   setOpennedModal("validUpTo")
                   setLabelValue("Community site valid up to"),
@@ -745,7 +749,7 @@ const handlemodaldData = (data) => {
           <div>
                 <ReportProblemIcon
               style={{
-                color:fieldIconColors.applyedForExtentionPerioud}}
+                color:getIconColor.applyedForExtentionPerioud}}
               onClick={() => {
                   setOpennedModal("applyedForExtentionPerioud")
                   setLabelValue("Extension of time"),
@@ -766,7 +770,7 @@ const handlemodaldData = (data) => {
           <div>
                 <ReportProblemIcon
               style={{
-                color:fieldIconColors.amount}}
+                color:getIconColor.amount}}
               onClick={() => {
                   setOpennedModal("amount")
                   setLabelValue("Amount (Rs.)"),
@@ -814,7 +818,7 @@ const handlemodaldData = (data) => {
                                        <div className="btn btn-sm col-md-4">
                                        <ReportProblemIcon
               style={{
-                color:fieldIconColors.copyOfBoardResolution}}
+                color:getIconColor.copyOfBoardResolution}}
               onClick={() => {
                   setOpennedModal("copyOfBoardResolution")
                   setLabelValue("Copy of Board resolution in favour of authorized signatory, applying for case (if applicable)."),
@@ -850,7 +854,7 @@ const handlemodaldData = (data) => {
                                        <div className="btn btn-sm col-md-4">
                                        <ReportProblemIcon
               style={{
-                color:fieldIconColors.justificationForExtention}}
+                color:getIconColor.justificationForExtention}}
               onClick={() => {
                   setOpennedModal("justificationForExtention")
                   setLabelValue("Justification for extension in time period for construction of community site."),
@@ -887,7 +891,7 @@ const handlemodaldData = (data) => {
                                        <div className="btn btn-sm col-md-4">
                                        <ReportProblemIcon
               style={{
-                color:fieldIconColors.proofOfOwnershipOfCommunity}}
+                color:getIconColor.proofOfOwnershipOfCommunity}}
               onClick={() => {
                   setOpennedModal("proofOfOwnershipOfCommunity")
                   setLabelValue("Proof of ownership of community site (in case of the extension is sought by an applicant other than the licensee)."),
@@ -924,7 +928,7 @@ const handlemodaldData = (data) => {
                                        <div className="btn btn-sm col-md-4">
                                        <ReportProblemIcon
               style={{
-                color:fieldIconColors.proofOfOnlinePaymentOfExtention}}
+                color:getIconColor.proofOfOnlinePaymentOfExtention}}
               onClick={() => {
                   setOpennedModal("proofOfOnlinePaymentOfExtention")
                   setLabelValue("Proof of online payment of extension fees at the rates provided in Schedule-C to these Rules."),
@@ -961,7 +965,7 @@ const handlemodaldData = (data) => {
                                        <div className="btn btn-sm col-md-4">
                                        <ReportProblemIcon
               style={{
-                color:fieldIconColors.explonatoryNotForExtention}}
+                color:getIconColor.explonatoryNotForExtention}}
               onClick={() => {
                   setOpennedModal("explonatoryNotForExtention")
                   setLabelValue("An explanatory note indicating the details of progress made about the construction of such a community site."),
@@ -998,7 +1002,7 @@ const handlemodaldData = (data) => {
                                        <div className="btn btn-sm col-md-4">
                                        <ReportProblemIcon
               style={{
-                color:fieldIconColors.uploadRenewalLicenseCopy}}
+                color:getIconColor.uploadRenewalLicenseCopy}}
               onClick={() => {
                   setOpennedModal("uploadRenewalLicenseCopy")
                   setLabelValue("In case of other than licensee/developer, upload renewed license copy."),
@@ -1034,7 +1038,7 @@ const handlemodaldData = (data) => {
                                        <div className="btn btn-sm col-md-4">
                                        <ReportProblemIcon
               style={{
-                color:fieldIconColors.locationOfApplied}}
+                color:getIconColor.locationOfApplied}}
               onClick={() => {
                   setOpennedModal("locationOfApplied")
                   setLabelValue("Location of applied community site on the plan."),
@@ -1070,7 +1074,7 @@ const handlemodaldData = (data) => {
                                        <div className="btn btn-sm col-md-4">
                                        <ReportProblemIcon
               style={{
-                color:fieldIconColors.anyOtherDocumentByDirector}}
+                color:getIconColor.anyOtherDocumentByDirector}}
               onClick={() => {
                   setOpennedModal("anyOtherDocumentByDirector")
                   setLabelValue(" Any other document which the director may require for the said purpose."),

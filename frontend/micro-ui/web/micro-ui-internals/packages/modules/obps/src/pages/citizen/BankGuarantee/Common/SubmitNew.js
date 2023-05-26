@@ -91,7 +91,7 @@ function SubmitNew() {
         NewBankGuaranteeRequest: [
           {
             loiNumber: "",
-            typeOfBg: "",
+            
             businessService: "",
             tenantId: tenantId,
 
@@ -122,6 +122,7 @@ function SubmitNew() {
             assignee: null,
 
             ...data,
+            typeOfBg: data?.typeOfBg?.label
           },
         ],
         RequestInfo: {
@@ -356,7 +357,7 @@ function SubmitNew() {
                     {/* Type of fee */}
                     <span style={{ color: "red" }}>*</span>
                   </h2>
-   <ReactMultiSelect control={control} name="typeOfBg" placeholder="" data={selectTypeData} labels=""  disabled={existingBgNumber?.length > 0 ? true : false}/>
+   <ReactMultiSelect control={control} name="typeOfBg" placeholder="" data={selectTypeData} onClick={submitNewFormSubmitHandler} labels=""  disabled={existingBgNumber?.length > 0 ? true : false}/>
                   {/* <select
                     className="Inputcontrol"
                     class="form-control"
