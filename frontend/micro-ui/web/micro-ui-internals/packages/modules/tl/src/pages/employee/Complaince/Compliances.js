@@ -286,7 +286,7 @@ const Addmoreinput = ({ applicationimp }) => {
 
                     <div>
                         <Col md={12} lg={12} mb={3} sx={{ marginY: 2 }}>
-                            <button id="btnSearch" class="btn btn-primary btn-md center-block" style={{ marginTop: "-58px", marginRight: "97px" }}
+                            <button id="btnSearch" class="btn btn-primary btn-md center-block" style={{ marginTop: "0px", marginRight: "97px" }}
                                 onClick={() => {
                                     setSmShow(true),
                                         console.log("modal open")

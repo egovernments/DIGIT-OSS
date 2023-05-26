@@ -848,12 +848,39 @@ const PersonalinfoChild = (props) => {
                         <div className="row">
 
                           <div className="btn btn-sm col-md-6">
-                            <IconButton onClick={() => getDocShareholding(item?.uploadPdf)}>
+                            <IconButton 
+                            style={{
+                              color: " #1266af",
+                              fontSize: " 12px",
+                              fontWeight: "bold",
+                              cursor: "pointer",
+                              textDecorationLine: "underline",
+                            }}
+                            onClick={() => {
+                              if (item?.uploadPdf) getDocShareholding(item?.uploadPdf, setLoader);
+                              else setShowToastError({ label: "No Document here", error: true, success: false });
+                            }}
+                            
+                            // onClick={() => getDocShareholding(item?.uploadPdf)}
+                            >
                               <Visibility color="info" className="icon" /></IconButton>
 
                           </div>
                           <div className="btn btn-sm col-md-6">
-                            <IconButton onClick={() => getDocShareholding(item?.uploadPdf)}>
+                            <IconButton 
+                             style={{
+                              color: " #1266af",
+                              fontSize: " 12px",
+                              fontWeight: "bold",
+                              cursor: "pointer",
+                              textDecorationLine: "underline",
+                            }}
+                            onClick={() => {
+                              if (item?.uploadPdf) getDocShareholding(item?.uploadPdf, setLoader);
+                              else setShowToastError({ label: "No Document here", error: true, success: false });
+                            }}
+                            // onClick={() => getDocShareholding(item?.uploadPdf)}
+                            >
                               <FileDownload color="primary" className="mx-1" />
                             </IconButton>
                           </div>
@@ -936,14 +963,40 @@ const PersonalinfoChild = (props) => {
                         <div className="row">
                           {/* <button className="btn btn-sm col-md-6" onClick={()=>getDocShareholding(item?.uploadPdf)} > */}
                           <div className="btn btn-sm col-md-4">
-                            <IconButton onClick={() => getDocShareholding(item?.uploadPdf)}>
+                            <IconButton 
+                            style={{
+                              color: " #1266af",
+                              fontSize: " 12px",
+                              fontWeight: "bold",
+                              cursor: "pointer",
+                              textDecorationLine: "underline",
+                            }}
+                            onClick={() => {
+                              if (item?.uploadPdf) getDocShareholding(item?.uploadPdf, setLoader);
+                              else setShowToastError({ label: "No Document here", error: true, success: false });
+                            }}
+                            // onClick={() => getDocShareholding(item?.uploadPdf)}
+                            >
                               <Visibility color="info" className="icon" /></IconButton>
                           </div>
                           {/* </button> */}
                           {/* <button className="btn btn-sm col-md-6" onClick={() => window.open(item?.uploadPdf)} >
                                       <FileDownload color="primary" /> */}
                           <div className="btn btn-sm col-md-4">
-                            <IconButton onClick={() => getDocShareholding(item?.uploadPdf)}>
+                            <IconButton 
+                            style={{
+                              color: " #1266af",
+                              fontSize: " 12px",
+                              fontWeight: "bold",
+                              cursor: "pointer",
+                              textDecorationLine: "underline",
+                            }}
+                            onClick={() => {
+                              if (item?.uploadPdf) getDocShareholding(item?.uploadPdf, setLoader);
+                              else setShowToastError({ label: "No Document here", error: true, success: false });
+                            }}
+                            // onClick={() => getDocShareholding(item?.uploadPdf)}
+                            >
                               <FileDownload color="primary" className="mx-1" />
                             </IconButton>
                           </div>
@@ -1186,7 +1239,7 @@ const PersonalinfoChild = (props) => {
                 }}
                 onClick={() => {
                   if (personalinfo?.devDetail?.aurthorizedUserInfoArray?.[0]?.uploadDigitalSignaturePdf) getDocShareholding(personalinfo?.devDetail?.aurthorizedUserInfoArray?.[0]?.uploadDigitalSignaturePdf, setLoader);
-                  else setShowToastError({ label: "No pdf here", error: true, success: false });
+                  else setShowToastError({ label: "No Document here", error: true, success: false });
                 }}>
                 <Visibility color="info" className="icon" /></IconButton>
 
@@ -1203,7 +1256,7 @@ const PersonalinfoChild = (props) => {
                 }}
                 onClick={() => {
                   if (personalinfo?.devDetail?.aurthorizedUserInfoArray?.[0]?.uploadDigitalSignaturePdf) getDocShareholding(personalinfo?.devDetail?.aurthorizedUserInfoArray?.[0]?.uploadDigitalSignaturePdf, setLoader);
-                  else setShowToastError({ label: "No pdf here", error: true, success: false });
+                  else setShowToastError({ label: "No Document here", error: true, success: false });
                 }}
               >
                 <FileDownload color="primary" className="mx-1" />
@@ -1265,7 +1318,7 @@ const PersonalinfoChild = (props) => {
                 }}
                 onClick={() => {
                   if (personalinfo?.devDetail?.aurthorizedUserInfoArray?.[0]?.uploadBoardResolution) getDocShareholding(personalinfo?.devDetail?.aurthorizedUserInfoArray?.[0]?.uploadBoardResolution, setLoader);
-                  else setShowToastError({ label: "No pdf here", error: true, success: false });
+                  else setShowToastError({ label: "No Document here", error: true, success: false });
                 }}
               >
                 <Visibility color="info" className="icon" /></IconButton>
@@ -1282,7 +1335,7 @@ const PersonalinfoChild = (props) => {
                 }}
                 onClick={() => {
                   if (personalinfo?.devDetail?.aurthorizedUserInfoArray?.[0]?.uploadBoardResolution) getDocShareholding(personalinfo?.devDetail?.aurthorizedUserInfoArray?.[0]?.uploadBoardResolution, setLoader);
-                  else setShowToastError({ label: "No pdf here", error: true, success: false });
+                  else setShowToastError({ label: "No Document here", error: true, success: false });
                 }}
               >
                 <FileDownload color="primary" className="mx-1" />
