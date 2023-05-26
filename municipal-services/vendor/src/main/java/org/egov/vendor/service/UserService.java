@@ -128,10 +128,11 @@ public class UserService {
 									.equals(userDetailResponse.getUser().get(i).getMobileNumber())
 							&& !userDetailResponse.getUser().get(i).getUuid()
 									.equals(vendorRequest.getVendor().getOwner().getUuid())) {
-
-						throw new CustomException(VendorErrorConstants.ALREADY_VENDOR_EXIST,
-								VendorErrorConstants.VENDOR_ERROR_MESSAGE);
-
+						List<String> roleCodes = userDetailResponse.getUser().get(i).getRoles().stream().map(Role::getCode).collect(Collectors.toList());
+						if(roleCodes.contains(config.getDsoRole())) {
+							throw new CustomException(VendorErrorConstants.ALREADY_VENDOR_EXIST,
+									VendorErrorConstants.VENDOR_ERROR_MESSAGE);
+						}
 					}
 				}
 			}

@@ -56,7 +56,7 @@ public class UserService {
 
 	/**
 	 * 
-	 * @param vendorRequest
+	 * @param vehicleRequest
 	 */
 	@SuppressWarnings("null")
 	public void manageOwner(VehicleRequest vehicleRequest, boolean isUpdate) {
