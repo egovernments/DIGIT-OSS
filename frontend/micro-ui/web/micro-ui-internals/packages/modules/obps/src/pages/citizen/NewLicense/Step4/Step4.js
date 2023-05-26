@@ -562,7 +562,7 @@ const AppliedDetailForm = (props) => {
                   <div className="row">
                     <div className="col col-4 mt-3">
                       <h6>
-                        {`${t("NWL_APPLICANT_DGPS_POINTS_AREA")}`}:{/* Area(in acres): */}
+                        {`${t("NWL_APPLICANT_DETAIL_POINTS_AREA")}`}:{/* Area(in acres): */}
                         <input
                           type="number"
                           className="form-control"

@@ -34,7 +34,7 @@ const AdditionalDocument = () => {
   const [services, setServices] = useState([]);
   const [getData, setData] = useState([]);
   const [open, setOpen] = useState(false);
-  const [DataSection , setDataSection] = useState([]);
+  const [DataSection, setDataSection] = useState([]);
 
   const {
     watch,
@@ -154,16 +154,15 @@ const AdditionalDocument = () => {
         ],
       },
     };
-    let requestProfrma = {}
+    let requestProfrma = {};
     try {
       const Resp = await axios.post("/egov-mdms-service/v1/_search", payload);
       // console.log("asdasdasd", Resp?.data?.MdmsRes?.["common-masters"]?.services?.[0]?.businessService?.);
       const devPlan = Resp?.data?.MdmsRes?.["common-masters"]?.services?.[0]?.businessService?.map(function (data) {
-        return { value: data?.name, label: data?.name , };
+        return { value: data?.name, label: data?.name };
       });
       setServices(devPlan);
       requestProfrma = {
-
         RequestInfo: {
           apiId: "Rainmaker",
           ver: "v1",
@@ -174,58 +173,44 @@ const AdditionalDocument = () => {
           msgId: "090909",
           requesterId: "",
           authToken: "",
-        correlationId: null,
-    
+          correlationId: null,
         },
         MdmsCriteria: {
           tenantId: "hr",
           moduleDetails: [
-
             {
+              moduleName: "common-masters",
 
-                moduleName: "common-masters",
+              tenantId: "hr",
 
-                tenantId: "hr",
-
-                masterDetails: [
-
-                    {
-
-                        name: "ApplicationSection",
-
-                    }
-
-                ]
-
-            }
-
-        ]
-        } 
-      }
-    } 
-    catch (error) {
+              masterDetails: [
+                {
+                  name: "ApplicationSection",
+                },
+              ],
+            },
+          ],
+        },
+      };
+    } catch (error) {
       console.log(error);
-  
     }
-    
-    console.log("TCPaccessrequestProfrma123", requestProfrma)
-     try {
+
+    console.log("TCPaccessrequestProfrma123", requestProfrma);
+    try {
       const Resp = await axios.post(`/egov-mdms-service/v1/_search`, requestProfrma);
       // .then((response) => {
       //   return response?.data;
-        
+
       // });
       const section = Resp?.data?.MdmsRes?.["common-masters"]?.ApplicationSection?.map(function (data) {
         return { value: data?.type, label: data?.type };
       });
       setDataSection(section);
       console.log("FileddataNamemDMSD", section);
-  
     } catch (error) {
       console.log(error);
-  
     }
-
   };
 
   useEffect(() => {
@@ -380,7 +365,7 @@ const AdditionalDocument = () => {
                       </th>
                       <th>
                         {`${t("AD_APPLICATION_SECETION")}`}
-                        {/* Upload Document */}
+                        {/* Select section */}
                       </th>
                       <th>
                         {`${t("AD_DOCUMENT_DESCRIPTION")}`}
@@ -390,7 +375,7 @@ const AdditionalDocument = () => {
                         {`${t("AD_UPLOAD_DOCUMENT")}`}
                         {/* Upload Document */}
                       </th>
-                      
+
                       <th>
                         {`${t("AD_ACTION")}`}
                         {/* Action */}
@@ -403,13 +388,14 @@ const AdditionalDocument = () => {
                         <td>{index + 1}</td>
                         <td>
                           <ReactMultiSelect
-                  control={control}
-                  name="applicationSection"
-                  placeholder="Select Section"
-                  data={DataSection}
-                  labels=""
-                  onChange={() => setValue("applicationSections", { label: "", value: "" })}
-                /></td>
+                            control={control}
+                            name="applicationSection"
+                            placeholder="Select Section"
+                            data={DataSection}
+                            labels=""
+                            onChange={() => setValue("applicationSections", { label: "", value: "" })}
+                          />
+                        </td>
                         <td>
                           <div>
                             {/* <label>Document Description</label> */}
