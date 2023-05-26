@@ -435,12 +435,12 @@ const LandScheduleForm = (props) => {
                 <Col>
                   <div className="row">
                     <div className="col col-12 ">
-                      <div>
+                      {/* <div>
                         <h2>
-                          1.&nbsp;
-                          {`${t("NWL_APPLICANT_WHETHER_LICENCE_APPLIED_FOR_ADDITIONAL_AREA")}`}
-                          {/* Whether licence applied for additional area ? */}
-                          <span style={{ color: "red" }}>*</span>&nbsp;&nbsp;
+                          1.&nbsp; */}
+                      {/* {`${t("NWL_APPLICANT_WHETHER_LICENCE_APPLIED_FOR_ADDITIONAL_AREA")}`} */}
+                      {/* Whether licence applied for additional area ? */}
+                      {/* <span style={{ color: "red" }}>*</span>&nbsp;&nbsp;
                           <label htmlFor="licenseAppliedYes">
                             <input {...register("licenseApplied")} type="radio" value="Y" id="licenseAppliedYes" />
                             &nbsp; Yes &nbsp;&nbsp;
@@ -453,7 +453,7 @@ const LandScheduleForm = (props) => {
                             {errors?.licenseApplied && errors?.licenseApplied?.message}
                           </h3>
                         </h2>
-                      </div>
+                      </div> */}
 
                       {watch("licenseApplied") === "Y" && (
                         <div>
@@ -732,11 +732,11 @@ const LandScheduleForm = (props) => {
                   </div>
                   <div className="row mt-2 mb-4">
                     <div className="col col-12 ">
-                      <div>
+                      {/* <div>
                         <h2>
-                          {`${t("NWL_APPLICANT_WHETHER_LICENCE_APPLIED_UNDER_MIGRATION_POLICY")}`}
-                          {/* Whether licence applied under Migration Policy ? */}
-                          <span style={{ color: "red" }}>*</span>&nbsp;&nbsp;
+                          {`${t("NWL_APPLICANT_WHETHER_LICENCE_APPLIED_UNDER_MIGRATION_POLICY")}`} */}
+                      {/* Whether licence applied under Migration Policy ? */}
+                      {/* <span style={{ color: "red" }}>*</span>&nbsp;&nbsp;
                           <label htmlFor="migrationLicYes">
                             <input
                               {...register("migrationLic")}
@@ -759,7 +759,7 @@ const LandScheduleForm = (props) => {
                             {errors?.migrationLic && errors?.migrationLic?.message}
                           </h3>
                         </h2>
-                      </div>
+                      </div> */}
                       {watch("migrationLic") === "Y" && (
                         <div>
                           {modalData.length > 0 && (
@@ -771,10 +771,10 @@ const LandScheduleForm = (props) => {
                       )}
                     </div>
                   </div>
-                  <hr></hr>
+                  {/* <hr></hr> */}
                   <div className="mt-4">
                     <h4 className="mb-2">
-                      {`${t("NWL_APPLICANT_ANY_ENCUMBRANCE_WITH_RESPECT_TO_FOLLOWING")}`}
+                      1. {`${t("NWL_APPLICANT_ANY_ENCUMBRANCE_WITH_RESPECT_TO_FOLLOWING")}`}
                       {/* Any encumbrance with respect to following  */}
                       <span style={{ color: "red" }}>*</span>
                     </h4>

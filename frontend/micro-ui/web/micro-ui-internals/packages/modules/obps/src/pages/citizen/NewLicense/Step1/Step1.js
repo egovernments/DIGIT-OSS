@@ -249,11 +249,11 @@ const ApllicantFormStep1 = (props) => {
               {`${t("NWL_DEVELOPER_INFORMATION")}`}
               {/* Developer Information */}
             </h5>
-            <div className="row-12">
-              <div className="col md={4} xxl lg-4">
-                {developerDataLabel?.addInfo?.showDevTypeFields == "Individual" ||
-                developerDataLabel?.addInfo?.showDevTypeFields == "Proprietorship Firm" ||
-                developerDataLabel?.addInfo?.showDevTypeFields == "Hindu Undivided Family" ? (
+            <div style={{ rowGap: "18px" }} className="row">
+              {developerDataLabel?.addInfo?.showDevTypeFields == "Individual" ||
+              developerDataLabel?.addInfo?.showDevTypeFields == "Proprietorship Firm" ||
+              developerDataLabel?.addInfo?.showDevTypeFields == "Hindu Undivided Family" ? (
+                <div className="col col-lg-4 col-md-6 col-sm-6 mb-2">
                   <FormControl>
                     <h2>
                       {`${t("NWL_APPLICANT_DEVELOPER_NAME")}`}
@@ -271,7 +271,9 @@ const ApllicantFormStep1 = (props) => {
                       {...register("developerNameA")}
                     />
                   </FormControl>
-                ) : (
+                </div>
+              ) : (
+                <div className="col col-lg-4 col-md-6 col-sm-6 mb-2">
                   <FormControl>
                     <h2>
                       {`${t("NWL_APPLICANT_DEVELOPER_NAME")}`}
@@ -289,8 +291,9 @@ const ApllicantFormStep1 = (props) => {
                       {...register("developerName")}
                     />
                   </FormControl>
-                )}
-                &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp;
+                </div>
+              )}
+              <div className="col col-lg-4 col-md-6 col-sm-6 mb-2">
                 <FormControl>
                   <h2>
                     {`${t("NWL_APPLICANT_DEVELOPER_ADDRESS")}`}
@@ -319,7 +322,8 @@ const ApllicantFormStep1 = (props) => {
                     {errors?.developerAddress && errors?.developerAddress?.message}
                   </h3>
                 </FormControl>
-                &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp;
+              </div>
+              <div className="col col-lg-4 col-md-6 col-sm-6 mb-2">
                 <FormControl>
                   <h2>
                     {`${t("NWL_APPLICANT_DEVELOPER_EMAILID")}`}
@@ -348,7 +352,8 @@ const ApllicantFormStep1 = (props) => {
                     {errors?.developerEmail && errors?.developerEmail?.message}
                   </h3>
                 </FormControl>
-                &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp;
+              </div>
+              <div className="col col-lg-4 col-md-6 col-sm-6 mb-2">
                 <FormControl>
                   <h2>
                     {`${t("NWL_APPLICANT_DEVELOPER_TYPE")}`}
@@ -377,14 +382,11 @@ const ApllicantFormStep1 = (props) => {
                   </h3>
                 </FormControl>
               </div>
-            </div>
-            <br></br>
-            <div className="row-12">
-              <div className="col md={4} xxl lg-4">
-                {developerDataLabel?.addInfo?.showDevTypeFields != "Individual" &&
-                  developerDataLabel?.addInfo?.showDevTypeFields != "Limited Liability Partnership" &&
-                  developerDataLabel?.addInfo?.showDevTypeFields != "Hindu Undivided Family" &&
-                  developerDataLabel?.addInfo?.showDevTypeFields != "Proprietorship Firm" && (
+              {developerDataLabel?.addInfo?.showDevTypeFields != "Individual" &&
+                developerDataLabel?.addInfo?.showDevTypeFields != "Limited Liability Partnership" &&
+                developerDataLabel?.addInfo?.showDevTypeFields != "Hindu Undivided Family" &&
+                developerDataLabel?.addInfo?.showDevTypeFields != "Proprietorship Firm" && (
+                  <div className="col col-lg-4 col-md-6 col-sm-6 mb-2">
                     <FormControl>
                       <h2>
                         {`${t("NWL_APPLICANT_CIN_NUMBER")}`}
@@ -411,11 +413,12 @@ const ApllicantFormStep1 = (props) => {
                         {errors?.developerCinNo && errors?.developerCinNo?.message}
                       </h3>
                     </FormControl>
-                  )}
-                &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp;
-                {developerDataLabel?.addInfo?.showDevTypeFields != "Company" &&
-                  developerDataLabel?.addInfo?.showDevTypeFields != "Limited Liability Partnership" &&
-                  developerDataLabel?.addInfo?.showDevTypeFields != "Partnership Firm" && (
+                  </div>
+                )}
+              {developerDataLabel?.addInfo?.showDevTypeFields != "Company" &&
+                developerDataLabel?.addInfo?.showDevTypeFields != "Limited Liability Partnership" &&
+                developerDataLabel?.addInfo?.showDevTypeFields != "Partnership Firm" && (
+                  <div className="col col-lg-4 col-md-6 col-sm-6 mb-2">
                     <FormControl>
                       <h2>
                         {`${t("NWL_APPLICANT_PAN_NUMBER")}`}
@@ -442,9 +445,10 @@ const ApllicantFormStep1 = (props) => {
                         {errors?.developerPanNo && errors?.developerPanNo?.message}
                       </h3>
                     </FormControl>
-                  )}
-                &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp;
-                {developerDataLabel?.addInfo?.showDevTypeFields != "Company" && (
+                  </div>
+                )}
+              {developerDataLabel?.addInfo?.showDevTypeFields != "Company" && (
+                <div className="col col-lg-4 col-md-6 col-sm-6 mb-2">
                   <FormControl>
                     <h2>
                       {`${t("NWL_APPLICANT_GST_NUMBER")}`}
@@ -471,13 +475,14 @@ const ApllicantFormStep1 = (props) => {
                       {errors?.developerGstNo && errors?.developerGstNo?.message}
                     </h3>
                   </FormControl>
-                )}
-                &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp;
-                {developerDataLabel?.addInfo?.showDevTypeFields != "Individual" &&
-                  developerDataLabel?.addInfo?.showDevTypeFields != "Company" &&
-                  developerDataLabel?.addInfo?.showDevTypeFields != "Hindu Undivided Family" &&
-                  developerDataLabel?.addInfo?.showDevTypeFields != "Proprietorship Firm" &&
-                  developerDataLabel?.addInfo?.showDevTypeFields != "Partnership Firm" && (
+                </div>
+              )}
+              {developerDataLabel?.addInfo?.showDevTypeFields != "Individual" &&
+                developerDataLabel?.addInfo?.showDevTypeFields != "Company" &&
+                developerDataLabel?.addInfo?.showDevTypeFields != "Hindu Undivided Family" &&
+                developerDataLabel?.addInfo?.showDevTypeFields != "Proprietorship Firm" &&
+                developerDataLabel?.addInfo?.showDevTypeFields != "Partnership Firm" && (
+                  <div className="col col-lg-4 col-md-6 col-sm-6 mb-2">
                     <FormControl>
                       <h2>
                         {`${t("NWL_APPLICANT_LLP_NUMBER")}`}
@@ -504,16 +509,15 @@ const ApllicantFormStep1 = (props) => {
                         {errors?.developerLlpNo && errors?.developerLlpNo?.message}
                       </h3>
                     </FormControl>
-                  )}
-              </div>
+                  </div>
+                )}
             </div>
-            <br></br>
             {developerDataLabel?.addInfo?.showDevTypeFields != "Individual" &&
               developerDataLabel?.addInfo?.showDevTypeFields != "Limited Liability Partnership" &&
               developerDataLabel?.addInfo?.showDevTypeFields != "Hindu Undivided Family" &&
               developerDataLabel?.addInfo?.showDevTypeFields != "Partnership Firm" &&
               developerDataLabel?.addInfo?.showDevTypeFields != "Proprietorship Firm" && (
-                <div>
+                <div className="mt-5">
                   <h5 className="card-title fw-bold">
                     {`${t("NWL_APPLICANT_1_DIRECTOR_INFOMATION_AS_PER_MCA")}`}
 
