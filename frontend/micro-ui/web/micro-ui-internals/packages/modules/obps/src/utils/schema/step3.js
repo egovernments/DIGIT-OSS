@@ -47,6 +47,16 @@ const VALIDATION_SCHEMA = Yup.object().shape({
       return true;
     },
   }),
+  compactBlockRemark: Yup.string().test({
+    name: "compactBlock",
+    test: function (value) {
+      const newoptions = this.resolve(Yup.ref("compactBlock"));
+      if (newoptions === "Y") {
+        return !!value || this.createError({ message: "This field is required" });
+      }
+      return true;
+    },
+  }),
   road: Yup.string().nullable().required("This field is required."),
   utilityLine: Yup.string().nullable().required("This field is required."),
   landSchedule: Yup.string().nullable().required("This field is required."),
