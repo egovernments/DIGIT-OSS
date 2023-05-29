@@ -18,8 +18,9 @@ import { IconButton } from "@mui/material";
 import { getDocShareholding } from "./ScrutinyDevelopment/docview.helper";
 import { useTranslation } from "react-i18next";
 import { useLocation } from "react-router-dom";
-import AdditionalDocument from "./AdditionalDocument";
+import AdditionalDocument from "./AdditionalDocument/ApplicantInfo";
 import CusToaster from "../../../components/Toaster";
+import ApplicationPurpose from "./AdditionalDocument/ApplicationPurpose";
 
 const Genarelinfo = (props) => {
   // useTranslation
@@ -432,13 +433,15 @@ const Genarelinfo = (props) => {
       </div>
       <Collapse in={open2}>
         <div id="example-collapse-text">
+        {!additionalDocResponData?.AdditionalDocumentReport?.[0]?.applicantPurpose == null &&
+          <div>
+          <ApplicationPurpose
+          additionalDocRespon={additionalDocResponData}
+         />
+        </div>
 
-        <div>
-            <AdditionalDocument
-            additionalDocRespon={additionalDocResponData}
-           
-            />
-          </div>
+        }
+        
           <Form.Group className="justify-content-center" controlId="formBasicEmail" style={{ border: "2px solid #e9ecef", margin: 10, padding: 20 }}>
             <Row className="ml-auto" style={{ marginBottom: 5 }}>
               <Col md={4} xxl lg="3" className={classes.formLabel}>

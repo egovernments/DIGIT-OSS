@@ -11,6 +11,8 @@ import FileDownload from "@mui/icons-material/FileDownload";
 import { IconButton } from "@mui/material";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
+import AddIcon from "@mui/icons-material/Add";
+import RemoveIcon from "@mui/icons-material/Remove";
 
 import {  Box,
   Collapse,
@@ -21,7 +23,7 @@ import {  Box,
 
 
 const windowHeight = window !== undefined ? window.innerHeight : null;
-const ScrutinyDevelopment = (props) => {
+const ExternalSection = (props) => {
 
   // function createMarkup(el) {
   //   return {__html:conatn};
@@ -38,7 +40,7 @@ const ScrutinyDevelopment = (props) => {
   const userRoles = user?.info?.roles?.map((e) => e.code);
   const showRemarksSection = userRoles.includes("DTCP_HR")
   const histeroyData = props.histeroyData
-
+  const [open3, setOpen3] = useState(false);
   const [approval, setDisapproval] = useState(false);
   const [disapprovedList, setDisapprovedList] = useState([]);
   const dateTime = new Date();
@@ -207,12 +209,41 @@ console.log("log123Disrenu" ,id);
         marginTop: 5,
       }}
     >
+
+
+<div
+            className="collapse-header"
+            onClick={() => setOpen3(!open3)}
+            aria-controls="example-collapse-text"
+            aria-expanded={open3}
+            style={{
+              background: "#f1f1f1",
+              padding: "0.25rem 1.25rem",
+              borderRadius: "0.25rem",
+              fontWeight: "600",
+              display: "flex",
+              cursor: "pointer",
+              color: "#817f7f",
+              justifyContent: "space-between",
+              alignContent: "center",
+            }}
+          >
+            <span style={{ color: "#817f7f", fontSize: 16 }} className="">
+              - External Section 
+            
+            </span>
+            {open3 ? <RemoveIcon></RemoveIcon> : <AddIcon></AddIcon>}
+          </div>
+          <Collapse in={open3}>
+            <div id="example-collapse-text" style={{ marginTop: 12, paddingLeft: 12, paddingRight: 12 }}>
+
+
       <Row class="remarkshelp">
         <div 
         class="currentremarks"
          >
           <div class="WhatsNewCard" style={{ backgroundColor: "#ddf2cf" }}>
-            {/* <p class="text-center" ><h4>Current Remarks</h4></p> */}
+            <p class="text-center" ><h4>External Section</h4></p>
             <Row>
 
               <Col>
@@ -583,14 +614,14 @@ console.log("log123Disrenu" ,id);
               </Form.Group>
 
             </div>
-            Account Section
+            
 
 
           </div>
 
         </div>
 
-
+{/* 
         <div 
         class="currentremarks"
          >
@@ -645,11 +676,15 @@ console.log("log123Disrenu" ,id);
           <div class="WhatsNewCard" style={{ backgroundColor: "#ddf2cf" }}>
           Main
 
-            </div></div>
+            </div></div> */}
 
 
         </Row>
-        <Row>
+
+
+        </div>
+        </Collapse>
+        {/* <Row>
 
         <div class="histroryremarks">
           <div class="WhatsNewCard" style={{ backgroundColor: "#ddf2cf" }}>
@@ -701,7 +736,7 @@ console.log("log123Disrenu" ,id);
 
           </div>
         </div>
-      </Row>
+      </Row> */}
 
 
     
@@ -713,4 +748,4 @@ console.log("log123Disrenu" ,id);
   );
 };
 
-export default ScrutinyDevelopment;
+export default ExternalSection;

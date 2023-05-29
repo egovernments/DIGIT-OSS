@@ -53,11 +53,7 @@ const getDynamicFileds = (type , data) => {
           case "textarea":
           return (
             <React.Fragment>
-            <div className="row" style={{
-              display: "flex",
-              width: "1150px",
-              marginTop: "15px",
-             }}>
+            <div className="textareaProforma" >
               {/* <label> Remark</label> */}
               <textarea
                 type="textarea"
