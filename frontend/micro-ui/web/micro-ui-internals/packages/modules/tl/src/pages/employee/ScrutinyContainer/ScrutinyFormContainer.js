@@ -122,6 +122,7 @@ const ScrutinyFormcontainer = (props) => {
     
     }
     let requestFiled = {}
+    let requestProfrma = {}
     try {
       const Resp = await axios.post(`/tl-services/v1/_search?tenantId=hr&applicationNumber=${id}`, requestInfo).then((response) => {
         return response?.data;
@@ -135,10 +136,7 @@ const ScrutinyFormcontainer = (props) => {
       setBusinessService(Resp?.Licenses[0]?.businessService);
       setStatus(Resp?.Licenses[0]?.status);
       console.log("devStatus", Resp?.Licenses[0]?.status);
-      
-
-      
-      ////////////////////////////////////
+    
       requestFiled = {
 
         RequestInfo: {
@@ -151,7 +149,7 @@ const ScrutinyFormcontainer = (props) => {
           msgId: "090909",
           requesterId: "",
           authToken: authToken,
-          // userInfo: userInfo
+         
   
         },
         MdmsCriteria: {
@@ -164,8 +162,7 @@ const ScrutinyFormcontainer = (props) => {
                 {
                   "name": "rolesaccess",
                   "filter":`[?(${query})]`,
-                  // `[?(@.role=='${filterDataRole}'|| @.role=='${userRolesArray}')]`
-                },
+                 },
                 {
                   "name": "rolesaccess",
                   "filter": `[?(@.applicationStatus =='${Resp?.Licenses[0]?.status}')]`
@@ -175,20 +172,7 @@ const ScrutinyFormcontainer = (props) => {
           ]
         }
       }
-    } catch (error) {
-      console.log(error);
-    }
-    
-    console.log("TCPaccess123", requestFiled)
-    let requestProfrma = {}
-     try {
-      const Resp = await axios.post(`/egov-mdms-service/v1/_search`, requestFiled).then((response) => {
-        return response?.data;
-      });
-      setMDMSData(Resp?.MdmsRes?.ACCESSCONTROL_ROLESACCESS?.rolesaccess);
-
-      console.log("FileddataName12", mDMSData);
-
+     
       requestProfrma = {
 
         RequestInfo: {
@@ -215,14 +199,34 @@ const ScrutinyFormcontainer = (props) => {
   
                   "name": "PerformaNewLicence",
   
-                  "filter":"[?(@.role=='AO')]"
+                  "filter":`[?(${query})]`,
   
+              },
+              {
+                "name": "PerformaNewLicence",
+                "filter": `[?(@.applicationStatus =='${Resp?.Licenses[0]?.status}')]`
               }
+             
               ]
             }
           ]
         } 
       } 
+    } catch (error) {
+      console.log(error);
+    }
+    
+    console.log("TCPaccess123", requestFiled)
+    // let requestProfrma = {status}
+     try {
+      const Resp = await axios.post(`/egov-mdms-service/v1/_search`, requestFiled).then((response) => {
+        return response?.data;
+      });
+      setMDMSData(Resp?.MdmsRes?.ACCESSCONTROL_ROLESACCESS?.rolesaccess);
+
+      console.log("FileddataName12", mDMSData);
+
+     
     } 
     catch (error) {
       console.log(error);
@@ -560,8 +564,8 @@ const ScrutinyFormcontainer = (props) => {
   console.log("meri update34", lastUpdate)
   return (
     <Card className="formColorEmp">
-      <Card.Header  className="head-application">
-        <div className="row fw-normal">
+    <Card className="head-application">
+      <div className="row fw-normal">
           <div className="col-sm-2">
             <b><p className="head-font">Application Number:</p></b>
             <b><p className="head-font">{id}</p></b>
@@ -591,7 +595,7 @@ const ScrutinyFormcontainer = (props) => {
             <Button style={{ textAlign: "right" }} value="Submit" id="Submit" onChange1={handleChange} name="Submit" onClick={handleshow19}>Views PDF</Button>
           </div>
         </div>
-      </Card.Header>
+      </Card>
       <Row >
         <div className="formlist">
           <ScrutitnyForms

@@ -2,6 +2,7 @@ import React from "react";
 import { Button, Form } from "react-bootstrap";
 
 
+
 const Component = ({ dataMDMS , register }) => {
  
   console.log("datatemplates", dataMDMS?.["common-masters"]?.PerformaNewLicence?.[0]?.templates);
@@ -20,7 +21,7 @@ const getDynamicFileds = (type , data) => {
             <React.Fragment>
              <div style={{
               display: "flex",
-              width: "800px",
+              width: "1250px",
               marginTop: "15px",
              }}>
               <p >{data?.label}: </p>
@@ -53,7 +54,7 @@ const getDynamicFileds = (type , data) => {
             <React.Fragment>
             <div className="row" style={{
               display: "flex",
-              width: "800px",
+              width: "1150px",
               marginTop: "15px",
              }}>
               {/* <label> Remark</label> */}

@@ -21,6 +21,8 @@ export const configTLApproverApplication = ({
   if (action?.action == "SENDBACKTOCITIZEN" || action?.action == "APPROVE") checkCondtions = false;
   if (action.isTerminateState) checkCondtions = false;
 
+  
+
   return {
     label: {
       heading: `WF_${action?.action}_APPLICATION`,
@@ -45,21 +47,25 @@ export const configTLApproverApplication = ({
               //   selected={selectedApprover}
               // />
               
-            //  <React.Fragment>
+             <React.Fragment>
+            
                  <MultiSelectDropdown
               options={approvers}
               // options={[{name:"dtp"},{name:"ctp"},{name:"acp"}]}
               autoComplete="off"
               optionsKey="name"
-              // id="fieldInspector"
+              id="fieldInspector"
               onSelect={setSelectedApprover}
               selected={selectedApprover}
               showSelectedValue={true}
             />
-            // <p>{JSON.stringify(selectedApprover)}</p>
-            // {/* <p>{JSON.stringify(approvers)}</p> */}
-            //  </React.Fragment>
+            {/* <p>{JSON.stringify(selectedApprover)}</p>
+           <p>{JSON.stringify(approvers)}</p> 
+           <p>{JSON.stringify(setSelectedApprover)}</p>  */}
+           
+             </React.Fragment>
             ),
+            
           },
           {
             label: t("WF_COMMON_COMMENTS"),

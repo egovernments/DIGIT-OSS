@@ -1298,10 +1298,10 @@ Note: The term “Collaboration agreement" shall include all Development agreeme
                       
                   <tr key={index}>
                     <td>
-                      <input type="text" className="form-control" placeholder={item?.district } disabled />
+                      <input type="text" className="form-control" title={item?.district?.label} placeholder={item?.district?.label} disabled />
                     </td>
                     <td>
-                      <input type="text" className="form-control" placeholder={item?.developmentPlan} disabled />
+                      <input type="text" className="form-control"title={item?.developmentPlan?.label} placeholder={item?.developmentPlan?.label} disabled />
                     </td>
                     <td>
                       <input type="text" className="form-control" placeholder={item?.potential} disabled />
@@ -1310,10 +1310,10 @@ Note: The term “Collaboration agreement" shall include all Development agreeme
                       <input type="text" className="form-control" placeholder={item?.sector} disabled />
                     </td>
                     <td>
-                      <input type="text" className="form-control" placeholder={item?.tehsil} disabled />
+                      <input type="text" className="form-control" title={item?.tehsil?.label} placeholder={item?.tehsil?.label} disabled />
                     </td>
                     <td>
-                      <input type="text" className="form-control" placeholder={item?.revenueEstate} disabled />
+                      <input type="text" className="form-control" title={item?.revenueEstate?.label} placeholder={item?.revenueEstate?.label} disabled />
                     </td>
                     <td>
                       <input type="text" className="form-control" placeholder={item?.hadbastNo} disabled />
@@ -1328,7 +1328,7 @@ Note: The term “Collaboration agreement" shall include all Development agreeme
                       <input type="text" className="form-control" title={item?.landOwner} placeholder={item?.landOwner} disabled />
                     </td>
                     <td class="text-center">
-                      <input type="text" className="form-control" title={item?.typeLand} placeholder={item?.typeLand} disabled />
+                      <input type="text" className="form-control" title={item?.typeLand?.label} placeholder={item?.typeLand?.label} disabled />
                     </td>
                     <td class="text-center">
                       <input type="text" className="form-control" title={item?.isChange} placeholder="N/A"  value={item?.isChange} disabled />

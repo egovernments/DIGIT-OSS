@@ -49,7 +49,7 @@ const AppliedDetailForm = (props) => {
     mode: "onChange",
     reValidateMode: "onChange",
     resolver: yupResolver(VALIDATION_SCHEMA),
-    validationSchema: VALIDATION_SCHEMA,
+    // validationSchema: VALIDATION_SCHEMA,
     shouldFocusError: true,
     defaultValues: {
       dgpsDetails: [
@@ -84,28 +84,28 @@ const AppliedDetailForm = (props) => {
     name: "dgpsDetails",
   });
 
-  const validateDgpsPoint = () => {
-    const data = getValues("dgpsDetails");
-    let temp = {};
-    data.forEach((ele, index) => {
-      temp = { ...temp, [`dgpsPointLatitude${index}`]: true, [`dgpsPointLongitude${index}`]: true };
-    });
-    setShowError({ ...showError, ...temp });
-    if (
-      data.every((item) => {
-        return validateXvalue(item.longitude) && validateYvalue(item.latitude);
-      })
-    ) {
-      return true;
-    } else {
-      return false;
-    }
-  };
+  // const validateDgpsPoint = () => {
+  //   const data = getValues("dgpsDetails");
+  //   let temp = {};
+  //   data.forEach((ele, index) => {
+  //     temp = { ...temp, [`dgpsPointLatitude${index}`]: true, [`dgpsPointLongitude${index}`]: true };
+  //   });
+  //   setShowError({ ...showError, ...temp });
+  //   if (
+  //     data.every((item) => {
+  //       return validateXvalue(item.longitude) && validateYvalue(item.latitude);
+  //     })
+  //   ) {
+  //     return true;
+  //   } else {
+  //     return false;
+  //   }
+  // };
 
   const AppliedDetailFormSubmitHandler = async (data) => {
-    if (!validateDgpsPoint()) {
-      return;
-    }
+    // if (!validateDgpsPoint()) {
+    //   return;
+    // }
     // console.log("data", newDataA);
     // return;
     setLoader(true);
@@ -518,25 +518,25 @@ const AppliedDetailForm = (props) => {
   //   setIsValid(check);
   // }, [error]);
 
-  const validateXvalue = (value) => {
-    if (value >= 432100.0 && value <= 751900.0 && value.toString().includes(".")) {
-      const decimalPlaces = value.toString().split(".")[1];
-      if (decimalPlaces.length === 3) {
-        return true;
-      }
-    }
-    return false;
-  };
+  // const validateXvalue = (value) => {
+  //   if (value >= 432100.0 && value <= 751900.0 && value.toString().includes(".")) {
+  //     const decimalPlaces = value.toString().split(".")[1];
+  //     if (decimalPlaces.length === 3) {
+  //       return true;
+  //     }
+  //   }
+  //   return false;
+  // };
 
-  const validateYvalue = (value) => {
-    if (value >= 3054400.0 && value <= 3425500.0 && value.toString().includes(".")) {
-      const decimalPlaces = value.toString().split(".")[1];
-      if (decimalPlaces.length === 3) {
-        return true;
-      }
-    }
-    return false;
-  };
+  // const validateYvalue = (value) => {
+  //   if (value >= 3054400.0 && value <= 3425500.0 && value.toString().includes(".")) {
+  //     const decimalPlaces = value.toString().split(".")[1];
+  //     if (decimalPlaces.length === 3) {
+  //       return true;
+  //     }
+  //   }
+  //   return false;
+  // };
 
   let Tree = ({ data }) => {
     return (
@@ -974,13 +974,13 @@ const AppliedDetailForm = (props) => {
                             type="number"
                             className="form-control"
                             {...register(`dgpsDetails.${index}.longitude`)}
-                            onBlur={() => setShowError({ ...showError, [`dgpsPointLongitude${index}`]: true })}
+                            // onBlur={() => setShowError({ ...showError, [`dgpsPointLongitude${index}`]: true })}
                           />
-                          {showError?.[`dgpsPointLongitude${index}`] && !validateXvalue(watch("dgpsDetails")[index].longitude) ? (
+                          {/* {showError?.[`dgpsPointLongitude${index}`] && !validateXvalue(watch("dgpsDetails")[index].longitude) ? (
                             <CardLabelError style={{ color: "red" }}>
                               X:Longitude{index + 1} is not valid. It should be in between 432100.000 and 751900.000
                             </CardLabelError>
-                          ) : null}
+                          ) : null} */}
                         </div>
                         <div className="col col-4">
                           <label>Y:Latitude</label>
@@ -990,7 +990,7 @@ const AppliedDetailForm = (props) => {
                               type="number"
                               className="form-control"
                               {...register(`dgpsDetails.${index}.latitude`)}
-                              onBlur={() => setShowError({ ...showError, [`dgpsPointLatitude${index}`]: true })}
+                              // onBlur={() => setShowError({ ...showError, [`dgpsPointLatitude${index}`]: true })}
                             />
                             {index > 3 && (
                               <button type="button" style={{ marginLeft: "40px" }} className="btn btn-primary" onClick={() => remove(index)}>
@@ -998,11 +998,11 @@ const AppliedDetailForm = (props) => {
                               </button>
                             )}
                           </div>
-                          {showError?.[`dgpsPointLatitude${index}`] && !validateYvalue(watch("dgpsDetails")[index].latitude) ? (
+                          {/* {showError?.[`dgpsPointLatitude${index}`] && !validateYvalue(watch("dgpsDetails")[index].latitude) ? (
                             <CardLabelError style={{ color: "red" }}>
                               Y:Latitude{index + 1} is not valid. It should be in between 3054400.000 and 3425500.000
                             </CardLabelError>
-                          ) : null}
+                          ) : null} */}
                         </div>
                       </div>
                     </div>
@@ -1020,12 +1020,12 @@ const AppliedDetailForm = (props) => {
             </Row>
             <div className="row mb-5" style={{ width: "100%", justifyContent: "center" }}>
               <button
-                type="button"
+                type="submit"
                 style={{ width: "190px" }}
                 class="btn btn-primary btn-md center-block mt-3"
-                onClick={() => {
-                  validateDgpsPoint();
-                }}
+                // onClick={() => {
+                //   validateDgpsPoint();
+                // }}
               >
                 Submit
               </button>

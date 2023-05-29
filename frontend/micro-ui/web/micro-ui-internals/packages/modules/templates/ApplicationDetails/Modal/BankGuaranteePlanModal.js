@@ -23,7 +23,7 @@ const CloseBtn = (props) => {
   );
 };
 
-const BankGuaranteePlan = ({ t, action, tenantId, state, id, closeModal, submitAction, actionData, applicationData, businessService, moduleCode }) => {
+const BankGuaranteePlanModal = ({ t, action, tenantId, state, id, closeModal, submitAction, actionData, applicationData, businessService, moduleCode }) => {
   const { data: approverData, isLoading: PTALoading } = Digit.Hooks.useEmployeeSearch(
     tenantId,
     {
@@ -53,6 +53,7 @@ const BankGuaranteePlan = ({ t, action, tenantId, state, id, closeModal, submitA
   const [uploadedFile, setUploadedFile] = useState(null);
   const [error, setError] = useState(null);
   const [financialYears, setFinancialYears] = useState([]);
+  const [comment, setComment] = useState(null) ;
   const [selectedFinancialYear, setSelectedFinancialYear] = useState(null);
 
   useEffect(() => {
@@ -92,11 +93,11 @@ const BankGuaranteePlan = ({ t, action, tenantId, state, id, closeModal, submitA
   }, [file]);
 
   function submit(data) {
-    let workflow = { action: action?.action, comments: data?.comments, businessService, moduleName: moduleCode };
+    let workflow = { action: action?.action, comments: comment,businessService, moduleName: moduleCode };
     applicationData = {
       ...applicationData,
       action: action?.action,
-      comment: data?.comments,
+      comment: comment,
       // assignee: !selectedApprover?.uuid ? null : [selectedApprover?.uuid],
       assignee: selectedApprover?.length ? selectedApprover.map((ele)=>ele[1]?.uuid):[],
       // assignee: action?.isTerminateState ? [] : [selectedApprover?.uuid],
@@ -112,10 +113,10 @@ const BankGuaranteePlan = ({ t, action, tenantId, state, id, closeModal, submitA
     };
     console.log("log123...submitted updated",applicationData,selectedApprover, selectedApprover.map((ele)=>ele[1]?.uuid));
     submitAction({
-        NewBankGuaranteeRequest: [applicationData],
+        // ElectricPlanRequest: [applicationData],
+        NewBankGuaranteeRequest: applicationData,
     });
   }
-
   useEffect(() => {
     if (action) {
       console.log("log123Approvers",approvers)
@@ -130,6 +131,8 @@ const BankGuaranteePlan = ({ t, action, tenantId, state, id, closeModal, submitA
           uploadedFile,
           setUploadedFile,
           businessService,
+          setComment,
+          comment,
         })
       );
     }
@@ -166,4 +169,4 @@ const BankGuaranteePlan = ({ t, action, tenantId, state, id, closeModal, submitA
   );
 };
 
-export default BankGuaranteePlan;
+export default BankGuaranteePlanModal;

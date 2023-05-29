@@ -1,15 +1,23 @@
 import React, { useState, useRef, useEffect, useContext } from "react";
 
-// import ScrutinyDevelopment from "./ScrutinyDevelopment/ScrutinyDevelopment";
+// import ServicePlanCivil from "./ServicePlanCivilEng";
+// import ServicePlanExternal from "./ServicePlanExternal";
+// import ServicePlanService from "./ServicePlan";
+// import JeLandinfo from "./Scrutiny LOI/JE/JE";
+// import DisApprovalList from "./DisApprovalList";
+// import HistoryList from "./History";
+// import ScrutinyDevelopment from "../../ScrutinyDevelopment/ScrutinyDevelopment";
+import ScrutinyDevelopment from "../../../ScrutinyDevelopment/ScrutinyDevelopment";
+import { ScrutinyRemarksContext } from "../../../../../../../context/remarks-data-context";
+
 import { Button, Row, Col } from "react-bootstrap";
 import { useForkRef } from "@mui/material";
 import axios from "axios";
-import Scrutiny from "../../BankScrutiny/basicScrutiny";
-import ScrutinyDevelopment from "../../../ScrutinyDevelopment/ScrutinyDevelopment";
-import { ScrutinyRemarksContext } from "../../../../../../../context/remarks-data-context/index";
 import SubmitNew from "../SubmitNew";
 
-const FormBank = ({ apiResponse, applicationNumber, refreshScrutinyData, setAdditionalDetails, histeroyData }) => {
+// import AddIcon from "@mui/icons-material/Add";
+
+const FormBank = ({apiResponse,applicationNumber,refreshScrutinyData,setAdditionalDetails,histeroyData,idwDataTreade,edcDataTreade,applicationStatus }) => {
   const [purpose, setPurpose] = useState("");
   const jeLandInfoRef = useRef();
 
@@ -23,7 +31,7 @@ const FormBank = ({ apiResponse, applicationNumber, refreshScrutinyData, setAddi
   const [displayAppliedLand, setDisplayAppliedLandInfo] = useState([]);
   const [displayFeeandCharges, setDisplayFeeandChargesInfo] = useState([]);
 
-  const { remarksData, iconStates, handleGetFiledsStatesById, handleGetRemarkssValues } = useContext(ScrutinyRemarksContext);
+const { remarksData,iconStates,handleGetFiledsStatesById,handleGetRemarkssValues,setBusinessService } = useContext(ScrutinyRemarksContext);
   const [displayJeLand, setDisplayJeLand] = useState([]);
   const [ActiveKey, setActiveKey] = useState(1);
   const [defaultHeightPersonal, setDefaultHeightPersonal] = useState(0);
@@ -32,17 +40,18 @@ const FormBank = ({ apiResponse, applicationNumber, refreshScrutinyData, setAddi
   const [defaultheightApplied, setDefaultheightApplied] = useState(0);
   const [defaultheightFee, setDefaultheightFee] = useState(0);
   const [open, setOpen] = useState(false);
-
+  
   const [sumrol, setSumrol] = useState({});
   const [uncheckedValue, setUncheckedVlue] = useState([]);
   const [remarksChanges, setRemarksChanges] = useState("");
   const [disapprovalData, setDisapprovalData] = useState({});
   const [applictaionNo, setApplicationNO] = useState(null);
   // const [iconStates,setIconState]= useState(null)
-  const [urlGetShareHoldingDoc, setDocShareHoldingUrl] = useState("");
+  const [urlGetShareHoldingDoc,setDocShareHoldingUrl] = useState("")
 
   const userInfo = Digit.UserService.getUser()?.info || {};
   const authToken = Digit.UserService.getUser()?.access_token || null;
+
 
   const getUncheckedPersonalinfos = (data) => {
     setDisplayPersonalInfo(data.data);
@@ -95,7 +104,7 @@ const FormBank = ({ apiResponse, applicationNumber, refreshScrutinyData, setAddi
     setDisplayFeeandChargesInfo(data.data);
     console.log(data);
   };
-
+  
   const handleGetDisapprovalList = async () => {
     const dataToPass = {
       RequestInfo: {
@@ -112,11 +121,9 @@ const FormBank = ({ apiResponse, applicationNumber, refreshScrutinyData, setAddi
       },
     };
     try {
-      const Resp = await axios
-        .post(`/land-services/egscrutiny/_searchbylogin?applicationId=${apiResponse?.id}&userid=${userInfo?.id}`, dataToPass)
-        .then((response) => {
-          return response.data;
-        });
+      const Resp = await axios.post(`/land-services/egscrutiny/_searchbylogin?applicationId=${apiResponse?.id}&userid=${userInfo?.id}`, dataToPass).then((response) => {
+        return response.data;
+      });
 
       console.log("Response From API", Resp);
       setDisapprovalData(Resp);
@@ -125,33 +132,35 @@ const FormBank = ({ apiResponse, applicationNumber, refreshScrutinyData, setAddi
       console.log(error);
     }
   };
+ 
 
   useEffect(() => {
-    if (apiResponse?.id) {
+    if(apiResponse?.id){
       handleGetDisapprovalList();
     }
-  }, [remarksChanges, apiResponse]);
+  }, [remarksChanges,apiResponse]);
 
   // useEffect(() => {
   //   handleGetInputFieldsValues();
   // }, []);
   useEffect(() => {
-    if (applicationNumber) {
+    if(applicationNumber){
       // console.log("log123...",userInfo)
       handleGetRemarkssValues(applicationNumber);
     }
   }, [applicationNumber]);
 
-  useEffect(() => {
-    if (applicationNumber) {
+  useEffect(()=>{
+    setBusinessService("BG_NEW");
+    if(applicationNumber){
       handleGetFiledsStatesById(applicationNumber);
     }
-  }, [applicationNumber]);
+  },[applicationNumber]);
 
   const curentDataPersonal = (data) => {
     setRemarksChanges(data.data);
   };
-
+  
   console.log(uncheckedValue);
   console.log("React", purpose);
 
@@ -210,45 +219,51 @@ const FormBank = ({ apiResponse, applicationNumber, refreshScrutinyData, setAddi
       setDefaultheightFee(0);
     }
   };
-  console.log("scrutiny form api get", apiResponse !== undefined ? apiResponse?.ApplicantInfo : apiResponse);
-  console.log("scrutiny form api get1", apiResponse !== undefined ? apiResponse?.ApplicantPurpose : apiResponse);
-  // console.log("scrutiny form api get2", apiResponse !== undefined ? apiResponse?.LandSchedule : apiResponse);
-  console.log("remarks api", remarksData.egScrutiny !== undefined ? remarksData.egScrutiny : null);
+//   console.log("scrutiny form api get", apiResponse !== undefined ? apiResponse?.ApplicantInfo : apiResponse);
+//   console.log(
+//     "scrutiny form api get1",
+//     apiResponse !== undefined ? apiResponse?.ApplicantPurpose : apiResponse
+//   );
+//   // console.log("scrutiny form api get2", apiResponse !== undefined ? apiResponse?.LandSchedule : apiResponse);
+//   console.log("remarks api", remarksData.egScrutiny !== undefined ? remarksData.egScrutiny : null);
 
-  console.log("remakes data parsnalinfo", remarksChanges);
+//   console.log("remakes data parsnalinfo", remarksChanges);
+
+
+
+
 
   return (
     <div>
       <div style={{ position: "relative", maxWidth: "100%", padding: 2 }}>
         <div>
-          <div>
-            <SubmitNew apiResponse={apiResponse} refreshScrutinyData={refreshScrutinyData} dataForIcons={iconStates}></SubmitNew>
-          </div>
-
-          {/* <JeLandinfo jeLandInfoRef={jeLandInfoRef} passUncheckedList={getUncheckedJeLandInfo}></JeLandinfo> */}
+         <div>
+         <SubmitNew
+           apiResponse={apiResponse}
+           refreshScrutinyData={refreshScrutinyData}
+           applicationNumber={applicationNumber}
+           passUncheckedList={getUncheckedGeneralinfos}
+           passCheckedList={getCheckedGeneralInfoValue}
+           onClick={() => setOpen(!open)}
+           dataForIcons={iconStates}
+           applicationStatus={applicationStatus}
+           ></SubmitNew>
+         </div>
+        
         </div>
       </div>
       <div style={{ position: "relative", width: "100%", display: "flex", marginBottom: 2 }}>
-        {/* <DisApprovalList
-          disapprovallistDeveloper={displayPurpose}
-          disapprovallistGeneral={displayGeneral}
-          disapprovallistAppliedLand={displayAppliedLand}
-          disapprovalCheckedAppliedLand={displayAppliedLandCheckedList}
-          disapprovallistPersonal={displayPersonal}
-          disapprovalCheckedPersonal={displayPersonalCHeckedList}
-          disapprovalCheckedGeneral={displayGeneralCHeckedList}
-          disapprovalCheckedPurpose={displayPurposeCHeckedList}
-          DisApprovalListFeeandCharges={displayFeeandCharges}
-          dataList={disapprovalData}
-        ></DisApprovalList> */}
-        {/* <HistoryList></HistoryList> */}
+        
       </div>
 
       <div style={{ position: "relative", width: "100%", height: "100%", display: "flex" }}>
-        <ScrutinyDevelopment remarkData={remarksData.egScrutiny !== undefined ? remarksData.egScrutiny : null}>
-          {(histeroyData = histeroyData)}
-        </ScrutinyDevelopment>
+        <ScrutinyDevelopment
+          remarkData={remarksData.egScrutiny !== undefined ? remarksData.egScrutiny : null}
+          // remarksum={sumrol.egScrutiny !== undefined ? sumrol.egScrutiny : null}
+          histeroyData={histeroyData}
+        ></ScrutinyDevelopment>
       </div>
+      
     </div>
   );
 };
