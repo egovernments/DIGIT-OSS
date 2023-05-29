@@ -24,7 +24,7 @@ const getResponse = (data, vendorDetails) => {
 const VehicleDetails = async (tenantId, filters = {}) => {
   const vehicleDetails = await FSMService.vehiclesSearch(tenantId, filters);
   const id = vehicleDetails?.vehicle?.[0]?.id
-  const vendorDetails = await FSMService.vendorSearch(tenantId, { vehicleIds: id });
+  const vendorDetails = await FSMService.vendorSearch(tenantId, { vehicleIds: id, status: "ACTIVE" });
 
   const data = vehicleDetails.vehicle.map((data) => ({
     vehicleData: data,
