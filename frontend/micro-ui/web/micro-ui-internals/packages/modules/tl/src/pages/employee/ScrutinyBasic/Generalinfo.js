@@ -18,6 +18,7 @@ import { IconButton } from "@mui/material";
 import { getDocShareholding } from "./ScrutinyDevelopment/docview.helper";
 import { useTranslation } from "react-i18next";
 import { useLocation } from "react-router-dom";
+import AdditionalDocument from "./AdditionalDocument";
 
 const Genarelinfo = (props) => {
   // useTranslation
@@ -28,6 +29,10 @@ const Genarelinfo = (props) => {
   const [uncheckedValue, setUncheckedVlue] = useState([]);
   const [checkValue, setCheckedVAlue] = useState([]);
   const [docModal, setDocModal] = useState(false);
+
+
+  const [loader, setLoader] = useState(false);
+  const [showToastError, setShowToastError] = useState({ label: "", error: false, success: false });
   // const [fieldValue, setFieldValue] = useState("");
   // let user = Digit.UserService.getUser();
   // const userRoles = user?.info?.roles?.map((e) => e.code) || [];
@@ -35,11 +40,13 @@ const Genarelinfo = (props) => {
   // const hideRemarksPatwari = userRoles.some((item)=>item ==="Patwari_HQ")
   // const hideRemarksJE = userRoles.some((item)=>item ==="JE_HQ" || item === "JE_HR")
   const applicationStatus = props.applicationStatus ;
+  const additionalDocResponData = props.additionalDocRespon;
   let user = Digit.UserService.getUser();
   const userInfo = Digit.UserService.getUser()?.info || {};
   const userRolesArray = userInfo?.roles.filter((user) => user.code !== "EMPLOYEE");
   const filterDataRole = userRolesArray?.[0]?.code;
   const userRoles = user?.info?.roles?.map((e) => e.code) || [];
+
   
   console.log("rolelogintime" , userRoles );
   console.log("afterfilter12" , filterDataRole)
@@ -424,6 +431,13 @@ const Genarelinfo = (props) => {
       </div>
       <Collapse in={open2}>
         <div id="example-collapse-text">
+
+        <div>
+            <AdditionalDocument
+            additionalDocRespon={additionalDocResponData}
+           
+            />
+          </div>
           <Form.Group className="justify-content-center" controlId="formBasicEmail" style={{ border: "2px solid #e9ecef", margin: 10, padding: 20 }}>
             <Row className="ml-auto" style={{ marginBottom: 5 }}>
               <Col md={4} xxl lg="3" className={classes.formLabel}>
@@ -1365,12 +1379,39 @@ Note: The term “Collaboration agreement" shall include all Development agreeme
                     </td>
                     <td class="text-center">
                     <div className="btn btn-sm col-md-6">
-                                    <IconButton onClick={()=>getDocShareholding(item?.registeringAuthorityDoc)}>
+                             
+                                    <IconButton
+                                    style={{
+                                      color: " #1266af",
+                                      fontSize: " 12px",
+                                      fontWeight: "bold",
+                                      cursor: "pointer",
+                                      textDecorationLine: "underline",
+                                    }}
+                                    onClick={() => {
+                                      if (item?.registeringAuthorityDoc) getDocShareholding(item?.registeringAuthorityDoc, setLoader);
+                                      else setShowToastError({ label: "No Document here", error: true, success: false });
+                                    }}>
+                                    
+                                    {/* onClick={()=>getDocShareholding(item?.registeringAuthorityDoc)} */}
+                                  
                                       <Visibility color="info" className="icon" /></IconButton>
                                   
                                   </div>
                                   <div className="btn btn-sm col-md-6">
-                                    <IconButton onClick={()=>getDocShareholding(item?.registeringAuthorityDoc)}>
+                                  <IconButton
+                                    style={{
+                                      color: " #1266af",
+                                      fontSize: " 12px",
+                                      fontWeight: "bold",
+                                      cursor: "pointer",
+                                      textDecorationLine: "underline",
+                                    }}
+                                    onClick={() => {
+                                      if (item?.registeringAuthorityDoc) getDocShareholding(item?.registeringAuthorityDoc, setLoader);
+                                      else setShowToastError({ label: "No Document here", error: true, success: false });
+                                    }}>
+                                    {/* <IconButton onClick={()=>getDocShareholding(item?.registeringAuthorityDoc)}> */}
                                 <FileDownload color="primary" className="mx-1" />
                         </IconButton>
                         </div>
