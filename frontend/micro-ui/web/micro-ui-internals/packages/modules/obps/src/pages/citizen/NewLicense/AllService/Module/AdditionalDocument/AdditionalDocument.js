@@ -10,7 +10,6 @@ import DialogTitle from "@mui/material/DialogTitle";
 import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
 import ReactMultiSelect from "../../../../../../../../../react-components/src/atoms/ReactMultiSelect";
 import Spinner from "../../../../../../components/Loader";
-import SearchLicenceComp from "../../../../../../components/SearchLicence";
 import FileUpload from "@mui/icons-material/FileUpload";
 import CusToaster from "../../../../../../components/Toaster";
 import VisibilityIcon from "@mui/icons-material/Visibility";
@@ -35,6 +34,7 @@ const AdditionalDocument = () => {
   const [getData, setData] = useState([]);
   const [open, setOpen] = useState(false);
   const [DataSection, setDataSection] = useState([]);
+  const [show, setShow] = useState(false);
 
   const {
     watch,
@@ -55,14 +55,11 @@ const AdditionalDocument = () => {
         {
           documentName: "",
           document: "",
+          applicationSection: "",
         },
       ],
     },
   });
-
-  useEffect(() => {
-    console.log("user", userInfo);
-  }, []);
 
   const { fields, append, remove } = useFieldArray({
     control,
@@ -73,23 +70,15 @@ const AdditionalDocument = () => {
     const token = window?.localStorage?.getItem("token");
     setLoader(true);
 
-    data["businessService"] = data?.allservices?.value;
-    data["applicationSection"] = data?.applicationSection?.value;
-    data["type"] = data?.numberType?.value;
+    const updatedDocuments = data?.DocumentsDetails?.map((document) => {
+      const { applicationSection, ...rest } = document;
+      const { value } = applicationSection;
+      return { ...rest, applicationSection: value };
+    });
 
-    if (data?.numberType?.value == "loiNumber") {
-      data["loiNumber"] = data?.number;
-      data["applicationNumber"] = "";
-      data["licenceNumber"] = "";
-    } else if (data?.numberType?.value == "applicationNumber") {
-      data["applicationNumber"] = data?.number;
-      data["loiNumber"] = "";
-      data["licenceNumber"] = "";
-    } else if (data?.numberType?.value == "licenceNumber") {
-      data["licenceNumber"] = data?.number;
-      data["applicationNumber"] = "";
-      data["loiNumber"] = "";
-    }
+    data["DocumentsDetails"] = updatedDocuments;
+    data["businessService"] = data?.allservices?.value;
+    data["licenceNumber"] = data?.licenceNumber?.value;
 
     data["username"] = userInfo?.userName;
     data["developerName"] = userInfo?.name;
@@ -154,67 +143,90 @@ const AdditionalDocument = () => {
         ],
       },
     };
-    let requestProfrma = {};
     try {
       const Resp = await axios.post("/egov-mdms-service/v1/_search", payload);
-      // console.log("asdasdasd", Resp?.data?.MdmsRes?.["common-masters"]?.services?.[0]?.businessService?.);
       const devPlan = Resp?.data?.MdmsRes?.["common-masters"]?.services?.[0]?.businessService?.map(function (data) {
         return { value: data?.name, label: data?.name };
       });
       setServices(devPlan);
-      requestProfrma = {
-        RequestInfo: {
-          apiId: "Rainmaker",
-          ver: "v1",
-          ts: 0,
-          action: "_search",
-          did: "",
-          key: "",
-          msgId: "090909",
-          requesterId: "",
-          authToken: "",
-          correlationId: null,
-        },
-        MdmsCriteria: {
-          tenantId: "hr",
-          moduleDetails: [
-            {
-              moduleName: "common-masters",
-
-              tenantId: "hr",
-
-              masterDetails: [
-                {
-                  name: "ApplicationSection",
-                },
-              ],
-            },
-          ],
-        },
-      };
     } catch (error) {
-      console.log(error);
+      return error;
     }
+  };
 
-    console.log("TCPaccessrequestProfrma123", requestProfrma);
+  const getApplicationSection = async () => {
+    const payload = {
+      RequestInfo: {
+        apiId: "Rainmaker",
+        ver: "v1",
+        ts: 0,
+        action: "_search",
+        did: "",
+        key: "",
+        msgId: "090909",
+        requesterId: "",
+        authToken: "",
+        correlationId: null,
+      },
+      MdmsCriteria: {
+        tenantId: "hr",
+        moduleDetails: [
+          {
+            moduleName: "common-masters",
+
+            tenantId: "hr",
+
+            masterDetails: [
+              {
+                name: "ApplicationSection",
+              },
+            ],
+          },
+        ],
+      },
+    };
     try {
-      const Resp = await axios.post(`/egov-mdms-service/v1/_search`, requestProfrma);
-      // .then((response) => {
-      //   return response?.data;
-
-      // });
+      const Resp = await axios.post(`/egov-mdms-service/v1/_search`, payload);
       const section = Resp?.data?.MdmsRes?.["common-masters"]?.ApplicationSection?.map(function (data) {
         return { value: data?.type, label: data?.type };
       });
       setDataSection(section);
-      console.log("FileddataNamemDMSD", section);
     } catch (error) {
-      console.log(error);
+      return error;
+    }
+  };
+
+  const getAlllicences = async (serviceName) => {
+    const token = window?.localStorage?.getItem("token");
+    const payload = {
+      RequestInfo: {
+        apiId: "Rainmaker",
+        ver: "v1",
+        ts: 0,
+        action: "_search",
+        did: "",
+        key: "",
+        msgId: "090909",
+        requesterId: "",
+        authToken: token,
+        userInfo: userInfo,
+      },
+    };
+    try {
+      const Resp = await axios.post(`/tl-services/_getServices/_search?businessService=${serviceName}`, payload);
+      const appNumbers = Resp?.data?.applicationNumbers?.map(function (data) {
+        return { value: data, label: data };
+      });
+      setShow(true);
+      setData(appNumbers);
+    } catch (error) {
+      return error;
     }
   };
 
   useEffect(() => {
     getAllservices();
+    getApplicationSection();
   }, []);
 
   const getDocumentData = async (file, fieldName) => {
@@ -239,41 +251,6 @@ const AdditionalDocument = () => {
       return error;
     }
   };
-
-  // const getNumbers = async () => {
-  //   const token = window?.localStorage?.getItem("token");
-  //   const type = watch("numberType")?.value;
-  //   const businessService = watch("allservices")?.value;
-  //   setLoader(true);
-  //   const payload = {
-  //     RequestInfo: {
-  //       apiId: "Rainmaker",
-  //       ver: "v1",
-  //       ts: 0,
-  //       action: "_search",
-  //       did: "",
-  //       key: "",
-  //       msgId: "090909",
-  //       requesterId: "",
-  //       authToken: token,
-  //       userInfo: userInfo,
-  //     },
-  //   };
-  //   try {
-  //     const Resp = await axios.post(`/tl-services/_getServices/_search?type=${type}&businessService=${businessService}`, payload);
-  //     // console.log("setData", Resp);
-  //     setLoader(false);
-  //     const selectData = Resp?.data?.map((it) => {
-  //       return { value: it, label: it };
-  //     });
-  //     if (Resp?.data?.length) setValue("licenceNo", { label: "", value: "" });
-  //     else setValue("licenceNo", "");
-  //     setData(selectData);
-  //   } catch (error) {
-  //     setLoader(false);
-  //     return error;
-  //   }
-  // };
 
   const handleClose = () => {
     setOpen(false);
@@ -303,44 +280,25 @@ const AdditionalDocument = () => {
                   placeholder="Select Service"
                   data={services}
                   labels=""
-                  onChange={() => setValue("numberType", { label: "", value: "" })}
+                  onChange={(e) => {
+                    resetField("licenceNumber");
+                    setShow(false);
+                    getAlllicences(e?.value);
+                  }}
                 />
               </div>
-              {watch("allservices") && (
+              {show && (
                 <div className="col col-5">
                   <h2 className="FormLable">
-                    {`${t("AD_SELECT_APPLICATION_NO_LOI_NO_LICENCE_NO ")}`}
+                    {/* {`${t("AD_SELECT_APPLICATION_NO_LOI_NO_LICENCE_NO ")}`} */}
+                    Select Application Number
+                    {/* getData */}
                     {/* Select Application No, LOI No, Licence No  */}
                     <span style={{ color: "red" }}>*</span>
                   </h2>
-                  <ReactMultiSelect
-                    control={control}
-                    name="numberType"
-                    placeholder="Select Type"
-                    data={selectTypeData}
-                    labels=""
-                    // onChange={getNumbers}
-                  />
+                  <ReactMultiSelect control={control} name="licenceNumber" placeholder="Select Number" data={getData} labels="" />
                 </div>
               )}
-              {watch("numberType")?.value && (
-                <div className="col col-5">
-                  <h2 className="FormLable">Select {watch("numberType")?.label}</h2>
-                  <input type="text" className="form-control" {...register("number")} />
-                </div>
-              )}
-              {/* {watch("numberType")?.value && (
-                <SearchLicenceComp
-                  apiData={getData}
-                  watch={watch}
-                  register={register}
-                  control={control}
-                  setLoader={setLoader}
-                  errors={errors}
-                  setValue={setValue}
-                  resetField={resetField}
-                />
-              )} */}
             </div>
 
             <div style={{ textAlignLast: "right", marginTop: "10px" }}>
@@ -348,7 +306,7 @@ const AdditionalDocument = () => {
                 type="button"
                 style={{ width: "100px", marginRight: 15 }}
                 className="btn btn-primary"
-                onClick={() => append({ documentName: "", document: "" })}
+                onClick={() => append({ documentName: "", document: "", applicationSection: "" })}
               >
                 {`${t("AD_ADD_ROW")}`}
                 {/* Add Row */}
@@ -389,16 +347,14 @@ const AdditionalDocument = () => {
                         <td>
                           <ReactMultiSelect
                             control={control}
-                            name="applicationSection"
+                            name={`DocumentsDetails.${index}.applicationSection`}
                             placeholder="Select Section"
                             data={DataSection}
                             labels=""
-                            onChange={() => setValue("applicationSections", { label: "", value: "" })}
                           />
                         </td>
                         <td>
                           <div>
-                            {/* <label>Document Description</label> */}
                             <input type="text" className="form-control" {...register(`DocumentsDetails.${index}.documentName`)} />
                           </div>
                         </td>
@@ -435,46 +391,6 @@ const AdditionalDocument = () => {
               </div>
             </div>
 
-            {/* <div className="card-body">
-              <div className="table-bd">
-                {fields?.map((item, index) => (
-                  <div key={item?.id}>
-                    <span> &nbsp;</span>
-                    <div className="row" style={{ placeItems: "center" }}>
-                      <div className="col col-1">
-                        <span>{index + 1}.</span>
-                      </div>
-                      <div className="col col-4">
-                        <label>Document Description</label>
-                        <input type="text" className="form-control" {...register(`services.${index}.description`)} />
-                      </div>
-                      <div className="col col-3">
-                        <h6 style={{ display: "flex" }}>
-                          Upload Document<span style={{ color: "red" }}>*</span>
-                        </h6>
-                        <label>
-                          <FileUpload style={{ cursor: "pointer" }} color="primary" />
-                          <input
-                            type="file"
-                            style={{ display: "none" }}
-                            onChange={(e) => getDocumentData(e?.target?.files[0], `services.${index}.document`)}
-                            accept="application/pdf"
-                          />
-                        </label>
-                      </div>
-                      <div className="col col-3">
-                        {index > 0 && (
-                          <button type="button" style={{ float: "right" }} className="btn btn-primary" onClick={() => remove(index)}>
-                            Remove
-                          </button>
-                        )}
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div> */}
-
             <div style={{ display: "flex", justifyContent: "right", marginTop: "20px" }}>
               <button
                 style={{
@@ -508,9 +424,6 @@ const AdditionalDocument = () => {
                 <CheckCircleOutlineIcon style={{ color: "blue", variant: "filled" }} />
               </span>
             </p>
-            {/* <p>
-              Please Note down your Application Number <span style={{ padding: "5px", color: "blue" }}>test</span> for further assistance
-            </p> */}
           </DialogContentText>
         </DialogContent>
         <DialogActions>

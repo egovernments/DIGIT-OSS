@@ -631,7 +631,10 @@ const ApllicantPuropseForm = (props) => {
         datapost,
         {}
       );
-      const mustData = Resp?.data?.must?.map((el, i) => {
+
+      const sortedNumbers = Resp?.data?.must?.sort((a, b) => a - b);
+
+      const mustData = sortedNumbers?.map((el, i) => {
         return { label: el, id: i, value: el };
       });
       setMustilDataLabels({ data: mustData, isLoading: false });
@@ -960,7 +963,7 @@ const ApllicantPuropseForm = (props) => {
       const valueB = watch("bigha") * 3025 + watch("biswa") * 151.25 + watch("biswansi") * 7.56;
       setValue("nonConsolidatedTotal", isNaN(valueB) ? "N/A" : (valueB / 4840)?.toFixed(5));
     }
-  }, [watch("bigha"), watch("biswa"), watch("biswansi")]);
+  }, [watch("bigha"), watch("biswa"), watch("biswansi"), watch("nonConsolidationType")]);
 
   useEffect(() => {
     console.log("erorrs=====", errors);
