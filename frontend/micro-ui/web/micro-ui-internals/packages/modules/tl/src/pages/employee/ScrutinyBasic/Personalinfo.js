@@ -16,7 +16,8 @@ import Collapse from "react-bootstrap/Collapse";
 import Modal from "react-bootstrap/Modal";
 import ModalChild from "./Remarks/ModalChild";
 import ReportProblemIcon from "@mui/icons-material/ReportProblem";
-import AdditionalDocument from "./AdditionalDocument";
+import ApplicantInfo from "./AdditionalDocument/ApplicantInfo";
+
 
 const Personalinfo = (props) => {
   const [uncheckedValue, setUncheckedVlue] = useState([]);
@@ -197,12 +198,14 @@ const Personalinfo = (props) => {
             applicationStatus={applicationStatus}
             mDMSData={mDMSData}
           />
+         {/* { additionalDocResponData?.[0]?.applicantInfo === "applicantInfo" && */}
           <div>
-            <AdditionalDocument
+            <ApplicantInfo
             additionalDocRespon={additionalDocResponData}
            
             />
           </div>
+{/* } */}
         </div>
       </Collapse>
       {/* </Card> */}

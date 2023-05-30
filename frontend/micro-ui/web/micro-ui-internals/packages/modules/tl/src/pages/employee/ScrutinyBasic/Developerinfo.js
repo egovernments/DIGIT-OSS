@@ -29,6 +29,8 @@ import Tooltip from "@mui/material/Tooltip";
 import { useTranslation } from "react-i18next";
 import { useLocation } from "react-router-dom";
 import Visibility from "@mui/icons-material/Visibility";
+import DetailsOfAppliedland from "./AdditionalDocument/DetailsOfAppliedland";
+import LandSchedule from "./AdditionalDocument/LandSchedule";
 // import CommercialPlottedForm from "./Puropse/CommercialPlottedForm";
 
 const Developerinfo = (props) => {
@@ -41,7 +43,7 @@ const Developerinfo = (props) => {
   const dataIcons = props.dataForIcons;
   const landScheduleData = props.ApiResponseData;
   const Purpose = props.purpose;
-
+  const additionalDocResponData = props.additionalDocRespon;
   const applicationStatus = props.applicationStatus;
   // let user = Digit.UserService.getUser();
   // const userRoles = user?.info?.roles?.map((e) => e.code) || [];
@@ -529,10 +531,25 @@ const Developerinfo = (props) => {
       </div>
       <Collapse in={open}>
         <div id="example-collapse-text">
+
+        <div>
+            <LandSchedule
+            additionalDocRespon={additionalDocResponData}
+           
+            />
+          </div>
+
           <Form.Group
             style={{ display: props.displayGeneral, border: "2px solid #e9ecef", margin: 15, padding: 15 }}
             className={`justify-content-center ${classes.formLabel}`}
           >
+
+
+
+
+
+
+
             {/* <Row className={classes.formLabel}>
               <Col md={4} xxl lg="12">
                 <label htmlFor="Developer Details">

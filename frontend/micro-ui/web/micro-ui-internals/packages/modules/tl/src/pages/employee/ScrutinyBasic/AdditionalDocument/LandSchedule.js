@@ -9,7 +9,7 @@ import VisibilityIcon from "@mui/icons-material/Visibility";
 import FileDownloadIcon from "@mui/icons-material/FileDownload";
 import { convertEpochToDateDMY } from '../../../../utils';
 
-function AdditionalDocument (prop)
+function LandSchedule (prop)
 {
 
  const additionalDocref=useRef()
@@ -44,7 +44,7 @@ const handleSubmit=(e)=>{
 
 }
 useEffect(() => {
-if(additionalDocResponData?.AdditionalDocuments?.length){
+if(additionalDocResponData?.AdditionalDocumentReport?.length){
    additionalDocref.current.classList.add("blinkComponentScrutiny")
 }
 },[additionalDocResponData])
@@ -98,6 +98,7 @@ console.log("additionalDocResponData" , additionalDocResponData);
                     <thead>                        
                     <tr>                       
                     <th>Sr. No</th>
+                    <th>Application Section</th>
                     <th>Document Description</th>
                     <th>
                      Download Document
@@ -108,11 +109,15 @@ console.log("additionalDocResponData" , additionalDocResponData);
                     </tr>
                     </thead>
                     
-                    {additionalDocResponData?.AdditionalDocuments?.map((item) => (
+                    {additionalDocResponData?.AdditionalDocumentReport?.map((item) => (
                      <tbody>
-                        { item?.additionalDetails?.map( (input, index)=>(
+                        { item?.landSchedule?.map( (input, index)=>(
                             <tr key={index}>                        
                     <td>{index + 1}</td>
+                    <td>
+                    
+                       {input?.applicationSection}
+                         </td>
                     <td>
                     
                        {input?.documentName}
@@ -131,20 +136,6 @@ console.log("additionalDocResponData" , additionalDocResponData);
                                           <FileDownloadIcon color="info" className="icon" />
                                         </IconButton>
                                       </div>
-                                      {/* <div className="btn btn-sm col-md-4">
-                                        <ReportProblemIcon
-                                          style={{
-                                            color: fieldIconColors.technicalAndFinancialCapacityDoc,
-                                          }}
-                                          onClick={() => {
-                                            setOpennedModal("technicalAndFinancialCapacityDoc");
-                                            setLabelValue("Documents about the Technical and Financial Capacity of the ‘new entity’ proposed to be inducted as a ‘Developer’ or ‘shareholder(s)’ as per prescribed policy parameters for grant of a license"),
-                                              setSmShow(true),
-                                              console.log("modal open"),
-                                              setFieldValue(personalinfo !== null ? personalinfo.technicalAndFinancialCapacityDoc : null);
-                                          }}
-                                        ></ReportProblemIcon>
-                                      </div> */}
                                     </div>
                         </td>
                     <td>
@@ -171,4 +162,4 @@ console.log("additionalDocResponData" , additionalDocResponData);
         </React.Fragment>
     );
 }
-export default AdditionalDocument;
+export default LandSchedule;

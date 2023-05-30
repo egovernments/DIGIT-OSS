@@ -21146,14 +21146,14 @@ input[type=text]:disabled {
   align-items: center;
   }
   .histroryremarks{
-    width: 35%;
+    width: 100%;
     height: 500px;
     overflow-y: auto;
   
   }
   .currentremarks {
-    width: 65%;
-    height: 500px;
+    width: 100%;
+    height: 200px;
     overflow-y: auto;
   }
 
@@ -21278,3 +21278,13 @@ color: #fff !important;
     /* top:50%;
     left:50%; */
 }
+
+
+.textareaProforma{
+  display: flex;
+  overflow-x: scroll;
+ /* width: "px"; */
+  margin-Top: "15px";
+}
+
+

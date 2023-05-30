@@ -212,7 +212,7 @@ console.log("log123Disrenu" ,id);
         class="currentremarks"
          >
           <div class="WhatsNewCard" style={{ backgroundColor: "#ddf2cf" }}>
-            {/* <p class="text-center" ><h4>Current Remarks</h4></p> */}
+            <p class="text-center" ><h4>Current Remarks</h4></p>
             <Row>
 
               <Col>
@@ -220,8 +220,24 @@ console.log("log123Disrenu" ,id);
                 {id}
               </Col>
             </Row>
-           
-      
+            {/* <Row>
+
+              <Col>
+                <b>Field Name</b>
+
+              </Col>
+              <Col>
+                <b>Field value</b>
+
+              </Col>
+              <Col>
+                <b> Status</b>
+
+              </Col>
+
+            </Row> */}
+
+
             <div>
               <Form.Group>
                <div>
@@ -315,7 +331,7 @@ console.log("log123Disrenu" ,id);
                                   <b>{el.isApproved}</b>
                                 </td>
                                 <td>
-                              
+                                  {/* <i>{<div dangerouslySetInnerHTML={createMarkup(el.remarks)}> </div>}</i> */}
                                   <i>{<div dangerouslySetInnerHTML={{__html: el.remarks}}/>}</i>
                                 </td>
 
@@ -386,7 +402,7 @@ console.log("log123Disrenu" ,id);
                                                 <b>{el.isApproved}</b>
                                               </td>
                                               <td>
-                                          
+                                                {/* <i>{el.remarks}</i> */}
                                                 <i>{<div dangerouslySetInnerHTML={{__html: el.remarks}}/>}</i>
                                               </td>
               
@@ -457,7 +473,7 @@ console.log("log123Disrenu" ,id);
                                                 <b>{el.isApproved}</b>
                                               </td>
                                               <td>
-                                                
+                                                {/* <i>{el.remarks}</i> */}
                                                 <i>{<div dangerouslySetInnerHTML={{__html: el.remarks}}/>}</i>
                                               </td>
               
@@ -468,7 +484,7 @@ console.log("log123Disrenu" ,id);
                                         </table>
                                          )}   
 
-                   
+                                         {/* /////////////////////////////////   */}
                                           
                                          <p>
                     <IconButton
@@ -537,7 +553,7 @@ console.log("log123Disrenu" ,id);
                                   <b>{el.isApproved}</b>
                                 </td>
                                 <td>
-                               
+                                  {/* <i>{<div dangerouslySetInnerHTML={createMarkup(el.remarks)}> </div>}</i> */}
                                   <i>{<div dangerouslySetInnerHTML={{__html: el.remarks}}/>}</i>
                                 </td>
 
@@ -560,7 +576,7 @@ console.log("log123Disrenu" ,id);
 
                      <b style={{ textAlign: "right" }}>{el.createdOn}</b>
                      <b style={{ textAlign: "right" }}>
-             
+                     {/* {new Date(el.createdOn).toLocaleDateString("en-GB")} {new Date(el.ts).toLocaleTimeString("en-US")} */}
                    </b>
                     </Row>
                       </Box>
@@ -583,73 +599,9 @@ console.log("log123Disrenu" ,id);
               </Form.Group>
 
             </div>
-            Account Section
-
-
           </div>
 
         </div>
-
-
-        <div 
-        class="currentremarks"
-         >
-          <div class="WhatsNewCard" style={{ backgroundColor: "#ddf2cf" }}>
-
-          Drawing
-
-            </div></div>
-            <div 
-        class="currentremarks"
-         >
-          <div class="WhatsNewCard" style={{ backgroundColor: "#ddf2cf" }}>
-          Legal 
-            </div></div>
-            <div 
-        class="currentremarks"
-         >
-          <div class="WhatsNewCard" style={{ backgroundColor: "#ddf2cf" }}>
-          Revnue
-            </div></div>
-            <div 
-        class="currentremarks"
-         >
-          <div class="WhatsNewCard" style={{ backgroundColor: "#ddf2cf" }}>
-          Techinical 
-            </div></div>
-            <div 
-        class="currentremarks"
-         >
-          <div class="WhatsNewCard" style={{ backgroundColor: "#ddf2cf" }}>
-          Main
-
-            </div></div>
-            <div 
-        class="currentremarks"
-         >
-          <div class="WhatsNewCard" style={{ backgroundColor: "#ddf2cf" }}>
-          DTP Field Section
-            </div></div>
-            
-            
-            <div 
-        class="currentremarks"
-         >
-          <div class="WhatsNewCard" style={{ backgroundColor: "#ddf2cf" }}>
-          STP Field Section 
-
-            </div></div>
-            <div 
-        class="currentremarks"
-         >
-          <div class="WhatsNewCard" style={{ backgroundColor: "#ddf2cf" }}>
-          Main
-
-            </div></div>
-
-
-        </Row>
-        <Row>
 
         <div class="histroryremarks">
           <div class="WhatsNewCard" style={{ backgroundColor: "#ddf2cf" }}>
@@ -662,7 +614,7 @@ console.log("log123Disrenu" ,id);
                 <div key={index}>
                   <hr style={{ marginTop: 5, marginBottom: 5 }}></hr>
                   
-     
+                  {/* {item.comment} */}
                   {<div dangerouslySetInnerHTML={{__html: item.comment}}/>}
                   <div>{item.action}</div>
 
@@ -704,7 +656,42 @@ console.log("log123Disrenu" ,id);
       </Row>
 
 
-    
+      {/* {JSON.stringify(userRoles)}
+      {JSON.stringify(showRemarksSection)} */}
+
+      {/* {
+        showRemarksSection &&
+        <TableContainer component={Paper} style={{ marginTop: 20 }}>
+          <Table sx={{ minWidth: 650 }} aria-label="simple table">
+            <TableHead>
+              <TableRow>
+                <TableCell>Field</TableCell>
+                <TableCell align="right">Remark</TableCell>
+                <TableCell align="right">Action</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {disapprovedList.map((row, i) => (
+                <TableRow
+                  key={row?.fieldIdL}
+                  sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                >
+                  <TableCell component="th" scope="row">
+                    {row.fieldIdL}
+                  </TableCell>
+                  <TableCell align="right">{row.comment}</TableCell>
+                  <TableCell align="right">
+                    <Checkbox
+                      checked={row?.isLOIPart}
+                      onChange={(e) => onAction(row, i, e.target.checked)}
+                    />
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
+      } */}
       <br>
       </br>
 
