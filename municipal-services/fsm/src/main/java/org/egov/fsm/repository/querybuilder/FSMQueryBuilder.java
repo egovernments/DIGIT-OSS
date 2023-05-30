@@ -59,6 +59,7 @@ public class FSMQueryBuilder {
 				.filter(checkappnumber -> checkappnumber.length() > 0).findFirst().orElse(null) != null)) {
 			boolean flag = false;
 			addClauseIfRequired(preparedStmtList, builder);
+			builder.append(" ( ");
 			for (String applicationno : applicationNumber) {
 
 				if (flag)
@@ -69,7 +70,7 @@ public class FSMQueryBuilder {
 				flag = true;
 
 			}
-
+			builder.append(" ) ");
 		}
 
 		List<String> applicationStatus = criteria.getApplicationStatus();

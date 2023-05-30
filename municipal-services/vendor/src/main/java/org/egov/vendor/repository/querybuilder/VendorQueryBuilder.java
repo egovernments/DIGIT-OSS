@@ -116,6 +116,7 @@ public class VendorQueryBuilder {
 						.collect(Collectors.toList());
 				boolean flag = false;
 				addClauseIfRequired(preparedStmtList, builder);
+				builder.append(" ( ");
 				for (String vendorname : vendorNametoLowerCase) {
 					if (flag)
 						builder.append(" OR ");
@@ -125,6 +126,7 @@ public class VendorQueryBuilder {
 
 					flag = true;
 				}
+				builder.append(" ) ");
 			}
 
 			List<String> ownerIds = criteria.getOwnerIds();

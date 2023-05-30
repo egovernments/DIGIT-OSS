@@ -48,6 +48,7 @@ public class DriverQueryBuilder {
 					&& (driverName.stream().filter(name -> name.length() > 0).findFirst().orElse(null) != null)) {
 				boolean flag = false;
 				addClauseIfRequired(preparedStmtList, builder);
+				builder.append(" ( ");
 				for (String drivername : driverName) {
 
 					if (flag)
@@ -58,7 +59,7 @@ public class DriverQueryBuilder {
 					flag = true;
 
 				}
-
+				builder.append(" ) ");
 			}
 
 			List<String> ownerIds = criteria.getOwnerIds();
