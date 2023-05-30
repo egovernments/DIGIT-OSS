@@ -7,6 +7,7 @@ import AddPost from "../Material/TextEditor";
 const Component = ({ dataMDMS , register }) => {
  
   console.log("datatemplates", dataMDMS?.["common-masters"]?.PerformaNewLicence?.[0]?.templates);
+  
   // console.log("datatemplates", );
 
 //   const { register, handleSubmit , watch } = useForm();
@@ -15,15 +16,15 @@ const Component = ({ dataMDMS , register }) => {
 
 const getDynamicFileds = (type , data) => {
     
-
+    
     switch (type) {
         case "radio":
           return (
             <React.Fragment>
-             <div style={{
+             <div className="textareaProforma" style={{
               display: "flex",
-              width: "1250px",
-              marginTop: "15px",
+              // width: "1250px",
+              // marginTop: "15px",
              }}>
               <p >{data?.label}: </p>
               {(data?.label && !data?.name?.includes("Remarks")) && <input type="hidden" value={data.label} {...register(data?.name+"Label")} />}
@@ -141,6 +142,7 @@ return (
 else {
     return null ;
 }
+
 
 };
 

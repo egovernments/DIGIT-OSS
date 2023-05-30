@@ -254,6 +254,10 @@ const DataGridDemo = (props) => {
                                             item.employees?.find((item, index) => (item.role === "JE_HQ"))?getDataGri(item.employees?.find((item, index) => (item.role === "JE_HQ")),item): <td></td>
 
                                                 }
+                                                {/* {
+                                            item.employees?.find((item, index) => (item.role === "JD_HQ"))?getDataGri(item.employees?.find((item, index) => (item.role === "JD_HQ")),item): <td></td>
+
+                                                } */}
                                           
 
                                             {/* {

@@ -201,11 +201,11 @@ console.log("log123Disrenu" ,id);
       className="justify-content-center"
       style={{
         top: windowHeight * 0.3,
-        minWidth: "90%",
-        maxWidth: "98%",
+        minWidth: "100%",
+        maxWidth: "100%",
         maxHeight: "50%",
         minHeight: "40%",
-        marginTop: 5,
+        // marginTop: 5,
       }}
     >
 

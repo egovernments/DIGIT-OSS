@@ -202,16 +202,16 @@ console.log("log123Disrenu" ,id);
       className="justify-content-center"
       style={{
         top: windowHeight * 0.3,
-        minWidth: "90%",
-        maxWidth: "98%",
+        minWidth: "100%",
+        maxWidth: "100%",
         maxHeight: "50%",
         minHeight: "40%",
-        marginTop: 5,
+        // marginTop: 5,
       }}
     >
 
 
-<div
+{/* <div
             className="collapse-header"
             onClick={() => setOpen3(!open3)}
             aria-controls="example-collapse-text"
@@ -235,7 +235,7 @@ console.log("log123Disrenu" ,id);
             {open3 ? <RemoveIcon></RemoveIcon> : <AddIcon></AddIcon>}
           </div>
           <Collapse in={open3}>
-            <div id="example-collapse-text" style={{ marginTop: 12, paddingLeft: 12, paddingRight: 12 }}>
+            <div id="example-collapse-text" style={{ marginTop: 12, paddingLeft: 12, paddingRight: 12 }}> */}
 
 
       <Row class="remarkshelp">
@@ -682,8 +682,8 @@ console.log("log123Disrenu" ,id);
         </Row>
 
 
-        </div>
-        </Collapse>
+        {/* </div>
+        </Collapse> */}
         {/* <Row>
 
         <div class="histroryremarks">

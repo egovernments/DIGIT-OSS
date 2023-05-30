@@ -1,4 +1,3 @@
-
 import React, { useContext, useEffect, useState } from "react";
 import { Row, Col, Card, Container, Form, Button } from "react-bootstrap";
 import axios from "axios";
@@ -14,6 +13,8 @@ import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
 
+// import Collapse from "react-bootstrap/Collapse";
+
 import {  Box,
   Collapse,
   } from "@mui/material";
@@ -23,7 +24,7 @@ import {  Box,
 
 
 const windowHeight = window !== undefined ? window.innerHeight : null;
-const DTPFieldSection = (props) => {
+const HistoryList = (props) => {
 
   // function createMarkup(el) {
   //   return {__html:conatn};
@@ -41,6 +42,7 @@ const DTPFieldSection = (props) => {
   const showRemarksSection = userRoles.includes("DTCP_HR")
   const histeroyData = props.histeroyData
   const [open3, setOpen3] = useState(false);
+
   const [approval, setDisapproval] = useState(false);
   const [disapprovedList, setDisapprovedList] = useState([]);
   const dateTime = new Date();
@@ -198,6 +200,7 @@ const toggleshown4 = applicationStatus => {
 
 console.log("log123Disrenu" ,id);
   return (
+   
     <Container
       className="justify-content-center"
       style={{
@@ -209,41 +212,13 @@ console.log("log123Disrenu" ,id);
         // marginTop: 5,
       }}
     >
-
-
-
-
-{/* <div
-            className="collapse-header"
-            onClick={() => setOpen3(!open3)}
-            aria-controls="example-collapse-text"
-            aria-expanded={open3}
-            style={{
-              background: "#f1f1f1",
-              padding: "0.25rem 1.25rem",
-              borderRadius: "0.25rem",
-              fontWeight: "600",
-              display: "flex",
-              cursor: "pointer",
-              color: "#817f7f",
-              justifyContent: "space-between",
-              alignContent: "center",
-            }}
-          >
-            <span style={{ color: "#817f7f", fontSize: 16 }} className="">
-              - DTP Field Section
-            
-            </span>
-            {open3 ? <RemoveIcon></RemoveIcon> : <AddIcon></AddIcon>}
-          </div>
-          <Collapse in={open3}>
-            <div id="example-collapse-text" style={{ marginTop: 12, paddingLeft: 12, paddingRight: 12 }}> */}
-      <Row class="remarkshelp">
+      
+      {/* <Row class="remarkshelp">
         <div 
         class="currentremarks"
          >
           <div class="WhatsNewCard" style={{ backgroundColor: "#ddf2cf" }}>
-            <p class="text-center" ><h4>DTP Field Section</h4></p>
+            <p class="text-center" ><h4>Account Section</h4></p>
             <Row>
 
               <Col>
@@ -620,6 +595,7 @@ console.log("log123Disrenu" ,id);
           </div>
 
         </div>
+        </Row> */}
 
 {/* 
         <div 
@@ -679,12 +655,8 @@ console.log("log123Disrenu" ,id);
             </div></div> */}
 
 
-        </Row>
-
-
-        {/* </div>
-        </Collapse> */}
-        {/* <Row>
+        {/* </Row> */}
+        <Row>
 
         <div class="histroryremarks">
           <div class="WhatsNewCard" style={{ backgroundColor: "#ddf2cf" }}>
@@ -736,16 +708,19 @@ console.log("log123Disrenu" ,id);
 
           </div>
         </div>
-      </Row> */}
+      </Row>
 
-
-    
-      <br>
-      </br>
 
 
     </Container>
+ 
+    
+    
   );
 };
 
-export default DTPFieldSection;
+export default HistoryList;
+
+
+
+
