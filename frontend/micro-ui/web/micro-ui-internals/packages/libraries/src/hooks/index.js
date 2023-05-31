@@ -15,6 +15,7 @@ import useInboxGeneral from "./useInboxGeneral/useInboxGeneral";
 import useNewInboxGeneral from "./useInboxGeneral/useNewInbox";
 import useBoundaryLocalities from "./useLocalities";
 import useCommonMDMS from "./useMDMS";
+import useWorkflowDetailsV2 from "./useWorkflowDetailsV2";
 import useModuleTenants from "./useModuleTenants";
 import useQueryParams from "./useQueryParams";
 import useRouteSubscription from "./useRouteSubscription";
@@ -24,6 +25,8 @@ import useApplicationStatusGeneral from "./useStatusGeneral";
 import useStore from "./useStore";
 import { useTenants } from "./useTenants";
 import useWorkflowDetails from "./workflow";
+import useCustomAPIHook from "./useCustomAPIHook";
+import useUpdateCustom from "./useUpdateCustom";
 
 import useComplaintDetails from "./pgr/useComplaintDetails";
 import { useComplaintsList, useComplaintsListByMobile } from "./pgr/useComplaintList";
@@ -187,6 +190,9 @@ const Hooks = {
   survey,
   useGenderMDMS,
   useRouteSubscription,
+  useCustomAPIHook,
+  useWorkflowDetailsV2,
+  useUpdateCustom,
   useCustomMDMS,
   useGetHowItWorksJSON,
   useGetFAQsJSON,

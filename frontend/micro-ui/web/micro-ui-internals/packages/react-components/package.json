@@ -1,6 +1,6 @@
 {
   "name": "@egovernments/digit-ui-react-components",
-  "version": "1.5.22",
+  "version": "1.5.23",
   "license": "MIT",
   "main": "dist/index.js",
   "module": "dist/index.modern.js",
@@ -39,7 +39,8 @@
     "react": "17.0.2",
     "react-dom": "17.0.2",
     "react-router-dom": "5.3.0",
-    "react-scripts": "^4.0.1"
+    "react-scripts": "^4.0.1",
+    "react-responsive":"9.0.2"
   },
   "files": [
     "dist"

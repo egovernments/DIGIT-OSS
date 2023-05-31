@@ -58,7 +58,7 @@ export const Row = (props) => {
       <h2 style={labelStyle}>{props.label}{props?.isMandotary && '*'}</h2>
       <div className="value" style={valueStyle}>
         {
-          props?.isValueLink ? (<a className="status-value-link" href={props?.isValueLink?.href}>{value}</a>) : <p>{value}</p> 
+          props?.isValueLink ? (<p className="status-value-link" onClick={props?.navigateLinkHandler}>{value}</p>) : <p>{value}</p> 
         }
         {props?.privacy && (
           <span style={{ display: "inline-flex", width: "fit-content", marginLeft: "10px" }}>
@@ -100,7 +100,7 @@ export const StatusTable = (props) => {
     );
   } else {
     return (
-      <div className={employee ? "employee-data-table" : "data-table"} style={props.style}>
+      <div className={employee ? `employee-data-table ${props?.customClass ? props?.customClass : ""}` : "data-table"} style={props.style}>
         {props.children}
       </div>
     );

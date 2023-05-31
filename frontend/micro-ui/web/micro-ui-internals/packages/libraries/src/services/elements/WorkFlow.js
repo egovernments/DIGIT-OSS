@@ -3,57 +3,26 @@ import { Request } from "../atoms/Utils/Request";
 import cloneDeep from "lodash/cloneDeep";
 
 const getThumbnails = async (ids, tenantId, documents = []) => {
-  tenantId = window.location.href.includes("/obps/") || window.location.href.includes("/pt/") ? Digit.ULBService.getStateId() : tenantId;
+
   
-  if (window.location.href.includes("/obps/")) {
-    if (documents?.length > 0) {
-      let workflowsDocs = [];
-      documents?.map(doc => {
-        if (doc?.url) {
-          const thumbs = doc?.url?.split(",")?.[3] || doc?.url?.split(",")?.[0]
-          workflowsDocs.push({
-            thumbs: [thumbs],
-            images: [Digit.Utils.getFileUrl(doc.url)]
-          }) 
-        }
-      })
-      return workflowsDocs?.[0];
-    } else {
-      return null;
-    }
-  } else {
     const res = await Digit.UploadServices.Filefetch(ids, tenantId);
     if (res.data.fileStoreIds && res.data.fileStoreIds.length !== 0) {
-      return { 
-        thumbs: res.data.fileStoreIds.map((o) => o.url.split(",")[3] || o.url.split(",")[0]), 
-        images: res.data.fileStoreIds.map((o) => Digit.Utils.getFileUrl(o.url)) };
+      return {
+        thumbs: res.data.fileStoreIds.map((o) => o.url.split(",")[3] || o.url.split(",")[0]),
+        images: res.data.fileStoreIds.map((o) => Digit.Utils.getFileUrl(o.url))
+      };
     } else {
       return null;
     }
-  }
+  
 };
 
 const makeCommentsSubsidariesOfPreviousActions = async (wf) => {
   const TimelineMap = new Map();
-  const tenantId = window.location.href.includes("/obps/") ? Digit.ULBService.getStateId() : wf?.[0]?.tenantId;
+  const tenantId =  wf?.[0]?.tenantId;
   let fileStoreIdsList = [];
   let res = {};
 
-  if (window.location.href.includes("/obps/")) {
-    wf?.map(wfData => {
-      wfData?.documents?.map(wfDoc => {
-        if (wfDoc?.fileStoreId) fileStoreIdsList.push(wfDoc?.fileStoreId);
-      })
-    })
-    if (fileStoreIdsList?.length > 0) {
-      res = await Digit.UploadServices.Filefetch(fileStoreIdsList, tenantId);
-    }
-    wf?.forEach(wfData => {
-      wfData?.documents?.forEach(wfDoc => {
-        if (wfDoc?.fileStoreId) wfDoc.url = res.data[wfDoc?.fileStoreId];
-      })
-    });
-  }
   for (const eventHappened of wf) {
     if (eventHappened?.documents) {
       eventHappened.thumbnailsToShow = await getThumbnails(eventHappened?.documents?.map(e => e?.fileStoreId), eventHappened?.tenantId, eventHappened?.documents)
@@ -72,6 +41,36 @@ const makeCommentsSubsidariesOfPreviousActions = async (wf) => {
   }
   const response = TimelineMap.get("tlActions")
   return response
+}
+
+const getThumbnailsV2 = async (ids, tenantId, documents = []) => {
+
+  const res = await Digit.UploadServices.Filefetch(ids, tenantId);
+  if (res.data.fileStoreIds && res.data.fileStoreIds.length !== 0) {
+    return {
+      thumbs: res.data.fileStoreIds.map((o) => o.url.split(",")[3] || o.url.split(",")[0]),
+      images: res.data.fileStoreIds.map((o) => Digit.Utils.getFileUrl(o.url))
+    };
+  } else {
+    return null;
+  }
+};
+
+const makeCommentsSubsidariesOfPreviousActionsV2 = async (wf) => {
+  const TimelineMap = new Map();
+  // const tenantId = window.location.href.includes("/obps/") ? Digit.ULBService.getStateId() : wf?.[0]?.tenantId;
+ 
+  
+  for (const eventHappened of wf) {
+    
+    //currenlty in workflow documentUid is getting populated so while update we are sending fileStoreId in documentUid field
+    if (eventHappened?.documents) {
+      eventHappened.thumbnailsToShow = await getThumbnailsV2(eventHappened?.documents?.map(e => e?.documentUid || e?.fileStoreId), eventHappened?.tenantId, eventHappened?.documents)
+    }
+
+      
+  }
+ 
 }
 
 const getAssignerDetails = (instance, nextStep, moduleCode) => {
@@ -108,7 +107,108 @@ export const WorkflowService = {
       auth: true,
     });
   },
+  getDetailsByIdV2: async ({ tenantId, id, moduleCode }) => {
+    
+    //process instance search
+    const workflow = await Digit.WorkflowService.getByBusinessId(tenantId, id);
+    const applicationProcessInstance = cloneDeep(workflow?.ProcessInstances);
+    //business service search
+    const businessServiceResponse = (await Digit.WorkflowService.init(tenantId, moduleCode))?.BusinessServices[0]?.states;
 
+    if (workflow && workflow.ProcessInstances) {
+      const processInstances = workflow.ProcessInstances;
+      const nextStates = processInstances[0]?.nextActions.map((action) => ({ action: action?.action, nextState: processInstances[0]?.state.uuid }));
+      const nextActions = nextStates.map((id) => ({
+        action: id.action,
+        state: businessServiceResponse?.find((state) => state.uuid === id.nextState),
+      }));
+
+      /* To check state is updatable and provide edit option*/
+      const currentState = businessServiceResponse?.find((state) => state.uuid === processInstances[0]?.state.uuid);
+      
+      // if current state is editable then we manually append an edit action
+      //(doing only for muster)
+      //beacuse in other module edit action is defined in workflow
+      
+      // if (currentState && currentState?.isStateUpdatable && moduleCode==="muster-roll-approval" ) {
+      //   nextActions.push({ action: "EDIT", state: currentState });
+      //  }
+      // Check when to add Edit action(In Estimate only when send back to originator action is taken)
+
+      const getStateForUUID = (uuid) => businessServiceResponse?.find((state) => state.uuid === uuid);
+
+      //this actionState is used in WorkflowActions component
+      const actionState = businessServiceResponse
+        ?.filter((state) => state.uuid === processInstances[0]?.state.uuid)
+        .map((state) => {
+          let _nextActions = state.actions?.map?.((ac) => {
+            let actionResultantState = getStateForUUID(ac.nextState);
+            let assignees = actionResultantState?.actions?.reduce?.((acc, act) => {
+              return [...acc, ...act.roles];
+            }, []);
+            return { ...actionResultantState, assigneeRoles: assignees, action: ac.action, roles: ac.roles };
+          });
+          // if (state?.isStateUpdatable && moduleCode==="MR") {
+          //   _nextActions.push({ action: "RE-SUBMIT", ...state, roles: state?.actions?.[0]?.roles })
+          // }
+          //CHECK WHEN EDIT ACTION TO BE SHOWN
+          return { ...state, nextActions: _nextActions, roles: state?.action, roles: state?.actions?.reduce((acc, el) => [...acc, ...el.roles], []) };
+        })?.[0];
+
+
+        //mapping nextActions with suitable roles
+      const actionRolePair = nextActions?.map((action) => ({
+        action: action?.action,
+        roles: action.state?.actions?.map((action) => action.roles).join(","),
+      }));
+
+
+      if (processInstances.length > 0) {
+        // const EnrichedWfData = await makeCommentsSubsidariesOfPreviousActions(processInstances)
+        //if any documents are there this fn will add thumbnails to show
+        
+        await makeCommentsSubsidariesOfPreviousActionsV2(processInstances)
+
+        let timeline = processInstances.map((instance, ind) => {
+          let checkPoint = {
+            performedAction: instance.action,
+            status: instance.state.applicationStatus,
+            state: instance.state.state,
+            assigner: instance?.assigner,
+            rating: instance?.rating,
+            // wfComment: instance?.wfComments?.map(e => e?.comment),
+            comment:instance?.comment,
+            wfDocuments: instance?.documents,
+            thumbnailsToShow: { thumbs: instance?.thumbnailsToShow?.thumbs, fullImage: instance?.thumbnailsToShow?.images },
+            assignes: instance.assignes,
+            caption: instance.assignes ? instance.assignes?.map((assignee) => ({ name: assignee.name, mobileNumber: assignee.mobileNumber })) : null,
+            auditDetails: {
+              created: Digit.DateUtils.ConvertEpochToDate(instance.auditDetails.createdTime),
+              lastModified: Digit.DateUtils.ConvertEpochToDate(instance.auditDetails.lastModifiedTime),
+              lastModifiedEpoch: instance.auditDetails.lastModifiedTime,
+            },
+            isTerminateState : instance?.state?.isTerminateState
+          };
+          return checkPoint;
+        });
+
+        
+        const details = {
+          timeline,
+          nextActions:actionRolePair,
+          actionState,
+          applicationBusinessService: workflow?.ProcessInstances?.[0]?.businessService,
+          processInstances: applicationProcessInstance,
+        };
+        
+
+        return details;
+      }
+    } else {
+      throw new Error("error fetching workflow services");
+    }
+    return {};
+  },
   getDetailsById: async ({ tenantId, id, moduleCode, role, getTripData }) => {
     const workflow = await Digit.WorkflowService.getByBusinessId(tenantId, id);
     const applicationProcessInstance = cloneDeep(workflow?.ProcessInstances);

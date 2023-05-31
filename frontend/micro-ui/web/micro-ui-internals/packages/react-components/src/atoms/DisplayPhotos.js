@@ -17,9 +17,9 @@ const ImageOrPDFIcon = ({source, index, last=false, onClick}) => {
 
 const DisplayPhotos = (props) => {
   return (
-    <div className="photos-wrap">
+    <div className="photos-wrap" style={props.style}>
       {props.srcs.map((source, index) => {
-        return <ImageOrPDFIcon {...{source, index, ...props}} last={++index !== props.srcs.length ? false : true}/>
+        return <ImageOrPDFIcon key={index} {...{source, index, ...props}} last={++index !== props.srcs.length ? false : true}/>
       })}
     </div>
   );

@@ -17,10 +17,11 @@ const TextArea = (props) => {
       className={`${user_type !== "citizen" ? "employee-card-textarea" : "card-textarea"} ${props.disable && "disabled"} ${
         props?.className ? props?.className : ""
       }`}
-      minLength={props.minLength}
-      maxLength={props.maxLength} 
+      minLength={props.minlength}
+      maxLength={props.maxlength} 
       autoComplete="off"
       disabled={props.disabled}
+      pattern={props?.validation && props.ValidationRequired ? props?.validation?.pattern : props.pattern}
     ></textarea>
     {  <p className="cell-text">{props.hintText}</p>}
     </React.Fragment>

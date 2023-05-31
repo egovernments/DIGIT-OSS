@@ -1,10 +1,10 @@
 import React, { useEffect, useReducer, useState } from "react"
 import UploadFile from "../atoms/UploadFile"
 
-const displayError = ({ t, error, name }) => (
+const displayError = ({ t, error, name }, customErrorMsg) => (
     <span style={{ display: 'flex', flexDirection: 'column' }}>
-        <div className="validation-error">{t(error)}</div>
-        <div className="validation-error">{`${t('ES_COMMON_DOC_FILENAME')} : ${name} ...`}</div>
+        <div className="validation-error">{customErrorMsg ? t(customErrorMsg) : t(error)}</div>
+        <div className="validation-error">{customErrorMsg ? '' : `${t('ES_COMMON_DOC_FILENAME')} : ${name} ...`}</div>
     </span>
 )
 
@@ -54,11 +54,12 @@ const checkIfAllValidFiles = (files, regex, maxSize, t, maxFilesAllowed, state) 
 }
 
 // can use react hook form to set validations @neeraj-egov
-const MultiUploadWrapper = ({ t, module = "PGR", tenantId = Digit.ULBService.getStateId(), getFormState, requestSpecifcFileRemoval, extraStyleName = "", setuploadedstate = [], showHintBelow, hintText, allowedFileTypesRegex = /(.*?)(jpg|jpeg|webp|aif|png|image|pdf|msword|openxmlformats-officedocument)$/i, allowedMaxSizeInMB = 10, acceptFiles = "image/*, .jpg, .jpeg, .webp, .aif, .png, .image, .pdf, .msword, .openxmlformats-officedocument, .dxf", maxFilesAllowed, customClass="" }) => {
+const MultiUploadWrapper = ({ t, module = "PGR", tenantId = Digit.ULBService.getStateId(), getFormState, requestSpecifcFileRemoval, extraStyleName = "", setuploadedstate = [], showHintBelow, hintText, allowedFileTypesRegex = /(.*?)(jpg|jpeg|webp|aif|png|image|pdf|msword|openxmlformats-officedocument)$/i, allowedMaxSizeInMB = 10, acceptFiles = "image/*, .jpg, .jpeg, .webp, .aif, .png, .image, .pdf, .msword, .openxmlformats-officedocument, .dxf", maxFilesAllowed, customClass="", customErrorMsg,containerStyles }) => {
     const FILES_UPLOADED = "FILES_UPLOADED"
     const TARGET_FILE_REMOVAL = "TARGET_FILE_REMOVAL"
 
     const [fileErrors, setFileErrors] = useState([]);
+    const [enableButton, setEnableButton] = useState(true)
 
     const uploadMultipleFiles = (state, payload) => {
         const { files, fileStoreIds } = payload;
@@ -70,6 +71,7 @@ const MultiUploadWrapper = ({ t, module = "PGR", tenantId = Digit.ULBService.get
     const removeFile = (state, payload) => {
         const __indexOfItemToDelete = state.findIndex(e => e[1].fileStoreId.fileStoreId === payload.fileStoreId.fileStoreId)
         const mutatedState = state.filter((e, index) => index !== __indexOfItemToDelete)
+        setFileErrors([])
         return [...mutatedState]
     }
 
@@ -87,6 +89,7 @@ const MultiUploadWrapper = ({ t, module = "PGR", tenantId = Digit.ULBService.get
     const [state, dispatch] = useReducer(uploadReducer, [...setuploadedstate])
     
     const onUploadMultipleFiles = async (e) => {
+        setEnableButton(false)
         setFileErrors([])
         const files = Array.from(e.target.files);
 
@@ -96,11 +99,14 @@ const MultiUploadWrapper = ({ t, module = "PGR", tenantId = Digit.ULBService.get
         if (!error) {
             try {
                 const { data: { files: fileStoreIds } = {} } = await Digit.UploadServices.MultipleFilesStorage(module, e.target.files, tenantId)
+                setEnableButton(true)
                 return dispatch({ type: FILES_UPLOADED, payload: { files: e.target.files, fileStoreIds } })
             } catch (err) {
+                setEnableButton(true)
             }
         } else {
             setFileErrors(validationMsg)
+            setEnableButton(true)
         }
     }
 
@@ -111,7 +117,7 @@ const MultiUploadWrapper = ({ t, module = "PGR", tenantId = Digit.ULBService.get
     }, [requestSpecifcFileRemoval])
 
     return (
-        <div>
+        <div style={containerStyles}>
             <UploadFile
                 onUpload={(e) => onUploadMultipleFiles(e)}
                 removeTargetedFile={(fileDetailsData) => dispatch({ type: TARGET_FILE_REMOVAL, payload: fileDetailsData })}
@@ -126,10 +132,11 @@ const MultiUploadWrapper = ({ t, module = "PGR", tenantId = Digit.ULBService.get
                 accept={acceptFiles}
                 message={t(`WORKS_NO_FILE_SELECTED`)}
                 customClass={customClass}
+                enableButton={enableButton}
             />
             <span style={{ display: 'flex' }}>
                 {fileErrors.length ? fileErrors.map(({ valid, name, type, size, error }) => (
-                    valid ? null : displayError({ t, error, name })
+                    valid ? null : displayError({ t, error, name }, customErrorMsg)
                 )) : null}
             </span>
         </div>)

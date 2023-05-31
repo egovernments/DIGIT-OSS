@@ -51,6 +51,7 @@ const TextField = (props) => {
       e.preventDefault();
     } else if (e.key == "Enter") {
       props.addProps.selectOption(props.addProps.currentIndex);
+      e.preventDefault();
     }
   };
 
