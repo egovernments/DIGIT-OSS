@@ -10,6 +10,7 @@ import LanguageSelection from "./LanguageSelection";
 import EmployeeLogin from "./Login";
 import UserProfile from "../citizen/Home/UserProfile";
 import ErrorComponent from "../../components/ErrorComponent";
+import { PrivateRoute } from "@egovernments/digit-ui-react-components";
 
 const userScreensExempted = ["user/profile", "user/error"];
 
@@ -75,14 +76,14 @@ const EmployeeApp = ({
               <Route path={`${path}/user/change-password`}>
                 <ChangePassword />
               </Route>
-              <Route path={`${path}/user/profile`}>
+              <PrivateRoute path={`${path}/user/profile`}>
                 <UserProfile stateCode={stateCode} userType={"employee"} cityDetails={cityDetails} />
-              </Route>
+              </PrivateRoute>
               <Route path={`${path}/user/error`}>
                 <ErrorComponent
                   initData={initData}
                   goToHome={() => {
-                    history.push(`/${window?.contextPath}/employee`);
+                    history.push(`/${window?.contextPath}/${Digit?.UserService?.getType?.()}`);
                   }}
                 />
               </Route>

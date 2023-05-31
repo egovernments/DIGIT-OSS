@@ -175,7 +175,7 @@ const Home = ({
             <ErrorComponent
               initData={initData}
               goToHome={() => {
-                history.push(`/${window?.contextPath}/citizen`);
+                history.push(`/${window?.contextPath}/${Digit?.UserService?.getType?.()}`);
               }}
             />
           </Route>
