@@ -1486,6 +1486,7 @@ const LandScheduleForm = (props) => {
                               type="date"
                               {...register("sectionFour")}
                               className="form-control"
+                              min="1900-01-01"
                               max={convertEpochToDate(new Date().setFullYear(new Date().getFullYear()))}
                             />
                             <h3 className="error-message" style={{ color: "red" }}>
@@ -1503,6 +1504,7 @@ const LandScheduleForm = (props) => {
                               type="date"
                               className="form-control"
                               {...register("sectionSix")}
+                              min="1900-01-01"
                               max={convertEpochToDate(new Date().setFullYear(new Date().getFullYear()))}
                             />
                             <h3 className="error-message" style={{ color: "red" }}>
@@ -1521,6 +1523,7 @@ const LandScheduleForm = (props) => {
                               type="date"
                               className="form-control"
                               {...register("rewardDate")}
+                              min="1900-01-01"
                               max={convertEpochToDate(new Date().setFullYear(new Date().getFullYear()))}
                             />
                             <h3 className="error-message" style={{ color: "red" }}>
@@ -1598,7 +1601,7 @@ const LandScheduleForm = (props) => {
                                   {/* Date of Release */}
                                 </h2>{" "}
                               </label>
-                              <input type="date" {...register("releaseDate")} className="form-control" />
+                              <input type="date" {...register("releaseDate")} className="form-control" min="1900-01-01" />
                               <div className="invalid-feedback">{errors?.releaseDate?.message}</div>
                             </div>
                             <div className="col col-lg-3 col-md-6 col-sm-6 mb-2">
@@ -3090,7 +3093,7 @@ const LandScheduleForm = (props) => {
                             <span style={{ color: "red" }}>*</span>
                           </h2>
                         </label>
-                        <Form.Control type="date" className="form-control" {...register("date")} />
+                        <Form.Control type="date" className="form-control" {...register("date")} min="1900-01-01" />
                       </div>
                       <h3 className="error-message" style={{ color: "red" }}>
                         {errors?.date && errors?.date?.message}

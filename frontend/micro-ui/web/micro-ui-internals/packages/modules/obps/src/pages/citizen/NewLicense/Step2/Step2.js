@@ -24,9 +24,9 @@ import Tooltip from "@mui/material/Tooltip";
 import { useTranslation } from "react-i18next";
 
 const applicationType = [
+  { label: "New Licence", value: "newLicence" },
   { label: "Addition", value: "addition" },
   { label: "Migration", value: "migration" },
-  { label: "New Licence", value: "newLicence" },
 ];
 
 const ApllicantPuropseForm = (props) => {
@@ -1018,9 +1018,13 @@ const ApllicantPuropseForm = (props) => {
     };
     try {
       const Resp = await axios.post(`/tl-services/new/licenses/object/_getByApplicationNumber?applicationNumber=${appNumber}`, payload);
-      const userData = Resp?.data?.LicenseDetails?.[0]?.ApplicantPurpose;
+      const userData = Resp?.data?.LicenseDetails?.[0]?.ApplicantPurpose?.AppliedLandDetails;
       console.log("data =====", userData);
-      setData({ caseNumber: Resp?.data?.caseNumber, dairyNumber: Resp?.data?.dairyNumber });
+      console.log("modalData==========", modalData);
+      // setArray(oldArray => [...oldArray,newValue] );
+
+      // setModalData((prev) => [...prev, userData]);
+      setModalData([...modalData, ...userData]);
       setStepData(userData);
     } catch (error) {
       return error;
