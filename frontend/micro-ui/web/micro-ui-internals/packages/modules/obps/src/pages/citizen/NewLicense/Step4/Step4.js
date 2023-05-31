@@ -712,8 +712,8 @@ const AppliedDetailForm = (props) => {
                           type="file"
                           style={{ display: "none" }}
                           onChange={(e) => {
-                            const chechType = e?.target?.files[0]?.type;
-                            if (chechType != "application/pdf") {
+                            const checkType = e?.target?.files[0]?.type;
+                            if (checkType != "application/pdf") {
                               setShowToastError({ label: "Please select given file format", error: true, success: false });
                             } else getDocumentData(e?.target?.files[0], "layoutPlanPdf");
                           }}
