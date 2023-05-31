@@ -1052,7 +1052,7 @@ const ApllicantPuropseForm = (props) => {
           )}
           <Card style={{ width: "126%", marginLeft: "-2px", paddingRight: "10px", marginTop: "40px", marginBottom: "52px" }}>
             <Form.Group>
-              <div className="row" style={{ alignItems: "self-end" }}>
+              {/* <div className="row" style={{ alignItems: "self-end" }}>
                 <div className="col col-lg-3 col-md-6 col-sm-6">
                   <label>
                     <h2>Type of Application</h2>
@@ -1099,7 +1099,7 @@ const ApllicantPuropseForm = (props) => {
                       </div>
                     </div>
                   )}
-              </div>
+              </div> */}
               <Row className="mt-3" style={{ marginBottom: 5 }}>
                 <Col md={4} xxl lg="4">
                   <div>
