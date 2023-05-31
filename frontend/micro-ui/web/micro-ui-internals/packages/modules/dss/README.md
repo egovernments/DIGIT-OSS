@@ -33,7 +33,7 @@ then navigate to App.js
 ```
 
 
-``jsx
+```jsx
 /** add this import **/
 
 import { initDSSComponents } from "@egovernments/digit-ui-module-dss";
@@ -52,6 +52,7 @@ const initDigitUI = () => {
 # Changelog
 
 ```bash
+1.5.22 updated the readme file
 1.5.21 added the readme file
 1.5.20 base version
 ```
