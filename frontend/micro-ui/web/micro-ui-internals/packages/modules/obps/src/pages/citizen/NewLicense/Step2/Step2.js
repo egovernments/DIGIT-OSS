@@ -23,6 +23,12 @@ import InfoIcon from "@mui/icons-material/Info";
 import Tooltip from "@mui/material/Tooltip";
 import { useTranslation } from "react-i18next";
 
+const applicationType = [
+  { label: "Addition", value: "addition" },
+  { label: "Migration", value: "migration" },
+  { label: "New Licence", value: "newLicence" },
+];
+
 const ApllicantPuropseForm = (props) => {
   const datapost = {
     RequestInfo: {
@@ -262,6 +268,7 @@ const ApllicantPuropseForm = (props) => {
   const [getMustil, setMustil] = useState("");
   const [getData, setData] = useState({ caseNumber: "", dairyNumber: "" });
   const [getTotalArea, setTotlArea] = useState();
+  const [getAppNumbers, setAppNumbers] = useState([]);
 
   const resetValues = () => {
     resetField("district");
@@ -965,6 +972,61 @@ const ApllicantPuropseForm = (props) => {
     }
   }, [watch("bigha"), watch("biswa"), watch("biswansi"), watch("nonConsolidationType")]);
 
+  const fetchLicenceNumbers = async () => {
+    const token = window?.localStorage?.getItem("token");
+    setLoader(true);
+    const payload = {
+      RequestInfo: {
+        apiId: "Rainmaker",
+        ver: "v1",
+        ts: 0,
+        action: "_search",
+        did: "",
+        key: "",
+        msgId: "090909",
+        requesterId: "",
+        authToken: token,
+        userInfo: userInfo,
+      },
+    };
+    try {
+      const Resp = await axios.post("/tl-services/_getServices/_search?type=LicenceNumber&businessService=NewTL", payload);
+      setLoader(false);
+      const appNumbers = Resp?.data?.applicationNumbers?.map(function (data) {
+        return { value: data, label: data };
+      });
+      setAppNumbers(appNumbers);
+    } catch (error) {
+      setLoader(false);
+      return error;
+    }
+  };
+
+  useEffect(() => {
+    fetchLicenceNumbers();
+  }, []);
+
+  const handleFetch = async () => {
+    const token = window?.localStorage?.getItem("token");
+    const appNumber = watch("licenceNumber")?.value;
+    const payload = {
+      RequestInfo: {
+        apiId: "Rainmaker",
+        msgId: "1669293303096|en_IN",
+        authToken: token,
+      },
+    };
+    try {
+      const Resp = await axios.post(`/tl-services/new/licenses/object/_getByApplicationNumber?applicationNumber=${appNumber}`, payload);
+      const userData = Resp?.data?.LicenseDetails?.[0]?.ApplicantPurpose;
+      console.log("data =====", userData);
+      setData({ caseNumber: Resp?.data?.caseNumber, dairyNumber: Resp?.data?.dairyNumber });
+      setStepData(userData);
+    } catch (error) {
+      return error;
+    }
+  };
+
   useEffect(() => {
     console.log("erorrs=====", errors);
   }, [errors]);
@@ -990,8 +1052,56 @@ const ApllicantPuropseForm = (props) => {
           )}
           <Card style={{ width: "126%", marginLeft: "-2px", paddingRight: "10px", marginTop: "40px", marginBottom: "52px" }}>
             <Form.Group>
-              <Row className="ml-auto" style={{ marginBottom: 5 }}>
-                <Col md={4} xxl lg="3">
+              {/* <div className="row" style={{ alignItems: "self-end" }}>
+                <div className="col col-lg-3 col-md-6 col-sm-6">
+                  <label>
+                    <h2>Type of Application</h2>
+                  </label>
+                  <ReactMultiSelect
+                    control={control}
+                    name="typeOfApplication"
+                    placeholder="Select type"
+                    data={applicationType}
+                    labels="typeOfApplication"
+                  />
+                  <h3 className="error-message" style={{ color: "red" }}>
+                    {errors?.typeOfApplication && errors?.typeOfApplication?.message}
+                  </h3>
+                </div>
+                {(watch("typeOfApplication")?.value == "addition" || watch("typeOfApplication")?.value == "migration") && (
+                  <div className="col col-lg-3 col-md-6 col-sm-6">
+                    <label>
+                      <h2>Licence Number</h2>
+                    </label>
+                    <ReactMultiSelect control={control} name="licenceNumber" placeholder="Select type" data={getAppNumbers} labels="licenceNumber" />
+                    <h3 className="error-message" style={{ color: "red" }}>
+                      {errors?.licenceNumber && errors?.licenceNumber?.message}
+                    </h3>
+                  </div>
+                )}
+                {(watch("typeOfApplication")?.value == "addition" || watch("typeOfApplication")?.value == "migration") &&
+                  watch("licenceNumber")?.value && (
+                    <div className="col col-lg-3 col-md-6 col-sm-6">
+                      <div
+                        style={{
+                          background: "#024f9d",
+                          color: "white",
+                          height: "38px",
+                          display: "flex",
+                          borderRadius: "5px",
+                          justifyContent: "center",
+                          alignItems: "center",
+                          cursor: "pointer",
+                        }}
+                        onClick={handleFetch}
+                      >
+                        Fetch
+                      </div>
+                    </div>
+                  )}
+              </div> */}
+              <Row className="mt-3" style={{ marginBottom: 5 }}>
+                <Col md={4} xxl lg="4">
                   <div>
                     <Form.Label>
                       <h2>
@@ -1017,7 +1127,7 @@ const ApllicantPuropseForm = (props) => {
                   </h3>
                 </Col>
 
-                <Col style={{ display: "flex", alignItems: "end" }} md={8} xxl lg="9">
+                <Col md={8} xxl lg="8" style={{ display: "flex", alignItems: "end" }}>
                   <p>
                     Note: The application to be received under policy dated 10.11.17 shall only be accepted within window period and correct spelling
                     of purpose.

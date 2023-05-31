@@ -243,7 +243,7 @@ const LandScheduleForm = (props) => {
       LicenseDetails: {
         LandSchedule: {
           ...data,
-          LandScheduleDetails: modalData,
+          // LandScheduleDetails: modalData,
         },
       },
       RequestInfo: {
@@ -785,7 +785,7 @@ const LandScheduleForm = (props) => {
                   {/* <hr></hr> */}
                   <div className="mt-4">
                     <h4 className="mb-2">
-                      1. {`${t("NWL_APPLICANT_ANY_ENCUMBRANCE_WITH_RESPECT_TO_FOLLOWING")}`}
+                      {`${t("NWL_APPLICANT_ANY_ENCUMBRANCE_WITH_RESPECT_TO_FOLLOWING")}`}
                       {/* Any encumbrance with respect to following  */}
                       <span style={{ color: "red" }}>*</span>
                     </h4>
@@ -2886,6 +2886,9 @@ const LandScheduleForm = (props) => {
                         {`${t("NWL_APPLICANT_SHAJRA_PLAN_DOCUMENT")}`}
                         {/* Shajra Plan  */}
                         <span style={{ color: "red" }}>*</span>
+                        <Tooltip title="Please select the file in .kml format">
+                          <InfoIcon style={{ cursor: "pointer" }} color="primary"></InfoIcon>
+                        </Tooltip>
                       </h2>
                       <span>
                         {" "}
@@ -2932,9 +2935,16 @@ const LandScheduleForm = (props) => {
                         <input
                           type="file"
                           style={{ display: "none" }}
-                          onChange={(e) => getDocumentData(e?.target?.files[0], "copyOfShajraPlan")}
-                          accept="application/pdf/jpeg/png"
-                          // accept=".dxf/.zip"
+                          accept=".kml"
+                          onChange={(e) => {
+                            var fileName = e?.target?.files[0]?.name;
+                            var fileExtension = fileName?.split(".")?.pop();
+                            if (fileExtension?.toLowerCase() == "kml") {
+                              getDocumentData(e?.target?.files[0], "copyOfShajraPlan");
+                            } else {
+                              setShowToastError({ label: "Please select given file format", error: true, success: false });
+                            }
+                          }}
                         />
                       </label>
                       {watch("copyOfShajraPlan") ? (
