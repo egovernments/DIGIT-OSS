@@ -1,11 +1,11 @@
 <!-- TODO: update this -->
 
-# digit-ui-module-core
+# digit-ui-module-hrms
 
 ## Install
 
 ```bash
-npm install --save digit-ui-module-core
+npm install --save digit-ui-module-hrms
 ```
 
 ## Limitation
@@ -23,7 +23,7 @@ frontend/micro-ui/web/package.json
 ```
 
 ```json
-"@egovernments/digit-ui-module-core":"^1.5.0",
+"@egovernments/digit-ui-module-hrms":"^1.5.0",
 ```
 
 then navigate to App.js
@@ -32,23 +32,28 @@ then navigate to App.js
  frontend/micro-ui/web/src/App.js
 ```
 
+
 ```jsx
 /** add this import **/
 
-import { DigitUI } from "@egovernments/digit-ui-module-core";
+import { initHRMSComponents } from "@egovernments/digit-ui-module-hrms";
 
+/** inside enabledModules add this new module key **/
 
-/** inside render Function add  the import for the component **/
+const enabledModules = ["HRMS"];
 
-  ReactDOM.render(<DigitUI stateCode={stateCode} enabledModules={enabledModules} moduleReducers={moduleReducers} />, document.getElementById("root"));
+/** inside init Function call this function **/
 
+const initDigitUI = () => {
+  initHRMSComponents();
+};
 ```
+
 # Changelog
 
 ```bash
-1.5.30 fixed the home routing issue in error screen
-1.5.29 added the readme file
-1.5.28 fixed the route issue for profile screen
+1.5.24 added the readme file
+1.5.23 base version
 ```
 
 ## Published from DIGIT Core 

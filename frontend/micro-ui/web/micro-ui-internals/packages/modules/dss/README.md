@@ -63,4 +63,3 @@ Digit Dev Repo (https://github.com/egovernments/DIGIT-Dev/tree/digit-ui-core)
 ## License
 
 MIT © [jagankumar-egov](https://github.com/jagankumar-egov)
-````
