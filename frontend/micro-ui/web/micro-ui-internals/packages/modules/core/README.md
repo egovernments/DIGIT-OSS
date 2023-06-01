@@ -5,7 +5,7 @@
 ## Install
 
 ```bash
-npm install --save digit-ui-module-core
+npm install --save @egovernments/digit-ui-module-core
 ```
 
 ## Limitation

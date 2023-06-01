@@ -1,17 +1,18 @@
 <!-- TODO: update this -->
 
-# digit-ui-module-dss
+# digit-ui-css
 
 ## Install
 
 ```bash
-npm install --save @egovernments/digit-ui-module-dss
+npm install --save @egovernments/digit-ui-css
 ```
 
 ## Limitation
 
 ```bash
 This Package is more specific to DIGIT-UI's can be used across mission's
+It is the base css for all Digit UI's
 ```
 
 ## Usage
@@ -23,38 +24,26 @@ frontend/micro-ui/web/package.json
 ```
 
 ```json
-"@egovernments/digit-ui-module-dss":"^1.5.0",
+"@egovernments/digit-ui-css":"^1.5.0",
 ```
 
 then navigate to App.js
 
 ```bash
- frontend/micro-ui/web/src/App.js
+frontend/micro-ui/web/public/index.html
 ```
-
 
 ```jsx
 /** add this import **/
 
-import { initDSSComponents } from "@egovernments/digit-ui-module-dss";
+  <link rel="stylesheet" href="https://unpkg.com/@egovernments/digit-ui-css@1.5.22/dist/index.css" />
 
-/** inside enabledModules add this new module key **/
-
-const enabledModules = ["DSS"];
-
-/** inside init Function call this function **/
-
-const initDigitUI = () => {
-  initDSSComponents();
-};
 ```
-
 # Changelog
 
 ```bash
-1.5.22 updated the readme file
-1.5.21 added the readme file
-1.5.20 base version
+1.5.24 added the readme file
+1.5.23 base version
 ```
 
 ## Published from DIGIT Core 
