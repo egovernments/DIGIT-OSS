@@ -46,7 +46,7 @@ import LOASection from "./CurrentRemarks/CurrentLOA";
 import ExternalSection from "./CurrentRemarks/CurrentExternalSection";
 import HistoryList from "./ScrutinyDevelopment/HistoryList";
 
-const ScrutitnyForms = ({ apiResponse, applicationNumber, refreshScrutinyData , histeroyData,additionalDocResponData, applicationStatus ,mDMSData ,applicationimp , dataMDMS }) => {
+const ScrutitnyForms = ({ apiResponse, applicationNumber, refreshScrutinyData , histeroyData,additionalDocResponData, applicationStatus ,mDMSData ,applicationimp ,dataProfrmaFileds, dataMDMS }) => {
   const personalInfoRef = useRef();
   const generalInfoRef = useRef();
   const developerInfoRef = useRef();
@@ -58,7 +58,7 @@ const ScrutitnyForms = ({ apiResponse, applicationNumber, refreshScrutinyData , 
   
   const [purpose, setPurpose] = useState("");
   const jeLandInfoRef = useRef();
-  const { register, handleSubmit , watch } = useForm();
+  const { register, handleSubmit , watch , setValue} = useForm();
   
 
   const [displayPersonal, setDisplayPersonalInfo] = useState([]);
@@ -712,6 +712,8 @@ console.log("userInFODATA123" , userInfo);
             <Component 
           dataMDMS = {dataMDMS}
           register = {register}
+          setValue = {setValue}
+          dataProfrmaFileds ={dataProfrmaFileds}
               // style={{}}
          />
            {/* <input as="textarea" rows={1} type="text" className="form-control" placeholder="" {...register("landOwnerA")}/> */}
