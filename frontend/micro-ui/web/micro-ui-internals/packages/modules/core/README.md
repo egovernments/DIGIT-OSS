@@ -43,17 +43,20 @@ import { DigitUI } from "@egovernments/digit-ui-module-core";
   ReactDOM.render(<DigitUI stateCode={stateCode} enabledModules={enabledModules} moduleReducers={moduleReducers} />, document.getElementById("root"));
 
 ```
+
 # Changelog
 
 ```bash
+1.5.32 fixed payment response issue for  sanitation UI
 1.5.31 fixed the allservices screen back button for sanitation UI
 1.5.30 fixed the home routing issue in error screen
 1.5.29 added the readme file
 1.5.28 fixed the route issue for profile screen
 ```
 
-## Published from DIGIT Core 
-Digit Dev Repo (https://github.com/egovernments/DIGIT-Dev/tree/digit-ui-core)
+## Published from DIGIT Core
+
+Digit Dev Repo (<https://github.com/egovernments/DIGIT-Dev/tree/digit-ui-core>)
 
 ## License
 
