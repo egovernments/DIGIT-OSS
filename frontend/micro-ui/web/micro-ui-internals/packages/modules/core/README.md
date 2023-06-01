@@ -46,6 +46,7 @@ import { DigitUI } from "@egovernments/digit-ui-module-core";
 # Changelog
 
 ```bash
+1.5.31 fixed the allservices screen back button for sanitation UI
 1.5.30 fixed the home routing issue in error screen
 1.5.29 added the readme file
 1.5.28 fixed the route issue for profile screen
