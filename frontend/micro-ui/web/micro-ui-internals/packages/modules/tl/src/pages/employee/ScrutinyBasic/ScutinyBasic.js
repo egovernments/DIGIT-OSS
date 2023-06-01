@@ -46,7 +46,7 @@ import LOASection from "./CurrentRemarks/CurrentLOA";
 import ExternalSection from "./CurrentRemarks/CurrentExternalSection";
 import HistoryList from "./ScrutinyDevelopment/HistoryList";
 
-const ScrutitnyForms = ({ apiResponse, applicationNumber, refreshScrutinyData , histeroyData,additionalDocResponData, applicationStatus ,mDMSData ,applicationimp ,dataProfrmaFileds, dataMDMS }) => {
+const ScrutitnyForms = ({ apiResponse, applicationNumber, refreshScrutinyData ,profrmaID, histeroyData,additionalDocResponData, applicationStatus ,mDMSData ,applicationimp ,dataProfrmaFileds, dataMDMS }) => {
   const personalInfoRef = useRef();
   const generalInfoRef = useRef();
   const developerInfoRef = useRef();
@@ -364,7 +364,7 @@ const { remarksData,iconStates,rolesDate,handleRoles,handleGetFiledsStatesById,h
 // const handleData=(data)=>{
 //   console.log("savehandle" , data);
 // }
-
+const userID = profrmaID?.id
 function convertToObjectArray(obj) {
   const result = [];
 
@@ -404,7 +404,7 @@ function convertToObjectArray(obj) {
 
 
 const handleData = async (data) => {
-  if (data) {
+  if (!userID) {
    
  const payload = {
   "requestInfo": {
@@ -425,12 +425,7 @@ const handleData = async (data) => {
   
 }
 
-// const Resp = await axios.post(`/land-services/egscrutiny/_performa/_create?status=submit`, payload )
-// console.log("savehandle" , data);
-// console.log("savehandle" , Resp);
-// } catch (error) {
-//   console.log(error);
-// }
+
 let requestProfrma = {}
 try {
   const Resp = await axios.post("/land-services/egscrutiny/_performa/_create?status=submit", payload, {}).then((response) => {
@@ -475,9 +470,7 @@ try {
     }
   
   }
-  // const Resps = await axios.post(`/tl-services/_performaScrutiny/_create`, requestProfrma )
-  // console.log("savehandle" , data);
-  // console.log("savehandle" , Resps);
+
 
 
 
@@ -489,7 +482,7 @@ try {
   const Resp = await axios.post(`/tl-services/_performaScrutiny/_create`, requestProfrma).then((response) => {
     return response?.data;
   });
-  // setMDMSData(Resp?.MdmsRes?.ACCESSCONTROL_ROLESACCESS?.rolesaccess);
+
 
   console.log("savehandle" , data);
   console.log("savehandle" , Resps);
@@ -506,8 +499,149 @@ catch (error) {
 // handleRoles(id)
 console.log("response from API3242526277", Resp);
 // props?.remarksUpdate({ data: RemarksDeveloper.data });
-} else {
-// props?.passmodalData();
+} else { 
+  // const requestProfrmaUpdate = {
+
+  //     "RequestInfo": {
+    
+  //         "apiId": "Rainmaker",
+    
+  //         authToken: authToken,
+  //          userInfo: userInfo,
+    
+  //         "msgId": "1684320117934|en_IN"
+    
+  //     },
+    
+  //     PerformaScruitny: {
+    
+  //         applicationNumber: applicationNumber,
+    
+  //         applicationStatus: applicationStatus,
+    
+  //         userName: userInfo?.name,
+    
+  //         userId: userInfo?.id,
+    
+  //         designation: designation ,
+    
+  //         createdOn: dateTime.toUTCString(),
+    
+  //         additionalDetails: {
+    
+  //           data
+    
+  //         }
+    
+    
+    
+  //     }
+    
+  //   }
+  //   try {
+  //     const Resp = await axios.post(`/tl-services/_performaScrutiny/_update`, requestProfrmaUpdate).then((response) => {
+  //       return response?.data;
+  //     });
+    
+    
+  //     console.log("savehandle323" , data);
+  //     console.log("savehandle3434" , Resps);
+    
+     
+  //   } 
+  //   catch (error) {
+  //     console.log(error);
+    
+  //   }
+   
+ const payload = {
+  "requestInfo": {
+      "api_id": "1",
+      "ver": "1",
+      "ts": null,
+      "action": "create",
+      "did": "",
+      "key": "",
+      "msg_id": "",
+      "requester_id": "",
+      authToken: authToken,
+      userInfo: userInfo,
+  },
+  egScrutiny: convertToObjectArray(data || {}) || []
+      
+     
+  
+}
+
+
+let requestProfrma = {}
+try {
+  const Resp = await axios.post("/land-services/egscrutiny/_performa/_update", payload, {}).then((response) => {
+    return response.data;
+  });
+
+ requestProfrma = {
+
+    "RequestInfo": {
+  
+        "apiId": "Rainmaker",
+  
+        authToken: authToken,
+         userInfo: userInfo,
+  
+        "msgId": "1684320117934|en_IN"
+  
+    },
+  
+    PerformaScruitny: {
+  
+        applicationNumber: applicationNumber,
+  
+        applicationStatus: applicationStatus,
+  
+        userName: userInfo?.name,
+  
+        userId: userInfo?.id,
+  
+        designation: designation ,
+  
+        createdOn: dateTime.toUTCString(),
+  
+        additionalDetails: {
+  
+          data
+  
+        }
+  
+  
+  
+    }
+  
+  }
+
+
+
+
+} catch (error) {
+  console.log(error);
+}
+
+try {
+  const Resp = await axios.post(`/tl-services/_performaScrutiny/_update`, requestProfrma).then((response) => {
+    return response?.data;
+  });
+
+
+  console.log("savehandle" , data);
+  console.log("savehandle" , Resps);
+
+ 
+} 
+catch (error) {
+  console.log(error);
+
+}
+
 }
 };
 
@@ -700,7 +834,7 @@ console.log("userInFODATA123" , userInfo);
             }}
           >
             <span style={{ color: "#817f7f", fontSize: 16 }} className="">
-              - Performa For Scruitny {designation} 
+            Performa For Scruitny {designation} 
               
             </span>
             {open2 ? <RemoveIcon></RemoveIcon> : <AddIcon></AddIcon>}
@@ -769,7 +903,7 @@ console.log("userInFODATA123" , userInfo);
             aria-controls="example-collapse-text"
             aria-expanded={open5}
             style={{
-              background: "#f1f1f1",
+              background: "#E9E5DE",
               padding: "0.25rem 1.25rem",
               borderRadius: "0.25rem",
               fontWeight: "600",
@@ -806,7 +940,7 @@ console.log("userInFODATA123" , userInfo);
             aria-controls="example-collapse-text"
             aria-expanded={open6}
             style={{
-              background: "#f1f1f1",
+              background: "#E9E5DE",
               padding: "0.25rem 1.25rem",
               borderRadius: "0.25rem",
               fontWeight: "600",
@@ -844,7 +978,7 @@ console.log("userInFODATA123" , userInfo);
             aria-controls="example-collapse-text"
             aria-expanded={open7}
             style={{
-              background: "#f1f1f1",
+              background: "#E9E5DE",
               padding: "0.25rem 1.25rem",
               borderRadius: "0.25rem",
               fontWeight: "600",
@@ -885,7 +1019,7 @@ console.log("userInFODATA123" , userInfo);
             aria-controls="example-collapse-text"
             aria-expanded={open8}
             style={{
-              background: "#f1f1f1",
+              background: "#E9E5DE",
               padding: "0.25rem 1.25rem",
               borderRadius: "0.25rem",
               fontWeight: "600",
@@ -926,7 +1060,7 @@ console.log("userInFODATA123" , userInfo);
             aria-controls="example-collapse-text"
             aria-expanded={open9}
             style={{
-              background: "#f1f1f1",
+              background: "#E9E5DE",
               padding: "0.25rem 1.25rem",
               borderRadius: "0.25rem",
               fontWeight: "600",
@@ -968,7 +1102,7 @@ console.log("userInFODATA123" , userInfo);
             aria-controls="example-collapse-text"
             aria-expanded={open10}
             style={{
-              background: "#f1f1f1",
+              background: "#E9E5DE",
               padding: "0.25rem 1.25rem",
               borderRadius: "0.25rem",
               fontWeight: "600",
@@ -1007,7 +1141,7 @@ console.log("userInFODATA123" , userInfo);
             aria-controls="example-collapse-text"
             aria-expanded={open11}
             style={{
-              background: "#f1f1f1",
+              background: "#E9E5DE",
               padding: "0.25rem 1.25rem",
               borderRadius: "0.25rem",
               fontWeight: "600",
@@ -1047,7 +1181,7 @@ console.log("userInFODATA123" , userInfo);
             aria-controls="example-collapse-text"
             aria-expanded={open12}
             style={{
-              background: "#f1f1f1",
+              background: "#E9E5DE",
               padding: "0.25rem 1.25rem",
               borderRadius: "0.25rem",
               fontWeight: "600",
@@ -1130,7 +1264,7 @@ console.log("userInFODATA123" , userInfo);
             aria-controls="example-collapse-text"
             aria-expanded={open14}
             style={{
-              background: "#f1f1f1",
+              background: "#E9E5DE",
               padding: "0.25rem 1.25rem",
               borderRadius: "0.25rem",
               fontWeight: "600",
@@ -1185,7 +1319,7 @@ console.log("userInFODATA123" , userInfo);
             }}
           >
             <span style={{ color: "#817f7f", fontSize: 16 }} className="">
-              - History Remarks Section 
+            History Remarks Section 
               {/* {applicationStatus} */}
             </span>
             {open4 ? <RemoveIcon></RemoveIcon> : <AddIcon></AddIcon>}
