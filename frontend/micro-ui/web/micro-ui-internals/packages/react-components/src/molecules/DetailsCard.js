@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import CitizenInfoLabel from "../atoms/CitizenInfoLabel";
 import  ActionBar from "../atoms/ActionBar";
 import SubmitBar from "../atoms/SubmitBar";
-const Details = ({ label, name, onClick}) => {
+export const Details = ({ label, name, onClick}) => {
   return (
     <div className="detail" onClick={onClick}>
       <span className="label">

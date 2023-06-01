@@ -1,8 +1,32 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef, forwardRef } from "react";
 import { useGlobalFilter, usePagination, useRowSelect, useSortBy, useTable } from "react-table";
-import { ArrowBack, ArrowForward, ArrowToFirst, ArrowToLast, SortDown, SortUp } from "./svgindex";
+import { ArrowBack, ArrowForward, ArrowToFirst, ArrowToLast, SortDown, SortUp, DoubleTickIcon } from "./svgindex";
+import CheckBox from "./CheckBox";
+import ActionBar from "./ActionBar";
+import SubmitBar from "./SubmitBar";
+import Toast from "./Toast";
 
 const noop = () => {};
+
+const IndeterminateCheckbox = forwardRef(
+  ({ indeterminate, ...rest }, ref) => {
+    const defaultRef = useRef()
+    const resolvedRef = ref || defaultRef
+
+    useEffect(() => {
+      resolvedRef.current.indeterminate = indeterminate
+    }, [resolvedRef, indeterminate])
+
+    return (
+      <React.Fragment>
+        <CheckBox
+          inputRef={resolvedRef}
+          {...rest}       
+        />
+      </React.Fragment>
+    )
+  }
+)
 
 const Table = ({
   className = "table",
@@ -33,6 +57,9 @@ const Table = ({
   tableTopComponent,
   tableRef,
   isReportTable = false,
+  showCheckBox = false,
+  actionLabel = 'CS_COMMON_DOWNLOAD',
+  tableSelectionHandler = () => {}
 }) => {
   const {
     getTableProps,
@@ -50,7 +77,7 @@ const Table = ({
     previousPage,
     setPageSize,
     setGlobalFilter,
-    state: { pageIndex, pageSize, sortBy, globalFilter },
+    state: { pageIndex, pageSize, sortBy, globalFilter, selectedRowIds },
   } = useTable(
     {
       columns,
@@ -76,15 +103,56 @@ const Table = ({
     useGlobalFilter,
     useSortBy,
     usePagination,
-    useRowSelect
+    useRowSelect,
+    hooks => {
+      if(showCheckBox) {
+        hooks.visibleColumns.push(columns => [
+          {
+            id: 'selection',
+            Header: ({ getToggleAllPageRowsSelectedProps }) => (
+              <div>
+                <IndeterminateCheckbox {...getToggleAllPageRowsSelectedProps()} />
+              </div>
+            ),
+            Cell: ({ row }) => (
+              <div>
+                <IndeterminateCheckbox {...row.getToggleRowSelectedProps()} />
+              </div>
+            ),
+          },
+          ...columns,
+        ])
+      }
+    }
   );
   let isTotalColSpanRendered = false;
+  const [toast, setToast] = useState({show : false, label : "", error : false});
+
   useEffect(() => {
     onSort(sortBy);
   }, [onSort, sortBy]);
 
 
   useEffect(() => setGlobalFilter(onSearch), [onSearch, setGlobalFilter,data]);
+  
+  const handleSelection = async () => {
+    const selectedRows = rows?.filter(ele => Object.keys(selectedRowIds)?.includes(ele?.id))
+    const response = await tableSelectionHandler(selectedRows,t)
+    setToast({show: true, label: t(response?.label), error: !response?.isSuccess})
+  }
+
+  const handleToastClose = () => {
+    setToast({show : false, label : "", error : false})
+  }
+
+  useEffect(()=>{
+    if(toast?.show) {
+      setTimeout(()=>{
+        handleToastClose();
+      },3000);
+    }
+  },[toast?.show])
+
   //note -> adding data prop in dependency array to trigger filter whenever state of the table changes
   //use case -> without this if we enter string to search and then click on it's attendence checkbox or skill selector for that matter then the global filtering resets and whole table is shown
   return (
@@ -101,7 +169,7 @@ const Table = ({
                   </th>
                 )}
                 {headerGroup.headers.map((column) => (
-                  <th {...column.getHeaderProps(column.getSortByToggleProps())} style={{ verticalAlign: "top" }}>
+                  <th {...column.getHeaderProps(column.getSortByToggleProps())} style={column?.id === 'selection' ? { minWidth: '100px' } : { verticalAlign: "top", textAlign: `${column?.headerAlign ? column?.headerAlign : "left"}` }}>
                     {column.render("Header")}
                     <span>{column.isSorted ? column.isSortedDesc ? <SortDown /> : <SortUp /> : ""}</span>
                   </th>
@@ -185,6 +253,15 @@ const Table = ({
           {/* to go to first and last page we need to do a manual pagination , it can be updated later*/}
         </div>
       )}
+      { Object.keys(selectedRowIds)?.length > 0 && (
+        <ActionBar className="actionBarWrapper">
+          <span style={{display: "flex"}}>
+            <DoubleTickIcon style={{marginRight: "8px"}}/>
+            <p className="search-instruction-header" style={{marginBottom: 0}}>{`${Object.keys(selectedRowIds)?.length} ${t("COMMON_SELECTED")}`}</p>
+          </span>
+          <SubmitBar label={t(actionLabel)} onSubmit={handleSelection} />
+        </ActionBar>)}
+      {toast?.show && <Toast label={toast?.label} error={toast?.error} isDleteBtn={true} onClose={handleToastClose}></Toast>}
     </React.Fragment>
   );
 };

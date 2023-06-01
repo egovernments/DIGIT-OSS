@@ -23,7 +23,7 @@ const Breadcrumb = (props) => {
             {isLast(ci) || !crumb?.path ? (
               <span style={props?.spanStyle ? { ...props?.spanStyle, color: "#0B0C0C" } : { color: "#0B0C0C" }}>{crumb.content}</span>
             ) : (
-              <Link to={crumb.path}>{crumb.content}</Link>
+              <Link to={{ pathname:crumb.path, state: {count : crumb?.count} }}>{crumb.content}</Link>
             )}
           </li>
         );

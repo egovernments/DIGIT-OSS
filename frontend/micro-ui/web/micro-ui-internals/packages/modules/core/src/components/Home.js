@@ -91,7 +91,7 @@ const CitizenHome = ({ modules, getCitizenMenu, fetchedCitizen, isLoading }) => 
   return (
     <React.Fragment>
       <div className="citizen-all-services-wrapper">
-        <BackButton />
+        {location.pathname.includes("sanitation-ui/citizen/all-services") ? null : <BackButton />}
         <div className="citizenAllServiceGrid">
           {moduleArray
             .filter((mod) => mod)

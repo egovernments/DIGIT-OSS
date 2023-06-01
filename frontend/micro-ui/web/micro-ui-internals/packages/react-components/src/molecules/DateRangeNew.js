@@ -14,7 +14,7 @@ function isStartDateFocused(focusNumber) {
     return focusNumber === 0;
 }
 
-const DateRangeNew = ({ values, onFilterChange, t, labelClass, label, customStyles}) => {
+const DateRangeNew = ({ values, onFilterChange, t, labelClass, label, customStyles, inputRef}) => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [focusedRange, setFocusedRange] = useState([0, 0]);
     const [selectionRange, setSelectionRange] = useState({
@@ -22,7 +22,7 @@ const DateRangeNew = ({ values, onFilterChange, t, labelClass, label, customStyl
         startDate: values?.startDate,
         endDate: values?.endDate
     });
-    const wrapperRef = useRef(null);
+    const wrapperRef = useRef(inputRef);
 
     useEffect(() => {
         const handleClickOutside = (event) => {
@@ -136,8 +136,8 @@ const DateRangeNew = ({ values, onFilterChange, t, labelClass, label, customStyl
 
     return (
         <>
-            <div className="filter-label" style={{"marginBottom":"1rem", ...customStyles}}>{label ? label : t(`ES_DSS_DATE_RANGE`)}</div>
-            <div className="employee-select-wrap" style={{ "marginBottom": "0" }}  ref={wrapperRef}>
+            <div className="filter-label" style={{...customStyles}}>{label}</div>
+            <div className="employee-select-wrap" ref={wrapperRef}>
                 <div className="select">
                     <input className="employee-select-wrap--elipses" type="text" value={values?.title ? `${values?.title}` : ""} readOnly />
                     <Calender className="cursorPointer" onClick={() => setIsModalOpen((prevState) => !prevState)} />
@@ -155,6 +155,7 @@ const DateRangeNew = ({ values, onFilterChange, t, labelClass, label, customStyl
                             showSelectionPreview={true}
                             staticRanges={staticRanges}
                             inputRanges={[]}
+                            weekStartsOn={1}
                         />
                     </div>
                 )}
