@@ -1,7 +1,6 @@
 const { createProxyMiddleware } = require("http-proxy-middleware");
 
 const createProxy = createProxyMiddleware({
- 
   target: process.env.REACT_APP_PROXY_API || "http://103.166.62.118:80",
   changeOrigin: true,
 });
@@ -13,6 +12,11 @@ const apiSetuProxy = createProxyMiddleware({
 
 const GetCluDetails = createProxyMiddleware({
   target: process.env.REACT_APP_PROXY_SCRUTINY_EG || "http://182.79.97.53:81",
+  changeOrigin: true,
+});
+
+const createsSampleProxy = createProxyMiddleware({
+  target: process.env.REACT_APP_PROXY_API || "http://10.1.1.83:8020",
   changeOrigin: true,
 });
 
@@ -85,10 +89,11 @@ module.exports = function (app) {
     "/tl-services/SurrendOfLicenseRequest/_search",
     "/tl-services/ExtensionOfCLUPermissionRequest/_create",
     "/tl-services/ExtensionOfCLUPermissionRequest/_search",
-    "/egov-mdms-service/v1/_search"
+    "/egov-mdms-service/v1/_search",
   ].forEach((location) => app.use(location, createProxy));
   ["/mca/v1/companies", "/mca-directors/v1/companies", "/certificate/v3/pan/pancr"].forEach((location) => app.use(location, apiSetuProxy));
   // ["/egov-mdms-service/v1"].forEach((location) => app.use(location, LicProxy));
   ["/api/cis/GetCluDetails", "/api/cis/GetLicenceDetails"].forEach((location) => app.use(location, GetCluDetails));
   ["/api/cis/GetCluDetails", "/api/cis/GetLicenceDetails"].forEach((location) => app.use(location, GetCluDetails));
+  ["filestore/v1/files"].forEach((location) => app.use(location, createsSampleProxy));
 };
