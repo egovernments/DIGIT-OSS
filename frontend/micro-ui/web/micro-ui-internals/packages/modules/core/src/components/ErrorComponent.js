@@ -14,7 +14,7 @@ const ErrorConfig = {
   },
   notfound: {
     imgUrl: `https://s3.ap-south-1.amazonaws.com/egov-qa-assets/PageNotFound.png`,
-    infoMessage: "CORE_NOT_FOUND",
+    infoMessage: "MODULE_NOT_FOUND",
     buttonInfo: "ACTION_TEST_HOME",
   },
 };

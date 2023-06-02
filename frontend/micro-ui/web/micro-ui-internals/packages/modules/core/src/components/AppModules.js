@@ -30,7 +30,7 @@ export const AppModules = ({ stateCode, userType, modules, appTenants }) => {
     ) : (
       <Route key={index} path={`${path}/${code.toLowerCase()}`}>
         <Redirect
-          to={{ pathname: `/${window?.contextPath}/employee/user/error?type=notfound`, state: { from: location.pathname + location.search } }}
+          to={`/${window?.contextPath}/employee/user/error?type=notfound&module=${code}` }
         />
       </Route>
     );
