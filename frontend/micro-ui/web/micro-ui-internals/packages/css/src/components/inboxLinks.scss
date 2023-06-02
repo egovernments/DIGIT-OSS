@@ -1,0 +1,53 @@
+.inbox-search-links-container {
+    height: 100%;
+    width: 100% !important;
+    display: flex;
+    flex-direction: column;
+    padding: 1rem;
+    .header {
+        display: grid;
+        grid-template-columns: 20% 1fr;
+        .logo {
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            .inbox-search-icon--projects {
+                fill : #f47738;
+                height: 2rem;
+                width: 2rem;
+            }
+        }
+        .text {
+            line-height: 32px;
+            font-weight: 700;
+            color : black;
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+        }
+
+        @media (min-width: 1024px) {
+            .text {
+                font-size: 24px;
+            }
+        }
+
+        @media (max-width: 1024px) {
+            .text {
+                font-size: 20px;
+            }
+        }
+    }
+    .contents {
+        margin-top: 1rem;
+        box-sizing: border-box;
+        display: flex;
+        flex-direction: column;
+        .link {
+            padding: 8px;
+            --text-opacity: 1;
+            color: #f47738;
+            color: rgba(244, 119, 56, var(--text-opacity));
+        }
+    }
+}

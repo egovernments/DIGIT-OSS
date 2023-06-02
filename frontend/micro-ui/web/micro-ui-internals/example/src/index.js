@@ -12,6 +12,7 @@ import { initUtilitiesComponents } from  "@egovernments/digit-ui-module-utilitie
 import "@egovernments/digit-ui-css/example/index.css";
 
 import { pgrCustomizations } from "./pgr";
+import { UICustomizations } from "./UICustomizations";
 
 var Digit = window.Digit || {};
 
@@ -65,6 +66,8 @@ const initDigitUI = () => {
 
   window.Digit.Customizations = {
     PGR: pgrCustomizations,
+    commonUiConfig: UICustomizations
+
   };
 
   const stateCode = window?.globalConfigs?.getConfig("STATE_LEVEL_TENANT_ID") || "pb";

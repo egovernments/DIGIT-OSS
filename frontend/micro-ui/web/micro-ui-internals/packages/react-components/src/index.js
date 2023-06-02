@@ -269,11 +269,13 @@ import WorkflowTimeline from "./atoms/WorkflowTimeline";
 import WorkflowActions from "./atoms/WorkflowActions";
 import Amount from "./atoms/Amount";
 import Paragraph from "./atoms/Paragraph";
+import CitizenConsentForm from "./atoms/CitizenConsentForm";
 export {
   InputTextAmount,
   Button,
   ViewImages,
   Phone,
+  CitizenConsentForm,
   Body,
   Loader,
   TopBar,

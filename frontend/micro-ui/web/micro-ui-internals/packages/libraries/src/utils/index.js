@@ -7,6 +7,8 @@ import * as pt from "./pt";
 import * as privacy from "./privacy";
 import PDFUtil, { downloadReceipt ,downloadPDFFromLink,downloadBill ,getFileUrl} from "./pdf";
 import getFileTypeFromFileStoreURL from "./fileType";
+import preProcessMDMSConfig from "./preProcessMDMSConfig";
+import preProcessMDMSConfigInboxSearch from "./preProcessMDMSConfigInboxSearch";
 
 const GetParamFromUrl = (key, fallback, search) => {
   if (typeof window !== "undefined") {
@@ -272,7 +274,10 @@ const swAccess = () => {
   return SW_ACCESS?.length > 0;
 };
 
-
+/* to get the MDMS config module name */
+const getConfigModuleName = () => {
+  return window?.globalConfigs?.getConfig("UICONFIG_MODULENAME") || "commonUiConfig";
+};
 export default {
   pdf: PDFUtil,
   downloadReceipt,
@@ -307,6 +312,8 @@ export default {
   tlAccess,
   wsAccess,
   swAccess,
-
+  getConfigModuleName,
+  preProcessMDMSConfig,
+  preProcessMDMSConfigInboxSearch,
   ...privacy
 };

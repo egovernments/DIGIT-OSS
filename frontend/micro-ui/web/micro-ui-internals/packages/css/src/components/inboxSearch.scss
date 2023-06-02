@@ -1,0 +1,104 @@
+.search-wrapper {
+    height: 100%;
+    width: 100%;
+    padding: 1rem;
+
+    .popup-label {
+        display: flex;
+        font-size: large;
+        .header{
+            width: 100%;
+            font-weight: normal;  
+            font-size: large;
+            .icon {
+                margin-right: 12px;
+                margin-top: 5px;
+            }
+        }
+    }
+
+    .filter-header-wrapper {
+        display: grid;
+        grid-template-columns: 15% 1fr 15%;
+        height: 3rem;
+        margin-bottom: 1rem;
+        .icon-refresh {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid #00000017;
+            cursor: pointer;
+            svg {
+                height: 60%;
+                width: 40%;
+            }
+        }
+        .label {
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+        }
+
+        @media (min-width: 1024px) {
+            .label {
+                font-size:24px;
+            }
+        }
+
+        @media (max-width: 1024px) {
+            .label {
+                font-size:16px;
+            }
+        }
+
+        .icon-filter {
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+        }
+    }
+
+    .search-field-wrapper {
+        display: grid;
+        row-gap: 0.25rem;
+        column-gap: 1rem;
+        &.inbox {
+            grid-template-columns: repeat(3, 1fr);
+            &.filter {
+                display: flex;
+                flex-direction: column;
+            }
+        }
+        &.search {
+            grid-template-columns: repeat(4, 1fr);
+        }
+    }
+
+    .search-button-wrapper {
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        gap: 1rem;
+        padding-top: 8px;
+        &.inbox {
+            grid-column: 2 / span 2;
+            &.filter {
+                button {
+                    width: 100%;
+                }
+            }
+        }
+        &.search {
+            grid-column: 3 / span 2;
+        }
+    }
+}
+
+@screen sm {
+    .search-wrapper {
+        .search-field-wrapper {
+            display: flex;
+            flex-direction : column;
+        }
+    }   
+}

@@ -42,6 +42,7 @@ frontend/micro-ui/web/public/index.html
 # Changelog
 
 ```bash
+1.5.25 added the css of inbox search composers
 1.5.24 added the readme file
 1.5.23 base version
 ```
