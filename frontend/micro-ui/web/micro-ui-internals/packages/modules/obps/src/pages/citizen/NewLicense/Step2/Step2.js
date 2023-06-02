@@ -233,12 +233,185 @@ const ApllicantPuropseForm = (props) => {
       ),
     },
   ];
+  const migColumns = [
+    {
+      title: "District",
+      render: (data) => (data?.district ? data?.district?.label : "N/A"),
+    },
+    {
+      title: "Development Plan",
+      render: (data) => (data?.developmentPlan ? data?.developmentPlan?.label : "N/A"),
+    },
+    {
+      title: "Zone",
+      render: (data) => (data?.potential ? data?.potential : "N/A"),
+    },
+    {
+      title: "Sector",
+      render: (data) => (data?.sector ? data?.sector : "N/A"),
+    },
+    {
+      title: "Tehsil",
+      render: (data) => (data?.tehsil ? data?.tehsil?.label : "N/A"),
+    },
+    {
+      title: "Revenue Estate",
+      render: (data) => (data?.revenueEstate ? data?.revenueEstate?.label : "N/A"),
+    },
+    {
+      title: "Hadbast No.",
+      render: (data) => (data?.hadbastNo ? data?.hadbastNo : "N/A"),
+    },
+    {
+      title: "Rectangle No.",
+      render: (data) => (data?.rectangleNo ? data?.rectangleNo : "N/A"),
+    },
+    {
+      title: "Khasra No.",
+      render: (data) => (data?.khewats ? data?.khewats : "N/A"),
+    },
+    {
+      title: "Min",
+      render: (data) => (data?.min ? "Yes" : "No"),
+    },
+    {
+      key: "landOwner",
+      title: "Name of Land Owner",
+      dataIndex: "landOwner",
+      render: (data) => (
+        <h6 data-toggle="tooltip" data-placement="top" title={data}>
+          {data?.split(" ")?.slice(0, 2)?.join(" ") + "..."}
+        </h6>
+      ),
+    },
+    {
+      title: "Type of land",
+      render: (data) => (data?.typeLand ? data?.typeLand?.label : "N/A"),
+    },
+    {
+      title: "change in information",
+      render: (data) => (data?.isChange == "false" ? "Incorrect" : data?.isChange == "true" || data?.isChange ? "Correct" : "Incorrect"),
+    },
+    {
+      title: "Rectangle No./Mustil(Changed)",
+      render: (data) => (data?.editRectangleNo ? data?.editRectangleNo : "N/A"),
+    },
+    {
+      title: "Khasra Number(Changed)",
+      render: (data) => (data?.editKhewats ? data?.editKhewats : "N/A"),
+    },
+    {
+      title: "Name of the Land Owner as per Mutation/Jamabandi",
+      render: (data) => (data?.landOwnerRegistry ? data?.landOwnerRegistry : "N/A"),
+    },
+    {
+      title: "Whether Khasra been developed in collaboration",
+      render: (data) => (data?.collaboration ? data?.collaboration : "N/A"),
+    },
+    {
+      title: "Name of the developer company",
+      render: (data) => (data?.developerCompany ? data?.developerCompany : "N/A"),
+    },
+    {
+      title: "Date of registering collaboration agreement",
+      render: (data) => (data?.agreementValidFrom ? data?.agreementValidFrom : "N/A"),
+    },
+    {
+      title: "Whether collaboration agreement irrevocable (Yes/No)",
+      render: (data) => (data?.agreementIrrevocialble ? data?.agreementIrrevocialble : "N/A"),
+    },
+    {
+      title: "Name of authorized signatory on behalf of land owner(s)",
+      render: (data) => (data?.authSignature ? data?.authSignature : "N/A"),
+    },
+    {
+      title: "Name of authorized signatory on behalf of developer",
+      render: (data) => (data?.nameAuthSign ? data?.nameAuthSign : "N/A"),
+    },
+    {
+      title: "Registering Authority",
+      render: (data) => (data?.registeringAuthority ? data?.registeringAuthority : "N/A"),
+    },
+    {
+      key: "registeringAuthorityDoc",
+      title: "Registering Authority document",
+      dataIndex: "",
+      render: (data) => (
+        <div>
+          {data?.registeringAuthorityDoc && (
+            <a onClick={() => getDocShareholding(data?.registeringAuthorityDoc, setLoader)} className="btn btn-sm ">
+              <VisibilityIcon color="info" className="icon" />
+            </a>
+          )}
+        </div>
+      ),
+    },
+    {
+      title: "Consolidation Type",
+      render: (data) => (data?.consolidationType ? data?.consolidationType : "N/A"),
+    },
+    {
+      title: "Kanal",
+      render: (data) => (data?.kanal ? data?.kanal : "N/A"),
+    },
+    {
+      title: "Marla",
+      render: (data) => (data?.marla ? data?.marla : "N/A"),
+    },
+    {
+      title: "Sarsai",
+      render: (data) => (data?.sarsai ? data?.sarsai : "N/A"),
+    },
+    {
+      title: "Bigha",
+      render: (data) => (data?.bigha ? data?.bigha : "N/A"),
+    },
+    {
+      title: "Biswa",
+      render: (data) => (data?.biswa ? data?.biswa : "N/A"),
+    },
+    {
+      title: "Biswansi",
+      render: (data) => (data?.biswansi ? data?.biswansi : "N/A"),
+    },
+    {
+      title: "Acquisition Status",
+      render: (data) => (data?.acquistionStatus ? data?.acquistionStatus : "N/A"),
+    },
+    {
+      title: "Consolidated Total Area",
+      render: (data) => (data?.consolidatedTotal ? data?.consolidatedTotal : "N/A"),
+    },
+    {
+      title: "Non-Consolidated Total Area",
+      render: (data) => (data?.nonConsolidatedTotal ? data?.nonConsolidatedTotal : "N/A"),
+    },
+    {
+      title: "Action",
+      dataIndex: "",
+      render: (data) => (
+        <div style={{ width: "116px", display: "flex", justifyContent: "space-between" }}>
+          <ContentCopyIcon
+            onClick={() => {
+              var obj = data;
+              const arrB = JSON.parse(JSON.stringify(obj));
+              const length = migModalData?.length + 1;
+              arrB["rowid"] = length.toString();
+              setMigModalData([...migModalData, arrB]);
+            }}
+            style={{ cursor: "pointer" }}
+          />
+        </div>
+      ),
+    },
+  ];
 
   const { t } = useTranslation();
   const location = useLocation();
   const userInfo = Digit.UserService.getUser()?.info || {};
   const [district, setDistrict] = useState("");
   const [modalData, setModalData] = useState([]);
+  const [migModalData, setMigModalData] = useState([]);
   const [specificTableData, setSpecificTableData] = useState(null);
   // const [districtDataLabels, setDistrictDataLabels] = useState({ data: [], isLoading: true });
   const [tehsilDataLabels, setTehsilDataLabels] = useState({ data: [], isLoading: true });
@@ -1022,10 +1195,9 @@ const ApllicantPuropseForm = (props) => {
       console.log("data =====", userData);
       console.log("modalData==========", modalData);
       // setArray(oldArray => [...oldArray,newValue] );
-
-      // setModalData((prev) => [...prev, userData]);
-      setModalData([...modalData, ...userData]);
-      setStepData(userData);
+      setMigModalData(userData);
+      // setModalData([...modalData, ...userData]);
+      // setStepData(userData);
     } catch (error) {
       return error;
     }
@@ -1178,6 +1350,11 @@ const ApllicantPuropseForm = (props) => {
                   <WorkingTable columns={columns} data={modalData} />
                 </div>
               )}
+              {/* {migModalData.length > 0 && (
+                <div className="applt" style={{ overflow: "auto" }}>
+                  <WorkingTable columns={migColumns} data={migModalData} />
+                </div>
+              )} */}
             </Form.Group>
             <br></br>
             <div class="row">
@@ -2202,60 +2379,6 @@ const ApllicantPuropseForm = (props) => {
                     </tbody>
                   </table>
                 )}
-                {/* {watch("nonConsolidationType") == "pucka" && (
-                  <table className="table table-bordered" style={{ backgroundColor: "rgb(251 251 253))" }}>
-                    <thead>
-                      <tr>
-                        <th>
-                          <h2>
-                            {`${t("NWL_APPLICANT_BIGHA_LAND_SCHEDULE")}`}
-                            <span style={{ color: "red" }}>*</span>
-                          </h2>
-                        </th>
-                        <th>
-                          <h2>
-                            {`${t("NWL_APPLICANT_BISWA_LAND_SCHEDULE")}`}
-                            <span style={{ color: "red" }}>*</span>
-                          </h2>
-                        </th>
-                        <th>
-                          <h2>
-                            {`${t("NWL_APPLICANT_BISWANSI_LAND_SCHEDULE")}`}
-                            <span style={{ color: "red" }}>*</span>
-                          </h2>
-                          &nbsp;&nbsp;
-                        </th>
-                        <th>
-                          <h2>
-                            {`${t("NWL_APPLICANT_TOTAL_AREA_LAND_SCHEDULE")}`}
-                            <span style={{ color: "red" }}>*</span>
-                          </h2>
-                          &nbsp;&nbsp;
-                        </th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr>
-                        <td>
-                          <input type="number" className="form-control" {...register("bigha")} id="bigha" />
-                          <label htmlFor="sumBigha">Total: {watch("bigha") * 3025}</label>&nbsp;&nbsp;
-                        </td>
-                        <td>
-                          <input type="number" className="form-control" {...register("biswa")} id="biswa" />
-                          <label htmlFor="sumBiswa">Total: {(watch("biswa") * 151.25)?.toFixed(3)}</label>&nbsp;&nbsp;
-                        </td>
-                        <td>
-                          <input type="number" className="form-control" {...register("biswansi")} id="biswansi" />
-                          <label htmlFor="sumBiswansi">Total: {(watch("biswansi") * 7.56)?.toFixed(3)}</label>&nbsp;&nbsp;
-                        </td>
-                        <td>
-                          <input disabled type="number" className="form-control" {...register("nonConsolidatedTotal")} />
-                          &nbsp;&nbsp;
-                        </td>
-                      </tr>
-                    </tbody>
-                  </table>
-                )} */}
               </Col>
             </Row>
 

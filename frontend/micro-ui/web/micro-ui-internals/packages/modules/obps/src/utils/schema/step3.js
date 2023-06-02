@@ -63,7 +63,7 @@ const VALIDATION_SCHEMA = Yup.object().shape({
   mutation: Yup.string().nullable().required("This field is required."),
   jambandhi: Yup.string().nullable().required("This field is required."),
   copyofSpaBoard: Yup.string().nullable().required("This field is required."),
-  copyOfShajraPlan: Yup.string().nullable().required("This field is required."),
+  // copyOfShajraPlan: Yup.string().nullable().required("This field is required."),
   constructedRowWidth: Yup.string().test({
     name: "conditional",
     test: function (value) {

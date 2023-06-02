@@ -303,8 +303,11 @@ const LandScheduleForm = (props) => {
     formData.append("module", "property-upload");
     formData.append("tag", "tag-property");
     setLoader(true);
+    const headers = {
+      "Content-Type": "multipart/form-data",
+    };
     try {
-      const Resp = await axios.post("/filestore/v1/files", formData, {});
+      const Resp = await axios.post("/filestore/v1/files", formData, { headers });
       setValue(fieldName, Resp?.data?.files?.[0]?.fileStoreId);
       setFileStoreId({ ...fileStoreId, [fieldName]: Resp?.data?.files?.[0]?.fileStoreId });
       setSelectedFiles([...selectedFiles, file.name]);
@@ -1534,9 +1537,8 @@ const LandScheduleForm = (props) => {
                       )}
                     </div>
                   </div>
-                  <br></br>
                   {watch("acquistion") === "Y" && (
-                    <div className="row">
+                    <div className="row mt-5">
                       <div className="col col-12">
                         <label>
                           <h2>
@@ -1679,8 +1681,7 @@ const LandScheduleForm = (props) => {
                       </div>
                     </div>
                   )}
-                  <br></br>
-                  <div className="row">
+                  <div className="row mt-5">
                     <div className="col col-12">
                       <h2>
                         {`${t("NWL_APPLICANT_DETAILS_OF_EXISTING_APPROACH_AS_PER_POLICY_SHAJRA_PLAN")}`}
@@ -2940,13 +2941,13 @@ const LandScheduleForm = (props) => {
                           style={{ display: "none" }}
                           accept=".kml"
                           onChange={(e) => {
-                            var fileName = e?.target?.files[0]?.name;
-                            var fileExtension = fileName?.split(".")?.pop();
-                            if (fileExtension?.toLowerCase() == "kml") {
-                              getDocumentData(e?.target?.files[0], "copyOfShajraPlan");
-                            } else {
-                              setShowToastError({ label: "Please select given file format", error: true, success: false });
-                            }
+                            // var fileName = e?.target?.files[0]?.name;
+                            // var fileExtension = fileName?.split(".")?.pop();
+                            // if (fileExtension?.toLowerCase() == "kml") {
+                            getDocumentData(e?.target?.files[0], "copyOfShajraPlan");
+                            // } else {
+                            //   setShowToastError({ label: "Please select given file format", error: true, success: false });
+                            // }
                           }}
                         />
                       </label>
