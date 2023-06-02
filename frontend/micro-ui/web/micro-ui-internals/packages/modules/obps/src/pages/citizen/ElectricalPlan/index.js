@@ -17,6 +17,7 @@ import Spinner from "../../../components/Loader";
 import { Toast } from "@egovernments/digit-ui-react-components";
 import ErrorIcon from "@mui/icons-material/Error";
 import { useTranslation } from "react-i18next";
+import CusToaster from "../../../components/Toaster";
 
 const electricalPlanService = () => {
   const {
@@ -369,8 +370,13 @@ const electricalPlanService = () => {
       );
       setPurpose(Resp?.data?.Licenses?.[0]?.tradeLicenseDetail?.additionalDetail?.[0]?.ApplicantPurpose?.purpose);
       setTotalArea(Resp?.data?.Licenses?.[0]?.tradeLicenseDetail?.additionalDetail?.[0]?.ApplicantPurpose?.totalArea);
+      setLoader(false);
+      setShowToastError({ label: "LOI Number Verify Successfully", error: false, success: true });
+
     } catch (error) {
       console.log(error);
+      setLoader(false);
+      setShowToastError({ label: "Invalid LOI Number", error: true, success: false });
     }
     console.log("loiloiloi");
   };
@@ -877,7 +883,7 @@ const electricalPlanService = () => {
                       )}
                     </td>
                   </tr>
-                  <tr>
+                  {/* <tr>
                     <td>
                       <div className="px-2">
                         <p className="mb-2">2.</p>
@@ -887,7 +893,7 @@ const electricalPlanService = () => {
                       <h2>
                         {" "}
                         {`${t("EP_APPLICANT_ENVIRONMENT_CLEARANCE")}`}
-                        {/* Environmental Clearance. */}
+                    
                       </h2>
                       {drawingErr.environmentalClearance ? <p style={{ color: "red" }}>Please upload environmental clearance drawings*</p> : " "}
                     </td>
@@ -920,11 +926,11 @@ const electricalPlanService = () => {
                         </div>
                       )}
                     </td>
-                  </tr>
+                  </tr> */}
                   <tr>
                     <td>
                       <div className="px-2">
-                        <p className="mb-2">3.</p>
+                        <p className="mb-2">2.</p>
                       </div>
                     </td>
                     <td component="th" scope="row">
@@ -968,7 +974,7 @@ const electricalPlanService = () => {
                   <tr>
                     <td>
                       <div className="px-2">
-                        <p className="mb-2">4.</p>
+                        <p className="mb-2">3.</p>
                       </div>
                     </td>
                     <td component="th" scope="row">
@@ -1012,7 +1018,7 @@ const electricalPlanService = () => {
                   <tr>
                     <td>
                       <div className="px-2">
-                        <p className="mb-2">5.</p>
+                        <p className="mb-2">4.</p>
                       </div>
                     </td>
                     <td component="th" scope="row">
@@ -1100,12 +1106,12 @@ const electricalPlanService = () => {
         />
       )}
       {showToastError && (
-        <Toast
-          error={showToastError?.key === "error" ? true : false}
-          label="Duplicate file Selected"
-          isDleteBtn={true}
+        <CusToaster
+          label={showToastError?.label}
+          success={showToastError?.success}
+          error={showToastError?.error}
           onClose={() => {
-            setShowToastError(null);
+            setShowToastError({ label: "", success: false, error: false });
           }}
         />
       )}
