@@ -47,6 +47,7 @@ import { DigitUI } from "@egovernments/digit-ui-module-core";
 # Changelog
 
 ```bash
+1.5.34 fixed module not found redirection issue
 1.5.33 fixed payment not throwing error page for sanitation
 1.5.32 fixed the localisation issue by adding translation to the keys and fixed payment response issue for  sanitation UI
 1.5.31 fixed the allservices screen back button for sanitation UI
