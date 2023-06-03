@@ -243,7 +243,7 @@ const LandScheduleForm = (props) => {
       LicenseDetails: {
         LandSchedule: {
           ...data,
-          LandScheduleDetails: modalData,
+          // LandScheduleDetails: modalData,
         },
       },
       RequestInfo: {
@@ -303,8 +303,11 @@ const LandScheduleForm = (props) => {
     formData.append("module", "property-upload");
     formData.append("tag", "tag-property");
     setLoader(true);
+    const headers = {
+      "Content-Type": "multipart/form-data",
+    };
     try {
-      const Resp = await axios.post("/filestore/v1/files", formData, {});
+      const Resp = await axios.post("/filestore/v1/files", formData, { headers });
       setValue(fieldName, Resp?.data?.files?.[0]?.fileStoreId);
       setFileStoreId({ ...fileStoreId, [fieldName]: Resp?.data?.files?.[0]?.fileStoreId });
       setSelectedFiles([...selectedFiles, file.name]);
@@ -405,6 +408,17 @@ const LandScheduleForm = (props) => {
     setmodal(false);
   };
 
+  const handleKeepOnlyOne = () => {
+    const keepIndex = 0; // Index of the array field you want to keep
+
+    // Remove all fields except the one at keepIndex
+    for (let i = fields.length - 1; i >= 0; i--) {
+      if (i !== keepIndex) {
+        remove(i);
+      }
+    }
+  };
+
   useEffect(() => {
     console.log("errors", errors);
   }, [errors]);
@@ -435,12 +449,12 @@ const LandScheduleForm = (props) => {
                 <Col>
                   <div className="row">
                     <div className="col col-12 ">
-                      <div>
+                      {/* <div>
                         <h2>
-                          1.&nbsp;
-                          {`${t("NWL_APPLICANT_WHETHER_LICENCE_APPLIED_FOR_ADDITIONAL_AREA")}`}
-                          {/* Whether licence applied for additional area ? */}
-                          <span style={{ color: "red" }}>*</span>&nbsp;&nbsp;
+                          1.&nbsp; */}
+                      {/* {`${t("NWL_APPLICANT_WHETHER_LICENCE_APPLIED_FOR_ADDITIONAL_AREA")}`} */}
+                      {/* Whether licence applied for additional area ? */}
+                      {/* <span style={{ color: "red" }}>*</span>&nbsp;&nbsp;
                           <label htmlFor="licenseAppliedYes">
                             <input {...register("licenseApplied")} type="radio" value="Y" id="licenseAppliedYes" />
                             &nbsp; Yes &nbsp;&nbsp;
@@ -453,7 +467,7 @@ const LandScheduleForm = (props) => {
                             {errors?.licenseApplied && errors?.licenseApplied?.message}
                           </h3>
                         </h2>
-                      </div>
+                      </div> */}
 
                       {watch("licenseApplied") === "Y" && (
                         <div>
@@ -732,11 +746,11 @@ const LandScheduleForm = (props) => {
                   </div>
                   <div className="row mt-2 mb-4">
                     <div className="col col-12 ">
-                      <div>
+                      {/* <div>
                         <h2>
-                          {`${t("NWL_APPLICANT_WHETHER_LICENCE_APPLIED_UNDER_MIGRATION_POLICY")}`}
-                          {/* Whether licence applied under Migration Policy ? */}
-                          <span style={{ color: "red" }}>*</span>&nbsp;&nbsp;
+                          {`${t("NWL_APPLICANT_WHETHER_LICENCE_APPLIED_UNDER_MIGRATION_POLICY")}`} */}
+                      {/* Whether licence applied under Migration Policy ? */}
+                      {/* <span style={{ color: "red" }}>*</span>&nbsp;&nbsp;
                           <label htmlFor="migrationLicYes">
                             <input
                               {...register("migrationLic")}
@@ -759,7 +773,7 @@ const LandScheduleForm = (props) => {
                             {errors?.migrationLic && errors?.migrationLic?.message}
                           </h3>
                         </h2>
-                      </div>
+                      </div> */}
                       {watch("migrationLic") === "Y" && (
                         <div>
                           {modalData.length > 0 && (
@@ -771,7 +785,7 @@ const LandScheduleForm = (props) => {
                       )}
                     </div>
                   </div>
-                  <hr></hr>
+                  {/* <hr></hr> */}
                   <div className="mt-4">
                     <h4 className="mb-2">
                       {`${t("NWL_APPLICANT_ANY_ENCUMBRANCE_WITH_RESPECT_TO_FOLLOWING")}`}
@@ -1424,9 +1438,13 @@ const LandScheduleForm = (props) => {
                                 placeholder=""
                                 {...register("pocket")}
                                 onChange={(e) => {
+                                  console.log(e?.target?.value);
+                                  if (!e?.target?.value) {
+                                    handleKeepOnlyOne();
+                                  }
                                   let delay;
                                   delay = setTimeout(() => {
-                                    console.log("e===", handleFunction(e?.target?.value));
+                                    handleFunction(e?.target?.value);
                                   }, 500);
                                   return () => clearTimeout(delay);
                                 }}
@@ -1471,6 +1489,7 @@ const LandScheduleForm = (props) => {
                               type="date"
                               {...register("sectionFour")}
                               className="form-control"
+                              min="1900-01-01"
                               max={convertEpochToDate(new Date().setFullYear(new Date().getFullYear()))}
                             />
                             <h3 className="error-message" style={{ color: "red" }}>
@@ -1488,6 +1507,7 @@ const LandScheduleForm = (props) => {
                               type="date"
                               className="form-control"
                               {...register("sectionSix")}
+                              min="1900-01-01"
                               max={convertEpochToDate(new Date().setFullYear(new Date().getFullYear()))}
                             />
                             <h3 className="error-message" style={{ color: "red" }}>
@@ -1506,6 +1526,7 @@ const LandScheduleForm = (props) => {
                               type="date"
                               className="form-control"
                               {...register("rewardDate")}
+                              min="1900-01-01"
                               max={convertEpochToDate(new Date().setFullYear(new Date().getFullYear()))}
                             />
                             <h3 className="error-message" style={{ color: "red" }}>
@@ -1516,9 +1537,8 @@ const LandScheduleForm = (props) => {
                       )}
                     </div>
                   </div>
-                  <br></br>
                   {watch("acquistion") === "Y" && (
-                    <div className="row">
+                    <div className="row mt-5">
                       <div className="col col-12">
                         <label>
                           <h2>
@@ -1583,7 +1603,7 @@ const LandScheduleForm = (props) => {
                                   {/* Date of Release */}
                                 </h2>{" "}
                               </label>
-                              <input type="date" {...register("releaseDate")} className="form-control" />
+                              <input type="date" {...register("releaseDate")} className="form-control" min="1900-01-01" />
                               <div className="invalid-feedback">{errors?.releaseDate?.message}</div>
                             </div>
                             <div className="col col-lg-3 col-md-6 col-sm-6 mb-2">
@@ -1661,8 +1681,7 @@ const LandScheduleForm = (props) => {
                       </div>
                     </div>
                   )}
-                  <br></br>
-                  <div className="row">
+                  <div className="row mt-5">
                     <div className="col col-12">
                       <h2>
                         {`${t("NWL_APPLICANT_DETAILS_OF_EXISTING_APPROACH_AS_PER_POLICY_SHAJRA_PLAN")}`}
@@ -1743,12 +1762,12 @@ const LandScheduleForm = (props) => {
                             </h2>
                           </div>
                           <div class="col-sm-6 text-right">
-                            <label>
-                              <input {...register("alreadyConstructedSector")} type="radio" value="Y" id="alreadyConstructedSector" />
+                            <label htmlFor="alreadyConstructedSectoryes">
+                              <input {...register("alreadyConstructedSector")} type="radio" value="Y" id="alreadyConstructedSectoryes" />
                               &nbsp; Yes &nbsp;&nbsp;
                             </label>
-                            <label htmlFor="alreadyConstructedSector">
-                              <input {...register("alreadyConstructedSector")} type="radio" value="N" id="alreadyConstructedSector" />
+                            <label htmlFor="alreadyConstructedSectorno">
+                              <input {...register("alreadyConstructedSector")} type="radio" value="N" id="alreadyConstructedSectorno" />
                               &nbsp; No &nbsp;&nbsp;
                             </label>
 
@@ -2566,14 +2585,18 @@ const LandScheduleForm = (props) => {
                               <h2>
                                 {`${t("NWL_APPLICANT_REMARKS_SHAJRA_PLAN")}`}
                                 {/* Remark */}
+                                {watch("compactBlock") === "Y" && <span style={{ color: "red" }}>*</span>}
                               </h2>
                             </label>
                             <input type="text" className="form-control" {...register("compactBlockRemark")} />
+                            <h3 className="error-message" style={{ color: "red" }}>
+                              {errors?.compactBlockRemark && errors?.compactBlockRemark?.message}
+                            </h3>
                           </div>
                         </div>
                       )}
                     </div>
-                    <div className="col col-lg-3 col-md-6 col-sm-6 mb-2">
+                    <div className="col col-lg-5 col-md-6 col-sm-6 mb-2 mt-3">
                       <h2>
                         &nbsp;
                         {`${t("NWL_APPLICANT_H_WHETHER_OTHERS_LAND_FALL_SHAJRA_PLAN")}`}
@@ -2602,7 +2625,7 @@ const LandScheduleForm = (props) => {
                         </div>
                       )}
                     </div>
-                    <div className="col col-6 mt-3">
+                    <div className="col col-12 mt-3">
                       <h2>
                         &nbsp;
                         {`${t("NWL_APPLICANT_SURROUNDINGS_SHAJRA_PLAN")}`}
@@ -2867,6 +2890,9 @@ const LandScheduleForm = (props) => {
                         {`${t("NWL_APPLICANT_SHAJRA_PLAN_DOCUMENT")}`}
                         {/* Shajra Plan  */}
                         <span style={{ color: "red" }}>*</span>
+                        <Tooltip title="Please select the file in .kml format">
+                          <InfoIcon style={{ cursor: "pointer" }} color="primary"></InfoIcon>
+                        </Tooltip>
                       </h2>
                       <span>
                         {" "}
@@ -2913,9 +2939,16 @@ const LandScheduleForm = (props) => {
                         <input
                           type="file"
                           style={{ display: "none" }}
-                          onChange={(e) => getDocumentData(e?.target?.files[0], "copyOfShajraPlan")}
-                          accept="application/pdf/jpeg/png"
-                          // accept=".dxf/.zip"
+                          accept=".kml"
+                          onChange={(e) => {
+                            // var fileName = e?.target?.files[0]?.name;
+                            // var fileExtension = fileName?.split(".")?.pop();
+                            // if (fileExtension?.toLowerCase() == "kml") {
+                            getDocumentData(e?.target?.files[0], "copyOfShajraPlan");
+                            // } else {
+                            //   setShowToastError({ label: "Please select given file format", error: true, success: false });
+                            // }
+                          }}
                         />
                       </label>
                       {watch("copyOfShajraPlan") ? (
@@ -3061,7 +3094,7 @@ const LandScheduleForm = (props) => {
                             <span style={{ color: "red" }}>*</span>
                           </h2>
                         </label>
-                        <Form.Control type="date" className="form-control" {...register("date")} />
+                        <Form.Control type="date" className="form-control" {...register("date")} min="1900-01-01" />
                       </div>
                       <h3 className="error-message" style={{ color: "red" }}>
                         {errors?.date && errors?.date?.message}

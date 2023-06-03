@@ -47,13 +47,23 @@ const VALIDATION_SCHEMA = Yup.object().shape({
       return true;
     },
   }),
+  compactBlockRemark: Yup.string().test({
+    name: "compactBlock",
+    test: function (value) {
+      const newoptions = this.resolve(Yup.ref("compactBlock"));
+      if (newoptions === "Y") {
+        return !!value || this.createError({ message: "This field is required" });
+      }
+      return true;
+    },
+  }),
   road: Yup.string().nullable().required("This field is required."),
   utilityLine: Yup.string().nullable().required("This field is required."),
   landSchedule: Yup.string().nullable().required("This field is required."),
   mutation: Yup.string().nullable().required("This field is required."),
   jambandhi: Yup.string().nullable().required("This field is required."),
   copyofSpaBoard: Yup.string().nullable().required("This field is required."),
-  copyOfShajraPlan: Yup.string().nullable().required("This field is required."),
+  // copyOfShajraPlan: Yup.string().nullable().required("This field is required."),
   constructedRowWidth: Yup.string().test({
     name: "conditional",
     test: function (value) {
