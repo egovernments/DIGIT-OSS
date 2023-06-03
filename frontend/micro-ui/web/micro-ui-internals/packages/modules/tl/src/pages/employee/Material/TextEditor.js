@@ -53,6 +53,7 @@ function AddPost({ modal = false, state, setState }) {
         width: "100%",
         margin: 5,
         padding: 3,
+        minHeight: "300px",
       }}
     >
       {/* <header className="App-header">Rich Text Editor Example</header> */}
