@@ -315,7 +315,6 @@ const LandScheduleForm = (props) => {
       setShowToastError({ label: "File Uploaded Successfully", error: false, success: true });
     } catch (error) {
       setLoader(false);
-
       return error.message;
     }
   };
@@ -349,6 +348,7 @@ const LandScheduleForm = (props) => {
     resetField("khasraNumber");
     resetField("area");
   };
+
   useEffect(() => {
     if (specificTableData) {
       setValue("previousLicensenumber", specificTableData?.previousLicensenumber);
@@ -2941,13 +2941,13 @@ const LandScheduleForm = (props) => {
                           style={{ display: "none" }}
                           accept=".kml"
                           onChange={(e) => {
-                            // var fileName = e?.target?.files[0]?.name;
-                            // var fileExtension = fileName?.split(".")?.pop();
-                            // if (fileExtension?.toLowerCase() == "kml") {
-                            getDocumentData(e?.target?.files[0], "copyOfShajraPlan");
-                            // } else {
-                            //   setShowToastError({ label: "Please select given file format", error: true, success: false });
-                            // }
+                            var fileName = e?.target?.files[0]?.name;
+                            var fileExtension = fileName?.split(".")?.pop();
+                            if (fileExtension?.toLowerCase() == "kml") {
+                              getDocumentData(e?.target?.files[0], "copyOfShajraPlan");
+                            } else {
+                              setShowToastError({ label: "Please select given file format", error: true, success: false });
+                            }
                           }}
                         />
                       </label>
