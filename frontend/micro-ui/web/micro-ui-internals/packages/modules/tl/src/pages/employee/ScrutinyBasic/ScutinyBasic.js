@@ -1459,7 +1459,9 @@ console.log("userInFODATA123" , userInfo);
 <div style={{ position: "relative", width: "100%", display: "flex", marginBottom: 2 , marginTop: 3}}>
        <HistoryList remarkData={remarksData.egScrutiny !== undefined ? remarksData.egScrutiny : null}
       
-       histeroyData={histeroyData}></HistoryList>
+       histeroyData={histeroyData}
+       applicationStatus={applicationStatus}
+       ></HistoryList>
     
       </div>
       {/* </div>
