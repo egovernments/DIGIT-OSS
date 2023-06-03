@@ -21303,5 +21303,6 @@ color: #fff !important;
     width: 45%;
     height: 500PX;
     overflow-y: auto;
+    border: groove;
   }
 
