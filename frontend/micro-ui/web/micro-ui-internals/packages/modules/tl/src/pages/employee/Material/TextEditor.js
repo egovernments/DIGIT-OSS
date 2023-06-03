@@ -124,15 +124,15 @@ function AddPost({ modal = false, state, setState , applicationStatus}) {
         width: "100%",
         // margin: 5,
         padding: 3,
+        padding: 4,
+       marginTop: 4,
        
       }}
     >
       {/* <header className="App-header">Rich Text Editor Example</header> */}
       
       <Editor
-       style={{
-        minHeight: "320px",
-      }}
+        className="rdw-editor-main"
         editorState={editorState}
         onEditorStateChange={handleEditorStateChange}
         // wrapperClassName="wrapper-class"

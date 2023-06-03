@@ -2939,13 +2939,12 @@ const LandScheduleForm = (props) => {
                         <input
                           type="file"
                           style={{ display: "none" }}
-                          // accept=".kml"
+                          accept=".kml"
                           onChange={(e) => {
                             // var fileName = e?.target?.files[0]?.name;
                             // var fileExtension = fileName?.split(".")?.pop();
                             // if (fileExtension?.toLowerCase() == "kml") {
                             getDocumentData(e?.target?.files[0], "copyOfShajraPlan");
-                            accept="application/pdf/jpeg/png/kml"
                             // } else {
                             //   setShowToastError({ label: "Please select given file format", error: true, success: false });
                             // }
