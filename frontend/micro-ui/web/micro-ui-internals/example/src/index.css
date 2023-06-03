@@ -21305,4 +21305,11 @@ color: #fff !important;
     overflow-y: auto;
     border: groove;
   }
+.rdw-editor-main{
+  height: 100%;
+    overflow: auto;
+    box-sizing: border-box;
+    min-height: 300px;
+    border: currentColor;
+}
 
