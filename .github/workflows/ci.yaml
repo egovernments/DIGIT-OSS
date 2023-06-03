@@ -5,7 +5,7 @@ on:
       - master
 jobs:
   build:
-    name: Build
+    name: TCP
     runs-on: self-hosted
     steps:
     - name: Trigger single Job
