@@ -23,7 +23,7 @@ import ProformaForlegalBranch from "../Proforma/ProformaForlegalBranch";
 import ProformaPatwari from "../Proforma/ProformaForPatwari";
 import Addmoreinput from "../Complaince/Compliances";
 import ProformForRevenu from "../Proforma/ProformForRevenu";
-import AdditionalDocument from "./AdditionalDocument";
+import AdditionalDocument from "./AdditionalDocument/ApplicantInfo";
 import Component from "../Proforma/Index";
 
 import AddIcon from "@mui/icons-material/Add";
@@ -33,7 +33,20 @@ import Collapse from "react-bootstrap/Collapse";
 // import AddPost from "../Material/TextEditor";
 import {useForm} from "react-hook-form";
 
-const ScrutitnyForms = ({ apiResponse, applicationNumber, refreshScrutinyData , histeroyData,additionalDocResponData, applicationStatus ,mDMSData ,applicationimp , dataMDMS }) => {
+
+import AccountSection from "./CurrentRemarks/CurrentRemarks"
+import DrawingSection from "./CurrentRemarks/CurrentDrawing";
+import RevnueSection from "./CurrentRemarks/CurrentRevnue";
+import LegalSection from "./CurrentRemarks/CurentLegal";
+import TechinicalSection from "./CurrentRemarks/CurrentTechinical";
+import STPFieldSection from "./CurrentRemarks/CurrentSTPFieldSection";
+import DTPFieldSection from "./CurrentRemarks/CurrentDTPFieldSection";
+import MainSection from "./CurrentRemarks/CurrentMain";
+import LOASection from "./CurrentRemarks/CurrentLOA";
+import ExternalSection from "./CurrentRemarks/CurrentExternalSection";
+import HistoryList from "./ScrutinyDevelopment/HistoryList";
+
+const ScrutitnyForms = ({ apiResponse, applicationNumber, refreshScrutinyData ,profrmaID, histeroyData,additionalDocResponData, applicationStatus ,mDMSData ,applicationimp ,dataProfrmaFileds, dataMDMS }) => {
   const personalInfoRef = useRef();
   const generalInfoRef = useRef();
   const developerInfoRef = useRef();
@@ -45,7 +58,7 @@ const ScrutitnyForms = ({ apiResponse, applicationNumber, refreshScrutinyData , 
   
   const [purpose, setPurpose] = useState("");
   const jeLandInfoRef = useRef();
-  const { register, handleSubmit , watch } = useForm();
+  const { register, handleSubmit , watch , setValue} = useForm();
   
 
   const [displayPersonal, setDisplayPersonalInfo] = useState([]);
@@ -69,6 +82,21 @@ const { remarksData,iconStates,rolesDate,handleRoles,handleGetFiledsStatesById,h
   const [defaultheightFee, setDefaultheightFee] = useState(0);
   const [open, setOpen] = useState(false);
   const [open2, setOpen2] = useState(false);
+  const [open3, setOpen3] = useState(false);
+  const [open4, setOpen4] = useState(false);
+  const [open5, setOpen5] = useState(false);
+  const [open6, setOpen6] = useState(false);
+  const [open7, setOpen7] = useState(false);
+  const [open8, setOpen8] = useState(false);
+  const [open9, setOpen9] = useState(false);
+  const [open10, setOpen10] = useState(false);
+  const [open11, setOpen11] = useState(false);
+  const [open12, setOpen12] = useState(false);
+  const [open13, setOpen13] = useState(false);
+  const [open14, setOpen14] = useState(false);
+  const [open15, setOpen15] = useState(false);
+  // const [open6, setOpen6] = useState(false);
+  // const [open6, setOpen6] = useState(false);
   // const [apiResponse, setApiResponse] = useState({});
   // const [remarksResponse, setRemarksResponse] = useState({});
   const [sumrol, setSumrol] = useState({});
@@ -338,7 +366,7 @@ const { remarksData,iconStates,rolesDate,handleRoles,handleGetFiledsStatesById,h
 // const handleData=(data)=>{
 //   console.log("savehandle" , data);
 // }
-
+const userID = profrmaID?.id
 function convertToObjectArray(obj) {
   const result = [];
 
@@ -374,8 +402,11 @@ function convertToObjectArray(obj) {
   return result;
 }
 
+
+
+
 const handleData = async (data) => {
-  if (data) {
+  if (!userID) {
    
  const payload = {
   "requestInfo": {
@@ -396,26 +427,223 @@ const handleData = async (data) => {
   
 }
 
-// const Resp = await axios.post(`/land-services/egscrutiny/_performa/_create?status=submit`, payload )
-// console.log("savehandle" , data);
-// console.log("savehandle" , Resp);
-// } catch (error) {
-//   console.log(error);
-// }
+
+let requestProfrma = {}
 try {
   const Resp = await axios.post("/land-services/egscrutiny/_performa/_create?status=submit", payload, {}).then((response) => {
     return response.data;
   });
+
+ requestProfrma = {
+
+    "RequestInfo": {
+  
+        "apiId": "Rainmaker",
+  
+        authToken: authToken,
+         userInfo: userInfo,
+  
+        "msgId": "1684320117934|en_IN"
+  
+    },
+  
+    PerformaScruitny: {
+  
+        applicationNumber: applicationNumber,
+  
+        applicationStatus: applicationStatus,
+  
+        userName: userInfo?.name,
+  
+        userId: userInfo?.id,
+  
+        designation: designation ,
+  
+        createdOn: dateTime.toUTCString(),
+  
+        additionalDetails: {
+  
+          data
+  
+        }
+  
+  
+  
+    }
+  
+  }
+
+
+
+
 } catch (error) {
   console.log(error);
 }
+
+try {
+  const Resp = await axios.post(`/tl-services/_performaScrutiny/_create`, requestProfrma).then((response) => {
+    return response?.data;
+  });
+
+
+  console.log("savehandle" , data);
+  console.log("savehandle" , Resps);
+
+ 
+} 
+catch (error) {
+  console.log(error);
+
+}
+
 // handleGetFiledsStatesById(id);
 // handleGetRemarkssValues(id);
 // handleRoles(id)
 console.log("response from API3242526277", Resp);
 // props?.remarksUpdate({ data: RemarksDeveloper.data });
-} else {
-// props?.passmodalData();
+} else { 
+  // const requestProfrmaUpdate = {
+
+  //     "RequestInfo": {
+    
+  //         "apiId": "Rainmaker",
+    
+  //         authToken: authToken,
+  //          userInfo: userInfo,
+    
+  //         "msgId": "1684320117934|en_IN"
+    
+  //     },
+    
+  //     PerformaScruitny: {
+    
+  //         applicationNumber: applicationNumber,
+    
+  //         applicationStatus: applicationStatus,
+    
+  //         userName: userInfo?.name,
+    
+  //         userId: userInfo?.id,
+    
+  //         designation: designation ,
+    
+  //         createdOn: dateTime.toUTCString(),
+    
+  //         additionalDetails: {
+    
+  //           data
+    
+  //         }
+    
+    
+    
+  //     }
+    
+  //   }
+  //   try {
+  //     const Resp = await axios.post(`/tl-services/_performaScrutiny/_update`, requestProfrmaUpdate).then((response) => {
+  //       return response?.data;
+  //     });
+    
+    
+  //     console.log("savehandle323" , data);
+  //     console.log("savehandle3434" , Resps);
+    
+     
+  //   } 
+  //   catch (error) {
+  //     console.log(error);
+    
+  //   }
+   
+ const payload = {
+  "requestInfo": {
+      "api_id": "1",
+      "ver": "1",
+      "ts": null,
+      "action": "create",
+      "did": "",
+      "key": "",
+      "msg_id": "",
+      "requester_id": "",
+      authToken: authToken,
+      userInfo: userInfo,
+  },
+  egScrutiny: convertToObjectArray(data || {}) || []
+      
+     
+  
+}
+
+
+let requestProfrma = {}
+try {
+  const Resp = await axios.post("/land-services/egscrutiny/_performa/_update", payload, {}).then((response) => {
+    return response.data;
+  });
+
+ requestProfrma = {
+
+    "RequestInfo": {
+  
+        "apiId": "Rainmaker",
+  
+        authToken: authToken,
+         userInfo: userInfo,
+  
+        "msgId": "1684320117934|en_IN"
+  
+    },
+  
+    PerformaScruitny: {
+  
+        applicationNumber: applicationNumber,
+  
+        applicationStatus: applicationStatus,
+  
+        userName: userInfo?.name,
+  
+        userId: userInfo?.id,
+  
+        designation: designation ,
+  
+        createdOn: dateTime.toUTCString(),
+  
+        additionalDetails: {
+  
+          data
+  
+        }
+  
+  
+  
+    }
+  
+  }
+
+
+
+
+} catch (error) {
+  console.log(error);
+}
+
+try {
+  const Resp = await axios.post(`/tl-services/_performaScrutiny/_update`, requestProfrma).then((response) => {
+    return response?.data;
+  });
+
+
+  console.log("savehandle" , data);
+  console.log("savehandle" , Resps);
+
+ 
+} 
+catch (error) {
+  console.log(error);
+
+}
+
 }
 };
 
@@ -514,6 +742,7 @@ console.log("userInFODATA123" , userInfo);
               dataForIcons={iconStates}
               applicationStatus={applicationStatus}
               mDMSData={mDMSData}
+              additionalDocRespon={additionalDocResponData}
             ></Developerinfo>
             {/* </Col> */}
           </div>
@@ -529,6 +758,7 @@ console.log("userInFODATA123" , userInfo);
               dataForIcons={iconStates}
               applicationStatus={applicationStatus}
               mDMSData={mDMSData}
+              additionalDocRespon={additionalDocResponData}
             ></AppliedLandinfo>
             {/* </Col> */}
           </div>
@@ -541,6 +771,7 @@ console.log("userInFODATA123" , userInfo);
               // feeandchargesData={feeandcharges}
               applicationStatus={applicationStatus}
               mDMSData={mDMSData}
+              additionalDocRespon={additionalDocResponData}
             ></Feeandcharges>
          
           </div>
@@ -593,7 +824,7 @@ console.log("userInFODATA123" , userInfo);
             aria-controls="example-collapse-text"
             aria-expanded={open2}
             style={{
-              background: "#f1f1f1",
+              background: "#E9E5DE",
               padding: "0.25rem 1.25rem",
               borderRadius: "0.25rem",
               fontWeight: "600",
@@ -605,8 +836,8 @@ console.log("userInFODATA123" , userInfo);
             }}
           >
             <span style={{ color: "#817f7f", fontSize: 16 }} className="">
-              - Performa For Scruitny {designation} 
-              {/* {applicationStatus} */}
+            Performa For Scruitny {designation} 
+              
             </span>
             {open2 ? <RemoveIcon></RemoveIcon> : <AddIcon></AddIcon>}
           </div>
@@ -617,6 +848,8 @@ console.log("userInFODATA123" , userInfo);
             <Component 
           dataMDMS = {dataMDMS}
           register = {register}
+          setValue = {setValue}
+          dataProfrmaFileds ={dataProfrmaFileds}
               // style={{}}
          />
            {/* <input as="textarea" rows={1} type="text" className="form-control" placeholder="" {...register("landOwnerA")}/> */}
@@ -635,22 +868,517 @@ console.log("userInFODATA123" , userInfo);
 
         </div>
       </div>
-      {/* <div style={{ position: "relative", width: "100%", display: "flex", marginBottom: 2 }}>
-       <AddPost></AddPost>
-      </div> */}
 
-      <div style={{ position: "relative", width: "100%", height: "100%", display: "flex" }}>
+      <div
+            className="collapse-header"
+            onClick={() => setOpen3(!open3)}
+            aria-controls="example-collapse-text"
+            aria-expanded={open3}
+            style={{
+              background: "#E9E5DE",
+              padding: "0.25rem 1.25rem",
+              borderRadius: "0.25rem",
+              fontWeight: "600",
+              display: "flex",
+              cursor: "pointer",
+              color: "#817f7f",
+              justifyContent: "space-between",
+              alignContent: "center",
+            }}
+          >
+            <span style={{ color: "#817f7f", fontSize: 16 }} className="">
+              {/* - Current Remarks Scruitny  */}
+            Current Remarks Section
+             
+            </span>
+            {open3 ? <RemoveIcon></RemoveIcon> : <AddIcon></AddIcon>}
+          </div>
+          <Collapse in={open3}>
+            <div id="example-collapse-text" 
+            // style={{ marginTop: 12, paddingLeft: 12, paddingRight: 12 }}
+            >
+
+
+            <div
+            className="collapse-header"
+            onClick={() => setOpen5(!open5)}
+            aria-controls="example-collapse-text"
+            aria-expanded={open5}
+            style={{
+              background: "#E9E5DE",
+              padding: "0.25rem 1.25rem",
+              borderRadius: "0.25rem",
+              fontWeight: "600",
+              display: "flex",
+              cursor: "pointer",
+              color: "#817f7f",
+              justifyContent: "space-between",
+              alignContent: "center",
+            }}
+          >
+            <span style={{ color: "#817f7f", fontSize: 16 }} className="">
+              {/* - Current Remarks Scruitny  */}
+              - AccountSection
+             
+            </span>
+            {open5 ? <RemoveIcon></RemoveIcon> : <AddIcon></AddIcon>}
+          </div>
+          <Collapse in={open5}>
+            <div id="example-collapse-text"
+              style={{ marginTop: 12, paddingLeft: 12, paddingRight: 12 }}
+             >
+      <div style={{ position: "relative", width: "100%", display: "flex", marginBottom: 2 }}>
+     
+       <AccountSection remarkData={remarksData.egScrutiny !== undefined ? remarksData.egScrutiny : null}
+      
+       histeroyData={histeroyData}></AccountSection>
+    
+      </div>
+      </div>
+      </Collapse>
+      <div
+            className="collapse-header"
+            onClick={() => setOpen6(!open6)}
+            aria-controls="example-collapse-text"
+            aria-expanded={open6}
+            style={{
+              background: "#E9E5DE",
+              padding: "0.25rem 1.25rem",
+              borderRadius: "0.25rem",
+              fontWeight: "600",
+              display: "flex",
+              cursor: "pointer",
+              color: "#817f7f",
+              justifyContent: "space-between",
+              alignContent: "center",
+            }}
+          >
+            <span style={{ color: "#817f7f", fontSize: 16 }} className="">
+              {/* - Current Remarks Scruitny  */}
+              - DrawingSection
+             
+            </span>
+            {open6 ? <RemoveIcon></RemoveIcon> : <AddIcon></AddIcon>}
+          </div>
+          <Collapse in={open6}>
+            <div id="example-collapse-text" 
+            style={{ marginTop: 12, paddingLeft: 12, paddingRight: 12 }}
+            >
+       <div style={{ position: "relative", width: "100%", display: "flex", marginBottom: 2 }}>
+       <DrawingSection remarkData={remarksData.egScrutiny !== undefined ? remarksData.egScrutiny : null}
+      
+       histeroyData={histeroyData}></DrawingSection>
+    
+      </div>
+      </div>
+      </Collapse>
+
+
+      <div
+            className="collapse-header"
+            onClick={() => setOpen7(!open7)}
+            aria-controls="example-collapse-text"
+            aria-expanded={open7}
+            style={{
+              background: "#E9E5DE",
+              padding: "0.25rem 1.25rem",
+              borderRadius: "0.25rem",
+              fontWeight: "600",
+              display: "flex",
+              cursor: "pointer",
+              color: "#817f7f",
+              justifyContent: "space-between",
+              alignContent: "center",
+            }}
+          >
+            <span style={{ color: "#817f7f", fontSize: 16 }} className="">
+              {/* - Current Remarks Scruitny  */}
+              - LegalSection
+             
+            </span>
+            {open7 ? <RemoveIcon></RemoveIcon> : <AddIcon></AddIcon>}
+          </div>
+          <Collapse in={open7}>
+            <div id="example-collapse-text" 
+            // style={{ marginTop: 12, paddingLeft: 12, paddingRight: 12 }}
+            >
+     
+
+              
+      <div style={{ position: "relative", width: "100%", display: "flex", marginBottom: 2 }}>
+       <LegalSection remarkData={remarksData.egScrutiny !== undefined ? remarksData.egScrutiny : null}
+      
+       histeroyData={histeroyData}></LegalSection>
+    
+      </div>
+      </div>
+      </Collapse>
+   
+
+      <div
+            className="collapse-header"
+            onClick={() => setOpen8(!open8)}
+            aria-controls="example-collapse-text"
+            aria-expanded={open8}
+            style={{
+              background: "#E9E5DE",
+              padding: "0.25rem 1.25rem",
+              borderRadius: "0.25rem",
+              fontWeight: "600",
+              display: "flex",
+              cursor: "pointer",
+              color: "#817f7f",
+              justifyContent: "space-between",
+              alignContent: "center",
+            }}
+          >
+            <span style={{ color: "#817f7f", fontSize: 16 }} className="">
+              {/* - Current Remarks Scruitny  */}
+              - RevnueSection
+             
+            </span>
+            {open8 ? <RemoveIcon></RemoveIcon> : <AddIcon></AddIcon>}
+          </div>
+          <Collapse in={open8}>
+            <div id="example-collapse-text" 
+            // style={{ marginTop: 12, paddingLeft: 12, paddingRight: 12 }}
+            >
+       
+
+
+      <div style={{ position: "relative", width: "100%", display: "flex", marginBottom: 2 }}>
+       <RevnueSection remarkData={remarksData.egScrutiny !== undefined ? remarksData.egScrutiny : null}
+      
+       histeroyData={histeroyData}></RevnueSection>
+    
+      </div>
+      </div>
+      </Collapse>
+
+
+      <div
+            className="collapse-header"
+            onClick={() => setOpen9(!open9)}
+            aria-controls="example-collapse-text"
+            aria-expanded={open9}
+            style={{
+              background: "#E9E5DE",
+              padding: "0.25rem 1.25rem",
+              borderRadius: "0.25rem",
+              fontWeight: "600",
+              display: "flex",
+              cursor: "pointer",
+              color: "#817f7f",
+              justifyContent: "space-between",
+              alignContent: "center",
+            }}
+          >
+            <span style={{ color: "#817f7f", fontSize: 16 }} className="">
+              {/* - Current Remarks Scruitny  */}
+              - TechinicalSection
+             
+            </span>
+            {open9 ? <RemoveIcon></RemoveIcon> : <AddIcon></AddIcon>}
+          </div>
+          <Collapse in={open9}>
+            <div id="example-collapse-text" 
+            // style={{ marginTop: 12, paddingLeft: 12, paddingRight: 12 }}
+            >
+
+     
+      
+
+      <div style={{ position: "relative", width: "100%", display: "flex", marginBottom: 2 }}>
+       <TechinicalSection remarkData={remarksData.egScrutiny !== undefined ? remarksData.egScrutiny : null}
+      
+       histeroyData={histeroyData}></TechinicalSection>
+    
+      </div>
+      </div>
+      </Collapse>
+
+
+      <div
+            className="collapse-header"
+            onClick={() => setOpen10(!open10)}
+            aria-controls="example-collapse-text"
+            aria-expanded={open10}
+            style={{
+              background: "#E9E5DE",
+              padding: "0.25rem 1.25rem",
+              borderRadius: "0.25rem",
+              fontWeight: "600",
+              display: "flex",
+              cursor: "pointer",
+              color: "#817f7f",
+              justifyContent: "space-between",
+              alignContent: "center",
+            }}
+          >
+            <span style={{ color: "#817f7f", fontSize: 16 }} className="">
+              {/* - Current Remarks Scruitny  */}
+              - MainSection
+             
+            </span>
+            {open10 ? <RemoveIcon></RemoveIcon> : <AddIcon></AddIcon>}
+          </div>
+          <Collapse in={open10}>
+            <div id="example-collapse-text" 
+            // style={{ marginTop: 12, paddingLeft: 12, paddingRight: 12 }}
+            >
+     
+      <div style={{ position: "relative", width: "100%", display: "flex", marginBottom: 2 }}>
+       <MainSection remarkData={remarksData.egScrutiny !== undefined ? remarksData.egScrutiny : null}
+      
+       histeroyData={histeroyData}></MainSection>
+    
+      </div>
+      </div>
+      </Collapse>
+
+
+      <div
+            className="collapse-header"
+            onClick={() => setOpen11(!open11)}
+            aria-controls="example-collapse-text"
+            aria-expanded={open11}
+            style={{
+              background: "#E9E5DE",
+              padding: "0.25rem 1.25rem",
+              borderRadius: "0.25rem",
+              fontWeight: "600",
+              display: "flex",
+              cursor: "pointer",
+              color: "#817f7f",
+              justifyContent: "space-between",
+              alignContent: "center",
+            }}
+          >
+            <span style={{ color: "#817f7f", fontSize: 16 }} className="">
+              {/* - Current Remarks Scruitny  */}
+              - DTPFieldSection
+             
+            </span>
+            {open11 ? <RemoveIcon></RemoveIcon> : <AddIcon></AddIcon>}
+          </div>
+          <Collapse in={open11}>
+            <div id="example-collapse-text" 
+            // style={{ marginTop: 12, paddingLeft: 12, paddingRight: 12 }}
+            >
+      
+      <div style={{ position: "relative", width: "100%", display: "flex", marginBottom: 2 }}>
+       <DTPFieldSection remarkData={remarksData.egScrutiny !== undefined ? remarksData.egScrutiny : null}
+      
+       histeroyData={histeroyData}></DTPFieldSection>
+    
+      </div>
+
+      </div>
+            </Collapse>
+
+
+            <div
+            className="collapse-header"
+            onClick={() => setOpen12(!open12)}
+            aria-controls="example-collapse-text"
+            aria-expanded={open12}
+            style={{
+              background: "#E9E5DE",
+              padding: "0.25rem 1.25rem",
+              borderRadius: "0.25rem",
+              fontWeight: "600",
+              display: "flex",
+              cursor: "pointer",
+              color: "#817f7f",
+              justifyContent: "space-between",
+              alignContent: "center",
+            }}
+          >
+            <span style={{ color: "#817f7f", fontSize: 16 }} className="">
+              {/* - Current Remarks Scruitny  */}
+              - STP Field Section
+             
+            </span>
+            {open12 ? <RemoveIcon></RemoveIcon> : <AddIcon></AddIcon>}
+          </div>
+          <Collapse in={open12}>
+            <div id="example-collapse-text" 
+            // style={{ marginTop: 12, paddingLeft: 12, paddingRight: 12 }}
+            >
+   
+      <div style={{ position: "relative", width: "100%", display: "flex", marginBottom: 2 }}>
+       <STPFieldSection remarkData={remarksData.egScrutiny !== undefined ? remarksData.egScrutiny : null}
+      
+       histeroyData={histeroyData}></STPFieldSection>
+    
+      </div>
+
+      </div>
+      </Collapse>
+
+
+
+      {/* <div
+            className="collapse-header"
+            onClick={() => setOpen6(!open6)}
+            aria-controls="example-collapse-text"
+            aria-expanded={open6}
+            style={{
+              background: "#f1f1f1",
+              padding: "0.25rem 1.25rem",
+              borderRadius: "0.25rem",
+              fontWeight: "600",
+              display: "flex",
+              cursor: "pointer",
+              color: "#817f7f",
+              justifyContent: "space-between",
+              alignContent: "center",
+            }}
+          >
+            <span style={{ color: "#817f7f", fontSize: 16 }} className="">
+          
+              - DrawingSection
+             
+            </span>
+            {open6 ? <RemoveIcon></RemoveIcon> : <AddIcon></AddIcon>}
+          </div>
+          <Collapse in={open6}>
+            <div id="example-collapse-text" 
+          >
+      
+      
+      <div style={{ position: "relative", width: "100%", display: "flex", marginBottom: 2 }}>
+       <LOASection remarkData={remarksData.egScrutiny !== undefined ? remarksData.egScrutiny : null}
+      
+       histeroyData={histeroyData}></LOASection>
+    
+      </div>
+
+
+      </div>
+      </Collapse> */}
+
+
+
+      <div
+            className="collapse-header"
+            onClick={() => setOpen14(!open14)}
+            aria-controls="example-collapse-text"
+            aria-expanded={open14}
+            style={{
+              background: "#E9E5DE",
+              padding: "0.25rem 1.25rem",
+              borderRadius: "0.25rem",
+              fontWeight: "600",
+              display: "flex",
+              cursor: "pointer",
+              color: "#817f7f",
+              justifyContent: "space-between",
+              alignContent: "center",
+            }}
+          >
+            <span style={{ color: "#817f7f", fontSize: 16 }} className="">
+              {/* - Current Remarks Scruitny  */}
+              - External Section
+             
+            </span>
+            {open14 ? <RemoveIcon></RemoveIcon> : <AddIcon></AddIcon>}
+          </div>
+          <Collapse in={open14}>
+            <div id="example-collapse-text" 
+            // style={{ marginTop: 12, paddingLeft: 12, paddingRight: 12 }}
+            >
+    
+      <div style={{ position: "relative", width: "100%", display: "flex", marginBottom: 2 }}>
+       <ExternalSection remarkData={remarksData.egScrutiny !== undefined ? remarksData.egScrutiny : null}
+      
+       histeroyData={histeroyData}></ExternalSection>
+    
+      </div>
+      </div>
+            </Collapse>
+</div>
+</Collapse>
+
+
+
+
+{/* <div
+            className="collapse-header"
+            onClick={() => setOpen4(!open4)}
+            aria-controls="example-collapse-text"
+            aria-expanded={open4}
+            style={{
+              background: "#E9E5DE",
+              padding: "0.25rem 1.25rem",
+              borderRadius: "0.25rem",
+              fontWeight: "600",
+              display: "flex",
+              cursor: "pointer",
+              color: "#817f7f",
+              justifyContent: "space-between",
+              alignContent: "center",
+            }}
+          >
+            <span style={{ color: "#817f7f", fontSize: 16 }} className="">
+            History Remarks Section 
+             
+            </span>
+            {open4 ? <RemoveIcon></RemoveIcon> : <AddIcon></AddIcon>}
+          </div>
+          <Collapse in={open4}>
+            <div id="example-collapse-text" style={{ marginTop: 12, paddingLeft: 12, paddingRight: 12 }}>
+<div style={{ position: "relative", width: "100%", display: "flex", marginBottom: 2 }}>
+       <HistoryList remarkData={remarksData.egScrutiny !== undefined ? remarksData.egScrutiny : null}
+      
+       histeroyData={histeroyData}></HistoryList>
+    
+      </div>
+      </div>
+      </Collapse> */}
+
+
+
+      {/* <div style={{ position: "relative", width: "100%", height: "100%", display: "flex" }}>
         <ScrutinyDevelopment
           remarkData={remarksData.egScrutiny !== undefined ? remarksData.egScrutiny : null}
-          // remarksum={sumrol.egScrutiny !== undefined ? sumrol.egScrutiny : null}
+        
           histeroyData={histeroyData}
         ></ScrutinyDevelopment>
-      </div>
+      </div> */}
       {/* <div style={{ position: "relative", width: "100%", height: "100%", display: "flex" }}>
         <TemplatesPatwar
            ApiResponseData={apiResponse !== undefined ? apiResponse?.ApplicantPurpose : null}
         ></TemplatesPatwar>
       </div> */}
+      <div
+            className="collapse-header"
+            onClick={() => setOpen13(!open13)}
+            aria-controls="example-collapse-text"
+            aria-expanded={open13}
+            style={{
+              background: "#E9E5DE",
+              padding: "0.25rem 1.25rem",
+              borderRadius: "0.25rem",
+              fontWeight: "600",
+              display: "flex",
+              cursor: "pointer",
+              color: "#817f7f",
+              justifyContent: "space-between",
+              alignContent: "center",
+            }}
+          >
+            <span style={{ color: "#817f7f", fontSize: 16 }} className="">
+              {/* - Current Remarks Scruitny  */}
+              Add Compliances
+             
+            </span>
+            {open13 ? <RemoveIcon></RemoveIcon> : <AddIcon></AddIcon>}
+          </div>
+          <Collapse in={open13}>
+            <div id="example-collapse-text"
+              style={{ marginTop: 12, paddingLeft: 12, paddingRight: 12 }}
+             >
       
       <div style={{ position: "relative", width: "100%", height: "100%", display: "flex" }}>
       <Addmoreinput
@@ -658,8 +1386,37 @@ console.log("userInFODATA123" , userInfo);
       >
       </Addmoreinput>
       </div>
+      </div>
+      </Collapse>
       
-
+      <div
+            className="collapse-header"
+            onClick={() => setOpen15(!open15)}
+            aria-controls="example-collapse-text"
+            aria-expanded={open15}
+            style={{
+              background: "#E9E5DE",
+              padding: "0.25rem 1.25rem",
+              borderRadius: "0.25rem",
+              fontWeight: "600",
+              display: "flex",
+              cursor: "pointer",
+              color: "#817f7f",
+              justifyContent: "space-between",
+              alignContent: "center",
+            }}
+          >
+            <span style={{ color: "#817f7f", fontSize: 16 }} className="">
+              {/* - Current Remarks Scruitny  */}
+              ONLINE LICENSE APPLICATION SCRUTINY PROFORMA
+             
+            </span>
+            {open15 ? <RemoveIcon></RemoveIcon> : <AddIcon></AddIcon>}
+          </div>
+          <Collapse in={open15}>
+            <div id="example-collapse-text"
+              style={{ marginTop: 12, paddingLeft: 12, paddingRight: 12 }}
+             >
       <div style={{ position: "relative", width: "100%", height: "100%", display: "flex" }}>
       <DataGridDemo
           
@@ -670,6 +1427,45 @@ console.log("userInFODATA123" , userInfo);
           >
           </DataGridDemo>
       </div>
+      </div>
+      </Collapse>
+
+
+      {/* <div
+            className="collapse-header"
+            onClick={() => setOpen4(!open4)}
+            aria-controls="example-collapse-text"
+            aria-expanded={open4}
+            style={{
+              background: "#E9E5DE",
+              padding: "0.25rem 1.25rem",
+              borderRadius: "0.25rem",
+              fontWeight: "600",
+              display: "flex",
+              cursor: "pointer",
+              color: "#817f7f",
+              justifyContent: "space-between",
+              alignContent: "center",
+            }}
+          >
+            <span style={{ color: "#817f7f", fontSize: 16 }} className="">
+            History Remarks Section 
+             
+            </span>
+            {open4 ? <RemoveIcon></RemoveIcon> : <AddIcon></AddIcon>}
+          </div>
+          <Collapse in={open4}>
+            <div id="example-collapse-text" style={{ marginTop: 12, paddingLeft: 12, paddingRight: 12 }}> */}
+<div style={{ position: "relative", width: "100%", display: "flex", marginBottom: 2 , marginTop: 3}}>
+       <HistoryList remarkData={remarksData.egScrutiny !== undefined ? remarksData.egScrutiny : null}
+      
+       histeroyData={histeroyData}></HistoryList>
+    
+      </div>
+      {/* </div>
+      </Collapse> */}
+
+
     </div>
   );
 };

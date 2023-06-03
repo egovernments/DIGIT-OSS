@@ -425,10 +425,14 @@ const ServicePlanService = () => {
         Resp?.data?.Licenses?.[0]?.tradeLicenseDetail?.additionalDetail?.[0]?.ApplicantPurpose?.AppliedLandDetails?.[0]?.developmentPlan?.label);
       setPurpose(Resp?.data?.Licenses?.[0]?.tradeLicenseDetail?.additionalDetail?.[0]?.ApplicantPurpose?.purpose);
       setTotalArea(Resp?.data?.Licenses?.[0]?.tradeLicenseDetail?.additionalDetail?.[0]?.ApplicantPurpose?.totalArea);
-
+      setLoader(false);
+      setShowToastError({ label: "LOI Number Verify Successfully", error: false, success: true });
       console.log({ devName, developmentPlan, purpose, totalArea, purpose });
     } catch (error) {
       console.log(error);
+      setLoader(false);
+      setShowToastError({ label: "Invalid LOI Number", error: true, success: false });
+
     }
 
     console.log("loiloiloi");

@@ -47,8 +47,11 @@ const ScrutinyFormcontainer = (props) => {
   const [lastUpdate, SetLastUpdate] = useState();
   const [workflowDetails, setWorkflowDetails] = useState();
   const [applicationData, setApplicationData] = useState();
+  const [tcpApplicationNumber, setTcpApplicationNumber] = useState();
   const [mDMSData, setMDMSData] = useState();
   const [dataProfrma , setDataProfrma] = useState([]);
+  const [profrmaData , setProfrmaData] = useState([]);
+  const [profrmaDataID , setProfrmaDataID] = useState([]);
   const [mDmsUpdate, SetMDmsUpdate] = useState();
   const { setBusinessService } = useContext(ScrutinyRemarksContext)
 
@@ -123,6 +126,7 @@ const ScrutinyFormcontainer = (props) => {
     }
     let requestFiled = {}
     let requestProfrma = {}
+    // let dataProfrmaFiled = {}
     try {
       const Resp = await axios.post(`/tl-services/v1/_search?tenantId=hr&applicationNumber=${id}`, requestInfo).then((response) => {
         return response?.data;
@@ -132,11 +136,62 @@ const ScrutinyFormcontainer = (props) => {
 
       console.log("devDel123", Resp?.Licenses[0])
       setApplicationData(Resp?.Licenses[0]);
+      setTcpApplicationNumber(Resp?.Licenses[0]?.tcpApplicationNumber);
       console.log("devDel1236", Resp?.Licenses[0]?.businessService)
       setBusinessService(Resp?.Licenses[0]?.businessService);
       setStatus(Resp?.Licenses[0]?.status);
       console.log("devStatus", Resp?.Licenses[0]?.status);
+
+      const additionalDoc = {
+      
+     
+
+        "RequestInfo": {
+  
+          "apiId": "Rainmaker",
+  
+          "ver": "v1",
+  
+          "ts": 0,
+  
+          "action": "_search",
+  
+          "did": "",
+  
+          "key": "",
+  
+          "msgId": "090909",
+  
+          "requesterId": "",
+  
+          "authToken": authToken,
+  
+          "userInfo": userInfo
+  
+      },
+       
+      }
     
+      const additionalDocRespon = await axios.post(`/tl-services/_additionalDocuments/_search?licenceNumber=${Resp?.Licenses[0]?.tcpApplicationNumber}&businessService=NewTL`, additionalDoc)
+      SetAdditionalDocResponData(additionalDocRespon?.data);
+      console.log("Datafee", additionalDocRespon);
+  
+    
+
+  //     dataProfrmaFiled = {
+
+  // "RequestInfo": {
+  //   "apiId": "Rainmaker",
+  //   "msgId": "1669293303096|en_IN",
+  //   "authToken": authToken
+
+  // },
+       
+  //     }
+
+
+
+
       requestFiled = {
 
         RequestInfo: {
@@ -202,9 +257,13 @@ const ScrutinyFormcontainer = (props) => {
                   "filter":`[?(${query})]`,
   
               },
+              // {
+              //   "name": "PerformaNewLicence",
+              //   "filter": `[?(@.applicationStatus =='${Resp?.Licenses[0]?.status}')]`
+              // }
               {
                 "name": "PerformaNewLicence",
-                "filter": `[?(@.applicationStatus =='${Resp?.Licenses[0]?.status}')]`
+                "filter": `[?(@.applicationStatus =='PENDING_AT_PATWARI_HQ_PRELIM')]`
               }
              
               ]
@@ -246,6 +305,8 @@ const ScrutinyFormcontainer = (props) => {
   
     }
 
+   
+
     // } catch (error) {
     //   console.log(error);
 
@@ -267,8 +328,32 @@ const ScrutinyFormcontainer = (props) => {
     // }
     // const applicationNo = id
     // console.log("applicationNo", applicationNo);
-    const additionalDoc = {
+    const dataProfrmaFiled = {
 
+
+      "RequestInfo": {
+
+        "apiId": "Rainmaker",
+
+        "authToken": authToken,
+
+        "userInfo": userInfo,
+
+        "msgId": "1684320117934|en_IN"
+
+    },
+     
+    }
+  
+    const dataProfrmaFiledRespon = await axios.post(`/tl-services/_performaScrutiny/_search?applicationNumber=${id}&userId=${userInfo?.id}`, dataProfrmaFiled)
+    setProfrmaData(dataProfrmaFiledRespon?.data?.PerformaScruitny?.[0]?.additionalDetails);
+    setProfrmaDataID(dataProfrmaFiledRespon?.data?.PerformaScruitny?.[0]);
+      console.log("FileddataNamemDMSprofrmaData", dataProfrmaFiledRespon , profrmaDataID);
+
+        
+    const additionalDoc = {
+      
+     
 
       "RequestInfo": {
 
@@ -296,7 +381,7 @@ const ScrutinyFormcontainer = (props) => {
      
     }
   
-    const additionalDocRespon = await axios.post(`/tl-services/_additionalDocuments/_search?licenceNumber=${id}&businessService=NewTL`, additionalDoc)
+    const additionalDocRespon = await axios.post(`/tl-services/_additionalDocuments/_search?licenceNumber=${Resp?.Licenses[0]?.tcpApplicationNumber}&businessService=NewTL`, additionalDoc)
     SetAdditionalDocResponData(additionalDocRespon?.data);
     console.log("Datafee", additionalDocRespon);
 
@@ -608,6 +693,8 @@ const ScrutinyFormcontainer = (props) => {
             refreshScrutinyData={getScrutinyData}
             mDMSData={mDMSData}
             dataMDMS={dataProfrma}
+            dataProfrmaFileds={profrmaData}
+            profrmaID={profrmaDataID}
             applicationimp={applicationData}
           ></ScrutitnyForms>
         </div>

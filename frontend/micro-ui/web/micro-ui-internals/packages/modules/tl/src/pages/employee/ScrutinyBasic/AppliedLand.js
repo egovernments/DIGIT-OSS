@@ -33,6 +33,7 @@ import ITCyberCityForm from "./Puropse/ITCyberCityForm";
 import { array } from "yup";
 import { useTranslation } from "react-i18next";
 import { useLocation } from "react-router-dom";
+import DetailsOfAppliedland from "./AdditionalDocument/DetailsOfAppliedland";
 
 const AppliedLandinfo = (props) => {
 
@@ -42,7 +43,7 @@ const AppliedLandinfo = (props) => {
   const {t} = useTranslation();
   const { pathname: url } = useLocation();
 
-
+  const additionalDocResponData = props.additionalDocRespon;
   const dataIcons = props.dataForIcons;
   const DetailsofAppliedLand = props.ApiResponseData;
   const applicationStatus = props.applicationStatus;
@@ -561,10 +562,24 @@ let Tree = ({ data }) => {
       </div>
       <Collapse in={open}>
         <div id="example-collapse-text">
+{!additionalDocResponData?.AdditionalDocumentReport?.[0]?.detailsOfAppliedland == null &&
+  <div>
+            <DetailsOfAppliedland
+            additionalDocRespon={additionalDocResponData}
+           
+            />
+          </div>
+}
+        
+
           <Form.Group
             style={{ display: props.displayPurpose, border: "2px solid #e9ecef", margin: 10, padding: 10 }}
             className="justify-content-center"
           >
+
+
+
+
             <Row className="ml-auto" style={{ marginBottom: 5 }}>
               {/* {JSON.stringify(userRoles)}
                     {JSON.stringify(hideRemarks)} */}

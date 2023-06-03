@@ -1,4 +1,3 @@
-
 import React, { useContext, useEffect, useState } from "react";
 import { Row, Col, Card, Container, Form, Button } from "react-bootstrap";
 import axios from "axios";
@@ -11,17 +10,22 @@ import FileDownload from "@mui/icons-material/FileDownload";
 import { IconButton } from "@mui/material";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
+import AddIcon from "@mui/icons-material/Add";
+import RemoveIcon from "@mui/icons-material/Remove";
+
+// import Collapse from "react-bootstrap/Collapse";
 
 import {  Box,
   Collapse,
   } from "@mui/material";
+import AddPost from "../../Material/TextEditor";
 
 // import { Scrollbars } from 'react-custom-scrollbars';
 
 
 
 const windowHeight = window !== undefined ? window.innerHeight : null;
-const ScrutinyDevelopment = (props) => {
+const HistoryList = (props) => {
 
   // function createMarkup(el) {
   //   return {__html:conatn};
@@ -38,6 +42,7 @@ const ScrutinyDevelopment = (props) => {
   const userRoles = user?.info?.roles?.map((e) => e.code);
   const showRemarksSection = userRoles.includes("DTCP_HR")
   const histeroyData = props.histeroyData
+  const [open3, setOpen3] = useState(false);
 
   const [approval, setDisapproval] = useState(false);
   const [disapprovedList, setDisapprovedList] = useState([]);
@@ -196,23 +201,25 @@ const toggleshown4 = applicationStatus => {
 
 console.log("log123Disrenu" ,id);
   return (
+   
     <Container
       className="justify-content-center"
       style={{
         top: windowHeight * 0.3,
-        minWidth: "90%",
-        maxWidth: "98%",
+        minWidth: "100%",
+        maxWidth: "100%",
         maxHeight: "50%",
         minHeight: "40%",
-        marginTop: 5,
+        // marginTop: 5,
       }}
     >
+      
       <Row class="remarkshelp">
         <div 
-        class="currentremarks"
+        class="concludingremarks"
          >
-          <div class="WhatsNewCard" style={{ backgroundColor: "#ddf2cf" }}>
-            {/* <p class="text-center" ><h4>Current Remarks</h4></p> */}
+          {/* <div class="WhatsNewCard" style={{ backgroundColor: "#ddf2cf" }}>
+            <p class="text-center" ><h4>Account Section</h4></p>
             <Row>
 
               <Col>
@@ -583,14 +590,18 @@ console.log("log123Disrenu" ,id);
               </Form.Group>
 
             </div>
-            Account Section
+            
 
 
-          </div>
+          </div> */}
+          <AddPost>
+            
+          </AddPost>
 
         </div>
+       
 
-
+{/* 
         <div 
         class="currentremarks"
          >
@@ -645,13 +656,13 @@ console.log("log123Disrenu" ,id);
           <div class="WhatsNewCard" style={{ backgroundColor: "#ddf2cf" }}>
           Main
 
-            </div></div>
+            </div></div> */}
 
 
-        </Row>
-        <Row>
+        {/* </Row> */}
+    
 
-        <div class="histroryremarks">
+        <div class="histrorynotingremarks">
           <div class="WhatsNewCard" style={{ backgroundColor: "#ddf2cf" }}>
 
 
@@ -704,13 +715,16 @@ console.log("log123Disrenu" ,id);
       </Row>
 
 
-    
-      <br>
-      </br>
-
 
     </Container>
+ 
+    
+    
   );
 };
 
-export default ScrutinyDevelopment;
+export default HistoryList;
+
+
+
+

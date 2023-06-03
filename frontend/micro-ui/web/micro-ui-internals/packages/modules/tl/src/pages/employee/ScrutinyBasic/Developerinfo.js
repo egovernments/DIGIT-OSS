@@ -29,6 +29,8 @@ import Tooltip from "@mui/material/Tooltip";
 import { useTranslation } from "react-i18next";
 import { useLocation } from "react-router-dom";
 import Visibility from "@mui/icons-material/Visibility";
+import DetailsOfAppliedland from "./AdditionalDocument/DetailsOfAppliedland";
+import LandSchedule from "./AdditionalDocument/LandSchedule";
 // import CommercialPlottedForm from "./Puropse/CommercialPlottedForm";
 
 const Developerinfo = (props) => {
@@ -41,7 +43,7 @@ const Developerinfo = (props) => {
   const dataIcons = props.dataForIcons;
   const landScheduleData = props.ApiResponseData;
   const Purpose = props.purpose;
-
+  const additionalDocResponData = props.additionalDocRespon;
   const applicationStatus = props.applicationStatus;
   // let user = Digit.UserService.getUser();
   // const userRoles = user?.info?.roles?.map((e) => e.code) || [];
@@ -529,10 +531,25 @@ const Developerinfo = (props) => {
       </div>
       <Collapse in={open}>
         <div id="example-collapse-text">
+
+        <div>
+            <LandSchedule
+            additionalDocRespon={additionalDocResponData}
+           
+            />
+          </div>
+
           <Form.Group
             style={{ display: props.displayGeneral, border: "2px solid #e9ecef", margin: 15, padding: 15 }}
             className={`justify-content-center ${classes.formLabel}`}
           >
+
+
+
+
+
+
+
             {/* <Row className={classes.formLabel}>
               <Col md={4} xxl lg="12">
                 <label htmlFor="Developer Details">
@@ -1721,7 +1738,7 @@ const Developerinfo = (props) => {
                       {/* <label> Remark Separated by </label> */}
                       {/* Separated by */}
 
-                      <Form.Control placeholder={landScheduleData?.compactBlockRemark}
+                      <Form.Control placeholder={landScheduleData?.separatedBy}
                         // height={30} style={{ maxWidth: 200, marginRight: 5 }} 
                         className={classes.formLabel}
                         disabled></Form.Control>
@@ -1735,7 +1752,7 @@ const Developerinfo = (props) => {
                       {`${t("NWL_APPLICANT_WHETHER_IN_COMPACT_BLOCK_SEPARATED_SHAJRA_PLAN")}`}
                       {/* <label> Remark </label> */}
 
-                      <Form.Control placeholder={landScheduleData?.compactBlockRemark}
+                      <Form.Control placeholder={landScheduleData?.separatedBy}
                         // height={30} style={{ maxWidth: 200, marginRight: 5 }} 
                         className={classes.formLabel}
                         disabled></Form.Control>
@@ -3796,15 +3813,26 @@ const Developerinfo = (props) => {
                 {`${t("NWL_APPLICANT_SURROUNDINGS_SHAJRA_PLAN")}`}
                 &nbsp;&nbsp;
               </div>
+
+              {landScheduleData?. surroundingsObj?.map((item, index) => (
               <div className="row">
+             
+             <div className="col col-2">
+                  <label>
+                    {`${t("NWL_APPLICANT_POCKETED_NAME_SHAJRA_PLAN")}`}
+                  </label>
 
+                  <Form.Control placeholder={item?.pocketName}
 
+                    className={classes.formLabel}
+                    disabled></Form.Control>
+                </div>
                 <div className="col col-2">
                   <label>
                     {`${t("NWL_APPLICANT_SURROUNDINGS_NORTH_SHAJRA_PLAN")}`}
                   </label>
 
-                  <Form.Control placeholder={landScheduleData?.utilityWidth}
+                  <Form.Control placeholder={item?.north}
 
                     className={classes.formLabel}
                     disabled></Form.Control>
@@ -3815,7 +3843,7 @@ const Developerinfo = (props) => {
                     {`${t("NWL_APPLICANT_SURROUNDINGS_SOUTH_SHAJRA_PLAN")}`}
                   </label>
 
-                  <Form.Control placeholder={landScheduleData?.utilityWidth}
+                  <Form.Control placeholder={item?.south}
 
                     className={classes.formLabel}
                     disabled></Form.Control>
@@ -3825,7 +3853,7 @@ const Developerinfo = (props) => {
                     {`${t("NWL_APPLICANT_SURROUNDINGS_EAST_SHAJRA_PLAN")}`}
                   </label>
 
-                  <Form.Control placeholder={landScheduleData?.utilityWidth}
+                  <Form.Control placeholder={item?.east}
 
                     className={classes.formLabel}
                     disabled></Form.Control>
@@ -3835,12 +3863,18 @@ const Developerinfo = (props) => {
                     {`${t("NWL_APPLICANT_SURROUNDINGS_WEST_SHAJRA_PLAN")}`}
                   </label>
 
-                  <Form.Control placeholder={landScheduleData?.utilityWidth}
+                  <Form.Control placeholder={item?.west}
 
                     className={classes.formLabel}
                     disabled></Form.Control>
                 </div>
-                <div className="col col-4 p-1">
+                
+              </div>
+                ))
+
+              }
+              <div className="row">
+              <div className="col col-4 p-1">
                   <h6
                     data-toggle="tooltip"
                     data-placement="top"
