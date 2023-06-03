@@ -18,6 +18,7 @@ import RemoveIcon from "@mui/icons-material/Remove";
 import {  Box,
   Collapse,
   } from "@mui/material";
+import AddPost from "../../Material/TextEditor";
 
 // import { Scrollbars } from 'react-custom-scrollbars';
 
@@ -213,11 +214,11 @@ console.log("log123Disrenu" ,id);
       }}
     >
       
-      {/* <Row class="remarkshelp">
+      <Row class="remarkshelp">
         <div 
-        class="currentremarks"
+        class="concludingremarks"
          >
-          <div class="WhatsNewCard" style={{ backgroundColor: "#ddf2cf" }}>
+          {/* <div class="WhatsNewCard" style={{ backgroundColor: "#ddf2cf" }}>
             <p class="text-center" ><h4>Account Section</h4></p>
             <Row>
 
@@ -592,10 +593,13 @@ console.log("log123Disrenu" ,id);
             
 
 
-          </div>
+          </div> */}
+          <AddPost>
+            
+          </AddPost>
 
         </div>
-        </Row> */}
+       
 
 {/* 
         <div 
@@ -656,9 +660,9 @@ console.log("log123Disrenu" ,id);
 
 
         {/* </Row> */}
-        <Row>
+    
 
-        <div class="histroryremarks">
+        <div class="histrorynotingremarks">
           <div class="WhatsNewCard" style={{ backgroundColor: "#ddf2cf" }}>
 
 

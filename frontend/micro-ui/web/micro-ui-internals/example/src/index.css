@@ -21286,5 +21286,22 @@ color: #fff !important;
  /* width: "px"; */
   margin-Top: "15px";
 }
+.remarkshelp {
 
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  }
+  .histrorynotingremarks{
+    width: 55%;
+    height: 500px;
+    overflow-y: auto;
+  
+  }
+  .concludingremarks {
+    width: 45%;
+    height: 500PX;
+    overflow-y: auto;
+  }
 
