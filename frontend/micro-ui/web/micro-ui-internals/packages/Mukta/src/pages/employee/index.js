@@ -27,19 +27,18 @@ const CustomBredcrumb = ({ t }) => (
 
 const App = ({ path }) => {
   const { t } = useTranslation();
-
   return (
     <Switch>
       <React.Fragment>
         <div>
           <CustomBredcrumb t={t} />
 
-          <PrivateRoute path={`${path}/sample`} component={() => <Sample></Sample>} />
+          <PrivateRoute path={`${path}/create`} component={() => <Sample></Sample>} />
           <PrivateRoute path={`${path}/inbox`} component={() => <SampleInbox></SampleInbox>} />
           <PrivateRoute path={`${path}/search`} component={() => <SampleSearch></SampleSearch>} />
-          <PrivateRoute>
+          {/* <PrivateRoute>
             <Redirect to={`/${window?.contextPath}/employee/user/error?type=notfound&module=${path}`} />
-          </PrivateRoute>
+          </PrivateRoute> */}
         </div>
       </React.Fragment>
     </Switch>

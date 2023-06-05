@@ -10,6 +10,7 @@ import MuktaCard from "./components/MuktaCard";
 
 
 const MuktaModule = ({ stateCode, userType, tenants }) => {
+  stateCode=Digit.ULBService.getStateId();
   const moduleCode = ["Mukta"];
   const { path, url } = useRouteMatch();
   const language = Digit.StoreData.getCurrentLanguage();

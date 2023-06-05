@@ -1,6 +1,6 @@
 {
     "name": "@egovernments/digit-ui-customisation-mukta",
-    "version": "0.2.0",
+    "version": "0.0.1",
     "description": "MUKTA Customisation of Works UI",
     "main": "dist/index.js",
     "module": "dist/index.modern.js",

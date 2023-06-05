@@ -1,3 +1,4 @@
+import React from "react";
 import { initLibraries } from "@egovernments/digit-ui-libraries";
 import {
   paymentConfigs, PaymentLinks, PaymentModule
@@ -6,13 +7,16 @@ import { DigitUI } from "@egovernments/digit-ui-module-core";
 import { initDSSComponents } from "@egovernments/digit-ui-module-dss";
 import { initEngagementComponents } from "@egovernments/digit-ui-module-engagement";
 import { initHRMSComponents } from "@egovernments/digit-ui-module-hrms";
-import React from "react";
+import { initUtilitiesComponents } from  "@egovernments/digit-ui-module-utilities";
+
 
 window.contextPath = window?.globalConfigs?.getConfig("CONTEXT_PATH");
 
 initLibraries();
 
-const enabledModules = ["DSS", "NDSS"];
+const enabledModules = ["DSS", "NDSS",  "Utilities",
+"HRMS", "Engagement"
+];
 window.Digit.ComponentRegistryService.setupRegistry({
   PaymentModule,
   ...paymentConfigs,
@@ -22,6 +26,7 @@ window.Digit.ComponentRegistryService.setupRegistry({
 initDSSComponents();
 initHRMSComponents();
 initEngagementComponents();
+initUtilitiesComponents();
 
 const moduleReducers = (initData) => ({
   initData,

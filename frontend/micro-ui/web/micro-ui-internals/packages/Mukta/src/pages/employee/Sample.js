@@ -1,66 +1,71 @@
-import { Loader, FormComposerV2 as FormComposer } from "@egovernments/digit-ui-react-components";
+import { Loader, FormComposerV2  } from "@egovernments/digit-ui-react-components";
 import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useHistory } from "react-router-dom";
 
 export const newConfig = [
   {
-    head: "Config Header",
-    subHead: "Config Sub Head",
+    head: "Sample Object Creation",
+    subHead: "Supporting Details",
     body: [
       {
         inline: true,
-        label: "Enter Sample text 1",
+        label: "Salutation",
         isMandatory: false,
-        key: "BrSelectFather",
         type: "text",
         disable: false,
-        populators: { name: "sampletext1", error: "Required", validation: { pattern: /^[A-Za-z]+$/i } },
+        populators: { name: "salutation", error: "Required", validation: { pattern: /^[A-Za-z]+$/i , maxlength:5} },
       },
       {
         inline: true,
-        label: "Enter Sample text 333",
+        label: "Name",
         isMandatory: true,
-        key: "BrSelectFather",
         type: "text",
         disable: false,
-        populators: { name: "sampletext333", error: "Required", validation: { pattern: /^[A-Za-z]+$/i } },
+        populators: { name: "name", error: "Required", validation: { pattern: /^[A-Za-z]+$/i } },
       },
       {
-        inline: true,
-        label: "Enter Sample text 2",
-        isMandatory: false,
-        description: "Field supporting description",
-        key: "BrSelectFather",
-        type: "text",
-        disable: false,
-        populators: { name: "sampletext2", error: "Required", validation: { pattern: /^[A-Za-z]+$/i } },
-      },
-      {
-        inline: true,
-        label: "Enter Sample Dob",
         isMandatory: true,
-        description: "Field supporting description",
-        type: "date",
+        type: "radio",
+                key: "genders",
+        label: "Gender",
         disable: false,
-        populators: { name: "dob", error: "Required", validation: { required:true } },
+        populators: {
+          name: "gender",
+          optionsKey: "name",
+          error: "sample required message",
+          required: true,
+          mdmsConfig: {
+            masterName: "GenderType",
+            moduleName: "common-masters",
+            localePrefix: "COMMON_GENDER",
+          },
+        },
       },
       {
-        label: "Enter Sample phone number",
+        label: "Age",
         isMandatory: true,
-        key: "BrSelectFather",
         type: "number",
         disable: false,
-        populators: { name: "samplenum1", error: "sample error message", validation: { min: 5999999999, max: 9999999999 } },
+        populators: { name: "age", error: "sample error message", validation: { min: 0, max: 100 } },
       },
       {
-        label: "Enter Sample phone number 2",
+        inline: true,
+        label: "DOB",
         isMandatory: true,
-        key: "BrSelectFather",
+        description: "Please enter a valid Date of birth",
+        type: "date",
+        disable: false,
+        populators: { name: "dob", error: "Required", validation: { required:true, } },
+      },
+      {
+        label: "Phone number",
+        isMandatory: true,
         type: "mobileNumber",
         disable: false,
-        populators: { name: "samplenum2", error: "sample error message", validation: { min: 5999999999, max: 9999999999 } },
+        populators: { name: "phNumber", error: "sample error message", validation: { min: 5999999999, max: 9999999999 } },
       },
+      
       {
         "label": "COMMON_WARD",
         "type": "locationdropdown",
@@ -72,14 +77,23 @@ export const newConfig = [
             "optionsKey": "i18nKey",
             "defaultText": "COMMON_SELECT_WARD",
             "selectedText": "COMMON_SELECTED",
-            "allowMultiSelect": true
+            "allowMultiSelect": false
         }
       },
       {
+        inline: true,
+        label: "Address",
+        isMandatory: false,
+        description: "address details",
+        type: "textarea",
+        disable: false,
+        populators: { name: "address", error: "Required", validation: { pattern: /^[A-Za-z]+$/i } },
+      },
+      {
         "inline": true,
-        "label": "PROJECT_ESTIMATED_COST_IN_RS",
+        "label": "Enter Random Amount",
         "isMandatory": false,
-        "key": "noSubProject_estimatedCostInRs",
+        "key": "amountInRs",
         "type": "amount",
         "disable": false,
         "preProcess": {
@@ -89,7 +103,7 @@ export const newConfig = [
         },
         "populators": {
           "prefix":"₹ ",
-            "name": "noSubProject_estimatedCostInRs",
+            "name": "amountInRs",
             "error": "PROJECT_PATTERN_ERR_MSG_PROJECT_ESTIMATED_COST",
             "validation": {
               "pattern": "^[1-9]\\d*(\\.\\d+)?$",
@@ -103,80 +117,63 @@ export const newConfig = [
     ],
   },
   {
-    head: "Config Header 2",
+    head: "Application Subheading",
     body: [
       {
-        label: "Enter text 2",
+        label: "Additional Details",
         isMandatory: true,
-        description: "Field supporting description",
-        key: "BrSelectFather",
+        description: "Additional Details if any",
+        key: "additionalDetails",
         type: "text",
         disable: false,
-        populators: { name: "sampletext3", error: "sample error message", validation: { pattern: /^[A-Za-z]+$/i } },
+        populators: { name: "additionalDetails", error: "sample error message", validation: { pattern: /^[A-Za-z]+$/i } },
       },
-      {
-        isMandatory: true,
-        key: "genders",
-        type: "radioordropdown",
-        label: "Enter Gender",
-        disable: false,
-        populators: {
-          name: "genders",
-          optionsKey: "name",
-          error: "sample required message",
-          required: true,
-          mdmsConfig: {
-            masterName: "GenderType",
-            moduleName: "common-masters",
-            localePrefix: "COMMON_GENDER",
-          },
-        },
-      },
+      // {
+      //   isMandatory: true,
+      //   key: "genders",
+      //   type: "radioordropdown",
+      //   label: "Enter Gender",
+      //   disable: false,
+      //   populators: {
+      //     name: "genders",
+      //     optionsKey: "name",
+      //     error: "sample required message",
+      //     required: true,
+      //     mdmsConfig: {
+      //       masterName: "GenderType",
+      //       moduleName: "common-masters",
+      //       localePrefix: "COMMON_GENDER",
+      //     },
+      //   },
+      // },
       {
         isMandatory: false,
-        key: "gender",
+        key: "priority",
         type: "radio",
-        label: "Enter Gender New",
+        label: "Enter Priority of Application",
         disable: false,
         populators: {
-          name: "gender",
+          name: "priority",
           optionsKey: "name",
           error: "sample required message",
           required: false,
           options: [
             {
-              code: "MALE",
-              name: "MALE",
+              code: "1",
+              name: "P1",
             },
             {
-              code: "FEMALE",
-              name: "FEMALE",
+              code: "2",
+              name: "P2",
             },
             {
-              code: "TRANSGENDER",
-              name: "TRANSGENDER",
+              code: "3",
+              name: "P3",
             },
           ],
         },
       },
-      {
-        isMandatory: true,
-        key: "gender3",
-        type: "radio",
-        label: "Enter Gender",
-        disable: false,
-        populators: {
-          name: "gender3",
-          optionsKey: "name",
-          error: "sample required message",
-          required: true,
-          mdmsConfig: {
-            masterName: "GenderType",
-            moduleName: "common-masters",
-            localePrefix: "COMMON_GENDER",
-          },
-        },
-      },
+      
     ],
   },
 ];
@@ -195,11 +192,11 @@ const Create = () => {
   const configs = newConfig ? newConfig : newConfig;
 
   return (
-    <FormComposer
-      heading={t("Config Application Heading")}
+    <FormComposerV2
+      heading={t("Application Heading")}
       label={t("Submit Bar")}
-      description={"Sample Description"}
-      text={"Sample Text"}
+      description={"Description"}
+      text={"Sample Text if required"}
       config={configs.map((config) => {
         return {
           ...config,

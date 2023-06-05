@@ -146,7 +146,7 @@ function DatePicker(props) {
 function getDDMMYYYY(date) {
   if (!date) return "";
 
-  return new Date(date).toLocaleString("en-In").split(",")[0];
+  return new Date(date)?.toLocaleString("en-In")?.split(",")?.[0];
 }
 
 export default TextInput;

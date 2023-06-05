@@ -73,7 +73,7 @@ export const FormComposer = (props) => {
     clearErrors,
     unregister,
   } = useForm({
-    defaultValues: props.defaultValues,
+    defaultValues: props?.defaultValues,
   });
   const { t } = useTranslation();
   const formData = watch();

@@ -24,7 +24,7 @@ const MuktaCard = () => {
     links: [
       {
         label: t("Create"),
-        link: `/${window?.contextPath}/employee/Mukta/sample`,
+        link: `/${window?.contextPath}/employee/Mukta/create`,
       },
       {
         label: t("Inbox"),
