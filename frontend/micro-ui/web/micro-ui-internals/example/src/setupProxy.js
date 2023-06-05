@@ -15,11 +15,6 @@ const GetCluDetails = createProxyMiddleware({
   changeOrigin: true,
 });
 
-const createsSampleProxy = createProxyMiddleware({
-  target: process.env.REACT_APP_PROXY_API || "http://10.1.1.83:8020",
-  changeOrigin: true,
-});
-
 module.exports = function (app) {
   [
     "/egov-mdms-service",
@@ -95,5 +90,4 @@ module.exports = function (app) {
   // ["/egov-mdms-service/v1"].forEach((location) => app.use(location, LicProxy));
   ["/api/cis/GetCluDetails", "/api/cis/GetLicenceDetails"].forEach((location) => app.use(location, GetCluDetails));
   ["/api/cis/GetCluDetails", "/api/cis/GetLicenceDetails"].forEach((location) => app.use(location, GetCluDetails));
-  ["filestore/v1/files"].forEach((location) => app.use(location, createsSampleProxy));
 };
