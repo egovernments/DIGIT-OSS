@@ -113,12 +113,12 @@ const MyApplications = ({ view }) => {
       {loader && <Spinner></Spinner>}
       <Header>{`${t("TL_MY_APPLICATIONS_HEADER")}`}</Header>
       <div className="row mb-3">
-        <div style={{ position: "relative", zIndex: "12" }} className="col col-4 mt-3">
+        {/* <div style={{ position: "relative", zIndex: "12" }} className="col col-4 mt-3">
           <h6>
             Order By
             <ReactMultiSelect control={control} name="selectData" placeholder="Select option" data={dateRange} labels="" />
           </h6>
-        </div>
+        </div> */}
         <div className="col col-4 mt-3">
           <h6>
             Search
