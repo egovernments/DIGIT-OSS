@@ -112,7 +112,20 @@ const MyApplications = ({ view }) => {
     <div>
       {loader && <Spinner></Spinner>}
       <Header>{`${t("TL_MY_APPLICATIONS_HEADER")}`}</Header>
-
+      <div className="row mb-3">
+        <div style={{ position: "relative", zIndex: "12" }} className="col col-4 mt-3">
+          <h6>
+            Order By
+            <ReactMultiSelect control={control} name="selectData" placeholder="Select option" data={dateRange} labels="" />
+          </h6>
+        </div>
+        <div className="col col-4 mt-3">
+          <h6>
+            Search
+            <input type="text" className="form-control" placeholder="search" {...register(`search`)} />
+          </h6>
+        </div>
+      </div>
       {/* <table className="customers" id="customers" style={{ borderCollapse: "collapse", width: "100%" }}>
 
       <div className="row mb-3">
@@ -236,8 +249,8 @@ const MyApplications = ({ view }) => {
         })}
       </table> */}
 
-      <Col md={12} lg={12} mb={3} sx={{ marginY: 2 }}>
-        <Paper sx={{ width: "126%", overflow: "hidden", marginY: 2 }}>
+      <Col md={12} lg={12} mb={3}>
+        <Paper sx={{ width: "100%", overflow: "hidden", marginY: 2 }}>
           <TableContainer sx={{ maxHeight: 500 }}>
             <Table stickyHeader aria-label="sticky table">
               <TableHead>

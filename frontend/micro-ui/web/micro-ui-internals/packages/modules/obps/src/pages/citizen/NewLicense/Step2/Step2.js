@@ -1126,7 +1126,19 @@ const ApllicantPuropseForm = (props) => {
   }, []);
 
   useEffect(() => {
-    if (watch("consolidationType") == "consolidated") resetField("nonConsolidationType");
+    if (watch("consolidationType") == "consolidated") {
+      resetField("nonConsolidationType");
+      resetField("bigha");
+      resetField("biswa");
+      resetField("biswansi");
+      resetField("nonConsolidatedTotal");
+    }
+    if (watch("consolidationType") == "non-consolidated") {
+      resetField("kanal");
+      resetField("marla");
+      resetField("sarsai");
+      resetField("consolidatedTotal");
+    }
   }, [watch("consolidationType")]);
 
   useEffect(() => {
@@ -1802,8 +1814,8 @@ const ApllicantPuropseForm = (props) => {
                             },
                             validate: {
                               required: (value) => {
-                                if (!value && watch("collaboration") == "Y") return true;
-                                return "This field is required";
+                                if (!value && watch("collaboration") == "Y") return "This field is required";
+                                return true;
                               },
                             },
                           })}
@@ -1834,8 +1846,8 @@ const ApllicantPuropseForm = (props) => {
                             },
                             validate: {
                               required: (value) => {
-                                if (!value && watch("collaboration") == "Y") return true;
-                                return "This field is required";
+                                if (!value && watch("collaboration") == "Y") return "This field is required";
+                                return true;
                               },
                             },
                           })}
