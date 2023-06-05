@@ -8,6 +8,7 @@ import { initDSSComponents } from "@egovernments/digit-ui-module-dss";
 import { initEngagementComponents } from "@egovernments/digit-ui-module-engagement";
 import { initHRMSComponents } from "@egovernments/digit-ui-module-hrms";
 import { initUtilitiesComponents } from  "@egovernments/digit-ui-module-utilities";
+import {initMuktaCustomisations} from "@egovernments/digit-ui-customisation-mukta";
 
 import "@egovernments/digit-ui-css/example/index.css";
 
@@ -18,6 +19,7 @@ var Digit = window.Digit || {};
 
 const enabledModules = ["Payment", "QuickPayLinks", "DSS", "HRMS", "Engagement", "NDSS",
   "Utilities",
+  "Mukta",
 //added to check fsm
 "FSM"
 ];
@@ -72,6 +74,7 @@ const initDigitUI = () => {
 
   const stateCode = window?.globalConfigs?.getConfig("STATE_LEVEL_TENANT_ID") || "pb";
   initTokens(stateCode);
+  initMuktaCustomisations();
 
   ReactDOM.render(<DigitUI stateCode={stateCode} enabledModules={enabledModules} moduleReducers={moduleReducers} />, document.getElementById("root"));
 };
