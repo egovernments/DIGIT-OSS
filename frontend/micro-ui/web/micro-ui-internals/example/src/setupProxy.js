@@ -46,8 +46,10 @@ module.exports = function (app) {
     "/tl-services/v1/_search",
     "/egov-url-shortening/shortener",
     "/inbox/v1/_search",
+    "/inbox/v2/_search",
     "/tl-services",
     "/tl-calculator",
+    "/org-services",
     "/edcr",
     "/bpa-services",
     "/noc-services",
@@ -67,7 +69,8 @@ module.exports = function (app) {
     "/loi-service",
     "/works-inbox-service/v2/_search",
     "/egov-pdf/download/WORKSESTIMATE/estimatepdf",
-    "/muster-roll"
+    "/muster-roll",
+    "/individual"
   ].forEach((location) => app.use(location, createProxy));
   ["/pb-egov-assets"].forEach((location) => app.use(location, assetsProxy));
 };

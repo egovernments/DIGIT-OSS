@@ -1,6 +1,6 @@
 {
   "name": "@egovernments/digit-ui-module-common",
-  "version": "1.5.28",
+  "version": "1.5.29",
   "license": "MIT",
   "main": "dist/index.js",
   "module": "dist/index.modern.js",
@@ -14,7 +14,7 @@
     "prepublish": "yarn build"
   },
   "dependencies": {
-    "@egovernments/digit-ui-react-components": "1.5.5",
+    "@egovernments/digit-ui-react-components": "1.5.23",
     "react": "17.0.2",
     "react-dom": "17.0.2",
     "react-hook-form": "6.15.8",

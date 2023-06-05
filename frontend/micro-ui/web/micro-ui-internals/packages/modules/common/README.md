@@ -56,6 +56,7 @@ const initDigitUI = () => {
 # Changelog
 
 ```bash
+1.5.29 version upgraded for fixes in payment modules
 1.5.28 base version
 ```
 

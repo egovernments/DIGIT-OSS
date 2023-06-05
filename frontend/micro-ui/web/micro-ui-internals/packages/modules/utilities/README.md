@@ -73,7 +73,9 @@ _Add this configuration to enable this module [MDMS Enabling Utilities Module](h
    Example Routes as follows
 
    ```bash
-   works-ui/employee/utilities/search/commonMuktaUiConfig/SearchEstimateConfig
+   works-ui/employee/utilities/search/commonMuktaUiConfig/SearchIndividualConfig
+   
+   works-ui/employee/utilities/search/commonMuktaUiConfig/InboxMusterConfig
    ```
 
 2. Iframe
@@ -122,6 +124,9 @@ _Bill Module
 # Changelog
 
 ```bash
+0.0.5 fixed the instablility issue with previous version
+0.0.4 Updated the react-component library version
+0.0.3 corrected the directory and added the preprocess function at inbox
 0.0.2 added into the digit-core and integrated with core react components
 0.0.1 base version
 ```
@@ -132,4 +137,3 @@ Digit Dev Repo (https://github.com/egovernments/DIGIT-Dev/tree/digit-ui-core)
 ## License
 
 MIT © [jagankumar-egov](https://github.com/jagankumar-egov)
-````

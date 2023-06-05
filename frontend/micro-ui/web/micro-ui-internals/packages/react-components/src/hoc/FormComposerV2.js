@@ -28,6 +28,8 @@ import CheckBox from "../atoms/CheckBox";
 import MultiSelectDropdown from '../atoms/MultiSelectDropdown';
 import Paragraph from "../atoms/Paragraph";
 import InputTextAmount from "../atoms/InputTextAmount";
+import LocationDropdownWrapper from "../molecules/LocationDropdownWrapper";
+import ApiDropdown from "../molecules/ApiDropdown";
 
 const wrapperStyles = {
   // "display":"flex",
@@ -452,7 +454,54 @@ export const FormComposer = (props) => {
             />
           </form>
         ); 
-      case "multiselectdropdown":
+      
+      case "locationdropdown":
+        return (
+          <Controller
+            name={`${populators.name}`}
+            control={control}
+            defaultValue={formData?.[populators.name]}
+            rules={{ required: populators?.isMandatory, ...populators.validation }}
+            render={(props) => {
+              return (
+                <div style={{ display: "grid", gridAutoFlow: "row" }}>
+                  <LocationDropdownWrapper
+                    props={props}
+                    populators={populators}
+                    formData={formData}
+                    inputRef={props.ref}
+                    errors={errors}
+                    setValue={setValue}
+                  />
+                </div>
+              );
+            }}
+          />
+        );
+
+        case "apidropdown":
+        return (
+          <Controller
+            name={`${populators.name}`}
+            control={control}
+            defaultValue={formData?.[populators.name]}
+            rules={{ required: populators?.isMandatory, ...populators.validation }}
+            render={(props) => {
+              return (
+                <div style={{ display: "grid", gridAutoFlow: "row" }}>
+                  <ApiDropdown
+                    props={props}
+                    populators={populators}
+                    formData={formData}
+                    inputRef={props.ref}
+                    errors={errors}
+                  />
+                </div>
+              );
+            }}
+          />
+        );
+        case "multiselectdropdown":
         return (
           <Controller
             name={`${populators.name}`}

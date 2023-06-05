@@ -1,0 +1,149 @@
+.horizontal-nav {
+    overflow: auto;
+    display: flex;
+    margin-top: 3rem;
+
+    .menu-item {
+        border: 10px;
+        -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+        cursor: pointer;
+        text-decoration: none;
+        margin: 0px;
+        padding: 0px;
+        outline: none;
+        font-size: 16px;
+        position: relative;
+        color: rgb(95, 92, 98);
+        line-height: 48px;
+        transition: all 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms;
+        min-height: 48px;
+        white-space: initial;
+        background: none;
+
+        .icon {
+            display: block;
+            color: rgb(117, 117, 117);
+            fill: rgb(117, 117, 117);
+            height: 21px !important;
+            width: 21px !important;
+            float: left;
+            margin-top: 12px;
+        }
+
+        .edit-btn-ico {
+            height: 17px;
+            width: 17px;
+            margin-top: 16px;
+        }
+
+        .icon+.menu-label {
+            margin-left: 36px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+    }
+   
+    @media (min-width: 780px) {
+        .sidebar-list {
+            padding-right: 30px;
+            padding-left: 30px;
+            background-color: #EEEEEE;
+            border: 1px solid #DDDDDD;
+            border-radius: 8px 8px 0px 0px;
+
+            &.active {
+                font-weight: 600;
+                border-bottom: 3px solid theme(colors.primary.main);
+
+                background-color: #FFFFFF;
+
+                .menu-label {
+                    color: theme(colors.primary.main);
+                }
+
+                .icon {
+                    fill: theme(colors.primary.main);
+                }
+            }
+
+            .submenu-container {
+                cursor: pointer;
+                display: flex;
+                flex-direction: column;
+
+                .sidebar-link {
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    padding: 15px!important;
+                    padding-top: 20px!important;
+                    svg {
+                        width: 24px !important;
+                        height: 24px !important;
+                        color: rgb(117, 117, 117);
+                        fill: rgb(117, 117, 117);
+                    }
+
+                    .actions {
+                        .tooltip {
+                            margin-left: 16px;
+                        }
+                    }
+                }
+
+                .actions {
+                    display: flex;
+                    align-items: center;
+                    overflow: hidden !important;
+
+                    span {
+                        margin-left: 13px;
+                        line-height: 48px;
+                        white-space: nowrap;
+                        color: #5f5c62;
+                        overflow: hidden;
+                        text-overflow: ellipsis;
+                    }
+                }
+            }
+            .submenu-container:first-child {
+                margin-top:5px;
+                .employee-search-input{
+                    margin-left:16px !important;
+                }
+              }
+        }
+
+        .dropdown-link {
+            .actions {
+                display: flex;
+                padding: 1em;
+
+                svg {
+                    width: 21px;
+                    height: 21px;
+                    color: rgb(117, 117, 117);
+                    fill: rgb(117, 117, 117);
+                }
+
+                span {
+                    color: #5f5c62;
+                }
+            }
+        }
+    }
+}
+.sidebar-link {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px!important;
+    padding-top: 20px!important;
+    svg {
+        width: 24px !important;
+        height: 26px !important;
+        color: rgb(117, 117, 117);
+        fill: rgb(117, 117, 117);
+    }
+}

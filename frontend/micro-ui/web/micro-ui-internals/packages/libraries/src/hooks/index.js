@@ -11,6 +11,8 @@ import useClickOutside from "./useClickOutside";
 import useCustomMDMS from "./useCustomMDMS";
 import useDocumentSearch from "./useDocumentSearch";
 import useDynamicData from "./useDynamicData";
+import useLocation from "./useLocation";
+
 import useInboxGeneral from "./useInboxGeneral/useInboxGeneral";
 import useNewInboxGeneral from "./useInboxGeneral/useNewInbox";
 import useBoundaryLocalities from "./useLocalities";
@@ -201,6 +203,7 @@ const Hooks = {
   useStaticData,
   useDynamicData,
   useBulkPdfDetails,
+  useLocation
 };
 
 export default Hooks;
