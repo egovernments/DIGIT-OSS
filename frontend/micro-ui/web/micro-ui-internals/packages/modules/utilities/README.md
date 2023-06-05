@@ -124,6 +124,8 @@ _Bill Module
 # Changelog
 
 ```bash
+0.0.5 fixed the instablility issue with previous version
+0.0.4 Updated the react-component library version
 0.0.3 corrected the directory and added the preprocess function at inbox
 0.0.2 added into the digit-core and integrated with core react components
 0.0.1 base version
