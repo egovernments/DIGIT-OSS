@@ -52,7 +52,7 @@ const MyApplications = ({ view }) => {
   //       );
 
   const userInfo = Digit.UserService.getUser()?.info || {};
-  const getApplications = async () => {
+  const getApplications = async (searchData) => {
     setLoader(true);
     const token = window?.localStorage?.getItem("token");
     const data = {
@@ -64,7 +64,7 @@ const MyApplications = ({ view }) => {
       },
     };
     try {
-      const Resp = await axios.post("/tl-services/v1/_search", data);
+      const Resp = await axios.post(`/tl-services/v1/_search?searchData=${searchData}`, data);
       setLoader(false);
       setData(Resp?.data);
     } catch (error) {
@@ -74,7 +74,7 @@ const MyApplications = ({ view }) => {
   };
 
   useEffect(() => {
-    getApplications();
+    getApplications("");
   }, []);
 
   ////////////////////////////////////////////////////////////////////////
@@ -122,7 +122,19 @@ const MyApplications = ({ view }) => {
         <div className="col col-4 mt-3">
           <h6>
             Search
-            <input type="text" className="form-control" placeholder="search" {...register(`search`)} />
+            <input
+              type="text"
+              className="form-control"
+              placeholder="search"
+              {...register(`search`)}
+              onChange={(e) => {
+                let delay;
+                delay = setTimeout(() => {
+                  getApplications(e?.target?.value);
+                }, 300);
+                return () => clearTimeout(delay);
+              }}
+            />
           </h6>
         </div>
       </div>
