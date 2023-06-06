@@ -40,7 +40,7 @@ const AccountSection = (props) => {
   const { id } = useParams();
   let user = Digit.UserService.getUser();
   const userRoles = user?.info?.roles?.map((e) => e.code);
-  const showRemarksSection = userRoles.includes("DTCP_HR")
+  const showRemarksSection = userRoles.includes("AO_HQ")
   const histeroyData = props.histeroyData
   const [open3, setOpen3] = useState(false);
 
@@ -636,7 +636,10 @@ console.log("log123Disrenu" ,id);
                {remarkDataResp !== null ?  (
                       remarkDataResp?.map((el,  index) => {
                         return (
+                          
                           <div>
+                            {el?.role === "AO_HQ" && (
+                              <div>
                             <p> 
                  <IconButton
                     onClick={() => toggleshown1(el.employeeName)}
@@ -653,7 +656,7 @@ console.log("log123Disrenu" ,id);
                   </p>
                  
                    <div className="additional-info">
-                   {data.includes(el.employeeName) && (
+                   {data.includes(el.role) && (
                     <Box >
                      
                     <p>
@@ -977,8 +980,10 @@ console.log("log123Disrenu" ,id);
                      )}
                         
                         </div>
-      
+                        </div>
+                       ) }
                           </div>
+                              
                         );
                       })
                     ) : (

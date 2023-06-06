@@ -12,6 +12,7 @@ import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
+import TextSnippetIcon from '@mui/icons-material/TextSnippet';
 
 // import Collapse from "react-bootstrap/Collapse";
 
@@ -19,6 +20,8 @@ import {  Box,
   Collapse,
   } from "@mui/material";
 import AddPost from "../../Material/TextEditor";
+import DemoParinted from "./DemoParint";
+import BasicTable from "./UserRemarks";
 
 // import { Scrollbars } from 'react-custom-scrollbars';
 
@@ -199,6 +202,19 @@ const toggleshown4 = applicationStatus => {
   }
 }
 
+
+
+// const navigate = useNavigate();
+
+const handleClick = () => {
+//   setSelectedAction(null);
+//   setShowModal(false);
+
+//   setTimeout(() => {
+//  window.location.href = `/digit-ui/employee/tl/BasicTable`
+//   }, 3000);
+  window.location.href = `/digit-ui/employee/tl/BasicTable`
+};
 console.log("log123Disrenu" ,id);
   return (
    
@@ -218,8 +234,8 @@ console.log("log123Disrenu" ,id);
         <div 
         class="concludingremarks"
          >
-          <AddPost
-          // modal={true}
+          {/* <AddPost
+
           applicationStatus={applicationStatus}
           setState={(e) => {
             setDeveloperRemarks({ data: e });
@@ -229,7 +245,14 @@ console.log("log123Disrenu" ,id);
           
           >
             
-          </AddPost>
+          </AddPost> */}
+           <DemoParinted 
+         applicationStatus={applicationStatus}
+         setState={(e) => {
+           setDeveloperRemarks({ data: e });
+        
+         }}
+         state={RemarksDeveloper.data}></DemoParinted>
 
         </div>
        
@@ -361,19 +384,26 @@ console.log("log123Disrenu" ,id);
               <Form.Group>
                <div>
                {remarkDataResp !== null ?  (
-                      remarkDataResp?.map((el, i) => {
+                      remarkDataResp?.map((el, list) => {
                         return (
                           <div>
                          
+                         <div style={{width:20}}><TextSnippetIcon onClick={handleClick}>
+                          <BasicTable 
+                      
+                          ></BasicTable></TextSnippetIcon></div>
+
                          {el?.notingDetail !== null ?  (
                       el?.notingDetail?.map((item , index) => {
                         return (
                           <div>
-                         <b>{item?.isApproved}# {index + 1}</b>
+                            
+                         
+                         <b>{item?.isApproved}# {list + 1}</b>
                             <br></br>
                          <i>{<div dangerouslySetInnerHTML={{__html: item.remarks}}/>}</i>
 
-                        
+                    
                              
                           </div>
                         );
@@ -419,6 +449,9 @@ console.log("log123Disrenu" ,id);
 
           </div>
   
+      </Row>
+      <Row>
+       
       </Row>
 
 

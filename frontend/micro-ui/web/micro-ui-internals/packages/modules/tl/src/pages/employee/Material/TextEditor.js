@@ -1,13 +1,16 @@
 import React, { useEffect, useState } from "react";
 import { convertFromRaw, EditorState } from "draft-js";
 import { Editor } from "react-draft-wysiwyg";
+// import { HtmlEditor, Image, Inject, Link, QuickToolbar, RichTextEditorComponent, Table, Toolbar } from '@syncfusion/ej2-react-richtexteditor';
 import { convertFromHTML, convertToHTML } from "draft-convert";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import { useParams } from "react-router-dom";
 import axios from "axios";
+import Button from "react-bootstrap/Button";
 
 function AddPost({ modal = false, state, setState , applicationStatus}) {
   const [editorState, setEditorState] = useState(() => EditorState.createEmpty());
+ 
   const [convertedContent, setConvertedContent] = useState(null);
 
   
@@ -46,8 +49,13 @@ function AddPost({ modal = false, state, setState , applicationStatus}) {
       setConvertedContent(html);
     }
   };
-
-
+ 
+//   let toolbarSettings = {
+//     items: ['CreateTable']
+// };
+// let quickToolbarSettings = {
+//     table: ['TableHeader', 'TableRows', 'TableColumns', 'TableCell', '-', 'BackgroundColor', 'TableRemove', 'TableCellVerticalAlign', 'Styles']
+// };
 
 
  
@@ -92,6 +100,7 @@ function AddPost({ modal = false, state, setState , applicationStatus}) {
       } catch (error) {
         console.log(error);
       }
+      handleGetNotingRemarkssValues(id)
       // handleGetFiledsStatesById(id);
       // handleGetRemarkssValues(id);
       // handleRoles(id)
@@ -117,6 +126,7 @@ function AddPost({ modal = false, state, setState , applicationStatus}) {
   // }, [state]);
 
   return (
+  // <RichTextEditorComponent height={450} toolbarSettings={toolbarSettings} quickToolbarSettings={quickToolbarSettings}>
     <div
       className="text-editorEmp"
       style={{
@@ -140,10 +150,15 @@ function AddPost({ modal = false, state, setState , applicationStatus}) {
        
         toolbarClassName="toolbar-class"
       />
-      {!modal && <button onClick={handlemodalsubmit}>Submit</button>}
-      {/* () => console.log(convertedContent)  */}
+      {!modal && <Button style={{ textAlign: "right" }} onClick={handlemodalsubmit}>
+            Submit
+          </Button>}
+
+     
     </div>
-  );
+    // <Inject services={[Toolbar, Image, Link, HtmlEditor, QuickToolbar, Table]}/>
+    // </RichTextEditorComponent>
+    );
 }
 
 export default AddPost;

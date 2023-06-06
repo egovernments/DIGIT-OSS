@@ -67,33 +67,39 @@ export const configTLApproverApplication = ({
             ),
             
           },
-          {
-            label: t("WF_COMMON_COMMENTS"),
-            // type: "textarea",
-            populators: (  
-              <AdvanceTextArea
-              modal={true}
-              setState={setComment}
-              ></AdvanceTextArea>
-            )
-            // populators: {
+          //////////////////////TCP///////////////////////
+          // {
+          //   label: t("WF_COMMON_COMMENTS"),
+          //   type: "textarea",
+          //   populators: (  
+          //     <AdvanceTextArea
+          //     modal={true}
+          //     setState={setComment}
+          //     ></AdvanceTextArea>
+          //   )
+           
+          // },
+          // populators: {
             //   name: "comments",
             // },
-          },
-          {
-            label: t("TL_APPROVAL_CHECKLIST_BUTTON_UP_FILE"),
-            populators: (
-              <UploadFile
-                id={"workflow-doc"}
-                // accept=".jpg"
-                onUpload={selectFile}
-                onDelete={() => {
-                  setUploadedFile(null);
-                }}
-                message={uploadedFile ? `1 ${t(`ES_PT_ACTION_FILEUPLOADED`)}` : t(`CS_ACTION_NO_FILEUPLOADED`)}
-              />
-            )
-          },
+          //////////////////////TCP///////////////////////
+          //////////////////////TCP///////////////////////
+          // {
+          //   label: t("TL_APPROVAL_CHECKLIST_BUTTON_UP_FILE"),
+          //   populators: (
+          //     <UploadFile
+          //       id={"workflow-doc"}
+          //       accept=".jpg"
+          //       onUpload={selectFile}
+          //       onDelete={() => {
+          //         setUploadedFile(null);
+          //       }}
+          //       message={uploadedFile ? `1 ${t(`ES_PT_ACTION_FILEUPLOADED`)}` : t(`CS_ACTION_NO_FILEUPLOADED`)}
+          //     />
+          //   )
+          // },
+
+      //////////////////////TCP///////////////////////
           //   {
           //     label: action.docUploadRequired ? t("ES_PT_UPLOAD_FILE") : null,
           //     populators: action.docUploadRequired ? (
