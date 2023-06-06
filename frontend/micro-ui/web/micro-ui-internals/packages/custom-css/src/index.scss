@@ -837,3 +837,13 @@ input[type="number"] {
 width: auto;
   }
 }
+
+
+.sample-component-style{
+   display: flex;
+    align-items: center;
+    min-height: 300px;
+    overflow-y: scroll;
+    flex-direction: column;
+    border: 1px solid gray;
+}
