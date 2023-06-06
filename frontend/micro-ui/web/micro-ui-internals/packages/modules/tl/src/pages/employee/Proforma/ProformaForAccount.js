@@ -30,7 +30,7 @@ import { useTranslation } from "react-i18next";
 
 function RadioButtonsGroup(props) {
 
-  const {handleRoles, handleGetFiledsStatesById, handleGetRemarkssValues , bussinessService} = useContext(ScrutinyRemarksContext,);
+  const {handleRoles, handleGetFiledsStatesById, handleGetRemarkssValues , handleGetNotingRemarkssValues, bussinessService} = useContext(ScrutinyRemarksContext,);
   const apiData = props.apiResponseData;
   const applicationStatu =props.applicationStatus;
   const data =props.dataMDMS;
@@ -109,6 +109,7 @@ function RadioButtonsGroup(props) {
       } catch (error) {
         console.log(error);
       }
+      handleGetNotingRemarkssValues(id)
       // handleGetFiledsStatesById(id);
       // handleGetRemarkssValues(id);
       handleRoles(id)

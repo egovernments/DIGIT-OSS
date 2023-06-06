@@ -45,6 +45,7 @@ import MainSection from "./CurrentRemarks/CurrentMain";
 import LOASection from "./CurrentRemarks/CurrentLOA";
 import ExternalSection from "./CurrentRemarks/CurrentExternalSection";
 import HistoryList from "./ScrutinyDevelopment/HistoryList";
+// import HelpPost from "../Material/TextArea";
 
 const ScrutitnyForms = ({ apiResponse, applicationNumber, refreshScrutinyData ,profrmaID, histeroyData,additionalDocResponData, applicationStatus ,mDMSData ,applicationimp ,dataProfrmaFileds, dataMDMS }) => {
   const personalInfoRef = useRef();
@@ -72,7 +73,7 @@ const ScrutitnyForms = ({ apiResponse, applicationNumber, refreshScrutinyData ,p
   const [displayFeeandCharges, setDisplayFeeandChargesInfo] = useState([]);
   // const [displayLicenseDetails, setDisplayLicenseDetailsInfo] = useState([]);
   // const [displayLicenseDetailsCheckedlist, setDisplayCheckedLicenseDetailsList] = useState([]);
-const { remarksData,iconStates,rolesDate,handleRoles,handleGetFiledsStatesById,handleGetRemarkssValues } = useContext(ScrutinyRemarksContext);
+const {remarksData,notingRemarksData,iconStates,rolesDate,handleRoles,handleGetFiledsStatesById,handleGetRemarkssValues,handleGetNotingRemarkssValues } = useContext(ScrutinyRemarksContext);
   const [displayJeLand, setDisplayJeLand] = useState([]);
   const [ActiveKey, setActiveKey] = useState(1);
   const [defaultHeightPersonal, setDefaultHeightPersonal] = useState(0);
@@ -287,8 +288,11 @@ const { remarksData,iconStates,rolesDate,handleRoles,handleGetFiledsStatesById,h
 
   useEffect(() => {
     if (applicationNumber) {
-      handleRoles(applicationNumber);
+      
+      handleRoles(applicationNumber); 
+      handleGetNotingRemarkssValues(applicationNumber); 
     }
+   
   }, [applicationNumber]);
 
   
@@ -775,6 +779,8 @@ console.log("userInFODATA123" , userInfo);
             ></Feeandcharges>
          
           </div>
+          </div>
+          </div>
           {/* <div>
             <AdditionalDocument
             additionalDocRespon={additionalDocResponData}
@@ -817,6 +823,7 @@ console.log("userInFODATA123" , userInfo);
            
       </ProformaPatwari>
           </div> */}
+          <div  style={{ position: "relative", maxWidth: "100%", padding: 2 }}>
           <div>
             <div
             className="collapse-header"
@@ -862,12 +869,10 @@ console.log("userInFODATA123" , userInfo);
           </Collapse>
           </div>
           
-          <div>
-            
-          </div>
+  
 
-        </div>
-      </div>
+        {/* </div> */}
+    
 
       <div
             className="collapse-header"
@@ -1457,17 +1462,23 @@ console.log("userInFODATA123" , userInfo);
           <Collapse in={open4}>
             <div id="example-collapse-text" style={{ marginTop: 12, paddingLeft: 12, paddingRight: 12 }}> */}
 <div style={{ position: "relative", width: "100%", display: "flex", marginBottom: 2 , marginTop: 3}}>
-       <HistoryList remarkData={remarksData.egScrutiny !== undefined ? remarksData.egScrutiny : null}
+       <HistoryList remarkData={notingRemarksData.egScrutiny !== undefined ? notingRemarksData.egScrutiny : null}
       
        histeroyData={histeroyData}
        applicationStatus={applicationStatus}
        ></HistoryList>
     
       </div>
+{/* <div style={{ position: "relative", width: "100%", display: "flex", marginBottom: 2 , marginTop: 3}}>
+       <HelpPost 
+       ></HelpPost>
+    
+      </div> */}
       {/* </div>
       </Collapse> */}
 
 
+    </div>
     </div>
   );
 };

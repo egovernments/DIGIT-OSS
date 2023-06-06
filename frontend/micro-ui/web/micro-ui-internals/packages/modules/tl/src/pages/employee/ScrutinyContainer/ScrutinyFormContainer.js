@@ -257,14 +257,14 @@ const ScrutinyFormcontainer = (props) => {
                   "filter":`[?(${query})]`,
   
               },
-              // {
-              //   "name": "PerformaNewLicence",
-              //   "filter": `[?(@.applicationStatus =='${Resp?.Licenses[0]?.status}')]`
-              // }
               {
                 "name": "PerformaNewLicence",
-                "filter": `[?(@.applicationStatus =='PENDING_AT_PATWARI_HQ_PRELIM')]`
+                "filter": `[?(@.applicationStatus =='${Resp?.Licenses[0]?.status}')]`
               }
+              // {
+              //   "name": "PerformaNewLicence",
+              //   "filter": `[?(@.applicationStatus =='PENDING_AT_PATWARI_HQ_PRELIM')]`
+              // }
              
               ]
             }

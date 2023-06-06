@@ -21297,6 +21297,7 @@ color: #fff !important;
     width: 55%;
     height: 500px;
     overflow-y: auto;
+    border: groove;
   
   }
   .concludingremarks {
@@ -21311,5 +21312,13 @@ color: #fff !important;
     box-sizing: border-box;
     min-height: 300px;
     border: currentColor;
+}
+.jodit-react-container{
+  height: 100%;
+  overflow: auto;
+  box-sizing: border-box;
+  min-height: 400px;
+  border: currentColor;
+  padding: 5px;
 }
 

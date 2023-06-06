@@ -16,7 +16,7 @@ import { useLocation } from "react-router-dom";
 
 
 function ModalChild(props) {
-  const {handleRoles, handleGetFiledsStatesById, handleGetRemarkssValues , bussinessService} = useContext(ScrutinyRemarksContext,);
+  const {handleRoles, handleGetFiledsStatesById, handleGetRemarkssValues , handleGetNotingRemarkssValues, bussinessService} = useContext(ScrutinyRemarksContext,);
   const applicationStatus = props.applicationStatus ;
   const userInfo = Digit.UserService.getUser()?.info || {};
   const classes = useStyles();
@@ -86,6 +86,7 @@ function ModalChild(props) {
       } catch (error) {
         console.log(error);
       }
+      handleGetNotingRemarkssValues(id)
       handleGetFiledsStatesById(id);
       handleGetRemarkssValues(id);
       handleRoles(id)
