@@ -20,6 +20,7 @@ import { Button, Placeholder } from "react-bootstrap";
 import Spinner from "../components/Loader/index";
 import CusToaster from "../components/Toaster";
 const StakeholderDocuments = ({ t, config, onSelect, userType, formData, setError: setFormError, clearErrors: clearFormErrors, formState }) => {
+  console.log("FORMDATA...",formData)
   const tenantId = Digit.ULBService.getCurrentTenantId();
   const stateId = Digit.ULBService.getStateId();
   const userInfo = Digit.UserService.getUser();
