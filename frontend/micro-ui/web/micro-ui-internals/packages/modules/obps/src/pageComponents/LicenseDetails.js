@@ -606,6 +606,8 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
     localStorage.setItem("licenceDetails", JSON.stringify(licenseDet));
     Digit.OBPSService.BPAREGCreate(licenseDet, tenantId)
       .then((result, err) => {
+        console.log("FORMDATA...1",result)
+        sessionStorage.setItem("TECHNICAL_PROFESSIONAL_APPLICATION_NO",result?.Licenses?.[0]?.applicationNumber)
         setIsDisableForNext(false);
         let data = {
           result: result,
@@ -679,6 +681,7 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
     Digit.OBPSService.CREATEDeveloper(developerRegisterData, tenantId)
       .then((result, err) => {
         // console.log("DATA", result?.id);
+        console.log("FORMDATA...2",result)
         localStorage.setItem("devRegId", JSON.stringify(result?.id));
         setIsDisableForNext(false);
         let data = {
