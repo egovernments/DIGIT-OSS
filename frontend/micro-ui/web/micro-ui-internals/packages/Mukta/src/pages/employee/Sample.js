@@ -128,6 +128,7 @@ export const newConfig = [
         disable: false,
         populators: { name: "additionalDetails", error: "sample error message", validation: { pattern: /^[A-Za-z]+$/i } },
       },
+   
       // {
       //   isMandatory: true,
       //   key: "genders",
@@ -173,7 +174,12 @@ export const newConfig = [
           ],
         },
       },
-      
+      {
+        "type": "component",
+        "component": "SampleComponent",
+        "withoutLabel": true,
+        "key": "comments"
+      },
     ],
   },
 ];
