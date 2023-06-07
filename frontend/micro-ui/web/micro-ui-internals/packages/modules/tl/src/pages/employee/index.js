@@ -54,6 +54,8 @@ import BeneficialCard from "./ScrutinyBasic/AllServiceScrutiny/BeneficialInteres
 import ExtensionCluCard from "./ScrutinyBasic/AllServiceScrutiny/ExtensionClu/ExtensionCluCard";
 import CompletionLicCard from "./ScrutinyBasic/AllServiceScrutiny/CompletionLic/CompletionLicCard";
 import CompletionInbox from "./ScrutinyBasic/AllServiceScrutiny/CompletionLic/Inbox/index";
+import TechnicalProfessionalInbox from "./ScrutinyBasic/AllServiceScrutiny/TechnicalProfessionals/Inbox";
+import TechnicalProfessionalCard from "./ScrutinyBasic/AllServiceScrutiny/TechnicalProfessionals/TechnicalProfessionalCard";
 
 const TLBreadCrumb = ({ location }) => {
   const { t } = useTranslation();
@@ -251,6 +253,7 @@ const EmployeeApp = ({ path, url, userType }) => {
             <PrivateRoute path={`${path}/BeneficialCard/:id`} component={BeneficialCard} />
             <PrivateRoute path={`${path}/TransferScrutiny/:id`} component={TransferScrutiny} />
             <PrivateRoute path={`${path}/SurrenderScrutiny/:id`} component={SurrenderScrutiny} />
+            <PrivateRoute path={`${path}/TechnicalProfessionalscrutiny/:id`} component={TechnicalProfessionalCard} />
             <PrivateRoute path={`${path}/ExtensionCluCard/:id`} component={ExtensionCluCard} />
             <PrivateRoute path={`${path}/ExtensionCom/:id`} component={ExtensionCom} />
             <PrivateRoute path={`${path}/LayoutPlanScritny/:id`} component={LayoutPlanScritny} />
@@ -290,6 +293,18 @@ const EmployeeApp = ({ path, url, userType }) => {
                 <SurrenderInbox
                   parentRoute={path}
                   businessService={["SURREND_OF_LICENSE"]}
+                  filterComponent="TL_INBOX_FILTER"
+                  initialStates={{}}
+                  isInbox={true}
+                />
+              )}
+            />
+            <PrivateRoute
+              path={`${path}/TechnicalProfessionalInbox`}
+              component={(props) => (
+                <TechnicalProfessionalInbox
+                  parentRoute={path}
+                  businessService={["TECHNICAL_PROFESSIONAL"]}
                   filterComponent="TL_INBOX_FILTER"
                   initialStates={{}}
                   isInbox={true}

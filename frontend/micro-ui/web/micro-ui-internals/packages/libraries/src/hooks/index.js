@@ -159,6 +159,7 @@ import useEPInbox from "./obps/useEPInbox";
 import useBGInbox from "./obps/useBGInbox";
 import useTOLInbox from "./obps/useTOLInbox";
 import useSLInbox from "./obps/useSLInbox";
+import useTPInbox from "./obps/useTPInbox";
 import useLPInbox from "./obps/useLPInbox";
 import useCBIInbox from "./obps/useCBIInbox";
 import useAOSInbox from "./obps/useAOSInbox";
@@ -317,6 +318,7 @@ const obps = {
   useNocDetails: useNocDetails,
   useOBPSDocumentSearch,
   useObpsAPI,
+  useTPInbox,
   useBPADetails,
   useBPASearch,
   useBPAREGgetbill,
@@ -348,7 +350,8 @@ const obps = {
   useROLInbox,
   useCCInbox,
   useECOCSInbox,
-  useEOCPInbox
+  useEOCPInbox,
+
 };
 
 const events = {

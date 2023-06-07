@@ -325,6 +325,24 @@ const OBPSCard = () => {
           }
         ],
       };
+      const propsForTechnicalProfessionalModuleCard = {
+        Icon: <DocumentIconSolid />,
+        moduleName: t("TECHNICAL_PROFESSIONAL"),
+        kpis: [
+          {
+            count: "-",
+            label: t("CONSTRUCTION_OF_COMMUNITY_CARD"),
+            link: `/digit-ui/employee/tl/TechnicalProfessionalInbox`,
+          },
+        ],
+        links: [
+          {
+            count: "-",
+            label: t("ES_TITLE_INBOX"),
+            link: `/digit-ui/employee/tl/TechnicalProfessionalInbox`,
+          }
+        ],
+      };
       const propsForCopletionModuleCard = {
         Icon: <DocumentIconSolid />,
         moduleName: t("COMPLETION_CERTIFICATE_CARD"),
@@ -387,6 +405,7 @@ const OBPSCard = () => {
       obpsSubModuleProps.push(propsForCommiunitySiteoduleCard)
       obpsSubModuleProps.push(propsForCopletionModuleCard)
       obpsSubModuleProps.push(propsForExtentionModuleCard)
+      obpsSubModuleProps.push(propsForTechnicalProfessionalModuleCard)
         return (
         <React.Fragment>
         {

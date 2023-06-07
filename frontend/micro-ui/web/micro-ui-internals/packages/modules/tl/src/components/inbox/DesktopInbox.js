@@ -79,6 +79,8 @@ const DesktopInbox = ({
                       ? "ScrutinyForm"
                       : row.original["businessService"] === "COMPLETION_CERTIFICATE"
                       ? "Completionscrutiny"
+                      : row.original["businessService"] === "TECHNICAL_PROFESSIONAL"
+                      ? "TechnicalProfessionalscrutiny"
                       : null
                   }/` + row.original["applicationId"]
                 }
@@ -185,6 +187,8 @@ const DesktopInbox = ({
                       ? "Completionscrutiny"
                       : row.original["businessService"] === "EXTENTION_OF_CLU_PERMISSION"
                       ? "ExtensionCluCard"
+                      : row.original["businessService"] === "TECHNICAL_PROFESSIONAL"
+                      ? "TechnicalProfessionalscrutiny"
                       : null
                   }/` + row.original["applicationId"]
                 }
