@@ -374,7 +374,7 @@ const LandScheduleForm = (props) => {
           tenantId: "hr",
           moduleName: "TL",
           action: "SENDBACK",
-          previousStatus: "INITIATED",
+          previousStatus: "PURPOSE",
           comment: null,
         },
       ],
