@@ -315,7 +315,6 @@ const LandScheduleForm = (props) => {
       setShowToastError({ label: "File Uploaded Successfully", error: false, success: true });
     } catch (error) {
       setLoader(false);
-
       return error.message;
     }
   };
@@ -349,6 +348,7 @@ const LandScheduleForm = (props) => {
     resetField("khasraNumber");
     resetField("area");
   };
+
   useEffect(() => {
     if (specificTableData) {
       setValue("previousLicensenumber", specificTableData?.previousLicensenumber);
@@ -374,7 +374,7 @@ const LandScheduleForm = (props) => {
           tenantId: "hr",
           moduleName: "TL",
           action: "SENDBACK",
-          previousStatus: "INITIATED",
+          previousStatus: "PURPOSE",
           comment: null,
         },
       ],
@@ -2304,13 +2304,12 @@ const LandScheduleForm = (props) => {
                   <hr />
                   <br></br>
                   <h4>
-                    4.
                     {`${t("NWL_APPLICANT_4_SITE_CONDITION_SHAJRA_PLAN")}`}
                     {/* Site condition */}
                   </h4>
                   <br></br>
                   <div className="row">
-                    <div className="col col-lg-3 col-md-6 col-sm-6 mb-2">
+                    <div className="col col-lg-4 col-md-6 col-sm-6 mb-2">
                       <h2>
                         &nbsp;
                         {`${t("NWL_APPLICANT_4_A_VACANT_SHAJRA_PLAN")}`}
@@ -2347,7 +2346,7 @@ const LandScheduleForm = (props) => {
                         </div>
                       )}
                     </div>
-                    <div className="col col-lg-3 col-md-6 col-sm-6 mb-2">
+                    <div className="col col-lg-4 col-md-6 col-sm-6 mb-2">
                       <h2>
                         &nbsp;
                         {`${t("NWL_APPLICANT_4_B_HT_LINE_SHAJRA_PLAN")}`}
@@ -2384,7 +2383,7 @@ const LandScheduleForm = (props) => {
                         </div>
                       )}
                     </div>
-                    <div className="col col-lg-3 col-md-6 col-sm-6 mb-2">
+                    <div className="col col-lg-4 col-md-6 col-sm-6 mb-2">
                       <h2>
                         &nbsp;
                         {`${t("NWL_APPLICANT_4_C_IOC_GAS_PIPELINE_SHAJRA_PLAN")}`}
@@ -2419,7 +2418,7 @@ const LandScheduleForm = (props) => {
                         </div>
                       )}
                     </div>
-                    <div className="col col-lg-3 col-md-6 col-sm-6 mb-2">
+                    <div className="col col-lg-4 col-md-6 col-sm-6 mb-2">
                       <h2>
                         &nbsp;
                         {`${t("NWL_APPLICANT_4_D_NALLAH_SHAJRA_PLAN")}`}
@@ -2454,10 +2453,8 @@ const LandScheduleForm = (props) => {
                         </div>
                       )}
                     </div>
-                  </div>
-                  <br></br>
-                  <div className="row ">
-                    <div className="col col-lg-3 col-md-6 col-sm-6 mb-2">
+
+                    <div className="col col-lg-4 col-md-6 col-sm-6 mb-2">
                       <h2>
                         &nbsp;
                         {`${t("NWL_APPLICANT_4_E_ANY_REVENUE_REVENUE_RASTA_ROAD_PASSING_THROUGH_PROPOSED_SITE_SHAJRA_PLAN")}`}
@@ -2510,7 +2507,7 @@ const LandScheduleForm = (props) => {
                         </div>
                       )}
                     </div>
-                    <div className="col col-lg-3 col-md-6 col-sm-6 mb-2">
+                    <div className="col col-lg-4 col-md-6 col-sm-6 mb-2">
                       <h2>
                         &nbsp;
                         {`${t("NWL_APPLICANT_F_UTILITY_PERMIT_LINE_SHAJRA_PLAN")}`}
@@ -2563,7 +2560,7 @@ const LandScheduleForm = (props) => {
                         </div>
                       )}
                     </div>
-                    <div className="col col-lg-3 col-md-6 col-sm-6 mb-2">
+                    <div className="col col-lg-4 col-md-6 col-sm-6 mb-2">
                       <h2>
                         &nbsp;
                         {`${t("NWL_APPLICANT_G_COMPACT_BLOCK_SHAJRA_PLAN")}`}
@@ -2596,6 +2593,8 @@ const LandScheduleForm = (props) => {
                         </div>
                       )}
                     </div>
+                  </div>
+                  <div className="row">
                     <div className="col col-lg-5 col-md-6 col-sm-6 mb-2 mt-3">
                       <h2>
                         &nbsp;
@@ -2890,7 +2889,7 @@ const LandScheduleForm = (props) => {
                         {`${t("NWL_APPLICANT_SHAJRA_PLAN_DOCUMENT")}`}
                         {/* Shajra Plan  */}
                         <span style={{ color: "red" }}>*</span>
-                        <Tooltip title="Please select the file in .kml format">
+                        <Tooltip title="Please select the file in .kml and pdf format">
                           <InfoIcon style={{ cursor: "pointer" }} color="primary"></InfoIcon>
                         </Tooltip>
                       </h2>
@@ -2939,15 +2938,16 @@ const LandScheduleForm = (props) => {
                         <input
                           type="file"
                           style={{ display: "none" }}
-                          accept=".kml"
+                          // accept=".kml"
+                          accept=".pdf, .kml"
                           onChange={(e) => {
-                            // var fileName = e?.target?.files[0]?.name;
-                            // var fileExtension = fileName?.split(".")?.pop();
-                            // if (fileExtension?.toLowerCase() == "kml") {
-                            getDocumentData(e?.target?.files[0], "copyOfShajraPlan");
-                            // } else {
-                            //   setShowToastError({ label: "Please select given file format", error: true, success: false });
-                            // }
+                            var fileName = e?.target?.files[0]?.name;
+                            var fileExtension = fileName?.split(".")?.pop();
+                            if (fileExtension?.toLowerCase() == "kml" || fileExtension?.toLowerCase() == "pdf") {
+                              getDocumentData(e?.target?.files[0], "copyOfShajraPlan");
+                            } else {
+                              setShowToastError({ label: "Please select given file format", error: true, success: false });
+                            }
                           }}
                         />
                       </label>
