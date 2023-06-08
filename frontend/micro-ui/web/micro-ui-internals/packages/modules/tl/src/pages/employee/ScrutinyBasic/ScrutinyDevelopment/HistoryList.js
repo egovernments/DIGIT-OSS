@@ -22,6 +22,7 @@ import {  Box,
 import AddPost from "../../Material/TextEditor";
 import DemoParinted from "./DemoParint";
 import BasicTable from "./UserRemarks";
+import { convertDateToEpoch, convertEpochToDate, convertEpochToDateDMY } from "../../../../utils";
 
 // import { Scrollbars } from 'react-custom-scrollbars';
 
@@ -226,7 +227,7 @@ console.log("log123Disrenu" ,id);
         maxWidth: "100%",
         maxHeight: "50%",
         minHeight: "40%",
-        // marginTop: 5,
+        marginTop: 5,
       }}
     >
       
@@ -319,10 +320,13 @@ console.log("log123Disrenu" ,id);
     
 
         <div class="histrorynotingremarks">
-          <Card>
-          <p class="text-center" ><h4>Noting</h4></p>
+          <Card style={{backgroundColor: "rgb(255, 217, 84)"}}>
+          <p class="text-center"><h3><b>Noting</b></h3></p>
           </Card>
-          <div class="WhatsNewCard" style={{ backgroundColor: "#ddf2cf" }}>
+          <div 
+          // class="WhatsNewCard"
+        
+           style={{ backgroundColor: "#ddf2cf" , fontSize: 16 }}>
 
 
 
@@ -384,7 +388,7 @@ console.log("log123Disrenu" ,id);
               <Form.Group>
                <div>
                {remarkDataResp !== null ?  (
-                      remarkDataResp?.map((el, list) => {
+                      remarkDataResp?.map((el, index) => {
                         return (
                           <div>
                          
@@ -399,7 +403,7 @@ console.log("log123Disrenu" ,id);
                           <div>
                             
                          
-                         <b>{item?.isApproved}# {list + 1}</b>
+                         <b>{item?.isApproved}# {index + 1}</b>
                             <br></br>
                          <i>{<div dangerouslySetInnerHTML={{__html: item.remarks}}/>}</i>
 
@@ -412,19 +416,110 @@ console.log("log123Disrenu" ,id);
                       <p></p>
                     )}
 
+{/* {data.includes(el.employeeName) && (
+                    <Box > */}
+                    
+<div >
+  <Box>
+<Row>
+<p>
+                    <IconButton
+                           onClick={() => toggleshown4(el.applicationStatus)}
+                         >
+                           {dataThree.includes(index)? (
+                           
+                              <KeyboardArrowUpIcon /> 
+                            ) : (
+                           <p><KeyboardArrowDownIcon /><b style={{ color: "#ff0000" , fontSize: 16}}>{el.performaFieldDetail?.[0]?.isApproved}</b></p>
+                          
+                           )}
+                           
+                         </IconButton>
+                         </p>
+                          
+                              
+                             
+                             {dataThree.includes(el.applicationStatus) && (  
+                  <table colSpan = "2" className="table table-bordered" style={{ backgroundColor: "#ddf2cf" }}>
+                    <thead>
+
+                      <tr className="border-bottom-0">
+                        <th class="fw-normal pb-0 border-bottom-0 align-top">
+                          Sr.No
+                        </th>
+                        <th class="fw-normal pb-0 border-bottom-0 align-top">
+                          Filed Name
+                        </th>
+                        <th class="fw-normal pb-0 border-bottom-0 align-top">
+                          Filed value
+                        </th>
+                        <th class="fw-normal pb-0 border-bottom-0 align-top">
+                          Status
+                        </th>
+
+                        <th class="fw-normal pb-0 border-bottom-0 align-top">
+                          Remarks
+                        </th>
+                      </tr>
+                      <tr>
+
+                      </tr>
+
+
+                    </thead>
+                     <tbody>
+                 
+                     {el?.performaFieldDetail !== null ? (
+           el?.performaFieldDetail?.map((el, i) => {
+                      return (
+                    
+                           <tr >
+
+                                <td>
+                                  {i + 1}
+                                </td>
+                                <td>
+                                  <b>{el.name}</b>
+                                </td>
+                                <td>
+                                  <b>{el.value}</b>
+                                </td>
+
+                                <td>
+                                  <b>{el.isApproved}</b>
+                                </td>
+                                <td>
+                               
+                                  <i>{<div dangerouslySetInnerHTML={{__html: el.remarks}}/>}</i>
+                                </td>
+
+                              </tr>
+                                 );
+                                })
+                              ) : (
+                                <p></p>
+                              )}
+                           </tbody>
+                          </table>
+                          )} 
+                    </Row>
+                      </Box>
+               
+                        
+                        </div>
+
 <Row style={{ margin: 4 }}>
                       <b style={{ textAlign: "right", marginRight: 2 }}>{el.designation}</b>
                      <b style={{ textAlign: "right" }}>{el.employeeName}</b>
                      </Row>
                      <Row style={{ margin: 4 }}>
 
-                     <p style={{ textAlign: "right" }}>{el.createdOn}</p>
+                     <p style={{ textAlign: "right" }}>{el?.createdOn} {convertEpochToDate(el?.ts)}</p>
                      <b style={{ textAlign: "right" }}>
              
                    </b>
                     </Row>
-                    
-      
+                    <hr></hr>
                           </div>
                         );
                       })
@@ -433,7 +528,7 @@ console.log("log123Disrenu" ,id);
                     )}
 
                   
-                    <hr></hr>
+            
                   
                 </div>
                     
