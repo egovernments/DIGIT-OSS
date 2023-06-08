@@ -1,6 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
+import { TextInput, Label, SubmitBar, LinkLabel, ActionBar, CloseSvg, DatePicker, MobileNumber } from "@egovernments/digit-ui-react-components";
 import { Form, Col, Row } from "react-bootstrap";
 import axios from "axios";
 import { useStyles } from "./styles/modalChild.style";
@@ -119,7 +120,7 @@ function ModalChild(props) {
 
   return (
     <Modal
-      size="lg"
+      size="md"
       className="modal-lg modal-center"
       show={smShow}
       // aria-labelledby="example-modal-sizes-title-sm"
@@ -131,8 +132,9 @@ function ModalChild(props) {
       <Modal.Header closeButton>
         <Modal.Title id="example-modal-sizes-title-sm">
           <div>
-            <h3>{props.labelmodal}
-            </h3>
+            {/* <h3>{props.labelmodal}
+            </h3> */}
+            <Label>{t(props.labelmodal)}</Label>
             { docModal === false &&
             <p className={classes.subHead}>{inputFieldValue}</p>
             }

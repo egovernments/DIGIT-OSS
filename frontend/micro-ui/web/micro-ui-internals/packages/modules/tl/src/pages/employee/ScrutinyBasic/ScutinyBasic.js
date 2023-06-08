@@ -4,6 +4,7 @@ import Genarelinfo from "./Generalinfo";
 import Developerinfo from "./Developerinfo";
 import AppliedLandinfo from "./AppliedLand";
 import Feeandcharges from "./Feeandcharges";
+
 // import JeLandinfo from "./Scrutiny LOI/JE/JE";
 // import DisApprovalList from "./DisApprovalList";
 // import HistoryList from "./History";
@@ -25,6 +26,7 @@ import Addmoreinput from "../Complaince/Compliances";
 import ProformForRevenu from "../Proforma/ProformForRevenu";
 import AdditionalDocument from "./AdditionalDocument/ApplicantInfo";
 import Component from "../Proforma/Index";
+import { useParams } from "react-router-dom";
 
 import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
@@ -45,6 +47,7 @@ import MainSection from "./CurrentRemarks/CurrentMain";
 import LOASection from "./CurrentRemarks/CurrentLOA";
 import ExternalSection from "./CurrentRemarks/CurrentExternalSection";
 import HistoryList from "./ScrutinyDevelopment/HistoryList";
+import Spinner from "../../../components/Loader";
 // import HelpPost from "../Material/TextArea";
 
 const ScrutitnyForms = ({ apiResponse, applicationNumber, refreshScrutinyData ,profrmaID, histeroyData,additionalDocResponData, applicationStatus ,mDMSData ,applicationimp ,dataProfrmaFileds, dataMDMS }) => {
@@ -61,7 +64,7 @@ const ScrutitnyForms = ({ apiResponse, applicationNumber, refreshScrutinyData ,p
   const jeLandInfoRef = useRef();
   const { register, handleSubmit , watch , setValue} = useForm();
   
-
+  const { id } = useParams();
   const [displayPersonal, setDisplayPersonalInfo] = useState([]);
   const [displayPersonalCHeckedList, setDisplayCheckedPersonalList] = useState([]);
   const [displayGeneralCHeckedList, setDisplayCheckedGeneralList] = useState([]);
@@ -81,6 +84,16 @@ const {remarksData,notingRemarksData,iconStates,rolesDate,handleRoles,handleGetF
   const [defaultheightDevelper, setDefaultheightDevelper] = useState(0);
   const [defaultheightApplied, setDefaultheightApplied] = useState(0);
   const [defaultheightFee, setDefaultheightFee] = useState(0);
+  const [remarksDataAccount, setRemarksDataAccount] = useState({});
+  const [remarksDataDrawing, setRemarksDataDrawing] = useState({});
+  const [remarksDataLegal, setRemarksDataLegal] = useState({});
+  const [remarksDataRevnue, setRemarksDataRevnue] = useState({});
+  const [remarksDataTechinical, setRemarksDataTechinical] = useState({});
+  const [remarksDataMain, setRemarksDataMain] = useState({});
+  const [remarksDataDTPField, setRemarksDataDTPField] = useState({});
+  const [remarksDataSTPField, setRemarksDataSTPField] = useState({});
+  const [remarksDataExternal, setRemarksDataExternal] = useState({});
+  const [loader, setLoader] = useState(false);
   const [open, setOpen] = useState(false);
   const [open2, setOpen2] = useState(false);
   const [open3, setOpen3] = useState(false);
@@ -214,6 +227,8 @@ const {remarksData,notingRemarksData,iconStates,rolesDate,handleRoles,handleGetF
 
   // }
   const handleGetDisapprovalList = async () => {
+    setLoader(true);
+   
     const dataToPass = {
       RequestInfo: {
         api_id: "1",
@@ -234,12 +249,14 @@ const {remarksData,notingRemarksData,iconStates,rolesDate,handleRoles,handleGetF
         .then((response) => {
           return response.data;
         });
-
+        setLoader(false);
       console.log("Response From API", Resp);
       setDisapprovalData(Resp);
       
     } catch (error) {
       console.log(error);
+      setLoader(false);
+      return error.message;
     }
   };
   // const handleGetRemarkssValues = async () => {
@@ -650,60 +667,303 @@ catch (error) {
 
 }
 };
+////////////////////(1)Account Section ///////////////
 
-// console.log("Logger...",  convertToObjectArray(x))
+const handleAccountClick = async () =>{
+  setLoader(true);
+   console.log("logger1234...",applicationNumber)
+  // if(open5===true){
 
-// const handleData = async (data) => {
   
-//   const payload = {
+  const dataToSend = {
+      RequestInfo: {
+          apiId: "Rainmaker",
+          action: "_create",
+          did: 1,
+          key: "",
+          msgId: "20170310130900|en_IN",
+          ts: 0,
+          ver: ".01",
+          authToken: authToken,
+         
+      },
+  };
+ 
+  try {
+      const Resp = await axios.post(`/land-services/egscrutiny/_search4?applicationNumber=${applicationNumber}&roles=AO_HQ,CAO,CAO_HQ,AO,SO,SO_HQ`, dataToSend).then((response) => {
+          return response.data;
+      });
 
-//   "RequestInfo": {
-
-//       "apiId": "Rainmaker",
-
-//       authToken: authToken,
-//        userInfo: userInfo,
-
-//       "msgId": "1684320117934|en_IN"
-
-//   },
-
-//   PerformaScruitny: {
-
-//       applicationNumber: applicationNumber,
-
-//       applicationStatus: applicationStatus,
-
-//       userName: userInfo?.name,
-
-//       userId: userInfo?.id,
-
-//       designation: designation ,
-
-//       createdOn: dateTime.toUTCString(),
-
-//       additionalDetails: {
-
-//         data
-
-//       }
-
-
-
-//   }
-
+      console.log("RemarksSection", Resp);
+      setLoader(false);
+      setRemarksDataAccount(Resp);
+      
+  } catch (error) {
+    setLoader(false);
+      console.log(error);
+  }
 // }
-// const Resp = await axios.post(`/tl-services/_performaScrutiny/_create`, payload )
-// console.log("savehandle" , data);
-// console.log("savehandle" , Resp);
-
+// else{
+//   console.log(error);
 // }
+};
+
+////////////////////(2)Drawing Section ///////////////
+const handleDrawingClick = async () =>{
+  setLoader(true);
+  console.log("logger1234...",applicationNumber)
+  const dataToSend = {
+      RequestInfo: {
+          apiId: "Rainmaker",
+          action: "_create",
+          did: 1,
+          key: "",
+          msgId: "20170310130900|en_IN",
+          ts: 0,
+          ver: ".01",
+          authToken: authToken,
+         
+      },
+  };
+  try {
+      const Resp = await axios.post(`/land-services/egscrutiny/_search4?applicationNumber=${applicationNumber}&roles=SD_HQ,JD_HQ,PA,PA_HQ,ADA_HQ,AD_HQ,JE_HQ,ASST_JE_HQ`, dataToSend).then((response) => {
+          return response.data;
+      });
+
+      console.log("RemarksSection", Resp);
+      setLoader(false);
+      setRemarksDataDrawing(Resp);
+  } catch (error) {
+    setLoader(false);
+      console.log(error);
+  }
+};
+
+////////////////////(3)Legal Section ///////////////
+const handleLegalClick = async () =>{
+  setLoader(true);
+  console.log("logger1234...",applicationNumber)
+  const dataToSend = {
+      RequestInfo: {
+          apiId: "Rainmaker",
+          action: "_create",
+          did: 1,
+          key: "",
+          msgId: "20170310130900|en_IN",
+          ts: 0,
+          ver: ".01",
+          authToken: authToken,
+         
+      },
+  };
+  try {
+      const Resp = await axios.post(`/land-services/egscrutiny/_search4?applicationNumber=${applicationNumber}&roles=DA,DDA,ADA,DA_HQ,DDA_HQ,ADA_HQ,`, dataToSend).then((response) => {
+          return response.data;
+      });
+
+      console.log("RemarksSection", Resp);
+      setLoader(false);
+      setRemarksDataLegal(Resp);
+  } catch (error) {
+    setLoader(false);
+      console.log(error);
+  }
+};
+////////////////////(4)Revnue Section ///////////////
+const handleRevnueClick = async () =>{
+  setLoader(true);
+  console.log("logger1234...",applicationNumber)
+  const dataToSend = {
+      RequestInfo: {
+          apiId: "Rainmaker",
+          action: "_create",
+          did: 1,
+          key: "",
+          msgId: "20170310130900|en_IN",
+          ts: 0,
+          ver: ".01",
+          authToken: authToken,
+         
+      },
+  };
+  try {
+      const Resp = await axios.post(`/land-services/egscrutiny/_search4?applicationNumber=${applicationNumber}&roles=Naib Tehsildar,Patwari_HQ,Patwari`, dataToSend).then((response) => {
+          return response.data;
+      });
+
+      console.log("RemarksSection", Resp);
+      setLoader(false);
+      setRemarksDataRevnue(Resp);
+  } catch (error) {
+    setLoader(false);
+      console.log(error);
+  }
+};
+////////////////////(5)Techinical Section ///////////////
+const handleTechinicalClick = async () =>{
+  setLoader(true);
+  console.log("logger1234...",applicationNumber)
+  const dataToSend = {
+      RequestInfo: {
+          apiId: "Rainmaker",
+          action: "_create",
+          did: 1,
+          key: "",
+          msgId: "20170310130900|en_IN",
+          ts: 0,
+          ver: ".01",
+          authToken: authToken,
+         
+      },
+  };
+  try {
+      const Resp = await axios.post(`/land-services/egscrutiny/_search4?applicationNumber=${applicationNumber}&roles=Personal Assistant,JD_HQ,PA,PA_HQ,JE,Assistant,JE_HQ`, dataToSend).then((response) => {
+          return response.data;
+      });
+
+      console.log("RemarksSection", Resp);
+      setLoader(false);
+      setRemarksDataTechinical(Resp);
+  } catch (error) {
+    setLoader(false);
+      console.log(error);
+  }
+};
+////////////////////(6)Main Section ///////////////
+const handleMainClick = async () =>{
+  setLoader(true);
+  console.log("logger1234...",applicationNumber)
+  const dataToSend = {
+      RequestInfo: {
+          apiId: "Rainmaker",
+          action: "_create",
+          did: 1,
+          key: "",
+          msgId: "20170310130900|en_IN",
+          ts: 0,
+          ver: ".01",
+          authToken: authToken,
+         
+      },
+  };
+  try {
+      const Resp = await axios.post(`/land-services/egscrutiny/_search4?applicationNumber=${applicationNumber}&roles=STPEnforcement Office HQ,DTP_HQ,DTP,ATP_HQ,ATP,STP_HQ,STP,CTP_HQ,CTP,DTCP_HQ`, dataToSend).then((response) => {
+          return response.data;
+      });
+
+      console.log("RemarksSection", Resp);
+      setLoader(false);
+      setRemarksDataMain(Resp);
+  } catch (error) {
+    setLoader(false);
+      console.log(error);
+  }
+};
+
+////////////////////(7)DTP Field Section ///////////////
+const handleDTPFieldClick = async () =>{
+  setLoader(true);
+  console.log("logger1234...",applicationNumber)
+  const dataToSend = {
+      RequestInfo: {
+          apiId: "Rainmaker",
+          action: "_create",
+          did: 1,
+          key: "",
+          msgId: "20170310130900|en_IN",
+          ts: 0,
+          ver: ".01",
+          authToken: authToken,
+         
+      },
+  };
+  try {
+      const Resp = await axios.post(`/land-services/egscrutiny/_search4?applicationNumber=${applicationNumber}&roles=DTP_FIELD,DTP Field,Patwari_FIELD,PATWARI Field,Patwari,PATWARI Circle,PATWARI,JE_FIELD,JD_FIELD,SD_FIELD,Z`, dataToSend).then((response) => {
+          return response.data;
+      });
+
+      console.log("RemarksSection", Resp);
+      setLoader(false);
+      setRemarksDataDTPField(Resp);
+  } catch (error) {
+    setLoader(false);
+      console.log(error);
+  }
+};
+////////////////////(8)STP Field Section ///////////////
+const handleSTPFieldClick = async () =>{
+  setLoader(true);
+  console.log("logger1234...",applicationNumber)
+  const dataToSend = {
+      RequestInfo: {
+          apiId: "Rainmaker",
+          action: "_create",
+          did: 1,
+          key: "",
+          msgId: "20170310130900|en_IN",
+          ts: 0,
+          ver: ".01",
+          authToken: authToken,
+         
+      },
+  };
+  try {
+      const Resp = await axios.post(`/land-services/egscrutiny/_search4?applicationNumber=${applicationNumber}&roles=STPEnforcement Office-Gurugram,STP Circle,STP_Circle,STP Office-Gurugram,STP Office-Faridabad,STP Office-Panchkula,STP Office-Rohtak,STP Office-Hisar,JE_HQ`, dataToSend).then((response) => {
+          return response.data;
+      });
+
+      console.log("RemarksSection", Resp);
+      setLoader(false);
+      setRemarksDataSTPField(Resp);
+  } catch (error) {
+    setLoader(false);
+      console.log(error);
+  }
+};
+////////////////////(9)External Section ///////////////
+const handleExternalClick = async () =>{
+  setLoader(true);
+  console.log("logger1234...",applicationNumber)
+  const dataToSend = {
+      RequestInfo: {
+          apiId: "Rainmaker",
+          action: "_create",
+          did: 1,
+          key: "",
+          msgId: "20170310130900|en_IN",
+          ts: 0,
+          ver: ".01",
+          authToken: authToken,
+         
+      },
+  };
+  try {
+      const Resp = await axios.post(`/land-services/egscrutiny/_search4?applicationNumber=${applicationNumber}&roles=LAO,HSIIDC,DFO,DUE,DC`, dataToSend).then((response) => {
+          return response.data;
+      });
+
+      console.log("RemarksSection", Resp);
+      setLoader(false);
+      setRemarksDataExternal(Resp);
+  } catch (error) {
+    setLoader(false);
+      console.log(error);
+  }
+};
+
+
+
+
+
+
+
 
 
 console.log("userInFODATA123" , userInfo);
 
   return (
     <div>
+      {loader && <Spinner></Spinner>}
       <div style={{ position: "relative", maxWidth: "100%", padding: 2 }}>
         <div>
           <div>
@@ -827,7 +1087,7 @@ console.log("userInFODATA123" , userInfo);
           <div>
             <div
             className="collapse-header"
-            onClick={() => setOpen2(!open2)}
+            onClick={() => setOpen2(!open2) }
             aria-controls="example-collapse-text"
             aria-expanded={open2}
             style={{
@@ -906,7 +1166,7 @@ console.log("userInFODATA123" , userInfo);
 
             <div
             className="collapse-header"
-            onClick={() => setOpen5(!open5)}
+            onClick={() => {setOpen5(!open5) , handleAccountClick()}}
             aria-controls="example-collapse-text"
             aria-expanded={open5}
             style={{
@@ -934,7 +1194,7 @@ console.log("userInFODATA123" , userInfo);
              >
       <div style={{ position: "relative", width: "100%", display: "flex", marginBottom: 2 }}>
      
-       <AccountSection remarkData={remarksData.egScrutiny !== undefined ? remarksData.egScrutiny : null}
+       <AccountSection remarkData={remarksDataAccount.egScrutiny !== undefined ? remarksDataAccount.egScrutiny : null}
       
        histeroyData={histeroyData}></AccountSection>
     
@@ -943,7 +1203,7 @@ console.log("userInFODATA123" , userInfo);
       </Collapse>
       <div
             className="collapse-header"
-            onClick={() => setOpen6(!open6)}
+            onClick={() => {setOpen6(!open6) , handleDrawingClick()}}
             aria-controls="example-collapse-text"
             aria-expanded={open6}
             style={{
@@ -970,7 +1230,7 @@ console.log("userInFODATA123" , userInfo);
             style={{ marginTop: 12, paddingLeft: 12, paddingRight: 12 }}
             >
        <div style={{ position: "relative", width: "100%", display: "flex", marginBottom: 2 }}>
-       <DrawingSection remarkData={remarksData.egScrutiny !== undefined ? remarksData.egScrutiny : null}
+       <DrawingSection remarkData={remarksDataDrawing.egScrutiny !== undefined ? remarksDataDrawing.egScrutiny : null}
       
        histeroyData={histeroyData}></DrawingSection>
     
@@ -981,7 +1241,7 @@ console.log("userInFODATA123" , userInfo);
 
       <div
             className="collapse-header"
-            onClick={() => setOpen7(!open7)}
+            onClick={() => {setOpen7(!open7) , handleLegalClick()}}
             aria-controls="example-collapse-text"
             aria-expanded={open7}
             style={{
@@ -1011,7 +1271,7 @@ console.log("userInFODATA123" , userInfo);
 
               
       <div style={{ position: "relative", width: "100%", display: "flex", marginBottom: 2 }}>
-       <LegalSection remarkData={remarksData.egScrutiny !== undefined ? remarksData.egScrutiny : null}
+       <LegalSection remarkData={remarksDataLegal.egScrutiny !== undefined ? remarksDataLegal.egScrutiny : null}
       
        histeroyData={histeroyData}></LegalSection>
     
@@ -1022,7 +1282,7 @@ console.log("userInFODATA123" , userInfo);
 
       <div
             className="collapse-header"
-            onClick={() => setOpen8(!open8)}
+            onClick={() => {setOpen8(!open8) , handleRevnueClick()}}
             aria-controls="example-collapse-text"
             aria-expanded={open8}
             style={{
@@ -1052,7 +1312,7 @@ console.log("userInFODATA123" , userInfo);
 
 
       <div style={{ position: "relative", width: "100%", display: "flex", marginBottom: 2 }}>
-       <RevnueSection remarkData={remarksData.egScrutiny !== undefined ? remarksData.egScrutiny : null}
+       <RevnueSection remarkData={remarksDataRevnue.egScrutiny !== undefined ? remarksDataRevnue.egScrutiny : null}
       
        histeroyData={histeroyData}></RevnueSection>
     
@@ -1063,7 +1323,7 @@ console.log("userInFODATA123" , userInfo);
 
       <div
             className="collapse-header"
-            onClick={() => setOpen9(!open9)}
+            onClick={() => {setOpen9(!open9) , handleTechinicalClick()}}
             aria-controls="example-collapse-text"
             aria-expanded={open9}
             style={{
@@ -1094,7 +1354,7 @@ console.log("userInFODATA123" , userInfo);
       
 
       <div style={{ position: "relative", width: "100%", display: "flex", marginBottom: 2 }}>
-       <TechinicalSection remarkData={remarksData.egScrutiny !== undefined ? remarksData.egScrutiny : null}
+       <TechinicalSection remarkData={remarksDataTechinical.egScrutiny !== undefined ? remarksDataTechinical.egScrutiny : null}
       
        histeroyData={histeroyData}></TechinicalSection>
     
@@ -1105,7 +1365,7 @@ console.log("userInFODATA123" , userInfo);
 
       <div
             className="collapse-header"
-            onClick={() => setOpen10(!open10)}
+            onClick={() => {setOpen10(!open10) , handleMainClick()}}
             aria-controls="example-collapse-text"
             aria-expanded={open10}
             style={{
@@ -1133,7 +1393,7 @@ console.log("userInFODATA123" , userInfo);
             >
      
       <div style={{ position: "relative", width: "100%", display: "flex", marginBottom: 2 }}>
-       <MainSection remarkData={remarksData.egScrutiny !== undefined ? remarksData.egScrutiny : null}
+       <MainSection remarkData={remarksDataMain.egScrutiny !== undefined ? remarksDataMain.egScrutiny : null}
       
        histeroyData={histeroyData}></MainSection>
     
@@ -1144,7 +1404,7 @@ console.log("userInFODATA123" , userInfo);
 
       <div
             className="collapse-header"
-            onClick={() => setOpen11(!open11)}
+            onClick={() => {setOpen11(!open11) , handleDTPFieldClick()}}
             aria-controls="example-collapse-text"
             aria-expanded={open11}
             style={{
@@ -1172,7 +1432,7 @@ console.log("userInFODATA123" , userInfo);
             >
       
       <div style={{ position: "relative", width: "100%", display: "flex", marginBottom: 2 }}>
-       <DTPFieldSection remarkData={remarksData.egScrutiny !== undefined ? remarksData.egScrutiny : null}
+       <DTPFieldSection remarkData={remarksDataDTPField.egScrutiny !== undefined ? remarksDataDTPField.egScrutiny : null}
       
        histeroyData={histeroyData}></DTPFieldSection>
     
@@ -1184,7 +1444,7 @@ console.log("userInFODATA123" , userInfo);
 
             <div
             className="collapse-header"
-            onClick={() => setOpen12(!open12)}
+            onClick={() => {setOpen12(!open12) , handleSTPFieldClick()}}
             aria-controls="example-collapse-text"
             aria-expanded={open12}
             style={{
@@ -1212,7 +1472,7 @@ console.log("userInFODATA123" , userInfo);
             >
    
       <div style={{ position: "relative", width: "100%", display: "flex", marginBottom: 2 }}>
-       <STPFieldSection remarkData={remarksData.egScrutiny !== undefined ? remarksData.egScrutiny : null}
+       <STPFieldSection remarkData={remarksDataSTPField.egScrutiny !== undefined ? remarksDataSTPField.egScrutiny : null}
       
        histeroyData={histeroyData}></STPFieldSection>
     
@@ -1267,7 +1527,7 @@ console.log("userInFODATA123" , userInfo);
 
       <div
             className="collapse-header"
-            onClick={() => setOpen14(!open14)}
+            onClick={() => {setOpen14(!open14) , handleExternalClick()}}
             aria-controls="example-collapse-text"
             aria-expanded={open14}
             style={{
@@ -1295,7 +1555,7 @@ console.log("userInFODATA123" , userInfo);
             >
     
       <div style={{ position: "relative", width: "100%", display: "flex", marginBottom: 2 }}>
-       <ExternalSection remarkData={remarksData.egScrutiny !== undefined ? remarksData.egScrutiny : null}
+       <ExternalSection remarkData={remarksDataExternal.egScrutiny !== undefined ? remarksDataExternal.egScrutiny : null}
       
        histeroyData={histeroyData}></ExternalSection>
     

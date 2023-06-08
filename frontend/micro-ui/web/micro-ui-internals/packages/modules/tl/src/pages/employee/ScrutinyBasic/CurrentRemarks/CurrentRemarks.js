@@ -1,4 +1,3 @@
-
 import React, { useContext, useEffect, useState } from "react";
 import { Row, Col, Card, Container, Form, Button } from "react-bootstrap";
 import axios from "axios";
@@ -13,9 +12,6 @@ import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
-
-// import Collapse from "react-bootstrap/Collapse";
-
 import {  Box,
   Collapse,
   } from "@mui/material";
@@ -40,8 +36,9 @@ const AccountSection = (props) => {
   const { id } = useParams();
   let user = Digit.UserService.getUser();
   const userRoles = user?.info?.roles?.map((e) => e.code);
-  const showRemarksSection = userRoles.includes("AO_HQ")
+  const showRemarksSection = userRoles.includes("DTCP_HR")
   const histeroyData = props.histeroyData
+
   const [open3, setOpen3] = useState(false);
 
   const [approval, setDisapproval] = useState(false);
@@ -49,16 +46,6 @@ const AccountSection = (props) => {
   const dateTime = new Date();
   const remarkDataResp = props.remarkData;
   const authToken = Digit.UserService.getUser()?.access_token || null;
-
-  if (remarkDataResp && remarkDataResp?.length) {
-    const tempArray = remarkDataResp.filter((ele) => ele.role === "AO")
-    console.log("log123DisAfhhfj", tempArray);
-    // setDisapprovedList(tempArray);
-  }
-
-
-
-
 
 
   const onAction = async (data, index, value) => {
@@ -209,12 +196,68 @@ const toggleshown4 = applicationStatus => {
   }
 }
 
-
-
-const getDataGri = (element, item) => {
+console.log("log123Disrenu" ,id);
   return (
-      <React.Fragment>
-           {remarkDataResp !== null ?  (
+    <Container
+      className="justify-content-center"
+      style={{
+        top: windowHeight * 0.3,
+        minWidth: "100%",
+        maxWidth: "100%",
+        maxHeight: "50%",
+        minHeight: "40%",
+        // marginTop: 5,
+      }}
+    >
+
+{/* <div
+            className="collapse-header"
+            onClick={() => setOpen3(!open3)}
+            aria-controls="example-collapse-text"
+            aria-expanded={open3}
+            style={{
+              background: "#f1f1f1",
+              padding: "0.25rem 1.25rem",
+              borderRadius: "0.25rem",
+              fontWeight: "600",
+              display: "flex",
+              cursor: "pointer",
+              color: "#817f7f",
+              justifyContent: "space-between",
+              alignContent: "center",
+            }}
+          >
+            <span style={{ color: "#817f7f", fontSize: 16 }} className="">
+              - Revnue Section 
+            
+            </span>
+            {open3 ? <RemoveIcon></RemoveIcon> : <AddIcon></AddIcon>}
+          </div>
+          <Collapse in={open3}>
+            <div id="example-collapse-text" style={{ marginTop: 12, paddingLeft: 12, paddingRight: 12 }}> */}
+
+
+
+
+      <Row class="remarkshelp">
+        <div 
+        class="currentremarks"
+         >
+          <div class="WhatsNewCard" style={{ backgroundColor: "#ddf2cf" }}>
+            <p class="text-center" ><h4>AccountSection</h4></p>
+            <Row>
+
+              <Col>
+                <b>Application Id.</b>
+                {id}
+              </Col>
+            </Row>
+           
+      
+            <div>
+              <Form.Group>
+               <div>
+               {remarkDataResp !== null ?  (
                       remarkDataResp?.map((el,  index) => {
                         return (
                           <div>
@@ -459,7 +502,7 @@ const getDataGri = (element, item) => {
 
                    
                                           
-                                         <p>
+                                         {/* <p>
                     <IconButton
                            onClick={() => toggleshown4(el.applicationStatus)}
                          >
@@ -472,11 +515,11 @@ const getDataGri = (element, item) => {
                            )}
                            
                          </IconButton>
-                         </p>
+                         </p> */}
                           
                               
                              
-                             {dataThree.includes(el.applicationStatus) && (  
+                             {/* {dataThree.includes(el.applicationStatus) && (  
                   <table colSpan = "2" className="table table-bordered" style={{ backgroundColor: "#ddf2cf" }}>
                     <thead>
 
@@ -538,9 +581,7 @@ const getDataGri = (element, item) => {
                               )}
                            </tbody>
                           </table>
-                          )} 
-
-
+                          )}  */}
                     
                         
                       <Row style={{ margin: 4 }}>
@@ -560,430 +601,6 @@ const getDataGri = (element, item) => {
                         </div>
       
                           </div>
-                        );
-                      })
-                    ) : (
-                      <p></p>
-                    )}
-
-      </React.Fragment>
-  )
-}
-
-
-
-
-
-
-
-console.log("log123Disrenu" ,id);
-  return (
-   
-    <Container
-      className="justify-content-center"
-      style={{
-        top: windowHeight * 0.3,
-        minWidth: "100%",
-        maxWidth: "100%",
-        maxHeight: "50%",
-        minHeight: "40%",
-        // marginTop: 5,
-      }}
-    >
-       {/* <div
-            className="collapse-header"
-            onClick={() => setOpen3(!open3)}
-            aria-controls="example-collapse-text"
-            aria-expanded={open3}
-            style={{
-              background: "#f1f1f1",
-              padding: "0.25rem 1.25rem",
-              borderRadius: "0.25rem",
-              fontWeight: "600",
-              display: "flex",
-              cursor: "pointer",
-              color: "#817f7f",
-              justifyContent: "space-between",
-              alignContent: "center",
-            }}
-          >
-            <span style={{ color: "#817f7f", fontSize: 16 }} className="">
-              - Account Section 
-           
-            </span>
-            {open3 ? <RemoveIcon></RemoveIcon> : <AddIcon></AddIcon>}
-          </div>
-          <Collapse in={open3}>
-            <div id="example-collapse-text" style={{ marginTop: 12, paddingLeft: 12, paddingRight: 12 }}> */}
-      <Row class="remarkshelp">
-        <div 
-        class="currentremarks"
-         >
-          <div class="WhatsNewCard" style={{ backgroundColor: "#ddf2cf" }}>
-            <p class="text-center" ><h4>Account Section</h4></p>
-            <Row>
-
-              <Col>
-                <b>Application Id.</b>
-                {id}
-              </Col>
-            </Row>
-           
-      
-            <div>
-              <Form.Group>
-               <div>
-               {remarkDataResp !== null ?  (
-                      remarkDataResp?.map((el,  index) => {
-                        return (
-                          
-                          <div>
-                            {el?.role === "AO_HQ" && (
-                              <div>
-                            <p> 
-                 <IconButton
-                    onClick={() => toggleshown1(el.employeeName)}
-                  >
-                    {data.includes(index)?(
-                      <KeyboardArrowUpIcon />  
-                    ) : (
-                     <p><KeyboardArrowUpIcon /><b>{el.role}</b></p>   
-                      
-                    )}
-                   
-                  </IconButton>
-                 
-                  </p>
-                 
-                   <div className="additional-info">
-                   {data.includes(el.role) && (
-                    <Box >
-                     
-                    <p>
-                    <IconButton
-                           onClick={() => toggleshown(el.userID)}
-                         >
-                           {datailsShown.includes(index)? (
-                           
-                              <KeyboardArrowUpIcon /> 
-                            ) : (
-                           <p><KeyboardArrowDownIcon /><b style={{ color: "#ff0000" }}>{el.disApprovedfiledDetails?.[0]?.isApproved}</b></p>
-                          
-                           )}
-                           
-                         </IconButton>
-                         </p>
-                          
-                              
-                             
-                             {datailsShown.includes(el.userID) && (  
-                  <table colSpan = "2" className="table table-bordered" style={{ backgroundColor: "#ddf2cf" }}>
-                    <thead>
-
-                      <tr className="border-bottom-0">
-                        <th class="fw-normal pb-0 border-bottom-0 align-top">
-                          Sr.No
-                        </th>
-                        <th class="fw-normal pb-0 border-bottom-0 align-top">
-                          Filed Name
-                        </th>
-                        <th class="fw-normal pb-0 border-bottom-0 align-top">
-                          Filed value
-                        </th>
-                        <th class="fw-normal pb-0 border-bottom-0 align-top">
-                          Status
-                        </th>
-
-                        <th class="fw-normal pb-0 border-bottom-0 align-top">
-                          Remarks
-                        </th>
-                      </tr>
-                      <tr>
-
-                      </tr>
-
-
-                    </thead>
-                     <tbody>
-                 
-                     {el?.disApprovedfiledDetails !== null ? (
-           el?.disApprovedfiledDetails?.map((el, i) => {
-                      return (
-                    
-                           <tr >
-
-                                <td>
-                                  {i + 1}
-                                </td>
-                                <td>
-                                  <b>{el.name}</b>
-                                </td>
-                                <td>
-                                  <b>{el.value}</b>
-                                </td>
-
-                                <td>
-                                  <b>{el.isApproved}</b>
-                                </td>
-                                <td>
-                              
-                                  <i>{<div dangerouslySetInnerHTML={{__html: el.remarks}}/>}</i>
-                                </td>
-
-                              </tr>
-                                 );
-                                })
-                              ) : (
-                                <p></p>
-                              )}
-                           </tbody>
-                          </table>
-                          )}  
-                   <p> 
-                        <IconButton
-                           onClick={() => toggleshown3(el.designation)}
-                         >
-                           {dataFrist.includes(index)? (
-                             <KeyboardArrowUpIcon /> 
-                           ) : (
-                             <p><KeyboardArrowDownIcon /><b style={{ color: "#2874A6"}}>{el.condApprovedfiledDetails?.[0]?.isApproved}</b></p>
-                           )}
-                         
-                         </IconButton>
-                         </p>
-                         {dataFrist.includes(el.designation) && (      
-                                <table colSpan = "3" className="table table-bordered" style={{ backgroundColor: "#ddf2cf" }}>
-                                  <thead>
-              
-                                    <tr className="border-bottom-0">
-                                      <th class="fw-normal pb-0 border-bottom-0 align-top">
-                                        Sr.No
-                                      </th>
-                                      <th class="fw-normal pb-0 border-bottom-0 align-top">
-                                        Filed Name
-                                      </th>
-                                      <th class="fw-normal pb-0 border-bottom-0 align-top">
-                                        Filed value
-                                      </th>
-                                      <th class="fw-normal pb-0 border-bottom-0 align-top">
-                                        Status
-                                      </th>
-              
-                                      <th class="fw-normal pb-0 border-bottom-0 align-top">
-                                        Remarks
-                                      </th>
-                                    </tr>
-                                    <tr>
-              
-                                    </tr>
-              
-              
-                                  </thead>
-                                   <tbody>
-                                   {el?.condApprovedfiledDetails.map((el, i) => (
-                                         <tr >
-              
-                                              <td>
-                                                {i + 1}
-                                              </td>
-                                              <td>
-                                                <b>{el.name}</b>
-                                              </td>
-                                              <td>
-                                                <b>{el.value}</b>
-                                              </td>
-              
-                                              <td>
-                                                <b>{el.isApproved}</b>
-                                              </td>
-                                              <td>
-                                          
-                                                <i>{<div dangerouslySetInnerHTML={{__html: el.remarks}}/>}</i>
-                                              </td>
-              
-                                            </tr>
-                                               ))
-                                              }
-                                         </tbody>
-                                      
-                                        </table>
-                              )}     
-           <p> 
-                                     <IconButton
-                           onClick={() => toggleshown2(el.role)}
-                         >
-                           {dataTwo.includes(index)? (
-                             <KeyboardArrowUpIcon /> 
-                           ) : (
-                            <p><KeyboardArrowDownIcon /><b style={{ color: "#09cb3d" }}>{el.approvedfiledDetails?.[0]?.isApproved}</b></p>
-                           )}
-                           
-                         </IconButton>
-                         </p>
-                              
-                              
-                              {dataTwo.includes(el.role) && ( 
-                                <table colSpan = "4" className="table table-bordered" style={{ backgroundColor: "#ddf2cf" }}>
-                                  <thead>
-              
-                                    <tr className="border-bottom-0">
-                                      <th class="fw-normal pb-0 border-bottom-0 align-top">
-                                        Sr.No
-                                      </th>
-                                      <th class="fw-normal pb-0 border-bottom-0 align-top">
-                                        Filed Name
-                                      </th>
-                                      <th class="fw-normal pb-0 border-bottom-0 align-top">
-                                        Filed value
-                                      </th>
-                                      <th class="fw-normal pb-0 border-bottom-0 align-top">
-                                        Status
-                                      </th>
-              
-                                      <th class="fw-normal pb-0 border-bottom-0 align-top">
-                                        Remarks
-                                      </th>
-                                    </tr>
-                                    <tr>
-              
-                                    </tr>
-              
-              
-                                  </thead>
-                                   <tbody>
-                                   {el?.approvedfiledDetails.map((el, i) => (
-                                         <tr >
-              
-                                              <td>
-                                                {i + 1}
-                                              </td>
-                                              <td>
-                                                <b>{el.name}</b>
-                                              </td>
-                                              <td>
-                                                <b>{el.value}</b>
-                                              </td>
-              
-                                              <td>
-                                                <b>{el.isApproved}</b>
-                                              </td>
-                                              <td>
-                                                
-                                                <i>{<div dangerouslySetInnerHTML={{__html: el.remarks}}/>}</i>
-                                              </td>
-              
-                                            </tr>
-                                              ))
-                                            }
-                                         </tbody>
-                                        </table>
-                                         )}   
-
-                   
-                                          
-                                         <p>
-                    <IconButton
-                           onClick={() => toggleshown4(el.applicationStatus)}
-                         >
-                           {dataThree.includes(index)? (
-                           
-                              <KeyboardArrowUpIcon /> 
-                            ) : (
-                           <p><KeyboardArrowDownIcon /><b style={{ color: "#ff0000" }}>{el.performaFieldDetail?.[0]?.isApproved}</b></p>
-                          
-                           )}
-                           
-                         </IconButton>
-                         </p>
-                          
-                              
-                             
-                             {dataThree.includes(el.applicationStatus) && (  
-                  <table colSpan = "2" className="table table-bordered" style={{ backgroundColor: "#ddf2cf" }}>
-                    <thead>
-
-                      <tr className="border-bottom-0">
-                        <th class="fw-normal pb-0 border-bottom-0 align-top">
-                          Sr.No
-                        </th>
-                        <th class="fw-normal pb-0 border-bottom-0 align-top">
-                          Filed Name
-                        </th>
-                        <th class="fw-normal pb-0 border-bottom-0 align-top">
-                          Filed value
-                        </th>
-                        <th class="fw-normal pb-0 border-bottom-0 align-top">
-                          Status
-                        </th>
-
-                        <th class="fw-normal pb-0 border-bottom-0 align-top">
-                          Remarks
-                        </th>
-                      </tr>
-                      <tr>
-
-                      </tr>
-
-
-                    </thead>
-                     <tbody>
-                 
-                     {el?.performaFieldDetail !== null ? (
-           el?.performaFieldDetail?.map((el, i) => {
-                      return (
-                    
-                           <tr >
-
-                                <td>
-                                  {i + 1}
-                                </td>
-                                <td>
-                                  <b>{el.name}</b>
-                                </td>
-                                <td>
-                                  <b>{el.value}</b>
-                                </td>
-
-                                <td>
-                                  <b>{el.isApproved}</b>
-                                </td>
-                                <td>
-                               
-                                  <i>{<div dangerouslySetInnerHTML={{__html: el.remarks}}/>}</i>
-                                </td>
-
-                              </tr>
-                                 );
-                                })
-                              ) : (
-                                <p></p>
-                              )}
-                           </tbody>
-                          </table>
-                          )} 
-
-
-                    
-                        
-                      <Row style={{ margin: 4 }}>
-                      <b style={{ textAlign: "right", marginRight: 2 }}>{el.designation}</b>
-                     <b style={{ textAlign: "right" }}>{el.employeeName}</b>
-                     </Row>
-                     <Row style={{ margin: 4 }}>
-
-                     <b style={{ textAlign: "right" }}>{el.createdOn}</b>
-                     <b style={{ textAlign: "right" }}>
-             
-                   </b>
-                    </Row>
-                      </Box>
-                     )}
-                        
-                        </div>
-                        </div>
-                       ) }
-                          </div>
-                              
                         );
                       })
                     ) : (
@@ -1005,9 +622,7 @@ console.log("log123Disrenu" ,id);
 
         </div>
 
-{/*   {el.role?.find((item, index) => (item.role === "Patwari"))?getDataGri(item.employees?.find((item, index) => (item.role === "Patwari")),item): <td></td>
-
-                                        }
+{/* 
         <div 
         class="currentremarks"
          >
@@ -1066,6 +681,8 @@ console.log("log123Disrenu" ,id);
 
 
         </Row>
+        {/* </div>
+        </Collapse> */}
         {/* <Row>
 
         <div class="histroryremarks">
@@ -1121,12 +738,12 @@ console.log("log123Disrenu" ,id);
       </Row> */}
 
 
-{/* </div>
-</Collapse> */}
+    
+      <br>
+      </br>
+
+
     </Container>
- 
-    
-    
   );
 };
 
