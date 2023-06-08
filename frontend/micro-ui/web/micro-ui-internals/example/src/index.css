@@ -4832,6 +4832,33 @@ body {
   }
 }
 
+@media (max-width: 1146px) {
+  .ServiceCardCaption h3 {
+    font-size: 15px;
+  }
+  .links-redirect {
+    margin-top: 20px;
+  }
+  .links-redirect a {
+    font-size: 12px;
+  }
+}
+
+@media (max-width: 1009px) {
+  .ServiceCardCaption {
+    margin-top: 26px;
+  }
+  .ServiceCardCaption h3 {
+    font-size: 12px;
+  }
+  .links-redirect {
+    margin-top: 10px;
+  }
+  .links-redirect a {
+    font-size: 12px;
+  }
+}
+
 .WhatsNewCard {
   border-radius: .25rem;
   --bg-opacity: 1;
