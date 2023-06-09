@@ -212,7 +212,7 @@ console.log("log123Disrenu" ,id);
       }}
     >
 
-<div
+{/* <div
             className="collapse-header"
             onClick={() => setOpen3(!open3)}
             aria-controls="example-collapse-text"
@@ -235,7 +235,7 @@ console.log("log123Disrenu" ,id);
             </span>
             {open3 ? <RemoveIcon></RemoveIcon> : <AddIcon></AddIcon>}
           </div>
-          <Collapse in={open3}>
+          <Collapse in={open3}> */}
             <div id="example-collapse-text" style={{ marginTop: 12, paddingLeft: 12, paddingRight: 12 }}>
       <Row class="remarkshelp">
         <div 
@@ -681,7 +681,7 @@ console.log("log123Disrenu" ,id);
         </Row>
 
 </div>
-</Collapse>
+{/* </Collapse> */}
 
         {/* <Row>
 

@@ -109,6 +109,7 @@ const {remarksData,notingRemarksData,iconStates,rolesDate,handleRoles,handleGetF
   const [open13, setOpen13] = useState(false);
   const [open14, setOpen14] = useState(false);
   const [open15, setOpen15] = useState(false);
+  const [open16, setOpen16] = useState(false);
   // const [open6, setOpen6] = useState(false);
   // const [open6, setOpen6] = useState(false);
   // const [apiResponse, setApiResponse] = useState({});
@@ -964,6 +965,32 @@ console.log("userInFODATA123" , userInfo);
   return (
     <div>
       {loader && <Spinner></Spinner>}
+
+      <div>
+            <div
+            className="collapse-header"
+            onClick={() => setOpen4(!open4) }
+            aria-controls="example-collapse-text"
+            aria-expanded={open4}
+            style={{
+              background: "#f1f1f1",
+              padding: "0.25rem 1.25rem",
+              borderRadius: "0.25rem",
+              fontWeight: "600",
+              display: "flex",
+              cursor: "pointer",
+              color: "#817f7f",
+              justifyContent: "space-between",
+              alignContent: "center",
+            }}
+          >
+            <span style={{ color: "#817f7f", fontSize: 16 }} className="">
+           Application Form  
+              
+            </span>
+            {open4 ? <RemoveIcon></RemoveIcon> : <AddIcon></AddIcon>}
+          </div>
+          <Collapse in={open4}>
       <div style={{ position: "relative", maxWidth: "100%", padding: 2 }}>
         <div>
           <div>
@@ -1041,48 +1068,36 @@ console.log("userInFODATA123" , userInfo);
           </div>
           </div>
           </div>
-          {/* <div>
-            <AdditionalDocument
-            additionalDocRespon={additionalDocResponData}
-           
-            >
-              
-            </AdditionalDocument>
-          </div> */}
-
-          {/* <div>
-            <ProformForRevenu></ProformForRevenu>
+          </Collapse>
           </div>
+
+
           <div>
-          <RadioButtonsGroup
-             apiResponseData ={applicationimp}
-             applicationStatus={applicationStatus}
-             dataMDMS = {dataMDMS}
+            <div
+            className="collapse-header"
+            onClick={() => setOpen16(!open16) }
+            aria-controls="example-collapse-text"
+            aria-expanded={open16}
+            style={{
+              background: "#E9E5DE",
+              padding: "0.25rem 1.25rem",
+              borderRadius: "0.25rem",
+              fontWeight: "600",
+              display: "flex",
+              cursor: "pointer",
+              color: "#817f7f",
+              justifyContent: "space-between",
+              alignContent: "center",
+            }}
           >
-      </RadioButtonsGroup>
+            <span style={{ color: "#817f7f", fontSize: 16 }} className="">
+           Action Part  
+              
+            </span>
+            {open16 ? <RemoveIcon></RemoveIcon> : <AddIcon></AddIcon>}
           </div>
-          <div>
-          <IndeterminateCheckbox>
-      </IndeterminateCheckbox>
-          </div>
-          <div>
-          <ProformaForlegalBranch>
-      </ProformaForlegalBranch>
-          </div>
-          <div>
-          <DrawingBranch>
-      </DrawingBranch>
-          </div> */}
-         
-          {/* <div>
-          <ProformaPatwari
-           apiResponseData ={applicationimp}
-           applicationStatus={applicationStatus}
+          <Collapse in={open16}>
 
-           >
-           
-      </ProformaPatwari>
-          </div> */}
           <div  style={{ position: "relative", maxWidth: "100%", padding: 2 }}>
           <div>
             <div
@@ -1738,6 +1753,8 @@ console.log("userInFODATA123" , userInfo);
       </Collapse> */}
 
 
+    </div>
+    </Collapse>
     </div>
     </div>
   );
