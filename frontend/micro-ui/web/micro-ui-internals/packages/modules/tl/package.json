@@ -1,6 +1,6 @@
 {
   "name": "@egovernments/digit-ui-module-tl",
-  "version": "1.7.0-beta.1",
+  "version": "1.7.0-beta.2",
   "license": "MIT",
   "main": "dist/index.js",
   "module": "dist/index.modern.js",
