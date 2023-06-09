@@ -11,7 +11,7 @@ import {
   Toast,
   Loader,
 } from "@egovernments/digit-ui-react-components";
-import { TextField } from "@material-ui/core";
+import { FormHelperText, TextField } from "@material-ui/core";
 import React, { useEffect, useState, useMemo } from "react";
 import { render } from "react-dom";
 import { useTranslation } from "react-i18next";
@@ -19,6 +19,8 @@ import { Link, useHistory, useParams } from "react-router-dom";
 import Timeline from "../components/Timeline";
 import { stringReplaceAll } from "../utils";
 import { fromUnixTime, format } from 'date-fns';
+import { Button } from "bootstrap";
+import { useForm } from "react-hook-form";
 
 const ScrutinyDetails = ({ onSelect, userType, formData, config }) => {
   const { t } = useTranslation();
@@ -37,7 +39,8 @@ const ScrutinyDetails = ({ onSelect, userType, formData, config }) => {
   const { data, isLoading, refetch } = Digit.Hooks.obps.useScrutinyDetails(tenantId, formData?.data?.scrutinyNumber, {
     enabled: true,
   });
-
+  const [floors, setFloors] = useState([0])
+  const {register,watch,setValue,getValues,handleSubmit,formState: { errors },} = useForm();
 
   function getFloorData(block) {
     let floors = [];
@@ -221,12 +224,22 @@ const ScrutinyDetails = ({ onSelect, userType, formData, config }) => {
     return returnValue ? returnValue : "NA";
   }
 
+  const deleteFloor = (index) => {
+    let tempArray = floors;
+    tempArray.splice(index,1);
+    setFloors([...tempArray]);
+  }
+
+  const addFloor = () => {
+    setFloors([...floors, floors.length]);
+  }
+
   if (isMdmsLoading) return <Loader />
 
   return (
     <React.Fragment>
       <Timeline currentStep={checkingFlow === "OCBPA" ? 2 : 1} flow={checkingFlow === "OCBPA" ? "OCBPA" : ""} />
-      <FormStep t={t} config={config} onSelect={goNext} onSkip={onSkip} /* isDisabled={Object.keys(subOccupancyObject).length === 0} */>
+      <FormStep t={t} config={config} onSelect={handleSubmit(goNext)} onSkip={onSkip} /* isDisabled={Object.keys(subOccupancyObject).length === 0} */>
 
         <CardSubHeader style={{ fontSize: "20px" }}>{t(`BPA_BASIC_DETAILS_TITLE`)}</CardSubHeader>
         <StatusTable>
@@ -293,6 +306,42 @@ const ScrutinyDetails = ({ onSelect, userType, formData, config }) => {
             text={data?.planDetail?.blocks?.[0]?.building?.totalFloorArea}
           ></Row>
 
+
+          <div className="d-flex justify-content-end ">
+            <button type="button" className="btn btn-primary" onClick={addFloor}>Add Floor</button>
+          </div>
+
+          {
+            floors.map((item, index) => (
+              <div className="row mb-1 mt-2">
+                <select placeholder={t("Number of Floor")} className="form-control col-10" >
+                  <option value={"Ground Floor"}>Ground Floor</option>
+                  <option value={"First Floor"}>First Floor</option>
+                  <option value={"Second Floor"}>Second Floor</option>
+                  <option value={"Third Floor"}>Third Floor</option>
+                </select>
+
+                <div className="col-1">
+                  <button type="button" className="btn btn-danger" onClick={()=>deleteFloor(index)}>Remove</button>
+                  </div>
+
+                  <input className="form-control w-100 col-12" placeholder={t("BPA_SCRUTINY_DETAILS_FLOOR_WISE_COVERAGE_AREA")} {...register("floorWiseCoverageArea"+index+1, {
+                      minLength:{
+                        value:2,
+                        message:"Invalid Value"
+                      },
+                      maxLength:{
+                        value:10,
+                        message:"Invalid Value"
+                      },
+                      required: "Fields can't be blank",
+                    })}/>
+                    <FormHelperText error={Boolean(errors?.["floorWiseCoverageArea"+index+1])}>{errors?.["floorWiseCoverageArea"+index+1]?.message}</FormHelperText>
+
+              </div>
+            ))
+          }
+          
           <Row
             className="border-none"
             label={t("BPA_HEIGHT_FROM_GROUND_LEVEL_FROM_MUMTY")}
@@ -351,12 +400,41 @@ const ScrutinyDetails = ({ onSelect, userType, formData, config }) => {
           ></Row>
 
           <Row
+            className="border-none"
+            label={t("BPA_SCRUTINY_SIDE2_LABEL")}
+            text={data?.planDetail?.blocks?.[0]?.building?.totalFloorArea}
+          ></Row>
+
+          <Row
             className="border-none mt-4"
             label={t("BPA_BASEMENT_POSITION")}
           ></Row>
 
-          <input className="form-control w-100 p-2 mb-2" type="number" placeholder="Distance from left side" />
-          <input className="form-control w-100 p-2 mb-2" type="number" placeholder="Distance from right side" />
+          <input className="form-control w-100 p-2 mb-2" type="number" placeholder="Distance from left side" {...register("distanceFromLeftSide", {
+                      minLength:{
+                        value:1,
+                        message:"Invalid Value"
+                      },
+                      maxLength:{
+                        value:10,
+                        message:"Invalid Value"
+                      },
+                      required: "Fields can't be blank",
+                    })}/>
+                    <FormHelperText error={Boolean(errors?.["distanceFromLeftSide"])}>{errors?.["distanceFromLeftSide"]?.message}</FormHelperText>
+                    
+          <input className="form-control w-100 p-2 mb-2" type="number" placeholder="Distance from right side" {...register("distanceFromRightSide", {
+                      minLength:{
+                        value:1,
+                        message:"Invalid Value"
+                      },
+                      maxLength:{
+                        value:10,
+                        message:"Invalid Value"
+                      },
+                      required: "Fields can't be blank",
+                    })}/>
+                    <FormHelperText error={Boolean(errors?.["distanceFromRightSide"])}>{errors?.["distanceFromRightSide"]?.message}</FormHelperText>
 
           {/* <TextField variant="outlined" label={"Distance from left side"}/>
             <TextField variant="outlined" label={"Distance from right side"}/> */}

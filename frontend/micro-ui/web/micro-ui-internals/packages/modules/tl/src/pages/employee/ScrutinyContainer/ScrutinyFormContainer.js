@@ -12,6 +12,7 @@ import ActionModal from "../../../../../templates/ApplicationDetails/Modal";
 import { ScrutinyRemarksContext } from "../../../../context/remarks-data-context";
 import jsPDF from 'jspdf'
 import ScrutitnyForms from "../ScrutinyBasic/ScutinyBasic";
+import Spinner from "../../../components/Loader";
 
 
 
@@ -30,7 +31,7 @@ const ScrutinyFormcontainer = (props) => {
   const state = Digit.ULBService.getStateId();
   const { t } = useTranslation();
   const history = useHistory();
-
+  const [loader, setLoader] = useState(false);
   const [displayMenu, setDisplayMenu] = useState(false);
   const [selectedAction, setSelectedAction] = useState(null);
   const [showModal, setShowModal] = useState(false);
@@ -75,6 +76,7 @@ const ScrutinyFormcontainer = (props) => {
  
 
   const handleshow19 = async (e) => {
+    setLoader(true);
     const payload = {
 
       "RequestInfo": {
@@ -106,14 +108,16 @@ const ScrutinyFormcontainer = (props) => {
     window.open(pdfUrl);
 
     console.log("logger123456...", pdfBlob, pdfUrl);
-
+    setLoader(false);
   };
   const handleChange = (e) => {
+    
     this.setState({ isRadioSelected: true });
   };
 
 
   const getScrutinyData = async () => {
+    setLoader(true);
     console.log("log123... userInfo", authToken);
     let requestInfo = {
       "RequestInfo": {
@@ -131,6 +135,7 @@ const ScrutinyFormcontainer = (props) => {
       const Resp = await axios.post(`/tl-services/v1/_search?tenantId=hr&applicationNumber=${id}`, requestInfo).then((response) => {
         return response?.data;
       });
+      setLoader(false);
       console.log("Response From API1", Resp, Resp?.Licenses[0]?.applicationNumber, Resp?.Licenses[0]?.tradeLicenseDetail?.additionalDetail[0]);
       setScrutinyDetails(Resp?.Licenses[0]?.tradeLicenseDetail?.additionalDetail[0]);
 
@@ -257,14 +262,14 @@ const ScrutinyFormcontainer = (props) => {
                   "filter":`[?(${query})]`,
   
               },
-              // {
-              //   "name": "PerformaNewLicence",
-              //   "filter": `[?(@.applicationStatus =='${Resp?.Licenses[0]?.status}')]`
-              // }
               {
                 "name": "PerformaNewLicence",
-                "filter": `[?(@.applicationStatus =='PENDING_AT_PATWARI_HQ_PRELIM')]`
+                "filter": `[?(@.applicationStatus =='${Resp?.Licenses[0]?.status}')]`
               }
+              // {
+              //   "name": "PerformaNewLicence",
+              //   "filter": `[?(@.applicationStatus =='PENDING_AT_PATWARI_HQ_PRELIM')]`
+              // }
              
               ]
             }
@@ -519,7 +524,7 @@ const ScrutinyFormcontainer = (props) => {
       });
     }
     if (data.Licenses[0].action === "APPROVED_WITH_LOI") {
-
+      setLoader(true);
       let requesttoloi = {
         "RequestInfo": {
           "apiId": "Rainmaker",
@@ -534,8 +539,9 @@ const ScrutinyFormcontainer = (props) => {
         });
         console.log("AfterLoiUpdate", Resp, Resp?.Licenses);
 
-
+        setLoader(false);
       } catch (error) {
+        setLoader(false);
         console.log(error);
       }
 
@@ -567,12 +573,13 @@ const ScrutinyFormcontainer = (props) => {
           return response?.data;
         });
         // setApplicationData(Resp?.Licenses[0]);
+        setLoader(false);
         SetLastUpdate(Resp?.Licenses[0]);
         console.log("updateLicenses", Resp?.Licenses[0]?.tcpLoiNumber);
 
       } catch (error) {
         console.log(error);
-
+        setLoader(false);
       }
     // }
 
@@ -650,6 +657,7 @@ const ScrutinyFormcontainer = (props) => {
   console.log("meri update34", lastUpdate)
   return (
     <Card className="formColorEmp">
+      {loader && <Spinner></Spinner>}
     <Card className="head-application">
       <div className="row fw-normal">
           <div className="col-sm-2">

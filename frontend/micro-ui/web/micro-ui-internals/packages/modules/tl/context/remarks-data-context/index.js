@@ -10,6 +10,7 @@ const ScrutinyRemarksContext = createContext();
 const ScrutinyRemarksProvider = ({ children }) => {
 
     const [remarksData, setRemarksData] = useState({});
+    const [notingRemarksData, setNotingRemarksData] = useState({});
     const [iconStates,setIconState]= useState(null);
     const [rolesDate,setRolesData]= useState(null);
     const [bussinessService , setBusinessService] = useState("");
@@ -45,7 +46,33 @@ const ScrutinyRemarksProvider = ({ children }) => {
             console.log(error);
         }
     };
+    
+    const handleGetNotingRemarkssValues = async (applicationNumber) => {
+        console.log("logger1234...",applicationNumber)
+        const dataToSend = {
+            RequestInfo: {
+                apiId: "Rainmaker",
+                action: "_create",
+                did: 1,
+                key: "",
+                msgId: "20170310130900|en_IN",
+                ts: 0,
+                ver: ".01",
+                authToken: authToken,
+               
+            },
+        };
+        try {
+            const Resp = await axios.post(`/land-services/egscrutiny/_search5?applicationNumber=${applicationNumber}`, dataToSend).then((response) => {
+                return response.data;
+            });
 
+            console.log("Response From API", Resp);
+            setNotingRemarksData(Resp);
+        } catch (error) {
+            console.log(error);
+        }
+    };
 
     const handleGetFiledsStatesById=async(applicationNumber)=>{
         console.log("logger123...",applicationNumber)
@@ -107,7 +134,7 @@ const ScrutinyRemarksProvider = ({ children }) => {
 
 
     return (
-        <ScrutinyRemarksContext.Provider value={{remarksData,iconStates,rolesDate,handleRoles,handleGetFiledsStatesById,handleGetRemarkssValues,bussinessService,setBusinessService}}>
+        <ScrutinyRemarksContext.Provider value={{remarksData,notingRemarksData,iconStates,rolesDate,handleRoles,handleGetFiledsStatesById,handleGetRemarkssValues,handleGetNotingRemarkssValues ,bussinessService,setBusinessService}}>
             {children}
         </ScrutinyRemarksContext.Provider>
     )

@@ -176,11 +176,11 @@ const SearchApplication = ({ onSearch, type, onClose, searchFields, searchParams
                       submit
                     />
                   )}
-                  {type === "desktop" && !mobileView && (
+                  {/* {type === "desktop" && !mobileView && (
                     <span style={{ paddingTop: "9px" }} className="clear-search">
                       {clearAll()}
                     </span>
-                  )}
+                  )} */}
                 </div>
               )}
             </div>
