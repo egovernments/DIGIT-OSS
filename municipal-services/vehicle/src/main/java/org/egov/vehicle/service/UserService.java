@@ -69,7 +69,7 @@ public class UserService {
 			userDetailResponse = userExists(owner);
 
 			if (userDetailResponse != null && !CollectionUtils.isEmpty(userDetailResponse.getUser())) {
-				owner = userDetailResponse.getUser().get(0);
+// 				owner = userDetailResponse.getUser().get(0);
 				Integer count = repository.getVehicleCount(vehicleRequest, "ACTIVE");
 
 				for (int i = 0; i < userDetailResponse.getUser().size(); i++) {
