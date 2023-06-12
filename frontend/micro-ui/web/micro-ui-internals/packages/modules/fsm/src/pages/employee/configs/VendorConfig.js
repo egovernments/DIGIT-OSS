@@ -166,7 +166,7 @@ const VendorConfig = (t, disabled = false) => {
         },
         {
           route: "address",
-          component: "SelectAddress",
+          component: "FSMSelectAddress",
           withoutLabel: true,
           texts: {
             headerCaption: "CS_FILE_APPLICATION_PROPERTY_LOCATION_LABEL",
