@@ -44,6 +44,7 @@ const getTradeDetails = (application, t) => {
   return {
     title: t("TL_COMMON_TR_DETAILS"),
     values: [
+      { title: t("TL_HOME_SEARCH_RESULTS_APP_NO_LABEL"), value: application?.applicationNumber || t("CS_NA") },
       { title: t("TL_APPLICATION_TYPE"), value: t(`TRADELICENSE_APPLICATIONTYPE_${application?.applicationType}`) || t("CS_NA") },
       { title: t("TL_NEW_TRADE_DETAILS_LIC_TYPE_LABEL"), value: application?.licenseType ? t(`TRADELICENSE_LICENSETYPE_${application?.licenseType}`) : t("CS_NA") },
       { title: t("TL_COMMON_TABLE_COL_TRD_NAME"), value: application?.tradeName || t("CS_NA") },
