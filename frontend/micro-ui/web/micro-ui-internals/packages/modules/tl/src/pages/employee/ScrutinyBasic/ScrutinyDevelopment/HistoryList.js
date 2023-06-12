@@ -1,4 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
+import ReactDOM from "react-dom/client";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { Row, Col, Card, Container, Form, Button } from "react-bootstrap";
 import axios from "axios";
 import { ScrutinyRemarksContext } from "../../../../../context/remarks-data-context";
