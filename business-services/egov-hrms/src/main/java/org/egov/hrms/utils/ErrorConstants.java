@@ -199,4 +199,8 @@ public class ErrorConstants {
 	public static final String HRMS_INVALID_SEARCH_CITIZEN_CODE = "ERR_HRMS_INVALID_SEARCH_CITIZEN";
 	public static final String HRMS_INVALID_SEARCH_CITIZEN_MSG = "Citizen are not allowed to access employee search with Ids.";
 
+	public static final String HRMS_PASSWORD_REQUIRED = "ERR_HRMS_PASSWORD_REQUIRED";
+
+	public static final String HRMS_PASSWORD_REQUIRED_MSG = "Password is required";
+
 }

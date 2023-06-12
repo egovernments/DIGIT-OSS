@@ -7,6 +7,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.egov.hrms.model.Role;
 import org.egov.hrms.model.enums.GuardianRelation;
 import org.springframework.validation.annotation.Validated;
@@ -29,6 +30,9 @@ import lombok.ToString;
 @Setter
 @ToString
 @Builder
+@JsonIgnoreProperties(
+        ignoreUnknown = true
+)
 public class User {
 	
     @JsonProperty("id")
@@ -37,6 +41,10 @@ public class User {
     @Size(max=64)
     @JsonProperty("uuid")
     private String uuid;
+
+    @Size(max=64)
+    @JsonProperty("userServiceUuid")
+    private String userServiceUuid;
 
     @Size(max=180)
     @JsonProperty("userName")
@@ -172,6 +180,9 @@ public class User {
     @Size(max=256)
     @JsonProperty("tenantId")
     private String tenantId;
+
+    @JsonProperty("rowVersion")
+    private Integer rowVersion;
     
 
 }

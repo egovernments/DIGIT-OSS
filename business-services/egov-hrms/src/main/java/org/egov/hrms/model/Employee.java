@@ -90,8 +90,6 @@ public class Employee {
 
 
     @Valid
-    @NotEmpty
-    @Size(min = 1)
     private List<Assignment> assignments = new ArrayList<>();
 
     @Valid
