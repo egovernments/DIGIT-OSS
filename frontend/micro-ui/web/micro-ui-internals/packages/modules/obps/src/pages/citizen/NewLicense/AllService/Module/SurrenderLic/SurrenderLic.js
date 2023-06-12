@@ -1,18 +1,18 @@
 import React, { useEffect, useState } from "react";
-import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, InputLabel } from "@material-ui/core";
-import FormControl from "@mui/material/FormControl";
 import { useForm } from "react-hook-form";
-import Spinner from "../../../../../../components/Loader";
 import axios from "axios";
-import CusToaster from "../../../../../../components/Toaster";
 import { useTranslation } from "react-i18next";
 import { useLocation } from "react-router-dom";
-import ReactMultiSelect from "../../../../../../../../../react-components/src/atoms/ReactMultiSelect";
-import SearchLicenceComp from "../../../../../../components/SearchLicence";
+import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, InputLabel } from "@material-ui/core";
+import FormControl from "@mui/material/FormControl";
+import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
 import Visibility from "@mui/icons-material/Visibility";
 import FileUpload from "@mui/icons-material/FileUpload";
+import Spinner from "../../../../../../components/Loader";
+import CusToaster from "../../../../../../components/Toaster";
+import ReactMultiSelect from "../../../../../../../../../react-components/src/atoms/ReactMultiSelect";
+import SearchLicenceComp from "../../../../../../components/SearchLicence";
 import { getDocShareholding } from "../../../docView/docView.help";
-import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
 
 const selectTypeData = [
   { label: "Complete", value: "COMPLETE" },
@@ -129,6 +129,7 @@ function SurrenderLic() {
   } = useForm({ reValidateMode: "onChange", mode: "onChange" });
 
   const SurrenderLic = async (data) => {
+    console.log("data", data);
     try {
       setLoading(true);
       const body = {
@@ -322,7 +323,6 @@ function SurrenderLic() {
                       <InputLabel id="select-label">
                         {`${t("AREA_IN_ACRES")}`} <span style={{ color: "red" }}>*</span>
                       </InputLabel>
-
                       <input
                         type="text"
                         className="form-control"
@@ -452,7 +452,6 @@ function SurrenderLic() {
                 </h6>
               </div>
             </div>
-
             <div className="row-12">
               <div>
                 {watch("selectType")?.value === "COMPLETE" && (
@@ -482,7 +481,6 @@ function SurrenderLic() {
                             </div>
                           )}
                         </td>
-
                         <td>
                           {watch("zoningLayoutPlan") ? (
                             <div className="d-flex justify-content-center">
@@ -490,7 +488,6 @@ function SurrenderLic() {
                                 {" "}
                                 <FileUpload style={{ cursor: "pointer" }} color="info" className="icon" for={"zoningLayoutPlan"} />
                               </label>
-
                               <input
                                 id="zoningLayoutPlan"
                                 type="file"
