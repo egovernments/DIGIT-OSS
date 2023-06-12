@@ -40,7 +40,7 @@ const HistoryList = (props) => {
   // console.log("dataremarkswithouthtml" , el);
   
 
-  const { handleGetFiledsStatesById, handleGetRemarkssValues } = useContext(ScrutinyRemarksContext);
+  const {handleRoles, handleGetFiledsStatesById, handleGetRemarkssValues , handleGetNotingRemarkssValues, bussinessService} = useContext(ScrutinyRemarksContext,);
   const { id } = useParams();
   let user = Digit.UserService.getUser();
   const userRoles = user?.info?.roles?.map((e) => e.code);
@@ -207,15 +207,54 @@ const toggleshown4 = applicationStatus => {
 
 // const navigate = useNavigate();
 
-const handleClick = () => {
-//   setSelectedAction(null);
-//   setShowModal(false);
+const handleClick = async (e) => {
 
 //   setTimeout(() => {
 //  window.location.href = `/digit-ui/employee/tl/BasicTable`
 //   }, 3000);
-  window.location.href = `/digit-ui/employee/tl/BasicTable`
+const dataToSend = {
+  RequestInfo: {
+      apiId: "Rainmaker",
+      action: "_create",
+      did: 1,
+      key: "",
+      msgId: "20170310130900|en_IN",
+      ts: 0,
+      ver: ".01",
+      authToken: authToken,
+     
+  },
 };
+
+const Resp = await axios.post(`/tl-services/new/license/pdf?applicationNumber=${id}`, payload, { responseType: "arraybuffer" })
+
+  const pdfBlob = new Blob([Resp.data], { type: 'application/pdf' });
+  const pdfUrl = URL.createObjectURL(pdfBlob);
+  window.open(pdfUrl);
+
+  console.log("logger123456...", pdfBlob, pdfUrl);
+  setLoader(false);
+  
+
+// }
+// else{
+//   console.log(error);
+// }
+};
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
 console.log("log123Disrenu" ,id);
   return (
    
@@ -393,12 +432,14 @@ console.log("log123Disrenu" ,id);
                           <div>
                          
                          <div style={{width:20}}><TextSnippetIcon onClick={handleClick}>
-                          <BasicTable 
-                      
-                          ></BasicTable></TextSnippetIcon></div>
+                          {/* <BasicTable 
+                            roleCode={el?.role}
+                            applicationNo={id}
+                          ></BasicTable> */}
+                          </TextSnippetIcon></div>
 
                          {el?.notingDetail !== null ?  (
-                      el?.notingDetail?.map((item , index) => {
+                      el?.notingDetail?.map((item , i) => {
                         return (
                           <div>
                             
@@ -418,95 +459,98 @@ console.log("log123Disrenu" ,id);
 
 {/* {data.includes(el.employeeName) && (
                     <Box > */}
-                    
+        {el?.performaFieldDetail?.[0]?.isApproved === "Performa" &&
+
 <div >
-  <Box>
+<Box>
 <Row>
 <p>
-                    <IconButton
-                           onClick={() => toggleshown4(el.applicationStatus)}
-                         >
-                           {dataThree.includes(index)? (
-                           
-                              <KeyboardArrowUpIcon /> 
-                            ) : (
-                           <p><KeyboardArrowDownIcon /><b style={{ color: "#ff0000" , fontSize: 16}}>{el.performaFieldDetail?.[0]?.isApproved}</b></p>
-                          
-                           )}
-                           
-                         </IconButton>
-                         </p>
-                          
-                              
-                             
-                             {dataThree.includes(el.applicationStatus) && (  
-                  <table colSpan = "2" className="table table-bordered" style={{ backgroundColor: "#ddf2cf" }}>
-                    <thead>
-
-                      <tr className="border-bottom-0">
-                        <th class="fw-normal pb-0 border-bottom-0 align-top">
-                          Sr.No
-                        </th>
-                        <th class="fw-normal pb-0 border-bottom-0 align-top">
-                          Filed Name
-                        </th>
-                        <th class="fw-normal pb-0 border-bottom-0 align-top">
-                          Filed value
-                        </th>
-                        <th class="fw-normal pb-0 border-bottom-0 align-top">
-                          Status
-                        </th>
-
-                        <th class="fw-normal pb-0 border-bottom-0 align-top">
-                          Remarks
-                        </th>
-                      </tr>
-                      <tr>
-
-                      </tr>
-
-
-                    </thead>
-                     <tbody>
-                 
-                     {el?.performaFieldDetail !== null ? (
-           el?.performaFieldDetail?.map((el, i) => {
-                      return (
-                    
-                           <tr >
-
-                                <td>
-                                  {i + 1}
-                                </td>
-                                <td>
-                                  <b>{el.name}</b>
-                                </td>
-                                <td>
-                                  <b>{el.value}</b>
-                                </td>
-
-                                <td>
-                                  <b>{el.isApproved}</b>
-                                </td>
-                                <td>
-                               
-                                  <i>{<div dangerouslySetInnerHTML={{__html: el.remarks}}/>}</i>
-                                </td>
-
-                              </tr>
-                                 );
-                                })
-                              ) : (
-                                <p></p>
-                              )}
-                           </tbody>
-                          </table>
-                          )} 
-                    </Row>
-                      </Box>
-               
+                  <IconButton
+                         onClick={() => toggleshown4(el.applicationStatus)}
+                       >
+                         {dataThree.includes(index)? (
+                         
+                            <KeyboardArrowUpIcon /> 
+                          ) : (
+                         <p><KeyboardArrowDownIcon /><b style={{ color: "#ff0000" , fontSize: 16}}>{el.performaFieldDetail?.[0]?.isApproved}</b></p>
                         
-                        </div>
+                         )}
+                         
+                       </IconButton>
+                       </p>
+                        
+                            
+                           
+                           {dataThree.includes(el.applicationStatus) && (  
+                <table colSpan = "2" className="table table-bordered" style={{ backgroundColor: "#ddf2cf" }}>
+                  <thead>
+
+                    <tr className="border-bottom-0">
+                      <th class="fw-normal pb-0 border-bottom-0 align-top">
+                        Sr.No
+                      </th>
+                      <th class="fw-normal pb-0 border-bottom-0 align-top">
+                        Filed Name
+                      </th>
+                      <th class="fw-normal pb-0 border-bottom-0 align-top">
+                        Filed value
+                      </th>
+                      {/* <th class="fw-normal pb-0 border-bottom-0 align-top">
+                        Status
+                      </th> */}
+
+                      <th class="fw-normal pb-0 border-bottom-0 align-top">
+                        Remarks
+                      </th>
+                    </tr>
+                    <tr>
+
+                    </tr>
+
+
+                  </thead>
+                   <tbody>
+               
+                   {el?.performaFieldDetail !== null ? (
+         el?.performaFieldDetail?.map((data, i) => {
+                    return (
+                  
+                         <tr >
+
+                              <td>
+                                {i + 1}
+                              </td>
+                              <td>
+                                <b>{data.name}</b>
+                              </td>
+                              <td>
+                                <b>{data.value}</b>
+                              </td>
+
+                              {/* <td>
+                                <b>{el.isApproved}</b>
+                              </td> */}
+                              <td>
+                             
+                                <i>{<div dangerouslySetInnerHTML={{__html: data.remarks}}/>}</i>
+                              </td>
+
+                            </tr>
+                               );
+                              })
+                            ) : (
+                              <p></p>
+                            )}
+                         </tbody>
+                        </table>
+                        )} 
+                  </Row>
+                    </Box>
+             
+                      
+                      </div>
+          }            
+
 
 <Row style={{ margin: 4 }}>
                       <b style={{ textAlign: "right", marginRight: 2 }}>{el.designation}</b>

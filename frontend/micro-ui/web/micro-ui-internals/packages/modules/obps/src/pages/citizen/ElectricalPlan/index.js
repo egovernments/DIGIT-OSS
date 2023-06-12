@@ -58,7 +58,7 @@ const electricalPlanService = () => {
   const { t } = useTranslation();
   const [drawingErr, setDrawingErr] = useState({
     selfCenteredDrawings: false,
-    environmentalClearance: false,
+    // environmentalClearance: false,
     pdfFormat: false,
     autoCad: false,
     verifiedPlan: false,
@@ -136,7 +136,7 @@ const electricalPlanService = () => {
     }
     if (
       data.hasOwnProperty("selfCenteredDrawings") &&
-      data.hasOwnProperty("environmentalClearance") &&
+      // data.hasOwnProperty("environmentalClearance") &&
       data.hasOwnProperty("pdfFormat") &&
       data.hasOwnProperty("autoCad") &&
       data.hasOwnProperty("verifiedPlan")
@@ -195,6 +195,7 @@ const electricalPlanService = () => {
         setDeveloperDataLabel(Resp.data);
         setApplicationNumber(Resp.data.electricPlanResponse[0].applicationNumber);
         setOpen(true);
+        setShowToastError({ label: "EP Successfully", error: false, success: true });
       } else {
         electricPlanRes.loiNumber = data?.loiNumber ? data?.loiNumber : electricPlanRes.loiNumber;
         electricPlanRes.electricInfra = data?.electricInfra ? data?.electricInfra : electricPlanRes.electricInfra;
@@ -213,8 +214,10 @@ const electricalPlanService = () => {
         electricPlanRes.totalArea = totalArea;
         const isvalidUpdate = checkValid(electricPlanRes);
         console.log({ electricPlanRes, data, isvalidUpdate }, "jjjjjjjjjjjjjj");
+       
         if (!isvalidUpdate) {
           console.log("Dont call update");
+          
           return null;
         }
 
@@ -246,9 +249,11 @@ const electricalPlanService = () => {
         const Resp = await axios.post("/tl-services/electric/plan/_update", updateRequest);
         setOpen(true);
         setApplicationNumber(Resp.data.electricPlanResponse[0].applicationNumber);
+        setShowToastError({ label: "EP Successfully", error: false, success: true });
       }
     } catch (error) {
       console.log(error.message);
+      setShowToastError({ label: error?.code , error: true, success: false });
     }
   };
   const handleClose = () => {
@@ -376,7 +381,8 @@ const electricalPlanService = () => {
     } catch (error) {
       console.log(error);
       setLoader(false);
-      setShowToastError({ label: "Invalid LOI Number", error: true, success: false });
+      // setShowToastError({ label: "Invalid LOI Number", error: true, success: false });
+      setShowToastError({ label: error?.code , error: true, success: false });
     }
     console.log("loiloiloi");
   };
@@ -400,6 +406,7 @@ const electricalPlanService = () => {
       const response = await axios.post(`/tl-services/electric/plan/_get?applicationNumber=${id}`, postDistrict);
       console.log(response, "eeee");
       setApplicationId(id);
+      setShowToastError({ label: "EP Successfully", error: false, success: true });
       setLoiNumber(response?.data?.electricPlanResponse[0].loiNumber);
       setElectricInfra(response?.data?.electricPlanResponse[0].electricInfra);
       setElectricDistribution(response?.data?.electricPlanResponse[0].electricDistribution);
@@ -417,6 +424,7 @@ const electricalPlanService = () => {
       setEPOpen(true);
     } catch (error) {
       console.log(error);
+      setShowToastError({ label: error?.code , error: true, success: false });
     }
   };
   return (

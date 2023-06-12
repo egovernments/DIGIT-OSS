@@ -17,7 +17,7 @@ const getAction = (flow) => {
       break;
     case 'ARCHITECT.CLASSA': actions = [
       'Applicant Type',
-      'Pesonal Details',
+      'Personal Details',
       'BPA_DOC_DETAILS_SUMMARY',
       'BPA_STEPPER_SUMMARY_HEADER',
     ]
