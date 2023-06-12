@@ -36,6 +36,7 @@ const underlineDisabledStyle = {
 class AutoSuggestDropdown extends React.Component {
   state = {
     searchText: "",
+    tempSearch: "",
   };
 
   getNameById = (id, dropDownData) => {
@@ -53,7 +54,7 @@ class AutoSuggestDropdown extends React.Component {
   }
 
   onChangeText = (searchText, dataSource, params) => {
-    this.setState({ searchText });
+    this.setState({ searchText, tempSearch:searchText });
   };
 
   getLocalizedLabel = (label) => {
@@ -80,7 +81,7 @@ class AutoSuggestDropdown extends React.Component {
       ...restProps
     } = this.props;
     const { filterAutoComplete, getNameById, onChangeText, getLocalizedLabel } = this;
-    const { searchText } = this.state;
+    const { searchText, tempSearch } = this.state;
     let list = [];
     if (labelsFromLocalisation) {
       list =
@@ -102,6 +103,7 @@ onChange({value:""});
     return (
       <div style={{ display: "flex", position: "relative", width: "100%" }}>
         <AutoComplete
+          onBlur={()=>this.setState({ tempSearch:""  })}
           className={`autosuggest ${className}`}
           floatingLabelFixed={true}
           floatingLabelStyle={{ ...floatingLabelStyle }}
@@ -114,10 +116,10 @@ onChange({value:""});
           dataSource={(items && [...items]) || []}
           menuStyle={{ maxHeight: "150px", overflowY: "auto", overflowX: "auto"}}
           dataSourceConfig={{ text: "label", value: "value" }}
-          onNewRequest={onChange}
+          onNewRequest={()=>{onChange,this.setState({ tempSearch:""  })}}
           onUpdateInput={onChangeText}
           filter={(searchText, key) => {
-            return key.toLowerCase().includes(getNameById(searchText) && getNameById(searchText.toLowerCase()));
+            return key.toLowerCase().includes(getNameById(tempSearch) && getNameById(tempSearch.toLowerCase()));
           }}
           floatingLabelText={[
             floatingLabelText,
