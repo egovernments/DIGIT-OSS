@@ -106,6 +106,11 @@ export const Request = async ({
 
   }
 
+  //for the central instance if any api doesnot need tenantId then url can be added in below confirguration
+  const urlwithoutTenantId = [
+    "/user/oauth/token"
+  ];
+
   const headers1 = {
     "Content-Type": "application/json",
     Accept: window?.globalConfigs?.getConfig("ENABLE_SINGLEINSTANCE") ? "application/pdf,application/json" : "application/pdf",
@@ -153,7 +158,7 @@ export const Request = async ({
     Digit.SessionStorage.get("userType") === "citizen"
       ? Digit.ULBService.getStateId()
       : Digit.ULBService.getCurrentTenantId() || Digit.ULBService.getStateId();
-  if (!params["tenantId"] && window?.globalConfigs?.getConfig("ENABLE_SINGLEINSTANCE")) {
+  if (!params["tenantId"] && window?.globalConfigs?.getConfig("ENABLE_SINGLEINSTANCE")  && !(urlwithoutTenantId?.filter((ob) => url?.includes(ob))?.length > 0)) {
     params["tenantId"] = tenantInfo;
   }
 
