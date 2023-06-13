@@ -81,6 +81,8 @@ const DesktopInbox = ({
                       ? "Completionscrutiny"
                       : row.original["businessService"] === "TECHNICAL_PROFESSIONAL"
                       ? "TechnicalProfessionalscrutiny"
+                      : row.original["businessService"] === "BPAREG"
+                      ? "TechnicalProfessionalscrutiny"
                       : null
                   }/` + row.original["applicationId"]
                 }

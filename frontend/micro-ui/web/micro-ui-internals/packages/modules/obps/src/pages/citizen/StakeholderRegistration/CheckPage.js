@@ -620,7 +620,7 @@ const CheckPage = ({ onSubmit, value }) => {
               style={{ width: "100px", display: "inline" }}
               onClick={() => routeTo(`${routeLink}/stakeholder-document-details`)}
             /> */}
-            {documents?.documents.map((doc, index) => (
+            {documents?.documents?.map((doc, index) => (
               <div key={index}>
                 <CardSectionHeader styles={{ fontSize: "18px" }}>{t(`BPAREG_HEADER_${doc?.documentType?.replace(".", "_")}`)}</CardSectionHeader>
                 {doc?.info ? (

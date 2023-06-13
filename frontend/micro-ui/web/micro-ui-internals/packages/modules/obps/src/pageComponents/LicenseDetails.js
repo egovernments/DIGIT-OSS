@@ -10,7 +10,7 @@ import {
   MobileNumber,
   RadioButtons,
   RadioOrSelect,
- 
+
   TextInput,
   TextArea,
   CheckBox,
@@ -120,9 +120,9 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
   const [gender, setGender] = useState(formData?.LicneseDetails?.gender || formData?.formData?.LicneseDetails?.gender);
   const [mobileNumber, setMobileNumber] = useState(
     (!isOpenLinkFlow ? userInfo?.info?.mobileNumber : "") ||
-      formData?.LicneseDetails?.mobileNumber ||
-      formData?.formData?.LicneseDetails?.mobileNumber ||
-      ""
+    formData?.LicneseDetails?.mobileNumber ||
+    formData?.formData?.LicneseDetails?.mobileNumber ||
+    ""
   );
   const [dob, setDOB] = useState(formData?.LicneseDetails?.dob || formData?.formData?.LicneseDetails?.dob || "");
   const [PanNumber, setPanNumber] = useState(formData?.LicneseDetails?.PanNumber || formData?.formData?.LicneseDetails?.PanNumber || "");
@@ -190,7 +190,7 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
   const [showToast, setShowToast] = useState(null);
   const [showToastError, setShowToastError] = useState(null);
   const [filsArray, setFilesArray] = useState([]);
-  const [ panIsValid, setPanIsValid ] = useState(false);
+  const [panIsValid, setPanIsValid] = useState(false);
   const inputs = [
     {
       label: "HR_BIRTH_DATE_LABEL",
@@ -581,6 +581,36 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
 
             additionalDetail: {
               counsilForArchNo: null,
+              name: name,
+              mobileNumber: mobileNumber,
+              gender: gender,
+              email: email,
+              dob: dob,
+              PanNumber: PanNumber,
+              uploadBoardResolution: Documents?.uploadBoardResolution,
+              uploadDigitalSignaturePdf: Documents?.uploadDigitalSignaturePdf,
+              addressLineOne: addressLineOne,
+              addressLineTwo: addressLineTwo,
+              addressLineThree: addressLineThree,
+              addressLineFour: addressLineFour,
+              city: city,
+              pincode: pincode,
+              village: village,
+              tehsil: tehsil,
+              state: state,
+              district: district,
+              isAddressSame: isAddressSame,
+              addressLineOneCorrespondence: addressLineOneCorrespondence,
+              addressLineTwoCorrespondence: addressLineTwoCorrespondence,
+              addressLineThreeCorrespondence: addressLineThreeCorrespondence,
+              addressLineFourCorrespondence: addressLineFourCorrespondence,
+              cityCorrespondence: cityCorrespondence,
+              pincodeCorrespondence: pincodeCorrespondence,
+              villageCorrespondence: villageCorrespondence,
+              tehsilCorrespondence: tehsilCorrespondence,
+              stateCorrespondence: stateCorrespondence,
+              districtCorrespondence: districtCorrespondence,
+              addressSameAsPermanent: addressSameAsPermanent,
             },
             address: {
               city: "",
@@ -606,8 +636,8 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
     localStorage.setItem("licenceDetails", JSON.stringify(licenseDet));
     Digit.OBPSService.BPAREGCreate(licenseDet, tenantId)
       .then((result, err) => {
-        console.log("FORMDATA...1",result)
-        sessionStorage.setItem("TECHNICAL_PROFESSIONAL_APPLICATION_NO",result?.Licenses?.[0]?.applicationNumber)
+        console.log("FORMDATA...1", result)
+        sessionStorage.setItem("TECHNICAL_PROFESSIONAL_APPLICATION_NO", result?.Licenses?.[0]?.applicationNumber)
         setIsDisableForNext(false);
         let data = {
           result: result,
@@ -671,7 +701,7 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
         },
       },
     };
-    console.log("logger123...",LicenseType)
+    console.log("logger123...", LicenseType)
 
     if ((LicenseType !== "CITIZEN.CLASSA" && LicenseType !== "BPA_DEVELOPER")) {
       onSelect(config.key, developerRegisterData, null, null, "stakeholder-document-details");
@@ -681,7 +711,7 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
     Digit.OBPSService.CREATEDeveloper(developerRegisterData, tenantId)
       .then((result, err) => {
         // console.log("DATA", result?.id);
-        console.log("FORMDATA...2",result)
+        console.log("FORMDATA...2", result)
         localStorage.setItem("devRegId", JSON.stringify(result?.id));
         setIsDisableForNext(false);
         let data = {
@@ -694,7 +724,7 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
           isAddressSame: isAddressSame,
         };
         //1, units
-        console.log("logger123...",LicenseType)
+        console.log("logger123...", LicenseType)
         if ((LicenseType !== "CITIZEN.CLASSA" && LicenseType !== "BPA_DEVELOPER")) {
           onSelect("", formData, "", true, "stakeholder-document-details");
         } else {
@@ -706,7 +736,7 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
         setIsDisableForNext(true);
         setToastError(e?.response?.data?.Errors?.[0]?.code);
         setError(e?.response?.data?.Errors[0]?.message || null);
-        
+
       });
 
     // }
@@ -795,18 +825,18 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
                   </label>
                   <div className="row">
                     <Select
-                        value={gender || ''}
-                        onChange={setGenderName}
-                        className="w-100 form-control"
-                        variant="standard"
-                        
-                      >
-                          {
-                              menu?.map((item, index) => (
-                                  <MenuItem value={item.value} >{item?.code}</MenuItem>
-                              ))
-                          }
-                      </Select>
+                      value={gender || ''}
+                      onChange={setGenderName}
+                      className="w-100 form-control"
+                      variant="standard"
+
+                    >
+                      {
+                        menu?.map((item, index) => (
+                          <MenuItem value={item.value} >{item?.code}</MenuItem>
+                        ))
+                      }
+                    </Select>
                   </div>
                 </Form.Group>
                 <Form.Group className="col-md-4 mb-2">
@@ -826,7 +856,7 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
                     placeholder={mobileNumber}
                     name="mobileNumber"
                     required={true}
-                    onChange={(e) => {setMobileNo(e.target.value); setPanIsValid(false);}}
+                    onChange={(e) => { setMobileNo(e.target.value); setPanIsValid(false); }}
                     disabled
                     className="form-control"
                   />
@@ -895,7 +925,7 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
                       max={10}
                       maxlength="10"
                     />
-                    <Button className="ml-3" onClick={panVerification}>{panIsValid?"Verified":"Verify"}</Button>
+                    <Button className="ml-3" onClick={panVerification}>{panIsValid ? "Verified" : "Verify"}</Button>
                   </div>
                   {PanNumber && PanNumber.length > 0 && !PanNumber.match(Digit.Utils.getPattern("PAN")) && (
                     <labelError style={{ width: "100%", marginTop: "5px", fontSize: "16px", marginBottom: "12px", color: "red" }}>
@@ -1437,7 +1467,7 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
                 isDleteBtn={true}
                 onClose={() => {
                   setToastError(null);
-                  
+
                 }}
               />
             )}

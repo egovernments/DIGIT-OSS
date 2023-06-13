@@ -1,0 +1,58 @@
+[
+    {
+        "RequestInfo": {
+            "apiId": "Rainmaker",
+            "ver": ".01",
+            "ts": null,
+            "action": "_update",
+            "did": "1",
+            "key": "",
+            "msgId": "20170310130900|en_IN",
+            "authToken": "13c905a8-0b94-41cb-860b-8408f64fd9fa",
+            "userInfo": {
+                "id": 213,
+                "uuid": "bf50c235-0c49-4a15-8bcb-fa70c41b00fc",
+                "userName": "7878787878",
+                "name": "test",
+                "mobileNumber": "7878787878",
+                "emailId": "",
+                "locale": null,
+                "type": "CITIZEN",
+                "roles": [
+                    {
+                        "name": "Citizen",
+                        "code": "CITIZEN",
+                        "tenantId": "hr"
+                    }
+                ],
+                "active": true,
+                "tenantId": "hr",
+                "permanentCity": null
+            }
+        },
+        "SurrendOfLicense": [
+            {
+                "tenantId": "hr",
+                "action": "",
+                "licenseNo": "6438734",
+                "selectType": "COMPLETE",
+                "areaFallingUnder": "yes",
+                "thirdPartyRights": "yes",
+                "reraRegistration": "yes",
+                "zoningLayoutPlanfileUrl": "31df7faf-4c24-4985-9870-dc3db0080dbb",
+                "licenseCopyfileUrl": "72d96278-dcaf-40f8-8588-01488c587d36",
+                "edcaVailedfileUrl": "9c9bda54-1974-4b3d-a874-dd7ff5203ab2",
+                "detailedRelocationSchemefileUrl": "08865e32-a677-4767-bf0b-fe965d4981b9",
+                "giftDeedfileUrl": "fba2741d-daee-4158-a1db-5fc54fadecbf",
+                "mutationfileUrl": "12af31c9-d51d-46ea-9104-6e016decbc0e",
+                "jamabandhifileUrl": "9b7a57ec-551d-4276-b6a1-bb06f8ae0256",
+                "areaFallingDividing": "yes",
+                "areaInAcres": "10",
+                "declarationIDWWorksfileUrl": "917a1fb8-ebb4-48ac-9ed9-31a900b94114",
+                "revisedLayoutPlanfileUrl": "30bbc1ad-0e79-444d-a82b-e509b0f952e1",
+                "availedEdcfileUrl": "064acc46-f7a6-4754-96b3-9e41c7d25da2",
+                "areaFallingUnderfileUrl": "6168ab88-d653-48d5-975e-1f5bf3348389"
+            }
+        ]
+    }
+]
