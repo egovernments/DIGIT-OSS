@@ -52,6 +52,7 @@ const initDigitUI = () => {
 # Changelog
 
 ```bash
+1.5.23 updated the routes in the dss module to have dynamic base context path
 1.5.22 updated the readme file
 1.5.21 added the readme file
 1.5.20 base version

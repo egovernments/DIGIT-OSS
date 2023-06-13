@@ -72,7 +72,7 @@ const CustomHorizontalBarChart = ({
   };
 
   const goToDrillDownCharts = () => {
-    history.push(`/digit-ui/employee/dss/drilldown?chart=${response?.responseData?.drillDownChartId}&ulb=${value?.filters?.tenantId}&title=${title}`);
+    history.push(`/${window?.contextPath}/employee/dss/drilldown?chart=${response?.responseData?.drillDownChartId}&ulb=${value?.filters?.tenantId}&title=${title}`);
   };
 
   const tooltipFormatter = (value, name) => {

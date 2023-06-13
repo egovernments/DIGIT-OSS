@@ -451,7 +451,7 @@ const Home = ({ stateCode }) => {
                           : { backgroundColor: colors[index].light, padding: "20px" }
                       }
                       key={index}
-                      onClick={() => routeTo(`/digit-ui/employee/dss/dashboard/${item.ref.url}`)}
+                      onClick={() => routeTo(`/${window?.contextPath}/employee/dss/dashboard/${item.ref.url}`)}
                     >
                       <div style={{ justifyContent: "space-between", display: "flex", flexDirection: "row" }}>
                         <div className="dss-card-header" style={{ marginBottom: "10px" }}>

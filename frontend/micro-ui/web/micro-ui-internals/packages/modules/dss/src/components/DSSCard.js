@@ -36,8 +36,8 @@ const NDSSCard = () => {
     .filter((ele) => ele["nActive"] === true)
     .map((obj) => ({
       label: t(obj?.label),
-      link: `/digit-ui/employee/dss/dashboard/${obj?.key}`,
-      link: obj?.others?`/digit-ui/employee/dss/${obj?.key}`:`/digit-ui/employee/dss/dashboard/${obj?.key}`,
+      link: `/${window?.contextPath}/employee/dss/dashboard/${obj?.key}`,
+      link: obj?.others?`/${window?.contextPath}/employee/dss/${obj?.key}`:`/${window?.contextPath}/employee/dss/dashboard/${obj?.key}`,
     }));
 
   const propsForModuleCard = {
@@ -45,7 +45,7 @@ const NDSSCard = () => {
     moduleName: t("ACTION_TEST_NATDASHBOARD"),
     subHeader: t("ACTION_TEST_NATDASHBOARD"),
     // subHeaderLink: `/digit-ui/employee/payment/integration/dss/NURT_DASHBOARD`,
-    subHeaderLink: `/digit-ui/employee/dss/landing/NURT_DASHBOARD`,
+    subHeaderLink: `/${window?.contextPath}/employee/dss/landing/NURT_DASHBOARD`,
     className: "employeeCard customEmployeeCard card-home full-width-card full-employee-card-height",
     links: [...links],
   };
@@ -64,7 +64,7 @@ const DSSCard = () => {
     .filter((ele) => ele["active"] === true)
     .map((obj) => ({
       label: t(obj?.label),
-      link: obj.active?`/digit-ui/employee/dss/dashboard/${obj?.stateKey}`:`/employee/integration/dss/${obj?.stateKey}`,
+      link: obj.active?`/${window?.contextPath}/employee/dss/dashboard/${obj?.stateKey}`:`/employee/integration/dss/${obj?.stateKey}`,
     }));
 
   const propsForModuleCard = {
@@ -72,7 +72,7 @@ const DSSCard = () => {
     moduleName: t("ES_TITLE_DSS"),
     subHeader: t("ACTION_TEST_SURE_DASHBOARD"),
     // subHeaderLink: `/digit-ui/employee/payment/integration/dss/home`,
-    subHeaderLink: `/digit-ui/employee/dss/landing/home`,
+    subHeaderLink: `/${window?.contextPath}/employee/dss/landing/home`,
     className: "employeeCard card-home customEmployeeCard full-width-card full-employee-card-height",
     links: [...links],
   };

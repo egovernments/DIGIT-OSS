@@ -93,7 +93,7 @@ const CustomBarChart = ({
 
   const goToDrillDownCharts = () => {
     history.push(
-      `/digit-ui/employee/dss/drilldown?chart=${response?.responseData?.visualizationCode}&ulb=${
+      `/${window?.contextPath}/employee/dss/drilldown?chart=${response?.responseData?.visualizationCode}&ulb=${
         value?.filters?.tenantId
       }&title=${title}&fromModule=${Digit.Utils.dss.getCurrentModuleName()}&type=performing-metric&fillColor=${fillColor}&isNational=${
         checkCurrentScreen() ? "YES" : "NO"
