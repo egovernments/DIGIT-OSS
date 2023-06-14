@@ -71,19 +71,19 @@ const TechnicalProfessionalCard = (props) => {
       },
     };
     try {
-      const Resp = await axios.post(`/tl-services/SurrendOfLicenseRequest/_search?applicationNumber=${id}`, requestInfo).then((response) => {
+      const Resp = await axios.post(`/tl-services/BPAREG/_search?applicationNumber=${id}`, requestInfo).then((response) => {
         return response?.data;
       });
-        console.log("Response From API1", Resp, Resp?.surrendOfLicense);
-      setScrutinyDetails(Resp?.surrendOfLicense?.[0]);
+        console.log("Response From API1", Resp, Resp?.Licenses);
+      setScrutinyDetails(Resp?.Licenses?.[0]);
 
-      console.log("devDel1234", Resp?.surrendOfLicense?.[0]);
-      const loiNumber = Resp?.surrendOfLicense?.[0]?.loiNumber;
-      setApplicationData(Resp?.surrendOfLicense?.[0]);
-      setApplicationStatus(Resp?.surrendOfLicense?.[0]?.status);
+      console.log("devDel1234", Resp?.Licenses?.[0]);
+      const loiNumber = Resp?.Licenses?.[0]?.loiNumber;
+      setApplicationData(Resp?.Licenses?.[0]);
+      setApplicationStatus(Resp?.Licenses?.[0]?.status);
       setApplicationDetails({
-        applicationData: Resp?.surrendOfLicense?.[0],
-        workflowCode: Resp?.surrendOfLicense?.[0].businessService,
+        applicationData: Resp?.Licenses?.[0],
+        workflowCode: Resp?.Licenses?.[0].businessService,
       });
       // console.log("Loi1234787", userInfo );
       // console.log("Loi1234", loiNumber );
@@ -108,10 +108,10 @@ const TechnicalProfessionalCard = (props) => {
       setEdcDataTreade(Resploi?.data?.Licenses?.[0]?.tradeLicenseDetail?.EDC);
       setIdwDataTreade(Resploi?.data?.Licenses?.[0]?.tradeLicenseDetail?.IDW);
 
-      // setScrutinyDetails(Resp?.surrendOfLicense?.[0]);
+      // setScrutinyDetails(Resp?.Licenses?.[0]);
 
       console.log(setIdwDataTreade);
-      // setApplicationData(Resp?.surrendOfLicense?.[0]);
+      // setApplicationData(Resp?.Licenses?.[0]);
     } catch (error) {
       console.log(error);
     }
@@ -171,7 +171,7 @@ const TechnicalProfessionalCard = (props) => {
     // setTimeout(() => {
       setSelectedAction(null);
       setShowModal(false);
-      window.location.href = `/digit-ui/employee/tl/SurrenderInbox`;
+      window.location.href = `/digit-ui/employee/tl/TechnicalProfessionalInbox`;
     // }, 3000);
   };
 
@@ -181,7 +181,7 @@ const TechnicalProfessionalCard = (props) => {
 
   const submitAction = async (data = {}, nocData = false, isOBPS = {}) => {
     let tempdata = data || {};
-    tempdata.surrendOfLicense[0].additionalDetails = additionalDetails;
+    tempdata.Licenses[0].additionalDetails = additionalDetails;
     console.log("logger log1223", tempdata);
 
     try {

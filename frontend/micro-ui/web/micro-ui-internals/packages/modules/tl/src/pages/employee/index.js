@@ -56,6 +56,7 @@ import CompletionLicCard from "./ScrutinyBasic/AllServiceScrutiny/CompletionLic/
 import CompletionInbox from "./ScrutinyBasic/AllServiceScrutiny/CompletionLic/Inbox/index";
 import TechnicalProfessionalInbox from "./ScrutinyBasic/AllServiceScrutiny/TechnicalProfessionals/Inbox";
 import TechnicalProfessionalCard from "./ScrutinyBasic/AllServiceScrutiny/TechnicalProfessionals/TechnicalProfessionalCard";
+import LowMediumInbox from "./ScrutinyBasic/AllServiceScrutiny/LowMedium/Inbox";
 
 const TLBreadCrumb = ({ location }) => {
   const { t } = useTranslation();
@@ -305,6 +306,18 @@ const EmployeeApp = ({ path, url, userType }) => {
                 <TechnicalProfessionalInbox
                   parentRoute={path}
                   businessService={["TECHNICAL_PROFESSIONAL"]}
+                  filterComponent="TL_INBOX_FILTER"
+                  initialStates={{}}
+                  isInbox={true}
+                />
+              )}
+            />
+            <PrivateRoute
+              path={`${path}/LowMediumInbox`}
+              component={(props) => (
+                <LowMediumInbox
+                  parentRoute={path}
+                  businessService={["LOW_MEDIUM"]}
                   filterComponent="TL_INBOX_FILTER"
                   initialStates={{}}
                   isInbox={true}

@@ -95,7 +95,7 @@ function TechnicalProfessionalScrutiny({ apiResponse, refreshScrutinyData, appli
     // const [loader, setLoader] = useState(false);
     const token = window?.localStorage?.getItem("token");
     const userInfo = Digit.UserService.getUser()?.info || {};
-    const [beneficialDetails, setBeneficialDetails] = useState();
+    const [details, setDetails] = useState();
     const [developerServices, setDeveloperServices] = useState([]);
 
     const handlemodaldData = (data) => {
@@ -118,7 +118,7 @@ function TechnicalProfessionalScrutiny({ apiResponse, refreshScrutinyData, appli
 
     useEffect(() => {
         if (apiResponse) {
-            setBeneficialDetails(apiResponse);
+            setDetails(apiResponse);
         }
     }, [apiResponse])
 
@@ -226,42 +226,26 @@ function TechnicalProfessionalScrutiny({ apiResponse, refreshScrutinyData, appli
     const getBeneficiaryDetails = async () => {
         setLoader(true);
         try {
-            setBeneficialDetails(apiResponse);
-            setValue("licenseNo", apiResponse?.licenseNumber);
-            setValue("noObjectionCertificate", apiResponse?.noObjectionCertificate);
-            setValue("justificationCertificate", apiResponse?.justificationCertificate);
-            setValue("consentLetter", apiResponse?.consentLetter);
-            setValue("thirdPartyRightsCertificate", apiResponse?.thirdPartyRightsCertificate);
-            setValue("jointDevelopmentCertificate", apiResponse?.jointDevelopmentCertificate);
-            setValue("aministrativeChargeCertificate", apiResponse?.aministrativeChargeCertificate);
-            setValue("boardResolutionExisting", apiResponse?.boardResolutionExisting);
-            setValue("boardResolutionNewEntity", apiResponse?.boardResolutionNewEntity);
-            setValue("shareholdingPatternCertificate", apiResponse?.shareholdingPatternCertificate);
-            setValue("fiancialCapacityCertificate", apiResponse?.fiancialCapacityCertificate);
-            setValue("developerServiceCode", developerServices.filter((item) => item?.developerServiceCode === apiResponse?.developerServiceCode)?.[0]?.developerServiceName || "");
-            setShowhide(apiResponse?.developerServiceCode);
-            setValue("reraRegistrationCertificate", apiResponse?.reraRegistrationCertificate);
-            setValue("paidAmount", apiResponse?.paidAmount);
-            setValue("areaInAcres", apiResponse?.areaInAcres);
-            console.log("scene", apiResponse?.areaInAcres);
-
-            setValue("areaAcres", details?.newAdditionalDetails?.areaAcres);
-            setValue("colonizerName", details?.newAdditionalDetails?.colonizerName);
-            setValue("colonyType", details?.newAdditionalDetails?.colonyType);
-            setValue("developmentPlan", details?.newAdditionalDetails?.developmentPlan);
-            setValue("district", details?.newAdditionalDetails?.district);
-            setValue("periodOfRenewal", details?.newAdditionalDetails?.periodOfRenewal);
-            setValue("renewalRequiredUpto", details?.newAdditionalDetails?.renewalRequiredUpto);
-            setValue("revenueEstate", details?.newAdditionalDetails?.revenueEstate);
-            setValue("sectorNo", details?.newAdditionalDetails?.sectorNo);
-            setValue("selectLicence", details?.newAdditionalDetails?.selectLicence);
-            setValue("tehsil", details?.newAdditionalDetails?.tehsil);
-            setValue("validUpto", details?.newAdditionalDetails?.validUpto);
-
-
+            let details = apiResponse?.tradeLicenseDetail?.additionalDetail
+            setDetails(apiResponse);
+            setValue("name", details?.name);
+            setValue("gender", details?.gender);
+            setValue("dob", details?.dob);
+            setValue("mobileNumber", details?.mobileNumber);
+            setValue("email", details?.email);
+            setValue("pan", details?.PanNumber);
+            setValue("addressLine1", details?.addressLine1);
+            setValue("addressLine2", details?.addressLine2);
+            setValue("addressLine3", details?.addressLine3);
+            setValue("addressLine4", details?.addressLine4);
+            setValue("village", details?.village);
+            setValue("tehsil", details?.tehsil);
+            setValue("state", details?.reraRegistrationCertificate);
+            setValue("district", details?.paidAmount);
+            setValue("pin", details?.areaInAcres);
+            // console.log("scene", details?.areaInAcres);
 
             setLoader(false);
-            setShowhide(apiResponse?.developerServiceCode)
 
         } catch (err) {
             console.log("Submit Error ====> ", err.message);
