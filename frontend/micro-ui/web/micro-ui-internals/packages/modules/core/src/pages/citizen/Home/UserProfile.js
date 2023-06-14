@@ -116,14 +116,21 @@ const UserProfile = ({ stateCode, userType, cityDetails }) => {
   }
 
   const setUserEmailAddress = (value) => {
-    setEmail(value);
-
-    if(value.length && !(value.includes("@") && value.includes("."))){
-      setErrors({...errors, emailAddress: {type: "pattern", message: "CORE_COMMON_PROFILE_EMAIL_INVALID"}})
-    }else{
-      setErrors({...errors, emailAddress : null})
+    if (userInfo?.userName !== value) {
+      setEmail(value);
+  
+      if (value.length && !(value.includes("@") && value.includes("."))) {
+        setErrors({
+          ...errors,
+          emailAddress: { type: "pattern", message: "CORE_COMMON_PROFILE_EMAIL_INVALID" },
+        });
+      } else {
+        setErrors({ ...errors, emailAddress: null });
+      }
+    } else {
+      setErrors({ ...errors, emailAddress: null });
     }
-  }
+  };
 
   const setUserMobileNumber = (value) => {
     setMobileNo(value);
