@@ -24,7 +24,7 @@ import AddPost from "../../Material/TextEditor";
 import DemoParinted from "./DemoParint";
 import BasicTable from "./UserRemarks";
 import { convertDateToEpoch, convertEpochToDate, convertEpochToDateDMY } from "../../../../utils";
-import FullScreenDialog from "../Remarks/RemarksUser";
+// import FullScreenDialog from "../Remarks/RemarksUser";
 
 // import { Scrollbars } from 'react-custom-scrollbars';
 
@@ -421,16 +421,16 @@ const Resp = await axios.post(`/tl-services/new/license/pdf?applicationNumber=${
       
             <div>
               <Form.Group>
-              <FullScreenDialog
-              // id={id}
+              {/* <FullScreenDialog
+             
              passmodalData={handlemodaldData}
              displaymodal={smShow}
-            //  disPlayDoc={docModal}
+           
              onClose={() => { setSmShow(false); setDocModal(false) }}
              fieldValue={fieldValue}
              fieldValue2={fieldValue2}
              fieldValue3={fieldValue3}
-></FullScreenDialog>
+></FullScreenDialog> */}
                <div>
                {remarkDataResp !== null ?  (
                       remarkDataResp?.map((el, index) => {
@@ -442,14 +442,14 @@ const Resp = await axios.post(`/tl-services/new/license/pdf?applicationNumber=${
                          <div style={{width:20}}>
                          <TextSnippetIcon
                   
-                  onClick={() => {
+                  // onClick={() => {
                  
-                    setSmShow(true);
-                    // setDocModal(false);
-                    setFieldValue(el.employeeName !== null ? el.employeeName : null);
-                    setFieldValue2(el.designation !== null ? el.designation : null);
-                    setFieldValue3(el.role !== null ? el.role : null);
-                  }}
+                  //   setSmShow(true);
+                  //   // setDocModal(false);
+                  //   setFieldValue(el.employeeName !== null ? el.employeeName : null);
+                  //   setFieldValue2(el.designation !== null ? el.designation : null);
+                  //   setFieldValue3(el.role !== null ? el.role : null);
+                  // }}
                 ></TextSnippetIcon>
                          </div>
                          
