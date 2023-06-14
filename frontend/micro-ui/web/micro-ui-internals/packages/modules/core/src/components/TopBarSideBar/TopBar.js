@@ -29,7 +29,7 @@ const TopBar = ({
   // const userRolesArray = userInfo?.roles.filter((user) => user.code !=="EMPLOYEE" );
   // const filterDataRole = userRolesArray?.[0]?.code;
   const designation = userInfo?.name;
-  console.log("userInfodesignation" ,designation);
+  console.log("userInfodesignation" ,userInfo);
   
 
   React.useEffect(async () => {
@@ -142,6 +142,7 @@ const TopBar = ({
               
               }
              <b style={{fontSize:18}}>{designation}</b> 
+             {/* <b style={{fontSize:18}}>{designation}</b>  */}
             </div>
             {/* <div className="left">{showLanguageChange && <ChangeLanguage dropdown={true} />}</div> */}
             {userDetails?.access_token && (

@@ -1,6 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
-import ReactDOM from "react-dom/client";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+
 import { Row, Col, Card, Container, Form, Button } from "react-bootstrap";
 import axios from "axios";
 import { ScrutinyRemarksContext } from "../../../../../context/remarks-data-context";
@@ -25,6 +24,7 @@ import AddPost from "../../Material/TextEditor";
 import DemoParinted from "./DemoParint";
 import BasicTable from "./UserRemarks";
 import { convertDateToEpoch, convertEpochToDate, convertEpochToDateDMY } from "../../../../utils";
+import FullScreenDialog from "../Remarks/RemarksUser";
 
 // import { Scrollbars } from 'react-custom-scrollbars';
 
@@ -56,6 +56,7 @@ const HistoryList = (props) => {
   const remarkDataResp = props.remarkData;
   const authToken = Digit.UserService.getUser()?.access_token || null;
   const applicationStatus = props.applicationStatus
+  
 
   const onAction = async (data, index, value) => {
     console.log("DataDev123...", data, value);
@@ -204,9 +205,17 @@ const toggleshown4 = applicationStatus => {
     setDataThree(showState);
   }
 }
-
-
-
+const [open, setOpen] = useState(false);
+const [smShow, setSmShow] = useState(false);
+  const [docModal, setDocModal] = useState(false);
+  const handlemodaldData = () => {
+    setSmShow(false);
+  };
+  const [fieldValue, setFieldValue] = useState("");
+  const [fieldValue2, setFieldValue2] = useState("");
+  const [fieldValue3, setFieldValue3] = useState("");
+const  datamap = remarkDataResp?.[0]?.performaFieldDetail.reverse()
+console.log("datamap", datamap);
 // const navigate = useNavigate();
 
 const handleClick = async (e) => {
@@ -243,21 +252,6 @@ const Resp = await axios.post(`/tl-services/new/license/pdf?applicationNumber=${
 //   console.log(error);
 // }
 };
-  
-
-
-
-
-
-
-
-
-
-
-
-
-
-console.log("log123Disrenu" ,id);
   return (
    
     <Container
@@ -427,18 +421,38 @@ console.log("log123Disrenu" ,id);
       
             <div>
               <Form.Group>
+              <FullScreenDialog
+              // id={id}
+             passmodalData={handlemodaldData}
+             displaymodal={smShow}
+            //  disPlayDoc={docModal}
+             onClose={() => { setSmShow(false); setDocModal(false) }}
+             fieldValue={fieldValue}
+             fieldValue2={fieldValue2}
+             fieldValue3={fieldValue3}
+></FullScreenDialog>
                <div>
                {remarkDataResp !== null ?  (
                       remarkDataResp?.map((el, index) => {
                         return (
                           <div>
+                         {/* <Button variant="outlined" onClick={handleClickOpen}>
+        Open full-screen dialog
+      </Button> */}
+                         <div style={{width:20}}>
+                         <TextSnippetIcon
+                  
+                  onClick={() => {
+                 
+                    setSmShow(true);
+                    // setDocModal(false);
+                    setFieldValue(el.employeeName !== null ? el.employeeName : null);
+                    setFieldValue2(el.designation !== null ? el.designation : null);
+                    setFieldValue3(el.role !== null ? el.role : null);
+                  }}
+                ></TextSnippetIcon>
+                         </div>
                          
-                         <div style={{width:20}}><TextSnippetIcon onClick={handleClick}>
-                          {/* <BasicTable 
-                            roleCode={el?.role}
-                            applicationNo={id}
-                          ></BasicTable> */}
-                          </TextSnippetIcon></div>
 
                          {el?.notingDetail !== null ?  (
                       el?.notingDetail?.map((item , i) => {
@@ -461,12 +475,12 @@ console.log("log123Disrenu" ,id);
 
 {/* {data.includes(el.employeeName) && (
                     <Box > */}
-        {el?.performaFieldDetail?.[0]?.isApproved === "Performa" &&
+        {/* {el?.performaFieldDetail?.[0]?.isApproved === "Proforma" && */}
 
 <div >
 <Box>
 <Row>
-<p>
+{/* <p>
                   <IconButton
                          onClick={() => toggleshown4(el.applicationStatus)}
                        >
@@ -479,11 +493,11 @@ console.log("log123Disrenu" ,id);
                          )}
                          
                        </IconButton>
-                       </p>
+                       </p> */}
                         
                             
                            
-                           {dataThree.includes(el.applicationStatus) && (  
+                           {/* {dataThree.includes(el.applicationStatus) && (   */}
                 <table colSpan = "2" className="table table-bordered" style={{ backgroundColor: "#ddf2cf" }}>
                   <thead>
 
@@ -545,22 +559,25 @@ console.log("log123Disrenu" ,id);
                             )}
                          </tbody>
                         </table>
-                        )} 
+                        {/* )}  */}
                   </Row>
                     </Box>
              
                       
                       </div>
-          }            
+          {/* }             */}
 
 
-<Row style={{ margin: 4 }}>
+<Row style={{ margin: 4 }}>   
+
+                  <b style={{ textAlign: "right" }}>{el.employeeName}</b>
                       <b style={{ textAlign: "right", marginRight: 2 }}>{el.designation}</b>
-                     <b style={{ textAlign: "right" }}>{el.employeeName}</b>
+                     {/* <b style={{ textAlign: "right" }}>{el.role}</b> */}
+                  
                      </Row>
                      <Row style={{ margin: 4 }}>
 
-                     <p style={{ textAlign: "right" }}>{el?.createdOn} {convertEpochToDate(el?.ts)}</p>
+                     <p style={{ textAlign: "right" }}>{el?.ts}</p>
                      <b style={{ textAlign: "right" }}>
              
                    </b>

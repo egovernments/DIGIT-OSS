@@ -70,7 +70,7 @@ function ModalChild(props) {
           userid: userInfo?.id || null,
           serviceId: "123",
           documentId: null,
-          ts: dateTime.toUTCString(),
+          // ts: dateTime.toUTCString(),
           bussinessServiceName : bussinessService,
           designation : designation,
           name : userInfo?.name || null,
@@ -121,7 +121,7 @@ function ModalChild(props) {
   return (
     <Modal
       size="md"
-      className="modal-lg modal-center"
+      className="modal-md modal-center"
       show={smShow}
       // aria-labelledby="example-modal-sizes-title-sm"
       aria-labelledby="contained-modal-title-vcenter"

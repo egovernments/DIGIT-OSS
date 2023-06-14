@@ -94,24 +94,25 @@ console.log("additionalDocResponData" , additionalDocResponData);
                 {/* <div className="col-md-12">                        */}
                     <div className="col-md-12">
                     <h5 className='mt-3 mb-3' style={{textAlign: "center"}}><b>AdditionalDocument</b></h5>                       
-                    <table className="table table-bordered">
-                    <thead>                        
-                    <tr>                       
-                    <th>Sr. No</th>
-                    <th>Application Section</th>
-                    <th>Document Description</th>
-                    <th>
-                     Download Document
-                    </th>
-                    
-                    {/* <th>Part of LOI</th> */}
-                    <th>Date</th>
-                    </tr>
-                    </thead>
-                    
-                    {additionalDocResponData?.AdditionalDocumentReport?.map((item) => (
+{/*                     
+                    {additionalDocResponData?.AdditionalDocumentReport?.map((item) => ( */}
+                      <table className="table table-bordered">
+                      <thead>                        
+                      <tr>                       
+                      <th>Sr. No</th>
+                      <th>Application Section</th>
+                      <th>Document Description</th>
+                      <th>
+                       Download Document
+                      </th>
+                      
+                  
+                      <th>Date</th>
+                      </tr>
+                      </thead>
+                      
                      <tbody>
-                        { item?.applicantInfo?.map( (input, index)=>(
+                        {additionalDocResponData?.AdditionalDocumentReport?.[0]?.applicantInfo?.map( (input, index)=>(
                             <tr key={index}>                        
                     <td>{index + 1}</td>
                     <td>
@@ -141,20 +142,21 @@ console.log("additionalDocResponData" , additionalDocResponData);
                     <td>
         
                         {/* {input?.Date} */}
-                      {/* {convertEpochToDateDMY(input?.date)} 
-                      {convertEpochToDate(input?.date)} */}
-                  <p>{convertEpochToDate(input?.date)}
-                  {convertEpochToDate(input?.date)}</p>
+                      {convertEpochToDateDMY(input?.date)} 
+                      {/* {convertEpochToDate(input?.date)} */}
+                  {/* <p>{convertEpochToDate(input?.date)}
+                  {convertEpochToDate(input?.date)}</p> */}
                         </td>
 
                     </tr> 
                          ) )
                         }   
                       </tbody> 
-)) }                          
-                                          
-                                          
+                               
                     </table>
+{/* )) }                           */}
+                                          
+                       
                 
                 </div>
             
