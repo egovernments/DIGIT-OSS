@@ -920,3 +920,9 @@ width: auto;
 .user-img-txt{
   @apply bg-primary-main !important;
 }
+.selector-button-primary {
+  @apply h-8 bg-primary-main;
+}
+.customBtn-selected {
+  @apply bg-primary-main;
+}

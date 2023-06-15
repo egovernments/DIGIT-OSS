@@ -2987,3 +2987,11 @@ input[type=number] {
   --bg-opacity:1!important;
   background-color: #ae1e28 !important;
   background-color: rgba(174, 30, 40, var(--bg-opacity)) !important; }
+
+.selector-button-primary {
+  height: 2rem; }
+
+.customBtn-selected, .selector-button-primary {
+  --bg-opacity:1;
+  background-color: #ae1e28;
+  background-color: rgba(174, 30, 40, var(--bg-opacity)); }
