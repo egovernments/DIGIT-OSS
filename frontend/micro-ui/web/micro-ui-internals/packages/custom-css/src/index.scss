@@ -847,3 +847,76 @@ width: auto;
     flex-direction: column;
     border: 1px solid gray;
 }
+
+
+.primary-label-btn {
+  @apply flex;
+  gap: 10px;
+
+  svg {
+    fill: theme(colors.primary.main);
+  }
+
+  color: theme(colors.primary.main);
+
+  cursor: pointer;
+  font-weight: 500;
+  width: fit-content;
+}
+
+.primaryColor {
+  color: theme(colors.text.primary) !important;
+}
+
+@media (hover: hover) {
+  .primary-label-btn {
+    &:hover {
+      color: #000;
+
+      svg {
+        fill: #000;
+      }
+    }
+  }
+}
+
+.submit-bar {
+  @apply bg-primary-main
+}
+
+.complaint-links-container {
+  .header {.logo{
+    @apply bg-primary-main !important;
+  }
+}
+
+.links-wrapper{
+  .link{
+    .inbox-total{
+      @apply bg-primary-main ;
+    }
+    a{
+      color: theme(colors.text.primary) !important;
+     
+        }
+  }
+}
+}
+.citizen, .employee{
+  .sidebar{
+    background-image: url(https://in-egov-assets.s3.ap-south-1.amazonaws.com/images/top-green-card.png), url(https://in-egov-assets.s3.ap-south-1.amazonaws.com/images/top-red-card.png);
+    background-blend-mode: lighten;
+    background-size: cover;
+
+    .sidebar-link.active{
+      color: theme(colors.text.primary) !important;
+       svg{
+        fill:theme(colors.text.primary) ;
+       }
+    
+    }
+  }
+} 
+.user-img-txt{
+  @apply bg-primary-main !important;
+}

@@ -2,7 +2,9 @@ import { AppContainer, BreadCrumb } from "@egovernments/digit-ui-react-component
 import React from "react";
 import { useTranslation } from "react-i18next";
 import { Route, Switch } from "react-router-dom";
-
+import Sample from "./Sample";
+import SampleInbox from "./SampleInbox";
+import SampleSearch from "./SampleSearch";
 
 const ProjectBreadCrumb = ({ location }) => {
   const { t } = useTranslation();
@@ -30,9 +32,10 @@ const App = ({ path, stateCode, userType, tenants }) => {
         <React.Fragment>
           <ProjectBreadCrumb location={location} />
         </React.Fragment>
-       
-        <Route path={`${path}/sample`} component={() => <span>Sample Screen Created</span>} />
-      </AppContainer>
+        <PrivateRoute path={`${path}/create`} component={() => <Sample></Sample>} />
+          <PrivateRoute path={`${path}/inbox`} component={() => <SampleInbox></SampleInbox>} />
+          <PrivateRoute path={`${path}/search`} component={() => <SampleSearch></SampleSearch>} />
+        </AppContainer>
     </Switch>
   );
 };
