@@ -1,10 +1,8 @@
 import React from "react";
-import { PrivateRoute, BreadCrumb } from "@egovernments/digit-ui-react-components";
+import { PrivateRoute, BreadCrumb, Card } from "@egovernments/digit-ui-react-components";
 import { Switch } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import Sample from "./Sample";
-import SampleInbox from "./SampleInbox";
-import SampleSearch from "./SampleSearch";
+
 import { Redirect } from "react-router-dom";
 
 const CustomBredcrumb = ({ t }) => (
@@ -32,10 +30,8 @@ const App = ({ path }) => {
       <React.Fragment>
         <div>
           <CustomBredcrumb t={t} />
+          <PrivateRoute path={`${path}/pageone`} component={() => <Card><div>Sample screen created in Mukta Customisation folder</div></Card>} />
 
-          <PrivateRoute path={`${path}/create`} component={() => <Sample></Sample>} />
-          <PrivateRoute path={`${path}/inbox`} component={() => <SampleInbox></SampleInbox>} />
-          <PrivateRoute path={`${path}/search`} component={() => <SampleSearch></SampleSearch>} />
           {/* <PrivateRoute>
             <Redirect to={`/${window?.contextPath}/employee/user/error?type=notfound&module=${path}`} />
           </PrivateRoute> */}

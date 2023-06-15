@@ -8,7 +8,7 @@ const MuktaCard = () => {
 
   const propsForModuleCard = {
     Icon: <PropertyHouse />,
-    moduleName: t("Sample Module"),
+    moduleName: t("Sample Mukta Customisation Module"),
     kpis: [
       // {
       //     count:  isLoading ? "-" : data?.EmployeCount?.totalEmployee,
@@ -23,17 +23,9 @@ const MuktaCard = () => {
     ],
     links: [
       {
-        label: t("Create"),
-        link: `/${window?.contextPath}/employee/Mukta/create`,
-      },
-      {
-        label: t("Inbox"),
-        link: `/${window?.contextPath}/employee/Mukta/inbox`,
-      },
-      {
-        label: t("Search"),
-        link: `/${window?.contextPath}/employee/Mukta/search`,
-      },
+        label: t("Sample"),
+        link: `/${window?.contextPath}/employee/Mukta/pageone`,
+      }
     ],
   };
 

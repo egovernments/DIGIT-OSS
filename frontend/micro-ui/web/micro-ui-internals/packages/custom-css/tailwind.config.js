@@ -11,13 +11,13 @@ module.exports = {
     },
     colors: {
       primary: {
-        light: "#F18F5E",
-        main: "#F47738",
+        light: "rgb(174, 30, 40)",
+        main: "rgb(174, 30, 40)",
         dark: "#C8602B",
       },
       secondary: "#22394D",
       text: {
-        primary: "#0B0C0C",
+        primary: "rgb(174, 30, 40)",
         secondary: "#505A5F",
       },
       link: {
