@@ -19,12 +19,14 @@ import { UICustomizations } from "./UICustomizations";
 
 var Digit = window.Digit || {};
 
-const enabledModules = ["Payment", "QuickPayLinks", "DSS", "HRMS", "Engagement", "NDSS",
+
+const enabledModules = [ "DSS", "HRMS",
+//  "Engagement", "NDSS","QuickPayLinks", "Payment",
   "Utilities",
-  "Mukta",
-  "Sample",
 //added to check fsm
-"FSM"
+// "FSM"
+"Mukta",
+"Sample",
 ];
 
 const initTokens = (stateCode) => {
