@@ -29,8 +29,9 @@ import Tooltip from "@mui/material/Tooltip";
 import { useTranslation } from "react-i18next";
 import { useLocation } from "react-router-dom";
 import Visibility from "@mui/icons-material/Visibility";
-import DetailsOfAppliedland from "./AdditionalDocument/DetailsOfAppliedland";
-import LandSchedule from "./AdditionalDocument/LandSchedule";
+import DetailsOfAppliedland from "../AdditionalDocument/DetailsOfAppliedlandDoc";
+import LandSchedule from "../AdditionalDocument/LandSchedule";
+import ApplicantInfo from "../AdditionalDocument/ApplicantInfo";
 // import CommercialPlottedForm from "./Puropse/CommercialPlottedForm";
 
 const Developerinfo = (props) => {
@@ -506,7 +507,7 @@ const Developerinfo = (props) => {
         remarksUpdate={currentRemarks}
         applicationStatus={applicationStatus}
       ></ModalChild>
-
+  
       <div
         className="collapse-header"
         onClick={() => setOpen(!open)}
@@ -531,13 +532,16 @@ const Developerinfo = (props) => {
       </div>
       <Collapse in={open}>
         <div id="example-collapse-text">
-
+        {/* {!additionalDocResponData?.AdditionalDocumentReport?.[0]?.applicantInfo == null && */}
         <div>
             <LandSchedule
             additionalDocRespon={additionalDocResponData}
            
             />
+       
           </div>
+          
+{/* } */}
 
           <Form.Group
             style={{ display: props.displayGeneral, border: "2px solid #e9ecef", margin: 15, padding: 15 }}

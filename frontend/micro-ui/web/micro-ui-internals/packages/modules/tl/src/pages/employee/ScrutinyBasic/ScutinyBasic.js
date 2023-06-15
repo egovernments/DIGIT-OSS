@@ -24,7 +24,7 @@ import ProformaForlegalBranch from "../Proforma/ProformaForlegalBranch";
 import ProformaPatwari from "../Proforma/ProformaForPatwari";
 import Addmoreinput from "../Complaince/Compliances";
 import ProformForRevenu from "../Proforma/ProformForRevenu";
-import AdditionalDocument from "./AdditionalDocument/ApplicantInfo";
+import AdditionalDocument from "../AdditionalDocument/ApplicantInfo";
 import Component from "../Proforma/Index";
 import { useParams } from "react-router-dom";
 
@@ -48,6 +48,7 @@ import LOASection from "./CurrentRemarks/CurrentLOA";
 import ExternalSection from "./CurrentRemarks/CurrentExternalSection";
 import HistoryList from "./ScrutinyDevelopment/HistoryList";
 import Spinner from "../../../components/Loader";
+import ApplicationPurpose from "../AdditionalDocument/ApplicationPurpose";
 // import HelpPost from "../Material/TextArea";
 
 const ScrutitnyForms = ({ apiResponse, applicationNumber, refreshScrutinyData ,profrmaID, histeroyData,additionalDocResponData, applicationStatus ,mDMSData ,applicationimp ,dataProfrmaFileds, dataMDMS }) => {
@@ -403,12 +404,12 @@ function convertToObjectArray(obj) {
           fieldValue: obj[valueKey] || null,
           comment: obj[remarksKey] || null,
           applicationId: applicationNumber,
-          isApproved: "Performa",
+          isApproved: "Proforma",
           isLOIPart: "",
           userid: userInfo?.id,
           serviceId: "123",
           documentId: null,
-          ts: dateTime.toUTCString(),
+          // ts: dateTime.toUTCString(),
           bussinessServiceName: "TL",
           designation: designation,
           name: userInfo?.name,
@@ -481,7 +482,7 @@ try {
   
         designation: designation ,
   
-        createdOn: dateTime.toUTCString(),
+        // createdOn: dateTime.toUTCString(),
   
         additionalDetails: {
   
@@ -517,6 +518,7 @@ catch (error) {
   console.log(error);
 
 }
+handleGetNotingRemarkssValues(id)
 
 // handleGetFiledsStatesById(id);
 // handleGetRemarkssValues(id);
@@ -629,7 +631,7 @@ try {
   
         designation: designation ,
   
-        createdOn: dateTime.toUTCString(),
+        // createdOn: dateTime.toUTCString(),
   
         additionalDetails: {
   
@@ -667,6 +669,7 @@ catch (error) {
 }
 
 }
+handleGetNotingRemarkssValues(id)
 };
 ////////////////////(1)Account Section ///////////////
 
@@ -818,7 +821,7 @@ const handleTechinicalClick = async () =>{
       },
   };
   try {
-      const Resp = await axios.post(`/land-services/egscrutiny/_search4?applicationNumber=${applicationNumber}&roles=Personal Assistant,JD_HQ,PA,PA_HQ,JE,Assistant,JE_HQ`, dataToSend).then((response) => {
+      const Resp = await axios.post(`/land-services/egscrutiny/_search4?applicationNumber=${applicationNumber}&roles=Personal Assistant,JD_HQ,PA,PA_HQ,JE,Assistant,JE_HQ,Junior Engineer`, dataToSend).then((response) => {
           return response.data;
       });
 
@@ -958,8 +961,6 @@ const handleExternalClick = async () =>{
 
 
 
-
-
 console.log("userInFODATA123" , userInfo);
 
   return (
@@ -1019,7 +1020,14 @@ console.log("userInFODATA123" , userInfo);
               mDMSData={mDMSData}
               additionalDocRespon={additionalDocResponData}
             ></Genarelinfo>
-            {/* </Col> */}
+            {/* {!additionalDocResponData?.AdditionalDocumentReport?.[0]?.applicantPurpose == null &&
+            <div>
+              <ApplicationPurpose
+                 additionalDocRespon={additionalDocResponData}
+         ></ApplicationPurpose>
+        </div>
+
+        } */}
           </div>
 
           <div>
@@ -1072,7 +1080,7 @@ console.log("userInFODATA123" , userInfo);
           </div>
 
 
-          <div>
+          {/* <div>
             <div
             className="collapse-header"
             onClick={() => setOpen16(!open16) }
@@ -1096,10 +1104,13 @@ console.log("userInFODATA123" , userInfo);
             </span>
             {open16 ? <RemoveIcon></RemoveIcon> : <AddIcon></AddIcon>}
           </div>
-          <Collapse in={open16}>
+          <Collapse in={open16}> */}
 
           <div  style={{ position: "relative", maxWidth: "100%", padding: 2 }}>
-          <div>
+            
+
+  
+ <div>
             <div
             className="collapse-header"
             onClick={() => setOpen2(!open2) }
@@ -1137,17 +1148,15 @@ console.log("userInFODATA123" , userInfo);
            {/* <input as="textarea" rows={1} type="text" className="form-control" placeholder="" {...register("landOwnerA")}/> */}
           {/* <button type="submit" >save</button> */}
           <div className="col-sm-2">
-            <Button style={{ textAlign: "right" }} value="Submit" id="Submit" type="submit">Submit</Button>
+            <Button style={{ textAlign: "right" }} value="Submit" id="Submit" type="submit">Save Performa</Button>
           </div>
             </form>
           </div>
           </Collapse>
           </div>
           
-  
+ 
 
-        {/* </div> */}
-    
 
       <div
             className="collapse-header"
@@ -1175,7 +1184,7 @@ console.log("userInFODATA123" , userInfo);
           </div>
           <Collapse in={open3}>
             <div id="example-collapse-text" 
-            // style={{ marginTop: 12, paddingLeft: 12, paddingRight: 12 }}
+         
             >
 
 
@@ -1580,7 +1589,7 @@ console.log("userInFODATA123" , userInfo);
 </div>
 </Collapse>
 
-
+ 
 
 
 {/* <div
@@ -1668,6 +1677,9 @@ console.log("userInFODATA123" , userInfo);
       </div>
       </div>
       </Collapse>
+     
+      
+ 
       
       <div
             className="collapse-header"
@@ -1752,11 +1764,9 @@ console.log("userInFODATA123" , userInfo);
       {/* </div>
       </Collapse> */}
 
+</div>
+</div>
 
-    </div>
-    </Collapse>
-    </div>
-    </div>
   );
 };
 

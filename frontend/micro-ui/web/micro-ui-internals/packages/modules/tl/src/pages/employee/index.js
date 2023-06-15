@@ -56,7 +56,7 @@ import ExtensionCluCard from "./ScrutinyBasic/AllServiceScrutiny/ExtensionClu/Ex
 import CompletionLicCard from "./ScrutinyBasic/AllServiceScrutiny/CompletionLic/CompletionLicCard";
 import CompletionInbox from "./ScrutinyBasic/AllServiceScrutiny/CompletionLic/Inbox/index";
 import CompositionCluInbox from "./ScrutinyBasic/AllServiceScrutiny/CompositionClu/Inbox/Index";
-import BasicTable from "./ScrutinyBasic/ScrutinyDevelopment/UserRemarks";
+// import BasicTable from "./ScrutinyBasic/ScrutinyDevelopment/UserRemarks";
 
 const TLBreadCrumb = ({ location }) => {
   const { t } = useTranslation();
@@ -250,7 +250,7 @@ const EmployeeApp = ({ path, url, userType }) => {
             <PrivateRoute path={`${path}/scrutiny/:id`} component={ScrutinyFormcontainer} />
             {/* <PrivateRoute path={`${path}/Loi`} component={Loi} /> */}
             <PrivateRoute path={`${path}/Records`} component={Records} />
-            <PrivateRoute path={`${path}/BasicTable`} component={BasicTable} />
+            {/* <PrivateRoute path={`${path}/BasicTable`} component={BasicTable} /> */}
             <PrivateRoute path={`${path}/RenewalScrutiny/:id`} component={RenewalScrutiny} />
             <PrivateRoute path={`${path}/BeneficialCard/:id`} component={BeneficialCard} />
             <PrivateRoute path={`${path}/TransferScrutiny/:id`} component={TransferScrutiny} />

@@ -3,13 +3,13 @@ import React, { useEffect, useRef, useState } from 'react';
 import Collapse from "react-bootstrap/Collapse";  
 import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
-import { getDocShareholding } from '../ScrutinyDevelopment/docview.helper';
+import { getDocShareholding } from '../ScrutinyBasic/ScrutinyDevelopment/docview.helper';
 import { IconButton } from "@mui/material";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import FileDownloadIcon from "@mui/icons-material/FileDownload";
-import { convertEpochToDateDMY } from '../../../../utils';
+import { convertEpochToDate, convertEpochToDateDMY } from '../../../utils';
 
-function LandSchedule (prop)
+function ApplicationPurpose (prop)
 {
 
  const additionalDocref=useRef()
@@ -94,24 +94,25 @@ console.log("additionalDocResponData" , additionalDocResponData);
                 {/* <div className="col-md-12">                        */}
                     <div className="col-md-12">
                     <h5 className='mt-3 mb-3' style={{textAlign: "center"}}><b>AdditionalDocument</b></h5>                       
-                    <table className="table table-bordered">
-                    <thead>                        
-                    <tr>                       
-                    <th>Sr. No</th>
-                    <th>Application Section</th>
-                    <th>Document Description</th>
-                    <th>
-                     Download Document
-                    </th>
                     
-                    {/* <th>Part of LOI</th> */}
-                    <th>Date</th>
-                    </tr>
-                    </thead>
                     
-                    {additionalDocResponData?.AdditionalDocumentReport?.map((item) => (
+                    {/* {additionalDocResponData?.AdditionalDocumentReport?.map((item) => ( */}
+                      <table className="table table-bordered">
+                      <thead>                        
+                      <tr>                       
+                      <th>Sr. No</th>
+                      <th>Application Section</th>
+                      <th>Document Description</th>
+                      <th>
+                       Download Document
+                      </th>
+                      
+                      {/* <th>Part of LOI</th> */}
+                      <th>Date</th>
+                      </tr>
+                      </thead>
                      <tbody>
-                        { item?.landSchedule?.map( (input, index)=>(
+                        {additionalDocResponData?.AdditionalDocumentReport?.[0]?.applicantPurpose?.map( (input, index)=>(
                             <tr key={index}>                        
                     <td>{index + 1}</td>
                     <td>
@@ -140,18 +141,21 @@ console.log("additionalDocResponData" , additionalDocResponData);
                         </td>
                     <td>
         
-                        {/* {input?.Date} */}
-                      {convertEpochToDateDMY(input.Date)} 
+                   
+                     
+                  
+                  {convertEpochToDateDMY(input?.date)} 
                         </td>
 
                     </tr> 
                          ) )
                         }   
                       </tbody> 
-)) }                          
+                        </table>
+{/* )) }                           */}
                                           
                                           
-                    </table>
+                  
                 
                 </div>
             
@@ -162,4 +166,4 @@ console.log("additionalDocResponData" , additionalDocResponData);
         </React.Fragment>
     );
 }
-export default LandSchedule;
+export default ApplicationPurpose;

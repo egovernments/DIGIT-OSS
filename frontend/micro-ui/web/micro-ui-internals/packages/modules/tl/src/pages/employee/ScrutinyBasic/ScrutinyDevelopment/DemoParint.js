@@ -70,7 +70,7 @@ const handlemodalsubmit = async () => {
           userid: userInfo?.id || null,
           serviceId: "123",
           documentId: null,
-          ts: dateTime.toUTCString(),
+          // ts: dateTime.toUTCString(),
           bussinessServiceName : "NewTL",
           designation : designation,
           name : userInfo?.name || null,
@@ -138,7 +138,7 @@ console.log("AkashNEWFile" , content , editor , config ,post.content);
                                 onChange={(newContent) => contentFieldChanaged(newContent)}
                             />
       <Button style={{ textAlign: "right" }} onClick={handlemodalsubmit}>
-            Submit
+            Save Noting
           </Button>
       <div dangerouslySetInnerHTML={{ __html: content }} />
     </div>
