@@ -119,7 +119,7 @@ const SearchLicenceComp = ({ watch, register, control, setLoader, errors, setVal
               <input
                 type="text"
                 className="form-control"
-                placeholder="LC_XXXXX"
+                placeholder="lc-XXXXX"
                 {...register("licenceNo")}
                 onChange={() => {
                   setShowField({ select: false, other: false });
