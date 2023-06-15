@@ -556,6 +556,57 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
 
   const goNext = async () => {
     // if (!(formData?.result && formData?.result?.Licenses[0]?.id)) {
+
+    let userInfo = Digit.UserService.getUser();
+    const requestResp = {
+      RequestInfo: {
+        api_id: "1",
+        ver: "1",
+        ts: "",
+        action: "_getDeveloperById",
+        did: "",
+        key: "",
+        msg_id: "",
+        requester_id: "",
+        auth_token: "",
+      },
+    };
+    const getDevDetails = await axios.get(`/user/developer/_getDeveloperById?id=${userInfo?.info?.id}&isAllData=true`, requestResp, {});
+    let details = getDevDetails?.data?.devDetail?.[0];
+    details.licenceDetails = {
+      ...details.licenceDetails,
+      name: name,
+      mobileNumber: mobileNumber,
+      gender: gender,
+      email: email,
+      dob: dob,
+      PanNumber: PanNumber,
+      uploadBoardResolution: Documents?.uploadBoardResolution,
+      uploadDigitalSignaturePdf: Documents?.uploadDigitalSignaturePdf,
+      addressLineOne: addressLineOne,
+      addressLineTwo: addressLineTwo,
+      addressLineThree: addressLineThree,
+      addressLineFour: addressLineFour,
+      city: city,
+      pincode: pincode,
+      village: village,
+      tehsil: tehsil,
+      state: state,
+      district: district,
+      isAddressSame: isAddressSame,
+      addressLineOneCorrespondence: addressLineOneCorrespondence,
+      addressLineTwoCorrespondence: addressLineTwoCorrespondence,
+      addressLineThreeCorrespondence: addressLineThreeCorrespondence,
+      addressLineFourCorrespondence: addressLineFourCorrespondence,
+      cityCorrespondence: cityCorrespondence,
+      pincodeCorrespondence: pincodeCorrespondence,
+      villageCorrespondence: villageCorrespondence,
+      tehsilCorrespondence: tehsilCorrespondence,
+      stateCorrespondence: stateCorrespondence,
+      districtCorrespondence: districtCorrespondence,
+      addressSameAsPermanent: addressSameAsPermanent,
+    }
+
     let licenseDet = {
       parentId: userInfo?.info?.id,
       Licenses: [
@@ -579,39 +630,10 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
             subOwnerShipCategory: "INDIVIDUAL",
             tradeType: (LicenseType === "CITIZEN.CLASSA" || LicenseType === "BPA_DEVELOPER") ? tradeType : "TECHNICAL_PROFESSIONAL",
 
-            additionalDetail: {
+            additionalDetail: [{
               counsilForArchNo: null,
-              name: name,
-              mobileNumber: mobileNumber,
-              gender: gender,
-              email: email,
-              dob: dob,
-              PanNumber: PanNumber,
-              uploadBoardResolution: Documents?.uploadBoardResolution,
-              uploadDigitalSignaturePdf: Documents?.uploadDigitalSignaturePdf,
-              addressLineOne: addressLineOne,
-              addressLineTwo: addressLineTwo,
-              addressLineThree: addressLineThree,
-              addressLineFour: addressLineFour,
-              city: city,
-              pincode: pincode,
-              village: village,
-              tehsil: tehsil,
-              state: state,
-              district: district,
-              isAddressSame: isAddressSame,
-              addressLineOneCorrespondence: addressLineOneCorrespondence,
-              addressLineTwoCorrespondence: addressLineTwoCorrespondence,
-              addressLineThreeCorrespondence: addressLineThreeCorrespondence,
-              addressLineFourCorrespondence: addressLineFourCorrespondence,
-              cityCorrespondence: cityCorrespondence,
-              pincodeCorrespondence: pincodeCorrespondence,
-              villageCorrespondence: villageCorrespondence,
-              tehsilCorrespondence: tehsilCorrespondence,
-              stateCorrespondence: stateCorrespondence,
-              districtCorrespondence: districtCorrespondence,
-              addressSameAsPermanent: addressSameAsPermanent,
-            },
+              ...details
+            }],
             address: {
               city: "",
               landmark: "",

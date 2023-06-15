@@ -441,7 +441,7 @@ export const  convertToStakeholderObject = (data,tradeType = "",businessService=
         businessService: businessService,
         tradeLicenseDetail: {
           ...data?.result?.Licenses[0]?.tradeLicenseDetail,
-          additionalDetail: { counsilForArchNo: data?.formData?.LicneseType?.ArchitectNo,...additionaldata },
+          additionalDetail: [{ counsilForArchNo: data?.formData?.LicneseType?.ArchitectNo,...additionaldata }],
           tradeType: tradeType,
           // tradeUnits: [
           //   {

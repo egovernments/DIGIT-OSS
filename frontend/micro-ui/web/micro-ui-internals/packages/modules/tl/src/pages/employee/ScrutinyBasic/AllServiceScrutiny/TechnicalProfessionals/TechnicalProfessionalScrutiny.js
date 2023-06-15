@@ -226,7 +226,9 @@ function TechnicalProfessionalScrutiny({ apiResponse, refreshScrutinyData, appli
     const getBeneficiaryDetails = async () => {
         setLoader(true);
         try {
-            let details = apiResponse?.tradeLicenseDetail?.additionalDetail
+            let details = apiResponse?.tradeLicenseDetail?.additionalDetail?.[0]?.licenceDetails;
+            let documents = apiResponse?.tradeLicenseDetail?.additionalDetail?.[0]?.licensesDoc?.[0]
+
             setDetails(apiResponse);
             setValue("name", details?.name);
             setValue("gender", details?.gender);
@@ -240,9 +242,14 @@ function TechnicalProfessionalScrutiny({ apiResponse, refreshScrutinyData, appli
             setValue("addressLine4", details?.addressLine4);
             setValue("village", details?.village);
             setValue("tehsil", details?.tehsil);
-            setValue("state", details?.reraRegistrationCertificate);
-            setValue("district", details?.paidAmount);
-            setValue("pin", details?.areaInAcres);
+            setValue("state", details?.state);
+            setValue("district", details?.district);
+            setValue("pin", details?.pincode);
+
+            setValue("coaLetter", documents?.coaLetter);
+            setValue("experienceCertificate", documents?.experienceCertificate);
+            setValue("identifyProof", documents?.identityProof);
+            setValue("qualificationCertificate", documents?.qualificationCertificate);
             // console.log("scene", details?.areaInAcres);
 
             setLoader(false);

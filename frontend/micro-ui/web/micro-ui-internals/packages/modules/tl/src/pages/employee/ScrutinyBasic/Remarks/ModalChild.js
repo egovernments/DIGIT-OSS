@@ -60,7 +60,7 @@ function ModalChild(props) {
           userid: userInfo?.id || null,
           serviceId: "123",
           documentId: null,
-          ts: dateTime.toUTCString(),
+          // ts: dateTime.toUTCString(),
           bussinessServiceName : bussinessService,
           designation : designation,
           name : userInfo?.name || null,

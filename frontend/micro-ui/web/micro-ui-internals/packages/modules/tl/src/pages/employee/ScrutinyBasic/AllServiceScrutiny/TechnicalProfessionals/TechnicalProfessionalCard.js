@@ -71,7 +71,7 @@ const TechnicalProfessionalCard = (props) => {
       },
     };
     try {
-      const Resp = await axios.post(`/tl-services/BPAREG/_search?applicationNumber=${id}`, requestInfo).then((response) => {
+      const Resp = await axios.post(`/tl-services/v1/BPAREG/_search?applicationNumber=${id}`, requestInfo).then((response) => {
         return response?.data;
       });
         console.log("Response From API1", Resp, Resp?.Licenses);
@@ -181,9 +181,9 @@ const TechnicalProfessionalCard = (props) => {
 
   const submitAction = async (data = {}, nocData = false, isOBPS = {}) => {
     let tempdata = data || {};
-    tempdata.Licenses[0].additionalDetails = additionalDetails;
+    tempdata.Licenses[0].tradeLicenseDetail.tradeType = "TECHNICAL_PROFESSIONAL";
     console.log("logger log1223", tempdata);
-
+    // return;
     try {
       let body = {
         ...tempdata,
@@ -202,7 +202,7 @@ const TechnicalProfessionalCard = (props) => {
         },
       };
       console.log("logger log1223 body", body);
-      const response = await axios.post("/tl-services/SurrendOfLicenseRequest/_update", body);
+      const response = await axios.post("/tl-services/v1/BPAREG/_update", body);
       console.log("Update API Response ====> ", response.data);
       closeModal();
     } catch (error) {

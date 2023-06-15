@@ -111,10 +111,10 @@ const TechnicalProfessionalModal = ({ t, action, tenantId, state, id, closeModal
           ]
         : null,
     };
-    console.log("log123...submitted updated",applicationData,selectedApprover, selectedApprover.map((ele)=>ele[1]?.uuid));
+    console.log("log123...submitted updated",applicationData,selectedApprover, selectedApprover.map((ele)=>ele?.uuid));
     submitAction({
         // ElectricPlanRequest: [applicationData],
-        technicalProfessinal : [applicationData],
+        Licenses : [applicationData],
     });
   }
   useEffect(() => {
