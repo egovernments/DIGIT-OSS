@@ -105,7 +105,7 @@ const feeandcharges = props.feeandchargesData
 
   const [uncheckedValue, setUncheckedVlue] = useState([]);
   console.log(uncheckedValue);
-  console.log("step5" ,feeandcharges);
+  console.log("step5" ,feeAndChargesData);
 
   const Tree = ({ data }) => {
     return (
@@ -115,6 +115,10 @@ const feeandcharges = props.feeandchargesData
             <div>
               <table key={index} className="table table-bordered" style={{ backgroundColor: "rgb(251 251 253))", width: "629px" }}>
                 <thead>
+                <tr>
+                    <th>Purpose</th>
+                    <td>{item?.purpose}</td>
+                  </tr>
                   <tr>
                     <th>Conversion Charges (In Rs.)</th>
                     <td> {item?.conversionChargesCal}</td>
@@ -129,10 +133,7 @@ const feeandcharges = props.feeandchargesData
                     <th>License Fee Charges (In Rs.)</th>
                     <td>{item?.licenseFeeChargesCal}</td>
                   </tr>
-                  <tr>
-                    <th>Purpose</th>
-                    <td>{item?.purpose}</td>
-                  </tr>
+                 
                   <tr>
                     <th>Scrutiny Fee Charges (In Rs.)</th>
                     <td>{item?.scrutinyFeeChargesCal}</td>
@@ -459,9 +460,9 @@ const feeandcharges = props.feeandchargesData
                       </div>
                     ))
                     } */}
-    {feeandcharges?.feesTypeCalculationDto && (
+    {feeAndChargesData?.feesTypeCalculationDto && (
                     <div>
-                      <Tree data={feeandcharges?.feesTypeCalculationDto} />
+                      <Tree data={feeAndChargesData?.feesTypeCalculationDto} />
                     </div>
                   )}
                  
@@ -470,15 +471,14 @@ const feeandcharges = props.feeandchargesData
                       </div> */}
 </Row>
 <Row>
-                  
-                            <Col className="col col-4" >
+<Col className="col col-4" >
                             <h4 >
-                            {/* Total Fee */}
-                            {`${t("NWL_APPLICANT_FEE_TOTAL_FEE")}`}
-                            </h4>
-                              <input type="text" className="form-control" placeholder={feeandcharges?.totalFee} disabled />
+                          {/* Total Scruitny Fee */}
+                          {`${t("NWL_APPLICANT_FEE_TOTAL_SCRUITNY_FEE")}`}
+                          </h4>
+                              <input type="text" className="form-control" placeholder={feeAndChargesData?.feesTypeCalculationDto?.[0]?.totalScruitnyFee} disabled />
                             </Col>
-                          
+                            
                           
 
                             <Col className="col col-4" >
@@ -486,17 +486,18 @@ const feeandcharges = props.feeandchargesData
                             {/* Total Licence Fee */}
                             {`${t("NWL_APPLICANT_FEE_TOTAL_LICENCE_FEE")}`}
                             </h4>
-                              <input type="text" className="form-control" placeholder={feeandcharges?.totalLicenceFee} disabled />
+                              <input type="text" className="form-control" placeholder={feeAndChargesData?.feesTypeCalculationDto?.[0]?.totalLicenceFee} disabled />
                             </Col>
                          
-                          
                             <Col className="col col-4" >
                             <h4 >
-                          {/* Total Scruitny Fee */}
-                          {`${t("NWL_APPLICANT_FEE_TOTAL_SCRUITNY_FEE")}`}
-                          </h4>
-                              <input type="text" className="form-control" placeholder={feeandcharges?.totalScruitnyFee} disabled />
+                            {/* Total Fee */}
+                            {`${t("NWL_APPLICANT_FEE_TOTAL_FEE")}`}
+                            </h4>
+                              <input type="text" className="form-control" placeholder={feeAndChargesData?.feesTypeCalculationDto?.[0]?.totalFee} disabled />
                             </Col>
+                          
+                            
                           
                           </Row>
 

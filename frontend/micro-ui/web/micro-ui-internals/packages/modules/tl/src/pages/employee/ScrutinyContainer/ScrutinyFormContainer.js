@@ -12,6 +12,7 @@ import ActionModal from "../../../../../templates/ApplicationDetails/Modal";
 import { ScrutinyRemarksContext } from "../../../../context/remarks-data-context";
 import jsPDF from 'jspdf'
 import ScrutitnyForms from "../ScrutinyBasic/ScutinyBasic";
+import Spinner from "../../../components/Loader";
 
 
 
@@ -30,7 +31,7 @@ const ScrutinyFormcontainer = (props) => {
   const state = Digit.ULBService.getStateId();
   const { t } = useTranslation();
   const history = useHistory();
-
+  const [loader, setLoader] = useState(false);
   const [displayMenu, setDisplayMenu] = useState(false);
   const [selectedAction, setSelectedAction] = useState(null);
   const [showModal, setShowModal] = useState(false);
@@ -40,14 +41,18 @@ const ScrutinyFormcontainer = (props) => {
   const [businessService, setBusinessServices] = useState("NewTL");
   const [moduleCode, setModuleCode] = useState("TL")
   const [scrutinyDetails, setScrutinyDetails] = useState();
-  const [feeandchargesData, SetFeeandchargesData] = useState();
+  const [additionalDocResponData, SetAdditionalDocResponData] = useState();
   const [status, setStatus] = useState();
 
   const [applicationDetails, setApplicationDetails] = useState();
   const [lastUpdate, SetLastUpdate] = useState();
   const [workflowDetails, setWorkflowDetails] = useState();
   const [applicationData, setApplicationData] = useState();
+  const [tcpApplicationNumber, setTcpApplicationNumber] = useState();
   const [mDMSData, setMDMSData] = useState();
+  const [dataProfrma , setDataProfrma] = useState([]);
+  const [profrmaData , setProfrmaData] = useState([]);
+  const [profrmaDataID , setProfrmaDataID] = useState([]);
   const [mDmsUpdate, SetMDmsUpdate] = useState();
   const { setBusinessService } = useContext(ScrutinyRemarksContext)
 
@@ -60,7 +65,7 @@ const ScrutinyFormcontainer = (props) => {
   const showRemarksSection = userRoles.includes("DTCP_HR")
 
   console.log("rolename" , filterDataRole);
-  console.log("rolename" , userRolesArray);
+  console.log("userRolesArray" , userRolesArray);
   const roleCodeUseAPi = userRolesArray.map((object) => `${object.code}`)
 
   let query = userRolesArray.map((object) => `@.role=='${object.code}'`).join("|| ")
@@ -71,6 +76,7 @@ const ScrutinyFormcontainer = (props) => {
  
 
   const handleshow19 = async (e) => {
+    setLoader(true);
     const payload = {
 
       "RequestInfo": {
@@ -102,14 +108,16 @@ const ScrutinyFormcontainer = (props) => {
     window.open(pdfUrl);
 
     console.log("logger123456...", pdfBlob, pdfUrl);
-
+    setLoader(false);
   };
   const handleChange = (e) => {
+    
     this.setState({ isRadioSelected: true });
   };
 
 
   const getScrutinyData = async () => {
+    setLoader(true);
     console.log("log123... userInfo", authToken);
     let requestInfo = {
       "RequestInfo": {
@@ -121,19 +129,74 @@ const ScrutinyFormcontainer = (props) => {
     
     }
     let requestFiled = {}
+    let requestProfrma = {}
+    // let dataProfrmaFiled = {}
     try {
       const Resp = await axios.post(`/tl-services/v1/_search?tenantId=hr&applicationNumber=${id}`, requestInfo).then((response) => {
         return response?.data;
       });
+      setLoader(false);
       console.log("Response From API1", Resp, Resp?.Licenses[0]?.applicationNumber, Resp?.Licenses[0]?.tradeLicenseDetail?.additionalDetail[0]);
       setScrutinyDetails(Resp?.Licenses[0]?.tradeLicenseDetail?.additionalDetail[0]);
 
       console.log("devDel123", Resp?.Licenses[0])
       setApplicationData(Resp?.Licenses[0]);
+      setTcpApplicationNumber(Resp?.Licenses[0]?.tcpApplicationNumber);
       console.log("devDel1236", Resp?.Licenses[0]?.businessService)
       setBusinessService(Resp?.Licenses[0]?.businessService);
       setStatus(Resp?.Licenses[0]?.status);
       console.log("devStatus", Resp?.Licenses[0]?.status);
+
+      const additionalDoc = {
+      
+     
+
+        "RequestInfo": {
+  
+          "apiId": "Rainmaker",
+  
+          "ver": "v1",
+  
+          "ts": 0,
+  
+          "action": "_search",
+  
+          "did": "",
+  
+          "key": "",
+  
+          "msgId": "090909",
+  
+          "requesterId": "",
+  
+          "authToken": authToken,
+  
+          "userInfo": userInfo
+  
+      },
+       
+      }
+    
+      const additionalDocRespon = await axios.post(`/tl-services/_additionalDocuments/_search?licenceNumber=${Resp?.Licenses[0]?.tcpApplicationNumber}&businessService=NewTL`, additionalDoc)
+      SetAdditionalDocResponData(additionalDocRespon?.data);
+      console.log("Datafee", additionalDocRespon);
+  
+    
+
+  //     dataProfrmaFiled = {
+
+  // "RequestInfo": {
+  //   "apiId": "Rainmaker",
+  //   "msgId": "1669293303096|en_IN",
+  //   "authToken": authToken
+
+  // },
+       
+  //     }
+
+
+
+
       requestFiled = {
 
         RequestInfo: {
@@ -146,7 +209,7 @@ const ScrutinyFormcontainer = (props) => {
           msgId: "090909",
           requesterId: "",
           authToken: authToken,
-          // userInfo: userInfo
+         
   
         },
         MdmsCriteria: {
@@ -159,8 +222,7 @@ const ScrutinyFormcontainer = (props) => {
                 {
                   "name": "rolesaccess",
                   "filter":`[?(${query})]`,
-                  // `[?(@.role=='${filterDataRole}'|| @.role=='${userRolesArray}')]`
-                },
+                 },
                 {
                   "name": "rolesaccess",
                   "filter": `[?(@.applicationStatus =='${Resp?.Licenses[0]?.status}')]`
@@ -170,42 +232,173 @@ const ScrutinyFormcontainer = (props) => {
           ]
         }
       }
+     
+      requestProfrma = {
+
+        RequestInfo: {
+          apiId: "Rainmaker",
+          ver: "v1",
+          ts: 0,
+          action: "_search",
+          did: "",
+          key: "",
+          msgId: "090909",
+          requesterId: "",
+          authToken: authToken,
+          correlationId: null,
+    
+        },
+        MdmsCriteria: {
+          tenantId: "hr",
+          moduleDetails: [
+            {
+              moduleName: "common-masters",
+              tenantId: "hr",
+              masterDetails: [
+              //   {
+  
+              //     "name": "PerformaNewLicence",
+  
+              //     "filter":`[?(${query})]`,
+  
+              // },
+              // {
+              //   "name": "PerformaNewLicence",
+              //   "filter": `[?(@.applicationStatus =='${Resp?.Licenses[0]?.status}')]`
+              // }
+              {
+  
+                "name": "PerformaNewLicence",
+
+                "filter":`[?(${query} && @.applicationStatus =='${Resp?.Licenses[0]?.status}')]`
+
+            },
+
+
+              
+              // {
+              //   "name": "PerformaNewLicence",
+              //   "filter": `[?(@.applicationStatus =='PENDING_AT_PATWARI_HQ_PRELIM')]`
+              // }
+             
+              ]
+            }
+          ]
+        } 
+      } 
     } catch (error) {
       console.log(error);
     }
     
     console.log("TCPaccess123", requestFiled)
-
-
-    try {
+    // let requestProfrma = {status}
+     try {
       const Resp = await axios.post(`/egov-mdms-service/v1/_search`, requestFiled).then((response) => {
         return response?.data;
       });
       setMDMSData(Resp?.MdmsRes?.ACCESSCONTROL_ROLESACCESS?.rolesaccess);
-      console.log("FileddataName", mDMSData);
 
+      console.log("FileddataName12", mDMSData);
+
+     
+    } 
+    catch (error) {
+      console.log(error);
+  
+    }
+    
+    console.log("TCPaccessrequestProfrma123", requestProfrma)
+     try {
+      const Resp = await axios.post(`/egov-mdms-service/v1/_search`, requestProfrma).then((response) => {
+        return response?.data;
+      });
+      setDataProfrma(Resp?.MdmsRes);
+      console.log("FileddataNamemDMSDataProfrma", dataProfrma , Resp);
+  
     } catch (error) {
       console.log(error);
-
+  
     }
-    const applicationNo = id
-    console.log("applicationNo", applicationNo);
-    const feeAndChargesData = {
+
+   
+
+    // } catch (error) {
+    //   console.log(error);
+
+    // }
+
+   
+    
+
+    // try {
+    //   const Resp = await axios.post(`/egov-mdms-service/v1/_search`, requestFiled).then((response) => {
+    //     return response?.data;
+    //   });
+    //   setMDMSData(Resp?.MdmsRes?.ACCESSCONTROL_ROLESACCESS?.rolesaccess);
+    //   console.log("FileddataName", mDMSData);
+
+    // } catch (error) {
+    //   console.log(error);
+
+    // }
+    // const applicationNo = id
+    // console.log("applicationNo", applicationNo);
+    const dataProfrmaFiled = {
 
 
       "RequestInfo": {
+
         "apiId": "Rainmaker",
-        "msgId": "1669293303096|en_IN",
-        userInfo: userInfo,
+
         "authToken": authToken,
 
+        "userInfo": userInfo,
 
-      },
-      applicationNo: applicationNo,
+        "msgId": "1684320117934|en_IN"
+
+    },
+     
     }
-    const feeandchargesRespon = await axios.post(`/tl-calculator/v1/_getPaymentEstimate`, feeAndChargesData)
-    SetFeeandchargesData(feeandchargesRespon?.data);
-    console.log("Datafee", feeandchargesRespon);
+  
+    const dataProfrmaFiledRespon = await axios.post(`/tl-services/_performaScrutiny/_search?applicationNumber=${id}&userId=${userInfo?.id}`, dataProfrmaFiled)
+    setProfrmaData(dataProfrmaFiledRespon?.data?.PerformaScruitny?.[0]?.additionalDetails);
+    setProfrmaDataID(dataProfrmaFiledRespon?.data?.PerformaScruitny?.[0]);
+      console.log("FileddataNamemDMSprofrmaData", dataProfrmaFiledRespon , profrmaDataID);
+
+        
+    const additionalDoc = {
+      
+     
+
+      "RequestInfo": {
+
+        "apiId": "Rainmaker",
+
+        "ver": "v1",
+
+        "ts": 0,
+
+        "action": "_search",
+
+        "did": "",
+
+        "key": "",
+
+        "msgId": "090909",
+
+        "requesterId": "",
+
+        "authToken": authToken,
+
+        "userInfo": userInfo
+
+    },
+     
+    }
+  
+    const additionalDocRespon = await axios.post(`/tl-services/_additionalDocuments/_search?licenceNumber=${Resp?.Licenses[0]?.tcpApplicationNumber}&businessService=NewTL`, additionalDoc)
+    SetAdditionalDocResponData(additionalDocRespon?.data);
+    console.log("Datafee", additionalDocRespon);
 
 
   };
@@ -340,8 +533,8 @@ const ScrutinyFormcontainer = (props) => {
         },
       });
     }
-    if (data.Licenses[0].action === "APPROVE_SITE_VERIFICATION") {
-
+    if (data.Licenses[0].action === "APPROVED_WITH_LOI") {
+      setLoader(true);
       let requesttoloi = {
         "RequestInfo": {
           "apiId": "Rainmaker",
@@ -356,13 +549,14 @@ const ScrutinyFormcontainer = (props) => {
         });
         console.log("AfterLoiUpdate", Resp, Resp?.Licenses);
 
-
+        setLoader(false);
       } catch (error) {
+        setLoader(false);
         console.log(error);
       }
 
-      if (showRemarksSection==="DTCP_HR")
-      {
+      // if (showRemarksSection==="DTCP_HR")
+      // {
         let requestInfo = {
 
           RequestInfo: {
@@ -389,14 +583,15 @@ const ScrutinyFormcontainer = (props) => {
           return response?.data;
         });
         // setApplicationData(Resp?.Licenses[0]);
+        setLoader(false);
         SetLastUpdate(Resp?.Licenses[0]);
         console.log("updateLicenses", Resp?.Licenses[0]?.tcpLoiNumber);
 
       } catch (error) {
         console.log(error);
-
+        setLoader(false);
       }
-    }
+    // }
 
       const payload = {
 
@@ -472,8 +667,9 @@ const ScrutinyFormcontainer = (props) => {
   console.log("meri update34", lastUpdate)
   return (
     <Card className="formColorEmp">
-      <Card.Header className="head-application" >
-        <div className="row fw-normal">
+      {loader && <Spinner></Spinner>}
+    <Card className="head-application">
+      <div className="row fw-normal">
           <div className="col-sm-2">
             <b><p className="head-font">Application Number:</p></b>
             <b><p className="head-font">{id}</p></b>
@@ -488,32 +684,35 @@ const ScrutinyFormcontainer = (props) => {
           <div className="col-sm-2">
             <b><p className="head-font">TCP Application Number:</p></b>
             {/* {item.name.substring(0, 4)} */}
-            <b><p className="head-font">{applicationData?.tcpApplicationNumber}</p></b>
+            <b><p className="head-font">{applicationData?.tcpApplicationNumber.substring(7, 20)}</p></b>
           </div>
           <div className="col-sm-2">
             <b><p className="head-font">TCP Case Number:</p></b>
             <b><p className="head-font">{applicationData?.tcpCaseNumber.substring(0, 7)}</p></b>
           </div>
           <div className="col-sm-2">
-            <b><p className="head-font">TCP Dairy Number: </p></b>
+            <b><p className="head-font">TCP Diary Number: </p></b>
             <b><p className="head-font">{applicationData?.tcpDairyNumber}</p></b>
 
           </div>
           <div className="col-sm-2">
-            <Button style={{ textAlign: "right" }} value="Submit" id="Submit" onChange1={handleChange} name="Submit" onClick={handleshow19}>Views PDF</Button>
+            <Button style={{ textAlign: "right" }} value="Submit" id="Submit" onChange1={handleChange} name="Submit" onClick={handleshow19}>View PDF</Button>
           </div>
         </div>
-      </Card.Header>
+      </Card>
       <Row >
         <div className="formlist">
           <ScrutitnyForms
-            feeandcharges={feeandchargesData}
+            additionalDocResponData={additionalDocResponData}
             histeroyData={workflowDetailsTemp}
             apiResponse={scrutinyDetails}
             applicationNumber={id}
             applicationStatus={status}
             refreshScrutinyData={getScrutinyData}
             mDMSData={mDMSData}
+            dataMDMS={dataProfrma}
+            dataProfrmaFileds={profrmaData}
+            profrmaID={profrmaDataID}
             applicationimp={applicationData}
           ></ScrutitnyForms>
         </div>

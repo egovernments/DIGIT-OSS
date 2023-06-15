@@ -33,6 +33,8 @@ import ITCyberCityForm from "./Puropse/ITCyberCityForm";
 import { array } from "yup";
 import { useTranslation } from "react-i18next";
 import { useLocation } from "react-router-dom";
+import DetailsOfAppliedlandDoc from "../AdditionalDocument/DetailsOfAppliedlandDoc";
+
 
 const AppliedLandinfo = (props) => {
 
@@ -42,7 +44,7 @@ const AppliedLandinfo = (props) => {
   const {t} = useTranslation();
   const { pathname: url } = useLocation();
 
-
+  const additionalDocResponData = props.additionalDocRespon;
   const dataIcons = props.dataForIcons;
   const DetailsofAppliedLand = props.ApiResponseData;
   const applicationStatus = props.applicationStatus;
@@ -561,10 +563,26 @@ let Tree = ({ data }) => {
       </div>
       <Collapse in={open}>
         <div id="example-collapse-text">
+
+       {/* {!additionalDocResponData?.AdditionalDocumentReport?.[0]?.applicantInfo == null && */}
+       <div>
+            <DetailsOfAppliedlandDoc
+            additionalDocRespon={additionalDocResponData}
+           
+            />
+       
+          </div>
+          
+ {/* }  */}
+
           <Form.Group
             style={{ display: props.displayPurpose, border: "2px solid #e9ecef", margin: 10, padding: 10 }}
             className="justify-content-center"
           >
+
+
+
+
             <Row className="ml-auto" style={{ marginBottom: 5 }}>
               {/* {JSON.stringify(userRoles)}
                     {JSON.stringify(hideRemarks)} */}
@@ -577,7 +595,7 @@ let Tree = ({ data }) => {
 
                   <ReportProblemIcon
                     style={{
-                     display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_DGPS_POINTS_DOCUMENT") ? "block" : "none",
+                     display: hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_DGPS_POINTS_DOCUMENT") ? "block" : "none",
                       color: fieldIconColors.detailsOfPlots
                     }}
                     onClick={() => {
@@ -1310,14 +1328,15 @@ let Tree = ({ data }) => {
                     <h4>
                       <b>
                         {/* Bifurcation Of Purpose */}
-                      {`${t("NWL_APPLICANT_BIFURCATION_OF_PURPOSE_")}`}
+                      {`${t("NWL_APPLICANT_BIFURCATION_OF_PURPOSE")}`}
                       </b>
                     </h4>
                     <h4 className="mt-3">
                       <b>
                         {/* Total Applied Area: */}
-                        {`${t("NWL_APPLICANT_DGPS_TOTAL_APPLIED_AREA")}`}
+                        {`${t("NWL_APPLICANT_DGPS_TOTAL_APPLIED_AREA")}`} 
                          </b>
+
                       {DetailsofAppliedLand?.DetailsAppliedLandPlot?.totalAreaScheme}
                     </h4>
                     {/* <h4 className="mt-3">
@@ -1739,7 +1758,7 @@ let Tree = ({ data }) => {
                         </IconButton>
                         <ReportProblemIcon
                           style={{
-                           display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_DGPS_POINTS_DOCUMENT") ? "block" : "none",
+                           display: hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_DGPS_POINTS_DOCUMENT") ? "block" : "none",
                             color: fieldIconColors.demarcationPlan
                           }}
                           onClick={() => {
@@ -1766,7 +1785,7 @@ let Tree = ({ data }) => {
                         <ReportProblemIcon
                           style={{
                           
-                            display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_DGPS_DOCUMENTS_LAYOUT_PLAN_PDF") ? "block" : "none",
+                            display: hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_DGPS_DOCUMENTS_LAYOUT_PLAN_PDF") ? "block" : "none",
                             color: fieldIconColors.democraticPlan
                           }}
                           onClick={() => {
@@ -1793,7 +1812,7 @@ let Tree = ({ data }) => {
                         </IconButton>
                         <ReportProblemIcon
                           style={{
-                            display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_DGPS_DOCUMENTS_UNDERTAKING") ? "block" : "none",
+                            display: hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_DGPS_DOCUMENTS_UNDERTAKING") ? "block" : "none",
                             
                             color: fieldIconColors.sectoralPlan
                           }}
@@ -1824,7 +1843,7 @@ let Tree = ({ data }) => {
                         </IconButton>
                             <ReportProblemIcon
                               style={{
-                                display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_DGPS_DOCUMENTS_DEVELOPMENT_PLAN") ? "block" : "none",
+                                display: hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_DGPS_DOCUMENTS_DEVELOPMENT_PLAN") ? "block" : "none",
                                 color: fieldIconColors.uploadLayoutPlan
                               }}
                               onClick={() => {
@@ -1855,7 +1874,7 @@ let Tree = ({ data }) => {
                         </IconButton>
                           <ReportProblemIcon
                             style={{
-                              display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_DGPS_DOCUMENTS_SECTORAL_PLAN") ? "block" : "none",
+                              display: hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_DGPS_DOCUMENTS_SECTORAL_PLAN") ? "block" : "none",
                               color: fieldIconColors.planCrossSection
                             }}
                             onClick={() => {
@@ -1882,7 +1901,7 @@ let Tree = ({ data }) => {
                         </IconButton>
                           <ReportProblemIcon
                             style={{
-                              display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_DGPS_DOCUMENTS_EXPLANATORY_NOTE") ? "block" : "none",
+                              display: hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_DGPS_DOCUMENTS_EXPLANATORY_NOTE") ? "block" : "none",
                               color: fieldIconColors.publicHealthServices
                             }}
                             onClick={() => {
@@ -1911,7 +1930,7 @@ let Tree = ({ data }) => {
                         </IconButton>
                           <ReportProblemIcon
                             style={{
-                              display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_DGPS_DOCUMENTS_GUIDE_MAP") ? "block" : "none",
+                              display: hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_DGPS_DOCUMENTS_GUIDE_MAP") ? "block" : "none",
                               color: fieldIconColors.designRoad
                             }}
                             onClick={() => {
@@ -1938,7 +1957,7 @@ let Tree = ({ data }) => {
                         </IconButton>
                           <ReportProblemIcon
                             style={{
-                              display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_DGPS_DOCUMENTS_INDEMNITY_BOND") ? "block" : "none",
+                              display: hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_DGPS_DOCUMENTS_INDEMNITY_BOND") ? "block" : "none",
                               color: fieldIconColors.designSewarage
                             }}
                             onClick={() => {
@@ -1968,7 +1987,7 @@ let Tree = ({ data }) => {
                         </IconButton>
                           <ReportProblemIcon
                             style={{
-                              display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_DGPS_DOCUMENTS_ANY_OTHER_RELEVANT_DOCUMENT") ? "block" : "none",
+                              display: hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_DGPS_DOCUMENTS_ANY_OTHER_RELEVANT_DOCUMENT") ? "block" : "none",
                               color: fieldIconColors.designDisposal
                             }}
                             onClick={() => {

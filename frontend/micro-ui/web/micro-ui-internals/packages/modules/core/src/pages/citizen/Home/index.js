@@ -191,7 +191,7 @@ const Home = () => {
           },
           {
             link: `/digit-ui/citizen/tl/TransferLicense/my-applications`,
-            i18nKey: t("My applications"),
+            i18nKey: t("TL_MY_APPLICATIONS_HEADER"),
           },
         ],
       },
@@ -244,9 +244,8 @@ const Home = () => {
           {
             link: `/digit-ui/citizen/obps/LayoutPlanClu`,
             i18nKey: t("Revised Layout Plan"),
-
           },
-            {
+          {
             link: `/digit-ui/citizen/tl/LayoutPlanClu/my-application`,
             i18nKey: t("TL_MY_APPLICATIONS_HEADER"),
           },
@@ -261,7 +260,10 @@ const Home = () => {
             link: `/digit-ui/citizen/obps/ExtensionCom`,
             i18nKey: t("Extension of time"),
           },
-         
+           {
+            link: `/digit-ui/citizen/tl/ExtensionCom/my-application`,
+            i18nKey: t("TL_MY_APPLICATIONS_HEADER"),
+          },
         ],
       },
       {
@@ -277,7 +279,6 @@ const Home = () => {
             link: `/digit-ui/citizen/tl/ExtensionClu/my-application`,
             i18nKey: t("TL_MY_APPLICATIONS_HEADER"),
           },
-          
         ],
       },
       {
@@ -289,7 +290,7 @@ const Home = () => {
             link: `/digit-ui/citizen/obps/CompositionClu`,
             i18nKey: t("Composition of urban Area Violation"),
           },
-            {
+          {
             link: `/digit-ui/citizen/tl/CompositionClu/my-application`,
             i18nKey: t("TL_MY_APPLICATIONS_HEADER"),
           },

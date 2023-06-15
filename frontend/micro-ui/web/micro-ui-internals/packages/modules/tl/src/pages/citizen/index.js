@@ -11,9 +11,10 @@ import SLApplications from "./Applications/SLApplication";
 import RLApplication from "./Applications/RLApplication";
 import UAApplication from "./Applications/UAApplication";
 import TransferLicenceApplications from "./Applications/TLApplication";
-
+import ETCApplication from "./Applications/ETCApplication";
 import ECLUApplications from "./Applications/ECLUApplication";
 import CompletionApplications from "./Applications/CompletionApplications";
+import CBIApplications from "./Applications/CBIApplication";
 // import ApplicationDetails from "../../pages/citizen/Applications/ApplicationDetails";
 // import CreateTradeLicence from "./Create";
 // import EditTrade from "./EditTrade";
@@ -78,7 +79,9 @@ const App = () => {
           <PrivateRoute path={`${path}/CompositionClu/my-application`} component={UAApplication} />
           <PrivateRoute path={`${path}/TransferLicense/my-applications`} component={TransferLicenceApplications} />
           <PrivateRoute path={`${path}/ExtensionClu/my-application`} component={ECLUApplications} />
+           <PrivateRoute path={`${path}/ExtensionCom/my-application`} component={ETCApplication} />
           <PrivateRoute path={`${path}/CompletionLic/my-application`} component={CompletionApplications} />
+          <PrivateRoute path={`${path}/Beneficial/my-application`} component={CBIApplications} />
         </AppContainer>
       </Switch>
     </span>

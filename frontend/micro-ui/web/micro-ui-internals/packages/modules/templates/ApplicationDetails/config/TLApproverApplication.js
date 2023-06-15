@@ -21,6 +21,8 @@ export const configTLApproverApplication = ({
   if (action?.action == "SENDBACKTOCITIZEN" || action?.action == "APPROVE") checkCondtions = false;
   if (action.isTerminateState) checkCondtions = false;
 
+  
+
   return {
     label: {
       heading: `WF_${action?.action}_APPLICATION`,
@@ -45,49 +47,59 @@ export const configTLApproverApplication = ({
               //   selected={selectedApprover}
               // />
               
-            //  <React.Fragment>
+             <React.Fragment>
+            
                  <MultiSelectDropdown
               options={approvers}
               // options={[{name:"dtp"},{name:"ctp"},{name:"acp"}]}
               autoComplete="off"
               optionsKey="name"
-              // id="fieldInspector"
+              id="fieldInspector"
               onSelect={setSelectedApprover}
               selected={selectedApprover}
               showSelectedValue={true}
             />
-            // <p>{JSON.stringify(selectedApprover)}</p>
-            // {/* <p>{JSON.stringify(approvers)}</p> */}
-            //  </React.Fragment>
+            {/* <p>{JSON.stringify(selectedApprover)}</p>
+           <p>{JSON.stringify(approvers)}</p> 
+           <p>{JSON.stringify(setSelectedApprover)}</p>  */}
+           
+             </React.Fragment>
             ),
+            
           },
-          {
-            label: t("WF_COMMON_COMMENTS"),
-            // type: "textarea",
-            populators: (  
-              <AdvanceTextArea
-              modal={true}
-              setState={setComment}
-              ></AdvanceTextArea>
-            )
-            // populators: {
+          //////////////////////TCP///////////////////////
+          // {
+          //   label: t("WF_COMMON_COMMENTS"),
+          //   type: "textarea",
+          //   populators: (  
+          //     <AdvanceTextArea
+          //     modal={true}
+          //     setState={setComment}
+          //     ></AdvanceTextArea>
+          //   )
+           
+          // },
+          // populators: {
             //   name: "comments",
             // },
-          },
-          {
-            label: t("TL_APPROVAL_CHECKLIST_BUTTON_UP_FILE"),
-            populators: (
-              <UploadFile
-                id={"workflow-doc"}
-                // accept=".jpg"
-                onUpload={selectFile}
-                onDelete={() => {
-                  setUploadedFile(null);
-                }}
-                message={uploadedFile ? `1 ${t(`ES_PT_ACTION_FILEUPLOADED`)}` : t(`CS_ACTION_NO_FILEUPLOADED`)}
-              />
-            )
-          },
+          //////////////////////TCP///////////////////////
+          //////////////////////TCP///////////////////////
+          // {
+          //   label: t("TL_APPROVAL_CHECKLIST_BUTTON_UP_FILE"),
+          //   populators: (
+          //     <UploadFile
+          //       id={"workflow-doc"}
+          //       accept=".jpg"
+          //       onUpload={selectFile}
+          //       onDelete={() => {
+          //         setUploadedFile(null);
+          //       }}
+          //       message={uploadedFile ? `1 ${t(`ES_PT_ACTION_FILEUPLOADED`)}` : t(`CS_ACTION_NO_FILEUPLOADED`)}
+          //     />
+          //   )
+          // },
+
+      //////////////////////TCP///////////////////////
           //   {
           //     label: action.docUploadRequired ? t("ES_PT_UPLOAD_FILE") : null,
           //     populators: action.docUploadRequired ? (

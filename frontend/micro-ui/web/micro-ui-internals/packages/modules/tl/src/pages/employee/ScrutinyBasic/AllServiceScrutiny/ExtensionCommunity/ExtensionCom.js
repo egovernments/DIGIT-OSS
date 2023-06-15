@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Button from "react-bootstrap/Button";
 import Col from "react-bootstrap/Col";
 import Form from "react-bootstrap/Form";
@@ -12,32 +12,31 @@ import ModalChild from "../../Remarks/ModalChild";
 import Collapse from "react-bootstrap/Collapse";
 import { useStyles } from "../../css/personalInfoChild.style";
 import '../../css/personalInfoChild.style.js'
-
+import FormControl from "@mui/material/FormControl";
 import { IconButton } from "@mui/material";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import FileDownloadIcon from "@mui/icons-material/FileDownload";
+import { getDocShareholding } from "../../ScrutinyDevelopment/docview.helper";
 
-function ExtensionCom() {
+function ExtensionCom(props) {
   const [selects, setSelects] = useState();
   const [showhide, setShowhide] = useState("");
   const [open2, setOpen2] = useState(false);
+   const apiData = props.apiResponse;
+  const dataIcons = props.dataForIcons;
+  const applicationStatus = props.applicationStatus;
 
-  // const handleshowhide = (event) => {
-  //   const getuser = event.target.value;
-
-  //   setShowhide(getuser);
-  // };
   const handleselects = (event) => {
     const getu = event.target.value;
 
     setSelects(getu);
   };
 
-  const handleshowhide = (event) => {
-    const getuser = event.target.value;
+  // const handleshowhide = (event) => {
+  //   const getuser = event.target.value;
 
-    setShowhide(getuser);
-  };
+  //   setShowhide(getuser);
+  // };
   const {
     register,
     handleSubmit,
@@ -50,6 +49,7 @@ function ExtensionCom() {
   const extensionCom = (data) => console.log(data);
    
   const classes = useStyles();
+  const [docModal, setDocModal] = useState(false);
   const currentRemarks = (data) => {
     props.showTable({ data: data.data });
   };
@@ -58,77 +58,212 @@ function ExtensionCom() {
   const [smShow, setSmShow] = useState(false);
   const [labelValue, setLabelValue] = useState("");
   const Colors = {
-    approved:"#09cb3d",
-    disapproved:"#ff0000",
-    info:"#FFB602"
+    Conditional: "#2874A6",
+    approved: "#09cb3d",
+    disapproved: "#ff0000",
+      info: "#FFB602"
   }
 
-  const handlemodaldData = (data) => {
-    // setmodaldData(data.data);
-    setSmShow(false);
-    console.log("here",openedModal,data);
-    if(openedModal && data){
-      setFieldIconColors({...fieldIconColors,[openedModal]:data.data.isApproved?Colors.approved:Colors.disapproved})
-    }
-      setOpennedModal("");
-      setLabelValue("");
-  };
+  // const handlemodaldData = (data) => {
+  //   // setmodaldData(data.data);
+  //   setSmShow(false);
+  //   console.log("here",openedModal,data);
+  //   if(openedModal && data){
+  //     setgetIconColor({...getIconColor,[openedModal]:data.data.isApproved?Colors.approved:Colors.disapproved})
+  //   }
+  //     setOpennedModal("");
+  //     setLabelValue("");
+  // };
   const [selectedFieldData,setSelectedFieldData] = useState();
   const [fieldValue, setFieldValue] = useState("");
   const [openedModal, setOpennedModal] = useState("")
   const [fieldIconColors, setFieldIconColors] = useState({
-    developer: Colors.info,
-    authPersonName: Colors.info,
-    authMobileNo1: Colors.info,
-    authMobileNo2: Colors.info,
-    emailId: Colors.info,
-    pan: Colors.info,
-    address: Colors.info,
-    city: Colors.info,
-    pin: Colors.info,
+     developer: Colors.info,
+    licenseNo: Colors.info,
+
+    selectLicence: Colors.info,
+    validUpto: Colors.info,
+    renewalRequiredUpto: Colors.info,
+    periodOfRenewal: Colors.info,
+    colonizerName: Colors.info,
+    colonyType: Colors.info,
+    areaAcres: Colors.info,
+    sectorNo: Colors.info,
+    revenueEstate: Colors.info,
+    developmentPlan: Colors.info,
     tehsil: Colors.info,
     district: Colors.info,
-    state: Colors.info,
-    type: Colors.info,
-    lciSignedBy: Colors.info,
-    lciNotSigned: Colors.info,
-    parmanentAddress: Colors.info,
-    addressForCommunication: Colors.info,
-    authPerson: Colors.info,
-    emailForCommunication: Colors.info
+    appliedBy: Colors.info,
+    outstandingDues: Colors.info,
+    typeOfCommunitySite: Colors.info,
+    licenceRenewd: Colors.info,
+    areaInAcers: Colors.info,
+    validUpTo: Colors.info,
+    applyedForExtentionPerioud: Colors.info,
+    amount: Colors.info,
+    copyOfBoardResolution: Colors.info,
+    justificationForExtention: Colors.info,
+    proofOfOwnershipOfCommunity: Colors.info,
+    proofOfOnlinePaymentOfExtention: Colors.info,
+    explonatoryNotForExtention: Colors.info,
+    uploadRenewalLicenseCopy: Colors.info,
+    locationOfApplied: Colors.info,
+    anyOtherDocumentByDirector: Colors.info
   })
 
-  const fieldIdList = [{label:"Developer",key:"developer"},{label:"Authorized Person Name",key:"authPersonName"},{label:"Autrhoized Mobile No",key:"authMobileNo1"},{label:"Authorized MobileNo. 2 ",key:"authMobileNo2"},{label:"Email ID",key:"emailId"},{label:"PAN No.",key:"pan"},{label:"Address  1",key:"address"},{label:"Village/City",key:"city"},{label:"Pincode",key:"pin"},{label:"Tehsil",key:"tehsil"},{label:"District",key:"district"},{label:"State",key:"state"},{label:"Status (Individual/ Company/ Firm/ LLP etc.)",key:"type"},{label:"LC-I signed by",key:"lciSignedBy"},{label:"If LC-I is not signed by self (in case of an individual) nature of authorization (GPA/SPA)",key:"lciNotSigned"},{label: "Permanent address in case of individual/ registered office address in case other than individual", key:"parmanentAddress"},{label:"Address for communication",key:"addressForCommunication"},{label:"Name of the authorized person to sign the application",key:"authPerson"},{label:"Email ID for communication",key:"emailForCommunication"}]
+  const fieldIdList = [
+   { label: "Licence No", key: "licenseNo" },
+    { label: "selectLicence", key: "selectLicence" },
+    {label:"Valid Upto",key:"validUpto"},
+    {label:"Renewal required upto",key:"renewalRequiredUpto"},
+    {label:"Period of renewal(In Months)",key:"periodOfRenewal"},
+    {label:"Name of Colonizer",key:"colonizerName"},
+    {label:"Type of Colony",key:"colonyType"},
+    {label:"Area in Acres",key:"areaAcres"},
+    {label:"Sector No",key:"sectorNo"},
+    {label:"Revenue estate",key:"revenueEstate"},
+    {label:"Development Plan",key:"developmentPlan"},
+    {label:"Tehsil",key:"tehsil"},
+    {label:"District",key:"district"},
+    {label:"Applied by",key:"appliedBy"},
+    {label:"Outstanding dues if any",key:"outstandingDues"},
+    {label:"Type of community site",key:"typeOfCommunitySite"},
+    {label:"Licence Renewed",key:"licenceRenewd"},
+    {label:"Area in Acres",key:"areaInAcers"},
+    {label:"Community site valid up to",key:"validUpTo"},
+    {label:"Extension of time",key:"applyedForExtentionPerioud"},
+    {label:"Amount (Rs.)",key:"amount"},
+    {label:"Copy of Board resolution in favour of authorized signatory, applying for case (if applicable).",key:"copyOfBoardResolution"},
+    {label:"Justification for extension in time period for construction of community site",key:"justificationForExtention."},
+    {label:"Proof of ownership of community site (in case of the extension is sought by an applicant other than the licensee).",key:"proofOfOwnershipOfCommunity"},
+    {label:"Proof of online payment of extension fees at the rates provided in Schedule-C to these Rules.",key:"proofOfOnlinePaymentOfExtention"},
+    {label:"An explanatory note indicating the details of progress made about the construction of such a community site.",key:"explonatoryNotForExtention"},
+    {label: "In case of other than licensee/developer, upload renewed license copy.", key:"uploadRenewalLicenseCopy"},
+    {label:"Location of applied community site on the plan.",key:"locationOfApplied"},
+    {label:"Any other document which the director may require for the said purpose.",key:"anyOtherDocumentByDirector"}]
 
-//////////////////////////////////////////////////////
-// import React, { useState } from "react";
-// import { Card, Row, Col, Form, Button } from "react-bootstrap";
-// import { useForm } from "react-hook-form";
-// import AddIcon from "@mui/icons-material/Add";
-// import RemoveIcon from "@mui/icons-material/Remove";
+  const getColorofFieldIcon = () => {
+    let tempFieldColorState = getIconColor;
+    fieldIdList.forEach((item) => {
+      if (dataIcons !== null && dataIcons !== undefined) {
+        console.log("color method called");
+        const fieldPresent = dataIcons.egScrutiny.filter((ele) => ele.fieldIdL === item.label);
+        console.log("filteration value111", fieldPresent, fieldPresent[0]?.isApproved);
+        if (fieldPresent && fieldPresent.length) {
+          console.log("filteration value111", fieldPresent, fieldPresent[0]?.isApproved);
+          tempFieldColorState = {
+            ...tempFieldColorState,
+            [item.key]:
+              fieldPresent[0].isApproved === "In Order"
+                ? Colors.approved
+                : fieldPresent[0].isApproved === "Not In Order"
+                ? Colors.disapproved
+                : fieldPresent[0].isApproved === "Conditional"
+                ? Colors.Conditional
+                : Colors.info,
+          };
+        }
+      }
+    });
 
-// import Collapse from "react-bootstrap/Collapse";
+    setgetIconColor(tempFieldColorState);
+  };
+
+  useEffect(() => {
+    getColorofFieldIcon();
+    console.log("repeating1...");
+  }, [dataIcons]);
+
+  useEffect(() => {
+  if (labelValue) {
+    const fieldPresent = dataIcons.egScrutiny.filter((ele) => ele.fieldIdL === labelValue);
+    setSelectedFieldData(fieldPresent[0]);
+  } else {
+    setSelectedFieldData(null);
+  }
+}, [labelValue]);
 
 
-// function ExtensionCom() {
-//   const [selects, setSelects] = useState();
-//   const [showhide, setShowhide] = useState("");
+const handlemodaldData = (data) => {
 
-//   const handleshowhide = (event) => {
-//     const getuser = event.target.value;
+  setSmShow(false);
+  console.log("here",openedModal,data);
+  if(openedModal && data){
+    setFieldIconColors({...fieldIconColors,[openedModal]:data.data.isApproved?Colors.approved:Colors.disapproved})
 
-//     setShowhide(getuser);
-//   };
-//   const {
-//     register,
-//     handleSubmit,
-//     formState: { errors },
-//     control,
-//     setValue,
-//   } = useForm({});
+  }
+    setOpennedModal("");
+    setLabelValue("");
+};
+useEffect(() => {
+    if (apiResponse) {
+      setCOMData(apiResponse)
+    }
+  }, [apiResponse])
+
+const setCOMData = (details) => {
+     setValue("licenceNo", details?.newAdditionalDetails?.licenseNo);
+      setValue("appliedBy", details?.appliedBy);
+      setValue("outstandingDues", details?.outstandingDues);
+      setValue("typeOfCommunitySite", details?.typeOfCommunitySite);
+      setValue("licenceRenewd", details?.licenceRenewd);
+      setValue("areaInAcers", details?.areaInAcers);
+      setValue("validUpTo", details?.validUpTo);
+      setValue("applyedForExtentionPerioud", details?.applyedForExtentionPerioud);
+      setValue("amount", details?.amount);
+      setValue("copyOfBoardResolution", details?.copyOfBoardResolution);
+      setValue("justificationForExtention", details?.justificationForExtention);
+      setValue("proofOfOwnershipOfCommunity", details?.proofOfOwnershipOfCommunity);
+      setValue("proofOfOnlinePaymentOfExtention", details?.proofOfOnlinePaymentOfExtention);
+      setValue("explonatoryNotForExtention", details?.explonatoryNotForExtention);
+      setValue("uploadRenewalLicenseCopy", details?.uploadRenewalLicenseCopy);
+      setValue("locationOfApplied", details?.locationOfApplied);
+      setValue("anyOtherDocumentByDirector", details?.anyOtherDocumentByDirector);
+      setValue("areaAcres", details?.newAdditionalDetails?.areaAcres);
+      setValue("licenceGrantDate", details?.newAdditionalDetails?.licenceGrantDate);
+      setValue("colonizerName", details?.newAdditionalDetails?.colonizerName);
+      setValue("colonyType", details?.newAdditionalDetails?.colonyType);
+      setValue("developmentPlan", details?.newAdditionalDetails?.developmentPlan);
+      setValue("district", details?.newAdditionalDetails?.district);
+      setValue("periodOfRenewal", details?.newAdditionalDetails?.periodOfRenewal);
+      setValue("renewalRequiredUpto", details?.newAdditionalDetails?.renewalRequiredUpto);
+      setValue("revenueEstate", details?.newAdditionalDetails?.revenueEstate);
+      setValue("sectorNo", details?.newAdditionalDetails?.sectorNo);
+      setValue("selectLicence", details?.newAdditionalDetails?.selectLicence);
+      setValue("tehsil", details?.newAdditionalDetails?.tehsil);
+      setValue("validUpto", details?.newAdditionalDetails?.validUpto);
+  }
+
+  const getIconColor = (label) => {
+    if (findfisrtObj(dataForIcons?.egScrutiny, label)?.isApproved === 'In Order') {
+      return Colors.approved;
+    }
+    if (findfisrtObj(dataForIcons?.egScrutiny, label)?.isApproved === 'Not In Order') {
+      return Colors.disapproved;
+    }
+    if (findfisrtObj(dataForIcons?.egScrutiny, label)?.isApproved === "Conditional") {
+      return Colors.conditional;
+    }
+    return Colors.info
+  }
+
+  const findfisrtObj = (list = [], label) => {
+    return list?.filter((item, index) => item.fieldIdL === label)?.[0] || {}
+  }
 
   return (
     <form onSubmit={handleSubmit(extensionCom)}>
+       <ModalChild
+                      labelmodal={labelValue}
+                      passmodalData={handlemodaldData}
+                      displaymodal={smShow}
+                       disPlayDoc={docModal}
+                      onClose={() => setSmShow(false)}
+                      selectedFieldData={selectedFieldData}
+                      fieldValue={fieldValue}
+                      remarksUpdate={currentRemarks}
+                      applicationStatus={applicationStatus}
+                    ></ModalChild>
         <div
         className="collapse-header"
         onClick={() => setOpen2(!open2)}
@@ -154,341 +289,503 @@ function ExtensionCom() {
       <Collapse in={open2}>
         <div id="example-collapse-text">
       <Card 
-      // style={{ width: "126%", border: "5px solid #1266af" }}
+       style={{ width: "126%", border: "5px solid #1266af" }}
       >
         <h4 style={{ fontSize: "25px", marginLeft: "21px" }}>Extension (construction in community sites)</h4>
         <div className="card">
-          <Row className="col-12">
-            {/* <Form.Group as={Col} controlId="formGridCase">
-              <Form.Label>
-                <h2>
-                  {" "}
-                  License No.<span style={{ color: "red" }}>*</span>
-                </h2>
-              </Form.Label>
-              <input type="number" className="form-control" placeholder="" {...register("licenseNumber")} />
-            </Form.Group> */}
-            <Col className="col-4">
-                 <div>
-                <Form.Label>
-              <h5 className={classes.formLabel}>Licence No &nbsp;</h5>
-            </Form.Label>
-            <span className={classes.required}>*</span> &nbsp;&nbsp;
+         <div>
+      <div className="row gy-3">
+        <div className="col col-3">
+          <h2>
+            Licence No.<span style={{ color: "red" }}>*</span>
+          </h2>
+          <div style={{ display: "flex", placeItems: "center" }}>
+            <input type="text" className="form-control" placeholder="LC_XXXXX" {...register("licenseNo")} disabled />
+            <div>
+              <ReportProblemIcon
+                      style={{
+                        color: getIconColor.licenseNo,
+                      }}
+                      onClick={() => {
+                        setOpennedModal("licenseNo");
+                        setLabelValue("Licence No"),
+                          setSmShow(true),
+                          setDocModal(false),
+                          console.log("modal open"),
+                          setFieldValue(apiData !== null ? apiData.licenseNo : null);
+                      }}
+                    ></ReportProblemIcon>
+                   
+            </div>
           </div>
-            <div className={classes.fieldContainer}>
-            <Form.Control
-              className={classes.formControl}
-              placeholder=""
-              disabled
-            ></Form.Control>
-                
-                <ReportProblemIcon
-              style={{
-                color:fieldIconColors.developer}}
-              onClick={() => {
-                  setOpennedModal("Licence No")
-                  setLabelValue("Licence No"),
-                  setSmShow(true),
-                  console.log("modal open"),
-                  setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
-              }}
-            ></ReportProblemIcon>
-             <ModalChild
-              labelmodal={labelValue}
-              passmodalData={handlemodaldData}
-              displaymodal={smShow}
-              onClose={()=>setSmShow(false)}
-              selectedFieldData={selectedFieldData}
-              fieldValue={fieldValue}
-              remarksUpdate={currentRemarks}
-            ></ModalChild>
-             </div>
-              </Col>
-
-            {/* <Form.Group as={Col} controlId="formGridState">
-              <Form.Label>
-                <h2>
-                  {" "}
-                  Applied by <span style={{ color: "red" }}>*</span>
-                </h2>
-              </Form.Label>
-              <select className="form-control" placeholder="" {...register("appliedBy")} onChange={(e) => handleshowhide(e)}>
-                <option value=" ">----Select value-----</option>
-                <option value="1">Licensee</option>
-                <option value="2">Other than Licensee/Developer</option>
-              </select>
-            </Form.Group> */}
-            <Col className="col-4">
-                 <div>
-                <Form.Label>
-              <h5 className={classes.formLabel}>Applied by&nbsp;</h5>
-            </Form.Label>
-            <span className={classes.required}>*</span> &nbsp;&nbsp;
-          </div>
-            <div className={classes.fieldContainer}>
-            <Form.Control
-              className={classes.formControl}
-              placeholder=""
-              disabled
-            ></Form.Control>
-                
-                <ReportProblemIcon
-              style={{
-                color:fieldIconColors.developer}}
-              onClick={() => {
-                  setOpennedModal("Licence No")
-                  setLabelValue("Licence No"),
-                  setSmShow(true),
-                  console.log("modal open"),
-                  setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
-              }}
-            ></ReportProblemIcon>
-             
-             </div>
-              </Col>
-
-            {/* <Form.Group as={Col} controlId="formGridState">
-              <Form.Label>
-                <h2>
-                  {" "}
-                  Outstanding dues if any <span style={{ color: "red" }}>*</span>
-                </h2>
-              </Form.Label>
-              <input type="text" className="form-control" placeholder="" {...register("outstandingDues")} />
-            </Form.Group> */}
-            <Col className="col-4">
-                 <div>
-                <Form.Label>
-              <h5 className={classes.formLabel}>Outstanding dues if any &nbsp;</h5>
-            </Form.Label>
-            <span className={classes.required}>*</span> &nbsp;&nbsp;
-          </div>
-            <div className={classes.fieldContainer}>
-            <Form.Control
-              className={classes.formControl}
-              placeholder=""
-              disabled
-            ></Form.Control>
-                
-                <ReportProblemIcon
-              style={{
-                color:fieldIconColors.developer}}
-              onClick={() => {
-                  setOpennedModal("Licence No")
-                  setLabelValue("Licence No"),
-                  setSmShow(true),
-                  console.log("modal open"),
-                  setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
-              }}
-            ></ReportProblemIcon>
-             </div>
-              </Col>
-          </Row>
-          <Row className="col-12">
-            {/* <Form.Group as={Col} controlId="formGridState">
-              <Form.Label>
-                <h2>
-                  {" "}
-                  Type of community site
-                  <span style={{ color: "red" }}>*</span>
-                </h2>
-              </Form.Label>
-              <input type="text" className="form-control" placeholder="" {...register("typesCommunitySites")} />
-            </Form.Group> */}
-            <Col className="col-4">
-                 <div>
-                <Form.Label>
-              <h5 className={classes.formLabel}>Type of community site&nbsp;</h5>
-            </Form.Label>
-            <span className={classes.required}>*</span> &nbsp;&nbsp;
-          </div>
-            <div className={classes.fieldContainer}>
-            <Form.Control
-              className={classes.formControl}
-              placeholder=""
-              disabled
-            ></Form.Control>
-                
-                <ReportProblemIcon
-              style={{
-                color:fieldIconColors.developer}}
-              onClick={() => {
-                  setOpennedModal("Licence No")
-                  setLabelValue("Licence No"),
-                  setSmShow(true),
-                  console.log("modal open"),
-                  setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
-              }}
-            ></ReportProblemIcon>
-             
-             </div>
-              </Col>
-
-            {/* <Form.Group as={Col} controlId="formGridState">
-              <Form.Label>
-                <h2>
-                  {" "}
-                  Area in Acres
-                  <span style={{ color: "red" }}>*</span>
-                </h2>
-              </Form.Label>
-              <input type="text" className="form-control" placeholder="" {...register("areainAcres")} />
-            </Form.Group> */}
-            <Col className="col-4">
-                 <div>
-                <Form.Label>
-              <h5 className={classes.formLabel}>Area in Acres &nbsp;</h5>
-            </Form.Label>
-            <span className={classes.required}>*</span> &nbsp;&nbsp;
-          </div>
-            <div className={classes.fieldContainer}>
-            <Form.Control
-              className={classes.formControl}
-              placeholder=""
-              disabled
-            ></Form.Control>
-                
-                <ReportProblemIcon
-              style={{
-                color:fieldIconColors.developer}}
-              onClick={() => {
-                  setOpennedModal("Licence No")
-                  setLabelValue("Licence No"),
-                  setSmShow(true),
-                  console.log("modal open"),
-                  setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
-              }}
-            ></ReportProblemIcon>
-             </div>
-              </Col>
-            {/* <Form.Group as={Col} controlId="formGridState">
-              <Form.Label>
-                <h2>
-                  {" "}
-                  Community site valid up to <span style={{ color: "red" }}>*</span>{" "}
-                </h2>
-              </Form.Label>
-              <input type="Date" className="form-control" placeholder="" {...register("communitySite")} />
-            </Form.Group> */}
-            <Col className="col-4">
-                 <div>
-                <Form.Label>
-              <h5 className={classes.formLabel}>Community site valid up to &nbsp;</h5>
-            </Form.Label>
-            <span className={classes.required}>*</span> &nbsp;&nbsp;
-          </div>
-            <div className={classes.fieldContainer}>
-            <Form.Control
-              className={classes.formControl}
-              placeholder=""
-              disabled
-            ></Form.Control>
-                
-                <ReportProblemIcon
-              style={{
-                color:fieldIconColors.developer}}
-              onClick={() => {
-                  setOpennedModal("Licence No")
-                  setLabelValue("Licence No"),
-                  setSmShow(true),
-                  console.log("modal open"),
-                  setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
-              }}
-            ></ReportProblemIcon>
-             </div>
-              </Col>
-          </Row>
-          <Row className="col-12">
-            {/* <Form.Group as={Col} controlId="formGridState">
-              <Form.Label
-                data-toggle="tooltip"
-                data-placement="top"
-                title="Apply for an Extension of time for construction of the
-                  community site (in years)"
-              >
-                <h2>
-                  {" "}
-                  Extension of time
-                  <span style={{ color: "red" }}>*</span>
-                </h2>
-              </Form.Label>
-              <input type="text" className="form-control" placeholder="" {...register("extensionTime")} />
-            </Form.Group> */}
-            <Col className="col-4">
-                 <div>
-                <Form.Label
-                 data-toggle="tooltip"
-                data-placement="top"
-                title="Apply for an Extension of time for construction of the
-                  community site (in years)"
-                >
-              <h5 className={classes.formLabel}>Extension of time &nbsp;</h5>
-            </Form.Label>
-            <span className={classes.required}>*</span> &nbsp;&nbsp;
-          </div>
-            <div className={classes.fieldContainer}>
-            <Form.Control
-              className={classes.formControl}
-              placeholder=""
-              disabled
-            ></Form.Control>
-                
-                <ReportProblemIcon
-              style={{
-                color:fieldIconColors.developer}}
-              onClick={() => {
-                  setOpennedModal("Licence No")
-                  setLabelValue("Licence No"),
-                  setSmShow(true),
-                  console.log("modal open"),
-                  setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
-              }}
-            ></ReportProblemIcon>
-             </div>
-              </Col>
-            
-{/* 
-            <Form.Group as={Col} controlId="formGridState">
-              <Form.Label>
-                <h2>
-                  {" "}
-                  Amount (Rs.) <span style={{ color: "red" }}>*</span>
-                </h2>
-              </Form.Label>
-              <input type="text" className="form-control" placeholder="" {...register("amount")} />
-            </Form.Group> */}
-             <Col className="col-4">
-                 <div>
-                <Form.Label>
-              <h5 className={classes.formLabel}>Amount (Rs.)  &nbsp;</h5>
-            </Form.Label>
-            <span className={classes.required}>*</span> &nbsp;&nbsp;
-          </div>
-            <div className={classes.fieldContainer}>
-            <Form.Control
-              className={classes.formControl}
-              placeholder=""
-              disabled
-            ></Form.Control>
-                
-                <ReportProblemIcon
-              style={{
-                color:fieldIconColors.developer}}
-              onClick={() => {
-                  setOpennedModal("Licence No")
-                  setLabelValue("Licence No"),
-                  setSmShow(true),
-                  console.log("modal open"),
-                  setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
-              }}
-            ></ReportProblemIcon>
-             </div>
-              </Col>
-          </Row>
+        
         </div>
 
+          <div className="col col-3 ">
+            <h2>
+              Select Licence<span style={{ color: "red" }}>*</span>
+            </h2>
+            <div style={{ display: "flex", placeItems: "center" }}>
+            <input type="text" className="form-control" placeholder="" {...register("selectLicence")} disabled />
+            <div>
+              <ReportProblemIcon
+                      style={{
+                        color: getIconColor.selectLicence,
+                      }}
+                      onClick={() => {
+                        setOpennedModal("selectLicence");
+                        setLabelValue("Select Licence"),
+                          setDocModal(false),
+                          setSmShow(true),
+                          console.log("modal open"),
+                          setFieldValue(apiData !== null ? apiData.selectLicence : null);
+                      }}
+                    ></ReportProblemIcon>
+                    
+            </div>
+            </div>
+            
+            
+          </div>
+        {/* )} */}
+      </div>
+
+      {/* {showField.other && ( */}
+        <div className="row gy-3 mt-3">
+          <div className="col col-3 ">
+            <FormControl>
+              <h2>
+                Valid Upto <span style={{ color: "red" }}>*</span>
+              </h2>
+
+             
+            </FormControl>
+            <div style={{ display: "flex", placeItems: "center" }}>
+            <input type="date" className="form-control" placeholder="" {...register("validUpto")} disabled />
+           <div>
+              <ReportProblemIcon
+                      style={{
+                        color: getIconColor.validUpto,
+                      }}
+                      onClick={() => {
+                        setOpennedModal("validUpto");
+                        setLabelValue("Valid Upto"),
+                          setDocModal(false),
+                          setSmShow(true),
+                          console.log("modal open"),
+                          setFieldValue(apiData !== null ? apiData.selectLicence : null);
+                      }}
+                    ></ReportProblemIcon>
+                    
+            </div>
+            </div>
+            
+            <h3 className="error-message" style={{ color: "red" }}>
+              {errors?.validUpto && errors?.validUpto?.message}
+            </h3>
+          </div>
+         
+          <div className="col col-3 ">
+            <FormControl>
+              <h2>
+                Name of Colonizer <span style={{ color: "red" }}>*</span>
+              </h2>
+
+            </FormControl>
+            <div style={{ display: "flex", placeItems: "center" }}>
+            <input type="text" className="form-control" placeholder="" {...register("colonizerName")} disabled />
+            <div>
+              <ReportProblemIcon
+                      style={{
+                        color: getIconColor.colonizerName,
+                      }}
+                      onClick={() => {
+                        setOpennedModal("colonizerName");
+                        setLabelValue("Name of Colonizer"),
+                          setSmShow(true),
+                            setDocModal(false),
+                          console.log("modal open"),
+                          setFieldValue(apiData !== null ? apiData.colonizerName : null);
+                      }}
+                    ></ReportProblemIcon>
+                    
+            </div>
+            </div>
+            
+            {/* <h3 className="error-message" style={{ color: "red" }}>
+              {errors?.colonizerName && errors?.colonizerName?.message}
+            </h3> */}
+          </div>
+        </div>
+      {/* )} */}
+
+      {/* {showField.other && ( */}
+        <div className="row gy-3 mt-3">
+          <div className="col col-3 ">
+            <FormControl>
+              <h2>
+                Type of Colony
+                <span style={{ color: "red" }}>*</span>
+              </h2>
+
+              
+            </FormControl>
+            <div style={{ display: "flex", placeItems: "center" }}>
+            <input type="text" className="form-control" placeholder="" {...register("colonyType")} disabled />
+            <div>
+              <ReportProblemIcon
+                      style={{
+                        color: getIconColor.colonyType,
+                      }}
+                      onClick={() => {
+                        setOpennedModal("colonyType");
+                        setLabelValue("Type of Colony"),
+                          setSmShow(true),
+                            setDocModal(false),
+                          console.log("modal open"),
+                          setFieldValue(apiData !== null ? apiData.colonyType : null);
+                      }}
+                    ></ReportProblemIcon>
+                    
+            </div>
+            </div>
+            
+
+           
+            {/* <h3 className="error-message" style={{ color: "red" }}>
+              {errors?.colonyType && errors?.colonyType?.message}
+            </h3> */}
+          </div>
+
+          <div className="col col-3 ">
+            <FormControl>
+              <h2>
+                Area in Acres
+                <span style={{ color: "red" }}>*</span>
+              </h2>
+            </FormControl>
+            <div style={{ display: "flex", placeItems: "center" }}>
+            <input type="text" className="form-control" placeholder="" {...register("areaAcres")} disabled />
+            <div>
+              <ReportProblemIcon
+                      style={{
+                        color: getIconColor.areaAcres,
+                      }}
+                      onClick={() => {
+                        setOpennedModal("areaAcres");
+                        setLabelValue("Area in Acres"),
+                          setSmShow(true),
+                            setDocModal(false),
+                          console.log("modal open"),
+                          setFieldValue(apiData !== null ? apiData.areaAcres : null);
+                      }}
+                    ></ReportProblemIcon>
+                    
+            </div>
+            </div>
+          
+            <h3 className="error-message" style={{ color: "red" }}>
+              {errors?.areaAcres && errors?.areaAcres?.message}
+            </h3>
+          </div>
+
+          <div className="col col-3 ">
+            <FormControl>
+              <h2>
+                Sector No. <span style={{ color: "red" }}>*</span>
+              </h2>
+
+              
+            </FormControl>
+            <div style={{ display: "flex", placeItems: "center" }}>
+            <input type="text" className="form-control" placeholder="" {...register("sectorNo")} disabled/>
+            <div>
+              <ReportProblemIcon
+                      style={{
+                        color: getIconColor.sectorNo,
+                      }}
+                      onClick={() => {
+                        setOpennedModal("sectorNo");
+                        setLabelValue("Sector No"),
+                          setSmShow(true),
+                            setDocModal(false),
+                          console.log("modal open"),
+                          setFieldValue(apiData !== null ? apiData.sectorNo : null);
+                      }}
+                    ></ReportProblemIcon>
+                    
+            </div>
+            </div>
+           
+            <h3 className="error-message" style={{ color: "red" }}>
+              {errors?.sectorNo && errors?.sectorNo?.message}
+            </h3>
+          </div>
+          <div className="col col-3 ">
+            <FormControl>
+              <h2>Revenue estate</h2>
+
+            </FormControl>
+            <div style={{ display: "flex", placeItems: "center" }}>
+            <input type="text" className="form-control" placeholder="" {...register("revenueEstate")} disabled />
+            <div>
+              <ReportProblemIcon
+                      style={{
+                        color: getIconColor.revenueEstate,
+                      }}
+                      onClick={() => {
+                        setOpennedModal("selectLicence");
+                        setLabelValue("Revenue estate"),
+                          setSmShow(true),
+                            setDocModal(false),
+                          console.log("modal open"),
+                          setFieldValue(apiData !== null ? apiData.revenueEstate : null);
+                      }}
+                    ></ReportProblemIcon>
+                    
+            </div>
+            </div>
+           
+            <h3 className="error-message" style={{ color: "red" }}>
+              {errors?.revenueEstate && errors?.revenueEstate?.message}
+            </h3>
+          </div>
+          <div className="col col-3 ">
+            Development Plan
+          
+            <div style={{ display: "flex", placeItems: "center" }}>
+            <input type="text" className="form-control" placeholder="" {...register("developmentPlan")} disabled />
+            <div>
+              <ReportProblemIcon
+                      style={{
+                        color: getIconColor.developmentPlan,
+                      }}
+                      onClick={() => {
+                        setOpennedModal("developmentPlan");
+                        setLabelValue("Development Plan"),
+                          setSmShow(true),
+                            setDocModal(false),
+                          console.log("modal open"),
+                          setFieldValue(apiData !== null ? apiData.developmentPlan : null);
+                      }}
+                    ></ReportProblemIcon>
+                    
+            </div>
+            </div>
+         
+          </div>
+          
+        </div>
+      {/* )} */}
+
+      <div className="row gy-3 mt-3">
+        <div className="col col-3 ">
+          <FormControl>
+            <h2>Tehsil</h2>
+            
+            
+          </FormControl>
+          <div style={{ display: "flex", placeItems: "center" }}>
+          <input type="text" className="form-control" placeholder="" {...register("tehsil")} disabled />
+            <div>
+              <ReportProblemIcon
+                      style={{
+                        color: getIconColor.tehsil,
+                      }}
+                      onClick={() => {
+                        setOpennedModal("tehsil");
+                        setLabelValue("Tehsil"),
+                          setSmShow(true),
+                            setDocModal(false),
+                          console.log("modal open"),
+                          setFieldValue(apiData !== null ? apiData?.newAdditionalDetails?.tehsil : null);
+                      }}
+                    ></ReportProblemIcon>
+                    
+            </div>
+            </div>
+         
+        </div>
+        <div className="col col-3 ">
+          <FormControl>
+            <h2>District</h2>
+            
+          </FormControl>
+          <div style={{ display: "flex", placeItems: "center" }}>
+          <input type="text" className="form-control" placeholder="" {...register("district")} disabled />
+          <div>
+              <ReportProblemIcon
+                      style={{
+                        color: getIconColor.district,
+                      }}
+                      onClick={() => {
+                        setOpennedModal("district");
+                        setLabelValue("District"),
+                          setSmShow(true),
+                            setDocModal(false),
+                          console.log("modal open"),
+                          setFieldValue(apiData !== null ? apiData?.newAdditionalDetails?.district : null);
+                      }}
+                    ></ReportProblemIcon>
+                    
+            </div>
+            </div>
+        </div>
+      </div>
+    </div> 
+       <div className="row gy-3 mt-3">
+            <div className="col col-3 "><FormControl>
+            <h2>Applied by <span style={{ color: "red" }}>*</span></h2>
+          </FormControl>
+            <div style={{ display: "flex", placeItems: "center" }}>
+                <input type="text" className="form-control" placeholder="" {...register("appliedBy")} disabled />
+          <div>
+                <ReportProblemIcon
+              style={{
+                color:getIconColor.appliedBy}}
+              onClick={() => {
+                  setOpennedModal("appliedBy")
+                  setLabelValue("Applied by"),
+                  setSmShow(true),
+                  setDocModal(false),
+                  console.log("modal open"),
+                  setFieldValue(constructionOfCommunity !== null ? constructionOfCommunity.appliedBy : null);
+              }}
+            ></ReportProblemIcon>
+             </div>
+             </div>
+             </div>
+            <div className="col col-3 "><FormControl>
+            <h2>Outstanding dues if any<span style={{ color: "red" }}>*</span></h2>
+          </FormControl>
+            <div style={{ display: "flex", placeItems: "center" }}>
+                <input type="text" className="form-control" placeholder="" {...register("outstandingDues")} disabled />
+          <div>
+                <ReportProblemIcon
+              style={{
+                color:getIconColor.outstandingDues}}
+              onClick={() => {
+                  setOpennedModal("outstandingDues")
+                  setLabelValue("Outstanding dues if any"),
+                  setSmShow(true),
+                    setDocModal(false),
+                  console.log("modal open"),
+                  setFieldValue(constructionOfCommunity !== null ? constructionOfCommunity.outstandingDues : null);
+              }}
+            ></ReportProblemIcon>
+             </div>
+             </div>
+             </div>
+             <div className="col col-3 "><FormControl>
+            <h2>Type of community site<span style={{ color: "red" }}>*</span></h2>
+          </FormControl>
+            <div style={{ display: "flex", placeItems: "center" }}>
+                <input type="text" className="form-control" placeholder="" {...register("typeOfCommunitySite")} disabled />
+          <div>
+                <ReportProblemIcon
+              style={{
+                color:getIconColor.typeOfCommunitySite}}
+              onClick={() => {
+                  setOpennedModal("typeOfCommunitySite")
+                  setLabelValue("Type of community site"),
+                  setSmShow(true),
+                    setDocModal(false),
+                  console.log("modal open"),
+                  setFieldValue(constructionOfCommunity !== null ? constructionOfCommunity.typeOfCommunitySite : null);
+              }}
+            ></ReportProblemIcon>
+             </div>
+             </div>
+             </div>
+                <div className="col col-3 "><FormControl>
+            <h2>Area in Acres<span style={{ color: "red" }}>*</span></h2>
+          </FormControl>
+            <div style={{ display: "flex", placeItems: "center" }}>
+                <input type="text" className="form-control" placeholder="" {...register("areaInAcers")} disabled />
+          <div>
+                <ReportProblemIcon
+              style={{
+                color:getIconColor.areaInAcers}}
+              onClick={() => {
+                  setOpennedModal("areaInAcers")
+                  setLabelValue("Area in Acres"),
+                  setSmShow(true),
+                    setDocModal(false),
+                  console.log("modal open"),
+                  setFieldValue(constructionOfCommunity !== null ? constructionOfCommunity.areaInAcers : null);
+              }}
+            ></ReportProblemIcon>
+             </div>
+             </div>
+             </div>
+          </div>
+         <div className="row gy-3 mt-3">
+          <div className="col col-3 "><FormControl>
+            <h2>Community site valid up to<span style={{ color: "red" }}>*</span></h2>
+          </FormControl>
+            <div style={{ display: "flex", placeItems: "center" }}>
+                <input type="text" className="form-control" placeholder="" {...register("validUpTo")} disabled />
+          <div>
+                <ReportProblemIcon
+              style={{
+                color:getIconColor.validUpTo}}
+              onClick={() => {
+                  setOpennedModal("validUpTo")
+                  setLabelValue("Community site valid up to"),
+                  setSmShow(true),
+                    setDocModal(false),
+                  console.log("modal open"),
+                  setFieldValue(constructionOfCommunity !== null ? constructionOfCommunity.validUpTo : null);
+              }}
+            ></ReportProblemIcon>
+             </div>
+             </div>
+             </div>
+           <div className="col col-3 "><FormControl>
+            <h2>Extension of time<span style={{ color: "red" }}>*</span></h2>
+          </FormControl>
+            <div style={{ display: "flex", placeItems: "center" }}>
+                <input type="text" className="form-control" placeholder="" {...register("applyedForExtentionPerioud")} disabled />
+          <div>
+                <ReportProblemIcon
+              style={{
+                color:getIconColor.applyedForExtentionPerioud}}
+              onClick={() => {
+                  setOpennedModal("applyedForExtentionPerioud")
+                  setLabelValue("Extension of time"),
+                  setSmShow(true),
+                    setDocModal(false),
+                  console.log("modal open"),
+                  setFieldValue(constructionOfCommunity !== null ? constructionOfCommunity.applyedForExtentionPerioud : null);
+              }}
+            ></ReportProblemIcon>
+             </div>
+             </div>
+             </div>
+                <div className="col col-3 "><FormControl>
+            <h2>Amount (Rs.)<span style={{ color: "red" }}>*</span></h2>
+          </FormControl>
+            <div style={{ display: "flex", placeItems: "center" }}>
+                <input type="text" className="form-control" placeholder="" {...register("amount")} disabled />
+          <div>
+                <ReportProblemIcon
+              style={{
+                color:getIconColor.amount}}
+              onClick={() => {
+                  setOpennedModal("amount")
+                  setLabelValue("Amount (Rs.)"),
+                  setSmShow(true),
+                    setDocModal(false),
+                  console.log("modal open"),
+                  setFieldValue(constructionOfCommunity !== null ? constructionOfCommunity.amount : null);
+              }}
+            ></ReportProblemIcon>
+             </div>
+             </div>
+             </div>
+          </div>
         <div>
-          {showhide === "2" && (
+        
             <div className="card">
               <div className="table table-bordered table-responsive">
                 <thead>
@@ -511,23 +808,24 @@ function ExtensionCom() {
                                   
                                   
                                   <div className="btn btn-sm col-md-4">
-                                    <IconButton onClick={()=>getDocShareholding(item?.agreementDoc)}>
+                                    <IconButton onClick={()=>getDocShareholding(item?.copyOfBoardResolution)}>
                                        <VisibilityIcon color="info" className="icon" /></IconButton>
                                        </div>
                                   <div className="btn btn-sm col-md-4">
-                                   <IconButton onClick={()=>getDocShareholding(item?.agreementDoc)}>
+                                   <IconButton onClick={()=>getDocShareholding(item?.copyOfBoardResolution)}>
                                        <FileDownloadIcon color="info" className="icon" /></IconButton>
                                        </div>
                                        <div className="btn btn-sm col-md-4">
                                        <ReportProblemIcon
               style={{
-                color:fieldIconColors.developer}}
+                color:getIconColor.copyOfBoardResolution}}
               onClick={() => {
-                  setOpennedModal("Licence No")
-                  setLabelValue("Licence No"),
+                  setOpennedModal("copyOfBoardResolution")
+                  setLabelValue("Copy of Board resolution in favour of authorized signatory, applying for case (if applicable)."),
                   setSmShow(true),
+                    setDocModal(true),
                   console.log("modal open"),
-                  setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
+                  setFieldValue(constructionOfCommunity !== null ? constructionOfCommunity.copyOfBoardResolution : null);
               }}
             ></ReportProblemIcon>
                                        </div>
@@ -538,7 +836,7 @@ function ExtensionCom() {
                     <th scope="row">2</th>
                     <td>
                       {" "}
-                      Justification for extension in time period for construction of community site <span style={{ color: "red" }}>*</span>
+                      Justification for extension in time period for construction of community site. <span style={{ color: "red" }}>*</span>
                     </td>
                     <td>
                       {/* <input type="file" className="form-control" placeholder="" {...register("justificationExtension")}></input> */}
@@ -546,23 +844,24 @@ function ExtensionCom() {
                                   
                                   
                                   <div className="btn btn-sm col-md-4">
-                                    <IconButton onClick={()=>getDocShareholding(item?.agreementDoc)}>
+                                    <IconButton onClick={()=>getDocShareholding(item?.justificationForExtention)}>
                                        <VisibilityIcon color="info" className="icon" /></IconButton>
                                        </div>
                                   <div className="btn btn-sm col-md-4">
-                                   <IconButton onClick={()=>getDocShareholding(item?.agreementDoc)}>
+                                   <IconButton onClick={()=>getDocShareholding(item?.justificationForExtention)}>
                                        <FileDownloadIcon color="info" className="icon" /></IconButton>
                                        </div>
                                        <div className="btn btn-sm col-md-4">
                                        <ReportProblemIcon
               style={{
-                color:fieldIconColors.developer}}
+                color:getIconColor.justificationForExtention}}
               onClick={() => {
-                  setOpennedModal("Licence No")
-                  setLabelValue("Licence No"),
+                  setOpennedModal("justificationForExtention")
+                  setLabelValue("Justification for extension in time period for construction of community site."),
                   setSmShow(true),
+                  setDocModal(true),
                   console.log("modal open"),
-                  setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
+                  setFieldValue(constructionOfCommunity !== null ? constructionOfCommunity.justificationForExtention : null);
               }}
             ></ReportProblemIcon>
                                        </div>
@@ -573,7 +872,7 @@ function ExtensionCom() {
                     <th scope="row">3</th>
                     <td>
                       {" "}
-                      Proof of ownership of community site (in case of the extension is sought by an applicant other than the licensee) .{" "}
+                      Proof of ownership of community site (in case of the extension is sought by an applicant other than the licensee).{" "}
                       <span style={{ color: "red" }}>*</span>
                     </td>
                     <td>
@@ -582,23 +881,24 @@ function ExtensionCom() {
                                   
                                   
                                   <div className="btn btn-sm col-md-4">
-                                    <IconButton onClick={()=>getDocShareholding(item?.agreementDoc)}>
+                                    <IconButton onClick={()=>getDocShareholding(item?.proofOfOwnershipOfCommunity)}>
                                        <VisibilityIcon color="info" className="icon" /></IconButton>
                                        </div>
                                   <div className="btn btn-sm col-md-4">
-                                   <IconButton onClick={()=>getDocShareholding(item?.agreementDoc)}>
+                                   <IconButton onClick={()=>getDocShareholding(item?.proofOfOwnershipOfCommunity)}>
                                        <FileDownloadIcon color="info" className="icon" /></IconButton>
                                        </div>
                                        <div className="btn btn-sm col-md-4">
                                        <ReportProblemIcon
               style={{
-                color:fieldIconColors.developer}}
+                color:getIconColor.proofOfOwnershipOfCommunity}}
               onClick={() => {
-                  setOpennedModal("Licence No")
-                  setLabelValue("Licence No"),
+                  setOpennedModal("proofOfOwnershipOfCommunity")
+                  setLabelValue("Proof of ownership of community site (in case of the extension is sought by an applicant other than the licensee)."),
                   setSmShow(true),
+                  setDocModal(true),
                   console.log("modal open"),
-                  setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
+                  setFieldValue(constructionOfCommunity !== null ? constructionOfCommunity.proofOfOwnershipOfCommunity : null);
               }}
             ></ReportProblemIcon>
                                        </div>
@@ -618,23 +918,24 @@ function ExtensionCom() {
                                   
                                   
                                   <div className="btn btn-sm col-md-4">
-                                    <IconButton onClick={()=>getDocShareholding(item?.agreementDoc)}>
+                                    <IconButton onClick={()=>getDocShareholding(item?.proofOfOnlinePaymentOfExtention)}>
                                        <VisibilityIcon color="info" className="icon" /></IconButton>
                                        </div>
                                   <div className="btn btn-sm col-md-4">
-                                   <IconButton onClick={()=>getDocShareholding(item?.agreementDoc)}>
+                                   <IconButton onClick={()=>getDocShareholding(item?.proofOfOnlinePaymentOfExtention)}>
                                        <FileDownloadIcon color="info" className="icon" /></IconButton>
                                        </div>
                                        <div className="btn btn-sm col-md-4">
                                        <ReportProblemIcon
               style={{
-                color:fieldIconColors.developer}}
+                color:getIconColor.proofOfOnlinePaymentOfExtention}}
               onClick={() => {
-                  setOpennedModal("Licence No")
-                  setLabelValue("Licence No"),
+                  setOpennedModal("proofOfOnlinePaymentOfExtention")
+                  setLabelValue("Proof of online payment of extension fees at the rates provided in Schedule-C to these Rules."),
                   setSmShow(true),
+                  setDocModal(true),
                   console.log("modal open"),
-                  setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
+                  setFieldValue(constructionOfCommunity !== null ? constructionOfCommunity.proofOfOnlinePaymentOfExtention : null);
               }}
             ></ReportProblemIcon>
                                        </div>
@@ -645,7 +946,7 @@ function ExtensionCom() {
                     <th scope="row">5</th>
                     <td>
                       {" "}
-                      An explanatory note indicating the details of progress made about the construction of such a community site{" "}
+                      An explanatory note indicating the details of progress made about the construction of such a community site.{" "}
                       <span style={{ color: "red" }}>*</span>
                     </td>
                     <td>
@@ -654,23 +955,24 @@ function ExtensionCom() {
                                   
                                   
                                   <div className="btn btn-sm col-md-4">
-                                    <IconButton onClick={()=>getDocShareholding(item?.agreementDoc)}>
+                                    <IconButton onClick={()=>getDocShareholding(item?.explonatoryNotForExtention)}>
                                        <VisibilityIcon color="info" className="icon" /></IconButton>
                                        </div>
                                   <div className="btn btn-sm col-md-4">
-                                   <IconButton onClick={()=>getDocShareholding(item?.agreementDoc)}>
+                                   <IconButton onClick={()=>getDocShareholding(item?.explonatoryNotForExtention)}>
                                        <FileDownloadIcon color="info" className="icon" /></IconButton>
                                        </div>
                                        <div className="btn btn-sm col-md-4">
                                        <ReportProblemIcon
               style={{
-                color:fieldIconColors.developer}}
+                color:getIconColor.explonatoryNotForExtention}}
               onClick={() => {
-                  setOpennedModal("Licence No")
-                  setLabelValue("Licence No"),
+                  setOpennedModal("explonatoryNotForExtention")
+                  setLabelValue("An explanatory note indicating the details of progress made about the construction of such a community site."),
                   setSmShow(true),
+                  setDocModal(true),
                   console.log("modal open"),
-                  setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
+                  setFieldValue(constructionOfCommunity !== null ? constructionOfCommunity.explonatoryNotForExtention : null);
               }}
             ></ReportProblemIcon>
                                        </div>
@@ -690,23 +992,24 @@ function ExtensionCom() {
                                   
                                   
                                   <div className="btn btn-sm col-md-4">
-                                    <IconButton onClick={()=>getDocShareholding(item?.agreementDoc)}>
+                                    <IconButton onClick={()=>getDocShareholding(item?.uploadRenewalLicenseCopy)}>
                                        <VisibilityIcon color="info" className="icon" /></IconButton>
                                        </div>
                                   <div className="btn btn-sm col-md-4">
-                                   <IconButton onClick={()=>getDocShareholding(item?.agreementDoc)}>
+                                   <IconButton onClick={()=>getDocShareholding(item?.uploadRenewalLicenseCopy)}>
                                        <FileDownloadIcon color="info" className="icon" /></IconButton>
                                        </div>
                                        <div className="btn btn-sm col-md-4">
                                        <ReportProblemIcon
               style={{
-                color:fieldIconColors.developer}}
+                color:getIconColor.uploadRenewalLicenseCopy}}
               onClick={() => {
-                  setOpennedModal("Licence No")
-                  setLabelValue("Licence No"),
+                  setOpennedModal("uploadRenewalLicenseCopy")
+                  setLabelValue("In case of other than licensee/developer, upload renewed license copy."),
                   setSmShow(true),
+                  setDocModal(true),
                   console.log("modal open"),
-                  setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
+                  setFieldValue(constructionOfCommunity !== null ? constructionOfCommunity.uploadRenewalLicenseCopy : null);
               }}
             ></ReportProblemIcon>
                                        </div>
@@ -717,7 +1020,7 @@ function ExtensionCom() {
                     <th scope="row">7</th>
                     <td>
                       {" "}
-                      Any other document as demanded by Director at any time.<span style={{ color: "red" }}>*</span>
+                     Location of applied community site on the plan.<span style={{ color: "red" }}>*</span>
                     </td>
                     <td>
                       {/* <input type="file" className="form-control" placeholder="" {...register("directorDemanded")}></input> */}
@@ -725,23 +1028,24 @@ function ExtensionCom() {
                                   
                                   
                                   <div className="btn btn-sm col-md-4">
-                                    <IconButton onClick={()=>getDocShareholding(item?.agreementDoc)}>
+                                    <IconButton onClick={()=>getDocShareholding(item?.locationOfApplied)}>
                                        <VisibilityIcon color="info" className="icon" /></IconButton>
                                        </div>
                                   <div className="btn btn-sm col-md-4">
-                                   <IconButton onClick={()=>getDocShareholding(item?.agreementDoc)}>
+                                   <IconButton onClick={()=>getDocShareholding(item?.locationOfApplied)}>
                                        <FileDownloadIcon color="info" className="icon" /></IconButton>
                                        </div>
                                        <div className="btn btn-sm col-md-4">
                                        <ReportProblemIcon
               style={{
-                color:fieldIconColors.developer}}
+                color:getIconColor.locationOfApplied}}
               onClick={() => {
-                  setOpennedModal("Licence No")
-                  setLabelValue("Licence No"),
+                  setOpennedModal("locationOfApplied")
+                  setLabelValue("Location of applied community site on the plan."),
                   setSmShow(true),
+                  setDocModal(true),
                   console.log("modal open"),
-                  setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
+                  setFieldValue(constructionOfCommunity !== null ? constructionOfCommunity.locationOfApplied : null);
               }}
             ></ReportProblemIcon>
                                        </div>
@@ -760,23 +1064,24 @@ function ExtensionCom() {
                                   
                                   
                                   <div className="btn btn-sm col-md-4">
-                                    <IconButton onClick={()=>getDocShareholding(item?.agreementDoc)}>
+                                    <IconButton onClick={()=>getDocShareholding(item?.anyOtherDocumentByDirector)}>
                                        <VisibilityIcon color="info" className="icon" /></IconButton>
                                        </div>
                                   <div className="btn btn-sm col-md-4">
-                                   <IconButton onClick={()=>getDocShareholding(item?.agreementDoc)}>
+                                   <IconButton onClick={()=>getDocShareholding(item?.anyOtherDocumentByDirector)}>
                                        <FileDownloadIcon color="info" className="icon" /></IconButton>
                                        </div>
                                        <div className="btn btn-sm col-md-4">
                                        <ReportProblemIcon
               style={{
-                color:fieldIconColors.developer}}
+                color:getIconColor.anyOtherDocumentByDirector}}
               onClick={() => {
-                  setOpennedModal("Licence No")
-                  setLabelValue("Licence No"),
+                  setOpennedModal("anyOtherDocumentByDirector")
+                  setLabelValue(" Any other document which the director may require for the said purpose."),
                   setSmShow(true),
+                  setDocModal(true),
                   console.log("modal open"),
-                  setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
+                  setFieldValue(constructionOfCommunity !== null ? constructionOfCommunity.anyOtherDocumentByDirector : null);
               }}
             ></ReportProblemIcon>
                                        </div>
@@ -786,302 +1091,13 @@ function ExtensionCom() {
                 </tbody>
               </div>
             </div>
-          )}
+         
         </div>
-
-        <div>
-          {showhide === "1" && (
-            <div className="card">
-              <div className="table table-bordered table-responsive">
-                <thead>
-                  <tr>
-                    <th style={{ textAlign: "center" }}>Sr.No</th>
-                    <th style={{ textAlign: "center" }}>Field Name</th>
-                    <th style={{ textAlign: "center" }}>Upload Documents</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <th scope="row">1</th>
-                    <td>
-                      Copy of Board resolution in favour of authorized signatory, applying for case (if applicable)
-                      <span style={{ color: "red" }}>*</span>
-                    </td>
-                    <td>
-                      {/* <input type="file" className="form-control" placeholder="" {...register("boardResolutionSignatory")}></input> */}
-                      <div className="row">
-                                  
-                                  
-                                  <div className="btn btn-sm col-md-4">
-                                    <IconButton onClick={()=>getDocShareholding(item?.agreementDoc)}>
-                                       <VisibilityIcon color="info" className="icon" /></IconButton>
-                                       </div>
-                                  <div className="btn btn-sm col-md-4">
-                                   <IconButton onClick={()=>getDocShareholding(item?.agreementDoc)}>
-                                       <FileDownloadIcon color="info" className="icon" /></IconButton>
-                                       </div>
-                                       <div className="btn btn-sm col-md-4">
-                                       <ReportProblemIcon
-              style={{
-                color:fieldIconColors.developer}}
-              onClick={() => {
-                  setOpennedModal("Licence No")
-                  setLabelValue("Licence No"),
-                  setSmShow(true),
-                  console.log("modal open"),
-                  setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
-              }}
-            ></ReportProblemIcon>
-                                       </div>
-                                 </div>
-                    </td>
-                  </tr>
-                  <tr>
-                    <th scope="row">2</th>
-                    <td>
-                      {" "}
-                      Justification for extension in time period for construction of community site <span style={{ color: "red" }}>*</span>
-                    </td>
-                    <td>
-                      {/* <input type="file" className="form-control" placeholder="" {...register("extensionTimePeriod")}></input> */}
-                      <div className="row">
-                                  
-                                  
-                                  <div className="btn btn-sm col-md-4">
-                                    <IconButton onClick={()=>getDocShareholding(item?.agreementDoc)}>
-                                       <VisibilityIcon color="info" className="icon" /></IconButton>
-                                       </div>
-                                  <div className="btn btn-sm col-md-4">
-                                   <IconButton onClick={()=>getDocShareholding(item?.agreementDoc)}>
-                                       <FileDownloadIcon color="info" className="icon" /></IconButton>
-                                       </div>
-                                       <div className="btn btn-sm col-md-4">
-                                       <ReportProblemIcon
-              style={{
-                color:fieldIconColors.developer}}
-              onClick={() => {
-                  setOpennedModal("Licence No")
-                  setLabelValue("Licence No"),
-                  setSmShow(true),
-                  console.log("modal open"),
-                  setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
-              }}
-            ></ReportProblemIcon>
-                                       </div>
-                                 </div>
-                    </td>
-                  </tr>
-                  {/* <tr>
-                    <th scope="row">3</th>
-                    <td>
-                      {" "}
-                      Proof of ownership of community site (in case of the extension is sought by an applicant other than the licensee) .{" "}
-                      <span style={{ color: "red" }}>*</span>
-                    </td>
-                    <td>
-                      <input type="file" className="form-control" placeholder="" {...register("ownershipCommunitySite")}></input>
-                    </td>
-                  </tr> */}
-                  <tr>
-                    <th scope="row">3</th>
-                    <td>
-                      {" "}
-                      Proof of online payment of extension fees at the rates provided in Schedule-C to these Rules.{" "}
-                      <span style={{ color: "red" }}>*</span>
-                    </td>
-                    <td>
-                      {/* <input type="file" className="form-control" placeholder="" {...register("onlinePaymentExtensionFee")}></input> */}
-                      <div className="row">
-                                  
-                                  
-                                  <div className="btn btn-sm col-md-4">
-                                    <IconButton onClick={()=>getDocShareholding(item?.agreementDoc)}>
-                                       <VisibilityIcon color="info" className="icon" /></IconButton>
-                                       </div>
-                                  <div className="btn btn-sm col-md-4">
-                                   <IconButton onClick={()=>getDocShareholding(item?.agreementDoc)}>
-                                       <FileDownloadIcon color="info" className="icon" /></IconButton>
-                                       </div>
-                                       <div className="btn btn-sm col-md-4">
-                                       <ReportProblemIcon
-              style={{
-                color:fieldIconColors.developer}}
-              onClick={() => {
-                  setOpennedModal("Licence No")
-                  setLabelValue("Licence No"),
-                  setSmShow(true),
-                  console.log("modal open"),
-                  setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
-              }}
-            ></ReportProblemIcon>
-                                       </div>
-                                 </div>
-                    </td>
-                  </tr>
-                  <tr>
-                    <th scope="row">4</th>
-                    <td>
-                      {" "}
-                      An explanatory note indicating the details of progress made about the construction of such a community site{" "}
-                      <span style={{ color: "red" }}>*</span>
-                    </td>
-                    <td>
-                      {/* <input type="file" className="form-control" placeholder="" {...register("indicatingProgress")}></input> */}
-                      <div className="row">
-                                  
-                                  
-                                  <div className="btn btn-sm col-md-4">
-                                    <IconButton onClick={()=>getDocShareholding(item?.agreementDoc)}>
-                                       <VisibilityIcon color="info" className="icon" /></IconButton>
-                                       </div>
-                                  <div className="btn btn-sm col-md-4">
-                                   <IconButton onClick={()=>getDocShareholding(item?.agreementDoc)}>
-                                       <FileDownloadIcon color="info" className="icon" /></IconButton>
-                                       </div>
-                                       <div className="btn btn-sm col-md-4">
-                                       <ReportProblemIcon
-              style={{
-                color:fieldIconColors.developer}}
-              onClick={() => {
-                  setOpennedModal("Licence No")
-                  setLabelValue("Licence No"),
-                  setSmShow(true),
-                  console.log("modal open"),
-                  setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
-              }}
-            ></ReportProblemIcon>
-                                       </div>
-                                 </div>
-                    </td>
-                  </tr>
-                  <tr>
-                    <th scope="row">5</th>
-                    <td>
-                      {" "}
-                      In case of other than licensee/developer, upload renewed license copy.
-                      <span style={{ color: "red" }}>*</span>
-                    </td>
-                    <td>
-                      {/* <input type="file" className="form-control" placeholder="" {...register("uploadRenewd")}></input> */}
-                      <div className="row">
-                                  
-                                  
-                                  <div className="btn btn-sm col-md-4">
-                                    <IconButton onClick={()=>getDocShareholding(item?.agreementDoc)}>
-                                       <VisibilityIcon color="info" className="icon" /></IconButton>
-                                       </div>
-                                  <div className="btn btn-sm col-md-4">
-                                   <IconButton onClick={()=>getDocShareholding(item?.agreementDoc)}>
-                                       <FileDownloadIcon color="info" className="icon" /></IconButton>
-                                       </div>
-                                       <div className="btn btn-sm col-md-4">
-                                       <ReportProblemIcon
-              style={{
-                color:fieldIconColors.developer}}
-              onClick={() => {
-                  setOpennedModal("Licence No")
-                  setLabelValue("Licence No"),
-                  setSmShow(true),
-                  console.log("modal open"),
-                  setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
-              }}
-            ></ReportProblemIcon>
-                                       </div>
-                                 </div>
-                    </td>
-                  </tr>
-                  <tr>
-                    <th scope="row">6</th>
-                    <td>
-                      {" "}
-                      Any other document as demanded by Director at any time.<span style={{ color: "red" }}>*</span>
-                    </td>
-                    <td>
-                      {/* <input type="file" className="form-control" placeholder="" {...register("demandedDirector")}></input> */}
-                      <div className="row">
-                                  
-                                  
-                                  <div className="btn btn-sm col-md-4">
-                                    <IconButton onClick={()=>getDocShareholding(item?.agreementDoc)}>
-                                       <VisibilityIcon color="info" className="icon" /></IconButton>
-                                       </div>
-                                  <div className="btn btn-sm col-md-4">
-                                   <IconButton onClick={()=>getDocShareholding(item?.agreementDoc)}>
-                                       <FileDownloadIcon color="info" className="icon" /></IconButton>
-                                       </div>
-                                       <div className="btn btn-sm col-md-4">
-                                       <ReportProblemIcon
-              style={{
-                color:fieldIconColors.developer}}
-              onClick={() => {
-                  setOpennedModal("Licence No")
-                  setLabelValue("Licence No"),
-                  setSmShow(true),
-                  console.log("modal open"),
-                  setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
-              }}
-            ></ReportProblemIcon>
-                                       </div>
-                                 </div>
-                    </td>
-                  </tr>
-                  <tr>
-                  <th scope="row">7</th>
-                    <td>
-                      {" "}
-                      Any other document which the director may require for the said purpose. <span style={{ color: "red" }}>*</span>
-                    </td>
-                    <td>
-                      {/* <input type="file" className="form-control" placeholder="" {...register("documentdirector")}></input> */}
-                      <div className="row">
-                                  
-                                  
-                                  <div className="btn btn-sm col-md-4">
-                                    <IconButton onClick={()=>getDocShareholding(item?.agreementDoc)}>
-                                       <VisibilityIcon color="info" className="icon" /></IconButton>
-                                       </div>
-                                  <div className="btn btn-sm col-md-4">
-                                   <IconButton onClick={()=>getDocShareholding(item?.agreementDoc)}>
-                                       <FileDownloadIcon color="info" className="icon" /></IconButton>
-                                       </div>
-                                       <div className="btn btn-sm col-md-4">
-                                       <ReportProblemIcon
-              style={{
-                color:fieldIconColors.developer}}
-              onClick={() => {
-                  setOpennedModal("Licence No")
-                  setLabelValue("Licence No"),
-                  setSmShow(true),
-                  console.log("modal open"),
-                  setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
-              }}
-            ></ReportProblemIcon>
-                                       </div>
-                                 </div>
-                    </td>
-                  </tr>
-                </tbody>
-              </div>
-            </div>
-          )}
-        </div>
-
-        {/* <div class="row">
-          <div class="col-sm-12 text-right">
-            <button type="submit" id="btnSearch" class="btn btn-primary btn-md center-block">
-              Submit
-            </button>
-          </div>
-          <div class="col-sm-12 text-right">
-            <button id="btnSearch" class="btn btn-primary btn-md center-block" style={{ marginTop: "-58px", marginRight: "97px" }}>
-              Save as Draft
-            </button>
-          </div>
-        </div> */}
+</div>
       </Card>
       </div>
       </Collapse>
-    </form>
+      </form>
   );
 }
 

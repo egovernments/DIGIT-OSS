@@ -11,22 +11,22 @@ import WorkingTable from "../../../../components/Table";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
-import { VALIDATION_SCHEMA, MODAL_VALIDATION_SCHEMA } from "../../../../utils/schema/step2";
+// import { VALIDATION_SCHEMA, MODAL_VALIDATION_SCHEMA } from "../../../../utils/schema/step2";
 import ReactMultiSelect from "../../../../../../../react-components/src/atoms/ReactMultiSelect";
 import Spinner from "../../../../components/Loader";
 import { getDocShareholding } from "../docView/docView.help";
 import { convertEpochToDate } from "../../../../../../tl/src/utils";
 import { useLocation } from "react-router-dom";
-import { Toast, CardLabelError } from "@egovernments/digit-ui-react-components";
 import _ from "lodash";
 import CusToaster from "../../../../components/Toaster";
 import InfoIcon from "@mui/icons-material/Info";
 import Tooltip from "@mui/material/Tooltip";
 import { useTranslation } from "react-i18next";
 
-const migrationData = [
-  { label: "Fresh", value: "fresh" },
-  { label: "Addition / Migration", value: "addition-migration" },
+const applicationType = [
+  { label: "New Licence", value: "newLicence" },
+  { label: "Addition", value: "addition" },
+  { label: "Migration", value: "migration" },
 ];
 
 const ApllicantPuropseForm = (props) => {
@@ -43,14 +43,15 @@ const ApllicantPuropseForm = (props) => {
       authToken: "",
     },
   };
+
   const columns = [
     {
       title: "District",
-      render: (data) => (data?.district ? data?.district : "N/A"),
+      render: (data) => (data?.district ? data?.district?.label : "N/A"),
     },
     {
       title: "Development Plan",
-      render: (data) => (data?.developmentPlan ? data?.developmentPlan : "N/A"),
+      render: (data) => (data?.developmentPlan ? data?.developmentPlan?.label : "N/A"),
     },
     {
       title: "Zone",
@@ -62,11 +63,11 @@ const ApllicantPuropseForm = (props) => {
     },
     {
       title: "Tehsil",
-      render: (data) => (data?.tehsil ? data?.tehsil : "N/A"),
+      render: (data) => (data?.tehsil ? data?.tehsil?.label : "N/A"),
     },
     {
       title: "Revenue Estate",
-      render: (data) => (data?.revenueEstate ? data?.revenueEstate : "N/A"),
+      render: (data) => (data?.revenueEstate ? data?.revenueEstate?.label : "N/A"),
     },
     {
       title: "Hadbast No.",
@@ -81,6 +82,10 @@ const ApllicantPuropseForm = (props) => {
       render: (data) => (data?.khewats ? data?.khewats : "N/A"),
     },
     {
+      title: "Min",
+      render: (data) => (data?.min ? "Yes" : "No"),
+    },
+    {
       key: "landOwner",
       title: "Name of Land Owner",
       dataIndex: "landOwner",
@@ -92,7 +97,7 @@ const ApllicantPuropseForm = (props) => {
     },
     {
       title: "Type of land",
-      render: (data) => (data?.typeLand ? data?.typeLand : "N/A"),
+      render: (data) => (data?.typeLand ? data?.typeLand?.label : "N/A"),
     },
     {
       title: "change in information",
@@ -107,7 +112,7 @@ const ApllicantPuropseForm = (props) => {
       render: (data) => (data?.editKhewats ? data?.editKhewats : "N/A"),
     },
     {
-      title: "Name of the Land Ower as per Mutation/Jamabandi",
+      title: "Name of the Land Owner as per Mutation/Jamabandi",
       render: (data) => (data?.landOwnerRegistry ? data?.landOwnerRegistry : "N/A"),
     },
     {
@@ -144,8 +149,8 @@ const ApllicantPuropseForm = (props) => {
       dataIndex: "",
       render: (data) => (
         <div>
-          {watch("registeringAuthorityDocFileName") && (
-            <a onClick={() => getDocShareholding(watch("registeringAuthorityDocFileName"), setLoader)} className="btn btn-sm ">
+          {data?.registeringAuthorityDoc && (
+            <a onClick={() => getDocShareholding(data?.registeringAuthorityDoc, setLoader)} className="btn btn-sm ">
               <VisibilityIcon color="info" className="icon" />
             </a>
           )}
@@ -161,24 +166,28 @@ const ApllicantPuropseForm = (props) => {
       render: (data) => (data?.kanal ? data?.kanal : "N/A"),
     },
     {
-      title: "Bigha",
-      render: (data) => (data?.bigha ? data?.bigha : "N/A"),
-    },
-    {
       title: "Marla",
       render: (data) => (data?.marla ? data?.marla : "N/A"),
-    },
-    {
-      title: "Biswa",
-      render: (data) => (data?.biswa ? data?.biswa : "N/A"),
     },
     {
       title: "Sarsai",
       render: (data) => (data?.sarsai ? data?.sarsai : "N/A"),
     },
     {
+      title: "Bigha",
+      render: (data) => (data?.bigha ? data?.bigha : "N/A"),
+    },
+    {
+      title: "Biswa",
+      render: (data) => (data?.biswa ? data?.biswa : "N/A"),
+    },
+    {
       title: "Biswansi",
       render: (data) => (data?.biswansi ? data?.biswansi : "N/A"),
+    },
+    {
+      title: "Acquisition Status",
+      render: (data) => (data?.acquistionStatus ? data?.acquistionStatus : "N/A"),
     },
     {
       title: "Consolidated Total Area",
@@ -224,13 +233,187 @@ const ApllicantPuropseForm = (props) => {
       ),
     },
   ];
+  const migColumns = [
+    {
+      title: "District",
+      render: (data) => (data?.district ? data?.district?.label : "N/A"),
+    },
+    {
+      title: "Development Plan",
+      render: (data) => (data?.developmentPlan ? data?.developmentPlan?.label : "N/A"),
+    },
+    {
+      title: "Zone",
+      render: (data) => (data?.potential ? data?.potential : "N/A"),
+    },
+    {
+      title: "Sector",
+      render: (data) => (data?.sector ? data?.sector : "N/A"),
+    },
+    {
+      title: "Tehsil",
+      render: (data) => (data?.tehsil ? data?.tehsil?.label : "N/A"),
+    },
+    {
+      title: "Revenue Estate",
+      render: (data) => (data?.revenueEstate ? data?.revenueEstate?.label : "N/A"),
+    },
+    {
+      title: "Hadbast No.",
+      render: (data) => (data?.hadbastNo ? data?.hadbastNo : "N/A"),
+    },
+    {
+      title: "Rectangle No.",
+      render: (data) => (data?.rectangleNo ? data?.rectangleNo : "N/A"),
+    },
+    {
+      title: "Khasra No.",
+      render: (data) => (data?.khewats ? data?.khewats : "N/A"),
+    },
+    {
+      title: "Min",
+      render: (data) => (data?.min ? "Yes" : "No"),
+    },
+    {
+      key: "landOwner",
+      title: "Name of Land Owner",
+      dataIndex: "landOwner",
+      render: (data) => (
+        <h6 data-toggle="tooltip" data-placement="top" title={data}>
+          {data?.split(" ")?.slice(0, 2)?.join(" ") + "..."}
+        </h6>
+      ),
+    },
+    {
+      title: "Type of land",
+      render: (data) => (data?.typeLand ? data?.typeLand?.label : "N/A"),
+    },
+    {
+      title: "change in information",
+      render: (data) => (data?.isChange == "false" ? "Incorrect" : data?.isChange == "true" || data?.isChange ? "Correct" : "Incorrect"),
+    },
+    {
+      title: "Rectangle No./Mustil(Changed)",
+      render: (data) => (data?.editRectangleNo ? data?.editRectangleNo : "N/A"),
+    },
+    {
+      title: "Khasra Number(Changed)",
+      render: (data) => (data?.editKhewats ? data?.editKhewats : "N/A"),
+    },
+    {
+      title: "Name of the Land Owner as per Mutation/Jamabandi",
+      render: (data) => (data?.landOwnerRegistry ? data?.landOwnerRegistry : "N/A"),
+    },
+    {
+      title: "Whether Khasra been developed in collaboration",
+      render: (data) => (data?.collaboration ? data?.collaboration : "N/A"),
+    },
+    {
+      title: "Name of the developer company",
+      render: (data) => (data?.developerCompany ? data?.developerCompany : "N/A"),
+    },
+    {
+      title: "Date of registering collaboration agreement",
+      render: (data) => (data?.agreementValidFrom ? data?.agreementValidFrom : "N/A"),
+    },
+    {
+      title: "Whether collaboration agreement irrevocable (Yes/No)",
+      render: (data) => (data?.agreementIrrevocialble ? data?.agreementIrrevocialble : "N/A"),
+    },
+    {
+      title: "Name of authorized signatory on behalf of land owner(s)",
+      render: (data) => (data?.authSignature ? data?.authSignature : "N/A"),
+    },
+    {
+      title: "Name of authorized signatory on behalf of developer",
+      render: (data) => (data?.nameAuthSign ? data?.nameAuthSign : "N/A"),
+    },
+    {
+      title: "Registering Authority",
+      render: (data) => (data?.registeringAuthority ? data?.registeringAuthority : "N/A"),
+    },
+    {
+      key: "registeringAuthorityDoc",
+      title: "Registering Authority document",
+      dataIndex: "",
+      render: (data) => (
+        <div>
+          {data?.registeringAuthorityDoc && (
+            <a onClick={() => getDocShareholding(data?.registeringAuthorityDoc, setLoader)} className="btn btn-sm ">
+              <VisibilityIcon color="info" className="icon" />
+            </a>
+          )}
+        </div>
+      ),
+    },
+    {
+      title: "Consolidation Type",
+      render: (data) => (data?.consolidationType ? data?.consolidationType : "N/A"),
+    },
+    {
+      title: "Kanal",
+      render: (data) => (data?.kanal ? data?.kanal : "N/A"),
+    },
+    {
+      title: "Marla",
+      render: (data) => (data?.marla ? data?.marla : "N/A"),
+    },
+    {
+      title: "Sarsai",
+      render: (data) => (data?.sarsai ? data?.sarsai : "N/A"),
+    },
+    {
+      title: "Bigha",
+      render: (data) => (data?.bigha ? data?.bigha : "N/A"),
+    },
+    {
+      title: "Biswa",
+      render: (data) => (data?.biswa ? data?.biswa : "N/A"),
+    },
+    {
+      title: "Biswansi",
+      render: (data) => (data?.biswansi ? data?.biswansi : "N/A"),
+    },
+    {
+      title: "Acquisition Status",
+      render: (data) => (data?.acquistionStatus ? data?.acquistionStatus : "N/A"),
+    },
+    {
+      title: "Consolidated Total Area",
+      render: (data) => (data?.consolidatedTotal ? data?.consolidatedTotal : "N/A"),
+    },
+    {
+      title: "Non-Consolidated Total Area",
+      render: (data) => (data?.nonConsolidatedTotal ? data?.nonConsolidatedTotal : "N/A"),
+    },
+    {
+      title: "Action",
+      dataIndex: "",
+      render: (data) => (
+        <div style={{ width: "116px", display: "flex", justifyContent: "space-between" }}>
+          <ContentCopyIcon
+            onClick={() => {
+              var obj = data;
+              const arrB = JSON.parse(JSON.stringify(obj));
+              const length = migModalData?.length + 1;
+              arrB["rowid"] = length.toString();
+              setMigModalData([...migModalData, arrB]);
+            }}
+            style={{ cursor: "pointer" }}
+          />
+        </div>
+      ),
+    },
+  ];
+
   const { t } = useTranslation();
   const location = useLocation();
   const userInfo = Digit.UserService.getUser()?.info || {};
   const [district, setDistrict] = useState("");
   const [modalData, setModalData] = useState([]);
+  const [migModalData, setMigModalData] = useState([]);
   const [specificTableData, setSpecificTableData] = useState(null);
-  const [districtDataLabels, setDistrictDataLabels] = useState({ data: [], isLoading: true });
+  // const [districtDataLabels, setDistrictDataLabels] = useState({ data: [], isLoading: true });
   const [tehsilDataLabels, setTehsilDataLabels] = useState({ data: [], isLoading: true });
   const [revenueDataLabels, setRevenueDataLabels] = useState({ data: [], isLoading: true });
   const [mustilDataLabels, setMustilDataLabels] = useState({ data: [], isLoading: true });
@@ -247,7 +430,6 @@ const ApllicantPuropseForm = (props) => {
   const [stepData, setStepData] = useState(null);
   const [applicantId, setApplicantId] = useState("");
   const [selectedFiles, setSelectedFiles] = useState([]);
-  const [showToast, setShowToast] = useState(null);
   const [showToastError, setShowToastError] = useState({ label: "", error: false, success: false });
   const stateId = Digit.ULBService.getStateId();
   const [typeOfLand, setYypeOfLand] = useState({ data: [], isLoading: true });
@@ -259,6 +441,7 @@ const ApllicantPuropseForm = (props) => {
   const [getMustil, setMustil] = useState("");
   const [getData, setData] = useState({ caseNumber: "", dairyNumber: "" });
   const [getTotalArea, setTotlArea] = useState();
+  const [getAppNumbers, setAppNumbers] = useState([]);
 
   const resetValues = () => {
     resetField("district");
@@ -294,6 +477,7 @@ const ApllicantPuropseForm = (props) => {
     resetField("typeLand");
     resetField("developmentPlan");
     resetField("nonConsolidationType");
+    resetField("acquistionStatus");
     resetField("nonConsolidatedTotal");
     resetField("consolidatedTotal");
   };
@@ -309,6 +493,7 @@ const ApllicantPuropseForm = (props) => {
       setValue("bigha", specificTableData?.bigha);
       setValue("biswansi", specificTableData?.biswansi);
       setValue("biswa", specificTableData?.biswa);
+      setValue("acquistionStatus", specificTableData?.biswa);
       setValue("collaboration", specificTableData?.collaboration);
       setValue("landOwner", specificTableData?.landOwner);
       setValue("developerCompany", specificTableData?.developerCompany);
@@ -321,25 +506,26 @@ const ApllicantPuropseForm = (props) => {
       setValue("registeringAuthorityDoc", specificTableData?.registeringAuthorityDoc);
       setValue("editRectangleNo", specificTableData?.editRectangleNo);
       setValue("editKhewats", specificTableData?.editKhewats);
+      setValue("acquistionStatus", specificTableData?.acquistionStatus);
       setValue("landOwnerRegistry", specificTableData?.landOwnerRegistry);
-      const districtValue = districtOptons?.data?.filter((item) => item?.value === specificTableData?.district);
+      const districtValue = districtOptons?.data?.filter((item) => item?.value === specificTableData?.district?.value);
       // getDevPlanOption(districtValue?.[0]?.distCodeTCP);
       setValue("district", { label: districtValue?.[0]?.label, value: districtValue?.[0]?.value });
       if (districtValue?.[0]?.distCodeTCP) setDTCP(districtValue?.[0]);
-      const tehsilValue = tehsilDataLabels?.data?.filter((item) => item?.value === specificTableData?.tehsil);
+      const tehsilValue = tehsilDataLabels?.data?.filter((item) => item?.value === specificTableData?.tehsil?.value);
       setNameRevenueState(tehsilValue?.[0]?.value);
       setValue("tehsil", { label: tehsilValue?.[0]?.label, value: tehsilValue?.[0]?.value });
       // dev plan
-      const devPlanValue = devPlanOptons?.data?.filter((item) => item?.value === specificTableData?.developmentPlan);
+      const devPlanValue = devPlanOptons?.data?.filter((item) => item?.value === specificTableData?.developmentPlan?.value);
       setDevPlanVal(devPlanValue?.[0]?.value);
       setValue("developmentPlan", { label: devPlanValue?.[0]?.label, value: devPlanValue?.[0]?.value });
       // revenue
-      const revenueValue = revenueDataLabels?.data?.filter((item) => item?.value === specificTableData?.revenueEstate);
+      const revenueValue = revenueDataLabels?.data?.filter((item) => item?.value === specificTableData?.revenueEstate?.value);
       setMustil(revenueValue?.[0]?.value);
       setValue("revenueEstate", { label: revenueValue?.[0]?.label, value: revenueValue?.[0]?.value });
       const mustilValue = mustilDataLabels?.data?.filter((item) => item?.value === specificTableData?.rectangleNo);
       setValue("rectangleNo", { label: mustilValue?.[0]?.label, value: mustilValue?.[0]?.value });
-      const typeOfLandValue = typeOfLand?.data?.filter((item) => item?.value === specificTableData?.typeLand);
+      const typeOfLandValue = typeOfLand?.data?.filter((item) => item?.value === specificTableData?.typeLand?.value);
       setValue("typeLand", { label: typeOfLandValue?.[0]?.label, value: typeOfLandValue?.[0]?.value });
       setValue("isChange", JSON.parse(specificTableData?.isChange));
     }
@@ -394,11 +580,11 @@ const ApllicantPuropseForm = (props) => {
     watch,
     resetField,
   } = useForm({
-    mode: "onChange",
-    reValidateMode: "onChange",
+    // mode: "onChange",
+    // reValidateMode: "onChange",
     // resolver: yupResolver(VALIDATION_SCHEMA),
-    resolver: yupResolver(modal ? MODAL_VALIDATION_SCHEMA : VALIDATION_SCHEMA),
-    shouldFocusError: true,
+    // resolver: yupResolver(modal ? MODAL_VALIDATION_SCHEMA : VALIDATION_SCHEMA),
+    // shouldFocusError: true,
   });
 
   const { data: PurposeType } = Digit.Hooks.obps.useMDMS(stateId, "common-masters", ["Purpose"]);
@@ -411,23 +597,9 @@ const ApllicantPuropseForm = (props) => {
     setPurposeOptions({ data: purpose, isLoading: false });
   }, [PurposeType]);
 
-  // useEffect(() => {
-  //   const potential = PotentialType?.["common-masters"]?.PotentialZone?.map(function (data) {
-  //     return { value: data?.code, label: data?.zone };
-  //   });
-  //   setPotentialOptions({ data: potential, isLoading: false });
-  // }, [PotentialType]);
-
-  // useEffect(() => {
-  //   const district = DistrictType?.["common-masters"]?.District?.map(function (data) {
-  //     return { value: data?.districtCode, label: data?.name, distCodeTCP: data?.distCodeTCP };
-  //   });
-  //   setDistrictOptions({ data: district, isLoading: false });
-  // }, [DistrictType]);
-
   useEffect(() => {
     const district = DistrictType?.["common-masters"]?.District?.map(function (data) {
-      return { value: data?.disCode, label: data?.disName, distCodeTCP: data?.distCodeTCP };
+      return { value: data?.disCode, label: data?.disName, distCodeTCP: data?.distCodeTCP, applicationTenantId: data?.tenantId };
     });
     setDistrictOptions({ data: district, isLoading: false });
   }, [DistrictType]);
@@ -512,13 +684,6 @@ const ApllicantPuropseForm = (props) => {
     }
   };
 
-  // useEffect(() => {
-  //   const zonePlan = ZoneType?.["common-masters"]?.PotentialZone?.map(function (data) {
-  //     return { value: data?.code, label: data?.potentialZone };
-  //   });
-  //   setZoneOptions({ data: zonePlan, isLoading: false });
-  // }, [ZoneType]);
-
   const getSectorOptions = async (val) => {
     const payload = {
       RequestInfo: {
@@ -554,64 +719,6 @@ const ApllicantPuropseForm = (props) => {
         return { value: data?.sectorCode, label: data?.sectorNo };
       });
       setSectorOptions({ data: sectorPlan, isLoading: false });
-    } catch (error) {
-      return error;
-    }
-  };
-
-  const getToptions = async (val) => {
-    const payload = {
-      RequestInfo: {
-        apiId: "Rainmaker",
-        ver: "v1",
-        ts: 0,
-        action: "_search",
-        did: "",
-        key: "",
-        msgId: "090909",
-        authToken: "",
-        correlationId: null,
-      },
-      MdmsCriteria: {
-        tenantId: "hr",
-        moduleDetails: [
-          {
-            tenantId: "hr",
-            moduleName: "common-masters",
-            masterDetails: [
-              {
-                name: "tehsil",
-                filter: `[?(@.tehCode=="${val}")]`,
-              },
-            ],
-          },
-        ],
-      },
-    };
-    try {
-      const Resp = await axios.post("/egov-mdms-service/v1/_search", payload);
-      const sectorPlan = Resp?.data?.MdmsRes?.["common-masters"]?.Sector?.map(function (data) {
-        return { value: data?.sectorCode, label: data?.sectorNo };
-      });
-    } catch (error) {
-      return error;
-    }
-  };
-
-  // useEffect(() => {
-  //   const sectorPlan = sectorType?.["common-masters"]?.Sector?.map(function (data) {
-  //     return { value: data?.devPlanCode, label: data?.sectorNo };
-  //   });
-  //   setSectorOptions({ data: sectorPlan, isLoading: false });
-  // }, [sectorType]);
-
-  const DistrictApiCall = async () => {
-    try {
-      const Resp = await axios.post("/egov-mdms-service/v1/_district", datapost);
-      const distData = Resp?.data?.map((el) => {
-        return { label: el?.name, id: el?.distCode, value: el?.distCode };
-      });
-      setDistrictDataLabels({ data: distData, isLoading: false });
     } catch (error) {
       return error;
     }
@@ -656,17 +763,6 @@ const ApllicantPuropseForm = (props) => {
       return error;
     }
   };
-  // const getTehslidata = async (data) => {
-  //   try {
-  //     const Resp = await axios.post("/egov-mdms-service/v1/_tehsil?dCode=" + data, datapost, {});
-  //     const tehsilData = Resp?.data?.map((el) => {
-  //       return { label: el?.name, id: el?.code, value: el?.code };
-  //     });
-  //     setTehsilDataLabels({ data: tehsilData, isLoading: false });
-  //   } catch (error) {
-  //     return error;
-  //   }
-  // };
 
   const getRevenuStateData = async (data) => {
     const payload = {
@@ -708,18 +804,6 @@ const ApllicantPuropseForm = (props) => {
     }
   };
 
-  // const getRevenuStateData = async (code) => {
-  //   try {
-  //     const Resp = await axios.post("/egov-mdms-service/v1/_village?" + "dCode=" + district + "&" + "tCode=" + code, datapost, {});
-  //     const revenData = Resp?.data?.map((el) => {
-  //       return { label: el?.name, id: el?.khewats, value: el?.code, khewats: el?.khewats, code: el?.code };
-  //     });
-  //     setRevenueDataLabels({ data: revenData, isLoading: false });
-  //   } catch (error) {
-  //     return error;
-  //   }
-  // };
-
   const getMustilData = async (code) => {
     try {
       const Resp = await axios.post(
@@ -727,7 +811,10 @@ const ApllicantPuropseForm = (props) => {
         datapost,
         {}
       );
-      const mustData = Resp?.data?.must?.map((el, i) => {
+
+      const sortedNumbers = Resp?.data?.must?.sort((a, b) => a - b);
+
+      const mustData = sortedNumbers?.map((el, i) => {
         return { label: el, id: i, value: el };
       });
       setMustilDataLabels({ data: mustData, isLoading: false });
@@ -762,27 +849,15 @@ const ApllicantPuropseForm = (props) => {
   };
 
   useEffect(() => {
-    DistrictApiCall();
-  }, []);
-
-  useEffect(() => {
     console.log("modalData", modalData);
   }, [modalData]);
 
   const ApplicantPurposeModalData = (modaldata) => {
-    modaldata["district"] = modaldata?.district?.value;
     modaldata["potential"] = modaldata?.potential?.label;
     modaldata["sector"] = modaldata?.sector?.label;
-    modaldata["tehsil"] = modaldata?.tehsil?.value;
-    modaldata["revenueEstate"] = modaldata?.revenueEstate?.value;
     modaldata["rectangleNo"] = modaldata?.rectangleNo?.value;
-    modaldata["typeLand"] = modaldata?.typeLand?.value;
-    modaldata["developmentPlan"] = modaldata?.developmentPlan?.value;
     modaldata["isChange"] = showFields;
-
-    // modaldata["registeringAuthorityDoc"] = docId;
     delete modaldata?.purpose;
-
     if (modaldata?.consolidationType === "consolidated") {
       delete modaldata?.bigha;
       delete modaldata?.biswa;
@@ -819,9 +894,6 @@ const ApllicantPuropseForm = (props) => {
   const PurposeFormSubmitHandler = async (data) => {
     const token = window?.localStorage?.getItem("token");
     data["purpose"] = data?.purpose?.value;
-    // data["potential"] = data?.potential?.value;
-    // data["district"] = watch("district")?.value;
-    // data["state"] = "Haryana";
     data["totalArea"] = getTotalArea;
     delete data?.district;
     delete data?.developmentPlan;
@@ -844,6 +916,7 @@ const ApllicantPuropseForm = (props) => {
     delete data?.bigha;
     delete data?.biswa;
     delete data?.biswansi;
+    delete data?.acquistionStatus;
     delete data?.agreementIrrevocialble;
     delete data?.agreementValidFrom;
     delete data?.validitydate;
@@ -939,7 +1012,7 @@ const ApllicantPuropseForm = (props) => {
           businessId: applicantId,
           tenantId: "hr",
           moduleName: "TL",
-          action: "SENDBACK",
+          action: "INITIATE",
           previousStatus: "INITIATED",
           comment: null,
         },
@@ -972,12 +1045,9 @@ const ApllicantPuropseForm = (props) => {
   useEffect(() => {
     if (stepData) {
       const data = purposeOptions?.data?.filter((item) => item?.value === stepData?.purpose);
-      const districtData = districtDataLabels?.data?.filter((item) => item?.value === stepData?.district);
       setValue("purpose", { label: data?.[0]?.label, value: data?.[0]?.value });
-      // setDistrict(districtData?.[0]?.distCode);
-      // if (districtData?.[0]?.distCode) getTehslidata(districtData?.[0]?.distCode);
     }
-  }, [stepData, purposeOptions, districtDataLabels]);
+  }, [stepData, purposeOptions]);
 
   const { data: LandData } = Digit.Hooks.obps.useMDMS(stateId, "common-masters", ["LandType"]);
 
@@ -992,10 +1062,7 @@ const ApllicantPuropseForm = (props) => {
     const purposeSelected = data?.value;
     window?.localStorage.setItem("purpose", purposeSelected);
   };
-  const handleChangePotential = (data) => {
-    const potentialSelected = data?.value;
-    window?.localStorage.setItem("potential", JSON.stringify(potentialSelected));
-  };
+
   const getDocumentData = async (file, fieldName) => {
     if (selectedFiles.includes(file.name)) {
       setShowToastError({ label: "Duplicate file Selected", error: true, success: false });
@@ -1012,9 +1079,7 @@ const ApllicantPuropseForm = (props) => {
       const Resp = await axios.post("/filestore/v1/files", formData, {});
       setValue(fieldName, Resp?.data?.files?.[0]?.fileStoreId);
       setFileStoreId({ ...fileStoreId, [fieldName]: Resp?.data?.files?.[0]?.fileStoreId });
-      // if (fieldName === "registeringAuthorityDoc") {
-      //   setValue("registeringAuthorityDocFileName", file.name);
-      // }
+
       setSelectedFiles([...selectedFiles, file.name]);
       setLoader(false);
       setShowToastError({ label: "File Uploaded Successfully", error: false, success: true });
@@ -1061,24 +1126,98 @@ const ApllicantPuropseForm = (props) => {
   }, []);
 
   useEffect(() => {
-    const val = watch("marla") * 0.0062 + watch("sarsai") * 0.00069 + watch("kanal") * 0.125;
-    setValue("consolidatedTotal", isNaN(val) ? "N/A" : val?.toFixed(3));
-  }, [watch("sarsai"), watch("marla"), watch("kanal")]);
+    if (watch("consolidationType") == "consolidated") {
+      resetField("nonConsolidationType");
+      resetField("bigha");
+      resetField("biswa");
+      resetField("biswansi");
+      resetField("nonConsolidatedTotal");
+    }
+    if (watch("consolidationType") == "non-consolidated") {
+      resetField("kanal");
+      resetField("marla");
+      resetField("sarsai");
+      resetField("consolidatedTotal");
+    }
+  }, [watch("consolidationType")]);
 
   useEffect(() => {
-    if (watch("consolidationType") == "consolidated") resetField("nonConsolidationType");
-  }, [watch("consolidationType")]);
+    const val = watch("marla") * 0.0062 + watch("sarsai") * 0.00069 + watch("kanal") * 0.125;
+    setValue("consolidatedTotal", isNaN(val) ? "N/A" : val?.toFixed(5));
+  }, [watch("sarsai"), watch("marla"), watch("kanal")]);
 
   useEffect(() => {
     if (watch("nonConsolidationType") == "kachha") {
       const valueA = watch("bigha") * 1008 + watch("biswa") * 50.41 + watch("biswansi") * 2.52;
-      setValue("nonConsolidatedTotal", isNaN(valueA) ? "N/A" : (valueA / 4840)?.toFixed(3));
+      setValue("nonConsolidatedTotal", isNaN(valueA) ? "N/A" : (valueA / 4840)?.toFixed(5));
     }
     if (watch("nonConsolidationType") == "pucka") {
       const valueB = watch("bigha") * 3025 + watch("biswa") * 151.25 + watch("biswansi") * 7.56;
-      setValue("nonConsolidatedTotal", isNaN(valueB) ? "N/A" : (valueB / 4840)?.toFixed(3));
+      setValue("nonConsolidatedTotal", isNaN(valueB) ? "N/A" : (valueB / 4840)?.toFixed(5));
     }
-  }, [watch("bigha"), watch("biswa"), watch("biswansi")]);
+  }, [watch("bigha"), watch("biswa"), watch("biswansi"), watch("nonConsolidationType")]);
+
+  const fetchLicenceNumbers = async () => {
+    const token = window?.localStorage?.getItem("token");
+    setLoader(true);
+    const payload = {
+      RequestInfo: {
+        apiId: "Rainmaker",
+        ver: "v1",
+        ts: 0,
+        action: "_search",
+        did: "",
+        key: "",
+        msgId: "090909",
+        requesterId: "",
+        authToken: token,
+        userInfo: userInfo,
+      },
+    };
+    try {
+      const Resp = await axios.post("/tl-services/_getServices/_search?type=LicenceNumber&businessService=NewTL", payload);
+      setLoader(false);
+      const appNumbers = Resp?.data?.applicationNumbers?.map(function (data) {
+        return { value: data, label: data };
+      });
+      setAppNumbers(appNumbers);
+    } catch (error) {
+      setLoader(false);
+      return error;
+    }
+  };
+
+  useEffect(() => {
+    fetchLicenceNumbers();
+  }, []);
+
+  const handleFetch = async () => {
+    const token = window?.localStorage?.getItem("token");
+    const appNumber = watch("licenceNumber")?.value;
+    const payload = {
+      RequestInfo: {
+        apiId: "Rainmaker",
+        msgId: "1669293303096|en_IN",
+        authToken: token,
+      },
+    };
+    try {
+      const Resp = await axios.post(`/tl-services/new/licenses/object/_getByApplicationNumber?applicationNumber=${appNumber}`, payload);
+      const userData = Resp?.data?.LicenseDetails?.[0]?.ApplicantPurpose?.AppliedLandDetails;
+      console.log("data =====", userData);
+      console.log("modalData==========", modalData);
+      // setArray(oldArray => [...oldArray,newValue] );
+      setMigModalData(userData);
+      // setModalData([...modalData, ...userData]);
+      // setStepData(userData);
+    } catch (error) {
+      return error;
+    }
+  };
+
+  useEffect(() => {
+    console.log("erorrs=====", errors);
+  }, [errors]);
 
   return (
     <div>
@@ -1101,8 +1240,56 @@ const ApllicantPuropseForm = (props) => {
           )}
           <Card style={{ width: "126%", marginLeft: "-2px", paddingRight: "10px", marginTop: "40px", marginBottom: "52px" }}>
             <Form.Group>
-              <Row className="ml-auto" style={{ marginBottom: 5 }}>
-                <Col md={4} xxl lg="3">
+              {/* <div className="row" style={{ alignItems: "self-end" }}>
+                <div className="col col-lg-3 col-md-6 col-sm-6">
+                  <label>
+                    <h2>Type of Application</h2>
+                  </label>
+                  <ReactMultiSelect
+                    control={control}
+                    name="typeOfApplication"
+                    placeholder="Select type"
+                    data={applicationType}
+                    labels="typeOfApplication"
+                  />
+                  <h3 className="error-message" style={{ color: "red" }}>
+                    {errors?.typeOfApplication && errors?.typeOfApplication?.message}
+                  </h3>
+                </div>
+                {(watch("typeOfApplication")?.value == "addition" || watch("typeOfApplication")?.value == "migration") && (
+                  <div className="col col-lg-3 col-md-6 col-sm-6">
+                    <label>
+                      <h2>Licence Number</h2>
+                    </label>
+                    <ReactMultiSelect control={control} name="licenceNumber" placeholder="Select type" data={getAppNumbers} labels="licenceNumber" />
+                    <h3 className="error-message" style={{ color: "red" }}>
+                      {errors?.licenceNumber && errors?.licenceNumber?.message}
+                    </h3>
+                  </div>
+                )}
+                {(watch("typeOfApplication")?.value == "addition" || watch("typeOfApplication")?.value == "migration") &&
+                  watch("licenceNumber")?.value && (
+                    <div className="col col-lg-3 col-md-6 col-sm-6">
+                      <div
+                        style={{
+                          background: "#024f9d",
+                          color: "white",
+                          height: "38px",
+                          display: "flex",
+                          borderRadius: "5px",
+                          justifyContent: "center",
+                          alignItems: "center",
+                          cursor: "pointer",
+                        }}
+                        onClick={handleFetch}
+                      >
+                        Fetch
+                      </div>
+                    </div>
+                  )}
+              </div> */}
+              <Row className="mt-3" style={{ marginBottom: 5 }}>
+                <Col md={4} xxl lg="4">
                   <div>
                     <Form.Label>
                       <h2>
@@ -1120,26 +1307,15 @@ const ApllicantPuropseForm = (props) => {
                     placeholder="Purpose"
                     data={purposeOptions?.data}
                     labels="Purpose"
+                    rules={{ required: "This field is required" }}
                     loading={purposeOptions?.isLoading}
                   />
                   <h3 className="error-message" style={{ color: "red" }}>
-                    {errors?.purpose?.value && errors?.purpose?.value?.message}
+                    {errors.purpose && "This field is required"}
                   </h3>
                 </Col>
 
-                {/* <Col md={4} xxl lg="3">
-                  <div>
-                    <Form.Label>
-                      <h2>
-                        Type of application
-                        <span style={{ color: "red" }}>*</span>
-                      </h2>
-                    </Form.Label>
-                  </div>
-                  <ReactMultiSelect control={control} name="migration" placeholder="" data={migrationData} labels="Migration" />
-                </Col> */}
-
-                <Col style={{ display: "flex", alignItems: "end" }} md={8} xxl lg="9">
+                <Col md={8} xxl lg="8" style={{ display: "flex", alignItems: "end" }}>
                   <p>Note: The application to be received under policy dated 10.11.17 shall only be accepted within window period.</p>
                 </Col>
               </Row>
@@ -1162,6 +1338,11 @@ const ApllicantPuropseForm = (props) => {
                   onClick={() => {
                     if (!getValues()?.purpose) alert("Please Select Purpose First To Proceed Further");
                     else {
+                      setSelectedFiles([]);
+                      setValue("registeringAuthorityDoc", "");
+                      setValue("landOwnerSPAGPADoc", "");
+                      setValue("developerSPAGPADoc", "");
+                      setValue("collaboratorAgreementDocument", "");
                       resetValues();
                       setSpecificTableData(null);
                       setmodal(true);
@@ -1178,6 +1359,11 @@ const ApllicantPuropseForm = (props) => {
                   <WorkingTable columns={columns} data={modalData} />
                 </div>
               )}
+              {/* {migModalData.length > 0 && (
+                <div className="applt" style={{ overflow: "auto" }}>
+                  <WorkingTable columns={migColumns} data={migModalData} />
+                </div>
+              )} */}
             </Form.Group>
             <br></br>
             <div class="row">
@@ -1207,7 +1393,7 @@ const ApllicantPuropseForm = (props) => {
         <ModalBody>
           <form onSubmit={handleSubmit(ApplicantPurposeModalData)}>
             <Row className="ml-auto mb-3">
-              <Col md={4} xxl lg="4">
+              <Col className="mt-2" md={4} xxl lg="4">
                 <div>
                   <Form.Label>
                     <h2>
@@ -1220,6 +1406,7 @@ const ApllicantPuropseForm = (props) => {
                 <ReactMultiSelect
                   control={control}
                   name="district"
+                  rules={{ required: "This field is required" }}
                   data={districtOptons?.data}
                   labels="District"
                   loading={districtOptons?.isLoading}
@@ -1231,12 +1418,12 @@ const ApllicantPuropseForm = (props) => {
                 />
 
                 <h3 className="error-message" style={{ color: "red" }}>
-                  {errors?.district?.value && errors?.district?.value?.message}
+                  {errors.district && "This field is required"}
                 </h3>
               </Col>
               <br></br>
               {watch("district")?.value && (
-                <Col md={4} xxl lg="4">
+                <Col className="mt-2" md={4} xxl lg="4">
                   <div>
                     <Form.Label>
                       <h2>
@@ -1250,6 +1437,7 @@ const ApllicantPuropseForm = (props) => {
                   <ReactMultiSelect
                     control={control}
                     name="developmentPlan"
+                    rules={{ required: "This field is required" }}
                     placeholder="DevPlan"
                     data={devPlanOptons?.data}
                     labels="DevPlan"
@@ -1257,13 +1445,13 @@ const ApllicantPuropseForm = (props) => {
                     onChange={(e) => getZoneOption(e?.value)}
                   />
                   <h3 className="error-message" style={{ color: "red" }}>
-                    {errors?.developmentPlan?.value && errors?.developmentPlan?.value?.message}
+                    {errors?.developmentPlan && "This field is required"}
                   </h3>
                 </Col>
               )}
               <br></br>
               {watch("developmentPlan")?.value && (
-                <Col md={4} xxl lg="4">
+                <Col className="mt-2" md={4} xxl lg="4">
                   <div>
                     <Form.Label>
                       <h2>
@@ -1275,6 +1463,7 @@ const ApllicantPuropseForm = (props) => {
                   </div>
                   <ReactMultiSelect
                     control={control}
+                    rules={{ required: "This field is required" }}
                     name="potential"
                     placeholder="zonePlan"
                     data={ZoneOptions?.data}
@@ -1284,13 +1473,13 @@ const ApllicantPuropseForm = (props) => {
                   />
 
                   <h3 className="error-message" style={{ color: "red" }}>
-                    {errors?.potential?.value && errors?.potential?.value?.message}
+                    {errors?.potential && "This field is required"}
                   </h3>
                 </Col>
               )}
               <br></br>
               {watch("potential")?.value && (
-                <Col md={4} xxl lg="4">
+                <Col className="mt-2" md={4} xxl lg="4">
                   <div>
                     <Form.Label>
                       <h2>
@@ -1303,6 +1492,7 @@ const ApllicantPuropseForm = (props) => {
                   <ReactMultiSelect
                     control={control}
                     name="sector"
+                    rules={{ required: "This field is required" }}
                     placeholder="Sector"
                     data={sectorOptions?.data}
                     labels="Sector"
@@ -1310,12 +1500,12 @@ const ApllicantPuropseForm = (props) => {
                   />
 
                   <h3 className="error-message" style={{ color: "red" }}>
-                    {errors?.sector?.value && errors?.sector?.value?.message}
+                    {errors?.sector && "This field is required"}
                   </h3>
                 </Col>
               )}
               <br></br>
-              <Col md={4} xxl lg="4">
+              <Col className="mt-2" md={4} xxl lg="4">
                 <div>
                   <Form.Label>
                     <h2>
@@ -1327,7 +1517,8 @@ const ApllicantPuropseForm = (props) => {
                 </div>
                 <ReactMultiSelect
                   control={control}
-                  {...register("tehsil")}
+                  name="tehsil"
+                  rules={{ required: "This field is required" }}
                   data={tehsilDataLabels?.data}
                   labels="Tehsil"
                   loading={tehsilDataLabels?.isLoading}
@@ -1338,10 +1529,10 @@ const ApllicantPuropseForm = (props) => {
                 />
 
                 <h3 className="error-message" style={{ color: "red" }}>
-                  {errors?.tehsil?.value && errors?.tehsil?.value?.message}
+                  {errors?.tehsil && "This field is required"}
                 </h3>
               </Col>
-              <Col md={4} xxl lg="4">
+              <Col className="mt-2" md={4} xxl lg="4">
                 <div>
                   <Form.Label>
                     <h2>
@@ -1353,7 +1544,8 @@ const ApllicantPuropseForm = (props) => {
                 </div>
                 <ReactMultiSelect
                   control={control}
-                  {...register("revenueEstate")}
+                  name="revenueEstate"
+                  rules={{ required: "This field is required" }}
                   data={revenueDataLabels?.data}
                   labels="Revenue Estate"
                   loading={revenueDataLabels?.isLoading}
@@ -1361,11 +1553,11 @@ const ApllicantPuropseForm = (props) => {
                 />
 
                 <h3 className="error-message" style={{ color: "red" }}>
-                  {errors?.revenueEstate?.value && errors?.revenueEstate?.value?.message}
+                  {errors?.revenueEstate && "This field is required"}
                 </h3>
               </Col>
               <br></br>
-              <Col md={4} xxl lg="4">
+              <Col className="mt-2" md={4} xxl lg="4">
                 <div>
                   <Form.Label>
                     <h2>
@@ -1375,7 +1567,18 @@ const ApllicantPuropseForm = (props) => {
                     </h2>
                   </Form.Label>
                 </div>
-                <input type="number" className="form-control" placeholder="" {...register("hadbastNo")} />
+                <input
+                  type="number"
+                  className="form-control"
+                  placeholder=""
+                  {...register("hadbastNo", {
+                    required: "This field is required",
+                    maxLength: {
+                      value: 99,
+                      message: "Maximum length exceeded",
+                    },
+                  })}
+                />
                 <h3 className="error-message" style={{ color: "red" }}>
                   {errors?.hadbastNo && errors?.hadbastNo?.message}
                 </h3>
@@ -1395,14 +1598,15 @@ const ApllicantPuropseForm = (props) => {
                 </div>
                 <ReactMultiSelect
                   control={control}
+                  rules={{ required: "This field is required" }}
                   data={mustilDataLabels?.data}
                   loading={mustilDataLabels?.isLoading}
                   labels="Rectangle No."
-                  {...register("rectangleNo")}
+                  name="rectangleNo"
                 />
 
                 <h3 className="error-message" style={{ color: "red" }}>
-                  {errors?.rectangleNo?.value && errors?.rectangleNo?.value?.message}
+                  {errors?.rectangleNo && "This field is required"}
                 </h3>
               </Col>
 
@@ -1421,14 +1625,31 @@ const ApllicantPuropseForm = (props) => {
                   type="text"
                   className="form-control"
                   placeholder="Enter Khasra"
-                  {...register("khewats")}
+                  {...register("khewats", {
+                    required: "This field is required",
+                    maxLength: {
+                      value: 99,
+                      message: "Maximum length exceeded",
+                    },
+                  })}
                   onChange={(e) => setKhewats(e?.target?.value)}
                 />
                 <h3 className="error-message" style={{ color: "red" }}>
-                  {errors?.khewats && errors?.khewats?.message}
+                  {errors.khewats && errors.khewats.message}
                 </h3>
               </Col>
-              <Col md={4} xxl lg="4">
+
+              <Col style={{ display: "flex", alignItems: "center" }} md={4} xxl lg="4">
+                <div className="form-check">
+                  <label style={{ marginRight: "23px" }} className="checkbox" for="selectMIN">
+                    {`${t("NWL_APPLICANT_MIN")}`}
+                    {/* MIN */}
+                  </label>
+                  <input className="form-check-input" formControlName="agreeCheck" type="checkbox" value="" id="selectMIN" {...register("min")} />
+                </div>
+              </Col>
+
+              <Col className="mt-3" md={4} xxl lg="4">
                 <div>
                   <label>
                     <h2>
@@ -1451,12 +1672,12 @@ const ApllicantPuropseForm = (props) => {
                     <span style={{ color: "red" }}>*</span>
                   </b>
                   &nbsp;&nbsp;
-                  <label htmlFor="collaboration">
-                    <input {...register("collaboration")} type="radio" value="Y" id="yes" />
+                  <label htmlFor="collaborationYes">
+                    <input {...register("collaboration")} type="radio" value="Y" id="collaborationYes" />
                     &nbsp;&nbsp; Yes &nbsp;&nbsp;
                   </label>
-                  <label htmlFor="collaboration">
-                    <input {...register("collaboration")} type="radio" value="N" id="no" />
+                  <label htmlFor="collaborationNo">
+                    <input {...register("collaboration")} type="radio" value="N" id="collaborationNo" />
                     &nbsp;&nbsp; No &nbsp;&nbsp;
                   </label>
                   <h3 className="error-message" style={{ color: "red" }}>
@@ -1469,8 +1690,8 @@ const ApllicantPuropseForm = (props) => {
                       Note: The term “Collaboration agreement" shall include all Development agreements/ Joint Venture agreements/ Joint Development
                       agreements/ Memorandum of Understanding etc. and similar agreements registered with competent authority.
                     </p>
-                    <div className="row ">
-                      <div className="col col-4">
+                    <div style={{ placeItems: "end" }} className="row ">
+                      <div className="col col-lg-4 col-md-6 col-sm-6 mb-2">
                         <label>
                           <h2>
                             {`${t("NWL_APPLICANT_NAME_OF_THE_DEVELOPER_COMPANY_LAND_SCHEDULE")}`}
@@ -1481,12 +1702,27 @@ const ApllicantPuropseForm = (props) => {
                             </Tooltip>
                           </h2>
                         </label>
-                        <Form.Control type="text" className="form-control" placeholder="" {...register("developerCompany")} required="required" />
-                        {/* <CardLabelError style={{ width: "100%", marginTop: "5px", fontSize: "16px", marginBottom: "12px", color: "red" }}>
-                          ("This is requird field")
-                        </CardLabelError> */}
+                        <input
+                          className="form-control"
+                          {...register("developerCompany", {
+                            maxLength: {
+                              value: 30,
+                              message: "Maximum length exceeded",
+                            },
+                            validate: {
+                              required: (value) => {
+                                if (!value && watch("collaboration") == "Y") return "This field is required";
+                              },
+                            },
+                          })}
+                          placeholder=""
+                          type="text"
+                        />
+                        <h3 className="error-message" style={{ color: "red" }}>
+                          {errors?.developerCompany && errors?.developerCompany?.message}
+                        </h3>
                       </div>
-                      <div className="col col-4">
+                      <div className="col col-lg-4 col-md-6 col-sm-6 mb-2">
                         <label>
                           <h2>
                             {`${t("NWL_APPLICANT_DATA_OF_REGISTERING_COLLOABORATION_AGREEMENT_LAND_SCHEDULE")}`}
@@ -1499,31 +1735,64 @@ const ApllicantPuropseForm = (props) => {
                           value={modalData.agreementValidFrom}
                           className="form-control"
                           placeholder=""
-                          {...register("agreementValidFrom")}
+                          {...register("agreementValidFrom", {
+                            validate: {
+                              required: (value) => {
+                                if (!value && watch("collaboration") == "Y") return "This field is required";
+                                return true;
+                              },
+                            },
+                          })}
                           max={convertEpochToDate(new Date().setFullYear(new Date().getFullYear()))}
                         />
+                        <h3 className="error-message" style={{ color: "red" }}>
+                          {errors?.agreementValidFrom && errors?.agreementValidFrom?.message}
+                        </h3>
                       </div>
-                      <div className="col col-4">
+                      <div className="col col-lg-4 col-md-6 col-sm-6 mb-2">
                         <h2>
                           {`${t("NWL_APPLICANT_WHETER_COLLABORATION_AGREEMENT_IRREVOCABLE_LAND_SCHEDULE")}`}
                           {/* Whether collaboration agreement irrevocable (Yes/No) */}
                           <span style={{ color: "red" }}>*</span>
                         </h2>
                         <br></br>
-                        <label htmlFor="agreementIrrevocialble">
-                          <input {...register("agreementIrrevocialble")} type="radio" value="Y" id="yes" />
+                        <label htmlFor="agreementIrrevocialbleyes">
+                          <input
+                            {...register("agreementIrrevocialble", {
+                              validate: {
+                                required: (value) => {
+                                  if (!value && watch("collaboration") == "Y") return "This field is required";
+                                  return true;
+                                },
+                              },
+                            })}
+                            type="radio"
+                            value="Y"
+                            id="agreementIrrevocialbleyes"
+                          />
                           &nbsp;&nbsp; Yes &nbsp;&nbsp;
                         </label>
-                        <label htmlFor="agreementIrrevocialble">
-                          <input {...register("agreementIrrevocialble")} type="radio" value="N" id="no" />
+                        <label htmlFor="agreementIrrevocialbleno">
+                          <input
+                            {...register("agreementIrrevocialble", {
+                              validate: {
+                                required: (value) => {
+                                  if (!value && watch("collaboration") == "Y") return "This field is required";
+                                  return true;
+                                },
+                              },
+                            })}
+                            type="radio"
+                            value="N"
+                            id="agreementIrrevocialbleno"
+                          />
                           &nbsp;&nbsp; No &nbsp;&nbsp;
                         </label>
+                        <h3 className="error-message" style={{ color: "red" }}>
+                          {errors?.agreementIrrevocialble && errors?.agreementValidFrom?.message}
+                        </h3>
                       </div>
-                    </div>
-                    <br></br>
-                    <br></br>
-                    <div className="row ">
-                      <div className="col col-4">
+                      <div className="col col-lg-4 col-md-6 col-sm-6 mb-2 mt-3">
                         <label>
                           <h2>
                             {`${t("NWL_APPLICANT_NAME_OF_AUTHORIZED_SIGNATORY_ON_BEHALF_OF_LAND_OWNER")}`}
@@ -1531,12 +1800,28 @@ const ApllicantPuropseForm = (props) => {
                             <span style={{ color: "red" }}>*</span>
                           </h2>
                         </label>
-                        <Form.Control type="text" className="form-control" placeholder="" {...register("authSignature")} />
+                        <Form.Control
+                          type="text"
+                          className="form-control"
+                          placeholder=""
+                          {...register("authSignature", {
+                            maxLength: {
+                              value: 99,
+                              message: "Maximum length exceeded",
+                            },
+                            validate: {
+                              required: (value) => {
+                                if (!value && watch("collaboration") == "Y") return "This field is required";
+                                return true;
+                              },
+                            },
+                          })}
+                        />
                         <h3 className="error-message" style={{ color: "red" }}>
                           {errors?.authSignature && errors?.authSignature?.message}
                         </h3>
                       </div>
-                      <div className="col col-4">
+                      <div className="col col-lg-4 col-md-6 col-sm-6 mb-2 mt-3">
                         <label>
                           <h2>
                             {`${t("NWL_APPLICANT_NAME_OF_AUTHORIZED_SIGNATORY_ON_BEHALF_OF_DEVELOPER")}`}
@@ -1547,12 +1832,28 @@ const ApllicantPuropseForm = (props) => {
                             </Tooltip>
                           </h2>
                         </label>
-                        <Form.Control type="text" className="form-control" placeholder="" {...register("nameAuthSign")} />
+                        <Form.Control
+                          type="text"
+                          className="form-control"
+                          placeholder=""
+                          {...register("nameAuthSign", {
+                            maxLength: {
+                              value: 99,
+                              message: "Maximum length exceeded",
+                            },
+                            validate: {
+                              required: (value) => {
+                                if (!value && watch("collaboration") == "Y") return "This field is required";
+                                return true;
+                              },
+                            },
+                          })}
+                        />
                         <h3 className="error-message" style={{ color: "red" }}>
                           {errors?.nameAuthSign && errors?.nameAuthSign?.message}
                         </h3>
                       </div>
-                      <div className="col col-4">
+                      <div className="col col-lg-4 col-md-6 col-sm-6 mb-2 mt-3">
                         <label>
                           <h2>
                             {`${t("NWL_APPLICANT_REGISTERING_AUTHORITY_LAND_SCHEDULE")}`}
@@ -1560,15 +1861,29 @@ const ApllicantPuropseForm = (props) => {
                             <span style={{ color: "red" }}>*</span>
                           </h2>
                         </label>
-                        <Form.Control type="text" className="form-control" placeholder="" {...register("registeringAuthority")} />
+                        <Form.Control
+                          type="text"
+                          className="form-control"
+                          placeholder=""
+                          {...register("registeringAuthority", {
+                            validate: {
+                              maxLength: {
+                                value: 99,
+                                message: "Maximum length exceeded",
+                              },
+                              required: (value) => {
+                                if (!value && watch("collaboration") == "Y") return true;
+                                return "This field is required";
+                              },
+                            },
+                          })}
+                        />
                         <h3 className="error-message" style={{ color: "red" }}>
                           {errors?.registeringAuthority && errors?.registeringAuthority?.message}
                         </h3>
                       </div>
                     </div>
-                    <br></br>
-                    <br></br>
-                    <div className="row ">
+                    <div className="row mt-5">
                       <div className="col col-3">
                         <h6 style={{ display: "flex" }}>
                           {`${t("NWL_APPLICANT_REGISTERING_AUTHORITY_DOCUMENT_LAND_SCHEDULE")}`}
@@ -1580,19 +1895,22 @@ const ApllicantPuropseForm = (props) => {
                           <input
                             type="file"
                             style={{ display: "none" }}
-                            onChange={(e) => getDocumentData(e?.target?.files[0], "registeringAuthorityDocFileName")}
+                            onChange={(e) => getDocumentData(e?.target?.files[0], "registeringAuthorityDoc")}
                             accept="application/pdf/jpeg/png"
                           />
                         </label>
-                        {watch("registeringAuthorityDocFileName") && (
-                          <a onClick={() => getDocShareholding(watch("registeringAuthorityDocFileName"), setLoader)} className="btn btn-sm ">
+                        {watch("registeringAuthorityDoc") && (
+                          <a onClick={() => getDocShareholding(watch("registeringAuthorityDoc"), setLoader)} className="btn btn-sm ">
                             <VisibilityIcon color="info" className="icon" />
                           </a>
                         )}
                       </div>
 
                       <div className="col col-3">
-                        <h6 style={{ display: "flex" }}>Upload SPA/GPA of authorized signatory on behalf of land owner</h6>
+                        <h6 style={{ display: "flex" }}>
+                          {`${t("NWL_APPLICANT_BEHALF_OF_LAND_OWNER_DOCUMENT")}`}
+                          {/* Upload SPA/GPA of authorized signatory on behalf of land owner */}
+                        </h6>
                         <label>
                           <FileUpload style={{ cursor: "pointer" }} color="primary" />
                           <input
@@ -1610,7 +1928,10 @@ const ApllicantPuropseForm = (props) => {
                       </div>
 
                       <div className="col col-3">
-                        <h6 style={{ display: "flex" }}>Upload SPA/GPA of authorized signatory on behalf of developer</h6>
+                        <h6 style={{ display: "flex" }}>
+                          {`${t("NWL_APPLICANT_BEHALF_OF_DEVELOPER_DOCUMENT")}`}
+                          {/* Upload SPA/GPA of authorized signatory on behalf of developer */}
+                        </h6>
                         <label>
                           <FileUpload style={{ cursor: "pointer" }} color="primary" />
                           <input
@@ -1622,6 +1943,27 @@ const ApllicantPuropseForm = (props) => {
                         </label>
                         {watch("developerSPAGPADoc") && (
                           <a onClick={() => getDocShareholding(watch("developerSPAGPADoc"), setLoader)} className="btn btn-sm ">
+                            <VisibilityIcon color="info" className="icon" />
+                          </a>
+                        )}
+                      </div>
+
+                      <div className="col col-3">
+                        <h6 style={{ display: "flex" }}>
+                          {`${t("NWL_APPLICANT_COLLABORATOR_AGREEMENT_DOCUMENT")}`}
+                          {/* Collaborator Agreement Document */}
+                        </h6>
+                        <label>
+                          <FileUpload style={{ cursor: "pointer" }} color="primary" />
+                          <input
+                            type="file"
+                            style={{ display: "none" }}
+                            onChange={(e) => getDocumentData(e?.target?.files[0], "collaboratorAgreementDocument")}
+                            accept="application/pdf/jpeg/png"
+                          />
+                        </label>
+                        {watch("collaboratorAgreementDocument") && (
+                          <a onClick={() => getDocShareholding(watch("collaboratorAgreementDocument"), setLoader)} className="btn btn-sm ">
                             <VisibilityIcon color="info" className="icon" />
                           </a>
                         )}
@@ -1638,9 +1980,15 @@ const ApllicantPuropseForm = (props) => {
                     <span style={{ color: "red" }}>*</span>
                   </h2>
                 </label>
-                <ReactMultiSelect control={control} name="typeLand" data={typeOfLand?.data} labels="typeland" />
+                <ReactMultiSelect
+                  control={control}
+                  name="typeLand"
+                  rules={{ required: "This field is required" }}
+                  data={typeOfLand?.data}
+                  labels="typeland"
+                />
                 <h3 className="error-message" style={{ color: "red" }}>
-                  {errors?.typeLand && errors?.typeLand?.message}
+                  {errors?.typeLand && "This field is required"}
                 </h3>
               </Col>
             </Row>
@@ -1696,9 +2044,6 @@ const ApllicantPuropseForm = (props) => {
                       </label>
                     </div>
                     <input autoComplete="off" type="text" className="form-control" placeholder="khasra No." {...register("editKhewats")} />
-                    <h3 className="error-message" style={{ color: "red" }}>
-                      {errors?.editKhewats && errors?.editKhewats?.message}
-                    </h3>
                   </Col>
 
                   <Col md={4} xxl lg="4">
@@ -1728,12 +2073,23 @@ const ApllicantPuropseForm = (props) => {
                       <span style={{ color: "red" }}>*</span>{" "}
                     </b>
                     &nbsp;&nbsp;&nbsp;&nbsp;
-                    <label htmlFor="consolidated">
-                      <input {...register("consolidationType")} type="radio" value="consolidated" defaultValue="consolidated" id="consolidated" />
+                    <label htmlFor="consolidatedyes">
+                      <input
+                        {...register("consolidationType", { required: "This field is required" })}
+                        type="radio"
+                        value="consolidated"
+                        defaultValue="consolidated"
+                        id="consolidatedyes"
+                      />
                       &nbsp; Consolidated &nbsp;&nbsp;
                     </label>
-                    <label htmlFor="non-consolidated">
-                      <input {...register("consolidationType")} type="radio" value="non-consolidated" id="non-consolidated" />
+                    <label htmlFor="nonConsolidatedno">
+                      <input
+                        {...register("consolidationType", { required: "This field is required" })}
+                        type="radio"
+                        value="non-consolidated"
+                        id="nonConsolidatedno"
+                      />
                       &nbsp; Non-Consolidated &nbsp;&nbsp;
                     </label>
                   </h2>
@@ -1744,83 +2100,169 @@ const ApllicantPuropseForm = (props) => {
 
                 {watch("consolidationType") == "non-consolidated" && (
                   <div>
-                    <h2>
-                      <b>
-                        Non Consolidation Type<span style={{ color: "red" }}>*</span>{" "}
-                      </b>
-                      &nbsp;&nbsp;&nbsp;&nbsp;
-                      <label htmlFor="nonConsolidationType">
-                        <input {...register("nonConsolidationType")} type="radio" value="kachha" id="nonConsolidationType" />
-                        &nbsp; Kachha &nbsp;&nbsp;
+                    <div className="col col-4 mt-2 mb-3 p-0">
+                      <label>
+                        <h2>
+                          {`${t("NWL_APPLICANT_ACQUISITION_STATUS")}`}
+                          {/* Acquisition status */}
+                        </h2>
                       </label>
-                      <label htmlFor="nonConsolidatedType">
-                        <input {...register("nonConsolidationType")} type="radio" value="pucka" id="nonConsolidatedType" />
-                        &nbsp; Pucka &nbsp;&nbsp;
-                      </label>
-                    </h2>
-                    {/* <h3 className="error-message" style={{ color: "red" }}>
-                      {errors?.nonConsolidationType && errors?.nonConsolidationType?.message}
-                    </h3> */}
+                      <Form.Control type="text" className="form-control" placeholder="" {...register("acquistionStatus")} />
+                      {/* <h3 className="error-message" style={{ color: "red" }}>
+                    {errors?.registeringAuthority && errors?.registeringAuthority?.message}
+                  </h3> */}
+                    </div>
+                    <div>
+                      <h2>
+                        <b>
+                          Non Consolidation Type<span style={{ color: "red" }}>*</span>{" "}
+                        </b>
+                        &nbsp;&nbsp;&nbsp;&nbsp;
+                        <label htmlFor="nonConsolidationTypekacha">
+                          <input {...register("nonConsolidationType")} type="radio" value="kachha" id="nonConsolidationTypekacha" />
+                          &nbsp; Kachha &nbsp;&nbsp;
+                        </label>
+                        <label htmlFor="nonConsolidatedTypepucha">
+                          <input
+                            {...register("nonConsolidationType")}
+                            type="radio"
+                            value="pucka"
+                            id="nonConsolidatedTypepucha"
+                            onChange={(e) => {
+                              resetField("bigha");
+                              resetField("biswa");
+                              resetField("biswansi");
+                            }}
+                          />
+                          &nbsp; Pucka &nbsp;&nbsp;
+                        </label>
+                      </h2>
+                    </div>
                   </div>
                 )}
 
                 {watch("consolidationType") == "consolidated" && (
-                  <table className="table table-bordered" style={{ backgroundColor: "rgb(251 251 253))" }}>
-                    <thead>
-                      <tr>
-                        <th>
-                          <h2>
-                            {`${t("NWL_APPLICANT_KANAL_LAND_SCHEDULE")}`}
-                            {/* Kanal  */}
-                            <span style={{ color: "red" }}>*</span>
-                          </h2>
-                        </th>
-                        <th>
-                          <h2>
-                            {`${t("NWL_APPLICANT_MARLA_LAND_SCHEDULE")}`}
-                            {/* Marla  */}
-                            <span style={{ color: "red" }}>*</span>
-                          </h2>
-                        </th>
-                        <th>
-                          <h2>
-                            {`${t("NWL_APPLICANT_SARSAI_LAND_SCHEDULE")}`}
-                            {/* Sarsai */}
-                            <span style={{ color: "red" }}>*</span>
-                          </h2>
-                        </th>
-                        <th>
-                          <h2>
-                            {`${t("NWL_APPLICANT_TOTAL_AREA_LAND_SCHEDULE")}`}
-                            {/* Total Area (in acres)  */}
-                            <span style={{ color: "red" }}>*</span>
-                          </h2>
-                        </th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr>
-                        <td>
-                          <input type="number" className="form-control  " {...register("kanal")} id="kanal" />
-                          <label htmlFor="sum">Total: {(watch("kanal") * 0.125)?.toFixed(3)}</label>&nbsp;&nbsp;
-                        </td>
-                        <td>
-                          <input type="number" className="form-control " {...register("marla")} id="marla" />
-                          <label htmlFor="summarla">Total: {(watch("marla") * 0.0062)?.toFixed(3)}</label>&nbsp;&nbsp;
-                        </td>
-                        <td>
-                          <input type="number" className="form-control " {...register("sarsai")} id="sarsai" />
-                          <label htmlFor="sumsarsai">Total: {(watch("sarsai") * 0.00069)?.toFixed(3)}</label>&nbsp;&nbsp;
-                        </td>
-                        <td>
-                          <input type="number" className="form-control" {...register("consolidatedTotal")} disabled />
-                          &nbsp;&nbsp;
-                        </td>
-                      </tr>
-                    </tbody>
-                  </table>
+                  <div>
+                    <div className="col col-4 mt-2 mb-3 p-0">
+                      <label>
+                        <h2>
+                          {`${t("NWL_APPLICANT_ACQUISITION_STATUS")}`}
+                          {/* Acquisition status */}
+                        </h2>
+                      </label>
+                      <Form.Control type="text" className="form-control" placeholder="" {...register("acquistionStatus")} />
+                    </div>
+
+                    <table className="table table-bordered" style={{ backgroundColor: "rgb(251 251 253))" }}>
+                      <thead>
+                        <tr>
+                          <th>
+                            <h2>
+                              {`${t("NWL_APPLICANT_KANAL_LAND_SCHEDULE")}`}
+                              {/* Kanal  */}
+                              <span style={{ color: "red" }}>*</span>
+                            </h2>
+                          </th>
+                          <th>
+                            <h2>
+                              {`${t("NWL_APPLICANT_MARLA_LAND_SCHEDULE")}`}
+                              {/* Marla  */}
+                              <span style={{ color: "red" }}>*</span>
+                            </h2>
+                          </th>
+                          <th>
+                            <h2>
+                              {`${t("NWL_APPLICANT_SARSAI_LAND_SCHEDULE")}`}
+                              {/* Sarsai */}
+                              <span style={{ color: "red" }}>*</span>
+                            </h2>
+                          </th>
+                          <th>
+                            <h2>
+                              {`${t("NWL_APPLICANT_TOTAL_AREA_LAND_SCHEDULE")}`}
+                              {/* Total Area (in acres)  */}
+                            </h2>
+                          </th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <td>
+                            <input
+                              type="number"
+                              className="form-control"
+                              {...register("kanal", {
+                                maxLength: {
+                                  value: 99,
+                                  message: "Maximum length exceeded",
+                                },
+                                validate: {
+                                  required: (value) => {
+                                    if (!value && watch("consolidationType") == "consolidated") return "This field is required";
+                                  },
+                                },
+                              })}
+                              id="kanal"
+                            />
+                            <h3 className="error-message" style={{ color: "red" }}>
+                              {errors?.kanal && errors?.kanal?.message}
+                            </h3>
+                            <label htmlFor="sum">Total: {(watch("kanal") * 0.125)?.toFixed(3)}</label>&nbsp;&nbsp;
+                          </td>
+                          <td>
+                            <input
+                              type="number"
+                              className="form-control"
+                              {...register("marla", {
+                                maxLength: {
+                                  value: 99,
+                                  message: "Maximum length exceeded",
+                                },
+                                validate: {
+                                  required: (value) => {
+                                    if (!value && watch("consolidationType") == "consolidated") return "This field is required";
+                                  },
+                                },
+                              })}
+                              id="marla"
+                            />
+                            <h3 className="error-message" style={{ color: "red" }}>
+                              {errors?.marla && errors?.marla?.message}
+                            </h3>
+                            <label htmlFor="summarla">Total: {(watch("marla") * 0.0062)?.toFixed(3)}</label>&nbsp;&nbsp;
+                          </td>
+                          <td>
+                            <input
+                              type="number"
+                              className="form-control"
+                              {...register("sarsai", {
+                                maxLength: {
+                                  value: 99,
+                                  message: "Maximum length exceeded",
+                                },
+                                validate: {
+                                  required: (value) => {
+                                    if (!value && watch("consolidationType") == "consolidated") return "This field is required";
+                                  },
+                                },
+                              })}
+                              id="sarsai"
+                            />
+                            <h3 className="error-message" style={{ color: "red" }}>
+                              {errors?.sarsai && errors?.sarsai?.message}
+                            </h3>
+                            <label htmlFor="sumsarsai">Total: {(watch("sarsai") * 0.00069)?.toFixed(3)}</label>&nbsp;&nbsp;
+                          </td>
+                          <td>
+                            <input type="number" className="form-control" {...register("consolidatedTotal")} disabled />
+                            &nbsp;&nbsp;
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
                 )}
-                {watch("nonConsolidationType") == "kachha" && (
+                {(watch("nonConsolidationType") == "kachha" || watch("nonConsolidationType") == "pucka") && (
                   <table className="table table-bordered" style={{ backgroundColor: "rgb(251 251 253))" }}>
                     <thead>
                       <tr>
@@ -1850,7 +2292,6 @@ const ApllicantPuropseForm = (props) => {
                           <h2>
                             {`${t("NWL_APPLICANT_TOTAL_AREA_LAND_SCHEDULE")}`}
                             {/* Total Area (in acres) */}
-                            <span style={{ color: "red" }}>*</span>
                           </h2>
                           &nbsp;&nbsp;
                         </th>
@@ -1859,83 +2300,88 @@ const ApllicantPuropseForm = (props) => {
                     <tbody>
                       <tr>
                         <td>
-                          <input type="number" id="bigha" className="form-control" {...register("bigha")} />
-                          <label htmlFor="sumBigha">Total: {watch("bigha") * 1008}</label>&nbsp;&nbsp;
+                          <input
+                            type="number"
+                            id="bigha"
+                            className="form-control"
+                            {...register("bigha", {
+                              maxLength: {
+                                value: 99,
+                                message: "Maximum length exceeded",
+                              },
+                              validate: {
+                                required: (value) => {
+                                  if (!value && watch("consolidationType") == "non-consolidated") return "This field is required";
+                                },
+                              },
+                            })}
+                          />
+                          <h3 className="error-message" style={{ color: "red" }}>
+                            {errors?.bigha && errors?.bigha?.message}
+                          </h3>
+                          <label htmlFor="sumBigha">
+                            Total:
+                            {watch("nonConsolidationType") == "kachha" && watch("bigha") * 1008}
+                            {watch("nonConsolidationType") == "pucka" && watch("bigha") * 3025}
+                          </label>
+                          &nbsp;&nbsp;
                         </td>
                         <td>
-                          <input type="number" className="form-control" id="biswa" {...register("biswa")} />
-                          <label htmlFor="sumBiswa">Total: {(watch("biswa") * 50.41)?.toFixed(3)}</label>&nbsp;&nbsp;
+                          <input
+                            type="number"
+                            className="form-control"
+                            id="biswa"
+                            {...register("biswa", {
+                              maxLength: {
+                                value: 99,
+                                message: "Maximum length exceeded",
+                              },
+                              validate: {
+                                required: (value) => {
+                                  if (!value && watch("consolidationType") == "non-consolidated") return "This field is required";
+                                },
+                              },
+                            })}
+                          />
+                          <h3 className="error-message" style={{ color: "red" }}>
+                            {errors?.biswa && errors?.biswa?.message}
+                          </h3>
+                          <label htmlFor="sumBiswa">
+                            Total:
+                            {watch("nonConsolidationType") == "kachha" && (watch("biswa") * 50.41)?.toFixed(3)}
+                            {watch("nonConsolidationType") == "pucka" && (watch("biswa") * 151.25)?.toFixed(3)}
+                          </label>
+                          &nbsp;&nbsp;
                         </td>
                         <td>
-                          <input type="number" className="form-control" id="biswansi" {...register("biswansi")} />
-                          <label htmlFor="sumBiswansi">Total: {(watch("biswansi") * 2.52)?.toFixed(3)}</label>&nbsp;&nbsp;
+                          <input
+                            type="number"
+                            className="form-control"
+                            id="biswansi"
+                            {...register("biswansi", {
+                              maxLength: {
+                                value: 99,
+                                message: "Maximum length exceeded",
+                              },
+                              validate: {
+                                required: (value) => {
+                                  if (!value && watch("consolidationType") == "non-consolidated") return "This field is required";
+                                },
+                              },
+                            })}
+                          />
+                          <h3 className="error-message" style={{ color: "red" }}>
+                            {errors?.biswansi && errors?.biswansi?.message}
+                          </h3>
+                          <label htmlFor="sumBiswansi">
+                            Total:
+                            {watch("nonConsolidationType") == "kachha" && (watch("biswansi") * 2.52)?.toFixed(3)}
+                            {watch("nonConsolidationType") == "pucka" && (watch("biswansi") * 7.56)?.toFixed(3)}
+                          </label>
+                          &nbsp;&nbsp;
                         </td>
                         <td>
                           <input disabled type="number" className="form-control" {...register("nonConsolidatedTotal")} />
-                          {/* <label htmlFor="asumsarsai">
-                            Total: {(watch("bigha") * 1008 + watch("biswa") * 50.41 + watch("biswansi") * 2.52)?.toFixed(3)}
-                          </label> */}
-                          &nbsp;&nbsp;
-                        </td>
-                      </tr>
-                    </tbody>
-                  </table>
-                )}
-                {watch("nonConsolidationType") == "pucka" && (
-                  <table className="table table-bordered" style={{ backgroundColor: "rgb(251 251 253))" }}>
-                    <thead>
-                      <tr>
-                        <th>
-                          <h2>
-                            {`${t("NWL_APPLICANT_BIGHA_LAND_SCHEDULE")}`}
-                            {/* Bigha (sq. yard) */}
-                            <span style={{ color: "red" }}>*</span>
-                          </h2>
-                        </th>
-                        <th>
-                          <h2>
-                            {`${t("NWL_APPLICANT_BISWA_LAND_SCHEDULE")}`}
-                            {/* Biswa (sq. yard) */}
-                            <span style={{ color: "red" }}>*</span>
-                          </h2>
-                        </th>
-                        <th>
-                          <h2>
-                            {`${t("NWL_APPLICANT_BISWANSI_LAND_SCHEDULE")}`}
-                            {/* Biswansi (sq. yard)  */}
-                            <span style={{ color: "red" }}>*</span>
-                          </h2>
-                          &nbsp;&nbsp;
-                        </th>
-                        <th>
-                          <h2>
-                            {`${t("NWL_APPLICANT_TOTAL_AREA_LAND_SCHEDULE")}`}
-                            {/* Total Area (in acres) */}
-                            <span style={{ color: "red" }}>*</span>
-                          </h2>
-                          &nbsp;&nbsp;
-                        </th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr>
-                        <td>
-                          <input type="number" className="form-control" {...register("bigha")} id="bigha" />
-                          <label htmlFor="sumBigha">Total: {watch("bigha") * 3025}</label>&nbsp;&nbsp;
-                        </td>
-                        <td>
-                          <input type="number" className="form-control" {...register("biswa")} id="biswa" />
-                          <label htmlFor="sumBiswa">Total: {(watch("biswa") * 151.25)?.toFixed(3)}</label>&nbsp;&nbsp;
-                        </td>
-                        <td>
-                          <input type="number" className="form-control" {...register("biswansi")} id="biswansi" />
-                          <label htmlFor="sumBiswansi">Total: {(watch("biswansi") * 7.56)?.toFixed(3)}</label>&nbsp;&nbsp;
-                        </td>
-                        <td>
-                          <input disabled type="number" className="form-control" {...register("nonConsolidatedTotal")} />
-                          {/* <label htmlFor="sumsarsaia">
-                            Total: {(watch("bigha") * 3025 + watch("biswa") * 151.25 + watch("biswansi") * 7.56)?.toFixed(3)}
-                          </label> */}
                           &nbsp;&nbsp;
                         </td>
                       </tr>

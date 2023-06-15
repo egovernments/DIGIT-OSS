@@ -19,6 +19,10 @@ import { getDocShareholding } from "./ScrutinyDevelopment/docview.helper";
 import { useTranslation } from "react-i18next";
 import { useLocation } from "react-router-dom";
 
+import CusToaster from "../../../components/Toaster";
+import ApplicationPurpose from "../AdditionalDocument/ApplicationPurpose";
+import ApplicantInfo from "../AdditionalDocument/ApplicantInfo";
+
 const Genarelinfo = (props) => {
   // useTranslation
 
@@ -27,6 +31,11 @@ const Genarelinfo = (props) => {
   const [showhide1, setShowhide1] = useState("No");
   const [uncheckedValue, setUncheckedVlue] = useState([]);
   const [checkValue, setCheckedVAlue] = useState([]);
+  const [docModal, setDocModal] = useState(false);
+
+
+  const [loader, setLoader] = useState(false);
+  const [showToastError, setShowToastError] = useState({ label: "", error: false, success: false });
   // const [fieldValue, setFieldValue] = useState("");
   // let user = Digit.UserService.getUser();
   // const userRoles = user?.info?.roles?.map((e) => e.code) || [];
@@ -34,11 +43,13 @@ const Genarelinfo = (props) => {
   // const hideRemarksPatwari = userRoles.some((item)=>item ==="Patwari_HQ")
   // const hideRemarksJE = userRoles.some((item)=>item ==="JE_HQ" || item === "JE_HR")
   const applicationStatus = props.applicationStatus ;
+  const additionalDocResponData = props.additionalDocRespon;
   let user = Digit.UserService.getUser();
   const userInfo = Digit.UserService.getUser()?.info || {};
   const userRolesArray = userInfo?.roles.filter((user) => user.code !== "EMPLOYEE");
   const filterDataRole = userRolesArray?.[0]?.code;
   const userRoles = user?.info?.roles?.map((e) => e.code) || [];
+
   
   console.log("rolelogintime" , userRoles );
   console.log("afterfilter12" , filterDataRole)
@@ -392,6 +403,7 @@ const Genarelinfo = (props) => {
         labelmodal={labelValue}
         passmodalData={handlemodaldData}
         displaymodal={smShow}
+        disPlayDoc={docModal}
         onClose={() => setSmShow(false)}
         selectedFieldData={selectedFieldData}
         fieldValue={fieldValue}
@@ -422,7 +434,29 @@ const Genarelinfo = (props) => {
       </div>
       <Collapse in={open2}>
         <div id="example-collapse-text">
-          <Form.Group className="justify-content-center" controlId="formBasicEmail" style={{ border: "2px solid #e9ecef", margin: 10, padding: 20 }}>
+
+
+       {/* {!additionalDocResponData?.AdditionalDocumentReport?.[0]?.applicantInfo == null && */}
+       <div>
+            <ApplicationPurpose
+            additionalDocRespon={additionalDocResponData}
+           
+            />
+       
+          </div>
+          
+{/* } */}
+
+
+ 
+
+     
+       <Form.Group className="justify-content-center" controlId="formBasicEmail" style={{ border: "2px solid #e9ecef", margin: 10, padding: 20 }}>
+    
+  
+
+
+        
             <Row className="ml-auto" style={{ marginBottom: 5 }}>
               <Col md={4} xxl lg="3" className={classes.formLabel}>
                 {/* <Form.Label>
@@ -449,10 +483,10 @@ const Genarelinfo = (props) => {
                   </Form.Control>
                   {/* {JSON.stringify(userRoles)}
                     {JSON.stringify(hideRemarks)} */}
-                    {/*  display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_PURPOSE_OF_LICENCE") ? "block" : "none", */}
+                    {/*  display: hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_PURPOSE_OF_LICENCE") ? "block" : "none", */}
                   <ReportProblemIcon
                     style={{
-                      display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_PURPOSE_OF_LICENCE") ? "block" : "none",
+                      display: hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_PURPOSE_OF_LICENCE") ? "block" : "none",
                   
                       color: fieldIconColors.purpose
                     }}
@@ -460,6 +494,7 @@ const Genarelinfo = (props) => {
                       setOpennedModal("purpose")
                       setLabelValue("Purpose Of License"),
                         setSmShow(true),
+                        setDocModal(false),
                         console.log("modal open"),
                         setFieldValue(applicantInfoPersonal !== null ? applicantInfoPersonal?.purpose : null);
                     }}
@@ -504,7 +539,7 @@ const Genarelinfo = (props) => {
                 
                   <ReportProblemIcon
                     style={{
-                       display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_PURPOSE_OF_LICENCE") ? "block" : "none",
+                       display: hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_PURPOSE_OF_LICENCE") ? "block" : "none",
                 
                       color: fieldIconColors.potential
                     }}
@@ -512,6 +547,7 @@ const Genarelinfo = (props) => {
                       setLabelValue("Potential Zone"),
                       setOpennedModal("potential")
                         setSmShow(true),
+                        setDocModal(false),
                         console.log("modal open"),
                         setFieldValue(applicantInfoPersonal !== null ? applicantInfoPersonal?.potential : null);
                     }}
@@ -540,7 +576,7 @@ const Genarelinfo = (props) => {
                     </Form.Control>
                     <ReportProblemIcon
                       style={{
-                         display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_PURPOSE_OF_LICENCE") ? "block" : "none",
+                         display: hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_PURPOSE_OF_LICENCE") ? "block" : "none",
 
                         color: fieldIconColors.district
                       }}
@@ -548,6 +584,7 @@ const Genarelinfo = (props) => {
                         setLabelValue("District"),
                         setOpennedModal("district")
                           setSmShow(true),
+                        setDocModal(false),
                           console.log("modal open"),
                           setFieldValue(applicantInfoPersonal !== null ? applicantInfoPersonal?.district : null);
                       }}
@@ -575,7 +612,7 @@ const Genarelinfo = (props) => {
                     ></Form.Control>
                     <ReportProblemIcon
                       style={{
-                         display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_PURPOSE_OF_LICENCE") ? "block" : "none",
+                         display: hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_PURPOSE_OF_LICENCE") ? "block" : "none",
                       
                         color: fieldIconColors.state
                       }}
@@ -583,6 +620,7 @@ const Genarelinfo = (props) => {
                         setLabelValue("State"),
                         setOpennedModal("state")
                           setSmShow(true),
+                        setDocModal(false),
                           console.log("modal open"),
                           setFieldValue(applicantInfoPersonal !== null ? applicantInfoPersonal?.state : null);
                       }}
@@ -651,7 +689,7 @@ Note: The term “Collaboration agreement" shall include all Development agreeme
                      <th class="fw-normal pb-0 border-bottom-0 align-top">
                     {/* Khasra No. */}
                     {/* khewats No */}
-                    {`${t("NWL_APPLICANT_KHEWATS_NUMBER_LAND_SCHEDULE")}`}
+                    {`${t("NWL_APPLICANT_KHASRA_NUMBER_LAND_SCHEDULE")}`}
                     </th>
                     <th class="fw-normal pb-0 border-bottom-0 align-top">
                     {/* Name of Land Owner */}
@@ -754,7 +792,7 @@ Note: The term “Collaboration agreement" shall include all Development agreeme
                     <th class="fw-normal py-0 border-top-0">
                        <ReportProblemIcon
                       style={{
-                         display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_DISTRICT_LAND_SCHEDULE") ? "block" : "none",
+                         display: hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_DISTRICT_LAND_SCHEDULE") ? "block" : "none",
 
                         color: fieldIconColors.district
                       }}
@@ -762,6 +800,8 @@ Note: The term “Collaboration agreement" shall include all Development agreeme
                         setLabelValue("District"),
                         setOpennedModal("district")
                           setSmShow(true),
+                        setDocModal(false),
+                          
                           console.log("modal open"),
                           // setFieldValue(applicantInfoPersonal !== null ? applicantInfoPersonal?.district : null);
                           setFieldValue(applicantInfoPersonal?.AppliedLandDetails[0] !== null ? applicantInfoPersonal?.AppliedLandDetails[0]?.district : null);
@@ -770,7 +810,7 @@ Note: The term “Collaboration agreement" shall include all Development agreeme
                     <th class="fw-normal py-0 border-top-0">
                        <ReportProblemIcon
                       style={{
-                         display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_DEVELOPMENT_PLAN_LAND_SCHEDULE") ? "block" : "none",
+                         display: hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_DEVELOPMENT_PLAN_LAND_SCHEDULE") ? "block" : "none",
 
                         color: fieldIconColors.developmentPlan
                       }}
@@ -778,6 +818,7 @@ Note: The term “Collaboration agreement" shall include all Development agreeme
                         setLabelValue("Development Plan"),
                         setOpennedModal("developmentPlan")
                           setSmShow(true),
+                        setDocModal(false),
                           console.log("modal open"),
                           // setFieldValue(applicantInfoPersonal !== null ? applicantInfoPersonal?.district : null);
                           setFieldValue(applicantInfoPersonal?.AppliedLandDetails[0] !== null ? applicantInfoPersonal?.AppliedLandDetails[0]?.developmentPlan : null);
@@ -786,7 +827,7 @@ Note: The term “Collaboration agreement" shall include all Development agreeme
                   <th class="fw-normal py-0 border-top-0">
                     <ReportProblemIcon
                     style={{
-                       display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_ZONE_LAND_SCHEDULE") ? "block" : "none",
+                       display: hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_ZONE_LAND_SCHEDULE") ? "block" : "none",
                 
                       color: fieldIconColors.potential
                     }}
@@ -794,6 +835,7 @@ Note: The term “Collaboration agreement" shall include all Development agreeme
                       setLabelValue("Potential Zone"),
                       setOpennedModal("potential")
                         setSmShow(true),
+                        setDocModal(false),
                         console.log("modal open"),
                         // setFieldValue(applicantInfoPersonal !== null ? applicantInfoPersonal?.potential : null);
                         setFieldValue(applicantInfoPersonal?.AppliedLandDetails[0] !== null ? applicantInfoPersonal?.AppliedLandDetails[0]?.potential : null);
@@ -804,13 +846,14 @@ Note: The term “Collaboration agreement" shall include all Development agreeme
                       <ReportProblemIcon
                         style={{
                          
-                           display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_SECTOR_LAND_SCHEDULE") ? "block" : "none",
+                           display: hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_SECTOR_LAND_SCHEDULE") ? "block" : "none",
                           color: fieldIconColors.sector
                         }}
                         onClick={() => {
                           setLabelValue("Sector"),
                           setOpennedModal("sector")
                           setSmShow(true),
+                        setDocModal(false),
                           console.log("modal open"),
                           setFieldValue(applicantInfoPersonal?.AppliedLandDetails[0] !== null ? applicantInfoPersonal?.AppliedLandDetails[0]?.sector : null);
                         }}
@@ -820,13 +863,14 @@ Note: The term “Collaboration agreement" shall include all Development agreeme
                       <ReportProblemIcon
                         style={{
                          
-                           display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_TEHSIL_LAND_SCHEDULE") ? "block" : "none",
+                           display: hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_TEHSIL_LAND_SCHEDULE") ? "block" : "none",
                           color: fieldIconColors.tehsil
                         }}
                         onClick={() => {
                           setLabelValue("Tehsil"),
                           setOpennedModal("tehsil")
                           setSmShow(true),
+                        setDocModal(false),
                           console.log("modal open"),
                           setFieldValue(applicantInfoPersonal?.AppliedLandDetails[0] !== null ? applicantInfoPersonal?.AppliedLandDetails[0]?.tehsil : null);
                         }}
@@ -835,13 +879,14 @@ Note: The term “Collaboration agreement" shall include all Development agreeme
                     <th class="fw-normal py-0 border-top-0">
                       <ReportProblemIcon
                         style={{
-                           display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_REVENUE_ESTATE_LAND_SCHEDULE") ? "block" : "none",
+                           display: hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_REVENUE_ESTATE_LAND_SCHEDULE") ? "block" : "none",
                           color: fieldIconColors.revenue
                         }}
                         onClick={() => {
                           setLabelValue("Revenue estate"),
                           setOpennedModal("revenue")
                           setSmShow(true),
+                        setDocModal(false),
                           console.log("modal open"),
                           setFieldValue(applicantInfoPersonal?.AppliedLandDetails[0] !== null ? applicantInfoPersonal?.AppliedLandDetails[0]?.revenueEstate : null);
                         }}
@@ -850,7 +895,7 @@ Note: The term “Collaboration agreement" shall include all Development agreeme
                    <th class="fw-normal py-0 border-top-0">
                       <ReportProblemIcon
                         style={{
-                           display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_HADBAST_NUMBER_LAND_SCHEDULE") ? "block" : "none",
+                           display: hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_HADBAST_NUMBER_LAND_SCHEDULE") ? "block" : "none",
                          
                           color: fieldIconColors.hadbastNo
                         }}
@@ -858,6 +903,7 @@ Note: The term “Collaboration agreement" shall include all Development agreeme
                           setLabelValue(" Hadbast Number"),
                           setOpennedModal("hadbastNo")
                           setSmShow(true),
+                        setDocModal(false),
                           console.log("modal open"),
                           setFieldValue(applicantInfoPersonal?.AppliedLandDetails[0] !== null ? applicantInfoPersonal?.AppliedLandDetails[0]?.hadbastNo : null);
                         }}
@@ -866,14 +912,15 @@ Note: The term “Collaboration agreement" shall include all Development agreeme
                     <th class="fw-normal py-0 border-top-0">
                       <ReportProblemIcon
                         style={{
-                          //  display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_PURPOSE_OF_LICENCE") ? "block" : "none",
-                          display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_RECTANGLE_NUMBER_LAND_SCHEDULE") ? "block" : "none",
+                          //  display: hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_PURPOSE_OF_LICENCE") ? "block" : "none",
+                          display: hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_RECTANGLE_NUMBER_LAND_SCHEDULE") ? "block" : "none",
                           color: fieldIconColors.rectangleNo
                         }}
                         onClick={() => {
                           setLabelValue("Rectangle No"),
                           setOpennedModal("rectangeNo")
                           setSmShow(true),
+                        setDocModal(false),
                           console.log("modal open"),
                           setFieldValue(applicantInfoPersonal?.AppliedLandDetails[0] !== null ? applicantInfoPersonal?.AppliedLandDetails[0]?.rectangleNo : null);
                         }}
@@ -882,13 +929,14 @@ Note: The term “Collaboration agreement" shall include all Development agreeme
                     <th class="fw-normal py-0 border-top-0">
                       <ReportProblemIcon
                         style={{
-                          display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_KHEWATS_NUMBER_LAND_SCHEDULE") ? "block" : "none",
+                          display: hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_KHEWATS_NUMBER_LAND_SCHEDULE") ? "block" : "none",
                           color: fieldIconColors.rectaNo
                         }}
                         onClick={() => {
                           setLabelValue("khewats No"),
                           setOpennedModal("khewatsNo")
                           setSmShow(true),
+                        setDocModal(false),
                           console.log("modal open"),
                           setFieldValue(applicantInfoPersonal?.AppliedLandDetails[0] !== null ? applicantInfoPersonal?.AppliedLandDetails[0]?.khewats : null);
                         }}
@@ -897,13 +945,14 @@ Note: The term “Collaboration agreement" shall include all Development agreeme
                     <th class="fw-normal py-0 border-top-0">
                       <ReportProblemIcon
                         style={{
-                          display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_PURPOSE_OF_LICENCE") ? "block" : "none",
+                          display: hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_PURPOSE_OF_LICENCE") ? "block" : "none",
                           color: fieldIconColors.landOwner
                         }}
                         onClick={() => {
                           setLabelValue("Land owner"),
                           setOpennedModal("landOwner")
                           setSmShow(true),
+                        setDocModal(false),
                           console.log("modal open"),
                           setFieldValue(applicantInfoPersonal?.AppliedLandDetails[0] !== null ? applicantInfoPersonal?.AppliedLandDetails[0]?.landOwner : null);
                         }}
@@ -912,15 +961,16 @@ Note: The term “Collaboration agreement" shall include all Development agreeme
                     <th class="fw-normal py-0 border-top-0">
                       <ReportProblemIcon
                         style={{
-                          //  display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_PURPOSE_OF_LICENCE") ? "block" : "none",
+                          //  display: hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_PURPOSE_OF_LICENCE") ? "block" : "none",
                           // display: hideRemarksPatwari?"none":"block",
-                           display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_KHEWATS_NUMBER_LAND_SCHEDULE") ? "block" : "none",
+                           display: hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_KHEWATS_NUMBER_LAND_SCHEDULE") ? "block" : "none",
                           color: fieldIconColors.typeLand
                         }}
                         onClick={() => {
                           setLabelValue("Type of land"),
                           setOpennedModal("typeLand")
                           setSmShow(true),
+                        setDocModal(false),
                           console.log("modal open"),
                           setFieldValue(applicantInfoPersonal?.AppliedLandDetails[0] !== null ? applicantInfoPersonal?.AppliedLandDetails[0]?.typeLand : null);
                         }}
@@ -929,15 +979,16 @@ Note: The term “Collaboration agreement" shall include all Development agreeme
                     <th class="fw-normal py-0 border-top-0">
                       <ReportProblemIcon
                         style={{
-                          //  display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_PURPOSE_OF_LICENCE") ? "block" : "none",
+                          //  display: hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_PURPOSE_OF_LICENCE") ? "block" : "none",
                           // display: hideRemarksPatwari?"none":"block",
-                           display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_PURPOSE_OF_LICENCE") ? "block" : "none",
+                           display: hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_PURPOSE_OF_LICENCE") ? "block" : "none",
                           color: fieldIconColors.isChange
                         }}
                         onClick={() => {
                           setLabelValue("change in information"),
                           setOpennedModal("isChange")
                           setSmShow(true),
+                        setDocModal(false),
                           console.log("modal open"),
                           setFieldValue(applicantInfoPersonal?.AppliedLandDetails[0] !== null ? applicantInfoPersonal?.AppliedLandDetails[0]?.isChange : null);
                         }}
@@ -947,15 +998,16 @@ Note: The term “Collaboration agreement" shall include all Development agreeme
                     <th class="fw-normal py-0 border-top-0">
                       <ReportProblemIcon
                         style={{
-                          //  display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_PURPOSE_OF_LICENCE") ? "block" : "none",
+                          //  display: hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_PURPOSE_OF_LICENCE") ? "block" : "none",
                           // display: hideRemarksPatwari?"none":"block",
-                           display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_PURPOSE_OF_LICENCE") ? "block" : "none",
+                           display: hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_PURPOSE_OF_LICENCE") ? "block" : "none",
                           color: fieldIconColors.editRectangleNo
                         }}
                         onClick={() => {
                           setLabelValue("Rectangle No./Mustil(Changed)"),
                           setOpennedModal("editRectangleNo")
                           setSmShow(true),
+                        setDocModal(false),
                           console.log("modal open"),
                           setFieldValue(applicantInfoPersonal?.AppliedLandDetails[0] !== null ? applicantInfoPersonal?.AppliedLandDetails[0]?.editRectangleNo : null);
                         }}
@@ -968,13 +1020,14 @@ Note: The term “Collaboration agreement" shall include all Development agreeme
                       {" "}
                       <ReportProblemIcon
                         style={{
-                          display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_PURPOSE_OF_LICENCE") ? "block" : "none",
+                          display: hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_PURPOSE_OF_LICENCE") ? "block" : "none",
                           color: fieldIconColors.editKhewats
                         }}
                         onClick={() => {
                           setLabelValue("khewats No(Changed)"),
                           setOpennedModal("editKhewats")
                           setSmShow(true),
+                        setDocModal(false),
                           console.log("modal open"),
                           setFieldValue(applicantInfoPersonal?.AppliedLandDetails[0] !== null ? applicantInfoPersonal?.AppliedLandDetails[0]?.editKhewats : null);
                         }}
@@ -985,13 +1038,14 @@ Note: The term “Collaboration agreement" shall include all Development agreeme
                       <ReportProblemIcon
                         style={{
                           
-                           display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_PURPOSE_OF_LICENCE") ? "block" : "none",
+                           display: hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_PURPOSE_OF_LICENCE") ? "block" : "none",
                           color: fieldIconColors.landOwnerRegistry
                         }}
                         onClick={() => {
                           setLabelValue("Name of the Land Ower as per Mutation/Jamabandi"),
                           setOpennedModal("landOwnerRegistry")
                           setSmShow(true),
+                        setDocModal(false),
                           console.log("modal open"),
                           setFieldValue(applicantInfoPersonal?.AppliedLandDetails[0] !== null ? applicantInfoPersonal?.AppliedLandDetails[0]?.landOwnerRegistry : null);
                         }}
@@ -1003,13 +1057,14 @@ Note: The term “Collaboration agreement" shall include all Development agreeme
                       {" "}
                       <ReportProblemIcon
                         style={{
-                          display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_PURPOSE_OF_LICENCE") ? "block" : "none",
+                          display: hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_PURPOSE_OF_LICENCE") ? "block" : "none",
                           color: fieldIconColors.collaboration
                         }}
                         onClick={() => {
                           setLabelValue("Whether Khasra been developed in collaboration"),
                           setOpennedModal("collaboration")
                           setSmShow(true),
+                        setDocModal(false),
                           console.log("modal open"),
                           setFieldValue(applicantInfoPersonal?.AppliedLandDetails[0] !== null ? applicantInfoPersonal?.AppliedLandDetails[0]?.collaboration : null);
                         }}
@@ -1019,13 +1074,14 @@ Note: The term “Collaboration agreement" shall include all Development agreeme
                       {" "}
                       <ReportProblemIcon
                         style={{
-                          display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_PURPOSE_OF_LICENCE") ? "block" : "none",
+                          display: hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_PURPOSE_OF_LICENCE") ? "block" : "none",
                           color: fieldIconColors.developerCompany
                         }}
                         onClick={() => {
                           setLabelValue("Name of the developer company"),
                           setOpennedModal("developerCompany")
                           setSmShow(true),
+                        setDocModal(false),
                           console.log("modal open"),
                           setFieldValue(applicantInfoPersonal?.AppliedLandDetails[0] !== null ? applicantInfoPersonal?.AppliedLandDetails[0]?.developerCompany : null);
                         }}
@@ -1035,13 +1091,14 @@ Note: The term “Collaboration agreement" shall include all Development agreeme
                       {" "}
                       <ReportProblemIcon
                         style={{
-                          display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_PURPOSE_OF_LICENCE") ? "block" : "none",
+                          display: hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_PURPOSE_OF_LICENCE") ? "block" : "none",
                           color: fieldIconColors.agreementValidFrom
                         }}
                         onClick={() => {
                           setLabelValue("Date of registering collaboration agreement"),
                           setOpennedModal("agreementValidFrom")
                           setSmShow(true),
+                        setDocModal(false),
                           console.log("modal open"),
                           setFieldValue(applicantInfoPersonal?.AppliedLandDetails[0] !== null ? applicantInfoPersonal?.AppliedLandDetails[0]?.agreementValidFrom : null);
                         }}
@@ -1051,13 +1108,14 @@ Note: The term “Collaboration agreement" shall include all Development agreeme
                       {" "}
                       <ReportProblemIcon
                         style={{
-                          display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_PURPOSE_OF_LICENCE") ? "block" : "none",
+                          display: hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_PURPOSE_OF_LICENCE") ? "block" : "none",
                           color: fieldIconColors.agreementIrrevocialble
                         }}
                         onClick={() => {
                           setLabelValue("Collabration Agreement Irrevociable"),
                           setOpennedModal("agreementIrrevocialble")
                           setSmShow(true),
+                        setDocModal(false),
                           console.log("modal open"),
                           setFieldValue(applicantInfoPersonal?.AppliedLandDetails[0] !== null ? applicantInfoPersonal?.AppliedLandDetails[0]?.agreementIrrevocialble : null);
                         }}
@@ -1067,13 +1125,14 @@ Note: The term “Collaboration agreement" shall include all Development agreeme
                       {" "}
                       <ReportProblemIcon
                         style={{
-                          display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_PURPOSE_OF_LICENCE") ? "block" : "none",
+                          display: hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_PURPOSE_OF_LICENCE") ? "block" : "none",
                           color: fieldIconColors.authSignature
                         }}
                         onClick={() => {
                           setLabelValue("Name of authorized signatory on behalf of land owner(s)"),
                           setOpennedModal("authSignature")
                           setSmShow(true),
+                        setDocModal(false),
                           console.log("modal open"),
                           setFieldValue(applicantInfoPersonal?.AppliedLandDetails[0] !== null ? applicantInfoPersonal?.AppliedLandDetails[0]?.authSignature : null);
                         }}
@@ -1083,13 +1142,14 @@ Note: The term “Collaboration agreement" shall include all Development agreeme
                       {" "}
                       <ReportProblemIcon
                         style={{
-                          display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_PURPOSE_OF_LICENCE") ? "block" : "none",
+                          display: hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_PURPOSE_OF_LICENCE") ? "block" : "none",
                           color: fieldIconColors.nameAuthSign
                         }}
                         onClick={() => {
                           setLabelValue("Name of authorized signatory on behalf of developer"),
                           setOpennedModal("nameAuthSign")
                           setSmShow(true),
+                        setDocModal(false),
                           console.log("modal open"),
                           setFieldValue(applicantInfoPersonal?.AppliedLandDetails[0] !== null ? applicantInfoPersonal?.AppliedLandDetails[0]?.nameAuthSign : null);
                         }}
@@ -1099,13 +1159,14 @@ Note: The term “Collaboration agreement" shall include all Development agreeme
                       {" "}
                       <ReportProblemIcon
                         style={{
-                          display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_PURPOSE_OF_LICENCE") ? "block" : "none",
+                          display: hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_PURPOSE_OF_LICENCE") ? "block" : "none",
                           color: fieldIconColors.registeringAuthority
                         }}
                         onClick={() => {
                           setLabelValue("Registering Authority"),
                           setOpennedModal("registeringAuthority")
                           setSmShow(true),
+                        setDocModal(false),
                           console.log("modal open"),
                           setFieldValue(applicantInfoPersonal?.AppliedLandDetails[0] !== null ? applicantInfoPersonal?.AppliedLandDetails[0]?.registeringAuthority : null);
                         }}
@@ -1114,15 +1175,16 @@ Note: The term “Collaboration agreement" shall include all Development agreeme
                     <th class="fw-normal py-0 border-top-0">
                       <ReportProblemIcon
                         style={{
-                          //  display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_PURPOSE_OF_LICENCE") ? "block" : "none",
+                          //  display: hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_PURPOSE_OF_LICENCE") ? "block" : "none",
                           // display: hideRemarksPatwari?"none":"block",
-                           display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_PURPOSE_OF_LICENCE") ? "block" : "none",
+                           display: hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_PURPOSE_OF_LICENCE") ? "block" : "none",
                           color: fieldIconColors.registeringAuthorityDoc
                         }}
                         onClick={() => {
                           setLabelValue("Registering Authority document"),
                           setOpennedModal("registeringAuthorityDoc")
                           setSmShow(true),
+                        setDocModal(true),
                           console.log("modal open"),
                           setFieldValue(applicantInfoPersonal?.AppliedLandDetails[0] !== null ? applicantInfoPersonal?.AppliedLandDetails[0]?.registeringAuthorityDoc : null);
                         }}
@@ -1131,13 +1193,14 @@ Note: The term “Collaboration agreement" shall include all Development agreeme
                     <th class="fw-normal py-0 border-top-0">
                       <ReportProblemIcon
                         style={{
-                          display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_PURPOSE_OF_LICENCE") ? "block" : "none",
+                          display: hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_PURPOSE_OF_LICENCE") ? "block" : "none",
                           color: fieldIconColors.consolidationType
                         }}
                         onClick={() => {
                           setLabelValue("Consolidation Type"),
                           setOpennedModal("consolidationType")
                           setSmShow(true),
+                        setDocModal(false),
                           console.log("modal open"),
                           setFieldValue(applicantInfoPersonal?.AppliedLandDetails[0] !== null ? applicantInfoPersonal?.AppliedLandDetails[0]?.consolidationType : null);
                         }}
@@ -1146,13 +1209,14 @@ Note: The term “Collaboration agreement" shall include all Development agreeme
                     <th class="fw-normal py-0 border-top-0">
                       <ReportProblemIcon
                         style={{
-                          display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_PURPOSE_OF_LICENCE") ? "block" : "none",
+                          display: hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_PURPOSE_OF_LICENCE") ? "block" : "none",
                           color: fieldIconColors.kanal
                         }}
                         onClick={() => {
                           setLabelValue("Kanal"),
                           setOpennedModal("kanal")
                           setSmShow(true),
+                        setDocModal(false),
                           console.log("modal open"),
                           setFieldValue(applicantInfoPersonal?.AppliedLandDetails[0] !== null ? applicantInfoPersonal?.AppliedLandDetails[0]?.kanal : null);
                         }}
@@ -1162,13 +1226,14 @@ Note: The term “Collaboration agreement" shall include all Development agreeme
                     <th class="fw-normal py-0 border-top-0">
                       <ReportProblemIcon
                         style={{
-                          display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_PURPOSE_OF_LICENCE") ? "block" : "none",
+                          display: hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_PURPOSE_OF_LICENCE") ? "block" : "none",
                           color: fieldIconColors.marla
                         }}
                         onClick={() => {
                           setLabelValue("Marla"),
                           setOpennedModal("marla")
                           setSmShow(true),
+                        setDocModal(false),
                           console.log("modal open"),
                           setFieldValue(applicantInfoPersonal?.AppliedLandDetails[0] !== null ? applicantInfoPersonal?.AppliedLandDetails[0]?.marla : null);
                         }}
@@ -1177,13 +1242,14 @@ Note: The term “Collaboration agreement" shall include all Development agreeme
                     <th class="fw-normal py-0 border-top-0">
                       <ReportProblemIcon
                         style={{
-                          display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_PURPOSE_OF_LICENCE") ? "block" : "none",
+                          display: hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_PURPOSE_OF_LICENCE") ? "block" : "none",
                           color: fieldIconColors.sarsai
                         }}
                         onClick={() => {
                           setLabelValue("Sarsai"),
                           setOpennedModal("sarsai")
                           setSmShow(true),
+                        setDocModal(false),
                           console.log("modal open"),
                           setFieldValue(applicantInfoPersonal?.AppliedLandDetails[0] !== null ? applicantInfoPersonal?.AppliedLandDetails[0]?.sarsai : null);
                         }}
@@ -1192,13 +1258,14 @@ Note: The term “Collaboration agreement" shall include all Development agreeme
                     <th class="fw-normal py-0 border-top-0">
                       <ReportProblemIcon
                         style={{
-                          display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_PURPOSE_OF_LICENCE") ? "block" : "none",
+                          display: hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_TOTAL_AREA_LAND_SCHEDULE") ? "block" : "none",
                           color: fieldIconColors.bigha
                         }}
                         onClick={() => {
                           setLabelValue("Bigha"),
                           setOpennedModal("bigha")
                           setSmShow(true),
+                        setDocModal(false),
                           console.log("modal open"),
                           setFieldValue(applicantInfoPersonal?.AppliedLandDetails[0] !== null ? applicantInfoPersonal?.AppliedLandDetails[0]?.bigha : null);
                         }}
@@ -1208,13 +1275,14 @@ Note: The term “Collaboration agreement" shall include all Development agreeme
                     <th class="fw-normal py-0 border-top-0">
                       <ReportProblemIcon
                         style={{
-                          display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_PURPOSE_OF_LICENCE") ? "block" : "none",
+                          display: hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_PURPOSE_OF_LICENCE") ? "block" : "none",
                           color: fieldIconColors.biswa
                         }}
                         onClick={() => {
                           setLabelValue("Biswa"),
                           setOpennedModal("biswa")
                           setSmShow(true),
+                        setDocModal(false),
                           console.log("modal open"),
                           setFieldValue(applicantInfoPersonal?.AppliedLandDetails[0] !== null ? applicantInfoPersonal?.AppliedLandDetails[0]?.biswa : null);
                         }}
@@ -1223,13 +1291,14 @@ Note: The term “Collaboration agreement" shall include all Development agreeme
                     <th class="fw-normal py-0 border-top-0">
                       <ReportProblemIcon
                         style={{
-                          display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_PURPOSE_OF_LICENCE") ? "block" : "none",
+                          display: hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_PURPOSE_OF_LICENCE") ? "block" : "none",
                           color: fieldIconColors.biswansi
                         }}
                         onClick={() => {
                           setLabelValue("Biswansi"),
                           setOpennedModal("biswansi")
                           setSmShow(true),
+                        setDocModal(false),
                           console.log("modal open"),
                           setFieldValue(applicantInfoPersonal?.AppliedLandDetails[0] !== null ? applicantInfoPersonal?.AppliedLandDetails[0]?.biswansi : null);
                         }}
@@ -1240,13 +1309,14 @@ Note: The term “Collaboration agreement" shall include all Development agreeme
                       <ReportProblemIcon
                         style={{
                           
-                           display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_PURPOSE_OF_LICENCE") ? "block" : "none",
+                           display: hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_PURPOSE_OF_LICENCE") ? "block" : "none",
                           color: fieldIconColors.tehsil
                         }}
                         onClick={() => {
                           setLabelValue("tehsil"),
                           setOpennedModal("ConsolidatedTotal")
                           setSmShow(true),
+                        setDocModal(false),
                           console.log("modal open"),
                           setFieldValue(applicantInfoPersonal?.AppliedLandDetails[0] !== null ? applicantInfoPersonal?.AppliedLandDetails[0]?.tehsil : null);
                         }}
@@ -1260,10 +1330,10 @@ Note: The term “Collaboration agreement" shall include all Development agreeme
                       
                   <tr key={index}>
                     <td>
-                      <input type="text" className="form-control" placeholder={item?.district } disabled />
+                      <input type="text" className="form-control" title={item?.district?.label} placeholder={item?.district?.label} disabled />
                     </td>
                     <td>
-                      <input type="text" className="form-control" placeholder={item?.developmentPlan} disabled />
+                      <input type="text" className="form-control"title={item?.developmentPlan?.label} placeholder={item?.developmentPlan?.label} disabled />
                     </td>
                     <td>
                       <input type="text" className="form-control" placeholder={item?.potential} disabled />
@@ -1272,10 +1342,10 @@ Note: The term “Collaboration agreement" shall include all Development agreeme
                       <input type="text" className="form-control" placeholder={item?.sector} disabled />
                     </td>
                     <td>
-                      <input type="text" className="form-control" placeholder={item?.tehsil} disabled />
+                      <input type="text" className="form-control" title={item?.tehsil?.label} placeholder={item?.tehsil?.label} disabled />
                     </td>
                     <td>
-                      <input type="text" className="form-control" placeholder={item?.revenueEstate} disabled />
+                      <input type="text" className="form-control" title={item?.revenueEstate?.label} placeholder={item?.revenueEstate?.label} disabled />
                     </td>
                     <td>
                       <input type="text" className="form-control" placeholder={item?.hadbastNo} disabled />
@@ -1290,7 +1360,7 @@ Note: The term “Collaboration agreement" shall include all Development agreeme
                       <input type="text" className="form-control" title={item?.landOwner} placeholder={item?.landOwner} disabled />
                     </td>
                     <td class="text-center">
-                      <input type="text" className="form-control" title={item?.typeLand} placeholder={item?.typeLand} disabled />
+                      <input type="text" className="form-control" title={item?.typeLand?.label} placeholder={item?.typeLand?.label} disabled />
                     </td>
                     <td class="text-center">
                       <input type="text" className="form-control" title={item?.isChange} placeholder="N/A"  value={item?.isChange} disabled />
@@ -1327,12 +1397,39 @@ Note: The term “Collaboration agreement" shall include all Development agreeme
                     </td>
                     <td class="text-center">
                     <div className="btn btn-sm col-md-6">
-                                    <IconButton onClick={()=>getDocShareholding(item?.registeringAuthorityDoc)}>
+                             
+                                    <IconButton
+                                    style={{
+                                      color: " #1266af",
+                                      fontSize: " 12px",
+                                      fontWeight: "bold",
+                                      cursor: "pointer",
+                                      textDecorationLine: "underline",
+                                    }}
+                                    onClick={() => {
+                                      if (item?.registeringAuthorityDoc) getDocShareholding(item?.registeringAuthorityDoc, setLoader);
+                                      else setShowToastError({ label: "No Document here", error: true, success: false });
+                                    }}>
+                                    
+                                    {/* onClick={()=>getDocShareholding(item?.registeringAuthorityDoc)} */}
+                                  
                                       <Visibility color="info" className="icon" /></IconButton>
                                   
                                   </div>
                                   <div className="btn btn-sm col-md-6">
-                                    <IconButton onClick={()=>getDocShareholding(item?.registeringAuthorityDoc)}>
+                                  <IconButton
+                                    style={{
+                                      color: " #1266af",
+                                      fontSize: " 12px",
+                                      fontWeight: "bold",
+                                      cursor: "pointer",
+                                      textDecorationLine: "underline",
+                                    }}
+                                    onClick={() => {
+                                      if (item?.registeringAuthorityDoc) getDocShareholding(item?.registeringAuthorityDoc, setLoader);
+                                      else setShowToastError({ label: "No Document here", error: true, success: false });
+                                    }}>
+                                    {/* <IconButton onClick={()=>getDocShareholding(item?.registeringAuthorityDoc)}> */}
                                 <FileDownload color="primary" className="mx-1" />
                         </IconButton>
                         </div>
@@ -1374,7 +1471,7 @@ Note: The term “Collaboration agreement" shall include all Development agreeme
                      {/* <th class="fw-normal py-0 border-top-0"> */}
                        <ReportProblemIcon
                       style={{
-                        display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("Total Area (in acres)") ? "block" : "none",
+                        display: hideRemarksPatwari && showReportProblemIcon("Total Area (in acres)") ? "block" : "none",
 
                         color: fieldIconColors.district
                       }}
@@ -1382,6 +1479,7 @@ Note: The term “Collaboration agreement" shall include all Development agreeme
                         setLabelValue("Land schedule Table"),
                         setOpennedModal("district")
                           setSmShow(true),
+                        setDocModal(false),
                           console.log("modal open"),
                           setFieldValue(applicantInfoPersonal !== null ? applicantInfoPersonal?.district : null);
                           // setFieldValue(applicantInfoPersonal?.AppliedLandDetails[0] !== null ? applicantInfoPersonal?.AppliedLandDetails : null);
@@ -1394,16 +1492,31 @@ Note: The term “Collaboration agreement" shall include all Development agreeme
                   }
                 </tbody>
               </table>
+                 
             </div>
             {/* </div>
       </Collapse> */}
             {/* <div style={{ position: "relative", marginBottom: 40 }}>
               <Button onClick={() => props.passUncheckedList({ data: uncheckedValue, purpose: purpose })}>Submit</Button>
             </div> */}
+            <div className="row" style={{margin : 10}}>
+                  totalArea : {applicantInfoPersonal?.totalArea}
+                  </div>
+            
           </Form.Group>
+          
    </div>
       </Collapse>
-      {/* </Card> */}
+      {showToastError && (
+        <CusToaster
+          label={showToastError?.label}
+          success={showToastError?.success}
+          error={showToastError?.error}
+          onClose={() => {
+            setShowToastError({ label: "", success: false, error: false });
+          }}
+        />
+      )}
     </Form>
   );
 };

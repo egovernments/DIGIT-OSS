@@ -37,9 +37,11 @@ const DesktopInbox = ({
     }
     return str;
   };
+  
 
   const GetMobCell = (value) => <span className="sla-cell">{value}</span>;
-  const inboxColumns = () => [
+  const inboxColumns = () =>[
+    
     {
       Header: t("WF_INBOX_HEADER_APPLICATION_NO"),
       Cell: ({ row }) => {
@@ -74,7 +76,7 @@ const DesktopInbox = ({
                       : row.original["businessService"] === "ELECTRICAL_PLAN"
                       ? "ElectricalScrutiny"
                       : row.original["businessService"] === "EXTENTION_OF_CLU_PERMISSION"
-                      ? "ExtensionCluCard"
+                      ? "ElectricalScrutiny"
                       : row.original["businessService"] === "BG_NEW"
                       ? "ScrutinyForm"
                       : row.original["businessService"] === "COMPLETION_CERTIFICATE"
@@ -105,6 +107,7 @@ const DesktopInbox = ({
     },
     {
       Header: t("TL_COMMON_TABLE_COL_APP_TYPE"),
+      
       Cell: ({ row }) => {
         return GetCell(t(row.original["businessService"] ? `CS_COMMON_INBOX_${row.original["businessService"]?.toUpperCase()}` : "NA"));
       },
@@ -168,7 +171,7 @@ const DesktopInbox = ({
                       : row.original["businessService"] === "APPROVAL_OF_STANDARD"
                       ? "StandardDesign"
                       : row.original["businessService"] === "CHANGE_OF_BENEFICIAL"
-                      ? "Beneficialscrutiny"
+                      ? "BeneficialCard"
                       : row.original["businessService"] === "RENWAL_OF_LICIENCE"
                       ? "RenewalScrutiny"
                       : row.original["businessService"] === "TRANSFER_OF_LICIENCE"
@@ -240,7 +243,9 @@ const DesktopInbox = ({
         getCellProps={(cellInfo) => {
           return {
             style: {
-              minWidth: cellInfo.column.Header === t("ES_INBOX_APPLICATION_NO") ? "240px" : "",
+               minWidth: cellInfo.column.Header === t("ES_INBOX_APPLICATION_NO") ? "240px" : "",
+               backgroundColor: cellInfo.column.Header === t("ES_INBOX_APPLICATION_NO") ? "red":" " ,
+              //  backgroundColor: cellInfo.column === t("WF_INBOX_HEADER_APPLICATION_NO") ? "red":" " ,
               padding: "20px 18px",
               fontSize: "16px",
             },

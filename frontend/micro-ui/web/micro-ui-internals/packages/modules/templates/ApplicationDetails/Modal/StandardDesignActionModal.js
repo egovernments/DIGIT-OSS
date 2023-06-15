@@ -114,7 +114,7 @@ const StandardDesignModal = ({ t, action, tenantId, state, id, closeModal, submi
     console.log("log123...submitted updated",applicationData,selectedApprover, selectedApprover.map((ele)=>ele[1]?.uuid));
     submitAction({
         // ElectricPlanRequest: [applicationData],
-        approvalStandardResponse: [applicationData],
+        ApprovalStandardEntity: [applicationData],
     });
   }
   useEffect(() => {

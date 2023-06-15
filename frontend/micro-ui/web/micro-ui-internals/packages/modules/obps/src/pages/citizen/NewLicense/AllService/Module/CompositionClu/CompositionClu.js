@@ -90,6 +90,7 @@ function CompositionClu() {
   const [showToastError, setShowToastError] = useState({ label: "", error: false, success: false });
   const [showhide, setShowhide] = useState("No");
   const [applicationNumber, setApplicationNumber] = useState();
+   const [applicantId, setApplicantId] = useState("");
   const [open, setOpen] = React.useState(false);
   const [open1, setOpen1] = React.useState(false);
   const [khasraModal, setKhasraModal] = useState("");
@@ -209,6 +210,50 @@ function CompositionClu() {
       setLoader(false);
     }
   };
+
+    
+    const getCompositionCluDetails = async (id) => {
+    setLoader(true);
+    const token = window?.localStorage?.getItem("token");
+    const data = {
+      RequestInfo: {
+        apiId: "Rainmaker",
+        ver: "v1",
+        ts: 0,
+        action: "_search",
+        did: "",
+        key: "",
+        msgId: "090909",
+        requesterId: "",
+        authToken: token,
+        userInfo: userInfo,
+      },
+    };
+    try {
+      const Resp = await axios.post(`tl-services/composition/_get?applicationNumber=${id}`, data);
+      setLoader(false);
+      const resData = Resp?.data?.compositionOfUrban[0]?.additionalDetails;
+      console.log(Resp?.data?.compositionOfUrban[0]?.additionalDetails);
+      Object?.keys(resData)?.map((item) => {
+        setValue(item, resData[item]);
+      });
+      setValue("selectType", { label: resData?.selectType, value: resData?.selectType });
+    } catch (error) {
+      setLoader(false);
+      return error.message;
+    }
+  };
+    useEffect(() => {
+    const search = location?.search;
+    const params = new URLSearchParams(search);
+    const id = params.get("id");
+    // const id = "TCP_RLP_20230408_000282";
+    setApplicantId(id);
+    if (id) getCompositionCluDetails(id);
+  }, []);
+
+
+
    useEffect(()=>{
     console.log("totalarea1")
     if(modalValue?.length){

@@ -19,7 +19,6 @@ import TableHead from "@mui/material/TableHead";
 import TablePagination from "@mui/material/TablePagination";
 import TableRow from "@mui/material/TableRow";
 
-
 const SPApplications = ({ view }) => {
   const { t } = useTranslation();
   const history = useHistory();
@@ -223,38 +222,29 @@ const SPApplications = ({ view }) => {
         })}
       </table> */}
       <Col md={12} lg={12} mb={3} sx={{ marginY: 2 }}>
-
         <Paper sx={{ width: "126%", overflow: "hidden", marginY: 2 }}>
-
           <TableContainer sx={{ maxHeight: 500 }}>
             <Table stickyHeader aria-label="sticky table">
               <TableHead>
                 <TableRow>
-                  <StyledTableCell >ID</StyledTableCell>
-                  <StyledTableCell >Tenant Id</StyledTableCell>
-                  <StyledTableCell >Business Service</StyledTableCell>
-                  <StyledTableCell >Application Number</StyledTableCell>
-                  <StyledTableCell >Application Date</StyledTableCell>
-                  <StyledTableCell >Action</StyledTableCell>
-                  <StyledTableCell > Status</StyledTableCell>
-
-
-
+                  {/* <StyledTableCell >ID</StyledTableCell> */}
+                  <StyledTableCell>Tenant Id</StyledTableCell>
+                  <StyledTableCell>Business Service</StyledTableCell>
+                  <StyledTableCell>Application Number</StyledTableCell>
+                  <StyledTableCell>Application Date</StyledTableCell>
+                  <StyledTableCell>Action</StyledTableCell>
+                  <StyledTableCell> Status</StyledTableCell>
                 </TableRow>
-
               </TableHead>
               <TableBody>
-
                 {data?.servicePlanResponse?.map((item, index) => {
                   return (
                     <StyledTableRow sx={{ "&:last-child td, &:last-child th": { border: 0 } }}>
-                      <StyledTableCell component="th" scope="row">
-                        {item?.id}
-                      </StyledTableCell>
+                      {/* <StyledTableCell component="th" scope="row">
+                            {item?.id}
+                            </StyledTableCell> */}
                       <StyledTableCell>{item?.tenantId}</StyledTableCell>
-                      <StyledTableCell>
-                        {item?.businessService}
-                      </StyledTableCell>
+                      <StyledTableCell>{item?.businessService}</StyledTableCell>
                       <StyledTableCell
                         style={{ textDecoration: "underline blue 1px", cursor: "pointer", border: "1px solid #ddd", padding: " 8px" }}
                         onClick={() => {
@@ -277,8 +267,6 @@ const SPApplications = ({ view }) => {
                         {item?.status}
                       </StyledTableCell>
                     </StyledTableRow>
-
-
                   );
                 })}
               </TableBody>
@@ -294,7 +282,6 @@ const SPApplications = ({ view }) => {
             onRowsPerPageChange={handleChangeRowsPerPage}
           />
         </Paper>
-
       </Col>
     </div>
 

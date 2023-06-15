@@ -1,21 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "bootstrap/dist/css/bootstrap.css";
-import { useForm, useFieldArray, Controller } from "react-hook-form";
-import ResidentialPlottedForm from "./ResidentialPlotted";
-import DDJAYForm from "../Step4/DdjayForm";
-import IndustrialPlottedForm from "./IndustrialPlotted";
-import CommercialPlottedForm from "./CommercialPlotted";
-import NilpForm from "./Nilp";
-import ResidentialGroupHousingForm from "./ResidentialGroupHousing";
-import AffordableGroupHousingForm from "./AffordableGroupHousing";
-import CommercialIntegratedForm from "./CommercialIntegrated";
-import IILPForm from "./IILPForm";
-import ITCyberCityForm from "./ITCyberCity";
-import MixedLandUseForm from "./MixedLandUse";
-import RetirementHousingForm from "./RetirementHousing";
+import { useForm, useFieldArray } from "react-hook-form";
 import ReactMultiSelect from "../../../../../../../react-components/src/atoms/ReactMultiSelect";
-import LayoutPlan from "./LayoutPlan";
-import DemarcationPlan from "./DemarcationPlan";
 import { Card, Row, Col, Button, Form } from "react-bootstrap";
 import axios from "axios";
 import Spinner from "../../../../components/Loader";
@@ -23,41 +9,32 @@ import { getDocShareholding } from "../docView/docView.help";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { VALIDATION_SCHEMA } from "../../../../utils/schema/step4";
 import { useLocation } from "react-router-dom";
-import { Modal, ModalHeader, ModalBody, ModalFooter } from "reactstrap";
+import { Modal, ModalBody } from "reactstrap";
 import ScrollToTop from "@egovernments/digit-ui-react-components/src/atoms/ScrollToTop";
-import { CardLabelError } from "@egovernments/digit-ui-react-components";
-import { Toast } from "@egovernments/digit-ui-react-components";
 import _ from "lodash";
-import NumberInput from "../../../../components/NumberInput";
 import FileUpload from "@mui/icons-material/FileUpload";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import CusToaster from "../../../../components/Toaster";
 import InfoIcon from "@mui/icons-material/Info";
 import Tooltip from "@mui/material/Tooltip";
 import { useTranslation } from "react-i18next";
+import { CardLabelError } from "@egovernments/digit-ui-react-components";
 
 const AppliedDetailForm = (props) => {
   const location = useLocation();
   const { t } = useTranslation();
-  const Purpose = localStorage.getItem("purpose");
-  const [file, setFile] = useState(null);
   const [loader, setLoader] = useState(false);
   const [stepData, setStepData] = useState(null);
-  const [fileStoreId, setFileStoreId] = useState({});
   const [selectedFiles, setSelectedFiles] = useState([]);
-  const [showError, setShowError] = useState({});
-  const [showToast, setShowToast] = useState(null);
   const [showToastError, setShowToastError] = useState({ label: "", error: false, success: false });
-  const [toastMessage, setToastMessage] = useState(null);
   const userInfo = Digit.UserService.getUser()?.info || {};
   const [applicantId, setApplicantId] = useState("");
   const [modalData, setModalData] = useState([]);
-  const [error, setError] = useState({});
-  const [isValid, setIsValid] = useState(false);
+  const [showError, setShowError] = useState({});
+  // const [isValid, setIsValid] = useState(false);
   const [getData, setData] = useState({ caseNumber: "", dairyNumber: "" });
   const [newDataA, setNewDataA] = useState({});
-  const [getFarArr, setFarArr] = useState([]);
-  const [getUpdatedData, setUpdatedData] = useState(null);
+  const [dgpsModal, setDGPSModal] = useState(false);
 
   const {
     watch,
@@ -105,11 +82,6 @@ const AppliedDetailForm = (props) => {
   const { fields, append, remove } = useFieldArray({
     control,
     name: "dgpsDetails",
-  });
-
-  const { fields: detailsArray, append: detailsAppend, remove: detailsRemoce } = useFieldArray({
-    control,
-    name: "detailOfCommunitySites",
   });
 
   // const validateDgpsPoint = () => {
@@ -370,22 +342,6 @@ const AppliedDetailForm = (props) => {
     }
   }, [stepData]);
 
-  // const getSubmitDataLabel = async () => {
-  //   try {
-  //     const Resp = await axios.get(`http://103.166.62.118:80/land-services/new/licenses/_get?id=${props.getId}`).then((response) => {
-  //       return response;
-  //     });
-  //   } catch (error) {
-  //     return error;
-  //   }
-  // };
-
-  const handleWheel = (e) => e.target.blur();
-
-  // useEffect(() => {
-  //   getSubmitDataLabel();
-  // }, []);
-
   const getDocumentData = async (file, fieldName) => {
     if (selectedFiles.includes(file.name)) {
       setShowToastError({ label: "Duplicate file Selected", error: true, success: false });
@@ -400,47 +356,6 @@ const AppliedDetailForm = (props) => {
     try {
       const Resp = await axios.post("/filestore/v1/files", formData, {});
       setValue(fieldName, Resp?.data?.files?.[0]?.fileStoreId);
-      // setFileStoreId({ ...fileStoreId, [fieldName]: Resp?.data?.files?.[0]?.fileStoreId });
-      // setDocId(Resp?.data?.files?.[0]?.fileStoreId);
-      // if (fieldName === "hostedLayoutPlan") {
-      //   setValue("hostedLayoutPlanFileName", file.name);
-      // }
-      // if (fieldName === "consentRera") {
-      //   setValue("consentReraFileName", file.name);
-      // }
-      // if (fieldName === "sectoralPlan") {
-      //   setValue("sectoralPlanFileName", file.name);
-      // }
-      // if (fieldName === "detailedElectricSupply") {
-      //   setValue("detailedElectricSupplyFileName", file.name);
-      // }
-      // if (fieldName === "planCrossSection") {
-      //   setValue("planCrossSectionFileName", file.name);
-      // }
-      // if (fieldName === "publicHealthServices") {
-      //   setValue("publicHealthServicesFileName", file.name);
-      // }
-      // if (fieldName === "designRoad") {
-      //   setValue("designRoadFileName", file.name);
-      // }
-      // if (fieldName === "designSewarage") {
-      //   setValue("designSewarageFileName", file.name);
-      // }
-      // if (fieldName === "designDisposal") {
-      //   setValue("designDisposalFileName", file.name);
-      // }
-      // if (fieldName === "undertakingChange") {
-      //   setValue("undertakingChangeFileName", file.name);
-      // }
-      // if (fieldName === "proposedColony") {
-      //   setValue("proposedColonyFileName", file.name);
-      // }
-      // if (fieldName === "reportObjection") {
-      //   setValue("reportObjectionFileName", file.name);
-      // }
-      // if (fieldName === "undertaking") {
-      //   setValue("undertakingFileName", file.name);
-      // }
       setSelectedFiles([...selectedFiles, file.name]);
       setLoader(false);
       setShowToastError({ label: "File Uploaded Successfully", error: false, success: true });
@@ -461,7 +376,8 @@ const AppliedDetailForm = (props) => {
           businessId: applicantId,
           tenantId: "hr",
           moduleName: "TL",
-          action: "LANDDETAILS",
+          // action: "LANDDETAILS",
+          action: "SENDBACK",
           previousStatus: "LANDSCHEDULE",
           comment: null,
         },
@@ -537,8 +453,6 @@ const AppliedDetailForm = (props) => {
       const Resp = await axios.post("/egov-mdms-service/v1/_search", payload);
       const fars = Resp?.data?.MdmsRes?.["common-masters"]?.Purpose?.[0]?.far;
       const farsArr = [];
-      const testData = fars?.forEach((i) => farsArr?.push({ label: i[Object.keys(i)[0]], value: i[Object.keys(i)[0]] }));
-      setFarArr(farsArr);
       return farsArr;
     } catch (error) {
       return error;
@@ -552,29 +466,6 @@ const AppliedDetailForm = (props) => {
     setApplicantId(id?.toString());
     if (id) getApplicantUserData(id);
   }, []);
-  const [modal, setmodal] = useState(false);
-  const [modal1, setmodal1] = useState(false);
-  const [dgpsModal, setDGPSModal] = useState(false);
-
-  // const validateXvalue = (value) => {
-  //   if (value >= 432100.0 && value <= 751900.0 && value.toString().includes(".")) {
-  //     const decimalPlaces = value.toString().split(".")[1];
-  //     if (decimalPlaces.length === 3) {
-  //       return true;
-  //     }
-  //   }
-  //   return false;
-  // };
-
-  // const validateYvalue = (value) => {
-  //   if (value >= 3054400.0 && value <= 3425500.0 && value.toString().includes(".")) {
-  //     const decimalPlaces = value.toString().split(".")[1];
-  //     if (decimalPlaces.length === 3) {
-  //       return true;
-  //     }
-  //   }
-  //   return false;
-  // };
 
   const dgpsModalData = (data) => {
     setModalData((prev) => [...prev, data?.dgpsDetails]);
@@ -623,10 +514,30 @@ const AppliedDetailForm = (props) => {
     // });
   };
 
-  useEffect(() => {
-    const check = Object?.values(error)?.every((value) => value === null || (typeof value == "string" && !(value || false)));
-    setIsValid(check);
-  }, [error]);
+  // useEffect(() => {
+  //   const check = Object?.values(error)?.every((value) => value === null || (typeof value == "string" && !(value || false)));
+  //   setIsValid(check);
+  // }, [error]);
+
+  // const validateXvalue = (value) => {
+  //   if (value >= 432100.0 && value <= 751900.0 && value.toString().includes(".")) {
+  //     const decimalPlaces = value.toString().split(".")[1];
+  //     if (decimalPlaces.length === 3) {
+  //       return true;
+  //     }
+  //   }
+  //   return false;
+  // };
+
+  // const validateYvalue = (value) => {
+  //   if (value >= 3054400.0 && value <= 3425500.0 && value.toString().includes(".")) {
+  //     const decimalPlaces = value.toString().split(".")[1];
+  //     if (decimalPlaces.length === 3) {
+  //       return true;
+  //     }
+  //   }
+  //   return false;
+  // };
 
   let Tree = ({ data }) => {
     return (
@@ -637,6 +548,8 @@ const AppliedDetailForm = (props) => {
               const farsArr = [];
               const testData = x?.fars?.forEach((i) => farsArr?.push({ label: i, value: i }));
               setValue(x?.id, x?.area);
+              setValue(x?.code + x?.id, { label: x?.far, value: x?.far });
+
               return (
                 <div key={i}>
                   <h6 style={{ marginTop: "10px" }}>
@@ -650,7 +563,7 @@ const AppliedDetailForm = (props) => {
                   <div className="row">
                     <div className="col col-4 mt-3">
                       <h6>
-                        {`${t("NWL_APPLICANT_DGPS_POINTS_AREA")}`}:{/* Area(in acres): */}
+                        {`${t("NWL_APPLICANT_DETAIL_POINTS_AREA")}`}:{/* Area(in acres): */}
                         <input
                           type="number"
                           className="form-control"
@@ -659,12 +572,6 @@ const AppliedDetailForm = (props) => {
                           {...register(`${x?.id}`)}
                           onChange={(e) => {
                             updateAreaById(newDataA, x?.id, e?.target?.value);
-                            // let delay;
-                            // delay = setTimeout(() => {
-                            // updateAreaById(newDataA, x?.id, e?.target?.value);
-                            // }, 700);
-                            // return () => clearTimeout(delay);
-                            // const updatedData = updateAreaById(newDataA, x?.id, e?.target?.value);
                           }}
                         />
                         <span style={{ fontSize: "13px", fontWeight: "bold" }}>Max Percentage:</span> {x?.maxPercentage},{" "}
@@ -749,9 +656,15 @@ const AppliedDetailForm = (props) => {
                           style={{ float: "right", marginRight: 15 }}
                           className="btn btn-primary"
                           onClick={() => {
-                            window.open(
-                              `/digit-ui/WNS/wmsmap.html?latlngs=${item?.map((element) => `${element.latitude},${element.longitude}`).join(":")}`
-                            );
+                            if (!_.isEmpty(showError)) {
+                              const status = Object.keys(showError).every((k) => showError[k]);
+                              console.log(status);
+                              setShowToastError({ key: "error" });
+                              setToastMessage("Please fill enter all DGPS Points");
+                            } else
+                              window.open(
+                                `/digit-ui/WNS/wmsmap.html?latlngs=${item?.map((element) => `${element.latitude},${element.longitude}`).join(":")}`
+                              );
                           }}
                         >
                           View On Map
@@ -764,7 +677,7 @@ const AppliedDetailForm = (props) => {
                 <div>
                   <div className="mt-3 mb-3">
                     <h4>
-                      <b>Bifurcation Of Component</b>
+                      <b>Bifurcation Of Component of type of Licence</b>
                     </h4>
                     <h4 className="mt-3">
                       <b>
@@ -781,215 +694,17 @@ const AppliedDetailForm = (props) => {
                   <h4>
                     <b>Layout Plan</b>
                   </h4>
-                  {/* 
-                  <div>
-                    {stepData?.ApplicantPurpose?.purpose === "RPL" && (
-                      <ResidentialPlottedForm
-                        register={register}
-                        getDocumentData={getDocumentData}
-                        watch={watch}
-                        getDocShareholding={getDocShareholding}
-                        setValue={setValue}
-                        setLoader={setLoader}
-                        control={control}
-                        fields={detailsArray}
-                        add={detailsAppend}
-                        remove={detailsRemoce}
-                        handleWheel={handleWheel}
-                        setError={setError}
-                        error={error}
-                      />
-                    )}
-                  </div>
-                  <div>
-                    {stepData?.ApplicantPurpose?.purpose === "DDJAY_APHP" && (
-                      <DDJAYForm
-                        register={register}
-                        getDocumentData={getDocumentData}
-                        watch={watch}
-                        getDocShareholding={getDocShareholding}
-                        setLoader={setLoader}
-                        setValue={setValue}
-                        control={control}
-                        fields={detailsArray}
-                        add={detailsAppend}
-                        remove={detailsRemoce}
-                        handleWheel={handleWheel}
-                        setError={setError}
-                        error={error}
-                      />
-                    )}
-                  </div>
-                  <div>
-                    {(stepData?.ApplicantPurpose?.purpose === "CPCS" || stepData?.ApplicantPurpose?.purpose === "CPRS") && (
-                      <CommercialPlottedForm
-                        register={register}
-                        getDocumentData={getDocumentData}
-                        watch={watch}
-                        getDocShareholding={getDocShareholding}
-                        setLoader={setLoader}
-                        setValue={setValue}
-                        control={control}
-                        handleWheel={handleWheel}
-                        setError={setError}
-                        error={error}
-                        getFarArr={getFarArr}
-                      />
-                    )}
-                  </div>
-                  <div>
-                    {stepData?.ApplicantPurpose?.purpose === "IPL" && (
-                      <IndustrialPlottedForm
-                        register={register}
-                        getDocumentData={getDocumentData}
-                        watch={watch}
-                        getDocShareholding={getDocShareholding}
-                        setLoader={setLoader}
-                        setValue={setValue}
-                        control={control}
-                        handleWheel={handleWheel}
-                        setError={setError}
-                        error={error}
-                      />
-                    )}
-                  </div>
-                  <div>
-                    {(stepData?.ApplicantPurpose?.purpose === "NILPC" || stepData?.ApplicantPurpose?.purpose === "NILP") && (
-                      <NilpForm
-                        register={register}
-                        getDocumentData={getDocumentData}
-                        watch={watch}
-                        getDocShareholding={getDocShareholding}
-                        setLoader={setLoader}
-                        setValue={setValue}
-                        control={control}
-                        handleWheel={handleWheel}
-                        setError={setError}
-                        error={error}
-                      />
-                    )}
-                  </div>
-                  <div>
-                    {stepData?.ApplicantPurpose?.purpose === "RGP" && (
-                      <ResidentialGroupHousingForm
-                        register={register}
-                        getDocumentData={getDocumentData}
-                        watch={watch}
-                        getDocShareholding={getDocShareholding}
-                        setLoader={setLoader}
-                        setValue={setValue}
-                        control={control}
-                        handleWheel={handleWheel}
-                        setError={setError}
-                        error={error}
-                      />
-                    )}
-                  </div>
-                  <div>
-                    {stepData?.ApplicantPurpose?.purpose === "AGH" && (
-                      <AffordableGroupHousingForm
-                        register={register}
-                        getDocumentData={getDocumentData}
-                        watch={watch}
-                        getDocShareholding={getDocShareholding}
-                        setLoader={setLoader}
-                        setValue={setValue}
-                        control={control}
-                        handleWheel={handleWheel}
-                        setError={setError}
-                        error={error}
-                      />
-                    )}
-                  </div>
-                  <div>
-                    {(stepData?.ApplicantPurpose?.purpose === "CICS" || stepData?.ApplicantPurpose?.purpose === "CIRS") && (
-                      <CommercialIntegratedForm
-                        register={register}
-                        getDocumentData={getDocumentData}
-                        watch={watch}
-                        getDocShareholding={getDocShareholding}
-                        setLoader={setLoader}
-                        setValue={setValue}
-                        control={control}
-                        handleWheel={handleWheel}
-                        setError={setError}
-                        error={error}
-                      />
-                    )}
-                  </div>
-                  <div>
-                    {(stepData?.ApplicantPurpose?.purpose === "ITC" || stepData?.ApplicantPurpose?.purpose === "ITP") && (
-                      <ITCyberCityForm
-                        register={register}
-                        getDocumentData={getDocumentData}
-                        watch={watch}
-                        getDocShareholding={getDocShareholding}
-                        setLoader={setLoader}
-                        setValue={setValue}
-                        control={control}
-                        handleWheel={handleWheel}
-                        setError={setError}
-                        error={error}
-                      />
-                    )}
-                  </div>
-                  <div>
-                    {stepData?.ApplicantPurpose?.purpose === "IPULP" && (
-                      <IILPForm
-                        register={register}
-                        getDocumentData={getDocumentData}
-                        watch={watch}
-                        getDocShareholding={getDocShareholding}
-                        setLoader={setLoader}
-                        setValue={setValue}
-                        control={control}
-                        handleWheel={handleWheel}
-                        setError={setError}
-                        error={error}
-                      />
-                    )}
-                  </div>
-                  <div>
-                    {stepData?.ApplicantPurpose?.purpose === "MLU-CZ" && (
-                      <MixedLandUseForm
-                        register={register}
-                        getDocumentData={getDocumentData}
-                        watch={watch}
-                        getDocShareholding={getDocShareholding}
-                        setLoader={setLoader}
-                        setValue={setValue}
-                        control={control}
-                        handleWheel={handleWheel}
-                        setError={setError}
-                        error={error}
-                      />
-                    )}
-                  </div>
-                  <div>
-                    {stepData?.ApplicantPurpose?.purpose === "RHP" && (
-                      <RetirementHousingForm
-                        register={register}
-                        getDocumentData={getDocumentData}
-                        watch={watch}
-                        getDocShareholding={getDocShareholding}
-                        setLoader={setLoader}
-                        setValue={setValue}
-                        control={control}
-                        handleWheel={handleWheel}
-                        setError={setError}
-                        error={error}
-                      />
-                    )}
-                  </div> */}
 
                   <h6 className="text-black mt-4">
-                    <b>Documents</b>
+                    <b>
+                      Documents <span style={{ color: "#e47878", paddingLeft: "5px" }}>(Documents should be less than 25mb)</span>
+                    </b>
                   </h6>
                   <div className="row mt-3 ">
                     <div className="col col-3">
                       <h6 style={{ display: "flex" }}>
                         {`${t("NWL_APPLICANT_DGPS_DOCUMENTS_LAYOUT_PLAN_PDF")}`}
-                        {/* Layout Plan in pdf */}
+                        {/* Layout Plan pdf */}
                         <span style={{ color: "red" }}>*</span>
                       </h6>
                       <label>
@@ -997,7 +712,12 @@ const AppliedDetailForm = (props) => {
                         <input
                           type="file"
                           style={{ display: "none" }}
-                          onChange={(e) => getDocumentData(e?.target?.files[0], "layoutPlanPdf")}
+                          onChange={(e) => {
+                            const checkType = e?.target?.files[0]?.type;
+                            if (checkType != "application/pdf") {
+                              setShowToastError({ label: "Please select given file format", error: true, success: false });
+                            } else getDocumentData(e?.target?.files[0], "layoutPlanPdf");
+                          }}
                           accept="application/pdf"
                         />
                       </label>
@@ -1018,7 +738,15 @@ const AppliedDetailForm = (props) => {
                         <input
                           type="file"
                           style={{ display: "none" }}
-                          onChange={(e) => getDocumentData(e?.target?.files[0], "layoutPlanDxf")}
+                          onChange={async (e) => {
+                            var fileName = e?.target?.files[0]?.name;
+                            var fileExtension = fileName?.split(".")?.pop();
+                            if (fileExtension?.toLowerCase() == "dxf") {
+                              getDocumentData(e?.target?.files[0], "layoutPlanDxf");
+                            } else {
+                              setShowToastError({ label: "Please select given file format", error: true, success: false });
+                            }
+                          }}
                           accept=".dxf"
                         />
                       </label>
@@ -1195,31 +923,16 @@ const AppliedDetailForm = (props) => {
                       </div>
                     </div>
                     <div class="col-sm-6 text-right">
-                      <button disabled={isValid ? false : true} type="submit" id="btnSearch" class="btn btn-primary btn-md center-block">
+                      <button
+                        //  disabled={isValid ? false : true}
+                        type="submit"
+                        id="btnSearch"
+                        class="btn btn-primary btn-md center-block"
+                      >
                         Save and Continue
                       </button>
                     </div>
                   </div>
-                  {/* {showToast && (
-                    <Toast
-                      success={showToast?.key === "success" ? true : false}
-                      label="Document Uploaded Successfully"
-                      isDleteBtn={true}
-                      onClose={() => {
-                        setShowToast(null);
-                      }}
-                    />
-                  )}
-                  {showToastError && (
-                    <Toast
-                      error={showToastError?.key === "error" ? true : false}
-                      label={toastMessage}
-                      isDleteBtn={true}
-                      onClose={() => {
-                        setShowToastError(null);
-                      }}
-                    />
-                  )} */}
                   {showToastError && (
                     <CusToaster
                       label={showToastError?.label}
@@ -1248,38 +961,7 @@ const AppliedDetailForm = (props) => {
               <Col>
                 <h4>
                   1. DGPS points
-                  {/* <span className="text-primary">
-                    
-                    <a onClick={() => setmodal1(true)}>
-                      (Click here for instructions to receive DGPS-based coordinate points of the colony boundary)
-                    </a>
-                  </span> */}
                   <span style={{ color: "red" }}>*</span>
-                  {/* <div>
-                    <Modal
-                      size="lg"
-                      isOpen={modal1}
-                      toggle={() => setmodal(!modal1)}
-                      style={{ width: "500px", height: "200px" }}
-                      aria-labelledby="contained-modal-title-vcenter"
-                      centered
-                    >
-                      <ModalHeader toggle={() => setmodal1(!modal1)}></ModalHeader>
-                      <ModalBody style={{ fontSize: 20 }}>
-                        <h2>
-                          
-                          <b> A.</b> Applicant level Information: DGPS-based survey to be executed at the applicant level to collect coordinate points
-                          of the colony boundary. <br></br>• DGPS Coordinate points to be collected for each divergent/edge of the colony boundary.
-                          <br></br> • DGPS Coordinate Points to be entered by the applicant in e-License application in Web Form.<br></br>
-                          <b> B.</b> Web Form Fields at applicant level: Input Fields to be added in the web-form for entering the DGPS points.
-                          <br></br> • Input Fields for entering number of DGPS Points <br></br>• Input Fields for each DGPS Point: <br></br>o Add
-                          Point 1 as Point 1: (X: Longitude, Y: Latitude) <br></br>o Add Point 2 as Point 2: (X: Longitude, Y: Latitude) <br></br>o
-                          Add Point XX as Point XX: (X: Longitude, Y: Latitude)
-                        </h2>
-                      </ModalBody>
-                      <ModalFooter toggle={() => setmodal(!modal1)}></ModalFooter>
-                    </Modal>
-                  </div> */}
                 </h4>
                 <br></br>
                 <div className="px-2">
@@ -1296,70 +978,56 @@ const AppliedDetailForm = (props) => {
                             // onBlur={() => setShowError({ ...showError, [`dgpsPointLongitude${index}`]: true })}
                           />
                           {/* {showError?.[`dgpsPointLongitude${index}`] && !validateXvalue(watch("dgpsDetails")[index].longitude) ? (
-                              <CardLabelError style={{ color: "red" }}>
-                                X:Longitude{index + 1} is not valid. It should be in between 432100.0 and 751900.0
-                              </CardLabelError>
-                            ) : null} */}
+                            <CardLabelError style={{ color: "red" }}>
+                              X:Longitude{index + 1} is not valid. It should be in between 432100.000 and 751900.000
+                            </CardLabelError>
+                          ) : null} */}
                         </div>
                         <div className="col col-4">
                           <label>Y:Latitude</label>
-                          <input
-                            type="number"
-                            className="form-control"
-                            {...register(`dgpsDetails.${index}.latitude`)}
-                            // onBlur={() => setShowError({ ...showError, [`dgpsPointLatitude${index}`]: true })}
-                          />
+                          <div style={{ display: "flex" }}>
+                            <input
+                              style={{ width: "141px" }}
+                              type="number"
+                              className="form-control"
+                              {...register(`dgpsDetails.${index}.latitude`)}
+                              // onBlur={() => setShowError({ ...showError, [`dgpsPointLatitude${index}`]: true })}
+                            />
+                            {index > 3 && (
+                              <button type="button" style={{ marginLeft: "40px" }} className="btn btn-primary" onClick={() => remove(index)}>
+                                Delete
+                              </button>
+                            )}
+                          </div>
                           {/* {showError?.[`dgpsPointLatitude${index}`] && !validateYvalue(watch("dgpsDetails")[index].latitude) ? (
-                              <CardLabelError style={{ color: "red" }}>
-                                Y:Latitude{index + 1} is not valid. It should be in between 3054400.0 and 3425500.0
-                              </CardLabelError>
-                            ) : null} */}
+                            <CardLabelError style={{ color: "red" }}>
+                              Y:Latitude{index + 1} is not valid. It should be in between 3054400.000 and 3425500.000
+                            </CardLabelError>
+                          ) : null} */}
                         </div>
                       </div>
-                      {index > 3 && (
-                        <button type="button" style={{ float: "right" }} className="btn btn-primary" onClick={() => remove(index)}>
-                          Delete
-                        </button>
-                      )}
                     </div>
                   ))}
                   <button
                     type="button"
-                    style={{ float: "right", marginRight: 15 }}
+                    style={{ float: "right", marginRight: 15, marginTop: 17 }}
                     className="btn btn-primary"
                     onClick={() => append({ longitude: "", latitude: "" })}
-                    // onClick={() => {
-                    //   validateDgpsPoint();
-                    // }}
                   >
                     Add
                   </button>
-                  {/* <button
-                    type="button"
-                    style={{ float: "right", marginRight: 15 }}
-                    className="btn btn-primary"
-                    onClick={() => {
-                      console.log("showError", showError);
-                      if (!_.isEmpty(showError)) {
-                        // const status = Object.keys(showError).every((k) => showError[k]);
-                        // console.log(status);
-                        setShowToastError({ key: "error" });
-                        setToastMessage("Please fill enter all DGPS Points");
-                      } else
-                        window.open(
-                          `/digit-ui/WNS/wmsmap.html?latlngs=${watch("dgpsDetails")
-                            ?.map((element) => `${element.latitude},${element.longitude}`)
-                            .join(":")}`
-                        );
-                    }}
-                  >
-                    View On Map
-                  </button> */}
                 </div>
               </Col>
             </Row>
-            <div className="row m-0" style={{ width: "100%", justifyContent: "center" }}>
-              <button type="submit" style={{ width: "190px" }} class="btn btn-primary btn-md center-block mt-3">
+            <div className="row mb-5" style={{ width: "100%", justifyContent: "center" }}>
+              <button
+                type="submit"
+                style={{ width: "190px" }}
+                class="btn btn-primary btn-md center-block mt-3"
+                // onClick={() => {
+                //   validateDgpsPoint();
+                // }}
+              >
                 Submit
               </button>
             </div>

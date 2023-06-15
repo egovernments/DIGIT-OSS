@@ -4,6 +4,8 @@ import VisibilityIcon from "@mui/icons-material/Visibility";
 import { useForm } from "react-hook-form";
 import axios from "axios";
 import OutlinedInput from "@mui/material/OutlinedInput"; 
+import Spinner from "../../../components/Loader";
+import CusToaster from "../../../components/Toaster";
 
 const windowHeight = window !== undefined ? window.innerHeight : null;
 const Records = (props) => {
@@ -14,6 +16,8 @@ const Records = (props) => {
   const [businessService, setBusinessService] = useState("");
   const [tableDate, setTableDate] = useState("");
   const [iDApplication, setIDApplication] = useState("");
+  const [loader, setLoader] = useState(false);
+  const [showToastError, setShowToastError] = useState({ label: "", error: false, success: false });
   const {
     register,
     handleSubmit,
@@ -67,6 +71,7 @@ const Records = async (data) => {
   }
 
   const handleLoiNumber = async (e) => {
+    setLoader(true);
     e.preventDefault()
     const isValidPattern = getLoiPattern(LOINumber)
     // if(!isValidPattern){
@@ -92,6 +97,8 @@ const Records = async (data) => {
     }
     const Resp = await axios.post(`/tl-services/v1/_search?${watch("selectService")}=${LOINumber}`, loiRequest);
     console.log(Resp, "RRRRRRRRRRR");
+    setLoader(false);
+    setShowToastError({ label: "Successfully", error: false, success: true });
     setBusinessService(Resp?.data?.Licenses?.[0]?.businessService)
     setTableDate(Resp?.data?.Licenses?.[0])
     setIDApplication(Resp?.data?.Licenses?.[0].applicationNumber)
@@ -103,7 +110,11 @@ const Records = async (data) => {
   // console.log({ devName, developmentPlan, purpose, totalArea, purpose});
 
    } catch (error) {
-    console.log(error)
+    console.log("Errror2454" , error)
+    setShowToastError({ label: error?.message , error: true, success: false });
+    setLoader(false);
+    return error.message;
+   
    }
    console.log("loiloiloi343");
 
@@ -119,6 +130,7 @@ const Records = async (data) => {
   //   setShowhide(getuser);
   // };
   const handleshow19 = async (e) => {
+    setLoader(true);
     const payload = {
 
       "RequestInfo": {
@@ -142,7 +154,7 @@ const Records = async (data) => {
       }
     }
     const Resp = await axios.post(`/tl-services/new/license/pdf?applicationNumber=${iDApplication}`, payload, { responseType: "arraybuffer" })
-
+    setLoader(false);
     console.log("logger12345...", Resp.data, userInfo)
 
     const pdfBlob = new Blob([Resp.data], { type: 'application/pdf' });
@@ -165,6 +177,7 @@ const Records = async (data) => {
     <form 
     onSubmit={handleSubmit(Records)}
     >
+           {loader && <Spinner></Spinner>}
     <Container
       className="justify-content-center"
       style={{
@@ -284,6 +297,16 @@ const Records = async (data) => {
      
     }
     </Container>
+    {showToastError && (
+        <CusToaster
+          label={showToastError?.label}
+          success={showToastError?.success}
+          error={showToastError?.error}
+          onClose={() => {
+            setShowToastError({ label: "", success: false, error: false });
+          }}
+        />
+      )}
     </form>
   );
 };

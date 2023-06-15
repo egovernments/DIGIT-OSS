@@ -180,6 +180,20 @@ const toggleshown3 = designation => {
   }
 }
 
+const [dataThree,setDataThree] = useState([]);
+const toggleshown4 = applicationStatus => {
+  const  showState = dataThree.slice();
+  const index = showState.indexOf(applicationStatus);
+  if(index >= 0 ){
+    showState.splice(index, 1);
+    setDataThree(showState);
+  }
+  else{
+    showState.push(applicationStatus);
+    setDataThree(showState);
+  }
+}
+
 console.log("log123Disrenu" ,id);
   return (
     <Container
@@ -206,24 +220,8 @@ console.log("log123Disrenu" ,id);
                 {id}
               </Col>
             </Row>
-            {/* <Row>
-
-              <Col>
-                <b>Field Name</b>
-
-              </Col>
-              <Col>
-                <b>Field value</b>
-
-              </Col>
-              <Col>
-                <b> Status</b>
-
-              </Col>
-
-            </Row> */}
-
-
+           
+      
             <div>
               <Form.Group>
                <div>
@@ -317,7 +315,7 @@ console.log("log123Disrenu" ,id);
                                   <b>{el.isApproved}</b>
                                 </td>
                                 <td>
-                                  {/* <i>{<div dangerouslySetInnerHTML={createMarkup(el.remarks)}> </div>}</i> */}
+                              
                                   <i>{<div dangerouslySetInnerHTML={{__html: el.remarks}}/>}</i>
                                 </td>
 
@@ -388,7 +386,7 @@ console.log("log123Disrenu" ,id);
                                                 <b>{el.isApproved}</b>
                                               </td>
                                               <td>
-                                                {/* <i>{el.remarks}</i> */}
+                                          
                                                 <i>{<div dangerouslySetInnerHTML={{__html: el.remarks}}/>}</i>
                                               </td>
               
@@ -459,7 +457,7 @@ console.log("log123Disrenu" ,id);
                                                 <b>{el.isApproved}</b>
                                               </td>
                                               <td>
-                                                {/* <i>{el.remarks}</i> */}
+                                                
                                                 <i>{<div dangerouslySetInnerHTML={{__html: el.remarks}}/>}</i>
                                               </td>
               
@@ -468,8 +466,91 @@ console.log("log123Disrenu" ,id);
                                             }
                                          </tbody>
                                         </table>
-                                         )}     
-                        
+                                         )}   
+
+                   
+                                          
+                                         <p>
+                    <IconButton
+                           onClick={() => toggleshown4(el.applicationStatus)}
+                         >
+                           {dataThree.includes(index)? (
+                           
+                              <KeyboardArrowUpIcon /> 
+                            ) : (
+                           <p><KeyboardArrowDownIcon /><b style={{ color: "#ff0000" }}>{el.performaFieldDetail?.[0]?.isApproved}</b></p>
+                          
+                           )}
+                           
+                         </IconButton>
+                         </p>
+                          
+                              
+                             
+                             {dataThree.includes(el.applicationStatus) && (  
+                  <table colSpan = "2" className="table table-bordered" style={{ backgroundColor: "#ddf2cf" }}>
+                    <thead>
+
+                      <tr className="border-bottom-0">
+                        <th class="fw-normal pb-0 border-bottom-0 align-top">
+                          Sr.No
+                        </th>
+                        <th class="fw-normal pb-0 border-bottom-0 align-top">
+                          Filed Name
+                        </th>
+                        <th class="fw-normal pb-0 border-bottom-0 align-top">
+                          Filed value
+                        </th>
+                        <th class="fw-normal pb-0 border-bottom-0 align-top">
+                          Status
+                        </th>
+
+                        <th class="fw-normal pb-0 border-bottom-0 align-top">
+                          Remarks
+                        </th>
+                      </tr>
+                      <tr>
+
+                      </tr>
+
+
+                    </thead>
+                     <tbody>
+                 
+                     {el?.performaFieldDetail !== null ? (
+           el?.performaFieldDetail?.map((el, i) => {
+                      return (
+                    
+                           <tr >
+
+                                <td>
+                                  {i + 1}
+                                </td>
+                                <td>
+                                  <b>{el.name}</b>
+                                </td>
+                                <td>
+                                  <b>{el.value}</b>
+                                </td>
+
+                                <td>
+                                  <b>{el.isApproved}</b>
+                                </td>
+                                <td>
+                               
+                                  <i>{<div dangerouslySetInnerHTML={{__html: el.remarks}}/>}</i>
+                                </td>
+
+                              </tr>
+                                 );
+                                })
+                              ) : (
+                                <p></p>
+                              )}
+                           </tbody>
+                          </table>
+                          )} 
+                    
                         
                       <Row style={{ margin: 4 }}>
                       <b style={{ textAlign: "right", marginRight: 2 }}>{el.designation}</b>
@@ -479,7 +560,7 @@ console.log("log123Disrenu" ,id);
 
                      <b style={{ textAlign: "right" }}>{el.createdOn}</b>
                      <b style={{ textAlign: "right" }}>
-                     {/* {new Date(el.createdOn).toLocaleDateString("en-GB")} {new Date(el.ts).toLocaleTimeString("en-US")} */}
+             
                    </b>
                     </Row>
                       </Box>
@@ -502,9 +583,72 @@ console.log("log123Disrenu" ,id);
               </Form.Group>
 
             </div>
+           
+
           </div>
 
         </div>
+
+
+        {/* <div 
+        class="currentremarks"
+         >
+          <div class="WhatsNewCard" style={{ backgroundColor: "#ddf2cf" }}>
+
+          Drawing
+
+            </div></div>
+            <div 
+        class="currentremarks"
+         >
+          <div class="WhatsNewCard" style={{ backgroundColor: "#ddf2cf" }}>
+          Legal 
+            </div></div>
+            <div 
+        class="currentremarks"
+         >
+          <div class="WhatsNewCard" style={{ backgroundColor: "#ddf2cf" }}>
+          Revnue
+            </div></div>
+            <div 
+        class="currentremarks"
+         >
+          <div class="WhatsNewCard" style={{ backgroundColor: "#ddf2cf" }}>
+          Techinical 
+            </div></div>
+            <div 
+        class="currentremarks"
+         >
+          <div class="WhatsNewCard" style={{ backgroundColor: "#ddf2cf" }}>
+          Main
+
+            </div></div>
+            <div 
+        class="currentremarks"
+         >
+          <div class="WhatsNewCard" style={{ backgroundColor: "#ddf2cf" }}>
+          DTP Field Section
+            </div></div>
+            
+            
+            <div 
+        class="currentremarks"
+         >
+          <div class="WhatsNewCard" style={{ backgroundColor: "#ddf2cf" }}>
+          STP Field Section 
+
+            </div></div>
+            <div 
+        class="currentremarks"
+         >
+          <div class="WhatsNewCard" style={{ backgroundColor: "#ddf2cf" }}>
+          Main
+
+            </div></div> */}
+
+
+        </Row>
+        <Row>
 
         <div class="histroryremarks">
           <div class="WhatsNewCard" style={{ backgroundColor: "#ddf2cf" }}>
@@ -517,8 +661,10 @@ console.log("log123Disrenu" ,id);
                 <div key={index}>
                   <hr style={{ marginTop: 5, marginBottom: 5 }}></hr>
                   
-                  {/* {item.comment} */}
+     
                   {<div dangerouslySetInnerHTML={{__html: item.comment}}/>}
+                  <div>{item.action}</div>
+
                   <div className="text-right">
                    
                     <div class="font-weight-bold">
@@ -557,42 +703,7 @@ console.log("log123Disrenu" ,id);
       </Row>
 
 
-      {/* {JSON.stringify(userRoles)}
-      {JSON.stringify(showRemarksSection)} */}
-
-      {/* {
-        showRemarksSection &&
-        <TableContainer component={Paper} style={{ marginTop: 20 }}>
-          <Table sx={{ minWidth: 650 }} aria-label="simple table">
-            <TableHead>
-              <TableRow>
-                <TableCell>Field</TableCell>
-                <TableCell align="right">Remark</TableCell>
-                <TableCell align="right">Action</TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {disapprovedList.map((row, i) => (
-                <TableRow
-                  key={row?.fieldIdL}
-                  sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-                >
-                  <TableCell component="th" scope="row">
-                    {row.fieldIdL}
-                  </TableCell>
-                  <TableCell align="right">{row.comment}</TableCell>
-                  <TableCell align="right">
-                    <Checkbox
-                      checked={row?.isLOIPart}
-                      onChange={(e) => onAction(row, i, e.target.checked)}
-                    />
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </TableContainer>
-      } */}
+    
       <br>
       </br>
 

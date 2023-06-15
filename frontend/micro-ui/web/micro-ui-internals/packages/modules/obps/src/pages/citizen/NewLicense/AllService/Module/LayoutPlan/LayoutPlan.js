@@ -268,22 +268,7 @@ function LayoutPlanClu() {
           : layOutPlanData.additionalDetails?.boardResolutionAuthSignatoryDoc;
         layOutPlanData.additionalDetails.anyOther = data?.anyOther ? data?.anyOther : layOutPlanData.additionalDetails?.anyOther;
 
-  //  useEffect(() => {
-  //   var nameArray = modalValue?.map(function (itm) {
-  //     if (isNaN(itm?.areaModal)) return 0;
-  //     return itm?.areaModal;
-  //   });
-  //     const mixedSum = (nameArray = []) => {
-  //     let sum = 0;
-  //     for (let i = 0; i < nameArray.length; i++) {
-  //       const el = nameArray[i];
-  //       sum += +el;
-  //     }
-  //     return sum;
-  //   };
-  //    const totalVal = mixedSum(nameArray) + mixedSumB(nameArrayB);
-  //   setTotlArea(totalVal?.toFixed(3));
-  // }, [modalValue]);
+
 
         const updateRequest = {
           RequestInfo: {
@@ -308,12 +293,11 @@ function LayoutPlanClu() {
               workflowCode: "REVISED_LAYOUT_PLAN",
               // "comment": "",
               // "assignee": null
-            },
-          ],
-        };
+            }
+          ]}
         const Resp = await axios.post("/tl-services/revisedPlan/_update", updateRequest);
         setOpen(true);
-        setApplicationNumber(Resp.data.servicePlanResponse[0].applicationNumber);
+        setApplicationNumber(Resp.data.revisedPlan[0].applicationNumber);
       }
     } catch (error) {
       setLoader(false);

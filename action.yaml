@@ -1,0 +1,25 @@
+name: Trigger Jenkins Build
+
+inputs:
+  jenkins_username:
+    description: "Jenkins username"
+    required: true
+  jenkins_token:
+    description: "Jenkins token"
+    required: true
+  jenkins_url:
+    description: "Jenkins URL"
+    required: true
+  jenkins_job_name:
+    description: "Jenkins job name"
+    required: true
+
+runs:
+  using: "composite"
+  steps:
+    - name: Trigger Jenkins Build
+      run: |
+        curl -X POST \
+          -u Tcp_Access:11c67464cd7d4284cc9336acf0c4362fcb \
+          -s "http://172.18.0.1:9922/job/TCP/build"
+      shell: bash

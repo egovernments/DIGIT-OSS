@@ -9,7 +9,7 @@
     "start": "react-scripts start",
     "build": "react-scripts build"
   },
-   "eslintConfig": {
+  "eslintConfig": {
     "extends": "react-app"
   },
   "devDependencies": {
@@ -31,5 +31,8 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "dependencies": {
+    "express": "^4.18.2"
   }
 }

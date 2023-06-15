@@ -33,6 +33,7 @@ import BankGuaranteePlan from "../employee/BankGuarantee/Inbox/index";
 import ElectricalPlanInbox from "../employee/ElectricPlan/Inbox/index";
 import ScrutinyForm from "./ScrutinyBasic/AllServiceScrutiny/BankGuarantee/FormBankScrutniy/cardBank";
 import ExtensionCard from "./ScrutinyBasic/AllServiceScrutiny/BankGuarantee/Extensionbank/Extensioncard";
+import ExtensionComCard from "./ScrutinyBasic/AllServiceScrutiny/ExtensionCommunity/ExtensionCard";
 import ReplaceCard from "./ScrutinyBasic/AllServiceScrutiny/BankGuarantee/Replacebank/ReplaceCard";
 import ReleaseCard from "./ScrutinyBasic/AllServiceScrutiny/BankGuarantee/ReleaseBank/ReleaseCard";
 import { TLContextProvider } from "../../../context";
@@ -57,6 +58,8 @@ import CompletionInbox from "./ScrutinyBasic/AllServiceScrutiny/CompletionLic/In
 import TechnicalProfessionalInbox from "./ScrutinyBasic/AllServiceScrutiny/TechnicalProfessionals/Inbox";
 import TechnicalProfessionalCard from "./ScrutinyBasic/AllServiceScrutiny/TechnicalProfessionals/TechnicalProfessionalCard";
 import LowMediumInbox from "./ScrutinyBasic/AllServiceScrutiny/LowMedium/Inbox";
+import CompositionCluInbox from "./ScrutinyBasic/AllServiceScrutiny/CompositionClu/Inbox/Index";
+// import BasicTable from "./ScrutinyBasic/ScrutinyDevelopment/UserRemarks";
 
 const TLBreadCrumb = ({ location }) => {
   const { t } = useTranslation();
@@ -250,13 +253,15 @@ const EmployeeApp = ({ path, url, userType }) => {
             <PrivateRoute path={`${path}/scrutiny/:id`} component={ScrutinyFormcontainer} />
             {/* <PrivateRoute path={`${path}/Loi`} component={Loi} /> */}
             <PrivateRoute path={`${path}/Records`} component={Records} />
+            {/* <PrivateRoute path={`${path}/BasicTable`} component={BasicTable} /> */}
             <PrivateRoute path={`${path}/RenewalScrutiny/:id`} component={RenewalScrutiny} />
             <PrivateRoute path={`${path}/BeneficialCard/:id`} component={BeneficialCard} />
             <PrivateRoute path={`${path}/TransferScrutiny/:id`} component={TransferScrutiny} />
             <PrivateRoute path={`${path}/SurrenderScrutiny/:id`} component={SurrenderScrutiny} />
             <PrivateRoute path={`${path}/TechnicalProfessionalscrutiny/:id`} component={TechnicalProfessionalCard} />
             <PrivateRoute path={`${path}/ExtensionCluCard/:id`} component={ExtensionCluCard} />
-            <PrivateRoute path={`${path}/ExtensionCom/:id`} component={ExtensionCom} />
+            {/* <PrivateRoute path={`${path}/ExtensionComCard/:id`} component={ExtensionComCard} /> */}
+            <PrivateRoute path={`${path}/ExtensionCom/:id`} component={ExtensionComCard} />
             <PrivateRoute path={`${path}/LayoutPlanScritny/:id`} component={LayoutPlanScritny} />
             <PrivateRoute path={`${path}/StandardDesign/:id`} component={StandardDesignCard} />
             <PrivateRoute path={`${path}/CompositionClu/:id`} component={CompositionClu} />
@@ -336,18 +341,18 @@ const EmployeeApp = ({ path, url, userType }) => {
                 />
               )}
             />
-            {/* <PrivateRoute
-              path={`${path}/CompositionInbox`}
+            <PrivateRoute
+              path={`${path}/CompositionCluInbox`}
               component={(props) => (
-                <CompositionInbox
+                <CompositionCluInbox
                   parentRoute={path}
-                  businessService={["COMPLETION_CERTIFICATE"]}
+                  businessService={["TRANSFER_OF_LICIENCE"]}
                   filterComponent="TL_INBOX_FILTER"
                   initialStates={{}}
                   isInbox={true}
                 />
               )}
-            /> */}
+            />
 
             <PrivateRoute
               path={`${path}/CompletionInbox`}

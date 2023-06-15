@@ -22,7 +22,7 @@ const Timeline = ({ currentStep = 1, flow = "", changeSteps }) => {
   const isMobile = window.Digit.Utils.browser.isMobile();
   getAction(flow);
   return (
-    <div className="timeline-container" style={isMobile ? {} : { marginRight: "auto" }}>
+    <div className="timeline-container" style={isMobile ? {} : { marginRight: "auto", marginTop: "29px" }}>
       {actions.map((action, index, arr) => (
         <div style={{ cursor: "pointer" }} onClick={() => changeSteps(index + 1)} className="timeline-checkpoint" key={index}>
           <div className="timeline-content">

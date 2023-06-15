@@ -26,11 +26,18 @@ const LanguageSelection = () => {
     <Background>
       <Card className="bannerCard removeBottomMargin">
         <div className="bannerHeader">
-          <img className="bannerLogo" src={stateInfo?.logoUrl} alt="Digit" />
+          {/* <img className="bannerLogo" src={stateInfo?.logoUrl} alt="Digit" /> */}
+          <img
+              className="stateEmployeeLogin"
+              id="topbar-logo"
+              src={"https://filesuploadbucket1aws.s3.amazonaws.com/tcp-haryana/tcp-logo-hr3.png"}
+              
+              alt="TCP"
+            />
 
-          <p>{t(`TENANT_TENANTS_${stateInfo?.code.toUpperCase()}`)}</p>
+          {/* <p>{t(`TENANT_TENANTS_${stateInfo?.code.toUpperCase()}`)}</p> */}
         </div>
-        <div className="language-selector" style={{ justifyContent: "space-around", marginBottom: "24px", padding: "0 5%" }}>
+        {/* <div className="language-selector" style={{ justifyContent: "space-around", marginBottom: "24px", padding: "0 5%" }}>
           {languages.map((language, index) => (
             <div className="language-button-container" key={index}>
               <CustomButton
@@ -40,7 +47,7 @@ const LanguageSelection = () => {
               ></CustomButton>
             </div>
           ))}
-        </div>
+        </div> */}
         <SubmitBar style={{ width: "100%" }} label={t(`CORE_COMMON_CONTINUE`)} onSubmit={handleSubmit} />
       </Card>
       <div className="EmployeeLoginFooter">

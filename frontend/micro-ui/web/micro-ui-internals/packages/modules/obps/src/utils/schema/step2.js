@@ -29,6 +29,20 @@ const MODAL_VALIDATION_SCHEMA = Yup.object().shape({
     value: Yup.string().required("This field is required"),
   }),
   hadbastNo: Yup.string().max(99, "Too Long!").required("This field is required."),
+  developerCompany: Yup.string().test({
+    name: "conditional",
+    test: function (value) {
+      const newoptions = this.resolve(Yup.ref("collaboration"));
+      if (newoptions === "Y") {
+        return !!value || this.createError({ message: "Name is required" });
+      }
+      return true;
+    },
+  }),
+  // landOwnerRegistry: Yup.string().max(99, "Too Long!").required("This field is required."),
+  // developerCompany: Yup.string().max(20, "Too Long!").required("This field is required."),
+  // authSignature: Yup.string().max(99, "Too Long!").required("This field is required."),
+  // nameAuthSign: Yup.string().max(99, "Too Long!").required("This field is required."),
 
   khewats: Yup.string().max(99, "Too Long!").required("This field is required."),
   typeLand: Yup.object({
@@ -40,7 +54,6 @@ const MODAL_VALIDATION_SCHEMA = Yup.object().shape({
   // bigha: Yup.string().max(99, "Too Long!").required("This field is required."),
   // biswa: Yup.string().max(99, "Too Long!").required("This field is required."),
   // biswansi: Yup.string().max(99, "Too Long!").required("This field is required."),
-  // landOwnerRegistry: Yup.string().matches(/^[a-zA-Z0-9 ]+$/, "Please enter valid entry"),
   // developerCompany: Yup.string()
   //   .max(20, "Too Long!")
   //   .matches(/^[a-zA-Z_ ]+$/, "Please enter valid entry"),

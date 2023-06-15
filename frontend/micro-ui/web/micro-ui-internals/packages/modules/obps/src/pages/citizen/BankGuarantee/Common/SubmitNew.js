@@ -11,10 +11,7 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
-// import Dialog from "@mui/material/Dialog";
-// import DialogTitle from "@mui/material/DialogTitle";
-// import DialogContent from "@mui/material/DialogContent";
-// import DialogActions from "@mui/material/DialogActions";
+import ReactMultiSelect from "../../../../../../../react-components/src/atoms/ReactMultiSelect"
 import IconButton from "@mui/material/IconButton";
 import CloseIcon from "@mui/icons-material/Close";
 import Typography from "@mui/material/Typography";
@@ -25,8 +22,13 @@ import ReleaseNew from "./Release";
 import { getDocShareholding } from "../../NewLicense/docView/docView.help";
 import NumberInput from "../../../../components/NumberInput";
 import TextField from "@mui/material/TextField";
-import ReactMultiSelect from "../../../../../../../react-components/src/atoms/ReactMultiSelect";
 import { useTranslation } from "react-i18next";
+
+const selectTypeData = [
+  { label: "IDW", value: "IDW" },
+  { label: "EDC", value: "EDC" },
+   { label: "SPE", value: "SPE" },
+];
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   "& .MuiDialogContent-root": {
@@ -89,7 +91,7 @@ function SubmitNew() {
         NewBankGuaranteeRequest: [
           {
             loiNumber: "",
-            typeOfBg: "",
+            
             businessService: "",
             tenantId: tenantId,
 
@@ -120,6 +122,7 @@ function SubmitNew() {
             assignee: null,
 
             ...data,
+            typeOfBg: data?.typeOfBg?.label
           },
         ],
         RequestInfo: {
@@ -354,8 +357,8 @@ function SubmitNew() {
                     {/* Type of fee */}
                     <span style={{ color: "red" }}>*</span>
                   </h2>
- {/* <ReactMultiSelect control={control} name="numberType" placeholder="Select Type" data={selectTypeData} labels="" /> */}
-                  <select
+   <ReactMultiSelect control={control} name="typeOfBg" placeholder="" data={selectTypeData} onClick={submitNewFormSubmitHandler} labels=""  disabled={existingBgNumber?.length > 0 ? true : false}/>
+                  {/* <select
                     className="Inputcontrol"
                     class="form-control"
                     placeholder=""
@@ -365,7 +368,7 @@ function SubmitNew() {
                     <option value="IDW"> IDW</option>
                     <option value="EDC">EDC</option>
                     <option value="SPE">SPE</option>
-                  </select>
+                  </select> */}
                 </FormControl>
                 {/* <button
                
@@ -385,6 +388,7 @@ function SubmitNew() {
                 name="businessService"
                 id="businessService1"
                 value="BG_NEW"
+                 onClick={handleLoiNumber}
                 onChange={(e) => handleshowhide(e)}
               />
               &nbsp; {`${t("BG_SUBMIT_BANK_GUARANTEE")}`}
@@ -398,7 +402,7 @@ function SubmitNew() {
                 name="businessService"
                 id="businessService2"
                 value="BG_MORTGAGE"
-                onClick={handleLoiNumber}
+               
                 onChange={(e) => handleshowhide(e)}
               />
               &nbsp;{`${t("BG_SUBMIT_MORTGAGE")}`}
@@ -408,7 +412,7 @@ function SubmitNew() {
             {/* &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; */}
             {showhide === "BG_NEW" && (
               <div>
-                {watch("typeOfBg") === "SPE" && (
+                 {watch("typeOfBg")?.value == "SPE" && (
                    <div className="row-12">
  <div className="col md={4} xxl lg-3">
               <FormControl>
@@ -448,7 +452,7 @@ function SubmitNew() {
 //                   </div>
                 )}
                 &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
-                {watch("typeOfBg") === "IDW" && (
+                 {watch("typeOfBg")?.value == "IDW" && (
                   <div className="row-12">
  <div className="col md={4} xxl lg-3">
               <FormControl>
@@ -465,7 +469,7 @@ function SubmitNew() {
             </div>
                 )}
                 &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
-                {watch("typeOfBg") === "EDC" && (
+                 {watch("typeOfBg")?.value == "EDC" && (
                     <div className="row-12">
  <div className="col md={4} xxl lg-3">
               <FormControl>

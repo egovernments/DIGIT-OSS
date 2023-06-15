@@ -1,20 +1,28 @@
 import React, { useContext, useEffect, useState } from "react";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
+import { TextInput, Label, SubmitBar, LinkLabel, ActionBar, CloseSvg, DatePicker, MobileNumber } from "@egovernments/digit-ui-react-components";
 import { Form, Col, Row } from "react-bootstrap";
 import axios from "axios";
 import { useStyles } from "./styles/modalChild.style";
 import { useParams } from "react-router-dom";
 import { ScrutinyRemarksContext } from "../../../../../context/remarks-data-context";
 import AddPost from "../../Material/TextEditor";
+import { getDocShareholding } from "../ScrutinyDevelopment/docview.helper";
+import Visibility from "@mui/icons-material/Visibility";
+// import FileDownload from "@mui/icons-material/FileDownload";
+import { IconButton } from "@mui/material";
+import { useTranslation } from "react-i18next";
+import { useLocation } from "react-router-dom";
 
 
 function ModalChild(props) {
-  const {handleRoles, handleGetFiledsStatesById, handleGetRemarkssValues , bussinessService} = useContext(ScrutinyRemarksContext,);
+  const {handleRoles, handleGetFiledsStatesById, handleGetRemarkssValues , handleGetNotingRemarkssValues, bussinessService} = useContext(ScrutinyRemarksContext,);
   const applicationStatus = props.applicationStatus ;
   const userInfo = Digit.UserService.getUser()?.info || {};
   const classes = useStyles();
   const smShow = props.displaymodal;
+  const docModal = props.disPlayDoc;
   const [RemarksDeveloper, setDeveloperRemarks] = useState("");
   const [RemarksEntered, setRemarksEntered] = useState("");
   const [yesOrNoClicked, setIsYesorNoClicked] = useState();
@@ -27,6 +35,8 @@ function ModalChild(props) {
   const userRolesArray = userInfo?.roles.filter((user) => user.code !=="EMPLOYEE" );
   const filterDataRole = userRolesArray?.[0]?.code;
   const designation = userRolesArray?.[0]?.name;
+  const { t } = useTranslation();
+  const { pathname: url } = useLocation();
   
 
   console.log("usern23233" , userRolesArray );
@@ -77,6 +87,7 @@ function ModalChild(props) {
       } catch (error) {
         console.log(error);
       }
+      handleGetNotingRemarkssValues(id)
       handleGetFiledsStatesById(id);
       handleGetRemarkssValues(id);
       handleRoles(id)
@@ -91,8 +102,8 @@ function ModalChild(props) {
 
   useEffect(() => {
     if (props.selectedFieldData) {
-      setStatus(props.selectedFieldData.isApproved);
-      setDeveloperRemarks({ data: props.selectedFieldData?.comment ? props.selectedFieldData?.comment : "" });
+      setStatus(props.selectedFieldData.isApproved ? "In Order" : "Not In Order");
+      setDeveloperRemarks({ data: props.selectedFieldData.comment ? props.selectedFieldData.comment : "" });
       // setDeveloperRemarks({data:props.selectedFieldData.isApproved?"In Order":"Not In Order"});
     } else {
       setStatus(null);
@@ -100,15 +111,17 @@ function ModalChild(props) {
     }
   }, [props.selectedFieldData]);
 
-  console.log("Isdata" , status,RemarksDeveloper )
+  console.log("Isdata" , status )
+  console.log("docModal123....." , docModal )
+
 
   // let empCode = "EMPLOYEE";
   
 
   return (
     <Modal
-      size="lg"
-      className="modal-lg modal-center"
+      size="md"
+      className="modal-md modal-center"
       show={smShow}
       // aria-labelledby="example-modal-sizes-title-sm"
       aria-labelledby="contained-modal-title-vcenter"
@@ -119,8 +132,24 @@ function ModalChild(props) {
       <Modal.Header closeButton>
         <Modal.Title id="example-modal-sizes-title-sm">
           <div>
-            <h3>{props.labelmodal}</h3>
+            {/* <h3>{props.labelmodal}
+            </h3> */}
+            <Label>{t(props.labelmodal)}</Label>
+            { docModal === false &&
             <p className={classes.subHead}>{inputFieldValue}</p>
+            }
+            
+            { docModal === true &&
+            
+            <div className="btn btn-sm col-md-2">
+            <IconButton onClick={() => getDocShareholding(inputFieldValue)}>
+              <Visibility color="info" className="icon" /></IconButton>
+
+          </div>
+            
+            }
+
+            
           </div>
 
           {/* <Row>
@@ -189,7 +218,6 @@ function ModalChild(props) {
               rows="3"
               value={RemarksDeveloper.data}
             /> */}
-            {/* {RemarksDeveloper?.data} */}
              <AddPost
               modal={true}
               
@@ -197,7 +225,7 @@ function ModalChild(props) {
                 setDeveloperRemarks({ data: e });
                 // setRemarksEntered(e.target.value);
               }}
-              state={RemarksDeveloper?.data}
+              state={RemarksDeveloper.data}
               ></AddPost>
             {/* <Form.Control type="text" /> */}
           </Col>

@@ -7,7 +7,7 @@ import BPAActionModal from "./BPAActionModal";
 import NOCActionModal from "./NOCActionModal";
 import ElectricalPlanModal from "./ElectricalPlanModal";
 import ServicePlanModal from "./ServicePlanModal";
-import BankGuaranteePlan from "./BankGuaranteePlan";
+import BankGuaranteePlanModal from "./BankGuaranteePlanModal";
 import TransferLicModal from "./TransferLicModal";
 import RevisedPlanModal from "./RevisedPlanModal";
 
@@ -17,6 +17,7 @@ import BeneficialModal from "./ChangeInBenIntModal";
 import ExtensionCluModal from "./ExtensionCluModal";
 import CompletionLicModal from "./CompletionActionModal";
 import TechnicalProfessionalModal from "./TechnicalProfessionalModal";
+import ExtensionLicModal from "./extensionConstructionModal";
 
 const ActionModal = (props) => {
   if (props?.businessService.includes("PT")) {
@@ -61,10 +62,10 @@ const ActionModal = (props) => {
     return <RevisedPlanModal {...props} />;
   }
   if (props?.businessService.includes("BG_NEW")) {
-    return <BankGuaranteePlan {...props} />;
+    return <BankGuaranteePlanModal {...props} />;
   }
   if (props?.businessService.includes("BG_MORTGAGE")) {
-    return <BankGuaranteePlan {...props} />;
+    return <BankGuaranteePlanModal {...props} />;
   }
   if (props?.businessService.includes("SURREND_OF_LICENSE")) {
     return <SurrenderActionModal {...props} />;
@@ -80,6 +81,9 @@ const ActionModal = (props) => {
   }
   if (props?.businessService.includes("TECHNICAL_PROFESSIONAL")) {
     return <TechnicalProfessionalModal {...props} />;
+    }
+   if (props?.businessService.includes("CONSTRUCTION_OF_COMMUNITY")) {
+    return <ExtensionLicModal {...props} />;
   }
   // return <FSMActionModal {...props} />;
 };

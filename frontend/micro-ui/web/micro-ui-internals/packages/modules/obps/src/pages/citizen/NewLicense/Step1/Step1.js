@@ -1,13 +1,9 @@
 import React, { useState, useEffect } from "react";
-import { Button } from "@material-ui/core";
 import FormControl from "@mui/material/FormControl";
-import OutlinedInput from "@mui/material/OutlinedInput";
 import axios from "axios";
-import { Row, Col, Form } from "react-bootstrap";
 import { useForm, Controller } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useLocation, useHistory } from "react-router-dom";
-import { Toast } from "@egovernments/digit-ui-react-components";
 import Spinner from "../../../../components/Loader";
 import { getDocShareholding } from "../docView/docView.help";
 import { VALIDATION_SCHEMA } from "../../../../utils/schema/step1";
@@ -31,6 +27,7 @@ const ApllicantFormStep1 = (props) => {
   const [fileStoreId, setFileStoreId] = useState({});
   const [showToastError, setShowToastError] = useState({ label: "", error: false, success: false });
   const [getDisable, setDisable] = useState(true);
+  const [getAuthUserData, setAuthUserData] = useState(null);
 
   const {
     register,
@@ -39,8 +36,6 @@ const ApllicantFormStep1 = (props) => {
     formState: { errors },
     control,
     setValue,
-    getValues,
-    trigger,
   } = useForm({
     mode: "onChange",
     reValidateMode: "onChange",
@@ -49,9 +44,8 @@ const ApllicantFormStep1 = (props) => {
   });
   const token = window?.localStorage?.getItem("token");
   const ApplicantFormSubmitHandlerForm = async (data) => {
-    // props.Step1Continue("6", "userInfo", "licData");
-
     delete data?.developerName;
+    delete data?.developerNameA;
     delete data?.developerAddress;
     delete data?.developerEmail;
     delete data?.developerType;
@@ -73,7 +67,7 @@ const ApllicantFormStep1 = (props) => {
     delete data?.authorizedPan;
     delete data?.authorizedAddress;
 
-    // data["notSigned"] = data?.notSigned?.value;
+    const testingData = developerDataLabel;
     const postDistrict = {
       pageName: "ApplicantInfo",
       action: "INITIATE",
@@ -84,7 +78,10 @@ const ApllicantFormStep1 = (props) => {
       LicenseDetails: {
         ApplicantInfo: {
           ...data,
-          devDetail: developerDataLabel,
+          devDetail: {
+            ...testingData,
+            aurthorizedUserInfoArray: testingData?.aurthorizedUserInfoArray?.filter((item) => item?.emailId === userInfo?.emailId),
+          },
         },
       },
       RequestInfo: {
@@ -140,18 +137,20 @@ const ApllicantFormStep1 = (props) => {
   }, []);
 
   useEffect(() => {
-    const data = developerDataLabel?.aurthorizedUserInfoArray?.filter((item) => item?.emailId === userInfo?.emailId);
-    setValue("authorizedName", data?.[0]?.name);
-    setValue("authorizedMobile", data?.[0]?.mobileNumber);
-    setValue("authorizedEmail", data?.[0]?.emailId);
-    setValue("authorizedPan", data?.[0]?.pan);
-    // const filteredObject = developerDataLabel?.aurthorizedUserInfoArray.filter()
-    // developerDataLabel?.aurthorizedUserInfoArray?.[0]?.name
-  }, [userInfo, developerDataLabel]);
+    if (userInfo) {
+      const data = developerDataLabel?.aurthorizedUserInfoArray?.filter((item) => item?.emailId === userInfo?.emailId);
+      setAuthUserData(data);
+      setValue("authorizedName", data?.[0]?.name);
+      setValue("authorizedMobile", data?.[0]?.mobileNumber);
+      setValue("authorizedEmail", data?.[0]?.emailId);
+      setValue("authorizedPan", data?.[0]?.pan);
+    }
+  }, [developerDataLabel]);
 
   useEffect(() => {
     if (developerDataLabel) {
       setValue("developerName", developerDataLabel?.addInfo?.companyName);
+      setValue("developerNameA", developerDataLabel?.addInfo?.name);
       setValue("developerAddress", developerDataLabel?.addInfo?.registeredAddress);
       setValue("developerEmail", developerDataLabel?.addInfo?.emailId);
       setValue("developerType", developerDataLabel?.addInfo?.showDevTypeFields);
@@ -159,19 +158,6 @@ const ApllicantFormStep1 = (props) => {
       setValue("developerPanNo", developerDataLabel?.addInfo?.PanNumber);
       setValue("developerGstNo", developerDataLabel?.addInfo?.gst_Number);
       setValue("developerLlpNo", developerDataLabel?.addInfo?.llp_Number);
-
-      // setValue("directorDinNo", developerDataLabel?.addInfo?.DirectorsInformation?.[0]?.din);
-      // setValue("directorName", developerDataLabel?.addInfo?.DirectorsInformation?.[0]?.name);
-      // setValue("directorContactNumber", developerDataLabel?.addInfo?.DirectorsInformation?.[0]?.contactNumber);
-      // setValue("directorDoc", developerDataLabel?.licenceDetails?.pincode);
-      // setValue("shareholdingName", developerDataLabel?.addInfo?.shareHoldingPatterens?.[0]?.name);
-      // setValue("shareholdingDesignition", developerDataLabel?.addInfo?.shareHoldingPatterens?.[0]?.designition);
-      // setValue("shareholdingPercentage", developerDataLabel?.addInfo?.shareHoldingPatterens?.[0]?.percentage);
-      // setValue("shareholdingDoc", developerDataLabel?.addInfo?.showDevTypeFields);
-      // setValue("authorizedName", developerDataLabel?.aurthorizedUserInfoArray?.[0]?.name);
-      // setValue("authorizedMobile", developerDataLabel?.aurthorizedUserInfoArray?.[0]?.mobileNumber);
-      // setValue("authorizedEmail", developerDataLabel?.aurthorizedUserInfoArray?.[0]?.emailId);
-      // setValue("authorizedPan", developerDataLabel?.aurthorizedUserInfoArray?.[0]?.pan);
       setValue("authorizedAddress", developerDataLabel?.aurthorizedUserInfoArray?.[0]?.permaneneAddress);
       setValue(
         "permanentAddress",
@@ -263,32 +249,51 @@ const ApllicantFormStep1 = (props) => {
               {`${t("NWL_DEVELOPER_INFORMATION")}`}
               {/* Developer Information */}
             </h5>
-            <div className="row-12">
-              <div className="col md={4} xxl lg-4">
-                {developerDataLabel?.addInfo?.showDevTypeFields != "Individual" &&
-                  developerDataLabel?.addInfo?.showDevTypeFields != "Proprietorship Firm" && (
-                    <FormControl>
-                      <h2>
-                        {`${t("NWL_APPLICANT_DEVELOPER_NAME")}`}
-                        {/* Name  */}
-                        <span style={{ color: "red" }}>*</span>
-                      </h2>
-                      <input
-                        type="text"
-                        className="Inputcontrol"
-                        class="form-control"
-                        id="standard-disabled"
-                        label="Disabled"
-                        placeholder="N/A"
-                        readOnly
-                        {...register("developerName")}
-                      />
-                      <h3 className="error-message" style={{ color: "red" }}>
-                        {errors?.developerName && errors?.developerName?.message}
-                      </h3>
-                    </FormControl>
-                  )}
-                &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp;
+            <div style={{ rowGap: "18px" }} className="row">
+              {developerDataLabel?.addInfo?.showDevTypeFields == "Individual" ||
+              developerDataLabel?.addInfo?.showDevTypeFields == "Proprietorship Firm" ||
+              developerDataLabel?.addInfo?.showDevTypeFields == "Hindu Undivided Family" ? (
+                <div className="col col-lg-4 col-md-6 col-sm-6 mb-2">
+                  <FormControl>
+                    <h2>
+                      {`${t("NWL_APPLICANT_DEVELOPER_NAME")}`}
+                      {/* Name  */}
+                      <span style={{ color: "red" }}>*</span>
+                    </h2>
+                    <input
+                      type="text"
+                      className="Inputcontrol"
+                      class="form-control"
+                      id="standard-disabled"
+                      label="Disabled"
+                      placeholder="N/A"
+                      readOnly
+                      {...register("developerNameA")}
+                    />
+                  </FormControl>
+                </div>
+              ) : (
+                <div className="col col-lg-4 col-md-6 col-sm-6 mb-2">
+                  <FormControl>
+                    <h2>
+                      {`${t("NWL_APPLICANT_DEVELOPER_NAME")}`}
+                      {/* Name  */}
+                      <span style={{ color: "red" }}>*</span>
+                    </h2>
+                    <input
+                      type="text"
+                      className="Inputcontrol"
+                      class="form-control"
+                      id="standard-disabled"
+                      label="Disabled"
+                      placeholder="N/A"
+                      readOnly
+                      {...register("developerName")}
+                    />
+                  </FormControl>
+                </div>
+              )}
+              <div className="col col-lg-4 col-md-6 col-sm-6 mb-2">
                 <FormControl>
                   <h2>
                     {`${t("NWL_APPLICANT_DEVELOPER_ADDRESS")}`}
@@ -311,14 +316,14 @@ const ApllicantFormStep1 = (props) => {
                         value={value}
                         name="developerAddress"
                       />
-                      // <OutlinedInput type="text" value={value} className="form-control" placeholder="N/A" disabled name="developerAddress" />
                     )}
                   />
                   <h3 className="error-message" style={{ color: "red" }}>
                     {errors?.developerAddress && errors?.developerAddress?.message}
                   </h3>
                 </FormControl>
-                &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp;
+              </div>
+              <div className="col col-lg-4 col-md-6 col-sm-6 mb-2">
                 <FormControl>
                   <h2>
                     {`${t("NWL_APPLICANT_DEVELOPER_EMAILID")}`}
@@ -341,14 +346,14 @@ const ApllicantFormStep1 = (props) => {
                         value={value}
                         name="developerEmail"
                       />
-                      // <OutlinedInput type="text" value={value} className="form-control" disabled name="developerEmail" />
                     )}
                   />
                   <h3 className="error-message" style={{ color: "red" }}>
                     {errors?.developerEmail && errors?.developerEmail?.message}
                   </h3>
                 </FormControl>
-                &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp;
+              </div>
+              <div className="col col-lg-4 col-md-6 col-sm-6 mb-2">
                 <FormControl>
                   <h2>
                     {`${t("NWL_APPLICANT_DEVELOPER_TYPE")}`}
@@ -370,7 +375,6 @@ const ApllicantFormStep1 = (props) => {
                         value={value}
                         name="developerType"
                       />
-                      // <input type="text" value={value} className="form-control" placeholder="N/A" disabled name="developerType" />
                     )}
                   />
                   <h3 className="error-message" style={{ color: "red" }}>
@@ -378,14 +382,11 @@ const ApllicantFormStep1 = (props) => {
                   </h3>
                 </FormControl>
               </div>
-            </div>
-            <br></br>
-            <div className="row-12">
-              <div className="col md={4} xxl lg-4">
-                {developerDataLabel?.addInfo?.showDevTypeFields != "Individual" &&
-                  developerDataLabel?.addInfo?.showDevTypeFields != "Limited Liability Partnership" &&
-                  developerDataLabel?.addInfo?.showDevTypeFields != "Hindu Undivided Family" &&
-                  developerDataLabel?.addInfo?.showDevTypeFields != "Proprietorship Firm" && (
+              {developerDataLabel?.addInfo?.showDevTypeFields != "Individual" &&
+                developerDataLabel?.addInfo?.showDevTypeFields != "Limited Liability Partnership" &&
+                developerDataLabel?.addInfo?.showDevTypeFields != "Hindu Undivided Family" &&
+                developerDataLabel?.addInfo?.showDevTypeFields != "Proprietorship Firm" && (
+                  <div className="col col-lg-4 col-md-6 col-sm-6 mb-2">
                     <FormControl>
                       <h2>
                         {`${t("NWL_APPLICANT_CIN_NUMBER")}`}
@@ -412,11 +413,12 @@ const ApllicantFormStep1 = (props) => {
                         {errors?.developerCinNo && errors?.developerCinNo?.message}
                       </h3>
                     </FormControl>
-                  )}
-                &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp;
-                {developerDataLabel?.addInfo?.showDevTypeFields != "Company" &&
-                  developerDataLabel?.addInfo?.showDevTypeFields != "Limited Liability Partnership" &&
-                  developerDataLabel?.addInfo?.showDevTypeFields != "Partnership Firm" && (
+                  </div>
+                )}
+              {developerDataLabel?.addInfo?.showDevTypeFields != "Company" &&
+                developerDataLabel?.addInfo?.showDevTypeFields != "Limited Liability Partnership" &&
+                developerDataLabel?.addInfo?.showDevTypeFields != "Partnership Firm" && (
+                  <div className="col col-lg-4 col-md-6 col-sm-6 mb-2">
                     <FormControl>
                       <h2>
                         {`${t("NWL_APPLICANT_PAN_NUMBER")}`}
@@ -443,9 +445,10 @@ const ApllicantFormStep1 = (props) => {
                         {errors?.developerPanNo && errors?.developerPanNo?.message}
                       </h3>
                     </FormControl>
-                  )}
-                &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp;
-                {developerDataLabel?.addInfo?.showDevTypeFields != "Company" && (
+                  </div>
+                )}
+              {developerDataLabel?.addInfo?.showDevTypeFields != "Company" && (
+                <div className="col col-lg-4 col-md-6 col-sm-6 mb-2">
                   <FormControl>
                     <h2>
                       {`${t("NWL_APPLICANT_GST_NUMBER")}`}
@@ -472,13 +475,14 @@ const ApllicantFormStep1 = (props) => {
                       {errors?.developerGstNo && errors?.developerGstNo?.message}
                     </h3>
                   </FormControl>
-                )}
-                &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp;
-                {developerDataLabel?.addInfo?.showDevTypeFields != "Individual" &&
-                  developerDataLabel?.addInfo?.showDevTypeFields != "Company" &&
-                  developerDataLabel?.addInfo?.showDevTypeFields != "Hindu Undivided Family" &&
-                  developerDataLabel?.addInfo?.showDevTypeFields != "Proprietorship Firm" &&
-                  developerDataLabel?.addInfo?.showDevTypeFields != "Partnership Firm" && (
+                </div>
+              )}
+              {developerDataLabel?.addInfo?.showDevTypeFields != "Individual" &&
+                developerDataLabel?.addInfo?.showDevTypeFields != "Company" &&
+                developerDataLabel?.addInfo?.showDevTypeFields != "Hindu Undivided Family" &&
+                developerDataLabel?.addInfo?.showDevTypeFields != "Proprietorship Firm" &&
+                developerDataLabel?.addInfo?.showDevTypeFields != "Partnership Firm" && (
+                  <div className="col col-lg-4 col-md-6 col-sm-6 mb-2">
                     <FormControl>
                       <h2>
                         {`${t("NWL_APPLICANT_LLP_NUMBER")}`}
@@ -505,15 +509,15 @@ const ApllicantFormStep1 = (props) => {
                         {errors?.developerLlpNo && errors?.developerLlpNo?.message}
                       </h3>
                     </FormControl>
-                  )}
-              </div>
+                  </div>
+                )}
             </div>
-            <br></br>
             {developerDataLabel?.addInfo?.showDevTypeFields != "Individual" &&
               developerDataLabel?.addInfo?.showDevTypeFields != "Limited Liability Partnership" &&
               developerDataLabel?.addInfo?.showDevTypeFields != "Hindu Undivided Family" &&
+              developerDataLabel?.addInfo?.showDevTypeFields != "Partnership Firm" &&
               developerDataLabel?.addInfo?.showDevTypeFields != "Proprietorship Firm" && (
-                <div>
+                <div className="mt-5">
                   <h5 className="card-title fw-bold">
                     {`${t("NWL_APPLICANT_1_DIRECTOR_INFOMATION_AS_PER_MCA")}`}
 
@@ -582,10 +586,9 @@ const ApllicantFormStep1 = (props) => {
                                     }}
                                     onClick={() => {
                                       if (item?.uploadPdf) getDocShareholding(item?.uploadPdf, setLoader);
-                                      else setShowToastError({ label: "No pdf here", error: true, success: false });
                                     }}
                                   >
-                                    <VisibilityIcon color="info" className="icon" />
+                                    {item?.uploadPdf && <VisibilityIcon color="info" className="icon" />}
                                   </td>
                                 </tr>
                               );
@@ -631,10 +634,9 @@ const ApllicantFormStep1 = (props) => {
                                     }}
                                     onClick={() => {
                                       if (it?.uploadPdf) getDocShareholding(it?.uploadPdf, setLoader);
-                                      else setShowToastError({ label: "No pdf here", error: true, success: false });
                                     }}
                                   >
-                                    <VisibilityIcon color="info" className="icon" />
+                                    {it?.uploadPdf && <VisibilityIcon color="info" className="icon" />}
                                   </td>
                                 </tr>
                               );
@@ -649,7 +651,7 @@ const ApllicantFormStep1 = (props) => {
 
           <div classname="card" style={{ marginLeft: "-2px", paddingRight: "10px", marginTop: "5px", marginBottom: "52px" }}>
             <h5 className="card-title fw-bold">
-              {`${t("NWL_AUTHORIZED PERSON INFORMATION")}`}
+              {`${t("NWL_AUTHORIZED_PERSON_INFORMATION")}`}
               {/* Authorized Person Information */}
             </h5>
             <div className="row-12">
@@ -765,16 +767,15 @@ const ApllicantFormStep1 = (props) => {
                 <div
                   style={{ cursor: "pointer" }}
                   onClick={() => {
-                    if (developerDataLabel?.aurthorizedUserInfoArray?.[0]?.uploadDigitalSignaturePdf)
-                      getDocShareholding(developerDataLabel?.aurthorizedUserInfoArray?.[0]?.uploadDigitalSignaturePdf, setLoader);
-                    else setShowToastError({ label: "No pdf here", error: true, success: false });
+                    if (getAuthUserData?.[0]?.uploadDigitalSignaturePdf)
+                      getDocShareholding(getAuthUserData?.[0]?.uploadDigitalSignaturePdf, setLoader);
                   }}
                   id="btnSearch"
                   class=""
                 >
                   {`${t("NWL_VIEW_UPLOAD_DIGITAL_SIGNATURE")}`}
                   {/* View Upload Digital Signature  */}
-                  <VisibilityIcon color="info" className="icon" />
+                  {getAuthUserData?.[0]?.uploadDigitalSignaturePdf && <VisibilityIcon color="info" className="icon" />}
                 </div>
               </FormControl>
               &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp;
@@ -782,37 +783,38 @@ const ApllicantFormStep1 = (props) => {
                 <div
                   style={{ cursor: "pointer" }}
                   onClick={() => {
-                    if (developerDataLabel?.aurthorizedUserInfoArray?.[0]?.uploadBoardResolution)
-                      getDocShareholding(developerDataLabel?.aurthorizedUserInfoArray?.[0]?.uploadBoardResolution, setLoader);
-                    else setShowToastError({ label: "No pdf here", error: true, success: false });
+                    if (getAuthUserData?.[0]?.uploadBoardResolution) getDocShareholding(getAuthUserData?.[0]?.uploadBoardResolution, setLoader);
                   }}
                   id="btnSearch"
                   class=""
                 >
                   {`${t("NWL_VIEW_UPLOAD_BOARD_RESOLUTION")}`}
                   {/* View Upload Board Resolution */}
-                  <VisibilityIcon color="info" className="icon" />
+                  {getAuthUserData?.[0]?.uploadBoardResolution && <VisibilityIcon color="info" className="icon" />}
                 </div>
               </FormControl>
               &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp;
-              {developerDataLabel?.addInfo?.showDevTypeFields != "Hindu Undivided Family" &&
-                developerDataLabel?.addInfo?.showDevTypeFields != "Proprietorship Firm" &&
-                developerDataLabel?.addInfo?.showDevTypeFields != "Partnership Firm" && (
+              {developerDataLabel?.addInfo?.showDevTypeFields == "Company" &&
+                developerDataLabel?.addInfo?.showDevTypeFields == "Trust" &&
+                developerDataLabel?.addInfo?.showDevTypeFields == "Limited Liability Partnership" &&
+                developerDataLabel?.addInfo?.showDevTypeFields == "Firm" &&
+                developerDataLabel?.addInfo?.showDevTypeFields == "Institution" && (
                   <FormControl>
-                    <div
-                      style={{ cursor: "pointer" }}
-                      onClick={() => {
-                        if (developerDataLabel?.licensesDoc?.[0]?.memorandumOfArticles)
-                          getDocShareholding(developerDataLabel?.licensesDoc?.[0]?.memorandumOfArticles, setLoader);
-                        else setShowToastError({ label: "No pdf here", error: true, success: false });
-                      }}
-                      id="btnSearch"
-                      class=""
-                    >
-                      {`${t("NWL_VIEW_MOA_DOCUMENT")}`}
-                      {/* View MOA Document  */}
-                      <VisibilityIcon color="info" className="icon" />
-                    </div>
+                    {developerDataLabel?.licensesDoc?.[0]?.memorandumOfArticles && (
+                      <div
+                        style={{ cursor: "pointer" }}
+                        onClick={() => {
+                          if (developerDataLabel?.licensesDoc?.[0]?.memorandumOfArticles)
+                            getDocShareholding(developerDataLabel?.licensesDoc?.[0]?.memorandumOfArticles, setLoader);
+                        }}
+                        id="btnSearch"
+                        class=""
+                      >
+                        {`${t("NWL_VIEW_MOA_DOCUMENT")}`}
+                        {/* View MOA Document  */}
+                        {developerDataLabel?.licensesDoc?.[0]?.memorandumOfArticles && <VisibilityIcon color="info" className="icon" />}
+                      </div>
+                    )}
                   </FormControl>
                 )}
             </div>
@@ -897,6 +899,7 @@ const ApllicantFormStep1 = (props) => {
                 className="form-check-input"
                 formControlName="agreeCheck"
                 type="checkbox"
+                name="developerRegistration"
                 value=""
                 id="flexCheckDefault"
               />
@@ -930,18 +933,6 @@ const ApllicantFormStep1 = (props) => {
           }}
         />
       )}
-
-      {/* {showToastError && (
-        <Toast
-          error={showToastError?.key === "error" ? true : false}
-          label="No Pdf here"
-          isDleteBtn={true}
-          onClose={() => {
-            setShowToastError(null);
-            setError(null);
-          }}
-        />
-      )} */}
     </div>
   );
 };
