@@ -112,7 +112,7 @@ function ModalChild(props) {
   }, [props.selectedFieldData]);
 
   console.log("Isdata" , status )
-  console.log("docModal123....." , docModal )
+  console.log("docModal123....." , props.labelmodal )
 
 
   // let empCode = "EMPLOYEE";
@@ -120,13 +120,13 @@ function ModalChild(props) {
 
   return (
     <Modal
-      size="md"
-      className="modal-md modal-center"
+      size="lg"
+      className="modal-lg modal-center"
       show={smShow}
-      // aria-labelledby="example-modal-sizes-title-sm"
+      // aria-labelledby="example-modal-sizes-title-md"
       aria-labelledby="contained-modal-title-vcenter"
       centered
-      style={{ position: "fixed", left: "50%", top: "50%", transform: "translate(-50% , -50%)" }}
+      style={{ position: "fixed", left: "50%", top: "50%", transform: "translate(-50% , -50%)" , marginTop:"3%"}}
       onHide={props.onClose}
     >
       <Modal.Header closeButton>

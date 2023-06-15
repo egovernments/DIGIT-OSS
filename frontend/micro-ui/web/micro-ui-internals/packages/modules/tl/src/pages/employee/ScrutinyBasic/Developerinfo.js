@@ -334,6 +334,7 @@ const Developerinfo = (props) => {
     uploadPreviouslyLayoutPlan: Colors.info,
     landCompensationReceived: Colors.info,
     statusOfRelease: Colors.info,
+    statusOfReleases: Colors.info,
     dateOfAward: Colors.info,
     dateOfRelease: Colors.info,
     siteDetails: Colors.info,
@@ -353,6 +354,7 @@ const Developerinfo = (props) => {
     giftDeedHibbanama: Colors.info,
     adjoiningOwnLand: color.info,
     joiningOwnLand: Colors.info,
+    dateAwaedNotification: Colors.info,
   })
 
   const fieldIdList = [{ label: "Whether licence applied for additional area", key: "licenceApplied" },
@@ -367,19 +369,21 @@ const Developerinfo = (props) => {
   { label: "Third Party Remark", key: "thirdPartyRemark" },
   { label: "Third Party Document", key: "thirdPartyDoc" },
   { label: "Whether licence applied under Migration policy", key: "migrationPolicy" },
-  { label: "Any encumbrance with respect to following", key: "encumbrance" },
-  { label: "Existing litigation, if any, concerning applied land including co-sharers and collaborator", key: "existinglitigation" },
-  { label: "Court orders, if any, affecting applied land", key: "courtOrders" },
-  { label: "Any insolvency/liquidation proceedings against the land owner(s)/ collaborating developed", key: "anyInsolvency" },
-  { label: "Remark", key: "insolvencyRemark" },
-  { label: "As per applied land", key: "asPerAppliedLand" }, { label: "Revenue rasta", key: "revenueRasta" },
-  { label: "Watercourse running", key: "waterCourseRunning" },
-  { label: "Whether in Compact Block", key: "whetherInCompactBlock" },
+  { label: "NWL_APPLICANT_ANY_ENCUMBRANCE_WITH_RESPECT_TO_FOLLOWING", key: "encumbrance" },
+  { label: "NWL_APPLICANT_EXISTING_LITIGATION_IF_ANY_CONCERNING_APPLIED_LAND", key: "existinglitigation" },
+  { label: "NWL_APPLICANT_COURT_ORDERS_IF_ANY_AFFECTING_APPLIED_LAND", key: "courtOrders" },
+  { label: "NWL_APPLICANT_ANY_INSOLVENCY_LIQUIDATION_PROCEESSDING_AGAINST_THE_LAND_OWING", key: "anyInsolvency" },
+  { label: "NWL_APPLICANT_ANY_INSOLVENCY_Y_REMARKS_LAND_OWING", key: "insolvencyRemark" },
+  { label: "NWL_APPLICANT_AS_PER_APPLIED_LAND_SHAJRA_PLAN", key: "asPerAppliedLand" },
+  { label: "NWL_APPLICANT_REVENUE_RASTA_SHAJRA_PLAN", key: "revenueRasta" },
+  { label: "NWL_APPLICANT_WATERCOURSE_SHAJRA_PLAN", key: "waterCourseRunning" },
+  { label: "NWL_APPLICANT_WHETHER_IN_COMPACT_BLOCK_SHAJRA_PLAN", key: "whetherInCompactBlock" },
   { label: "Land Sandwiched", key: "landSandwiche" },
-  { label: "Acquisition status", key: "acquisitionStatus" },
-  { label: "Date of section 4 notification", key: "dateOfSection4Notification" },
-  { label: "Date of section 6 notification", key: "dateOfSection6Notification" },
-  { label: "Orders Upload", key: "ordersUpload" },
+  { label: "NWL_APPLICANT_ACQUISITION_STATUS_SHAJRA_PLAN", key: "acquisitionStatus" },
+  { label: "NWL_APPLICANT_ACQUISITION_STATUS_Y_DATE_SECTION4_SHAJRA_PLAN", key: "dateOfSection4Notification" },
+  { label: "NWL_APPLICANT_ACQUISITION_STATUS_Y_DATE_SECTION6_SHAJRA_PLAN", key: "dateOfSection6Notification" },
+  { label: "NWL_APPLICANT_ACQUISITION_STATUS_Y_DATE_AWAED_SHAJRA_PLAN", key: "dateAwaedNotification" },
+  { label: "NWL_APPLICANT_WHETER_LAND_RELEASED_EXCLUDED_FROM_AQUSITION_DATE_AWAED_SHAJRA_PLAN", key: "ordersUpload" },
   { label: "whether the applied site is approachable from the proposed 18/24 m internal sectoral plan road/sector dividing road", key: "internalSectoralPlan" },
   { label: "vacant", key: "vacant" },
   { label: "Construction", key: "construction" },
@@ -391,7 +395,7 @@ const Developerinfo = (props) => {
   { label: "Utility Line", key: "utilityLine" },
   { label: "Enclose the following documents as Annexures", key: "documentsAsAnnexures" },
   { label: "Land schedule", key: "landSchedule" },
-  { label: "Copy of Mutation", key: "copyOfMutation" },
+  { label: "NWL_APPLICANT_AQUSITION_Y_COPY_OF_RELEASE_ORDER_SHAJRA_PLAN", key: "copyOfMutation" },
   { label: "Copy of Jamabandi", key: "copyOfJamabandi" },
   { label: "Details of lease / patta, if any", key: "detailsOfLease" },
   { label: "Add Sales/deed/exchange", key: "addSalesDeed" },
@@ -410,11 +414,13 @@ const Developerinfo = (props) => {
   { label: "Download Previously approved Layout Plan", key: "uploadPreviouslyLayoutPlan" },
   { label: "Validity of Parent Licence", key: "validityOfParentLicence" },
   { label: "Approved Layout of Plan/ Site plan for(GH)Showing Area(s)/Proposed migration", key: "approvedLayoutOfPlan" },
-  { label: "Whether land compensation received", key: "landCompensationReceived" },
-  { label: "Status of release", key: "statusOfRelease" },
+  { label: "NWL_APPLICANT_AQUSITION_Y_WHETER_LAND_COMPENSATION_SHAJRA_PLAN", key: "landCompensationReceived" },
+  { label: "NWL_APPLICANT_WHETHER_Y_WHETER_LITIGATION_REGARDING_RELEASE_OF_LAND_SHAJRA_PLAN", key: "landCompensationReceived" },
+  { label: "NWL_APPLICANT_AQUSITION_Y_STATUS_OF_RELEASE_SHAJRA_PLAN", key: "statusOfRelease" },
+  { label: "NWL_APPLICANT_AQUSITION_Y_CWP_SLP_NUMBER_SHAJRA_PLAN", key: "statusOfReleases" },
   { label: "Date of Award", key: "dateOfAward" },
-  { label: "Date of Release", key: "dateOfRelease" },
-  { label: "Site Details", key: "siteDetails" },
+  { label: "NWL_APPLICANT_AQUSITION_Y_DATE_OF_RELEASE_SHAJRA_PLAN", key: "dateOfRelease" },
+  { label: "NWL_APPLICANT_AQUSITION_Y_SITE_DETAILS_SHAJRA_PLAN", key: "siteDetails" },
   { label: "(h) Details of existing approach as per policy dated 20-10-20", key: "siteApproachable" },
   { label: "(a)  Approach available from minimum 4 karam (22 ft) wide revenue rasta", key: "minimumApproachFour" },
   { label: "(b) Approach available from minimum 11 feet wide revenue rasta and applied site abuts acquired alignment of the sector road and there is no stay regarding construction on the land falling under the abutting sector road", key: "minimumApproachEleven" },
@@ -1206,7 +1212,7 @@ const Developerinfo = (props) => {
 
 
               {/* <h5>
-                2. Any encumbrance with respect to following :&nbsp;&nbsp;
+                2. NWL_APPLICANT_ANY_ENCUMBRANCE_WITH_RESPECT_TO_FOLLOWING :&nbsp;&nbsp;
               </h5> */}
               <label htmlFor="Developer Details">
               {`${t("NWL_APPLICANT_ANY_ENCUMBRANCE_WITH_RESPECT_TO_FOLLOWING")}`}
@@ -1244,7 +1250,7 @@ const Developerinfo = (props) => {
                     color: fieldIconColors.encumbrance
                   }}
                   onClick={() => {
-                    setLabelValue("Any encumbrance with respect to following"),
+                    setLabelValue("NWL_APPLICANT_ANY_ENCUMBRANCE_WITH_RESPECT_TO_FOLLOWING"),
                       setOpennedModal("encumbrance")
                     setSmShow(true),
                       setDocModal(false),
@@ -1316,7 +1322,7 @@ const Developerinfo = (props) => {
             <hr className="mb-3" />
             <Row className={classes.formLabel}>
               {/* <h6 >
-                (ii) Existing litigation, if any, concerning applied land including co-sharers and collaborator.
+                (ii) NWL_APPLICANT_EXISTING_LITIGATION_IF_ANY_CONCERNING_APPLIED_LAND.
               </h6> */}
               <label htmlFor="Developer Details">
                 {`${t("NWL_APPLICANT_EXISTING_LITIGATION_IF_ANY_CONCERNING_APPLIED_LAND")}`}
@@ -1333,7 +1339,7 @@ const Developerinfo = (props) => {
                     color: fieldIconColors.existinglitigation
                   }}
                   onClick={() => {
-                    setLabelValue("Existing litigation, if any, concerning applied land including co-sharers and collaborator"),
+                    setLabelValue("NWL_APPLICANT_EXISTING_LITIGATION_IF_ANY_CONCERNING_APPLIED_LAND"),
                       setOpennedModal("existinglitigation")
                     setSmShow(true),
                       setDocModal(false),
@@ -1353,7 +1359,7 @@ const Developerinfo = (props) => {
 
                     <div >
                       <hr className="mb-3" />
-                      {/* <h6 > Court orders, if any, affecting applied land   </h6> */}
+                      {/* <h6 > NWL_APPLICANT_COURT_ORDERS_IF_ANY_AFFECTING_APPLIED_LAND   </h6> */}
                       <label htmlFor="Developer Details">
                         {`${t("NWL_APPLICANT_COURT_ORDERS_IF_ANY_AFFECTING_APPLIED_LAND")}`}
                         <span class="text-danger font-weight-bold mx-2">*</span>
@@ -1369,7 +1375,7 @@ const Developerinfo = (props) => {
                           color: fieldIconColors.courtOrders
                         }}
                         onClick={() => {
-                          setLabelValue("Court orders, if any, affecting applied land"),
+                          setLabelValue("NWL_APPLICANT_COURT_ORDERS_IF_ANY_AFFECTING_APPLIED_LAND"),
                             setOpennedModal("courtOrders")
                           setSmShow(true),
                             setDocModal(false),
@@ -1449,7 +1455,7 @@ const Developerinfo = (props) => {
                       color: fieldIconColors.anyInsolvency
                     }}
                     onClick={() => {
-                      setLabelValue("Any insolvency/liquidation proceedings against the land owner(s)/ collaborating developed"),
+                      setLabelValue("NWL_APPLICANT_ANY_INSOLVENCY_LIQUIDATION_PROCEESSDING_AGAINST_THE_LAND_OWING"),
                         setOpennedModal("anyInsolvency")
                       setSmShow(true),
                         setDocModal(false),
@@ -1486,7 +1492,7 @@ const Developerinfo = (props) => {
                         color: fieldIconColors.insolvencyRemark
                       }}
                       onClick={() => {
-                        setLabelValue("Remark"),
+                        setLabelValue("NWL_APPLICANT_ANY_INSOLVENCY_Y_REMARKS_LAND_OWING"),
                           setOpennedModal("insolvencyRemark")
                         setSmShow(true),
                           setDocModal(false),
@@ -1528,7 +1534,7 @@ const Developerinfo = (props) => {
             <div className="row mx-1">
               <div className="col col-3 p-1">
                 <h6>
-                  {/* (a) As per applied land */}
+                  {/* (a) NWL_APPLICANT_AS_PER_APPLIED_LAND_SHAJRA_PLAN */}
                   {`${t("NWL_APPLICANT_AS_PER_APPLIED_LAND_SHAJRA_PLAN")}`}
 
                   <div className="d-flex flex-row align-items-center my-1 ">
@@ -1543,7 +1549,7 @@ const Developerinfo = (props) => {
                         color: fieldIconColors.asPerAppliedLand
                       }}
                       onClick={() => {
-                        setLabelValue("As per applied land"),
+                        setLabelValue("NWL_APPLICANT_AS_PER_APPLIED_LAND_SHAJRA_PLAN"),
                           setOpennedModal("asPerAppliedLand")
                         setSmShow(true),
                           setDocModal(false),
@@ -1639,7 +1645,7 @@ const Developerinfo = (props) => {
                       color: fieldIconColors.revenueRasta
                     }}
                     onClick={() => {
-                      setLabelValue("Revenue rasta"),
+                      setLabelValue("NWL_APPLICANT_REVENUE_RASTA_SHAJRA_PLAN"),
                         setOpennedModal("revenueRasta")
                       setSmShow(true),
                         setDocModal(false),
@@ -1685,7 +1691,7 @@ const Developerinfo = (props) => {
                       color: fieldIconColors.waterCourseRunning
                     }}
                     onClick={() => {
-                      setLabelValue("Watercourse running"),
+                      setLabelValue("NWL_APPLICANT_WATERCOURSE_SHAJRA_PLAN"),
                         setOpennedModal("waterCourseRunning")
                       setSmShow(true),
                         setDocModal(false),
@@ -1708,7 +1714,7 @@ const Developerinfo = (props) => {
               </div>
               <div className="col col-3 p-1">
                 {/* <h6>
-                  (d)&nbsp;Whether in Compact Block
+                  (d)&nbsp;NWL_APPLICANT_WHETHER_IN_COMPACT_BLOCK_SHAJRA_PLAN
                 </h6> */}
                 {`${t("NWL_APPLICANT_WHETHER_IN_COMPACT_BLOCK_SHAJRA_PLAN")}`}
 
@@ -1724,7 +1730,7 @@ const Developerinfo = (props) => {
                       color: fieldIconColors.whetherInCompactBlock
                     }}
                     onClick={() => {
-                      setLabelValue("Whether in Compact Block"),
+                      setLabelValue("NWL_APPLICANT_WHETHER_IN_COMPACT_BLOCK_SHAJRA_PLAN"),
                         setOpennedModal("whetherInCompactBlock")
                       setSmShow(true),
                         setDocModal(false),
@@ -1822,7 +1828,7 @@ const Developerinfo = (props) => {
               </div> */}
               <div className="col col-3 p-1">
                 {/* <h6>
-                  (f) Acquisition status
+                  (f) NWL_APPLICANT_ACQUISITION_STATUS_SHAJRA_PLAN
                 </h6> */}
                 {`${t("NWL_APPLICANT_ACQUISITION_STATUS_SHAJRA_PLAN")}`}
 
@@ -1837,7 +1843,7 @@ const Developerinfo = (props) => {
                       color: fieldIconColors.acquisitionStatus
                     }}
                     onClick={() => {
-                      setLabelValue("Acquisition status"),
+                      setLabelValue("NWL_APPLICANT_ACQUISITION_STATUS_SHAJRA_PLAN"),
                         setOpennedModal("acquisitionStatus")
                       setSmShow(true),
                         setDocModal(false),
@@ -1864,7 +1870,7 @@ const Developerinfo = (props) => {
                                 color: fieldIconColors.dateOfSection4Notification
                               }}
                               onClick={() => {
-                                setLabelValue("Date of section 4 notification"),
+                                setLabelValue("NWL_APPLICANT_ACQUISITION_STATUS_Y_DATE_SECTION4_SHAJRA_PLAN"),
                                   setOpennedModal("dateOfSection4Notification")
                                 setSmShow(true),
                                   setDocModal(false),
@@ -1881,7 +1887,7 @@ const Developerinfo = (props) => {
                       <div className="col col-12">
                         <div>
                           {`${t("NWL_APPLICANT_ACQUISITION_STATUS_Y_DATE_SECTION6_SHAJRA_PLAN")}`}
-                          {/* <label className="m-0">Date of section 6 notification</label> */}
+               
                           <div className="d-flex flex-row align-items-center my-1 ">
                             <Form.Control
 
@@ -1893,7 +1899,7 @@ const Developerinfo = (props) => {
                                 color: fieldIconColors.dateOfSection6Notification
                               }}
                               onClick={() => {
-                                setLabelValue("Date of section 6 notification"),
+                                setLabelValue("NWL_APPLICANT_ACQUISITION_STATUS_Y_DATE_SECTION6_SHAJRA_PLAN"),
                                   setOpennedModal("dateOfSection6Notification")
                                 setSmShow(true),
                                   setDocModal(false),
@@ -1902,7 +1908,7 @@ const Developerinfo = (props) => {
                               }}
                             ></ReportProblemIcon>
                           </div>
-                          {/* <Form.Control style={{ maxWidth: 200, marginTop: 10 }} disabled></Form.Control> */}
+                   
                         </div>
                       </div>
                     </div>
@@ -1920,11 +1926,11 @@ const Developerinfo = (props) => {
                           <ReportProblemIcon
                             style={{
                               display: hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_ACQUISITION_STATUS_Y_DATE_AWAED_SHAJRA_PLAN") ? "block" : "none",
-                              color: fieldIconColors.dateOfSection6Notification
+                              color: fieldIconColors.dateAwaedNotification
                             }}
                             onClick={() => {
-                              setLabelValue("Date of section 6 notification"),
-                                setOpennedModal("dateOfSection6Notification")
+                              setLabelValue("NWL_APPLICANT_ACQUISITION_STATUS_Y_DATE_AWAED_SHAJRA_PLAN"),
+                                setOpennedModal("dateAwaedNotification")
                               setSmShow(true),
                                 setDocModal(false),
                                 console.log("modal open"),
@@ -1964,7 +1970,7 @@ const Developerinfo = (props) => {
                           color: fieldIconColors.ordersUpload
                         }}
                         onClick={() => {
-                          setLabelValue("Orders Upload"),
+                          setLabelValue("NWL_APPLICANT_WHETER_LAND_RELEASED_EXCLUDED_FROM_AQUSITION_DATE_AWAED_SHAJRA_PLAN"),
                             setOpennedModal("ordersUpload")
                           setSmShow(true),
                             setDocModal(false),
@@ -1995,10 +2001,10 @@ const Developerinfo = (props) => {
                             <ReportProblemIcon
                               style={{
                                 display: hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_AQUSITION_Y_WHETER_LAND_COMPENSATION_SHAJRA_PLAN") ? "block" : "none",
-                                color: fieldIconColors.landCompensationReceived
+                                color: fieldIconColors.compensationReceived
                               }}
                               onClick={() => {
-                                setLabelValue("Whether land compensation received"),
+                                setLabelValue("NWL_APPLICANT_AQUSITION_Y_WHETER_LAND_COMPENSATION_SHAJRA_PLAN"),
                                   setOpennedModal("landCompensationReceived")
                                 setSmShow(true),
                                   setDocModal(false),
@@ -2032,7 +2038,7 @@ const Developerinfo = (props) => {
                                   color: fieldIconColors.statusOfRelease
                                 }}
                                 onClick={() => {
-                                  setLabelValue("Status of release"),
+                                  setLabelValue("NWL_APPLICANT_AQUSITION_Y_STATUS_OF_RELEASE_SHAJRA_PLAN"),
                                     setOpennedModal("statusOfRelease")
                                   setSmShow(true),
                                     setDocModal(false),
@@ -2065,7 +2071,7 @@ const Developerinfo = (props) => {
                                   color: fieldIconColors.dateOfRelease
                                 }}
                                 onClick={() => {
-                                  setLabelValue("Date of Release"),
+                                  setLabelValue("NWL_APPLICANT_AQUSITION_Y_DATE_OF_RELEASE_SHAJRA_PLAN"),
                                     setOpennedModal("dateOfRelease")
                                   setSmShow(true),
                                     setDocModal(false),
@@ -2099,7 +2105,7 @@ const Developerinfo = (props) => {
                                     color: fieldIconColors.copyOfMutation
                                   }}
                                   onClick={() => {
-                                    setLabelValue("Copy of Mutation"),
+                                    setLabelValue("NWL_APPLICANT_AQUSITION_Y_COPY_OF_RELEASE_ORDER_SHAJRA_PLAN"),
                                       setOpennedModal("copyOfMutation")
                                     setSmShow(true),
                                       setDocModal(true),
@@ -2145,7 +2151,7 @@ const Developerinfo = (props) => {
                                   color: fieldIconColors.siteDetails
                                 }}
                                 onClick={() => {
-                                  setLabelValue("Site Details"),
+                                  setLabelValue("NWL_APPLICANT_AQUSITION_Y_SITE_DETAILS_SHAJRA_PLAN"),
                                     setOpennedModal("siteDetails")
                                   setSmShow(true),
                                     setDocModal(false),
@@ -2178,7 +2184,7 @@ const Developerinfo = (props) => {
                                 color: fieldIconColors.landCompensationReceived
                               }}
                               onClick={() => {
-                                setLabelValue("Whether land compensation received"),
+                                setLabelValue("NWL_APPLICANT_WHETHER_Y_WHETER_LITIGATION_REGARDING_RELEASE_OF_LAND_SHAJRA_PLAN"),
                                   setOpennedModal("landCompensationReceived")
                                 setSmShow(true),
                                   setDocModal(false),
@@ -2211,11 +2217,11 @@ const Developerinfo = (props) => {
                                 <ReportProblemIcon
                                   style={{
                                     display: hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_AQUSITION_Y_CWP_SLP_NUMBER_SHAJRA_PLAN") ? "block" : "none",
-                                    color: fieldIconColors.statusOfRelease
+                                    color: fieldIconColors.statusOfReleases
                                   }}
                                   onClick={() => {
-                                    setLabelValue("Status of release"),
-                                      setOpennedModal("statusOfRelease")
+                                    setLabelValue("NWL_APPLICANT_AQUSITION_Y_CWP_SLP_NUMBER_SHAJRA_PLAN"),
+                                      setOpennedModal("statusOfReleases")
                                     setSmShow(true),
                                       setDocModal(false),
                                       console.log("modal open"),

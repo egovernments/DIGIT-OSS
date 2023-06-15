@@ -21,15 +21,12 @@ import ModalChild from "../Remarks/ModalChild";
 import ReportProblemIcon from "@mui/icons-material/ReportProblem";
 import { useStyles } from "../css/personalInfoChild.style";
 import { add } from "lodash";
-import { useTranslation } from "react-i18next";
 
 const CapacityScrutiny = ({ t, config, onSelect, showTable, formData, formDataValue, data, addInfo,applicationStatus , capacityScrutinyInfo, iconColorState ,showDevTypeFields,getRemarkData,mDMSData }) => {
-
+  const { pathname: url } = useLocation();
   // const userInfo = Digit.UserService.getUser();
   let validation = {};
   let isOpenLinkFlow = window.location.href.includes("openlink");
-  const {t} = useTranslation();
-  const { pathname: url } = useLocation();
 
   const [isDevType, setIsDevType] = useState(false);
   const [isDevTypeComp, setIsDevTypeComp] = useState(false);
