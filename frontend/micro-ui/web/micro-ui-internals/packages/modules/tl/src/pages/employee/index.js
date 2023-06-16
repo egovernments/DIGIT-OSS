@@ -55,9 +55,9 @@ import BeneficialCard from "./ScrutinyBasic/AllServiceScrutiny/BeneficialInteres
 import ExtensionCluCard from "./ScrutinyBasic/AllServiceScrutiny/ExtensionClu/ExtensionCluCard";
 import CompletionLicCard from "./ScrutinyBasic/AllServiceScrutiny/CompletionLic/CompletionLicCard";
 import CompletionInbox from "./ScrutinyBasic/AllServiceScrutiny/CompletionLic/Inbox/index";
-import TechnicalProfessionalInbox from "./ScrutinyBasic/AllServiceScrutiny/TechnicalProfessionals/Inbox";
+// import TechnicalProfessionalInbox from "./ScrutinyBasic/AllServiceScrutiny/TechnicalProfessionals/Inbox";
 import TechnicalProfessionalCard from "./ScrutinyBasic/AllServiceScrutiny/TechnicalProfessionals/TechnicalProfessionalCard";
-import LowMediumInbox from "./ScrutinyBasic/AllServiceScrutiny/LowMedium/Inbox";
+// import LowMediumInbox from "./ScrutinyBasic/AllServiceScrutiny/LowMedium/Inbox";
 import CompositionCluInbox from "./ScrutinyBasic/AllServiceScrutiny/CompositionClu/Inbox/Index";
 // import BasicTable from "./ScrutinyBasic/ScrutinyDevelopment/UserRemarks";
 
@@ -305,7 +305,7 @@ const EmployeeApp = ({ path, url, userType }) => {
                 />
               )}
             />
-            <PrivateRoute
+            {/* <PrivateRoute
               path={`${path}/TechnicalProfessionalInbox`}
               component={(props) => (
                 <TechnicalProfessionalInbox
@@ -328,7 +328,7 @@ const EmployeeApp = ({ path, url, userType }) => {
                   isInbox={true}
                 />
               )}
-            />
+            /> */}
             <PrivateRoute
               path={`${path}/CommunityInbox`}
               component={(props) => (

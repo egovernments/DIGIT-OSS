@@ -39,7 +39,10 @@ const DesktopInbox = ({ tableConfig, filterComponent, columns, isLoading, setSea
         return (
           <div>
             <span className="link">
-              <Link to={`/digit-ui/employee/tl/${row.original["businessService"] === 'SERVICE_PLAN' ? 'ServiceScrutiny' : row.original["businessService"] === 'ELECTRICAL_PLAN' ? 'ElectricalScrutiny' : row.original["businessService"] === "BG_NEW" ? 'ScrutinyForm' : null }/` + row.original["applicationId"]}>{row.original["applicationId"]}</Link>
+              <Link to={`/digit-ui/employee/tl/${row.original["businessService"] === 'SERVICE_PLAN' ? 'ServiceScrutiny' : row.original["businessService"] === 'ELECTRICAL_PLAN' ? 'ElectricalScrutiny' : row.original["businessService"] === "BG_NEW" ? 'ScrutinyForm' : row.original["businessService"] === "TECHNICAL_PROFESSIONAL"
+                      ? "TechnicalProfessionalscrutiny"
+                      : row.original["businessService"] === "BPAREG"
+                      ? "TechnicalProfessionalscrutiny" : null }/` + row.original["applicationId"]}>{row.original["applicationId"]}</Link>
             </span>
           </div>
         );
@@ -100,7 +103,10 @@ const DesktopInbox = ({ tableConfig, filterComponent, columns, isLoading, setSea
         return (
           <div>
             <div className="w-100 text-center link">
-            <Link to={`/digit-ui/employee/tl/${row.original["businessService"] === 'SERVICE_PLAN' ? 'ServiceScrutiny' : row.original["businessService"] === 'ELECTRICAL_PLAN' ? 'ElectricalScrutiny' : row.original["businessService"] === "BG_NEW" ? 'ScrutinyForm' : null }/` + row.original["applicationId"]}>
+            <Link to={`/digit-ui/employee/tl/${row.original["businessService"] === 'SERVICE_PLAN' ? 'ServiceScrutiny' : row.original["businessService"] === 'ELECTRICAL_PLAN' ? 'ElectricalScrutiny' : row.original["businessService"] === "BG_NEW" ? 'ScrutinyForm' : row.original["businessService"] === "TECHNICAL_PROFESSIONAL"
+                      ? "TechnicalProfessionalscrutiny"
+                      : row.original["businessService"] === "BPAREG"
+                      ? "TechnicalProfessionalscrutiny" : null }/` + row.original["applicationId"]}>
                 <Visibility/>
               </Link>
             </div>

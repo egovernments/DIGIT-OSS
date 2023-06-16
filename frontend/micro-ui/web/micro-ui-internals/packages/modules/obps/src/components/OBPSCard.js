@@ -360,14 +360,14 @@ const OBPSCard = () => {
           {
             count: "-",
             label: t("CONSTRUCTION_OF_COMMUNITY_CARD"),
-            link: `/digit-ui/employee/tl/TechnicalProfessionalInbox`,
+            link: `/digit-ui/employee/obps/TechnicalProfessionalInbox`,
           },
         ],
         links: [
           {
             count: "-",
             label: t("ES_TITLE_INBOX"),
-            link: `/digit-ui/employee/tl/TechnicalProfessionalInbox`,
+            link: `/digit-ui/employee/obps/TechnicalProfessionalInbox`,
           }
         ],
       };
@@ -378,14 +378,14 @@ const OBPSCard = () => {
           {
             count: "-",
             label: t("CONSTRUCTION_OF_COMMUNITY_CARD"),
-            link: `/digit-ui/employee/tl/LowMediumInbox`,
+            link: `/digit-ui/employee/obps/LowMediumInbox`,
           },
         ],
         links: [
           {
             count: "-",
             label: t("ES_TITLE_INBOX"),
-            link: `/digit-ui/employee/tl/LowMediumInbox`,
+            link: `/digit-ui/employee/obps/LowMediumInbox`,
           }
         ],
       };
@@ -396,14 +396,14 @@ const OBPSCard = () => {
           {
             count: "-",
             label: t("CONSTRUCTION_OF_COMMUNITY_CARD"),
-            link: `/digit-ui/employee/tl/HighRiskInbox`,
+            link: `/digit-ui/employee/obps/HighRiskInbox`,
           },
         ],
         links: [
           {
             count: "-",
             label: t("ES_TITLE_INBOX"),
-            link: `/digit-ui/employee/tl/HighRiskInbox`,
+            link: `/digit-ui/employee/obps/HighRiskInbox`,
           }
         ],
       };
