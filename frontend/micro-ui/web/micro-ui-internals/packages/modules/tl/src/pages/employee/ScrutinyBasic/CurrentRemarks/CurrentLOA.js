@@ -12,6 +12,8 @@ import { IconButton } from "@mui/material";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import AddIcon from "@mui/icons-material/Add";
+import { useTranslation } from "react-i18next";
+import { Label } from "@egovernments/digit-ui-react-components";
 import RemoveIcon from "@mui/icons-material/Remove";
 import {  Box,
   Collapse,
@@ -35,6 +37,7 @@ const LOASection = (props) => {
 
   const { handleGetFiledsStatesById, handleGetRemarkssValues } = useContext(ScrutinyRemarksContext);
   const { id } = useParams();
+  const { t } = useTranslation();
   let user = Digit.UserService.getUser();
   const userRoles = user?.info?.roles?.map((e) => e.code);
   const showRemarksSection = userRoles.includes("DTCP_HR")
@@ -337,6 +340,7 @@ console.log("log123Disrenu" ,id);
                                 </td>
                                 <td>
                                   <b>{el.name}</b>
+                                  <Label style={{  fontSize:12}}>{t(item?.name)}</Label>
                                 </td>
                                 <td>
                                   <b>{el.value}</b>
