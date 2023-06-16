@@ -353,6 +353,60 @@ const OBPSCard = () => {
           }
         ],
       };
+      const propsForTechnicalProfessionalModuleCard = {
+        Icon: <DocumentIconSolid />,
+        moduleName: t("TECHNICAL_PROFESSIONAL"),
+        kpis: [
+          {
+            count: "-",
+            label: t("CONSTRUCTION_OF_COMMUNITY_CARD"),
+            link: `/digit-ui/employee/tl/TechnicalProfessionalInbox`,
+          },
+        ],
+        links: [
+          {
+            count: "-",
+            label: t("ES_TITLE_INBOX"),
+            link: `/digit-ui/employee/tl/TechnicalProfessionalInbox`,
+          }
+        ],
+      };
+      const propsForLowMediumModuleCard = {
+        Icon: <DocumentIconSolid />,
+        moduleName: t("LOW_MEDIUM_RISK_BUILDINGS"),
+        kpis: [
+          {
+            count: "-",
+            label: t("CONSTRUCTION_OF_COMMUNITY_CARD"),
+            link: `/digit-ui/employee/tl/LowMediumInbox`,
+          },
+        ],
+        links: [
+          {
+            count: "-",
+            label: t("ES_TITLE_INBOX"),
+            link: `/digit-ui/employee/tl/LowMediumInbox`,
+          }
+        ],
+      };
+      const propsForHighRiskModuleCard = {
+        Icon: <DocumentIconSolid />,
+        moduleName: t("HIGH_RISK_BUILDINGS"),
+        kpis: [
+          {
+            count: "-",
+            label: t("CONSTRUCTION_OF_COMMUNITY_CARD"),
+            link: `/digit-ui/employee/tl/HighRiskInbox`,
+          },
+        ],
+        links: [
+          {
+            count: "-",
+            label: t("ES_TITLE_INBOX"),
+            link: `/digit-ui/employee/tl/HighRiskInbox`,
+          }
+        ],
+      };
       const propsForCopletionModuleCard = {
         Icon: <DocumentIconSolid />,
         moduleName: t("COMPLETION_CERTIFICATE_CARD"),
@@ -415,6 +469,9 @@ const OBPSCard = () => {
       obpsSubModuleProps.push(propsForCommiunitySiteoduleCard)
       obpsSubModuleProps.push(propsForCopletionModuleCard)
       obpsSubModuleProps.push(propsForExtentionModuleCard)
+      obpsSubModuleProps.push(propsForTechnicalProfessionalModuleCard)
+      obpsSubModuleProps.push(propsForLowMediumModuleCard);
+      obpsSubModuleProps.push(propsForHighRiskModuleCard)
         return (
         <React.Fragment>
         {

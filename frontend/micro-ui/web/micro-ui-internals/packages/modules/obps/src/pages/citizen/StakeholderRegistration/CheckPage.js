@@ -32,6 +32,7 @@ const CheckPage = ({ onSubmit, value }) => {
   const tenant = Digit.ULBService.getStateId();
   let isopenlink = window.location.href.includes("/openlink/");
   const isCitizenUrl = Digit.Utils.browser.isMobile() ? true : false;
+  const applicationNumber = sessionStorage.getItem("TECHNICAL_PROFESSIONAL_APPLICATION_NO");
 
   // if (isopenlink)
   //   window.onunload = function () {
@@ -81,7 +82,7 @@ const CheckPage = ({ onSubmit, value }) => {
   // console.log(":::::", getDevData);
 
   const { result, formData, documents } = value;
-  console.log("form DATA", formData);
+  console.log("form DATA", formData,result,getDevData,documents);
   let consumerCode = value?.result?.Licenses[0].applicationNumber;
   const fetchBillParams = { consumerCode };
 
@@ -154,7 +155,7 @@ const CheckPage = ({ onSubmit, value }) => {
               <Row
                 className="border-none"
                 label={t(`BPA_APPLICATION_NUMBER_LABEL`)}
-                text={result?.Licenses?.[0]?.applicationNumber ? result?.Licenses?.[0]?.applicationNumber : ""}
+                text={result?.Licenses?.[0]?.applicationNumber ? result?.Licenses?.[0]?.applicationNumber : applicationNumber}
               />
             </StatusTable>
           </Card>
@@ -175,7 +176,7 @@ const CheckPage = ({ onSubmit, value }) => {
                 className="border-none"
                 label={t(`BPA_LICENSE_TYPE`)}
                 textStyle={{ paddingLeft: "12px" }}
-                text={t(getDevData?.showDevTypeFields || getDevData?.licenceTypeSelected)}
+                text={t(showLicenceType || getDevData?.showDevTypeFields)}
               />
               {formData?.LicneseType?.LicenseType?.i18nKey.includes("ARCHITECT") && (
                 <Row className="border-none" label={t(`BPA_COUNCIL_NUMBER`)} text={formData?.LicneseType?.ArchitectNo} />
@@ -619,7 +620,7 @@ const CheckPage = ({ onSubmit, value }) => {
               style={{ width: "100px", display: "inline" }}
               onClick={() => routeTo(`${routeLink}/stakeholder-document-details`)}
             /> */}
-            {documents?.documents.map((doc, index) => (
+            {documents?.documents?.map((doc, index) => (
               <div key={index}>
                 <CardSectionHeader styles={{ fontSize: "18px" }}>{t(`BPAREG_HEADER_${doc?.documentType?.replace(".", "_")}`)}</CardSectionHeader>
                 {doc?.info ? (
