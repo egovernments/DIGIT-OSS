@@ -338,7 +338,7 @@ console.log("log123Disrenu" ,id);
                                 </td>
                                 <td>
                                   {/* <b>{el.name}</b> */}
-                                  <Label style={{  fontSize:12}}>{t(item?.name)}</Label>
+                                  <Label style={{  fontSize:12}}>{t(el?.name)}</Label>
                                 </td>
                                 <td>
                                   <b>{el.value}</b>
