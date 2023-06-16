@@ -694,7 +694,7 @@ const handleAccountClick = async () =>{
   };
  
   try {
-      const Resp = await axios.post(`/land-services/egscrutiny/_search4?applicationNumber=${applicationNumber}&roles=AO_HQ,CAO,CAO_HQ,AO,SO,SO_HQ`, dataToSend).then((response) => {
+      const Resp = await axios.post(`/land-services/egscrutiny/_search4?applicationNumber=${applicationNumber}&roles=Accounts,Accounts Officer,AO_HQ,CAO,CAO_HQ,AO,SO,SO_HQ`, dataToSend).then((response) => {
           return response.data;
       });
 
@@ -730,7 +730,7 @@ const handleDrawingClick = async () =>{
       },
   };
   try {
-      const Resp = await axios.post(`/land-services/egscrutiny/_search4?applicationNumber=${applicationNumber}&roles=SD_HQ,JD_HQ,PA,PA_HQ,ADA_HQ,AD_HQ,JE_HQ,ASST_JE_HQ`, dataToSend).then((response) => {
+      const Resp = await axios.post(`/land-services/egscrutiny/_search4?applicationNumber=${applicationNumber}&roles=Drawing Branch,Drafts Man,SD_HQ,Draftsman,Senior Draftmans,Assistant Draftsman,JD,Junior Draftsman,JD_HQ,PA,PA_HQ,ADA_HQ,AD_HQ,JE_HQ,ASST_JE_HQ`, dataToSend).then((response) => {
           return response.data;
       });
 
@@ -761,7 +761,7 @@ const handleLegalClick = async () =>{
       },
   };
   try {
-      const Resp = await axios.post(`/land-services/egscrutiny/_search4?applicationNumber=${applicationNumber}&roles=DA,DDA,ADA,DA_HQ,DDA_HQ,ADA_HQ,`, dataToSend).then((response) => {
+      const Resp = await axios.post(`/land-services/egscrutiny/_search4?applicationNumber=${applicationNumber}&roles=DA,DDA,ADA,DA_HQ,DDA_HQ,ADA_HQ,Assistant District Atorney,District Attorney`, dataToSend).then((response) => {
           return response.data;
       });
 
@@ -791,7 +791,7 @@ const handleRevnueClick = async () =>{
       },
   };
   try {
-      const Resp = await axios.post(`/land-services/egscrutiny/_search4?applicationNumber=${applicationNumber}&roles=Naib Tehsildar,Patwari_HQ,Patwari`, dataToSend).then((response) => {
+      const Resp = await axios.post(`/land-services/egscrutiny/_search4?applicationNumber=${applicationNumber}&roles=Naib Tehsildar,Patwari_HQ,Patwari,Naib Tehsildar,Patwari,PATWARI`, dataToSend).then((response) => {
           return response.data;
       });
 
@@ -821,7 +821,7 @@ const handleTechinicalClick = async () =>{
       },
   };
   try {
-      const Resp = await axios.post(`/land-services/egscrutiny/_search4?applicationNumber=${applicationNumber}&roles=Personal Assistant,JD_HQ,PA,PA_HQ,JE,Assistant,JE_HQ,Junior Engineer`, dataToSend).then((response) => {
+      const Resp = await axios.post(`/land-services/egscrutiny/_search4?applicationNumber=${applicationNumber}&roles=Personal Assistant,JD_HQ,PA,PA_HQ,JE,Assistant,JE_HQ,Junior Engineer,Junier Engineer,Jr Engineer`, dataToSend).then((response) => {
           return response.data;
       });
 
@@ -851,7 +851,7 @@ const handleMainClick = async () =>{
       },
   };
   try {
-      const Resp = await axios.post(`/land-services/egscrutiny/_search4?applicationNumber=${applicationNumber}&roles=STPEnforcement Office HQ,DTP_HQ,DTP,ATP_HQ,ATP,STP_HQ,STP,CTP_HQ,CTP,DTCP_HQ`, dataToSend).then((response) => {
+      const Resp = await axios.post(`/land-services/egscrutiny/_search4?applicationNumber=${applicationNumber}&roles=DGTCP,District Town Planner,DISTRICT TOWN PLANNER,STPEnforcement Office HQ,DTP_HQ,DTP,ATP_HQ,ATP,STP_HQ,STP,CTP_HQ,CTP,DTCP_HQ`, dataToSend).then((response) => {
           return response.data;
       });
 
@@ -882,7 +882,7 @@ const handleDTPFieldClick = async () =>{
       },
   };
   try {
-      const Resp = await axios.post(`/land-services/egscrutiny/_search4?applicationNumber=${applicationNumber}&roles=DTP_FIELD,DTP Field,Patwari_FIELD,PATWARI Field,Patwari,PATWARI Circle,PATWARI,JE_FIELD,JD_FIELD,SD_FIELD,Z`, dataToSend).then((response) => {
+      const Resp = await axios.post(`/land-services/egscrutiny/_search4?applicationNumber=${applicationNumber}&roles=Planning Assistant Field,Accounts Field,Personal Assistant Field,Junior Draftsman Field,DTP_FIELD,DB Field,ATP Field,Draftsman Field,DTP Field,Patwari_FIELD,PATWARI Field,Patwari,PATWARI Circle,PATWARI,JE_FIELD,JD_FIELD,SD_FIELD,Junior Engineer Field,Draftsman Field,Assistant District Atorney Field`, dataToSend).then((response) => {
           return response.data;
       });
 
@@ -912,7 +912,7 @@ const handleSTPFieldClick = async () =>{
       },
   };
   try {
-      const Resp = await axios.post(`/land-services/egscrutiny/_search4?applicationNumber=${applicationNumber}&roles=STPEnforcement Office-Gurugram,STP Circle,STP_Circle,STP Office-Gurugram,STP Office-Faridabad,STP Office-Panchkula,STP Office-Rohtak,STP Office-Hisar,JE_HQ`, dataToSend).then((response) => {
+      const Resp = await axios.post(`/land-services/egscrutiny/_search4?applicationNumber=${applicationNumber}&roles=STPEnforcement Office-Gurugram,STP Circle,STP_Circle,STP Office-Gurugram,STP Office-Faridabad,STP Office-Panchkula,STP Office-Rohtak,STP Office-Hisar,STP Circle`, dataToSend).then((response) => {
           return response.data;
       });
 

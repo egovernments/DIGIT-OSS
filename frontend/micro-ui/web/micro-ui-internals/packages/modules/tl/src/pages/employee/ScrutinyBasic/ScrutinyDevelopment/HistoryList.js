@@ -578,7 +578,7 @@ const Resp = await axios.post(`/tl-services/new/license/pdf?applicationNumber=${
                      </Row>
                      <Row style={{ margin: 4 }}>
 
-                     <p style={{ textAlign: "right" }}>{el?.ts}</p>
+                     <p style={{ textAlign: "right" }}>{el?.createdOn}{el?.ts}</p>
                      <b style={{ textAlign: "right" }}>
              
                    </b>
