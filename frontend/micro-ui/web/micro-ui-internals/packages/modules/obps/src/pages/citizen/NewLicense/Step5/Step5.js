@@ -91,9 +91,9 @@ const FeesChargesForm = (props) => {
       const Resp = await axios.post(`/tl-calculator/v1/_getPaymentEstimate`, payload);
       CalculationApi(Resp?.data?.feesTypeCalculationDto);
       setCalculatedData(Resp.data);
-      setValue("payableNow", Resp.data?.totalFee);
-      setValue("totalScrutinyFee", Resp.data?.totalScruitnyFee);
-      setValue("totalLicenseFee", Resp.data?.totalLicenceFee);
+      setValue("payableNow", Resp.data?.totalFee?.toLocaleString());
+      setValue("totalScrutinyFee", Resp.data?.totalScruitnyFee?.toLocaleString());
+      setValue("totalLicenseFee", Resp.data?.totalLicenceFee?.toLocaleString());
     } catch (error) {
       return error;
     }
@@ -221,30 +221,30 @@ const FeesChargesForm = (props) => {
                 <thead>
                   <tr>
                     <th>Purpose</th>
-                    <td>{item?.purpose}</td>
+                    <td style={{ textAlign: "right" }}>{item?.purpose}</td>
                   </tr>
                   <tr>
                     <th>Conversion Charges (In Rs.)</th>
-                    <td> {item?.conversionChargesCal}</td>
+                    <td style={{ textAlign: "right" }}> {item?.conversionChargesCal?.toLocaleString()}</td>
                   </tr>
                 </thead>
                 <tbody>
                   <tr>
                     <th>External Development Charges (In Rs.)</th>
-                    <td>{item?.externalDevelopmentChargesCal}</td>
+                    <td style={{ textAlign: "right" }}>{item?.externalDevelopmentChargesCal?.toLocaleString()}</td>
                   </tr>
                   <tr>
                     <th>License Fee Charges (In Rs.)</th>
-                    <td>{item?.licenseFeeChargesCal}</td>
+                    <td style={{ textAlign: "right" }}>{item?.licenseFeeChargesCal?.toLocaleString()}</td>
                   </tr>
 
                   <tr>
                     <th>Scrutiny Fee Charges (In Rs.)</th>
-                    <td>{item?.scrutinyFeeChargesCal}</td>
+                    <td style={{ textAlign: "right" }}>{item?.scrutinyFeeChargesCal?.toLocaleString()}</td>
                   </tr>
                   <tr>
                     <th>State Infrastructure Development Charges (In Rs.)</th>
-                    <td>{item?.stateInfrastructureDevelopmentChargesCal}</td>
+                    <td style={{ textAlign: "right" }}>{item?.stateInfrastructureDevelopmentChargesCal?.toLocaleString()}</td>
                   </tr>
                 </tbody>
               </table>
