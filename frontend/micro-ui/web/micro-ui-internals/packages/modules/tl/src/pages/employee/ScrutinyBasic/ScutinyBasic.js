@@ -111,6 +111,7 @@ const {remarksData,notingRemarksData,iconStates,rolesDate,handleRoles,handleGetF
   const [open14, setOpen14] = useState(false);
   const [open15, setOpen15] = useState(false);
   const [open16, setOpen16] = useState(false);
+  const [open17, setOpen17] = useState(false);
   // const [open6, setOpen6] = useState(false);
   // const [open6, setOpen6] = useState(false);
   // const [apiResponse, setApiResponse] = useState({});
@@ -1008,7 +1009,32 @@ console.log("userInFODATA123" , userInfo);
               additionalDocRespon={additionalDocResponData}
             ></Personalinfo>
           </div>
-          <div>
+          <div
+            className="collapse-header"
+            onClick={() => setOpen17(!open17) }
+            aria-controls="example-collapse-text"
+            aria-expanded={open17}
+            style={{
+              background: "#f1f1f1",
+              padding: "0.25rem 1.25rem",
+              borderRadius: "0.25rem",
+              fontWeight: "600",
+              display: "flex",
+              cursor: "pointer",
+              color: "#817f7f",
+              justifyContent: "space-between",
+              alignContent: "center",
+            }}
+          >
+            <span style={{ color: "#817f7f", fontSize: 16 }} className="">
+           Application Purpose & Land schedule
+              
+            </span>
+            {open4 ? <RemoveIcon></RemoveIcon> : <AddIcon></AddIcon>}
+          </div>
+          <Collapse in={open17}>
+            <div style={{ position: "relative", maxWidth: "100%", padding: 2 }}>
+            <div>
             <Genarelinfo
               generalInfoRef={generalInfoRef}
               passUncheckedList={getUncheckedGeneralinfos}
@@ -1043,8 +1069,12 @@ console.log("userInFODATA123" , userInfo);
               mDMSData={mDMSData}
               additionalDocRespon={additionalDocResponData}
             ></Developerinfo>
-            {/* </Col> */}
+          
           </div>
+          </div>
+        
+          </Collapse>
+
           <div>
             <AppliedLandinfo
               appliedInfoRef={appliedInfoRef}
@@ -1681,7 +1711,7 @@ console.log("userInFODATA123" , userInfo);
       
  
       
-      <div
+      {/* <div
             className="collapse-header"
             onClick={() => setOpen15(!open15)}
             aria-controls="example-collapse-text"
@@ -1699,7 +1729,7 @@ console.log("userInFODATA123" , userInfo);
             }}
           >
             <span style={{ color: "#817f7f", fontSize: 16 }} className="">
-              {/* - Current Remarks Scruitny  */}
+              
               ONLINE LICENSE APPLICATION SCRUTINY PROFORMA
              
             </span>
@@ -1720,7 +1750,7 @@ console.log("userInFODATA123" , userInfo);
           </DataGridDemo>
       </div>
       </div>
-      </Collapse>
+      </Collapse> */}
 
 
       {/* <div
@@ -1753,6 +1783,9 @@ console.log("userInFODATA123" , userInfo);
       
        histeroyData={histeroyData}
        applicationStatus={applicationStatus}
+       remarksData={remarksData}
+       dataForIcons={rolesDate}
+       applicationNumber={applicationNumber}
        ></HistoryList>
     
       </div>

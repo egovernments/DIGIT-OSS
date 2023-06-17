@@ -1354,11 +1354,7 @@ const PersonalinfoChild = (props) => {
         </Col>
         <Col md={4} xxl lg="4">
           <div>
-            {/* <Form.Label>
-
-              <h5 className={classes.formLabel} >Board Resolution &nbsp;</h5>
-            </Form.Label>
-            <span className={classes.required}>*</span> */}
+            
 
             <label htmlFor="PAN" className="card-title fw-bold">
               {`${t("NWL_APPLICANT_BOARD_RESOLUTION")}`}
@@ -1367,12 +1363,7 @@ const PersonalinfoChild = (props) => {
           </div>
 
           <div className={classes.fieldContainer}>
-            {/* <Form.Control
-              className={classes.formControl}
-              placeholder={personalinfo !== null ? personalinfo?.devDetail?.aurthorizedUserInfoArray?.[0]?.uploadDigitalSignaturePdf : null}
-              disabled
-            ></Form.Control> */}
-            {/* <div className="row"> */}
+         
 
             <div className="btn btn-sm col-md-2">
               <IconButton

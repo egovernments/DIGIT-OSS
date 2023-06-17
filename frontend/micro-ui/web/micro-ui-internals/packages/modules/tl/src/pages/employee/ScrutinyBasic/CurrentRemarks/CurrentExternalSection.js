@@ -339,7 +339,7 @@ console.log("log123Disrenu" ,id);
                                   {i + 1}
                                 </td>
                                 <td>
-                                  <b>{el.name}</b>
+                                  {/* <b>{el.name}</b> */}
                                   <Label style={{  fontSize:12}}>{t(el?.name)}</Label>
                                 </td>
                                 <td>

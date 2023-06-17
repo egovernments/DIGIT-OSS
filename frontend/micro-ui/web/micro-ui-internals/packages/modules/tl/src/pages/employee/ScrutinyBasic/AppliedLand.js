@@ -3,7 +3,7 @@ import { Button, Form } from "react-bootstrap";
 import { Card, Row, Col } from "react-bootstrap";
 
 import MigrationAppliedTrue from "./MigrationAplliedTrue";
-
+import Visibility from "@mui/icons-material/Visibility";
 import DDJAYForm from "../ScrutinyBasic/Puropse/DdjayForm";
 import ResidentialPlottedForm from "../ScrutinyBasic/Puropse/ResidentialPlotted";
 import IndustrialPlottedForm from "../ScrutinyBasic/Puropse/IndustrialPlotted";
@@ -1756,6 +1756,9 @@ let Tree = ({ data }) => {
                         <IconButton onClick={()=>getDocShareholding(DetailsofAppliedLand?.DetailsAppliedLandPlot?.layoutPlanDxf)}>
                           <DownloadForOfflineIcon color="primary" className="mx-1"  />
                         </IconButton>
+                        <IconButton onClick={() => getDocShareholding(DetailsofAppliedLand?.DetailsAppliedLandPlot?.layoutPlanDxf)}>
+                        <Visibility color="primary" className="mx-1" />
+                      </IconButton>
                         <ReportProblemIcon
                           style={{
                            display: hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_DGPS_POINTS_DOCUMENT") ? "block" : "none",
@@ -1782,6 +1785,9 @@ let Tree = ({ data }) => {
                         <IconButton onClick={()=>getDocShareholding(DetailsofAppliedLand?.DetailsAppliedLandPlot?.layoutPlanPdf)}>
                           <DownloadForOfflineIcon color="primary" className="mx-1"  />
                         </IconButton>
+                        <IconButton onClick={() => getDocShareholding(DetailsofAppliedLand?.DetailsAppliedLandPlot?.layoutPlanPdf)}>
+                        <Visibility color="primary" className="mx-1" />
+                      </IconButton>
                         <ReportProblemIcon
                           style={{
                           
@@ -1810,6 +1816,10 @@ let Tree = ({ data }) => {
                         <IconButton onClick={()=>getDocShareholding(DetailsofAppliedLand?.DetailsAppliedLandPlot?.undertaking)}>
                           <DownloadForOfflineIcon color="primary" className="mx-1"  />
                         </IconButton>
+                        <IconButton onClick={() => getDocShareholding(DetailsofAppliedLand?.DetailsAppliedLandPlot?.undertaking)}>
+                        <Visibility color="primary" className="mx-1" />
+                      </IconButton>
+
                         <ReportProblemIcon
                           style={{
                             display: hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_DGPS_DOCUMENTS_UNDERTAKING") ? "block" : "none",
@@ -1841,6 +1851,10 @@ let Tree = ({ data }) => {
                         <IconButton onClick={()=>getDocShareholding(DetailsofAppliedLand?.DetailsAppliedLandPlot?.layoutPlanPdf)}>
                           <DownloadForOfflineIcon color="primary" className="mx-1"  />
                         </IconButton>
+
+                        <IconButton onClick={() => getDocShareholding(DetailsofAppliedLand?.DetailsAppliedLandPlot?.layoutPlanPdf)}>
+                        <Visibility color="primary" className="mx-1" />
+                      </IconButton>
                             <ReportProblemIcon
                               style={{
                                 display: hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_DGPS_DOCUMENTS_DEVELOPMENT_PLAN") ? "block" : "none",
@@ -1872,6 +1886,9 @@ let Tree = ({ data }) => {
                         <IconButton onClick={()=>getDocShareholding(DetailsofAppliedLand?.DetailsAppliedLand?.planCrossSection)}>
                           <DownloadForOfflineIcon color="primary" className="mx-1"  />
                         </IconButton>
+                        <IconButton onClick={() => getDocShareholding(DetailsofAppliedLand?.DetailsAppliedLand?.planCrossSection)}>
+                        <Visibility color="primary" className="mx-1" />
+                      </IconButton>
                           <ReportProblemIcon
                             style={{
                               display: hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_DGPS_DOCUMENTS_SECTORAL_PLAN") ? "block" : "none",
@@ -1899,6 +1916,10 @@ let Tree = ({ data }) => {
                         <IconButton onClick={()=>getDocShareholding(DetailsofAppliedLand?.DetailsAppliedLand?.publicHealthServices)}>
                           <DownloadForOfflineIcon color="primary" className="mx-1"  />
                         </IconButton>
+
+                        <IconButton onClick={() => getDocShareholding(DetailsofAppliedLand?.DetailsAppliedLand?.publicHealthServices)}>
+                        <Visibility color="primary" className="mx-1" />
+                      </IconButton>
                           <ReportProblemIcon
                             style={{
                               display: hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_DGPS_DOCUMENTS_EXPLANATORY_NOTE") ? "block" : "none",
@@ -1928,6 +1949,11 @@ let Tree = ({ data }) => {
                         <IconButton onClick={()=>getDocShareholding(DetailsofAppliedLand?.DetailsAppliedLand?.designRoad)}>
                           <DownloadForOfflineIcon color="primary" className="mx-1"  />
                         </IconButton>
+
+                        <IconButton onClick={() => getDocShareholding(DetailsofAppliedLand?.DetailsAppliedLand?.designRoad)}>
+                        <Visibility color="primary" className="mx-1" />
+                      </IconButton>
+
                           <ReportProblemIcon
                             style={{
                               display: hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_DGPS_DOCUMENTS_GUIDE_MAP") ? "block" : "none",
@@ -1955,6 +1981,11 @@ let Tree = ({ data }) => {
                         <IconButton onClick={()=>getDocShareholding(DetailsofAppliedLand?.DetailsAppliedLand?.designSewarage)}>
                           <DownloadForOfflineIcon color="primary" className="mx-1"  />
                         </IconButton>
+
+                        <IconButton onClick={() => getDocShareholding(DetailsofAppliedLand?.DetailsAppliedLand?.designSewarage)}>
+                        <Visibility color="primary" className="mx-1" />
+                      </IconButton>
+
                           <ReportProblemIcon
                             style={{
                               display: hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_DGPS_DOCUMENTS_INDEMNITY_BOND") ? "block" : "none",
@@ -1985,6 +2016,11 @@ let Tree = ({ data }) => {
                         <IconButton onClick={()=>getDocShareholding(DetailsofAppliedLand?.DetailsAppliedLand?.designDisposal)}>
                           <DownloadForOfflineIcon color="primary" className="mx-1"  />
                         </IconButton>
+
+                        <IconButton onClick={() => getDocShareholding(DetailsofAppliedLand?.DetailsAppliedLand?.designDisposal)}>
+                        <Visibility color="primary" className="mx-1" />
+                      </IconButton>
+
                           <ReportProblemIcon
                             style={{
                               display: hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_DGPS_DOCUMENTS_ANY_OTHER_RELEVANT_DOCUMENT") ? "block" : "none",

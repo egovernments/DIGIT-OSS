@@ -1,8 +1,8 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useState, useRef, useEffect, useContext  } from "react";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import { TextInput, Label, SubmitBar, LinkLabel, ActionBar, CloseSvg, DatePicker, MobileNumber } from "@egovernments/digit-ui-react-components";
-import { Form, Col, Row } from "react-bootstrap";
+import {Card, Form, Col, Row } from "react-bootstrap";
 import axios from "axios";
 import { useStyles } from "./styles/modalChild.style";
 import { useParams } from "react-router-dom";
@@ -11,6 +11,7 @@ import { useParams } from "react-router-dom";
 // import { getDocShareholding } from "../ScrutinyDevelopment/docview.helper";
 // import Visibility from "@mui/icons-material/Visibility";
 // import FileDownload from "@mui/icons-material/FileDownload";
+
 import { IconButton } from "@mui/material";
 import { useTranslation } from "react-i18next";
 import { useLocation } from "react-router-dom";
@@ -20,10 +21,20 @@ import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
 
 import Collapse from "react-bootstrap/Collapse";
+import DataGridDemo from "../PatwariHQ";
+import { ScrutinyRemarksContext } from "../../../../../context/remarks-data-context";
 
 
 
 function FullScreenDialog(props) {
+
+  const {remarksData,notingRemarksData,iconStates,rolesDate,handleRoles,handleGetFiledsStatesById,handleGetRemarkssValues,handleGetNotingRemarkssValues } = useContext(ScrutinyRemarksContext);
+
+
+
+  console.log("newdataPAFullScreen", remarksData);
+  console.log("newdatahappFullScreen", rolesDate);
+
 
   const userInfo = Digit.UserService.getUser()?.info || {};
   const classes = useStyles();
@@ -110,26 +121,29 @@ function FullScreenDialog(props) {
        {/* {loader && <Spinner></Spinner>} */}
 
        <Modal
-      size="lg"
-      class="modal fade bd-example-modal-xl"
-      tabindex="-1"
-       role="dialog" 
+       class="modal fade"
+       id="exampleModalScrollable" 
+       tabindex="-1"
+        role="dialog" 
+        aria-labelledby="exampleModalScrollableTitle" 
+        aria-hidden="true"
+      scrollable={true}
       //  aria-labelledby="myExtraLargeModalLabel"
         // aria-hidden="true"
   
     // className="modal-lg modal-center"
       show={smShow}
       // aria-labelledby="example-modal-sizes-title-sm"
-      aria-labelledby="contained-modal-title-vcenter"
+      // aria-labelledby="contained-modal-title-vcenter"
       centered
-      style={{ position: "fixed", left: "50%", top: "50%", transform: "translate(-50% , -50%)" }}
+      style={{ position: "fixed", left: "50%", top: "50%", transform: "translate(-50% , -50%)" , height:700 ,marginTop: "50px"  }}
       onHide={props.onClose}
     >
-      <Modal.Header closeButton in={open14}>
-        <Modal.Title id="example-modal-sizes-title-sm">
-      
-
-        </Modal.Title>
+      <Modal.Header closeButton in={open14} style={{ textAlign: "center" ,backgroundColor: "#FFD954" ,marginLeft:"3%", maxWidth:"95%" }}>
+        {/* <Modal.Title id="example-modal-sizes-title-sm" > */}
+        ONLINE LICENSE APPLICATION SCRUTINY PROFORMA
+        {/* <Card style={{ textAlign: "center" ,backgroundColor: "#FFD954" , maxWidth:"95%" }}></Card> */}
+        {/* </Modal.Title> */}
       </Modal.Header>
       
       {/* <div
@@ -164,7 +178,7 @@ function FullScreenDialog(props) {
      */}
       <div style={{ position: "relative", width: "100%", display: "flex", margin: 2 }}>
      <Row style={{  marginRight:10, marginLeft:10}}>
-      {remarksDataExternal !== null ?  (
+      {/* {remarksDataExternal !== null ?  (
                       remarksDataExternal?.egScrutiny?.map((el, index) => {
                         return (
                           <div>
@@ -358,7 +372,17 @@ function FullScreenDialog(props) {
                         })
                       ) : (
                         <p></p>
-                      )}
+                      )} */}
+
+                      <DataGridDemo
+                      
+                      remarksData={remarksData}
+                      dataForIcons={rolesDate}
+                      >
+                    </DataGridDemo>
+                      </Row>
+                      <Row>
+
                       </Row>
         </div>
       {/* </div>
