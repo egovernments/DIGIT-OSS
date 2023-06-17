@@ -25,7 +25,8 @@ import AddPost from "../../Material/TextEditor";
 import DemoParinted from "./DemoParint";
 import BasicTable from "./UserRemarks";
 import { convertDateToEpoch, convertEpochToDate, convertEpochToDateDMY } from "../../../../utils";
-// import FullScreenDialog from "../Remarks/RemarksUser";
+import FullScreenDialog from "../Remarks/RemarksUser";
+import ScrollToTop from "@egovernments/digit-ui-react-components/src/atoms/ScrollToTop";
 
 // import { Scrollbars } from 'react-custom-scrollbars';
 
@@ -102,6 +103,14 @@ const HistoryList = (props) => {
         console.log("log123DisA", tempArray);
         setDisapprovedList(tempArray);
       }
+      // const ScrollToBottom = () =>{
+      //   window.scroll({
+      //     top:document.documentElement.scrollHeight,
+      //     behavior:'smooth',
+      //   });
+
+      // };
+      // ScrollToBottom();
     }, [remarkDataResp]
   )
 
@@ -266,7 +275,7 @@ const Resp = await axios.post(`/tl-services/new/license/pdf?applicationNumber=${
         marginTop: 5,
       }}
     >
-      
+       {/* <ScrollToTop /> */}
       <Row class="remarkshelp">
         <div 
         class="concludingremarks"
@@ -422,16 +431,18 @@ const Resp = await axios.post(`/tl-services/new/license/pdf?applicationNumber=${
       
             <div>
               <Form.Group>
-              {/* <FullScreenDialog
+              <FullScreenDialog
              
              passmodalData={handlemodaldData}
              displaymodal={smShow}
            
              onClose={() => { setSmShow(false); setDocModal(false) }}
              fieldValue={fieldValue}
-             fieldValue2={fieldValue2}
-             fieldValue3={fieldValue3}
-></FullScreenDialog> */}
+            //  fieldValue2={fieldValue2}
+            //  fieldValue3={fieldValue3}
+></FullScreenDialog>
+
+
                <div>
                {remarkDataResp !== null ?  (
                       remarkDataResp?.map((el, index) => {
@@ -443,16 +454,20 @@ const Resp = await axios.post(`/tl-services/new/license/pdf?applicationNumber=${
                          <div style={{width:20}}>
                          <TextSnippetIcon
                   
-                  // onClick={() => {
+                  onClick={() => {
                  
-                  //   setSmShow(true);
-                  //   // setDocModal(false);
-                  //   setFieldValue(el.employeeName !== null ? el.employeeName : null);
-                  //   setFieldValue2(el.designation !== null ? el.designation : null);
-                  //   setFieldValue3(el.role !== null ? el.role : null);
-                  // }}
+                    setSmShow(true);
+                    // setDocModal(false);
+                    setFieldValue(el.employeeName !== null ? el.employeeName : null);
+                    setFieldValue2(el.designation !== null ? el.designation : null);
+                    setFieldValue3(el.role !== null ? el.role : null);
+                  }}
                 ></TextSnippetIcon>
                          </div>
+                         
+
+                        
+
                          
 
                          {el?.notingDetail !== null ?  (
@@ -462,23 +477,8 @@ const Resp = await axios.post(`/tl-services/new/license/pdf?applicationNumber=${
                             
                          
                          <b>{item?.isApproved}# {index + 1}</b>
-                            <br></br>
-                         <i>{<div dangerouslySetInnerHTML={{__html: item.remarks}}/>}</i>
 
-                    
-                             
-                          </div>
-                        );
-                      })
-                    ) : (
-                      <p></p>
-                    )}
-
-{/* {data.includes(el.employeeName) && (
-                    <Box > */}
-        {/* {el?.performaFieldDetail?.[0]?.isApproved === "Proforma" && */}
-
-<div >
+                         <div >
 <Box>
 <Row>
 {/* <p>
@@ -499,6 +499,7 @@ const Resp = await axios.post(`/tl-services/new/license/pdf?applicationNumber=${
                             
                            
                            {/* {dataThree.includes(el.applicationStatus) && (   */}
+                           {el?.performaFieldDetail?.[0]?.isApproved == "Proforma"  &&     
                 <table colSpan = "2" className="table table-bordered" style={{ backgroundColor: "#ddf2cf" }}>
                   <thead>
 
@@ -553,19 +554,40 @@ const Resp = await axios.post(`/tl-services/new/license/pdf?applicationNumber=${
                               </td>
 
                             </tr>
+                         
                                );
                               })
                             ) : (
                               <p></p>
                             )}
-                         </tbody>
+                            </tbody>
                         </table>
+                      }
                         {/* )}  */}
                   </Row>
                     </Box>
              
                       
                       </div>
+
+
+                            <br></br>
+                         <i>{<div dangerouslySetInnerHTML={{__html: item.remarks}}/>}</i>
+
+                    
+                             
+                          </div>
+                        );
+                      })
+                    ) : (
+                      <p></p>
+                    )}
+
+{/* {data.includes(el.employeeName) && (
+                    <Box > */}
+        {/* {el?.performaFieldDetail?.[0]?.isApproved === "Proforma" && */}
+
+
           {/* }             */}
 
 

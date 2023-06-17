@@ -22,10 +22,11 @@ import { useLocation } from "react-router-dom";
 import CusToaster from "../../../components/Toaster";
 import ApplicationPurpose from "../AdditionalDocument/ApplicationPurpose";
 import ApplicantInfo from "../AdditionalDocument/ApplicantInfo";
+import Developerinfo from "./Developerinfo";
 
 const Genarelinfo = (props) => {
   // useTranslation
-
+  // const developerInfoRef = useRef();
   const { t } = useTranslation();
   const { pathname: url } = useLocation();
   const [showhide1, setShowhide1] = useState("No");
@@ -451,7 +452,7 @@ const Genarelinfo = (props) => {
         remarksUpdate={currentRemarks}
         applicationStatus={applicationStatus}
       ></ModalChild>
-      <div
+      {/* <div
         className="collapse-header"
         onClick={() => setOpen2(!open2)}
         aria-controls="example-collapse-text"
@@ -474,10 +475,10 @@ const Genarelinfo = (props) => {
         {open2 ? <RemoveIcon></RemoveIcon> : <AddIcon></AddIcon>}
       </div>
       <Collapse in={open2}>
-        <div id="example-collapse-text">
+        <div id="example-collapse-text"> */}
 
 
-          {/* {!additionalDocResponData?.AdditionalDocumentReport?.[0]?.applicantInfo == null && */}
+         
           <div>
             <ApplicationPurpose
               additionalDocRespon={additionalDocResponData}
@@ -1567,8 +1568,25 @@ display: hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_DATA_OF_REGI
 
           </Form.Group>
 
-        </div>
-      </Collapse>
+
+          {/* <div>
+            <Developerinfo
+              developerInfoRef={developerInfoRef}
+              purpose={apiResponse ? apiResponse?.ApplicantPurpose?.purpose : null}
+              passUncheckedList={getUncheckedPurposeinfos}
+              passCheckedList={getCheckedPurposeInfoValue}
+              onClick={() => setOpen(!open)}
+              ApiResponseData={apiResponse !== undefined ? apiResponse?.LandSchedule : null}
+              dataForIcons={iconStates}
+              applicationStatus={applicationStatus}
+              mDMSData={mDMSData}
+              additionalDocRespon={additionalDocResponData}
+            ></Developerinfo>
+          
+          </div> */}
+
+        {/* </div>
+      </Collapse> */}
       {showToastError && (
         <CusToaster
           label={showToastError?.label}
