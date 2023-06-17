@@ -13,6 +13,8 @@ import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
+import { useTranslation } from "react-i18next";
+import { Label } from "@egovernments/digit-ui-react-components";
 
 import {  Box,
   Collapse,
@@ -36,6 +38,7 @@ const STPFieldSection = (props) => {
 
   const { handleGetFiledsStatesById, handleGetRemarkssValues } = useContext(ScrutinyRemarksContext);
   const { id } = useParams();
+  const { t } = useTranslation();
   let user = Digit.UserService.getUser();
   const userRoles = user?.info?.roles?.map((e) => e.code);
   const showRemarksSection = userRoles.includes("DTCP_HR")
@@ -212,7 +215,7 @@ console.log("log123Disrenu" ,id);
       }}
     >
 
-<div
+{/* <div
             className="collapse-header"
             onClick={() => setOpen3(!open3)}
             aria-controls="example-collapse-text"
@@ -235,7 +238,7 @@ console.log("log123Disrenu" ,id);
             </span>
             {open3 ? <RemoveIcon></RemoveIcon> : <AddIcon></AddIcon>}
           </div>
-          <Collapse in={open3}>
+          <Collapse in={open3}> */}
             <div id="example-collapse-text" style={{ marginTop: 12, paddingLeft: 12, paddingRight: 12 }}>
       <Row class="remarkshelp">
         <div 
@@ -336,6 +339,7 @@ console.log("log123Disrenu" ,id);
                                 </td>
                                 <td>
                                   <b>{el.name}</b>
+                                  <Label style={{  fontSize:12}}>{t(el?.name)}</Label>
                                 </td>
                                 <td>
                                   <b>{el.value}</b>
@@ -681,7 +685,7 @@ console.log("log123Disrenu" ,id);
         </Row>
 
 </div>
-</Collapse>
+{/* </Collapse> */}
 
         {/* <Row>
 

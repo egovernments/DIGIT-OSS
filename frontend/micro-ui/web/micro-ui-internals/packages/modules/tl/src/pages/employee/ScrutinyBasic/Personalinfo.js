@@ -16,7 +16,7 @@ import Collapse from "react-bootstrap/Collapse";
 import Modal from "react-bootstrap/Modal";
 import ModalChild from "./Remarks/ModalChild";
 import ReportProblemIcon from "@mui/icons-material/ReportProblem";
-import ApplicantInfo from "./AdditionalDocument/ApplicantInfo";
+import ApplicantInfo from "../AdditionalDocument/ApplicantInfo";
 
 
 const Personalinfo = (props) => {
@@ -106,8 +106,12 @@ const Personalinfo = (props) => {
   const currentRemarklifo = (data) => {
     props.showTable({ data: data.data });
   };
-
-  return (
+    // let applicantInfoopen =   additionalDocResponData?.AdditionalDocumentReport?.map((array) => array.map((object) => `${object.applicantInfo}`).join("s"))
+    // additionalDocResponData?.[0]?.applicantInfo === "applicantInfo" &&
+    console.log("applicantInfoopen", additionalDocResponData?.AdditionalDocumentReport );
+ 
+ 
+    return (
     <Form
       ref={props.personalInfoRef}
 
@@ -198,14 +202,31 @@ const Personalinfo = (props) => {
             applicationStatus={applicationStatus}
             mDMSData={mDMSData}
           />
-         {/* { additionalDocResponData?.[0]?.applicantInfo === "applicantInfo" && */}
+          {/* {additionalDocResponData?.AdditionalDocumentReport != null &&  (
+            <div>
+         {applicantInfoopen === "applicantInfos" && ( */}
+         {/* {!additionalDocResponData?.AdditionalDocumentReport?.[0]?.applicantInfo == null && */}
           <div>
             <ApplicantInfo
             additionalDocRespon={additionalDocResponData}
            
             />
+       
           </div>
+          
 {/* } */}
+{/* {!additionalDocResponData?.AdditionalDocumentReport?.[0]?.applicantPurpose == null &&
+          <div> 
+          <ApplicationPurpose
+          additionalDocRespon={additionalDocResponData}
+         />
+       </div> 
+        }       */}
+
+     {/* ) } 
+    
+     </div>
+         ) } */}
         </div>
       </Collapse>
       {/* </Card> */}

@@ -8,6 +8,8 @@ import BackspaceIcon from '@mui/icons-material/Backspace';
 import { IconButton } from "@mui/material";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
+import { useTranslation } from "react-i18next";
+import { Label } from "@egovernments/digit-ui-react-components";
 
 import {
     Box,
@@ -24,6 +26,7 @@ const DataGridDemo = (props) => {
 
     const [chatSheet, setChatSheet] = useState([])
     const [expanded, setExpanded] = useState({})
+    const { t } = useTranslation();
 
     // const [open, setOpen] = useState(false);
     // const [handleshow19, sethandleshow19] = useState(false);
@@ -237,7 +240,8 @@ const DataGridDemo = (props) => {
                                         </td>
                                         <td>
 
-                                            {item?.name}
+                                     
+                                            <Label style={{  fontSize:14}}>{t(item?.name)}</Label>
 
                                         </td>
                                         

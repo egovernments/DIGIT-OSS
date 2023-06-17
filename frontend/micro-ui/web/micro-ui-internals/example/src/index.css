@@ -21234,8 +21234,8 @@ color: #fff;
 /* animation: mymove 300ms infinite; */
 /* animation: mymove 3s infinite alternate slidein; */
 animation: mymove 200ms infinite;
-animation-duration: 6s;
-animation-iteration-count: 3;
+animation-duration: 1s;
+animation-iteration-count: 20;
 }
 
 /* @keyframes blinkanimetion{

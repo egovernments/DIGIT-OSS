@@ -24,7 +24,7 @@ import ProformaForlegalBranch from "../Proforma/ProformaForlegalBranch";
 import ProformaPatwari from "../Proforma/ProformaForPatwari";
 import Addmoreinput from "../Complaince/Compliances";
 import ProformForRevenu from "../Proforma/ProformForRevenu";
-import AdditionalDocument from "./AdditionalDocument/ApplicantInfo";
+import AdditionalDocument from "../AdditionalDocument/ApplicantInfo";
 import Component from "../Proforma/Index";
 import { useParams } from "react-router-dom";
 
@@ -48,6 +48,7 @@ import LOASection from "./CurrentRemarks/CurrentLOA";
 import ExternalSection from "./CurrentRemarks/CurrentExternalSection";
 import HistoryList from "./ScrutinyDevelopment/HistoryList";
 import Spinner from "../../../components/Loader";
+import ApplicationPurpose from "../AdditionalDocument/ApplicationPurpose";
 // import HelpPost from "../Material/TextArea";
 
 const ScrutitnyForms = ({ apiResponse, applicationNumber, refreshScrutinyData ,profrmaID, histeroyData,additionalDocResponData, applicationStatus ,mDMSData ,applicationimp ,dataProfrmaFileds, dataMDMS }) => {
@@ -109,6 +110,7 @@ const {remarksData,notingRemarksData,iconStates,rolesDate,handleRoles,handleGetF
   const [open13, setOpen13] = useState(false);
   const [open14, setOpen14] = useState(false);
   const [open15, setOpen15] = useState(false);
+  const [open16, setOpen16] = useState(false);
   // const [open6, setOpen6] = useState(false);
   // const [open6, setOpen6] = useState(false);
   // const [apiResponse, setApiResponse] = useState({});
@@ -402,12 +404,12 @@ function convertToObjectArray(obj) {
           fieldValue: obj[valueKey] || null,
           comment: obj[remarksKey] || null,
           applicationId: applicationNumber,
-          isApproved: "Performa",
+          isApproved: "Proforma",
           isLOIPart: "",
           userid: userInfo?.id,
           serviceId: "123",
           documentId: null,
-          ts: dateTime.toUTCString(),
+          // ts: dateTime.toUTCString(),
           bussinessServiceName: "TL",
           designation: designation,
           name: userInfo?.name,
@@ -480,7 +482,7 @@ try {
   
         designation: designation ,
   
-        createdOn: dateTime.toUTCString(),
+        // createdOn: dateTime.toUTCString(),
   
         additionalDetails: {
   
@@ -516,6 +518,7 @@ catch (error) {
   console.log(error);
 
 }
+handleGetNotingRemarkssValues(id)
 
 // handleGetFiledsStatesById(id);
 // handleGetRemarkssValues(id);
@@ -628,7 +631,7 @@ try {
   
         designation: designation ,
   
-        createdOn: dateTime.toUTCString(),
+        // createdOn: dateTime.toUTCString(),
   
         additionalDetails: {
   
@@ -666,6 +669,7 @@ catch (error) {
 }
 
 }
+handleGetNotingRemarkssValues(id)
 };
 ////////////////////(1)Account Section ///////////////
 
@@ -690,7 +694,7 @@ const handleAccountClick = async () =>{
   };
  
   try {
-      const Resp = await axios.post(`/land-services/egscrutiny/_search4?applicationNumber=${applicationNumber}&roles=AO_HQ,CAO,CAO_HQ,AO,SO,SO_HQ`, dataToSend).then((response) => {
+      const Resp = await axios.post(`/land-services/egscrutiny/_search4?applicationNumber=${applicationNumber}&roles=Accounts,Accounts Officer,AO_HQ,CAO,CAO_HQ,AO,SO,SO_HQ`, dataToSend).then((response) => {
           return response.data;
       });
 
@@ -726,7 +730,7 @@ const handleDrawingClick = async () =>{
       },
   };
   try {
-      const Resp = await axios.post(`/land-services/egscrutiny/_search4?applicationNumber=${applicationNumber}&roles=SD_HQ,JD_HQ,PA,PA_HQ,ADA_HQ,AD_HQ,JE_HQ,ASST_JE_HQ`, dataToSend).then((response) => {
+      const Resp = await axios.post(`/land-services/egscrutiny/_search4?applicationNumber=${applicationNumber}&roles=Drawing Branch,Drafts Man,SD_HQ,Draftsman,Senior Draftmans,Assistant Draftsman,JD,Junior Draftsman,JD_HQ,PA,PA_HQ,ADA_HQ,AD_HQ,JE_HQ,ASST_JE_HQ`, dataToSend).then((response) => {
           return response.data;
       });
 
@@ -757,7 +761,7 @@ const handleLegalClick = async () =>{
       },
   };
   try {
-      const Resp = await axios.post(`/land-services/egscrutiny/_search4?applicationNumber=${applicationNumber}&roles=DA,DDA,ADA,DA_HQ,DDA_HQ,ADA_HQ,`, dataToSend).then((response) => {
+      const Resp = await axios.post(`/land-services/egscrutiny/_search4?applicationNumber=${applicationNumber}&roles=DA,DDA,ADA,DA_HQ,DDA_HQ,ADA_HQ,Assistant District Atorney,District Attorney`, dataToSend).then((response) => {
           return response.data;
       });
 
@@ -787,7 +791,7 @@ const handleRevnueClick = async () =>{
       },
   };
   try {
-      const Resp = await axios.post(`/land-services/egscrutiny/_search4?applicationNumber=${applicationNumber}&roles=Naib Tehsildar,Patwari_HQ,Patwari`, dataToSend).then((response) => {
+      const Resp = await axios.post(`/land-services/egscrutiny/_search4?applicationNumber=${applicationNumber}&roles=Naib Tehsildar,Patwari_HQ,Patwari,Naib Tehsildar,Patwari,PATWARI`, dataToSend).then((response) => {
           return response.data;
       });
 
@@ -817,7 +821,7 @@ const handleTechinicalClick = async () =>{
       },
   };
   try {
-      const Resp = await axios.post(`/land-services/egscrutiny/_search4?applicationNumber=${applicationNumber}&roles=Personal Assistant,JD_HQ,PA,PA_HQ,JE,Assistant,JE_HQ`, dataToSend).then((response) => {
+      const Resp = await axios.post(`/land-services/egscrutiny/_search4?applicationNumber=${applicationNumber}&roles=Personal Assistant,JD_HQ,PA,PA_HQ,JE,Assistant,JE_HQ,Junior Engineer,Junier Engineer,Jr Engineer`, dataToSend).then((response) => {
           return response.data;
       });
 
@@ -847,7 +851,7 @@ const handleMainClick = async () =>{
       },
   };
   try {
-      const Resp = await axios.post(`/land-services/egscrutiny/_search4?applicationNumber=${applicationNumber}&roles=STPEnforcement Office HQ,DTP_HQ,DTP,ATP_HQ,ATP,STP_HQ,STP,CTP_HQ,CTP,DTCP_HQ`, dataToSend).then((response) => {
+      const Resp = await axios.post(`/land-services/egscrutiny/_search4?applicationNumber=${applicationNumber}&roles=DGTCP,District Town Planner,DISTRICT TOWN PLANNER,STPEnforcement Office HQ,DTP_HQ,DTP,ATP_HQ,ATP,STP_HQ,STP,CTP_HQ,CTP,DTCP_HQ`, dataToSend).then((response) => {
           return response.data;
       });
 
@@ -878,7 +882,7 @@ const handleDTPFieldClick = async () =>{
       },
   };
   try {
-      const Resp = await axios.post(`/land-services/egscrutiny/_search4?applicationNumber=${applicationNumber}&roles=DTP_FIELD,DTP Field,Patwari_FIELD,PATWARI Field,Patwari,PATWARI Circle,PATWARI,JE_FIELD,JD_FIELD,SD_FIELD,Z`, dataToSend).then((response) => {
+      const Resp = await axios.post(`/land-services/egscrutiny/_search4?applicationNumber=${applicationNumber}&roles=Planning Assistant Field,Accounts Field,Personal Assistant Field,Junior Draftsman Field,DTP_FIELD,DB Field,ATP Field,Draftsman Field,DTP Field,Patwari_FIELD,PATWARI Field,Patwari,PATWARI Circle,PATWARI,JE_FIELD,JD_FIELD,SD_FIELD,Junior Engineer Field,Draftsman Field,Assistant District Atorney Field`, dataToSend).then((response) => {
           return response.data;
       });
 
@@ -908,7 +912,7 @@ const handleSTPFieldClick = async () =>{
       },
   };
   try {
-      const Resp = await axios.post(`/land-services/egscrutiny/_search4?applicationNumber=${applicationNumber}&roles=STPEnforcement Office-Gurugram,STP Circle,STP_Circle,STP Office-Gurugram,STP Office-Faridabad,STP Office-Panchkula,STP Office-Rohtak,STP Office-Hisar,JE_HQ`, dataToSend).then((response) => {
+      const Resp = await axios.post(`/land-services/egscrutiny/_search4?applicationNumber=${applicationNumber}&roles=STPEnforcement Office-Gurugram,STP Circle,STP_Circle,STP Office-Gurugram,STP Office-Faridabad,STP Office-Panchkula,STP Office-Rohtak,STP Office-Hisar,STP Circle`, dataToSend).then((response) => {
           return response.data;
       });
 
@@ -957,13 +961,37 @@ const handleExternalClick = async () =>{
 
 
 
-
-
 console.log("userInFODATA123" , userInfo);
 
   return (
     <div>
       {loader && <Spinner></Spinner>}
+
+      <div>
+            <div
+            className="collapse-header"
+            onClick={() => setOpen4(!open4) }
+            aria-controls="example-collapse-text"
+            aria-expanded={open4}
+            style={{
+              background: "#f1f1f1",
+              padding: "0.25rem 1.25rem",
+              borderRadius: "0.25rem",
+              fontWeight: "600",
+              display: "flex",
+              cursor: "pointer",
+              color: "#817f7f",
+              justifyContent: "space-between",
+              alignContent: "center",
+            }}
+          >
+            <span style={{ color: "#817f7f", fontSize: 16 }} className="">
+           Application Form  
+              
+            </span>
+            {open4 ? <RemoveIcon></RemoveIcon> : <AddIcon></AddIcon>}
+          </div>
+          <Collapse in={open4}>
       <div style={{ position: "relative", maxWidth: "100%", padding: 2 }}>
         <div>
           <div>
@@ -992,7 +1020,14 @@ console.log("userInFODATA123" , userInfo);
               mDMSData={mDMSData}
               additionalDocRespon={additionalDocResponData}
             ></Genarelinfo>
-            {/* </Col> */}
+            {/* {!additionalDocResponData?.AdditionalDocumentReport?.[0]?.applicantPurpose == null &&
+            <div>
+              <ApplicationPurpose
+                 additionalDocRespon={additionalDocResponData}
+         ></ApplicationPurpose>
+        </div>
+
+        } */}
           </div>
 
           <div>
@@ -1041,50 +1076,41 @@ console.log("userInFODATA123" , userInfo);
           </div>
           </div>
           </div>
-          {/* <div>
-            <AdditionalDocument
-            additionalDocRespon={additionalDocResponData}
-           
-            >
-              
-            </AdditionalDocument>
-          </div> */}
+          </Collapse>
+          </div>
+
 
           {/* <div>
-            <ProformForRevenu></ProformForRevenu>
-          </div>
-          <div>
-          <RadioButtonsGroup
-             apiResponseData ={applicationimp}
-             applicationStatus={applicationStatus}
-             dataMDMS = {dataMDMS}
+            <div
+            className="collapse-header"
+            onClick={() => setOpen16(!open16) }
+            aria-controls="example-collapse-text"
+            aria-expanded={open16}
+            style={{
+              background: "#E9E5DE",
+              padding: "0.25rem 1.25rem",
+              borderRadius: "0.25rem",
+              fontWeight: "600",
+              display: "flex",
+              cursor: "pointer",
+              color: "#817f7f",
+              justifyContent: "space-between",
+              alignContent: "center",
+            }}
           >
-      </RadioButtonsGroup>
+            <span style={{ color: "#817f7f", fontSize: 16 }} className="">
+           Action Part  
+              
+            </span>
+            {open16 ? <RemoveIcon></RemoveIcon> : <AddIcon></AddIcon>}
           </div>
-          <div>
-          <IndeterminateCheckbox>
-      </IndeterminateCheckbox>
-          </div>
-          <div>
-          <ProformaForlegalBranch>
-      </ProformaForlegalBranch>
-          </div>
-          <div>
-          <DrawingBranch>
-      </DrawingBranch>
-          </div> */}
-         
-          {/* <div>
-          <ProformaPatwari
-           apiResponseData ={applicationimp}
-           applicationStatus={applicationStatus}
+          <Collapse in={open16}> */}
 
-           >
-           
-      </ProformaPatwari>
-          </div> */}
           <div  style={{ position: "relative", maxWidth: "100%", padding: 2 }}>
-          <div>
+            
+
+  
+ <div>
             <div
             className="collapse-header"
             onClick={() => setOpen2(!open2) }
@@ -1122,17 +1148,15 @@ console.log("userInFODATA123" , userInfo);
            {/* <input as="textarea" rows={1} type="text" className="form-control" placeholder="" {...register("landOwnerA")}/> */}
           {/* <button type="submit" >save</button> */}
           <div className="col-sm-2">
-            <Button style={{ textAlign: "right" }} value="Submit" id="Submit" type="submit">Submit</Button>
+            <Button style={{ textAlign: "right" }} value="Submit" id="Submit" type="submit">Save Performa</Button>
           </div>
             </form>
           </div>
           </Collapse>
           </div>
           
-  
+ 
 
-        {/* </div> */}
-    
 
       <div
             className="collapse-header"
@@ -1160,7 +1184,7 @@ console.log("userInFODATA123" , userInfo);
           </div>
           <Collapse in={open3}>
             <div id="example-collapse-text" 
-            // style={{ marginTop: 12, paddingLeft: 12, paddingRight: 12 }}
+         
             >
 
 
@@ -1565,7 +1589,7 @@ console.log("userInFODATA123" , userInfo);
 </div>
 </Collapse>
 
-
+ 
 
 
 {/* <div
@@ -1653,6 +1677,9 @@ console.log("userInFODATA123" , userInfo);
       </div>
       </div>
       </Collapse>
+     
+      
+ 
       
       <div
             className="collapse-header"
@@ -1737,9 +1764,9 @@ console.log("userInFODATA123" , userInfo);
       {/* </div>
       </Collapse> */}
 
+</div>
+</div>
 
-    </div>
-    </div>
   );
 };
 

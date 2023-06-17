@@ -33,7 +33,8 @@ import ITCyberCityForm from "./Puropse/ITCyberCityForm";
 import { array } from "yup";
 import { useTranslation } from "react-i18next";
 import { useLocation } from "react-router-dom";
-import DetailsOfAppliedland from "./AdditionalDocument/DetailsOfAppliedland";
+import DetailsOfAppliedlandDoc from "../AdditionalDocument/DetailsOfAppliedlandDoc";
+
 
 const AppliedLandinfo = (props) => {
 
@@ -562,15 +563,17 @@ let Tree = ({ data }) => {
       </div>
       <Collapse in={open}>
         <div id="example-collapse-text">
-{!additionalDocResponData?.AdditionalDocumentReport?.[0]?.detailsOfAppliedland == null &&
-  <div>
-            <DetailsOfAppliedland
+
+       {/* {!additionalDocResponData?.AdditionalDocumentReport?.[0]?.applicantInfo == null && */}
+       <div>
+            <DetailsOfAppliedlandDoc
             additionalDocRespon={additionalDocResponData}
            
             />
+       
           </div>
-}
-        
+          
+ {/* }  */}
 
           <Form.Group
             style={{ display: props.displayPurpose, border: "2px solid #e9ecef", margin: 10, padding: 10 }}

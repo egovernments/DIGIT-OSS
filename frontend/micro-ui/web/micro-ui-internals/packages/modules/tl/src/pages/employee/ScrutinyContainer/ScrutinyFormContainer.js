@@ -255,17 +255,27 @@ const ScrutinyFormcontainer = (props) => {
               moduleName: "common-masters",
               tenantId: "hr",
               masterDetails: [
-                {
+              //   {
   
-                  "name": "PerformaNewLicence",
+              //     "name": "PerformaNewLicence",
   
-                  "filter":`[?(${query})]`,
+              //     "filter":`[?(${query})]`,
   
-              },
+              // },
+              // {
+              //   "name": "PerformaNewLicence",
+              //   "filter": `[?(@.applicationStatus =='${Resp?.Licenses[0]?.status}')]`
+              // }
               {
+  
                 "name": "PerformaNewLicence",
-                "filter": `[?(@.applicationStatus =='${Resp?.Licenses[0]?.status}')]`
-              }
+
+                "filter":`[?(${query} && @.applicationStatus =='${Resp?.Licenses[0]?.status}')]`
+
+            },
+
+
+              
               // {
               //   "name": "PerformaNewLicence",
               //   "filter": `[?(@.applicationStatus =='PENDING_AT_PATWARI_HQ_PRELIM')]`
@@ -681,12 +691,12 @@ const ScrutinyFormcontainer = (props) => {
             <b><p className="head-font">{applicationData?.tcpCaseNumber.substring(0, 7)}</p></b>
           </div>
           <div className="col-sm-2">
-            <b><p className="head-font">TCP Dairy Number: </p></b>
+            <b><p className="head-font">TCP Diary Number: </p></b>
             <b><p className="head-font">{applicationData?.tcpDairyNumber}</p></b>
 
           </div>
           <div className="col-sm-2">
-            <Button style={{ textAlign: "right" }} value="Submit" id="Submit" onChange1={handleChange} name="Submit" onClick={handleshow19}>Views PDF</Button>
+            <Button style={{ textAlign: "right" }} value="Submit" id="Submit" onChange1={handleChange} name="Submit" onClick={handleshow19}>View PDF</Button>
           </div>
         </div>
       </Card>

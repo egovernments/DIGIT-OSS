@@ -423,8 +423,12 @@ export const getapplicationdocstakeholder = (initial) => {
   return convertedDoc;
 };
 
-export const convertToStakeholderObject = (data,tradeType,businessService="") => {
+export const  convertToStakeholderObject = (data,tradeType = "",businessService="",additionaldata={}) => {
   let userInfo = Digit.UserService.getUser();
+  // let documents = {}
+  // if(sessionStorage.getItem('TECHINCAL_PROFESSIONAL_DOCUMENTS')){
+  //   documents = JSON.parse(sessionStorage.getItem('TECHINCAL_PROFESSIONAL_DOCUMENTS'));
+  // }
   let formData = {
     Licenses: [
       {
@@ -437,7 +441,7 @@ export const convertToStakeholderObject = (data,tradeType,businessService="") =>
         businessService: businessService,
         tradeLicenseDetail: {
           ...data?.result?.Licenses[0]?.tradeLicenseDetail,
-          additionalDetail: { counsilForArchNo: data?.formData?.LicneseType?.ArchitectNo },
+          additionalDetail: [{ counsilForArchNo: data?.formData?.LicneseType?.ArchitectNo,...additionaldata }],
           tradeType: tradeType,
           // tradeUnits: [
           //   {
