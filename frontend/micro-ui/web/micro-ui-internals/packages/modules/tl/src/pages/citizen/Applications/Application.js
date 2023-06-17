@@ -111,7 +111,8 @@ const MyApplications = ({ view }) => {
   return (
     <div>
       {loader && <Spinner></Spinner>}
-      <Header>{`${t("TL_MY_APPLICATIONS_HEADER")}`}</Header>
+      <Header >{`${t("TL_MY_APPLICATIONS_HEADER")}`}</Header>
+      <Col md={12} lg={12} mb={3}>
       <div className="row mb-3">
         {/* <div style={{ position: "relative", zIndex: "12" }} className="col col-4 mt-3">
           <h6>
@@ -137,7 +138,14 @@ const MyApplications = ({ view }) => {
             />
           </h6>
         </div>
+        <div className="col col-4 mt-3">
+
+        </div>
+        <div className="col col-4 mt-3">
+
+        </div>
       </div>
+      </Col>
       {/* <table className="customers" id="customers" style={{ borderCollapse: "collapse", width: "100%" }}>
 
       <div className="row mb-3">
@@ -261,8 +269,8 @@ const MyApplications = ({ view }) => {
         })}
       </table> */}
 
-      <Col md={12} lg={12} mb={3}>
-        <Paper sx={{ width: "100%", overflow: "hidden", marginY: 2 }}>
+      {/* <Col md={12} lg={12} mb={3}> */}
+        <Paper sx={{ width: "140%", overflow: "hidden", marginY: 2 }}>
           <TableContainer sx={{ maxHeight: 500 }}>
             <Table stickyHeader aria-label="sticky table">
               <TableHead>
@@ -273,7 +281,10 @@ const MyApplications = ({ view }) => {
                   <StyledTableCell>Application Number</StyledTableCell>
                   <StyledTableCell>Application Date</StyledTableCell>
                   <StyledTableCell>Action</StyledTableCell>
-                  <StyledTableCell> Status</StyledTableCell>
+                  <StyledTableCell>status</StyledTableCell>
+                  <StyledTableCell> Payment Receipt</StyledTableCell>
+                  <StyledTableCell> Downlaod Application</StyledTableCell>
+                  <StyledTableCell>Withdraw</StyledTableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
@@ -306,6 +317,15 @@ const MyApplications = ({ view }) => {
                       <StyledTableCell component="th" scope="row">
                         {item?.status}
                       </StyledTableCell>
+                      <StyledTableCell component="th" scope="row">
+                      <button type="button" class="btn btn-primary"></button>
+                            </StyledTableCell>
+                      <StyledTableCell component="th" scope="row">
+                      <button type="button" class="btn btn-primary"></button>
+                            </StyledTableCell>
+                      <StyledTableCell component="th" scope="row">
+                      <button type="button" class="btn btn-danger"></button>
+                            </StyledTableCell>
                     </StyledTableRow>
                   );
                 })}
@@ -322,7 +342,7 @@ const MyApplications = ({ view }) => {
             onRowsPerPageChange={handleChangeRowsPerPage}
           />
         </Paper>
-      </Col>
+      {/* </Col> */}
     </div>
 
     /* <Card>
