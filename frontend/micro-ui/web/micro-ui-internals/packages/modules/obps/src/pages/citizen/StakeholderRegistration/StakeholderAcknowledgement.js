@@ -77,7 +77,7 @@ const StakeholderAcknowledgement = ({ data, onSuccess }) => {
       console.log("logger1234...",data)
       let tradeType = (data?.formData?.LicneseType?.licenceTypeSelected === "CITIZEN.CLASSA" || data?.formData?.LicneseType?.licenceTypeSelected === "BPA_DEVELOPER") ? "BPA_DEVELOPER.Company" : "TECHNICAL_PROFESSIONAL"
       console.log("logger1234...5",data,data?.formData?.LicneseType?.licenceTypeSelected,tradeType)
-      let businessService = (data?.formData?.LicneseType?.licenceTypeSelected === "CITIZEN.CLASSA" || data?.formData?.LicneseType?.licenceTypeSelected === "BPA_DEVELOPER") ? "" : "BPAREG"
+      let businessService = (data?.formData?.LicneseType?.licenceTypeSelected === "CITIZEN.CLASSA" || data?.formData?.LicneseType?.licenceTypeSelected === "BPA_DEVELOPER") ? "BPAREG" : "BPAREG"
       formdata = convertToStakeholderObject(data,tradeType,businessService,licenseDataList?.devDetail[0]);
       console.log("logger1234...",tradeType,formdata)
       mutation.mutate(formdata, {
