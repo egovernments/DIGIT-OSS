@@ -468,16 +468,6 @@ const Resp = await axios.post(`/tl-services/new/license/pdf?applicationNumber=${
 
                         
 
-                         
-
-                         {el?.notingDetail !== null ?  (
-                      el?.notingDetail?.map((item , i) => {
-                        return (
-                          <div>
-                            
-                         
-                         <b>{item?.isApproved}# {index + 1}</b>
-
                          <div >
 <Box>
 <Row>
@@ -496,7 +486,7 @@ const Resp = await axios.post(`/tl-services/new/license/pdf?applicationNumber=${
                        </IconButton>
                        </p> */}
                         
-                            
+                        <b>Proforma # {index + 1}</b>
                            
                            {/* {dataThree.includes(el.applicationStatus) && (   */}
                            {el?.performaFieldDetail?.[0]?.isApproved == "Proforma"  &&     
@@ -570,6 +560,16 @@ const Resp = await axios.post(`/tl-services/new/license/pdf?applicationNumber=${
                       
                       </div>
 
+                         {el?.notingDetail !== null ?  (
+                      el?.notingDetail?.map((item , i) => {
+                        return (
+                          <div>
+                            
+                         
+                         
+
+                            <b>{item?.isApproved}# {index + 1}</b>
+
 
                             <br></br>
                          <i>{<div dangerouslySetInnerHTML={{__html: item.remarks}}/>}</i>
@@ -600,9 +600,12 @@ const Resp = await axios.post(`/tl-services/new/license/pdf?applicationNumber=${
                      </Row>
                      <Row style={{ margin: 4 }}>
 
-                     <p style={{ textAlign: "right" }}>{el?.createdOn}{el?.ts}</p>
+                     
                      <b style={{ textAlign: "right" }}>
-             
+                     <p style={{ textAlign: "right" }}>
+                      
+                      {convertEpochToDateDMY(el?.createdOn)} {el?.ts}</p> 
+                    
                    </b>
                     </Row>
                     <hr></hr>

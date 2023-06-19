@@ -136,6 +136,7 @@ console.log("AkashNEWFile" , content , editor , config ,post.content);
                                 value={post.content}
 
                                 onChange={(newContent) => contentFieldChanaged(newContent)}
+                                onClick={handlemodalsubmit}
                             />
       <Button style={{ textAlign: "right" }} onClick={handlemodalsubmit}>
             Save Noting
