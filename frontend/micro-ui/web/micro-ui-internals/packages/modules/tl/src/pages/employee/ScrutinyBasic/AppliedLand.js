@@ -444,18 +444,23 @@ let Tree = ({ data }) => {
             const farsArr = [];
             const testData = x?.fars?.forEach((i) => farsArr?.push({ label: i, value: i }));
             setValue(x?.id, x?.area);
+            
             return (
               <div key={i}>
                 <h6 style={{ marginTop: "10px" }}>
                   <span>
-                    <b>Purpose Name: </b>
+                    {/* <b>Purpose Name: </b> */}
+                    <b>
+                        {`${t("NWL_APPLICANT_DGPS_POINTS_PURPOSE_NAME")}`}:{/* Purpose Name: */}
+                      </b>
                   </span>
                   {x?.name}
                 </h6>
                 <div className="row">
                   <div className="col col-4 mt-3">
                     <h6>
-                      Area(in acres):
+                    {`${t("NWL_APPLICANT_DETAIL_POINTS_AREA")}`}
+                      {/* Area(in acres): */}
                       <input
                         type="number"
                         className="form-control"
@@ -469,7 +474,8 @@ let Tree = ({ data }) => {
                   {farsArr?.length > 0 && (
                     <div className="col col-4 mt-3">
                       <h6>
-                        FAR:{" "}
+                      {`${t("NWL_APPLICANT_DGPS_POINTS_FAR")}`}:
+                        {/* FAR:{" "} */}
                         <input
                         type="number"
                         className="form-control"

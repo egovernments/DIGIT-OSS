@@ -486,7 +486,7 @@ const Resp = await axios.post(`/tl-services/new/license/pdf?applicationNumber=${
                        </IconButton>
                        </p> */}
                         
-                        
+                        <b>Proforma # {index + 1}</b>
                            
                            {/* {dataThree.includes(el.applicationStatus) && (   */}
                            {el?.performaFieldDetail?.[0]?.isApproved == "Proforma"  &&     
