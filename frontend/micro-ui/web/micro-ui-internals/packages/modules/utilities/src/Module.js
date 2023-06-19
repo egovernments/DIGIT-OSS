@@ -21,8 +21,7 @@ export const UtilitiesModule = ({ stateCode, userType, tenants }) => {
 };
 
 const componentsToRegister = {
-  UtilitiesModule,
-  DSSModule: UtilitiesModule, // it has to be removed
+  UtilitiesModule
 };
 
 export const initUtilitiesComponents = () => {

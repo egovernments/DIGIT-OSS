@@ -124,6 +124,7 @@ _Bill Module
 # Changelog
 
 ```bash
+0.0.6 fixed the module overriding issue
 0.0.5 fixed the instablility issue with previous version
 0.0.4 Updated the react-component library version
 0.0.3 corrected the directory and added the preprocess function at inbox
