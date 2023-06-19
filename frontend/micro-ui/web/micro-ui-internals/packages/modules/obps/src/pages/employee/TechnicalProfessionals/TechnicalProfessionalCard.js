@@ -171,7 +171,7 @@ const TechnicalProfessionalCard = (props) => {
     // setTimeout(() => {
       setSelectedAction(null);
       setShowModal(false);
-      window.location.href = `/digit-ui/employee/tl/TechnicalProfessionalInbox`;
+      window.location.href = `/digit-ui/employee/obps/TechnicalProfessionalInbox`;
     // }, 3000);
   };
 

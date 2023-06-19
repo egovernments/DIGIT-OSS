@@ -14,7 +14,8 @@ import TechnicalProfessionalInbox from "./TechnicalProfessionals/Inbox";
 import LowMediumInbox from "./LowMedium/Inbox"
 // import TechnicalProfessionalCard from "./TechnicalProfessionals/TechnicalProfessionalCard";
 import { ScrutinyRemarksProvider } from "../../context/remarks-data-context";
-// import TechnicalProfessionalCard from "./TechnicalProfessionals/TechnicalProfessionalCard";
+import TechnicalProfessionalCard from "./TechnicalProfessionals/TechnicalProfessionalCard";
+import HighRiskInbox from "./HighRisk/Inbox";
 
 
 // import ScrutinyFormcontainer from "../citizen/NewLicense/ScrutinyContainer";
@@ -111,7 +112,7 @@ const EmployeeApp = ({ path }) => {
         <PrivateRoute path={`${path}/bpa/:id`} component={BpaApplicationDetail} />
         <PrivateRoute path={`${path}/response`} component={OBPSResponse} />
         <PrivateRoute path={`${path}/stakeholder-response`} component={StakeholderResponse} />
-        {/* <PrivateRoute path={`${path}/TechnicalProfessionalscrutiny/:id`} component={TechnicalProfessionalCard} /> */}
+        <PrivateRoute path={`${path}/TechnicalProfessionalscrutiny/:id`} component={TechnicalProfessionalCard} />
         {/* <PrivateRoute path={`${path}/scrutiny`} component={ScrutinyFormcontainer} /> */}
         <PrivateRoute
               path={`${path}/TechnicalProfessionalInbox`}
@@ -131,6 +132,18 @@ const EmployeeApp = ({ path }) => {
                 <LowMediumInbox
                   parentRoute={path}
                   businessService={["LOW_MEDIUM"]}
+                  filterComponent="TL_INBOX_FILTER"
+                  initialStates={{}}
+                  isInbox={true}
+                />
+              )}
+            />
+            <PrivateRoute
+              path={`${path}/HighRiskInbox`}
+              component={(props) => (
+                <HighRiskInbox
+                  parentRoute={path}
+                  businessService={["HIGH_RISK"]}
                   filterComponent="TL_INBOX_FILTER"
                   initialStates={{}}
                   isInbox={true}

@@ -4,7 +4,7 @@ import Modal from "react-bootstrap/Modal";
 import { TextInput, Label, SubmitBar, LinkLabel, ActionBar, CloseSvg, DatePicker, MobileNumber } from "@egovernments/digit-ui-react-components";
 import { Form, Col, Row } from "react-bootstrap";
 import axios from "axios";
-// import { useStyles } from "./styles/modal"; 
+import { useStyles } from "./styles/modal"; 
 import { useParams } from "react-router-dom";
 import { ScrutinyRemarksContext } from "../../../context/remarks-data-context"; 
 import AddPost from "../../../Material/TextEditor";

@@ -35,7 +35,7 @@ function ApplicationDetailsActionBar({ workflowDetails, displayMenu, onActionSel
     if (window.location.href.includes("/obps") || window.location.href.includes("/noc")) {
       const userInfos = sessionStorage.getItem("Digit.citizen.userRequestObject");
       const userInfo = userInfos ? JSON.parse(userInfos) : {};
-      user = userInfo?.value;
+      let user = userInfo?.value;
     }
 
     if (((window.location.href.includes("/obps") || window.location.href.includes("/noc")) && actions?.length == 1) || (actions?.[0]?.redirectionUrl?.pathname.includes("/pt/property-details/")) && actions?.length == 1) {
