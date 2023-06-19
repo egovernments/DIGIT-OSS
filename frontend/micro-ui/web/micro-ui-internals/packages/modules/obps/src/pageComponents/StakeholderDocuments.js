@@ -421,27 +421,28 @@ function SelectDocument({ t, document: doc, setDocuments, documentsUploadList, e
   // const docData = documents?.map((docs, index) => {
   //   setDocList(docs.documentUid);
   // });
-
+  
   const [showToastError, setShowToastError] = useState({ label: "", error: false, success: false });
-
+  
   // setDocList(documents);
   const { setValue, getValues, watch } = useForm();
   // const [docList, setDocList] = useState({});
   const filteredDocument = documents?.filter((item) => item?.documentType?.includes(doc?.code))[0];
-
+  
   const tenantId = Digit.ULBService.getCurrentTenantId();
-
+  
   const [selectedDocument, setSelectedDocument] = useState(
     filteredDocument
-      ? { ...filteredDocument, active: true, code: filteredDocument?.documentType, i18nKey: filteredDocument?.documentType }
-      : doc?.dropdownData?.length === 1
-        ? doc?.dropdownData[0]
-        : {}
-  );
-
-  const [file, setFile] = useState(null);
-  const [uploadedFile, setUploadedFile] = useState(() => filteredDocument?.fileStoreId || null);
-  setValue("finalDocList", filteredDocument?.fileStoreId);
+    ? { ...filteredDocument, active: true, code: filteredDocument?.documentType, i18nKey: filteredDocument?.documentType }
+    : doc?.dropdownData?.length === 1
+    ? doc?.dropdownData[0]
+    : {}
+    );
+    
+    const [file, setFile] = useState(null);
+    const [uploadedFile, setUploadedFile] = useState(() => filteredDocument?.fileStoreId || null);
+    // setValue("finalDocList", filteredDocument?.fileStoreId);
+    // return null
   // setArticlesOfAssociation(uploadedFile);
   // console.log("FILTEREDDOC", doc);
 
@@ -451,7 +452,6 @@ function SelectDocument({ t, document: doc, setDocuments, documentsUploadList, e
   function selectfile(e) {
     setFile(e.target.files[0]);
   }
-
   useEffect(() => {
     setDocuments((prev) => {
       const filteredDocumentsByDocumentType = prev?.filter((item) => item?.documentType !== doc?.code);

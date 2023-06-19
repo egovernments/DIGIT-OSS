@@ -10,8 +10,8 @@ import RemoveIcon from "@mui/icons-material/Remove";
 import ReportProblemIcon from "@mui/icons-material/ReportProblem";
 import ModalChild from "../Remarks/ModalChild";
 import Collapse from "react-bootstrap/Collapse";
-// import { useStyles } from "../../css/personalInfoChild.style";
-// import '../../css/personalInfoChild.style.js'
+import { useStyles } from "../../css/personalInfoChild.style";
+import '../../css/personalInfoChild.style.js'
 
 import { FormControl, FormHelperText, IconButton } from "@mui/material";
 import VisibilityIcon from "@mui/icons-material/Visibility";
