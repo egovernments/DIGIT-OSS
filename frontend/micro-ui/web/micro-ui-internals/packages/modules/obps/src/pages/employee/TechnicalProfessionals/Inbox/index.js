@@ -1,7 +1,7 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { Fragment, useCallback, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import MobileInbox from "../../../../../../components/inbox/MobileInbox";
-import DesktopInbox from "../../../../../../components/inbox/DesktopInbox";
+import MobileInbox from "../../../../components/Inbox/MobileInbox";
+import DesktopInbox from "../../../../components/Inbox/DesktopInbox";
 import { Header } from "@egovernments/digit-ui-react-components";
 
 
@@ -13,6 +13,14 @@ const TechnicalProfessionalInbox = ({
   filterComponent,
   isInbox
  }) => {
+
+
+  // return (
+  //   <Fragment>
+  //   efwefwefwefewfewfweffffffffffffffffffffffffffffffffffff    ewfffffffffffffffffffffffff
+  //   </Fragment>
+  // )
+
   const tenantId = Digit.ULBService.getCurrentTenantId();
   const [enableSarch, setEnableSearch] = useState(() => (isInbox ? {} : { enabled: false }));
 

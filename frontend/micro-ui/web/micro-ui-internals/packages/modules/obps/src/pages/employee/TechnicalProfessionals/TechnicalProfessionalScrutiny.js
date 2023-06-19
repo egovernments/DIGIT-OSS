@@ -8,7 +8,7 @@ import { Card } from "react-bootstrap";
 import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
 import ReportProblemIcon from "@mui/icons-material/ReportProblem";
-import ModalChild from "../../Remarks/ModalChild";
+import ModalChild from "../Remarks/ModalChild";
 import Collapse from "react-bootstrap/Collapse";
 import { useStyles } from "../../css/personalInfoChild.style";
 import '../../css/personalInfoChild.style.js'
@@ -20,7 +20,7 @@ import { useLocation } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import axios from "axios";
 import Visibility from "@mui/icons-material/Visibility";
-import { getDocShareholding } from "../../ScrutinyDevelopment/docview.helper";
+import { getDocShareholding } from "../docview.helper"; 
 
 function TechnicalProfessionalScrutiny({ apiResponse, refreshScrutinyData, applicationNumber, passUncheckedList, passCheckedList, dataForIcons, applicationStatus }) {
 

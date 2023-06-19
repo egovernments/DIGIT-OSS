@@ -6,8 +6,8 @@ import React, { useState, useRef, useEffect, useContext } from "react";
 // import JeLandinfo from "./Scrutiny LOI/JE/JE";
 // import DisApprovalList from "./DisApprovalList";
 // import HistoryList from "./History";
-import ScrutinyDevelopment from "../../ScrutinyDevelopment/ScrutinyDevelopment";
-import { ScrutinyRemarksContext } from "../../../../../../context/remarks-data-context/index";
+import ScrutinyDevelopment from "../ScrutinyDevelopment";
+import { ScrutinyRemarksContext } from "../../../context/remarks-data-context"; 
 
 import { Button, Row, Col } from "react-bootstrap";
 import { useForkRef } from "@mui/material";

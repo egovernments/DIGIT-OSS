@@ -10,6 +10,14 @@ import StakeholderResponse from "./StakeholderResponse";
 import ServicePlanInbox from "./ServicePlan/Inbox";
 import ElectricalPlanInbox from "./ElectricPlan/Inbox";
 import BankGuaranteePlan from "./BankGuarantee/Inbox";
+import TechnicalProfessionalInbox from "./TechnicalProfessionals/Inbox";
+import LowMediumInbox from "./LowMedium/Inbox"
+// import TechnicalProfessionalCard from "./TechnicalProfessionals/TechnicalProfessionalCard";
+import { ScrutinyRemarksProvider } from "../../context/remarks-data-context";
+import TechnicalProfessionalCard from "./TechnicalProfessionals/TechnicalProfessionalCard";
+import HighRiskInbox from "./HighRisk/Inbox";
+
+
 // import ScrutinyFormcontainer from "../citizen/NewLicense/ScrutinyContainer";
 const OBPSBreadCrumbs = ({ location }) => {
   const { t } = useTranslation();
@@ -54,6 +62,21 @@ const OBPSBreadCrumbs = ({ location }) => {
       content: t("ES_OBPS_SEARCH_BPA"),
       show: location.pathname.includes("/obps/search/application/stakeholder/") ? true : false,
     },
+    {
+      path: "/digit-ui/employee/obps/TechnicalProfessionalInbox",
+      content: t("ES_OBPS_SEARCH_BPA"),
+      show: location.pathname.includes("/obps/TechnicalProfessionalInbox") ? true : false,
+    },
+    {
+      path: "/digit-ui/employee/obps/LowMediumInbox",
+      content: t("ES_OBPS_SEARCH_BPA"),
+      show: location.pathname.includes("/obps/LowMediumInbox") ? true : false,
+    },
+    {
+      path: "/digit-ui/employee/obps/TechnicalProfessionalscrutiny/:id",
+      content: t("ES_OBPS_SEARCH_BPA"),
+      show: location.pathname.includes("/obps/TechnicalProfessionalscrutiny/") ? true : false,
+    },
   ];
 
   return <BreadCrumb crumbs={crumbs} />;
@@ -70,6 +93,7 @@ const EmployeeApp = ({ path }) => {
   const isFromNoc = window.location.href.includes("digit-ui/employee/obps/bpa/");
   const isRes = window.location.href.includes("obps/response") || window.location.href.includes("obps/stakeholder-response");
   return (
+    <ScrutinyRemarksProvider>
     <Fragment>
       {!isFromNoc && !isRes ? <div style={isLocation ? {marginLeft: "10px"} : {}}><OBPSBreadCrumbs location={location} /></div> : null}
       {isFromNoc ? <BackButton style={{ border: "none", margin: "0", padding: "0" }}>{t("CS_COMMON_BACK")}</BackButton>: null}
@@ -88,9 +112,47 @@ const EmployeeApp = ({ path }) => {
         <PrivateRoute path={`${path}/bpa/:id`} component={BpaApplicationDetail} />
         <PrivateRoute path={`${path}/response`} component={OBPSResponse} />
         <PrivateRoute path={`${path}/stakeholder-response`} component={StakeholderResponse} />
+        <PrivateRoute path={`${path}/TechnicalProfessionalscrutiny/:id`} component={TechnicalProfessionalCard} />
         {/* <PrivateRoute path={`${path}/scrutiny`} component={ScrutinyFormcontainer} /> */}
+        <PrivateRoute
+              path={`${path}/TechnicalProfessionalInbox`}
+              component={(props) => (
+                <TechnicalProfessionalInbox
+                  parentRoute={path}
+                  businessService={["TECHNICAL_PROFESSIONAL"]}
+                  filterComponent="TL_INBOX_FILTER"
+                  initialStates={{}}
+                  isInbox={true}
+                />
+              )}
+            />
+            <PrivateRoute
+              path={`${path}/LowMediumInbox`}
+              component={(props) => (
+                <LowMediumInbox
+                  parentRoute={path}
+                  businessService={["LOW_MEDIUM"]}
+                  filterComponent="TL_INBOX_FILTER"
+                  initialStates={{}}
+                  isInbox={true}
+                />
+              )}
+            />
+            <PrivateRoute
+              path={`${path}/HighRiskInbox`}
+              component={(props) => (
+                <HighRiskInbox
+                  parentRoute={path}
+                  businessService={["HIGH_RISK"]}
+                  filterComponent="TL_INBOX_FILTER"
+                  initialStates={{}}
+                  isInbox={true}
+                />
+              )}
+            />
       </Switch>
     </Fragment>
+    </ScrutinyRemarksProvider>
   )
 }
 

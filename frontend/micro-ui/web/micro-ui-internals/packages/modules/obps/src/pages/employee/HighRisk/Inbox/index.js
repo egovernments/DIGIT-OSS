@@ -1,12 +1,12 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import MobileInbox from "../../../../../../components/inbox/MobileInbox";
-import DesktopInbox from "../../../../../../components/inbox/DesktopInbox";
+import MobileInbox from "../../../../components/Inbox/MobileInbox";
+import DesktopInbox from "../../../../components/Inbox/DesktopInbox";
 import { Header } from "@egovernments/digit-ui-react-components";
 
 
 
-const LowMediumInbox = ({
+const HighRiskInbox = ({
   parentRoute,
   businessService = ["SURREND_OF_LICENSE"],
   initialStates = {},
@@ -150,4 +150,4 @@ const LowMediumInbox = ({
   }
 }
 
-export default LowMediumInbox
+export default HighRiskInbox

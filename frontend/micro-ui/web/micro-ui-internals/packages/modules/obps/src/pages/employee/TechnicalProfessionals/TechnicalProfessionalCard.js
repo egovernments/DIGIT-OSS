@@ -7,8 +7,8 @@ import { Button, Form } from "react-bootstrap";
 import { useTranslation } from "react-i18next";
 import { useQueryClient } from "react-query";
 import { useHistory, useParams } from "react-router-dom";
-import ApplicationDetailsActionBar from "../../../../../../../templates/ApplicationDetails/components/ApplicationDetailsActionBar";
-import ActionModal from "../../../../../../../templates/ApplicationDetails/Modal/index";
+import ApplicationDetailsActionBar from "../../../../../templates/ApplicationDetails/components/ApplicationDetailsActionBar";
+import ActionModal from "../../../../../templates/ApplicationDetails/Modal/index";
 import TechnicalProfessionalBasic from "./TechnicalProfessionalBasic";
 
 const TechnicalProfessionalCard = (props) => {
@@ -171,7 +171,7 @@ const TechnicalProfessionalCard = (props) => {
     // setTimeout(() => {
       setSelectedAction(null);
       setShowModal(false);
-      window.location.href = `/digit-ui/employee/tl/TechnicalProfessionalInbox`;
+      window.location.href = `/digit-ui/employee/obps/TechnicalProfessionalInbox`;
     // }, 3000);
   };
 
