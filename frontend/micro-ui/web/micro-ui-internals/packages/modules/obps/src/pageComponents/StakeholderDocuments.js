@@ -20,6 +20,7 @@ import { Button, Placeholder } from "react-bootstrap";
 import Spinner from "../components/Loader/index";
 import CusToaster from "../components/Toaster";
 const StakeholderDocuments = ({ t, config, onSelect, userType, formData, setError: setFormError, clearErrors: clearFormErrors, formState }) => {
+  console.log("FORMDATA...",formData)
   const tenantId = Digit.ULBService.getCurrentTenantId();
   const stateId = Digit.ULBService.getStateId();
   const userInfo = Digit.UserService.getUser();
@@ -39,6 +40,11 @@ const StakeholderDocuments = ({ t, config, onSelect, userType, formData, setErro
   const [registeredIrrevocablePaternshipDeed, setRegisteredIrrevocablePaternshipDeed] = useState("");
   const [affidavitAndPancard, setAffidavitAndPancard] = useState("");
   const [anyOtherDoc, setAnyOtherDoc] = useState("");
+  const [qualificationCertificate,setQualificationCertificate] = useState();
+  const [experienceCertificate,setExperienceCertificate] = useState();
+  const [coaLetter,setCoaLetter] = useState();
+  const [identifyProof,setIdentifyProof] = useState();
+
 
   // const [docList, setDocList] = useState({});
   if (isopenlink)
@@ -165,66 +171,97 @@ const StakeholderDocuments = ({ t, config, onSelect, userType, formData, setErro
   // console.log("-=-=-=-=", articlesOfAssociation);
   // console.log("()()()()()", memorandumOfArticles);
   const handleSubmit = () => {
-    let document = formData.documents;
 
-    // setArticlesOfAssociation(documents[0]?.documentUid);
-
-    let documentStep;
-    let regularDocs = [];
-    bpaTaxDocuments &&
-      documents &&
-      documents !== null &&
-      bpaTaxDocuments.map((initialob, index) => {
-        let docobject = documents.find((ob) => ob && ob !== null && ob.documentType === initialob.code);
-        if (docobject) regularDocs.push(docobject);
+    // if ((tradeType === "CITIZEN.CLASSA" || tradeType === "BPA_DEVELOPER")) {
+      let document = formData.documents;
+  
+      // setArticlesOfAssociation(documents[0]?.documentUid);
+  
+      let documentStep;
+      let regularDocs = [];
+      bpaTaxDocuments &&
+        documents &&
+        documents !== null &&
+        bpaTaxDocuments.map((initialob, index) => {
+          let docobject = documents.find((ob) => ob && ob !== null && ob.documentType === initialob.code);
+          if (docobject) regularDocs.push(docobject);
+        });
+      documentStep = { ...document, documents: regularDocs };
+  
+      let allDocs = [];
+  
+      bpaTaxDocuments.map((items, index) => {
+        let fstDoc = documents.find((obd) => obd.documentType == "ARTICLES_OF_ASSOCIATION");
+        if (fstDoc) allDocs.push(fstDoc?.fileStoreId);
+        let articlesOfAss = allDocs[0];
       });
-    documentStep = { ...document, documents: regularDocs };
+  
+      const docList = [
+        {
+          articlesOfAssociation: articlesOfAssociation,
+          memorandumOfArticles: memorandumOfArticles,
+          registeredIrrevocablePaternshipDeed: registeredIrrevocablePaternshipDeed,
+          affidavitAndPancard: affidavitAndPancard,
+          anyOtherDoc: anyOtherDoc,
+          qualificationCertificate,
+          experienceCertificate,
+          coaLetter,
+          identityProof:identifyProof
+        },
+      ];
+  
+      console.log("RTGT", articlesOfAssociation,docList);
+      const developerRegisterData = {
+        id: userInfo?.info?.id,
+        pageName: "licensesDoc",
+        createdBy: userInfo?.info?.id,
+        updatedBy: userInfo?.info?.id,
+        devDetail: {
+          licensesDoc: docList,
+        },
+      };
+      Digit.OBPSService.CREATEDeveloper(developerRegisterData, tenantId)
+        .then((result, err) => {
+          // localStorage.setItem('devRegId',JSON.stringify(result?.id));
+          setIsDisableForNext(false);
+          let data = {
+            result: result,
+            formData: formData,
+          };
+          //1, units
+          onSelect("", data, "", true);
+        })
+        .catch((e) => {
+          setIsDisableForNext(false);
+          setShowToast({ key: "error" });
+          setError(e?.response?.data?.Errors[0]?.message || null);
+        });
+      onSelect(config.key, documentStep);
 
-    let allDocs = [];
+    // } 
+    // else {
+    //   let documentObj = {
+        // qualificationCertificate,
+        // experienceCertificate,
+        // coaLetter,
+        // identifyProof
+    //   }
 
-    bpaTaxDocuments.map((items, index) => {
-      let fstDoc = documents.find((obd) => obd.documentType == "ARTICLES_OF_ASSOCIATION");
-      if (fstDoc) allDocs.push(fstDoc?.fileStoreId);
-      let articlesOfAss = allDocs[0];
-    });
+    //   let documentStep;
+    //   let regularDocs = [];
+    //   bpaTaxDocuments &&
+    //     documents &&
+    //     documents !== null &&
+    //     bpaTaxDocuments.map((initialob, index) => {
+    //       let docobject = documents.find((ob) => ob && ob !== null && ob.documentType === initialob.code);
+    //       if (docobject) regularDocs.push(docobject);
+    //     });
+    //   documentStep = { ...document, documents: regularDocs };
 
-    const docList = [
-      {
-        articlesOfAssociation: articlesOfAssociation,
-        memorandumOfArticles: memorandumOfArticles,
-        registeredIrrevocablePaternshipDeed: registeredIrrevocablePaternshipDeed,
-        affidavitAndPancard: affidavitAndPancard,
-        anyOtherDoc: anyOtherDoc,
-      },
-    ];
-
-    // console.log("RTGT", articlesOfAssociation);
-    const developerRegisterData = {
-      id: userInfo?.info?.id,
-      pageName: "licensesDoc",
-      createdBy: userInfo?.info?.id,
-      updatedBy: userInfo?.info?.id,
-      devDetail: {
-        licensesDoc: docList,
-      },
-    };
-    Digit.OBPSService.CREATEDeveloper(developerRegisterData, tenantId)
-      .then((result, err) => {
-        // localStorage.setItem('devRegId',JSON.stringify(result?.id));
-        setIsDisableForNext(false);
-        let data = {
-          result: result,
-          formData: formData,
-        };
-        //1, units
-        onSelect("", data, "", true);
-      })
-      .catch((e) => {
-        setIsDisableForNext(false);
-        setShowToast({ key: "error" });
-        setError(e?.response?.data?.Errors[0]?.message || null);
-      });
-    onSelect(config.key, documentStep);
+    //   console.log("logger123....",documentObj,documentStep)
+    //   sessionStorage.setItem("TECHINCAL_PROFESSIONAL_DOCUMENTS",JSON.stringify(documentObj));
+    //   onSelect(config.key, documentStep);
+    // }
   };
   const onSkip = () => onSelect();
   function onAdd() { }
@@ -246,7 +283,7 @@ const StakeholderDocuments = ({ t, config, onSelect, userType, formData, setErro
         if (doc?.required == true && data !== null && doc?.code == data?.documentType) {
           isRequired = true;
         }
-
+        console.log("logggger123......",data)
         if (data.documentType === "ARTICLES_OF_ASSOCIATION") {
           setArticlesOfAssociation(data?.documentUid);
         } else if (data.documentType === "MEMORANDUM_OF_ARTICLES") {
@@ -257,8 +294,17 @@ const StakeholderDocuments = ({ t, config, onSelect, userType, formData, setErro
           setAffidavitAndPancard(data?.documentUid);
         } else if (data.documentType === "APPL.BPAREG_OTHERS") {
           setAnyOtherDoc(data?.documentUid);
-        }
-
+        } else if (data.documentType === "QULAIFICATION_CERTIFICATES") {
+          setQualificationCertificate(data?.documentUid);
+        } else if (data.documentType === "EXPERIENCE_CERTIFICATES") {
+          setExperienceCertificate(data?.documentUid);
+        } else if (data.documentType === "COA_LETTER") {
+          setCoaLetter(data?.documentUid);
+        } else if (data.documentType === "IDENTITY_PROOF") {
+          setIdentifyProof(data?.documentUid);
+        } 
+        
+        console.log("logger12345....",data?.documentUid,data.documentType,data.documentType === "IDENTITY_PROOF");
         // if (doc.required == false && doc.code === "APPL.BPAREG_OTHERS") {
         //   setEnableSubmit(false);
         // }
@@ -375,27 +421,28 @@ function SelectDocument({ t, document: doc, setDocuments, documentsUploadList, e
   // const docData = documents?.map((docs, index) => {
   //   setDocList(docs.documentUid);
   // });
-
+  
   const [showToastError, setShowToastError] = useState({ label: "", error: false, success: false });
-
+  
   // setDocList(documents);
   const { setValue, getValues, watch } = useForm();
   // const [docList, setDocList] = useState({});
   const filteredDocument = documents?.filter((item) => item?.documentType?.includes(doc?.code))[0];
-
+  
   const tenantId = Digit.ULBService.getCurrentTenantId();
-
+  
   const [selectedDocument, setSelectedDocument] = useState(
     filteredDocument
-      ? { ...filteredDocument, active: true, code: filteredDocument?.documentType, i18nKey: filteredDocument?.documentType }
-      : doc?.dropdownData?.length === 1
-        ? doc?.dropdownData[0]
-        : {}
-  );
-
-  const [file, setFile] = useState(null);
-  const [uploadedFile, setUploadedFile] = useState(() => filteredDocument?.fileStoreId || null);
-  setValue("finalDocList", filteredDocument?.fileStoreId);
+    ? { ...filteredDocument, active: true, code: filteredDocument?.documentType, i18nKey: filteredDocument?.documentType }
+    : doc?.dropdownData?.length === 1
+    ? doc?.dropdownData[0]
+    : {}
+    );
+    
+    const [file, setFile] = useState(null);
+    const [uploadedFile, setUploadedFile] = useState(() => filteredDocument?.fileStoreId || null);
+    // setValue("finalDocList", filteredDocument?.fileStoreId);
+    // return null
   // setArticlesOfAssociation(uploadedFile);
   // console.log("FILTEREDDOC", doc);
 
@@ -405,7 +452,6 @@ function SelectDocument({ t, document: doc, setDocuments, documentsUploadList, e
   function selectfile(e) {
     setFile(e.target.files[0]);
   }
-
   useEffect(() => {
     setDocuments((prev) => {
       const filteredDocumentsByDocumentType = prev?.filter((item) => item?.documentType !== doc?.code);

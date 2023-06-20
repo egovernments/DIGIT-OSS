@@ -16,6 +16,7 @@ import SurrenderActionModal from "./SurrenderActionModal";
 import BeneficialModal from "./ChangeInBenIntModal";
 import ExtensionCluModal from "./ExtensionCluModal";
 import CompletionLicModal from "./CompletionActionModal";
+import TechnicalProfessionalModal from "./TechnicalProfessionalModal";
 import ExtensionLicModal from "./extensionConstructionModal";
 
 const ActionModal = (props) => {
@@ -78,6 +79,9 @@ const ActionModal = (props) => {
   if (props?.businessService.includes("COMPLETION_CERTIFICATE")) {
     return <CompletionLicModal {...props} />;
   }
+  if (props?.businessService.includes("TECHNICAL_PROFESSIONAL")) {
+    return <TechnicalProfessionalModal {...props} />;
+    }
    if (props?.businessService.includes("CONSTRUCTION_OF_COMMUNITY")) {
     return <ExtensionLicModal {...props} />;
   }

@@ -1012,7 +1012,7 @@ const ApllicantPuropseForm = (props) => {
           businessId: applicantId,
           tenantId: "hr",
           moduleName: "TL",
-          action: "SENDBACK",
+          action: "INITIATE",
           previousStatus: "INITIATED",
           comment: null,
         },
@@ -1126,7 +1126,19 @@ const ApllicantPuropseForm = (props) => {
   }, []);
 
   useEffect(() => {
-    if (watch("consolidationType") == "consolidated") resetField("nonConsolidationType");
+    if (watch("consolidationType") == "consolidated") {
+      resetField("nonConsolidationType");
+      resetField("bigha");
+      resetField("biswa");
+      resetField("biswansi");
+      resetField("nonConsolidatedTotal");
+    }
+    if (watch("consolidationType") == "non-consolidated") {
+      resetField("kanal");
+      resetField("marla");
+      resetField("sarsai");
+      resetField("consolidatedTotal");
+    }
   }, [watch("consolidationType")]);
 
   useEffect(() => {
@@ -1304,10 +1316,7 @@ const ApllicantPuropseForm = (props) => {
                 </Col>
 
                 <Col md={8} xxl lg="8" style={{ display: "flex", alignItems: "end" }}>
-                  <p>
-                    Note: The application to be received under policy dated 10.11.17 shall only be accepted within window period and correct spelling
-                    of purpose.
-                  </p>
+                  <p>Note: The application to be received under policy dated 10.11.17 shall only be accepted within window period.</p>
                 </Col>
               </Row>
 
@@ -1802,8 +1811,8 @@ const ApllicantPuropseForm = (props) => {
                             },
                             validate: {
                               required: (value) => {
-                                if (!value && watch("collaboration") == "Y") return true;
-                                return "This field is required";
+                                if (!value && watch("collaboration") == "Y") return "This field is required";
+                                return true;
                               },
                             },
                           })}
@@ -1834,8 +1843,8 @@ const ApllicantPuropseForm = (props) => {
                             },
                             validate: {
                               required: (value) => {
-                                if (!value && watch("collaboration") == "Y") return true;
-                                return "This field is required";
+                                if (!value && watch("collaboration") == "Y") return "This field is required";
+                                return true;
                               },
                             },
                           })}

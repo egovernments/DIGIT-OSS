@@ -899,6 +899,7 @@ const ApllicantFormStep1 = (props) => {
                 className="form-check-input"
                 formControlName="agreeCheck"
                 type="checkbox"
+                name="developerRegistration"
                 value=""
                 id="flexCheckDefault"
               />

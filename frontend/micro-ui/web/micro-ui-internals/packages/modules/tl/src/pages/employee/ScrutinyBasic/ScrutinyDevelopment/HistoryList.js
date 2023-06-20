@@ -1,4 +1,6 @@
+
 import React, { useContext, useEffect, useState } from "react";
+
 import { Row, Col, Card, Container, Form, Button } from "react-bootstrap";
 import axios from "axios";
 import { ScrutinyRemarksContext } from "../../../../../context/remarks-data-context";
@@ -12,12 +14,19 @@ import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
+import TextSnippetIcon from '@mui/icons-material/TextSnippet';
 
 // import Collapse from "react-bootstrap/Collapse";
 
 import {  Box,
   Collapse,
   } from "@mui/material";
+import AddPost from "../../Material/TextEditor";
+import DemoParinted from "./DemoParint";
+import BasicTable from "./UserRemarks";
+import { convertDateToEpoch, convertEpochToDate, convertEpochToDateDMY } from "../../../../utils";
+import FullScreenDialog from "../Remarks/RemarksUser";
+import ScrollToTop from "@egovernments/digit-ui-react-components/src/atoms/ScrollToTop";
 
 // import { Scrollbars } from 'react-custom-scrollbars';
 
@@ -35,20 +44,21 @@ const HistoryList = (props) => {
   // console.log("dataremarkswithouthtml" , el);
   
 
-  const { handleGetFiledsStatesById, handleGetRemarkssValues } = useContext(ScrutinyRemarksContext);
+  const {handleRoles, handleGetFiledsStatesById, handleGetRemarkssValues , handleGetNotingRemarkssValues, bussinessService} = useContext(ScrutinyRemarksContext,);
   const { id } = useParams();
   let user = Digit.UserService.getUser();
   const userRoles = user?.info?.roles?.map((e) => e.code);
   const showRemarksSection = userRoles.includes("DTCP_HR")
   const histeroyData = props.histeroyData
   const [open3, setOpen3] = useState(false);
-
+  const [RemarksDeveloper, setDeveloperRemarks] = useState("");
   const [approval, setDisapproval] = useState(false);
   const [disapprovedList, setDisapprovedList] = useState([]);
   const dateTime = new Date();
   const remarkDataResp = props.remarkData;
   const authToken = Digit.UserService.getUser()?.access_token || null;
-
+  const applicationStatus = props.applicationStatus
+  
 
   const onAction = async (data, index, value) => {
     console.log("DataDev123...", data, value);
@@ -93,6 +103,14 @@ const HistoryList = (props) => {
         console.log("log123DisA", tempArray);
         setDisapprovedList(tempArray);
       }
+      // const ScrollToBottom = () =>{
+      //   window.scroll({
+      //     top:document.documentElement.scrollHeight,
+      //     behavior:'smooth',
+      //   });
+
+      // };
+      // ScrollToBottom();
     }, [remarkDataResp]
   )
 
@@ -197,8 +215,53 @@ const toggleshown4 = applicationStatus => {
     setDataThree(showState);
   }
 }
+const [open, setOpen] = useState(false);
+const [smShow, setSmShow] = useState(false);
+  const [docModal, setDocModal] = useState(false);
+  const handlemodaldData = () => {
+    setSmShow(false);
+  };
+  const [fieldValue, setFieldValue] = useState("");
+  const [fieldValue2, setFieldValue2] = useState("");
+  const [fieldValue3, setFieldValue3] = useState("");
+const  datamap = remarkDataResp?.[0]?.performaFieldDetail.reverse()
+console.log("datamap", datamap);
+// const navigate = useNavigate();
 
-console.log("log123Disrenu" ,id);
+const handleClick = async (e) => {
+
+//   setTimeout(() => {
+//  window.location.href = `/digit-ui/employee/tl/BasicTable`
+//   }, 3000);
+const dataToSend = {
+  RequestInfo: {
+      apiId: "Rainmaker",
+      action: "_create",
+      did: 1,
+      key: "",
+      msgId: "20170310130900|en_IN",
+      ts: 0,
+      ver: ".01",
+      authToken: authToken,
+     
+  },
+};
+
+const Resp = await axios.post(`/tl-services/new/license/pdf?applicationNumber=${id}`, payload, { responseType: "arraybuffer" })
+
+  const pdfBlob = new Blob([Resp.data], { type: 'application/pdf' });
+  const pdfUrl = URL.createObjectURL(pdfBlob);
+  window.open(pdfUrl);
+
+  console.log("logger123456...", pdfBlob, pdfUrl);
+  setLoader(false);
+  
+
+// }
+// else{
+//   console.log(error);
+// }
+};
   return (
    
     <Container
@@ -209,393 +272,36 @@ console.log("log123Disrenu" ,id);
         maxWidth: "100%",
         maxHeight: "50%",
         minHeight: "40%",
-        // marginTop: 5,
+        marginTop: 5,
       }}
     >
-      
-      {/* <Row class="remarkshelp">
+       {/* <ScrollToTop /> */}
+      <Row class="remarkshelp">
         <div 
-        class="currentremarks"
+        class="concludingremarks"
          >
-          <div class="WhatsNewCard" style={{ backgroundColor: "#ddf2cf" }}>
-            <p class="text-center" ><h4>Account Section</h4></p>
-            <Row>
+          {/* <AddPost
 
-              <Col>
-                <b>Application Id.</b>
-                {id}
-              </Col>
-            </Row>
-           
-      
-            <div>
-              <Form.Group>
-               <div>
-               {remarkDataResp !== null ?  (
-                      remarkDataResp?.map((el,  index) => {
-                        return (
-                          <div>
-                            <p> 
-                 <IconButton
-                    onClick={() => toggleshown1(el.employeeName)}
-                  >
-                    {data.includes(index)?(
-                      <KeyboardArrowUpIcon />  
-                    ) : (
-                     <p><KeyboardArrowUpIcon /><b>{el.role}</b></p>   
-                      
-                    )}
-                   
-                  </IconButton>
-                 
-                  </p>
-                 
-                   <div className="additional-info">
-                   {data.includes(el.employeeName) && (
-                    <Box >
-                     
-                    <p>
-                    <IconButton
-                           onClick={() => toggleshown(el.userID)}
-                         >
-                           {datailsShown.includes(index)? (
-                           
-                              <KeyboardArrowUpIcon /> 
-                            ) : (
-                           <p><KeyboardArrowDownIcon /><b style={{ color: "#ff0000" }}>{el.disApprovedfiledDetails?.[0]?.isApproved}</b></p>
-                          
-                           )}
-                           
-                         </IconButton>
-                         </p>
-                          
-                              
-                             
-                             {datailsShown.includes(el.userID) && (  
-                  <table colSpan = "2" className="table table-bordered" style={{ backgroundColor: "#ddf2cf" }}>
-                    <thead>
-
-                      <tr className="border-bottom-0">
-                        <th class="fw-normal pb-0 border-bottom-0 align-top">
-                          Sr.No
-                        </th>
-                        <th class="fw-normal pb-0 border-bottom-0 align-top">
-                          Filed Name
-                        </th>
-                        <th class="fw-normal pb-0 border-bottom-0 align-top">
-                          Filed value
-                        </th>
-                        <th class="fw-normal pb-0 border-bottom-0 align-top">
-                          Status
-                        </th>
-
-                        <th class="fw-normal pb-0 border-bottom-0 align-top">
-                          Remarks
-                        </th>
-                      </tr>
-                      <tr>
-
-                      </tr>
-
-
-                    </thead>
-                     <tbody>
-                 
-                     {el?.disApprovedfiledDetails !== null ? (
-           el?.disApprovedfiledDetails?.map((el, i) => {
-                      return (
-                    
-                           <tr >
-
-                                <td>
-                                  {i + 1}
-                                </td>
-                                <td>
-                                  <b>{el.name}</b>
-                                </td>
-                                <td>
-                                  <b>{el.value}</b>
-                                </td>
-
-                                <td>
-                                  <b>{el.isApproved}</b>
-                                </td>
-                                <td>
-                              
-                                  <i>{<div dangerouslySetInnerHTML={{__html: el.remarks}}/>}</i>
-                                </td>
-
-                              </tr>
-                                 );
-                                })
-                              ) : (
-                                <p></p>
-                              )}
-                           </tbody>
-                          </table>
-                          )}  
-                   <p> 
-                        <IconButton
-                           onClick={() => toggleshown3(el.designation)}
-                         >
-                           {dataFrist.includes(index)? (
-                             <KeyboardArrowUpIcon /> 
-                           ) : (
-                             <p><KeyboardArrowDownIcon /><b style={{ color: "#2874A6"}}>{el.condApprovedfiledDetails?.[0]?.isApproved}</b></p>
-                           )}
-                         
-                         </IconButton>
-                         </p>
-                         {dataFrist.includes(el.designation) && (      
-                                <table colSpan = "3" className="table table-bordered" style={{ backgroundColor: "#ddf2cf" }}>
-                                  <thead>
-              
-                                    <tr className="border-bottom-0">
-                                      <th class="fw-normal pb-0 border-bottom-0 align-top">
-                                        Sr.No
-                                      </th>
-                                      <th class="fw-normal pb-0 border-bottom-0 align-top">
-                                        Filed Name
-                                      </th>
-                                      <th class="fw-normal pb-0 border-bottom-0 align-top">
-                                        Filed value
-                                      </th>
-                                      <th class="fw-normal pb-0 border-bottom-0 align-top">
-                                        Status
-                                      </th>
-              
-                                      <th class="fw-normal pb-0 border-bottom-0 align-top">
-                                        Remarks
-                                      </th>
-                                    </tr>
-                                    <tr>
-              
-                                    </tr>
-              
-              
-                                  </thead>
-                                   <tbody>
-                                   {el?.condApprovedfiledDetails.map((el, i) => (
-                                         <tr >
-              
-                                              <td>
-                                                {i + 1}
-                                              </td>
-                                              <td>
-                                                <b>{el.name}</b>
-                                              </td>
-                                              <td>
-                                                <b>{el.value}</b>
-                                              </td>
-              
-                                              <td>
-                                                <b>{el.isApproved}</b>
-                                              </td>
-                                              <td>
-                                          
-                                                <i>{<div dangerouslySetInnerHTML={{__html: el.remarks}}/>}</i>
-                                              </td>
-              
-                                            </tr>
-                                               ))
-                                              }
-                                         </tbody>
-                                      
-                                        </table>
-                              )}     
-           <p> 
-                                     <IconButton
-                           onClick={() => toggleshown2(el.role)}
-                         >
-                           {dataTwo.includes(index)? (
-                             <KeyboardArrowUpIcon /> 
-                           ) : (
-                            <p><KeyboardArrowDownIcon /><b style={{ color: "#09cb3d" }}>{el.approvedfiledDetails?.[0]?.isApproved}</b></p>
-                           )}
-                           
-                         </IconButton>
-                         </p>
-                              
-                              
-                              {dataTwo.includes(el.role) && ( 
-                                <table colSpan = "4" className="table table-bordered" style={{ backgroundColor: "#ddf2cf" }}>
-                                  <thead>
-              
-                                    <tr className="border-bottom-0">
-                                      <th class="fw-normal pb-0 border-bottom-0 align-top">
-                                        Sr.No
-                                      </th>
-                                      <th class="fw-normal pb-0 border-bottom-0 align-top">
-                                        Filed Name
-                                      </th>
-                                      <th class="fw-normal pb-0 border-bottom-0 align-top">
-                                        Filed value
-                                      </th>
-                                      <th class="fw-normal pb-0 border-bottom-0 align-top">
-                                        Status
-                                      </th>
-              
-                                      <th class="fw-normal pb-0 border-bottom-0 align-top">
-                                        Remarks
-                                      </th>
-                                    </tr>
-                                    <tr>
-              
-                                    </tr>
-              
-              
-                                  </thead>
-                                   <tbody>
-                                   {el?.approvedfiledDetails.map((el, i) => (
-                                         <tr >
-              
-                                              <td>
-                                                {i + 1}
-                                              </td>
-                                              <td>
-                                                <b>{el.name}</b>
-                                              </td>
-                                              <td>
-                                                <b>{el.value}</b>
-                                              </td>
-              
-                                              <td>
-                                                <b>{el.isApproved}</b>
-                                              </td>
-                                              <td>
-                                                
-                                                <i>{<div dangerouslySetInnerHTML={{__html: el.remarks}}/>}</i>
-                                              </td>
-              
-                                            </tr>
-                                              ))
-                                            }
-                                         </tbody>
-                                        </table>
-                                         )}   
-
-                   
-                                          
-                                         <p>
-                    <IconButton
-                           onClick={() => toggleshown4(el.applicationStatus)}
-                         >
-                           {dataThree.includes(index)? (
-                           
-                              <KeyboardArrowUpIcon /> 
-                            ) : (
-                           <p><KeyboardArrowDownIcon /><b style={{ color: "#ff0000" }}>{el.performaFieldDetail?.[0]?.isApproved}</b></p>
-                          
-                           )}
-                           
-                         </IconButton>
-                         </p>
-                          
-                              
-                             
-                             {dataThree.includes(el.applicationStatus) && (  
-                  <table colSpan = "2" className="table table-bordered" style={{ backgroundColor: "#ddf2cf" }}>
-                    <thead>
-
-                      <tr className="border-bottom-0">
-                        <th class="fw-normal pb-0 border-bottom-0 align-top">
-                          Sr.No
-                        </th>
-                        <th class="fw-normal pb-0 border-bottom-0 align-top">
-                          Filed Name
-                        </th>
-                        <th class="fw-normal pb-0 border-bottom-0 align-top">
-                          Filed value
-                        </th>
-                        <th class="fw-normal pb-0 border-bottom-0 align-top">
-                          Status
-                        </th>
-
-                        <th class="fw-normal pb-0 border-bottom-0 align-top">
-                          Remarks
-                        </th>
-                      </tr>
-                      <tr>
-
-                      </tr>
-
-
-                    </thead>
-                     <tbody>
-                 
-                     {el?.performaFieldDetail !== null ? (
-           el?.performaFieldDetail?.map((el, i) => {
-                      return (
-                    
-                           <tr >
-
-                                <td>
-                                  {i + 1}
-                                </td>
-                                <td>
-                                  <b>{el.name}</b>
-                                </td>
-                                <td>
-                                  <b>{el.value}</b>
-                                </td>
-
-                                <td>
-                                  <b>{el.isApproved}</b>
-                                </td>
-                                <td>
-                               
-                                  <i>{<div dangerouslySetInnerHTML={{__html: el.remarks}}/>}</i>
-                                </td>
-
-                              </tr>
-                                 );
-                                })
-                              ) : (
-                                <p></p>
-                              )}
-                           </tbody>
-                          </table>
-                          )} 
-                    
-                        
-                      <Row style={{ margin: 4 }}>
-                      <b style={{ textAlign: "right", marginRight: 2 }}>{el.designation}</b>
-                     <b style={{ textAlign: "right" }}>{el.employeeName}</b>
-                     </Row>
-                     <Row style={{ margin: 4 }}>
-
-                     <b style={{ textAlign: "right" }}>{el.createdOn}</b>
-                     <b style={{ textAlign: "right" }}>
-             
-                   </b>
-                    </Row>
-                      </Box>
-                     )}
-                        
-                        </div>
-      
-                          </div>
-                        );
-                      })
-                    ) : (
-                      <p></p>
-                    )}
-
-                  
-
-                  
-                </div>
-                    
-              </Form.Group>
-
-            </div>
+          applicationStatus={applicationStatus}
+          setState={(e) => {
+            setDeveloperRemarks({ data: e });
+         
+          }}
+          state={RemarksDeveloper.data}
+          
+          >
             
-
-
-          </div>
+          </AddPost> */}
+           <DemoParinted 
+         applicationStatus={applicationStatus}
+         setState={(e) => {
+           setDeveloperRemarks({ data: e });
+        
+         }}
+         state={RemarksDeveloper.data}></DemoParinted>
 
         </div>
-        </Row> */}
+       
 
 {/* 
         <div 
@@ -656,14 +362,20 @@ console.log("log123Disrenu" ,id);
 
 
         {/* </Row> */}
-        <Row>
+    
 
-        <div class="histroryremarks">
-          <div class="WhatsNewCard" style={{ backgroundColor: "#ddf2cf" }}>
+        <div class="histrorynotingremarks">
+          <Card style={{backgroundColor: "rgb(255, 217, 84)"}}>
+          <p class="text-center"><h3><b>Noting</b></h3></p>
+          </Card>
+          <div 
+          // class="WhatsNewCard"
+        
+           style={{ backgroundColor: "#ddf2cf" , fontSize: 16 }}>
 
 
 
-            <div >
+            {/* <div >
               <p class="text-center" ><h4>History Remarks</h4></p>
               {histeroyData?.data?.processInstances?.map((item, index) => (
                 <div key={index}>
@@ -704,10 +416,226 @@ console.log("log123Disrenu" ,id);
               }
 
 
+            </div> */}
+
+{/* <div class="WhatsNewCard" style={{ backgroundColor: "#ddf2cf" }}> */}
+          
+            {/* <Row>
+
+              <Col>
+                <b>Application Id.</b>
+                {id}
+              </Col>
+            </Row> */}
+           
+      
+            <div>
+              <Form.Group>
+              <FullScreenDialog
+             
+             passmodalData={handlemodaldData}
+             displaymodal={smShow}
+           
+             onClose={() => { setSmShow(false); setDocModal(false) }}
+             fieldValue={fieldValue}
+            //  fieldValue2={fieldValue2}
+            //  fieldValue3={fieldValue3}
+></FullScreenDialog>
+
+
+               <div>
+               {remarkDataResp !== null ?  (
+                      remarkDataResp?.map((el, index) => {
+                        return (
+                          <div>
+                         {/* <Button variant="outlined" onClick={handleClickOpen}>
+        Open full-screen dialog
+      </Button> */}
+                         <div style={{width:20}}>
+                         <TextSnippetIcon
+                  
+                  onClick={() => {
+                 
+                    setSmShow(true);
+                    // setDocModal(false);
+                    setFieldValue(el.employeeName !== null ? el.employeeName : null);
+                    setFieldValue2(el.designation !== null ? el.designation : null);
+                    setFieldValue3(el.role !== null ? el.role : null);
+                  }}
+                ></TextSnippetIcon>
+                         </div>
+                         
+
+                        
+
+                         <div >
+<Box>
+<Row>
+{/* <p>
+                  <IconButton
+                         onClick={() => toggleshown4(el.applicationStatus)}
+                       >
+                         {dataThree.includes(index)? (
+                         
+                            <KeyboardArrowUpIcon /> 
+                          ) : (
+                         <p><KeyboardArrowDownIcon /><b style={{ color: "#ff0000" , fontSize: 16}}>{el.performaFieldDetail?.[0]?.isApproved}</b></p>
+                        
+                         )}
+                         
+                       </IconButton>
+                       </p> */}
+                        
+                        <b>Proforma # {index + 1}</b>
+                           
+                           {/* {dataThree.includes(el.applicationStatus) && (   */}
+                           {el?.performaFieldDetail?.[0]?.isApproved == "Proforma"  &&     
+                <table colSpan = "2" className="table table-bordered" style={{ backgroundColor: "#ddf2cf" }}>
+                  <thead>
+
+                    <tr className="border-bottom-0">
+                      <th class="fw-normal pb-0 border-bottom-0 align-top">
+                        Sr.No
+                      </th>
+                      <th class="fw-normal pb-0 border-bottom-0 align-top">
+                        Filed Name
+                      </th>
+                      <th class="fw-normal pb-0 border-bottom-0 align-top">
+                        Filed value
+                      </th>
+                      {/* <th class="fw-normal pb-0 border-bottom-0 align-top">
+                        Status
+                      </th> */}
+
+                      <th class="fw-normal pb-0 border-bottom-0 align-top">
+                        Remarks
+                      </th>
+                    </tr>
+                    <tr>
+
+                    </tr>
+
+
+                  </thead>
+                   <tbody>
+               
+                   {el?.performaFieldDetail !== null ? (
+         el?.performaFieldDetail?.map((data, i) => {
+                    return (
+                  
+                         <tr >
+
+                              <td>
+                                {i + 1}
+                              </td>
+                              <td>
+                                <b>{data.name}</b>
+                              </td>
+                              <td>
+                                <b>{data.value}</b>
+                              </td>
+
+                              {/* <td>
+                                <b>{el.isApproved}</b>
+                              </td> */}
+                              <td>
+                             
+                                <i>{<div dangerouslySetInnerHTML={{__html: data.remarks}}/>}</i>
+                              </td>
+
+                            </tr>
+                         
+                               );
+                              })
+                            ) : (
+                              <p></p>
+                            )}
+                            </tbody>
+                        </table>
+                      }
+                        {/* )}  */}
+                  </Row>
+                    </Box>
+             
+                      
+                      </div>
+
+                         {el?.notingDetail !== null ?  (
+                      el?.notingDetail?.map((item , i) => {
+                        return (
+                          <div>
+                            
+                         
+                         
+
+                            <b>{item?.isApproved}# {index + 1}</b>
+
+
+                            <br></br>
+                         <i>{<div dangerouslySetInnerHTML={{__html: item.remarks}}/>}</i>
+
+                    
+                             
+                          </div>
+                        );
+                      })
+                    ) : (
+                      <p></p>
+                    )}
+
+{/* {data.includes(el.employeeName) && (
+                    <Box > */}
+        {/* {el?.performaFieldDetail?.[0]?.isApproved === "Proforma" && */}
+
+
+          {/* }             */}
+
+
+<Row style={{ margin: 4 }}>   
+
+                  <b style={{ textAlign: "right" }}>{el.employeeName}</b>
+                      <b style={{ textAlign: "right", marginRight: 2 }}>{el.designation}</b>
+                     {/* <b style={{ textAlign: "right" }}>{el.role}</b> */}
+                  
+                     </Row>
+                     <Row style={{ margin: 4 }}>
+
+                     
+                     <b style={{ textAlign: "right" }}>
+                     <p style={{ textAlign: "right" }}>
+                      
+                      {convertEpochToDateDMY(el?.createdOn)} {el?.ts}</p> 
+                    
+                   </b>
+                    </Row>
+                    <hr></hr>
+                          </div>
+                        );
+                      })
+                    ) : (
+                      <p></p>
+                    )}
+
+                  
+            
+                  
+                </div>
+                    
+              </Form.Group>
+
             </div>
+            
 
           </div>
-        </div>
+
+
+
+
+          </div>
+  
+      </Row>
+      <Row>
+       
       </Row>
 
 

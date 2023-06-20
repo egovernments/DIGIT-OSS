@@ -1,4 +1,5 @@
 import { BackButton, Banner, Card, CardText, LinkButton, Loader, SubmitBar } from "@egovernments/digit-ui-react-components";
+import axios from "axios";
 import React, { useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
@@ -50,25 +51,46 @@ const StakeholderAcknowledgement = ({ data, onSuccess }) => {
   const licenseType = mutation?.data?.Licenses?.[0]?.tradeLicenseDetail?.tradeUnits?.[0]?.tradeType?.split(".")[0] || "ARCHITECT";
 
 
-  useEffect(() => {
-    try {
+  const updateData = async () => {
+    try{
+  let userInfo = Digit.UserService.getUser();
+      const requestResp = {
+        RequestInfo: {
+          api_id: "1",
+          ver: "1",
+          ts: "",
+          action: "_getDeveloperById",
+          did: "",
+          key: "",
+          msg_id: "",
+          requester_id: "",
+          auth_token: "",
+        },
+      };
+      const getDevDetails = await axios.get(`/user/developer/_getDeveloperById?id=${userInfo?.info?.id}&isAllData=true`, requestResp, {});
+      const licenseDataList = getDevDetails?.data;
+
       console.log("logger1234...",data,tenantId)
       let tenantIdTemp = data?.result?.Licenses?.[0]?.tenantId ? data?.result?.Licenses?.[0]?.tenantId : tenantId;
       data.tenantId = tenantIdTemp;
       let formdata = {};
-      console.log("logger1234...5",data)
-      let tradeType = (data?.LicenseType?.licenceTypeSelected === "CITIZEN.CLASSA" || data?.LicenseType?.licenceTypeSelected === "BPA_DEVELOPER") ? "BPA_DEVELOPER.Company" : "TECHNICAL_PROFESSIONAL"
       console.log("logger1234...",data)
-      let businessService = (data?.LicenseType?.licenceTypeSelected === "CITIZEN.CLASSA" || data?.LicenseType?.licenceTypeSelected === "BPA_DEVELOPER") ? "" : "BPAREG"
-      formdata = convertToStakeholderObject(data,tradeType,businessService);
+      let tradeType = (data?.formData?.LicneseType?.licenceTypeSelected === "CITIZEN.CLASSA" || data?.formData?.LicneseType?.licenceTypeSelected === "BPA_DEVELOPER") ? "BPA_DEVELOPER.Company" : "TECHNICAL_PROFESSIONAL"
+      console.log("logger1234...5",data,data?.formData?.LicneseType?.licenceTypeSelected,tradeType)
+      let businessService = (data?.formData?.LicneseType?.licenceTypeSelected === "CITIZEN.CLASSA" || data?.formData?.LicneseType?.licenceTypeSelected === "BPA_DEVELOPER") ? "BPAREG" : "BPAREG"
+      formdata = convertToStakeholderObject(data,tradeType,businessService,licenseDataList?.devDetail[0]);
       console.log("logger1234...",tradeType,formdata)
       mutation.mutate(formdata, {
         onSuccess,
       });
-
     } catch (err) {
       console.log("Aknowledgement Error ====> ",err)
     }
+  }
+
+
+  useEffect(() => {
+    updateData();
   }, []);
 
   const handleDownloadPdf = async () => {

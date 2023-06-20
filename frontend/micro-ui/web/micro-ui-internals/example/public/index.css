@@ -174,11 +174,11 @@ button, input, .checkbox-wrap .input-emp, optgroup, select, textarea {
     display: -ms-flexbox;
     display: flex; }
 
-@media (min-width: 780px) {
+@media (max-width: 780px) {
   .employee-app-container {
     width: 100%; }
   .app-container {
-    width: 960px;
+    /* width: 960px; */
     margin-left: 8px;
     margin-right: auto; }
   .h1 {
@@ -6470,11 +6470,11 @@ img, video {
   display: -ms-flexbox;
   display: flex; }
 
-@media (min-width: 780px) {
+@media (max-width: 780px) {
   .employee-app-container {
     width: 100%; }
   .app-container {
-    width: 960px;
+    /* width: 960px; */
     margin-left: 8px;
     margin-right: auto; }
   .h1 {

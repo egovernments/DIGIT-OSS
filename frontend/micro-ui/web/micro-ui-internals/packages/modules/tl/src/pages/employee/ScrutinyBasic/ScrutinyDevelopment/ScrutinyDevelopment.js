@@ -212,7 +212,7 @@ console.log("log123Disrenu" ,id);
         class="currentremarks"
          >
           <div class="WhatsNewCard" style={{ backgroundColor: "#ddf2cf" }}>
-            {/* <p class="text-center" ><h4>Current Remarks</h4></p> */}
+            <p class="text-center" ><h4>Current Remarks</h4></p>
             <Row>
 
               <Col>
@@ -583,15 +583,14 @@ console.log("log123Disrenu" ,id);
               </Form.Group>
 
             </div>
-            Account Section
-
+           
 
           </div>
 
         </div>
 
 
-        <div 
+        {/* <div 
         class="currentremarks"
          >
           <div class="WhatsNewCard" style={{ backgroundColor: "#ddf2cf" }}>
@@ -645,7 +644,7 @@ console.log("log123Disrenu" ,id);
           <div class="WhatsNewCard" style={{ backgroundColor: "#ddf2cf" }}>
           Main
 
-            </div></div>
+            </div></div> */}
 
 
         </Row>

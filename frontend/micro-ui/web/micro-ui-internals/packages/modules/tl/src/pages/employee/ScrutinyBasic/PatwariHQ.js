@@ -8,11 +8,15 @@ import BackspaceIcon from '@mui/icons-material/Backspace';
 import { IconButton } from "@mui/material";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
+import { useTranslation } from "react-i18next";
+import { Label } from "@egovernments/digit-ui-react-components";
+import TextSnippetIcon from '@mui/icons-material/TextSnippet';
 
 import {
     Box,
     Collapse,
 } from "@mui/material";
+import TableDialog from "./TableDataModal";
 
 
 const DataGridDemo = (props) => {
@@ -24,6 +28,7 @@ const DataGridDemo = (props) => {
 
     const [chatSheet, setChatSheet] = useState([])
     const [expanded, setExpanded] = useState({})
+    const { t } = useTranslation();
 
     // const [open, setOpen] = useState(false);
     // const [handleshow19, sethandleshow19] = useState(false);
@@ -70,6 +75,15 @@ const DataGridDemo = (props) => {
         }
     }
 
+
+    const [open, setOpen] = useState(false);
+const [smShow, setSmShow] = useState(false);
+  const [docModal, setDocModal] = useState(false);
+  const handlemodaldData = () => {
+    setSmShow(false);
+  };
+  const [fieldValue, setFieldValue] = useState("");
+
     const getDataGri = (element, item) => {
         return (
             <React.Fragment>
@@ -82,9 +96,7 @@ const DataGridDemo = (props) => {
                             <p onClick={() => handleExpend(element.role, item.name, !expanded?.[element?.role]?.[item?.name])}>
                                 {element?.isApproved}
                             </p>
-
-                            {expanded?.[element?.role]?.[item?.name] && (
-                                <Card style={{ border: "black", backgroundColor: "#ff0000" }}>
+                                    {/* <Card style={{ border: "black", backgroundColor: "#ff0000" }}>
                                     <div>
 
                                         {element?.remarks}
@@ -92,7 +104,22 @@ const DataGridDemo = (props) => {
                                     <button style={{ textAlign: "left" }} onClick={() => handleExpend(element.role, item.name, !expanded?.[element?.role]?.[item?.name])}>
                                         <BackspaceIcon></BackspaceIcon>
                                     </button>
-                                </Card>
+                                </Card> */}
+                            {expanded?.[element?.role]?.[item?.name] && (
+                                
+                                <TextSnippetIcon
+                                
+                                onClick={() => {
+                 
+                    setSmShow(true);
+                  
+                    setFieldValue(element?.remarks  !== null ? element?.remarks : null);
+                    // setFieldValue2(el.designation !== null ? el.designation : null);
+                    // setFieldValue3(el.role !== null ? el.role : null);
+                  }}
+                                >
+
+                                </TextSnippetIcon>
                             )}
                         </td>
                     )
@@ -107,9 +134,7 @@ const DataGridDemo = (props) => {
                             <p onClick={() => handleExpend(element.role, item.name, !expanded?.[element?.role]?.[item?.name])}>
                                 {element?.isApproved}
                             </p>
-
-                            {expanded?.[element?.role]?.[item?.name] && (
-                                <Card style={{ border: "black", backgroundColor: "#2874A6" }}>
+                            {/* <Card style={{ border: "black", backgroundColor: "#2874A6" }}>
                                     <div>
 
                                         {element?.remarks}
@@ -117,7 +142,22 @@ const DataGridDemo = (props) => {
                                     <button style={{ textAlign: "left" }} onClick={() => handleExpend(element.role, item.name, !expanded?.[element?.role]?.[item?.name])}>
                                         <BackspaceIcon></BackspaceIcon>
                                     </button>
-                                </Card>
+                                </Card> */}
+                            {expanded?.[element?.role]?.[item?.name] && (
+                                
+                                <TextSnippetIcon
+                                
+                                onClick={() => {
+                 
+                    setSmShow(true);
+                  
+                    setFieldValue(element?.remarks  !== null ? element?.remarks : null);
+                    // setFieldValue2(el.designation !== null ? el.designation : null);
+                    // setFieldValue3(el.role !== null ? el.role : null);
+                  }}
+                                >
+
+                                </TextSnippetIcon>
                             )}
                         </td>
                     )
@@ -132,9 +172,7 @@ const DataGridDemo = (props) => {
                             <p onClick={() => handleExpend(element.role, item.name, !expanded?.[element?.role]?.[item?.name])}>
                                 {element?.isApproved}
                             </p>
-
-                            {expanded?.[element?.role]?.[item?.name] && (
-                                <Card style={{ border: "black", backgroundColor: "#09cb3d" }}>
+                            {/* <Card style={{ border: "black", backgroundColor: "#09cb3d" }}>
                                     <div>
 
                                         {element?.remarks}
@@ -142,7 +180,21 @@ const DataGridDemo = (props) => {
                                     <button style={{ textAlign: "left" }} onClick={() => handleExpend(element.role, item.name, !expanded?.[element?.role]?.[item?.name])}>
                                         <BackspaceIcon></BackspaceIcon>
                                     </button>
-                                </Card>
+                                </Card> */}
+                            {expanded?.[element?.role]?.[item?.name] && (
+                               <TextSnippetIcon
+                                
+                               onClick={() => {
+                
+                   setSmShow(true);
+                 
+                   setFieldValue(element?.remarks  !== null ? element?.remarks : null);
+                   // setFieldValue2(el.designation !== null ? el.designation : null);
+                   // setFieldValue3(el.role !== null ? el.role : null);
+                 }}
+                               >
+
+                               </TextSnippetIcon>
                             )}
                         </td>
                     )
@@ -163,10 +215,20 @@ const DataGridDemo = (props) => {
     return (
         <Form ref={props.generalInfoRef}>
 
+<TableDialog
+             
+             passmodalData={handlemodaldData}
+             displaymodal={smShow}
+           
+             onClose={() => { setSmShow(false); setDocModal(false) }}
+             fieldValue={fieldValue}
+            
+></TableDialog> 
+
 <Form.Group className="justify-content-center" controlId="formBasicEmail" style={{ border: "2px solid #e9ecef", margin: 10, padding: 20 , display:"grid"}}>
           
- <div style={{ overflow: "scroll" }}>
-                    <Card style={{ textAlign: "center" }}>ONLINE LICENSE APPLICATION SCRUTINY PROFORMA</Card>
+ <div style={{ overflow: "scroll" , height: "680px"}}>
+                    {/* <Card style={{ textAlign: "center" ,backgroundColor: "#FFD954" ,maxHeight:680 }}>ONLINE LICENSE APPLICATION SCRUTINY PROFORMA</Card> */}
                     <table className="table table-bordered">
                         <thead>
 
@@ -237,13 +299,14 @@ const DataGridDemo = (props) => {
                                         </td>
                                         <td>
 
-                                            {item?.name}
+                                     
+                                            <Label style={{  fontSize:14}}>{t(item?.name)}</Label>
 
                                         </td>
                                         
                                         
                                         {
-                                            item.employees?.find((item, index) => (item.role === "Patwari"))?getDataGri(item.employees?.find((item, index) => (item.role === "Patwari")),item): <td></td>
+                                            item.employees?.find((item, index) => (item.role === "Patwari" || "Patwari_HQ"))?getDataGri(item.employees?.find((item, index) => (item.role === "Patwari" || "Patwari_HQ")),item): <td></td>
 
                                         }
                                             

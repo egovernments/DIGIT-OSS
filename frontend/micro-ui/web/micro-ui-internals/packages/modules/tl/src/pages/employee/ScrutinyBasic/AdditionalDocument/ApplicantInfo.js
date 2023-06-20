@@ -3,11 +3,11 @@ import React, { useEffect, useRef, useState } from 'react';
 import Collapse from "react-bootstrap/Collapse";  
 import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
-import { getDocShareholding } from '../ScrutinyDevelopment/docview.helper';
+import { getDocShareholding } from '../ScrutinyBasic/ScrutinyDevelopment/docview.helper';
 import { IconButton } from "@mui/material";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import FileDownloadIcon from "@mui/icons-material/FileDownload";
-import { convertEpochToDateDMY } from '../../../../utils';
+import { convertEpochToDate, convertEpochToDateDMY } from '../../../utils';
 
 function ApplicantInfo (prop)
 {
@@ -141,7 +141,10 @@ console.log("additionalDocResponData" , additionalDocResponData);
                     <td>
         
                         {/* {input?.Date} */}
-                      {convertEpochToDateDMY(input.Date)} 
+                      {/* {convertEpochToDateDMY(input?.date)} 
+                      {convertEpochToDate(input?.date)} */}
+                  <p>{convertEpochToDate(input?.date)}
+                  {convertEpochToDate(input?.date)}</p>
                         </td>
 
                     </tr> 

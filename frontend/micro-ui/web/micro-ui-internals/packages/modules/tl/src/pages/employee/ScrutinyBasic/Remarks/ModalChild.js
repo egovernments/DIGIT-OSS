@@ -1,6 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
+import { TextInput, Label, SubmitBar, LinkLabel, ActionBar, CloseSvg, DatePicker, MobileNumber } from "@egovernments/digit-ui-react-components";
 import { Form, Col, Row } from "react-bootstrap";
 import axios from "axios";
 import { useStyles } from "./styles/modalChild.style";
@@ -16,7 +17,7 @@ import { useLocation } from "react-router-dom";
 
 
 function ModalChild(props) {
-  const {handleRoles, handleGetFiledsStatesById, handleGetRemarkssValues , bussinessService} = useContext(ScrutinyRemarksContext,);
+  const {handleRoles, handleGetFiledsStatesById, handleGetRemarkssValues , handleGetNotingRemarkssValues, bussinessService} = useContext(ScrutinyRemarksContext,);
   const applicationStatus = props.applicationStatus ;
   const userInfo = Digit.UserService.getUser()?.info || {};
   const classes = useStyles();
@@ -69,7 +70,7 @@ function ModalChild(props) {
           userid: userInfo?.id || null,
           serviceId: "123",
           documentId: null,
-          ts: dateTime.toUTCString(),
+          // ts: dateTime.toUTCString(),
           bussinessServiceName : bussinessService,
           designation : designation,
           name : userInfo?.name || null,
@@ -86,6 +87,7 @@ function ModalChild(props) {
       } catch (error) {
         console.log(error);
       }
+      handleGetNotingRemarkssValues(id)
       handleGetFiledsStatesById(id);
       handleGetRemarkssValues(id);
       handleRoles(id)
@@ -110,7 +112,7 @@ function ModalChild(props) {
   }, [props.selectedFieldData]);
 
   console.log("Isdata" , status )
-  console.log("docModal123....." , docModal )
+  console.log("docModal123....." , props.labelmodal )
 
 
   // let empCode = "EMPLOYEE";
@@ -121,17 +123,18 @@ function ModalChild(props) {
       size="lg"
       className="modal-lg modal-center"
       show={smShow}
-      // aria-labelledby="example-modal-sizes-title-sm"
+      // aria-labelledby="example-modal-sizes-title-md"
       aria-labelledby="contained-modal-title-vcenter"
       centered
-      style={{ position: "fixed", left: "50%", top: "50%", transform: "translate(-50% , -50%)" }}
+      style={{ position: "fixed", left: "50%", top: "50%", transform: "translate(-50% , -50%)" , marginTop:"3%"}}
       onHide={props.onClose}
     >
       <Modal.Header closeButton>
         <Modal.Title id="example-modal-sizes-title-sm">
           <div>
-            <h3>{props.labelmodal}
-            </h3>
+            {/* <h3>{props.labelmodal}
+            </h3> */}
+            <Label>{t(props.labelmodal)}</Label>
             { docModal === false &&
             <p className={classes.subHead}>{inputFieldValue}</p>
             }
