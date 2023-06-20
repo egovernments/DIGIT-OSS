@@ -75,7 +75,7 @@ const ColumnMetricData = ({data, setChartDenomination, index }) => {
   
     return (
       <div style={{marginRight: 16, maxWidth: "20%", flexDirection: "column", justifyContent: "center", alignItems: "center"}}>
-        {response ? <p className="heading-m" style={{ textAlign: "left", paddingTop: "0px", whiteSpace: "nowrap", paddingBottom: "0px" }}>
+        {response ? <p className="heading-m" style={{ textAlign: "center", paddingTop: "0px", wordWrap: "break-word", paddingBottom: "0px", marginLeft: "0px"}}>
             {`${Digit.Utils.dss.formatter(response?.responseData?.data?.[0]?.headerValue, response?.responseData?.data?.[0]?.headerSymbol, value?.denomination, true, t)}`}
         </p> : <div style={{ whiteSpace: "pre" }}>{t("DSS_NO_DATA")}</div>}
         <div className={`tooltip`} >
