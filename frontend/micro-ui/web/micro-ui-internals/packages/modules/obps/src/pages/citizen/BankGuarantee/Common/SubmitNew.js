@@ -15,7 +15,7 @@ import ReactMultiSelect from "../../../../../../../react-components/src/atoms/Re
 import IconButton from "@mui/material/IconButton";
 import CloseIcon from "@mui/icons-material/Close";
 import Typography from "@mui/material/Typography";
-import FileUpload from "@mui/icons-material/FileUpload";
+import FileUpload from "@mui/icons-material/FileUpload"; 
 import ArrowCircleUpIcon from "@mui/icons-material/ArrowCircleUp";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import ReleaseNew from "./Release";

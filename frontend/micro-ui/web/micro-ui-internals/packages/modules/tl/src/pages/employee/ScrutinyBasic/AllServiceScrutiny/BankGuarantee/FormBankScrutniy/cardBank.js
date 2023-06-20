@@ -1,6 +1,6 @@
 import axios from "axios";
 import { size } from "lodash";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { Container } from "react-bootstrap";
 import { Card, Row, Col } from "react-bootstrap";
 import { Button, Form } from "react-bootstrap";
@@ -10,6 +10,7 @@ import { useHistory, useParams } from "react-router-dom";
 import ApplicationDetailsActionBar from "../../../../../../../../templates/ApplicationDetails/components/ApplicationDetailsActionBar";
 import ActionModal from "../../../../../../../../templates/ApplicationDetails/Modal";
 import FormBank from "../FormBankScrutniy/FormBank";
+import { ScrutinyRemarksContext } from "../../../../../../../context/remarks-data-context";
 
 const ScrutinyForm = (props) => {
   const { id } = useParams();
@@ -30,18 +31,19 @@ const ScrutinyForm = (props) => {
   const [isEnableLoader, setIsEnableLoader] = useState(false);
   const [isWarningPop, setWarningPopUp] = useState(false);
   const [showhide19, setShowhide19] = useState("true");
-  const [businessService, setBusinessService] = useState("BG_NEW");
+  const [businessService, setBusinessServices] = useState("BG_NEW");
   const [moduleCode, setModuleCode] = useState("TL");
   const [scrutinyDetails, setScrutinyDetails] = useState();
-  // const [applicationNumber,setApplicationNumber] = useState("");
+  const [status, setStatus] = useState();
   const [applicationDetails, setApplicationDetails] = useState();
   const [workflowDetails, setWorkflowDetails] = useState();
   const [applicationData, setApplicationData] = useState();
-  const [additionalDetails, setAdditionalDetails] = useState({});
+  // const [additionalDetails, setAdditionalDetails] = useState({});
   const [loiNumberSet, setLOINumberSet] = useState("");
-  const [edcDataTreade, setEdcDataTreade] = useState("");
-  const [idwDataTreade, setIdwDataTreade] = useState("");
-  const [applicationStatus,setApplicationStatus] = useState();
+  const { setBusinessService } = useContext(ScrutinyRemarksContext)
+  // const [edcDataTreade, setEdcDataTreade] = useState("");
+  // const [idwDataTreade, setIdwDataTreade] = useState("");
+  // const [applicationStatus,setApplicationStatus] = useState();
 
   //   const authToken = Digit.UserService.getUser()?.access_token || null;
 
@@ -76,41 +78,16 @@ const ScrutinyForm = (props) => {
       });
         // console.log("Response From API1", Resp, Resp?.extensionOfCLUPermission);
        setScrutinyDetails(Resp?.newBankGuaranteeList?.[0]);
+       setStatus(Resp?.newBankGuaranteeList?.[0]?.status);
       console.log("devDel123", Resp?.newBankGuaranteeList?.[0]);
+       const loiNumber =  Resp?.newBankGuaranteeList?.[0]?.loiNumber
       setApplicationData(Resp?.newBankGuaranteeList?.[0]);
-      setApplicationStatus(Resp?.newBankGuaranteeList?.[0]?.status);
+      
      setApplicationDetails({
         applicationData: Resp?.newBankGuaranteeList?.[0],
         workflowCode: Resp?.newBankGuaranteeList?.[0].businessService,
       });
-      // console.log("Loi1234787", userInfo );
-      // console.log("Loi1234", loiNumber );
-      const loiRequest = {
-        requestInfo: {
-          api_id: "Rainmaker",
-          ver: "1",
-          ts: 0,
-          action: "_search",
-          did: "",
-          key: "",
-          msg_id: "090909",
-          requesterId: "",
-          authToken: authToken,
-          userInfo: userInfo,
-        },
-      };
-
-      const Resploi = await axios.post(`/tl-services/v1/_search?loiNumber=${loiNumber}`, loiRequest);
-      // console.log("Afterloi", Resploi );
-      console.log("EDCR1234", Resploi?.data?.Licenses?.[0]?.tradeLicenseDetail?.EDC);
-      setEdcDataTreade(Resploi?.data?.Licenses?.[0]?.tradeLicenseDetail?.EDC);
-      setIdwDataTreade(Resploi?.data?.Licenses?.[0]?.tradeLicenseDetail?.IDW);
-
-      // setScrutinyDetails(Resp?.extensionOfCLUPermission?.[0]);
-
-      console.log(setIdwDataTreade);
-      // setApplicationData(Resp?.extensionOfCLUPermission?.[0]);
-    } catch (error) {
+      } catch (error) {
       console.log(error);
     }
   };
@@ -177,14 +154,18 @@ const ScrutinyForm = (props) => {
     setWarningPopUp(false);
   };
 
-  const submitAction = async (data = {}, nocData = false, isOBPS = {}) => {
-    let tempdata = data || {};
-    tempdata.NewBankGuaranteeRequest[0].additionalDetails = additionalDetails;
-    console.log("logger log1223", tempdata);
+  const submitAction = async (data = [{}], nocData = false, isOBPS = {}) => {
+    // let tempdata = data || {};
+    // tempdata.NewBankGuaranteeRequest[0].additionalDetails = additionalDetails;
+    console.log("logger log1223456789", data);
 
     try {
       let body = {
-        ...tempdata,
+        
+        ...data,
+        NewBankGuaranteeRequest:[
+          data.NewBankGuaranteeRequest
+        ],
 
         RequestInfo: {
           api_id: "Rainmaker",
@@ -205,7 +186,7 @@ const ScrutinyForm = (props) => {
       closeModal();
     } catch (error) {
       console.log("Update Error ===> ", error.message);
-      closeModal();
+      
     }
     closeModal();
     setTimeout(() => {
@@ -241,30 +222,53 @@ const ScrutinyForm = (props) => {
 
   return (
     <Card>
-      <Card.Header class="fw-normal" style={{ top: 5, padding: 5, fontSize: 14, height: 90, lineHeight: 2 }}>
-        <div className="row">
-          <div className="col-md-3">
-            {loiNumberSet}
-            <p>Application Number:</p>
-            <p class="fw-normal">{id}</p>
+      <Card.Header className="head-application">
+        <div className="row fw-normal">
+          <div className="col-sm-2">
+            <b>
+              <p className="head-font">Application Number:</p>
+            </b>
+            <b>
+              <p className="head-font">{id}</p>
+            </b>
           </div>
-          <div className="col-md-2">
-            <p>Service Id: </p>
-            <p class="fw-normal">{applicationData?.businessService}</p>
+          <div className="col-sm-2">
+            <b>
+              <p className="head-font">Service Id: </p>
+            </b>
+            <b>
+              <p className="head-font">
+                {applicationData?.businessService}
+                {/* Licence */}
+              </p>
+            </b>
           </div>
-          <div className="col-md-3">
-            <p>TCP Application Number:</p>
-            <p class="fw-normal">{applicationData?.tcpApplicationNumber}</p>
+          <div className="col-sm-2">
+            <b>
+              <p className="head-font">TCP Application Number:</p>
+            </b>
+            {/* {item.name.substring(0, 4)} */}
+            <b>
+              <p className="head-font">{applicationData?.tcpApplicationNumber}</p>
+            </b>
           </div>
-          <div className="col-md-2">
-            <p>TCP Case Number:</p>
-            <p class="fw-normal">{applicationData?.tcpCaseNumber}</p>
+          <div className="col-sm-2">
+            <b>
+              <p className="head-font">TCP Case Number:</p>
+            </b>
+            <b>
+              <p className="head-font">{applicationData?.tcpCaseNumber}</p>
+            </b>
           </div>
-          <div className="col-md-2">
-            <p>TCP Dairy Number: </p>
-            <p class="fw-normal">{applicationData?.tcpDairyNumber}</p>
+          <div className="col-sm-2">
+            <b>
+              <p className="head-font">TCP Dairy Number: </p>
+            </b>
+            <b>
+              <p className="head-font">{applicationData?.tcpDairyNumber}</p>
+            </b>
           </div>
-        </div>
+           </div>
       </Card.Header>
       <Row style={{ top: 10, padding: 10 }}>
         <FormBank
@@ -272,21 +276,19 @@ const ScrutinyForm = (props) => {
           histeroyData={workflowDetailsTemp}
           applicationNumber={id}
           refreshScrutinyData={getScrutinyData}
-          setAdditionalDetails={setAdditionalDetails}
-          applicationStatus={applicationStatus}
+          // setAdditionalDetails={setAdditionalDetails}
+          applicationStatus={status}
         ></FormBank>
       </Row>
       {/* <Row style={{ top: 10, padding: "10px 22px" }}> */}
       <Row style={{ top: 10, padding: "10px 22px" }}>
-        <Card>
+ <Card>
           <Card.Header class="fw-normal" style={{ top: 5, padding: 5, fontSize: 20, height: 55, lineHeight: 2 }}>
             <p class="fw-normal text-center">Remarks History </p>
           </Card.Header>
-        </Card>
-      </Row>
-
-      <Row>
-
+          </Card>
+          </Row>
+          <Row>
         <div class="col-md-10 bg-light text-right" style={{ position: "relative", marginBottom: 30 }}>
           {showModal ? (
             <ActionModal
@@ -345,7 +347,6 @@ const ScrutinyForm = (props) => {
           </div>
         )}
       </Row>
-      {/* </Row> */}
     </Card>
   );
 };
