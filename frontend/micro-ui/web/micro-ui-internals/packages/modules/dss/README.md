@@ -58,6 +58,7 @@ const initDigitUI = () => {
 1.5.22 updated the readme file
 1.5.21 added the readme file
 1.5.20 base version
+1.5.26 Added a new version of horizontalBar chart, In chartConfig it makes use of this boolean key = horizontalBarv2
 ```
 
 ## Published from DIGIT Core 

@@ -46,6 +46,9 @@ const Layout = ({ rowData,forHome=false }) => {
             xDataKey=""
             showDrillDown={false}
             title={title}
+            horizontalBarv2={chart.horizontalBarv2 ? true : false}
+            // horizontalBarv2={true} //for testing
+
           />
         );
       case "bar":
