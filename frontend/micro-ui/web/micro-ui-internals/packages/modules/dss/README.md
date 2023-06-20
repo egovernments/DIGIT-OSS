@@ -52,13 +52,13 @@ const initDigitUI = () => {
 # Changelog
 
 ```bash
-1.5.25 added the support for horizontal metric chart
+1.5.26 Added a new version of horizontalBar chart, In chartConfig it makes use of this boolean key = horizontalBarv2
+1.5.25 added the support for horizontal metric chart, In chartConfig it makes use of this boolean key = isHorizontalChart
 1.5.24 added commonmaster module to support its localisation
 1.5.23 updated the routes in the dss module to have dynamic base context path
 1.5.22 updated the readme file
 1.5.21 added the readme file
 1.5.20 base version
-1.5.26 Added a new version of horizontalBar chart, In chartConfig it makes use of this boolean key = horizontalBarv2
 ```
 
 ## Published from DIGIT Core 
