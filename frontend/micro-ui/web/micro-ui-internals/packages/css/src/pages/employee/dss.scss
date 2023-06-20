@@ -249,3 +249,10 @@ border-color: rgba(244, 119, 56, var(--border-opacity));
   width: 48%;
   max-width: 48%;
 }
+.dss-primary{
+  display: inline;
+  margin-right: 10px;
+  path{
+    fill:theme(colors.primary.main);
+  }
+}
