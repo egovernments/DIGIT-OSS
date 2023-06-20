@@ -52,6 +52,7 @@ const initDigitUI = () => {
 # Changelog
 
 ```bash
+1.5.25 added the support for horizontal metric chart
 1.5.24 added commonmaster module to support its localisation
 1.5.23 updated the routes in the dss module to have dynamic base context path
 1.5.22 updated the readme file

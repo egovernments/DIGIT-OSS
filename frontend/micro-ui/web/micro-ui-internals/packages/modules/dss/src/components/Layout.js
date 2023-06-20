@@ -59,7 +59,7 @@ const Layout = ({ rowData,forHome=false }) => {
     switch (visualizer.vizType) {
       case "metric-collection":
         return (
-          <GenericChart header={visualizer.name} className="metricsTable" key={key} value={value} >
+          <GenericChart header={visualizer.name} className={`metricsTable ${visualizer?.isHorizontalChart?"dss-metric-horizontal":""}`} key={key} value={value} >
             <MetricChart data={visualizer} />
           </GenericChart>
         );

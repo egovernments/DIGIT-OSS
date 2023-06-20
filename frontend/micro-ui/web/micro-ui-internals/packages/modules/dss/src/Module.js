@@ -17,7 +17,7 @@ const DssBreadCrumb = ({ location }) => {
   const landingPageHiddenIn=["works-ui","sanitation-ui"];
   const crumbs = [
     {
-      path: `${window?.contextPath}/employee`,
+      path: `/${window?.contextPath}/employee`,
       content: t("ES_COMMON_HOME"),
       show: true,
     },
