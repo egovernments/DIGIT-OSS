@@ -16,6 +16,7 @@ import LowMediumInbox from "./LowMedium/Inbox"
 import { ScrutinyRemarksProvider } from "../../context/remarks-data-context";
 import TechnicalProfessionalCard from "./TechnicalProfessionals/TechnicalProfessionalCard";
 import HighRiskInbox from "./HighRisk/Inbox";
+import LowMediumCard from "./LowMedium/LowMediumCard";
 
 
 // import ScrutinyFormcontainer from "../citizen/NewLicense/ScrutinyContainer";
@@ -113,6 +114,7 @@ const EmployeeApp = ({ path }) => {
         <PrivateRoute path={`${path}/response`} component={OBPSResponse} />
         <PrivateRoute path={`${path}/stakeholder-response`} component={StakeholderResponse} />
         <PrivateRoute path={`${path}/TechnicalProfessionalscrutiny/:id`} component={TechnicalProfessionalCard} />
+        <PrivateRoute path={`${path}/LowMediumscrutiny/:id`} component={LowMediumCard} />
         {/* <PrivateRoute path={`${path}/scrutiny`} component={ScrutinyFormcontainer} /> */}
         <PrivateRoute
               path={`${path}/TechnicalProfessionalInbox`}
