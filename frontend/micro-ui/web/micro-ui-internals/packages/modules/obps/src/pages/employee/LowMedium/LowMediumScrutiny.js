@@ -8,7 +8,7 @@ import { Card } from "react-bootstrap";
 import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
 import ReportProblemIcon from "@mui/icons-material/ReportProblem";
-import ModalChild from "../Remarks/ModalChild";
+import ModalChild from "../remarks/ModalChild";
 import Collapse from "react-bootstrap/Collapse";
 import { useStyles } from "../../css/personalInfoChild.style";
 import '../../css/personalInfoChild.style.js'
