@@ -49,6 +49,7 @@ import ExternalSection from "./CurrentRemarks/CurrentExternalSection";
 import HistoryList from "./ScrutinyDevelopment/HistoryList";
 import Spinner from "../../../components/Loader";
 import ApplicationPurpose from "../AdditionalDocument/ApplicationPurpose";
+import FullScreenDialog from "./Remarks/RemarksUser";
 // import HelpPost from "../Material/TextArea";
 
 const ScrutitnyForms = ({ apiResponse, applicationNumber, refreshScrutinyData ,profrmaID, histeroyData,additionalDocResponData, applicationStatus ,mDMSData ,applicationimp ,dataProfrmaFileds, dataMDMS }) => {
@@ -1711,7 +1712,7 @@ console.log("userInFODATA123" , userInfo);
       
  
       
-      {/* <div
+      <div
             className="collapse-header"
             onClick={() => setOpen15(!open15)}
             aria-controls="example-collapse-text"
@@ -1747,10 +1748,12 @@ console.log("userInFODATA123" , userInfo);
           applicationStatus={applicationStatus}
           remarksData={remarksData}
           >
+          
           </DataGridDemo>
+          {/* <FullScreenDialog/> */}
       </div>
       </div>
-      </Collapse> */}
+      </Collapse>
 
 
       {/* <div
@@ -1783,9 +1786,9 @@ console.log("userInFODATA123" , userInfo);
       
        histeroyData={histeroyData}
        applicationStatus={applicationStatus}
-       remarksData={remarksData}
-       dataForIcons={rolesDate}
-       applicationNumber={applicationNumber}
+      //  remarksDatas={remarksData}
+      //  dataForIcons={rolesDate}
+      //  applicationNumber={applicationNumber}
        ></HistoryList>
     
       </div>

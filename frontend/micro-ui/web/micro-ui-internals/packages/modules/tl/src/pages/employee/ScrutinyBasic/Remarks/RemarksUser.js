@@ -32,14 +32,15 @@ function FullScreenDialog(props) {
 
 
 
-  console.log("newdataPAFullScreen", remarksData);
-  console.log("newdatahappFullScreen", rolesDate);
+  
+  
 
 
   const userInfo = Digit.UserService.getUser()?.info || {};
   const classes = useStyles();
   const smShow = props.displaymodal;
   const docModal = props.disPlayDoc;
+  const remarksDataRole = props.remarksDataExternal;
   const [RemarksDeveloper, setDeveloperRemarks] = useState("");
   const [RemarksEntered, setRemarksEntered] = useState("");
   const [yesOrNoClicked, setIsYesorNoClicked] = useState();
@@ -62,59 +63,16 @@ function FullScreenDialog(props) {
   };
 
 
-
+  console.log("newdataPAFullScreen", remarksDataRole);
 
   // ///////////////////////
   const [open14, setOpen14] = useState(false);
-  const [remarksDataExternal, setRemarksDataExternal] = useState({});
+  
   const [loader, setLoader] = useState(false);
 
-  const handleDrawingClick = async () =>{
-    // setLoader(true);
-
-    const dataToSend = {
-        RequestInfo: {
-            apiId: "Rainmaker",
-            action: "_create",
-            did: 1,
-            key: "",
-            msgId: "20170310130900|en_IN",
-            ts: 0,
-            ver: ".01",
-            authToken: authToken,
-           
-        },
-    };
-    try {
-        const Resp = axios.post(`/land-services/egscrutiny/_search4?applicationNumber=${id}&roles=${inputFieldValue3}`, dataToSend).then((response) => {
-            return response.data;
-        });
   
-        console.log("RemarksSection", Resp);
-        // setLoader(false);
-        setRemarksDataExternal(Resp);
-        smShow == false
-    } catch (error) {
-      // setLoader(false);
-        console.log(error);
-    }
-  
-  };
+  console.log("remarksinputFieldValue" , inputFieldValue3,inputFieldValue2 ,inputFieldValue);
 
-
-
-
-  //////////////////////////
-
- 
-
-
-
-  useEffect(() => {
-    handleDrawingClick();
-  }, [])
-  
-  console.log("remarksDataExternal" , remarksDataExternal);
 
   return (
     <div>
@@ -128,22 +86,17 @@ function FullScreenDialog(props) {
         aria-labelledby="exampleModalScrollableTitle" 
         aria-hidden="true"
       scrollable={true}
-      //  aria-labelledby="myExtraLargeModalLabel"
-        // aria-hidden="true"
-  
-    // className="modal-lg modal-center"
+     
       show={smShow}
-      // aria-labelledby="example-modal-sizes-title-sm"
-      // aria-labelledby="contained-modal-title-vcenter"
+      
       centered
       style={{ position: "fixed", left: "50%", top: "50%", transform: "translate(-50% , -50%)" , height:700 ,marginTop: "50px"  }}
       onHide={props.onClose}
     >
       <Modal.Header closeButton in={open14} style={{ textAlign: "center" ,backgroundColor: "#FFD954" ,marginLeft:"3%", maxWidth:"95%" }}>
-        {/* <Modal.Title id="example-modal-sizes-title-sm" > */}
-        ONLINE LICENSE APPLICATION SCRUTINY PROFORMA
-        {/* <Card style={{ textAlign: "center" ,backgroundColor: "#FFD954" , maxWidth:"95%" }}></Card> */}
-        {/* </Modal.Title> */}
+     
+        ONLINE LICENSE APPLICATION SCRUTINY SINGLE USER
+      
       </Modal.Header>
       
       {/* <div
@@ -374,12 +327,12 @@ function FullScreenDialog(props) {
                         <p></p>
                       )} */}
 
-                      <DataGridDemo
+                      {/* <DataGridDemo
                       
                       remarksData={remarksData}
                       dataForIcons={rolesDate}
                       >
-                    </DataGridDemo>
+                    </DataGridDemo> */}
                       </Row>
                       <Row>
 

@@ -121,23 +121,46 @@ const feeandcharges = props.feeandchargesData
                     <td style={{ textAlign: "right" }}>{item?.purpose}</td>
                   </tr>
                   <tr>
+                    <th>Conversion Charges (Formula)</th>
+                    <td style={{ textAlign: "right" }}> {item?.conversionFormula}</td>
+                  </tr>
+                  <tr>
                     <th>Conversion Charges (In Rs.)</th>
                     <td style={{ textAlign: "right" }}> {item?.conversionChargesCal?.toLocaleString()}</td>
                   </tr>
+                 
                 </thead>
                 <tbody>
+                <tr>
+                    <th>External Development Charges (Formula)</th>
+                    <td style={{ textAlign: "right" }}>{item?.edcFormula}</td>
+                  </tr>
                   <tr>
                     <th>External Development Charges (In Rs.)</th>
                     <td style={{ textAlign: "right" }}>{item?.externalDevelopmentChargesCal?.toLocaleString()}</td>
+                  </tr>
+                 
+                  <tr>
+                    <th>License Fee Charges (Formula)</th>
+                    <td style={{ textAlign: "right" }}>{item?.licenceFormula}</td>
                   </tr>
                   <tr>
                     <th>License Fee Charges (In Rs.)</th>
                     <td style={{ textAlign: "right" }}>{item?.licenseFeeChargesCal?.toLocaleString()}</td>
                   </tr>
-                 
+                  
+                  <tr>
+                    <th>Scrutiny Fee Charges (Formula)</th>
+                    <td style={{ textAlign: "right" }}>{item?.scrutinyFormula}</td>
+                  </tr>
                   <tr>
                     <th>Scrutiny Fee Charges (In Rs.)</th>
                     <td style={{ textAlign: "right" }}>{item?.scrutinyFeeChargesCal?.toLocaleString()}</td>
+                  </tr>
+                  
+                  <tr>
+                    <th>State Infrastructure Development Charges (Formula)</th>
+                    <td style={{ textAlign: "right" }}>{item?.stateInfraFormula}</td>
                   </tr>
                   <tr>
                     <th>State Infrastructure Development Charges (In Rs.)</th>

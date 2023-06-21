@@ -23,8 +23,8 @@ const DataGridDemo = (props) => {
     const applicant = props.dataForIcons;
     const applicants = props.remarksData;
 
-    console.log("newdataPA", applicants);
-    console.log("newdatahapp", applicant);
+    console.log("newdataPAdsfdf", applicants);
+    console.log("newdatahappdsfdf", applicant);
 
     const [chatSheet, setChatSheet] = useState([])
     const [expanded, setExpanded] = useState({})
