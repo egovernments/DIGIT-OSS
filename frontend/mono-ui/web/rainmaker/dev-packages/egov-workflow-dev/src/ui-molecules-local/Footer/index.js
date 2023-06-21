@@ -23,6 +23,21 @@ class Footer extends React.Component {
     //responseLength: 0
   };
 
+  componentDidMount = async () => {
+    const {setRoute , state} = this.props;
+    const licences = get(
+      state.screenConfiguration.preparedFinalObject,
+      `Licenses`
+    );
+
+    (async()=>{
+      let LicensesData = await getSearchResults(getTenantId(),licences[0].licenseNumber)
+      if (LicensesData && LicensesData.Licenses){
+        this.setState({ LicensesData: LicensesData.Licenses });
+      }
+    })();
+  };
+
   getDownloadData = () => {
     const { dataPath, state } = this.props;
     const data = get(
@@ -162,7 +177,7 @@ class Footer extends React.Component {
       state,
       dispatch
     } = this.props;
-    const { open, data, employeeList } = this.state;
+    const { open, data, employeeList, LicensesData } = this.state;
     const status = get(
       state.screenConfiguration.preparedFinalObject,
       `Licenses[0].status`
@@ -191,18 +206,12 @@ class Footer extends React.Component {
       state.screenConfiguration.preparedFinalObject,
       "Licenses[0].validTo"
     );
-
-   let LicenseExpiryDate = LicensevalidToDate-1000;
-
-
-   let date = new Date();
-
-   let currentDate = date.getFullYear()+'-'+date.getMonth()+'-'+date.getDay();
-       
-   let limitEpochDate = convertDateTimeToEpoch("01-01-"+date.getFullYear()+" 00:00:00");
-
-   let currentDatetoEpoch = convertDateToEpoch(currentDate);
-
+    
+    let LicenseExpiryDate = LicensevalidToDate - 1000;
+    let date = new Date();
+    let currentDate = date.getFullYear() + '-' + date.getMonth() + '-' + date.getDay();
+    let limitEpochDate = convertDateTimeToEpoch("01-01-" + date.getFullYear() + " 00:00:00");
+    let currentDatetoEpoch = convertDateToEpoch(currentDate);
 
     let downloadMenu =
       contractData &&
@@ -216,64 +225,67 @@ class Footer extends React.Component {
           }
         };
       });
-      if(moduleName === "NewTL"){
-        const responseLength = get(
-          state.screenConfiguration.preparedFinalObject,
-          `licenseCount`,
-          1
-        );
-      const rolearray=  getUserInfo() && JSON.parse(getUserInfo()).roles.filter((item)=>{
-          if((item.code=="TL_CEMP"&&item.tenantId===tenantId) || item.code == "CITIZEN")
+    if (moduleName === "NewTL") {
+      const responseLength = get(
+        state.screenConfiguration.preparedFinalObject,
+        `licenseCount`,
+        1
+      );
+      const rolearray = getUserInfo() && JSON.parse(getUserInfo()).roles.filter((item) => {
+        if ((item.code == "TL_CEMP" && item.tenantId === tenantId) || item.code == "CITIZEN")
           return true;
-        })
-       const rolecheck= rolearray.length>0? true: false;
-    if ((status === "APPROVED"||status === "EXPIRED") && ((currentDatetoEpoch<LicenseExpiryDate && currentDatetoEpoch>=limitEpochDate )||(currentDatetoEpoch>LicenseExpiryDate)) && rolecheck===true) {
-      const editButton = {
-        label: "Edit",
-        labelKey: "WF_TL_RENEWAL_EDIT_BUTTON",
-        link: () => {
-          process.env.REACT_APP_NAME === "Citizen" ? this.props.setRoute(
-            `/tradelicense-citizen/apply?applicationNumber=${applicationNumber}&licenseNumber=${licenseNumber}&tenantId=${tenantId}&action=EDITRENEWAL`
-          ) : this.props.setRoute(
-            `/tradelicence/apply?applicationNumber=${applicationNumber}&licenseNumber=${licenseNumber}&tenantId=${tenantId}&action=EDITRENEWAL`
-          );
-        }
-      };
-      downloadMenu && downloadMenu.push(editButton);
-      const submitButton = {
-        label: "Submit",
-        labelKey: "WF_TL_RENEWAL_SUBMIT_BUTTON",
-        link: () => {
-          this.renewTradelicence(financialYear, tenantId);
-        }
-      };
-      downloadMenu && downloadMenu.push(submitButton);
-    }
-  }
-
-  if(moduleName == "PT.CREATE"){ 
-    let ptWFProcessInstances = get(state.screenConfiguration.preparedFinalObject, "workflow.ProcessInstances")
-    if(ptWFProcessInstances && ptWFProcessInstances.length>0){
-      let ptStatus = ptWFProcessInstances[ptWFProcessInstances.length-1].state
-      if(ptStatus && ptStatus.state === "CORRECTIONPENDING"){
-        const editButtonForCitizen = {
+      })
+      const rolecheck = rolearray.length > 0 ? true : false;
+      if ((status === "APPROVED" || status === "EXPIRED") && ((currentDatetoEpoch < LicenseExpiryDate && currentDatetoEpoch >= limitEpochDate) || (currentDatetoEpoch > LicenseExpiryDate)) && rolecheck === true) {
+        const editButton = {
           label: "Edit",
-          labelKey: "WF_PT_EDIT_BUTTON",
+          labelKey: "WF_TL_RENEWAL_EDIT_BUTTON",
           link: () => {
-            let propertyId = get(state.screenConfiguration.preparedFinalObject, "Property.propertyId")
-            let tenantId = get(state.screenConfiguration.preparedFinalObject, "Property.tenantId")
-            this.props.setRoute(`/property-tax/assessment-form?assessmentId=0&purpose=update&propertyId=${propertyId}&tenantId=${tenantId}`)
+            process.env.REACT_APP_NAME === "Citizen" ? this.props.setRoute(
+              `/tradelicense-citizen/apply?applicationNumber=${applicationNumber}&licenseNumber=${licenseNumber}&tenantId=${tenantId}&action=EDITRENEWAL`
+            ) : this.props.setRoute(
+              `/tradelicence/apply?applicationNumber=${applicationNumber}&licenseNumber=${licenseNumber}&tenantId=${tenantId}&action=EDITRENEWAL`
+            );
           }
         };
-        downloadMenu.push(editButtonForCitizen)
+        downloadMenu && downloadMenu.push(editButton);
+        const submitButton = {
+          label: "Submit",
+          labelKey: "WF_TL_RENEWAL_SUBMIT_BUTTON",
+          link: () => {
+            this.renewTradelicence(financialYear, tenantId);
+          }
+        };
+        downloadMenu && downloadMenu.push(submitButton);
+        if (LicensesData && LicensesData[0].applicationNumber !== applicationNumber){
+          downloadMenu = [];
+        }
       }
-   
     }
-    
-  }
 
-  downloadMenu = downloadMenu && downloadMenu.filter(m=>m.labelKey!=="WF_PT.MUTATION_SKIP_PAYMENT");
-  downloadMenu = downloadMenu && downloadMenu.filter(m=>m.labelKey!=="WF_PT.MUTATION_FINAL_SKIP_PAYMENT");
+    if (moduleName == "PT.CREATE") {
+      let ptWFProcessInstances = get(state.screenConfiguration.preparedFinalObject, "workflow.ProcessInstances")
+      if (ptWFProcessInstances && ptWFProcessInstances.length > 0) {
+        let ptStatus = ptWFProcessInstances[ptWFProcessInstances.length - 1].state
+        if (ptStatus && ptStatus.state === "CORRECTIONPENDING") {
+          const editButtonForCitizen = {
+            label: "Edit",
+            labelKey: "WF_PT_EDIT_BUTTON",
+            link: () => {
+              let propertyId = get(state.screenConfiguration.preparedFinalObject, "Property.propertyId")
+              let tenantId = get(state.screenConfiguration.preparedFinalObject, "Property.tenantId")
+              this.props.setRoute(`/property-tax/assessment-form?assessmentId=0&purpose=update&propertyId=${propertyId}&tenantId=${tenantId}`)
+            }
+          };
+          downloadMenu.push(editButtonForCitizen)
+        }
+
+      }
+
+    }
+
+    downloadMenu = downloadMenu && downloadMenu.filter(m => m.labelKey !== "WF_PT.MUTATION_SKIP_PAYMENT");
+    downloadMenu = downloadMenu && downloadMenu.filter(m => m.labelKey !== "WF_PT.MUTATION_FINAL_SKIP_PAYMENT");
     const buttonItems = {
       label: { labelName: "Take Action", labelKey: "WF_TAKE_ACTION" },
       rightIcon: "arrow_drop_down",
@@ -290,6 +302,7 @@ class Footer extends React.Component {
       },
       menu: downloadMenu
     };
+
     return (
       <div className="apply-wizard-footer" id="custom-atoms-footer">
         {!isEmpty(downloadMenu) && (
