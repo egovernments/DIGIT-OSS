@@ -56,6 +56,7 @@ const initDigitUI = () => {
 # Changelog
 
 ```bash
+1.5.30 Fixes mannual receipt date range validation, Cheque and card number validation for FSM
 1.5.29 version upgraded for fixes in payment modules
 1.5.28 base version
 ```
