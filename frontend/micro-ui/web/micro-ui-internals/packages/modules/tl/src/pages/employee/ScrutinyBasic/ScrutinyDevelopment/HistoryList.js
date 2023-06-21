@@ -218,7 +218,6 @@ const toggleshown4 = applicationStatus => {
 const [open, setOpen] = useState(false);
 const [smShow, setSmShow] = useState(false);
 // const [roleDataModal, setRoleDataModal] = useState([]);
-const [remarksDataExternal, setRemarksDataExternal] = useState();
   const [docModal, setDocModal] = useState(false);
   const handlemodaldData = () => {
     setSmShow(false);
@@ -266,37 +265,6 @@ const Resp = await axios.post(`/tl-services/new/license/pdf?applicationNumber=${
 };
 
 
-
-const setRoleDataModal = async () =>{
- 
-const dataToSend = {
-      RequestInfo: {
-          apiId: "Rainmaker",
-          action: "_create",
-          did: 1,
-          key: "",
-          msgId: "20170310130900|en_IN",
-          ts: 0,
-          ver: ".01",
-          authToken: authToken,
-         
-      },
-  };
-  try {
-      const Resp = axios.post(`/land-services/egscrutiny/_search4?applicationNumber=${id}&roles=${fieldValue3}`, dataToSend).then((response) => {
-          return response.data;
-      });
-
-      console.log("RemarksSection", Resp);
-   
-      setRemarksDataExternal(Resp ,Resp?.egScrutiny);
-      
-  } catch (error) {
-    
-      console.log(error);
-  }
-
-};
 
 
 
@@ -473,7 +441,6 @@ const dataToSend = {
              
              passmodalData={handlemodaldData}
              displaymodal={smShow}
-             remarksDataExternal={remarksDataExternal}
            
              onClose={() => { setSmShow(false); setDocModal(false) }}
              fieldValue={id}
@@ -497,7 +464,7 @@ const dataToSend = {
                   onClick={() => {
                  
                     setSmShow(true);
-                    setRoleDataModal();
+                   
                    
                     setFieldValue(el.employeeName !== null ? el.employeeName : null);
                     setFieldValue2(el.designation !== null ? el.designation : null);
