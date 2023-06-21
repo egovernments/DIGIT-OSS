@@ -1,0 +1,20 @@
+curl --location --request POST 'http://localhost:8080/user/oauth/token' \
+--header 'authority: quickstart.local.digit' \
+--header 'sec-ch-ua: " Not A;Brand";v="99", "Chromium";v="90", "Google Chrome";v="90"' \
+--header 'accept: application/json, text/plain, */*' \
+--header 'authorization: Basic ZWdvdi11c2VyLWNsaWVudDo=' \
+--header 'sec-ch-ua-mobile: ?0' \
+--header 'user-agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.212 Safari/537.36' \
+--header 'content-type: application/x-www-form-urlencoded' \
+--header 'origin: http://quickstart.local.digit' \
+--header 'sec-fetch-site: same-origin' \
+--header 'sec-fetch-mode: cors' \
+--header 'sec-fetch-dest: empty' \
+--header 'referer: http://quickstart.local.digit/employee/user/login' \
+--header 'accept-language: en-GB,en;q=0.9' \
+--data-urlencode 'username=GRO' \
+--data-urlencode 'password=eGov@4321' \
+--data-urlencode 'grant_type=password' \
+--data-urlencode 'scope=read' \
+--data-urlencode 'tenantId=pg.citya' \
+--data-urlencode 'userType=EMPLOYEE'
