@@ -42,6 +42,7 @@ frontend/micro-ui/web/public/index.html
 # Changelog
 
 ```bash
+1.5.27 DSS UI alignment fixes for Horizontal Metric and bar chart
 1.5.26 added new css class for dss enhancements
 1.5.25 added the css of inbox search composers
 1.5.24 added the readme file

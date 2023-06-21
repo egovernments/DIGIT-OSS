@@ -52,6 +52,7 @@ const initDigitUI = () => {
 # Changelog
 
 ```bash
+1.5.29 DSS UI alignment fixes for Horizontal Metric and bar chart
 1.5.28 added the support for the dynamic icon in the metric chart by adding flag iconName
 1.5.27 Alignment fixes for Horizontal Metric Charts
 1.5.26 Added a new version of horizontalBar chart, In chartConfig it makes use of this boolean key = horizontalBarv2

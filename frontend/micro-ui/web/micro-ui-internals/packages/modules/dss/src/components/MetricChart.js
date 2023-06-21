@@ -74,17 +74,18 @@ const ColumnMetricData = ({data, setChartDenomination, index }) => {
   }
   
     return (
-      <div style={{marginRight: 16, maxWidth: "20%", flexDirection: "column", justifyContent: "center", alignItems: "center"}}>
+      <div style={{marginLeft: "8px", marginRight: "8px", maxWidth: "21%", flexDirection: "column", justifyContent: "center", alignItems: "center"}}>
         {response ? <p className="heading-m" style={{ textAlign: "center", paddingTop: "0px", wordWrap: "break-word", paddingBottom: "0px", marginLeft: "0px"}}>
             {`${Digit.Utils.dss.formatter(response?.responseData?.data?.[0]?.headerValue, response?.responseData?.data?.[0]?.headerSymbol, value?.denomination, true, t)}`}
         </p> : <div style={{ whiteSpace: "pre" }}>{t("DSS_NO_DATA")}</div>}
-        <div className={`tooltip`} >
+        <div className={`tooltip`} style={{marginLeft: "42px", paddingLeft: "32px"}}>
         <span
           className="tooltiptext"
           style={{
             fontSize: "medium",
-            width: t(`TIP_${data.name}`).length < 50 ? "fit-content" : 400,
-            height: 50,
+            width:"fit-content" ,
+            minWidth:  t(`TIP_${data.name}`).length < 20 ? t(`TIP_${data.name}`).length * 4 : 120,
+            maxWidth: 400,
             whiteSpace: "normal",
             visibility: "visible"
           }}
