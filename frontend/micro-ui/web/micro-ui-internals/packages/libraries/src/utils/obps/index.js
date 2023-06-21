@@ -1,4 +1,5 @@
 export const calculateRiskType = (riskTypes, plotArea, blocks) => {
+  console.log("logger123....12345",riskTypes,plotArea,blocks);
   const buildingHeight = blocks?.reduce((acc, block) => {
     return Math.max(acc, block.building.buildingHeight)
   }, Number.NEGATIVE_INFINITY);
