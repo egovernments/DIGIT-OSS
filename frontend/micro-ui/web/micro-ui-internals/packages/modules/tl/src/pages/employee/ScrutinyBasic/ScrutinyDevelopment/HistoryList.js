@@ -217,6 +217,8 @@ const toggleshown4 = applicationStatus => {
 }
 const [open, setOpen] = useState(false);
 const [smShow, setSmShow] = useState(false);
+// const [roleDataModal, setRoleDataModal] = useState([]);
+const [remarksDataExternal, setRemarksDataExternal] = useState();
   const [docModal, setDocModal] = useState(false);
   const handlemodaldData = () => {
     setSmShow(false);
@@ -262,6 +264,42 @@ const Resp = await axios.post(`/tl-services/new/license/pdf?applicationNumber=${
 //   console.log(error);
 // }
 };
+
+
+
+const setRoleDataModal = async () =>{
+ 
+const dataToSend = {
+      RequestInfo: {
+          apiId: "Rainmaker",
+          action: "_create",
+          did: 1,
+          key: "",
+          msgId: "20170310130900|en_IN",
+          ts: 0,
+          ver: ".01",
+          authToken: authToken,
+         
+      },
+  };
+  try {
+      const Resp = axios.post(`/land-services/egscrutiny/_search4?applicationNumber=${id}&roles=${fieldValue3}`, dataToSend).then((response) => {
+          return response.data;
+      });
+
+      console.log("RemarksSection", Resp);
+   
+      setRemarksDataExternal(Resp ,Resp?.egScrutiny);
+      
+  } catch (error) {
+    
+      console.log(error);
+  }
+
+};
+
+
+
   return (
    
     <Container
@@ -435,11 +473,12 @@ const Resp = await axios.post(`/tl-services/new/license/pdf?applicationNumber=${
              
              passmodalData={handlemodaldData}
              displaymodal={smShow}
+             remarksDataExternal={remarksDataExternal}
            
              onClose={() => { setSmShow(false); setDocModal(false) }}
-             fieldValue={fieldValue}
-            //  fieldValue2={fieldValue2}
-            //  fieldValue3={fieldValue3}
+             fieldValue={id}
+             fieldValue2={fieldValue2}
+             fieldValue3={fieldValue3}
 ></FullScreenDialog>
 
 
@@ -451,24 +490,23 @@ const Resp = await axios.post(`/tl-services/new/license/pdf?applicationNumber=${
                          {/* <Button variant="outlined" onClick={handleClickOpen}>
         Open full-screen dialog
       </Button> */}
-                         <div style={{width:20}}>
+                                          
+                                          <div style={{width:20}}>
                          <TextSnippetIcon
                   
                   onClick={() => {
                  
                     setSmShow(true);
-                    // setDocModal(false);
+                    setRoleDataModal();
+                   
                     setFieldValue(el.employeeName !== null ? el.employeeName : null);
                     setFieldValue2(el.designation !== null ? el.designation : null);
                     setFieldValue3(el.role !== null ? el.role : null);
                   }}
                 ></TextSnippetIcon>
                          </div>
-                         
-
-                        
-
-                         <div >
+                  
+<div >
 <Box>
 <Row>
 {/* <p>
@@ -559,6 +597,13 @@ const Resp = await axios.post(`/tl-services/new/license/pdf?applicationNumber=${
              
                       
                       </div>
+
+
+                      
+                         
+
+                        
+
 
                          {el?.notingDetail !== null ?  (
                       el?.notingDetail?.map((item , i) => {

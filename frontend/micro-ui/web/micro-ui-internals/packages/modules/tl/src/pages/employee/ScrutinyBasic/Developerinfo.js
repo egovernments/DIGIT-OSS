@@ -1620,8 +1620,8 @@ const Developerinfo = (props) => {
                 }
 
 
-{
-                  landScheduleData?.appliedLand === "N" &&
+{/* {
+                  landScheduleData?.appliedLand === "N" && */}
                   <div className="row ml-1 mr-2">
                     <div className="col  p-1" >
                       {/* <h6>Download Document</h6> */}
@@ -1638,9 +1638,9 @@ const Developerinfo = (props) => {
                   
                   </div>
 
-                }
+                {/* }
 {
-                  landScheduleData?.appliedLand === "N" &&
+                  landScheduleData?.appliedLand === "N" && */}
                   <div className="row ml-1 mr-2">
                       <div className="col  p-1" >
                       {/* <h6>Download Document</h6> */}
@@ -1658,7 +1658,7 @@ const Developerinfo = (props) => {
                     </div>
                  
 
-                }
+                {/* } */}
                  
 
               </div>
