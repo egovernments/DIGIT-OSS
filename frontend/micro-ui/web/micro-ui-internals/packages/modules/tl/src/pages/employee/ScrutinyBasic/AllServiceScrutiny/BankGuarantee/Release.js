@@ -1,66 +1,53 @@
-import React, { useState, useEffect, useTransition } from "react";
+import React, { useEffect, useState } from "react";
 import Button from "react-bootstrap/Button";
 import Col from "react-bootstrap/Col";
 import Form from "react-bootstrap/Form";
 import Row from "react-bootstrap/Row";
-import { useForm } from "react-hook-form";
 import { Card } from "react-bootstrap";
-import { Dialog } from "@mui/material";
-import DialogActions from "@mui/material/DialogActions";
-import DialogContent from "@mui/material/DialogContent";
-import DialogContentText from "@mui/material/DialogContentText";
-import DialogTitle from "@mui/material/DialogTitle";
-import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
-import Table from "@mui/material/Table";
-import TableBody from "@mui/material/TableBody";
-import TableCell from "@mui/material/TableCell";
-import TableContainer from "@mui/material/TableContainer";
-import TableHead from "@mui/material/TableHead";
-import TableRow from "@mui/material/TableRow";
-import Paper from "@mui/material/Paper";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import FormControl from "@mui/material/FormControl";
-import FormLabel from "@mui/material/FormLabel";
+import { useForm } from "react-hook-form";
 import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
-import ReportProblemIcon from "@mui/icons-material/ReportProblem";
-import ModalChild from "../../Remarks/ModalChild";
-import Collapse from "react-bootstrap/Collapse";
 import { useStyles } from "../../css/personalInfoChild.style";
-import "../../css/personalInfoChild.style.js";
-import { IconButton } from "@mui/material";
-import VisibilityIcon from "@mui/icons-material/Visibility";
-import FileDownloadIcon from "@mui/icons-material/FileDownload";
-import DownloadForOfflineIcon from "@mui/icons-material/DownloadForOffline";
-import { getDocShareholding } from "../../ScrutinyDevelopment/docview.helper";
+import Collapse from "react-bootstrap/Collapse";
+import ReportProblemIcon from "@mui/icons-material/ReportProblem";
+import { useLocation, useParams } from "react-router-dom";
+import axios from "axios";
+import { FormControl, FormHelperText, InputLabel, MenuItem, Select, TextField } from "@mui/material";
+import Visibility from "@mui/icons-material/Visibility";
+import FileUpload from "@mui/icons-material/FileUpload";
 import { useTranslation } from "react-i18next";
-import OutlinedInput from "@mui/material/OutlinedInput";
+import { getDocShareholding } from "../../ScrutinyDevelopment/docview.helper";
+import ModalChild from "../../Remarks/ModalChild";
 
-function Release (props) {
+function Release ({ apiResponse, refreshScrutinyData, applicationNumber, passUncheckedList, passCheckedList, dataForIcons,applicationStatus }) {
    const userRoles = Digit.UserService.getUser()?.info?.roles.map((item) => item.code) || [];
   const showActionButton = userRoles.includes("AO_HQ");
   const showActionButton1 = userRoles.includes("CAO");
   const {t}=useTranslation();
-  const [selects, setSelects] = useState();
+ const [selects, setSelects] = useState();
   const [showhide, setShowhide] = useState("");
-   const [open, setOpen] = useState(false);
+  const [licenseData, setLicenseData] = useState();
+  const { id } = useParams();
+  const [showToastError, setShowToastError] = useState({ label: "", error: false, success: false });
+  const authToken = Digit.UserService.getUser()?.access_token || null;
+  const userInfo = Digit.UserService.getUser()?.info || {};
+  const { pathname: url } = useLocation();
+  const [open, setOpen] = useState(false);
    const [open4, setOpen4] = useState(false);
    const [open3, setOpen3] = useState(false);
   const [open2, setOpen2] = useState(false);
-  const apiResponse = props.apiResponse;
-const classes = useStyles();
-  const [applicationNumber, setApplicationNumber] = useState();
-  const [developerDataLabel, setDeveloperDataLabel] = useState([]);
-  // let user = Digit.UserService.getUser();
-  // const userRoles = user?.info?.roles?.map((e) => e.code);
-  // const showRemarks = userRoles.includes("AO_HQ");
-
+   const [developerDataLabel, setDeveloperDataLabel] = useState([]);
   const handleshowhide = (event) => {
     const getuser = event.target.value;
 
     setShowhide(getuser);
   };
-const dataIcons = props.dataForIcons;
+   const handleselects = (event) => {
+    const getu = event.target.value;
+
+    setSelects(getu);
+  };
+// const dataIcons = props.dataForIcons;
   const {
     register,
     handleSubmit,
@@ -69,15 +56,10 @@ const dataIcons = props.dataForIcons;
     watch,
     setValue,
     getValues,
-  } = useForm({
-    mode: "onChange",
-
-    shouldFocusError: true,
-  });
+  } = useForm({});
 
   const Release = (data) => console.log(data);
-
- 
+ const classes = useStyles();
   const currentRemarks = (data) => {
     props.showTable({ data: data.data });
   };
@@ -94,95 +76,72 @@ const dataIcons = props.dataForIcons;
     window.location.href = `/digit-ui/employee`;
   };
 
-  const handlemodaldData = (data) => {
+const handlemodaldData = (data) => {
     // setmodaldData(data.data);
     setSmShow(false);
     console.log("here", openedModal, data);
-    if (openedModal && data) {
-      setFieldIconColors({ ...fieldIconColors, [openedModal]: data.data.isApproved ? Colors.approved : Colors.disapproved });
-    }
+    // if (openedModal && data) {
+    //   setFieldIconColors({ ...fieldIconColors, [openedModal]: data.data.isApproved ? Colors.approved : Colors.disapproved });
+    // }
     setOpennedModal("");
     setLabelValue("");
   };
   const [selectedFieldData, setSelectedFieldData] = useState();
   const [fieldValue, setFieldValue] = useState("");
   const [openedModal, setOpennedModal] = useState("");
-  const [fieldIconColors, setFieldIconColors] = useState({
-    issuingBank: Colors.info,
-    bgNumber: Colors.info,
-    validity: Colors.info,
-    claimPeriod: Colors.info,
-    amountInFig: Colors.info,
-    amountInWords: Colors.info,
-    typeOfBg: Colors.info,
-    bankGuaranteeReplacedWith: Colors.info,
-    reasonForReplacement: Colors.info,
-    applicationCerficifate: Colors.info,
-    applicationCerficifateDescription: Colors.info,
-    anyOtherDocumentDescription: Colors.info,
-    releaseCertificate: Colors.info,
-  });
+ useEffect(() => {
+    console.log("logger123...",dataForIcons)
+  }, [dataForIcons])
 
-  const fieldIdList = [
-    { label: " Do you want to Replace B.G.?", key: "issuingBank" },
-    { label: "Enter Bank Guarantee No.", key: "bgNumber" },
-    { label: "Type of B.G.", key: "validity" },
-    { label: " Upload New B.G. softcopy ", key: "claimPeriod" },
-    { label: "Full Completion Certificate.", key: "amountInFig" },
-    { label: " Amount", key: "amountInWords" },
-    { label: "Partial Completion Certificate.", key: "typeOfBg" },
-    { label: "Partial Completion Certificate.", key: "bankGuaranteeReplacedWith" },
-    { label: "Partial Completion Certificate.", key: "reasonForReplacement" },
-    { label: "Partial Completion Certificate.", key: "applicationCerficifate" },
-    { label: "Partial Completion Certificate.", key: "applicationCerficifateDescription" },
-    { label: "Partial Completion Certificate.", key: "anyOtherDocumentDescription" },
-    { label: "Partial Completion Certificate.", key: "releaseCertificate" },
-  ];
-  const getColorofFieldIcon = () => {
-    let tempFieldColorState = fieldIconColors;
-    fieldIdList.forEach((item) => {
-      if (dataIcons !== null && dataIcons !== undefined) {
-        console.log("color method called");
-        const fieldPresent = dataIcons.egScrutiny.filter((ele) => ele.fieldIdL === item.label);
-        console.log("filteration value111", fieldPresent, fieldPresent[0]?.isApproved);
-        if (fieldPresent && fieldPresent.length) {
-          console.log("filteration value111", fieldPresent, fieldPresent[0]?.isApproved);
-          tempFieldColorState = {
-            ...tempFieldColorState,
-            [item.key]:
-              fieldPresent[0].isApproved === "approved"
-                ? Colors.approved
-                : fieldPresent[0].isApproved === "disapproved"
-                ? Colors.disapproved
-                : fieldPresent[0].isApproved === "conditional"
-                ? Colors.conditional
-                : Colors.info,
-          };
-        }
-      }
-    });
+   const [loader, setLoading] = useState(false);
 
-    setFieldIconColors(tempFieldColorState);
-  };
+ const setReleaseData = (details) => {
+   setValue("bgNumber", details?.bgNumber);
+    setValue("issuingBank", details?.issuingBank);
+    setValue("validity", details?.validity);
+    setValue("claimPeriod", details?.claimPeriod);
+    setValue("amountInFig", details?.amountInFig);
+    setValue("amountInWords", details?.amountInWords);
+    setValue("releaseCertificate", details?.releaseCertificate);
+    setValue("bankGuaranteeReplacedWith", details?.bankGuaranteeReplacedWith);
+    setValue("reasonForReplacement", details?.reasonForReplacement);
+    setValue("bankGurenteeCertificateDescription", details?.bankGurenteeCertificateDescription);
+    setValue("anyOtherDocumentDescription", details?.anyOtherDocumentDescription);
+    setValue("bankGurenteeCertificate", details?.bankGurenteeCertificate);
+    setValue("anyOtherDocument", details?.anyOtherDocument);
+  }
 
-  useEffect(() => {
-    getColorofFieldIcon();
-    console.log("repeating1...");
-  }, [dataIcons]);
-
-  useEffect(() => {
-    if (labelValue) {
-      const fieldPresent = dataIcons.egScrutiny.filter((ele) => ele.fieldIdL === labelValue);
-      setSelectedFieldData(fieldPresent[0]);
-    } else {
-      setSelectedFieldData(null);
+   useEffect(() => {
+    if (apiResponse) {
+      setReleaseData(apiResponse)
     }
-  }, [labelValue]);
+  }, [apiResponse])
+ const findfisrtObj = (list = [], label) => {
+    return list?.filter((item, index) => item.fieldIdL === label)?.[0] || {}
+  }
 
+    const getIconColor = (label) => {
+    if (findfisrtObj(dataForIcons?.egScrutiny, label)?.isApproved === 'In Order') {
+      return Colors.approved;
+    }
+    if (findfisrtObj(dataForIcons?.egScrutiny, label)?.isApproved === 'Not In Order') {
+      return Colors.disapproved;
+    }
+    if (findfisrtObj(dataForIcons?.egScrutiny, label)?.isApproved === "Conditional") {
+      return Colors.conditional;
+    }
+    return Colors.info
+  }
 
-  const item = props.ApiResponseData;
-  console.log("digit2...........", apiResponse);
-
+  useEffect(()=>{
+    if(labelValue){
+      setSelectedFieldData(findfisrtObj(dataForIcons?.egScrutiny,labelValue))
+    } else {
+      setSelectedFieldData(null)
+    }
+    console.log("regergerg",labelValue,selectedFieldData)
+  },[labelValue])
+  
 
   return (
     <form onSubmit={handleSubmit(Release)}>
@@ -208,6 +167,16 @@ const dataIcons = props.dataForIcons;
         </span>
         {open2 ? <RemoveIcon></RemoveIcon> : <AddIcon></AddIcon>}
       </div>
+        <ModalChild
+                labelmodal={labelValue}
+                passmodalData={handlemodaldData}
+                displaymodal={smShow}
+                onClose={() => setSmShow(false)}
+                selectedFieldData={selectedFieldData}
+                fieldValue={fieldValue}
+                remarksUpdate={currentRemarks}
+                applicationStatus={applicationStatus}
+              ></ModalChild>
       <Collapse in={open2}>
         <div id="example-collapse-text">
           <Card
@@ -246,17 +215,16 @@ const dataIcons = props.dataForIcons;
                               <h2>{`${t("MY_APPLICATION_BG_GUARANTEE_NO")}`}</h2>
                             </Form.Label>
                           </div>
-                          <div className={classes.fieldContainer}>
-                            <Form.Control className={classes.formControl} placeholder={apiResponse?.bgNumber} disabled></Form.Control>
-
+                          <div className=" d-flex align-items-center">
+                    <input  className="form-control" disabled placeholder="" {...register("bgNumber")} />
                             <ReportProblemIcon
                               style={{
-                                color: fieldIconColors.bgNumber,
+                                color: getIconColor(t('MY_APPLICATION_BG_GUARANTEE_NO')),
                                 // display: showRemarks ? "none" : "block",
                               }}
                               onClick={() => {
-                                setOpennedModal("bgNumber");
-                                setLabelValue("Amount (in fig)"), setSmShow(true), console.log("modal open"), setFieldValue(bgNumber);
+                                setOpennedModal(t('MY_APPLICATION_BG_GUARANTEE_NO'));
+                                setLabelValue(t('MY_APPLICATION_BG_GUARANTEE_NO')), setSmShow(true), console.log("modal open"), setFieldValue(watch('bgNumber') || null);
                               }}
                             ></ReportProblemIcon>
                           </div>
@@ -268,43 +236,43 @@ const dataIcons = props.dataForIcons;
                               <h2>{`${t("MY_APPLICATION_BG_GUARANTEE_ISSUE_DATE")}`}</h2>
                             </Form.Label>
                           </div>
-                          <div className={classes.fieldContainer}>
-                            <Form.Control className={classes.formControl} placeholder={apiResponse?.issuingBank} disabled></Form.Control>
-
+                           <div className=" d-flex align-items-center">
+                    <input  className="form-control" disabled placeholder="" {...register("issuingBank")} />
                             <ReportProblemIcon
                               style={{
-                                color: fieldIconColors.issuingBank,
+                                color: getIconColor(t('MY_APPLICATION_BG_GUARANTEE_ISSUE_DATE')),
                                 // display: showRemarks ? "none" : "block",
                               }}
                               onClick={() => {
-                                setOpennedModal("issuingBank");
-                                setLabelValue("Amount (in fig)"), setSmShow(true), console.log("modal open"), setFieldValue(issuingBank);
+                                setOpennedModal(t('MY_APPLICATION_BG_GUARANTEE_ISSUE_DATE'));
+                                setLabelValue(t('MY_APPLICATION_BG_GUARANTEE_ISSUE_DATE')); setSmShow(true), console.log("modal open"),  setFieldValue(watch('issuingBank') || null);;
                               }}
                             ></ReportProblemIcon>
                           </div>
                           {/* <input type="text" className="form-control" placeholder="" {...register("amountInFig")} /> */}
                         </Form.Group>
-                         <Form.Group as={Col} controlId="formGridLicence">
+                        <Form.Group as={Col} controlId="formGridLicence">
                           <div>
                             <Form.Label>
                               <h2>{`${t("BG_SUBMIT_EXPIRY_DATE")}`}</h2>
                             </Form.Label>
                           </div>
-                          <div className={classes.fieldContainer}>
-                            <Form.Control className={classes.formControl} placeholder={apiResponse?.validity} disabled></Form.Control>
-
+                           <div className=" d-flex align-items-center">
+                    <input  className="form-control" disabled placeholder="" {...register("validity")} />
                             <ReportProblemIcon
                               style={{
-                                color: fieldIconColors.validity,
+                                 color: getIconColor(t('BG_SUBMIT_EXPIRY_DATE')),
                                 // display: showRemarks ? "none" : "block",
                               }}
                               onClick={() => {
-                                setOpennedModal("validity");
-                                setLabelValue("Amount (in fig)"), setSmShow(true), console.log("modal open"), setFieldValue(validity);
+                                setOpennedModal(t('BG_SUBMIT_EXPIRY_DATE'));
+                                setLabelValue(t('BG_SUBMIT_EXPIRY_DATE'));
+                                 setSmShow(true),
+                                 console.log("modal open")
+                                 setFieldValue(watch('validity') || null);
                               }}
                             ></ReportProblemIcon>
                           </div>
-                          {/* <input type="text" className="form-control" placeholder="" {...register("amountInFig")} /> */}
                         </Form.Group>
                          <Form.Group as={Col} controlId="formGridLicence">
                           <div>
@@ -312,17 +280,15 @@ const dataIcons = props.dataForIcons;
                               <h2>{`${t("MY_APPLICATION_BG_GUARANTEE_CLAIM_EXPIRY_DATE")}`}</h2>
                             </Form.Label>
                           </div>
-                          <div className={classes.fieldContainer}>
-                            <Form.Control className={classes.formControl} placeholder={apiResponse?.claimPeriod} disabled></Form.Control>
-
+                           <div className=" d-flex align-items-center">
+                    <input  className="form-control" disabled placeholder="" {...register("claimPeriod")} />
                             <ReportProblemIcon
                               style={{
-                                color: fieldIconColors.claimPeriod,
-                                // display: showRemarks ? "none" : "block",
+                                 color: getIconColor(t('MY_APPLICATION_BG_GUARANTEE_CLAIM_EXPIRY_DATE')),
                               }}
                               onClick={() => {
-                                setOpennedModal("claimPeriod");
-                                setLabelValue("Amount (in fig)"), setSmShow(true), console.log("modal open"), setFieldValue(claimPeriod);
+                                setOpennedModal(t('MY_APPLICATION_BG_GUARANTEE_CLAIM_EXPIRY_DATE'));
+                                setLabelValue(t('MY_APPLICATION_BG_GUARANTEE_CLAIM_EXPIRY_DATE')); setSmShow(true), console.log("modal open"),  setFieldValue(watch('claimPeriod') || null);
                               }}
                             ></ReportProblemIcon>
                           </div>
@@ -330,49 +296,44 @@ const dataIcons = props.dataForIcons;
                         </Form.Group>
                         </Row>
                          <Row className="col-12">
-                        <Form.Group as={Col} controlId="formGridLicence">
+                       <Form.Group as={Col} controlId="formGridLicence">
                           <div>
                             <Form.Label>
                               <h2>{`${t("MY_APPLICATION_BG_GUARANTEE_AMOUNT")}`}</h2>
                             </Form.Label>
                           </div>
-                          <div className={classes.fieldContainer}>
-                            <Form.Control className={classes.formControl} placeholder={apiResponse?.amountInFig} disabled></Form.Control>
-
+                          <div className=" d-flex align-items-center">
+                    <input className="form-control" disabled placeholder="" {...register("amountInFig")} />
                             <ReportProblemIcon
                               style={{
-                                color: fieldIconColors.amountInFig,
-                                // display: showRemarks ? "none" : "block",
+                                 color: getIconColor(t('MY_APPLICATION_BG_GUARANTEE_AMOUNT')),
                               }}
                               onClick={() => {
-                                setOpennedModal("amountInFig");
-                                setLabelValue("Amount (in fig)"), setSmShow(true), console.log("modal open"), setFieldValue(amountInFig);
+                                setOpennedModal(t('MY_APPLICATION_BG_GUARANTEE_AMOUNT'));
+                                setLabelValue(t('MY_APPLICATION_BG_GUARANTEE_AMOUNT')); setSmShow(true), console.log("modal open"), setFieldValue(watch('amountInFig') || null);;
                               }}
                             ></ReportProblemIcon>
                           </div>
                           {/* <input type="text" className="form-control" placeholder="" {...register("amountInFig")} /> */}
                         </Form.Group>
-                         <Form.Group as={Col} controlId="formGridLicence">
+                       <Form.Group as={Col} controlId="formGridLicence">
                           <div>
                             <Form.Label>
                               <h2>{`${t("BG_SUBMIT_AMOUNT_IN_WORDS")}`}</h2>
                             </Form.Label>
                           </div>
-                          <div className={classes.fieldContainer}>
-                            <Form.Control className={classes.formControl} placeholder={apiResponse?.amountInWords} disabled></Form.Control>
-
+                          <div className=" d-flex align-items-center">
+                    <input  className="form-control" disabled placeholder="" {...register("amountInWords")} />
                             <ReportProblemIcon
                               style={{
-                                color: fieldIconColors.amountInWords,
-                                // display: showRemarks ? "none" : "block",
+                                color: getIconColor(t('BG_SUBMIT_AMOUNT_IN_WORDS')),
                               }}
                               onClick={() => {
-                                setOpennedModal("amountInWords");
-                                setLabelValue("Amount (in fig)"), setSmShow(true), console.log("modal open"), setFieldValue(amountInWords);
+                                setOpennedModal(t('BG_SUBMIT_AMOUNT_IN_WORDS'));
+                                setLabelValue(t('BG_SUBMIT_AMOUNT_IN_WORDS')), setSmShow(true), console.log("modal open"), setFieldValue(watch('amountInWords') || null);
                               }}
                             ></ReportProblemIcon>
                           </div>
-                          {/* <input type="text" className="form-control" placeholder="" {...register("amountInFig")} /> */}
                         </Form.Group>
                            <Form.Group as={Col} controlId="formGridLicence">
                           <div>
@@ -380,17 +341,17 @@ const dataIcons = props.dataForIcons;
                               <h2>{`${t("RELEASE_BG")}`}</h2>
                             </Form.Label>
                           </div>
-                          <div className={classes.fieldContainer}>
-                            <Form.Control className={classes.formControl} placeholder={apiResponse?.releaseCertificate} disabled></Form.Control>
+                          <div className=" d-flex align-items-center">
+                    <input  className="form-control" disabled placeholder="" {...register("releaseCertificate")} />
 
                             <ReportProblemIcon
                               style={{
-                                color: fieldIconColors.releaseCertificate,
+                               color: getIconColor(t('RELEASE_BG')),
                                 // display: showRemarks ? "none" : "block",
                               }}
                               onClick={() => {
-                                setOpennedModal("releaseCertificate");
-                                setLabelValue("Amount (in fig)"), setSmShow(true), console.log("modal open"), setFieldValue(releaseCertificate);
+                                setOpennedModal(t('RELEASE_BG'));
+                                setLabelValue(t('RELEASE_BG')); setSmShow(true), console.log("modal open"), setFieldValue(watch('releaseCertificate') || null);
                               }}
                             ></ReportProblemIcon>
                           </div>
@@ -402,17 +363,16 @@ const dataIcons = props.dataForIcons;
                               <h2>Bank Guarantee replaced with</h2>
                             </Form.Label>
                           </div>
-                          <div className={classes.fieldContainer}>
-                            <Form.Control className={classes.formControl} placeholder={apiResponse?.bankGuaranteeReplacedWith} disabled></Form.Control>
-
+                          <div className=" d-flex align-items-center">
+                    <input  className="form-control" disabled placeholder="" {...register("bankGuaranteeReplacedWith")} />
                             <ReportProblemIcon
                               style={{
-                                color: fieldIconColors.bankGuaranteeReplacedWith,
+                               color: getIconColor("Bank Guarantee replaced with"),
                                 // display: showRemarks ? "none" : "block",
                               }}
                               onClick={() => {
-                                setOpennedModal("bankGuaranteeReplacedWith");
-                                setLabelValue("Amount (in fig)"), setSmShow(true), console.log("modal open"), setFieldValue(bankGuaranteeReplacedWith);
+                                setOpennedModal("Bank Guarantee replaced with");
+                                setLabelValue("Bank Guarantee replaced with"), setSmShow(true), console.log("modal open"), setFieldValue(watch('bankGuaranteeReplacedWith') || null);
                               }}
                             ></ReportProblemIcon>
                           </div>
@@ -426,17 +386,17 @@ const dataIcons = props.dataForIcons;
                               <h2>{`${t("RELEASE_BG_REASON_FOR_REPLACEMENT")}`}</h2>
                             </Form.Label>
                           </div>
-                          <div className={classes.fieldContainer}>
-                            <Form.Control className={classes.formControl} placeholder={apiResponse?.reasonForReplacement} disabled></Form.Control>
+                        <div className=" d-flex align-items-center">
+                    <input  className="form-control" disabled placeholder="" {...register("reasonForReplacement")} />
 
                             <ReportProblemIcon
                               style={{
-                                color: fieldIconColors.reasonForReplacement,
+                               color: getIconColor(t('RELEASE_BG_REASON_FOR_REPLACEMENT')),
                                 // display: showRemarks ? "none" : "block",
                               }}
                               onClick={() => {
-                                setOpennedModal("reasonForReplacement");
-                                setLabelValue("Amount (in fig)"), setSmShow(true), console.log("modal open"), setFieldValue(reasonForReplacement);
+                                setOpennedModal(t('RELEASE_BG_REASON_FOR_REPLACEMENT'));
+                                setLabelValue(t('RELEASE_BG_REASON_FOR_REPLACEMENT')); setSmShow(true), console.log("modal open"), setFieldValue(watch('reasonForReplacement') || null);
                               }}
                             ></ReportProblemIcon>
                           </div>
@@ -475,12 +435,12 @@ const dataIcons = props.dataForIcons;
                               <h2>{`${t("RELEASE_APPLICATION_PDF")}`}</h2>
                                <ReportProblemIcon
                               style={{
-                                color: fieldIconColors.bankGurenteeCertificateDescription,
+                               color: getIconColor(t('RELEASE_APPLICATION_PDF')),
                                 // display: showRemarks ? "none" : "block",
                               }}
                               onClick={() => {
-                                setOpennedModal("bankGurenteeCertificateDescription");
-                                setLabelValue("Amount (in fig)"), setSmShow(true), console.log("modal open"), setFieldValue(bankGurenteeCertificateDescription);
+                                setOpennedModal(t('RELEASE_APPLICATION_PDF'));
+                                setLabelValue(t('RELEASE_APPLICATION_PDF')); setSmShow(true), console.log("modal open"), setFieldValue(watch('bankGurenteeCertificate') || null);
                               }}
                             ></ReportProblemIcon>
                             </Form.Label>
@@ -496,17 +456,17 @@ const dataIcons = props.dataForIcons;
                               <h2>{`${t("EXTENSION_BANK_GUARANTEE_PDF")}`}</h2>
                             </Form.Label> */}
                           </div>
-                          <div className={classes.fieldContainer}>
-                            <Form.Control className={classes.formControl} placeholder={apiResponse?.bankGurenteeCertificateDescription} disabled></Form.Control>
+                          <div className=" d-flex align-items-center">
+                    <input  className="form-control" disabled placeholder="" {...register("bankGurenteeCertificateDescription")} />
 
                             <ReportProblemIcon
                               style={{
-                                color: fieldIconColors.bankGurenteeCertificateDescription,
+                                color: getIconColor(""),
                                 // display: showRemarks ? "none" : "block",
                               }}
                               onClick={() => {
-                                setOpennedModal("bankGurenteeCertificateDescription");
-                                setLabelValue("Amount (in fig)"), setSmShow(true), console.log("modal open"), setFieldValue(bankGurenteeCertificateDescription);
+                                setOpennedModal("");
+                                setLabelValue(""); setSmShow(true), console.log("modal open"), setFieldValue(watch('bankGurenteeCertificateDescription') || null);
                               }}
                             ></ReportProblemIcon>
                           </div>
@@ -526,12 +486,12 @@ const dataIcons = props.dataForIcons;
                               <h2>{`${t("RELEASE_COMPLETION_CERTIFICATE_PDF")}`}</h2>
                                <ReportProblemIcon
                               style={{
-                                color: fieldIconColors.bankGurenteeCertificateDescription,
+                                color: getIconColor(t('RELEASE_COMPLETION_CERTIFICATE_PDF')),
                                 // display: showRemarks ? "none" : "block",
                               }}
                               onClick={() => {
-                                setOpennedModal("bankGurenteeCertificateDescription");
-                                setLabelValue("Amount (in fig)"), setSmShow(true), console.log("modal open"), setFieldValue(bankGurenteeCertificateDescription);
+                                setOpennedModal(t('RELEASE_COMPLETION_CERTIFICATE_PDF'));
+                                setLabelValue(t('RELEASE_COMPLETION_CERTIFICATE_PDF')); setSmShow(true), console.log("modal open"), setFieldValue(watch('bankGurenteeCertificateDescription') || null);;
                               }}
                             ></ReportProblemIcon>
                             </Form.Label>
@@ -547,17 +507,17 @@ const dataIcons = props.dataForIcons;
                               <h2>{`${t("EXTENSION_BANK_GUARANTEE_PDF")}`}</h2>
                             </Form.Label> */}
                           </div>
-                          <div className={classes.fieldContainer}>
-                            <Form.Control className={classes.formControl} placeholder={apiResponse?.bankGurenteeCertificateDescription} disabled></Form.Control>
+                         <div className=" d-flex align-items-center">
+                    <input  className="form-control" disabled placeholder="" {...register("bankGurenteeCertificateDescription")} />
 
                             <ReportProblemIcon
                               style={{
-                                color: fieldIconColors.bankGurenteeCertificateDescription,
+                               color: getIconColor(""),
                                 // display: showRemarks ? "none" : "block",
                               }}
                               onClick={() => {
-                                setOpennedModal("bankGurenteeCertificateDescription");
-                                setLabelValue("Amount (in fig)"), setSmShow(true), console.log("modal open"), setFieldValue(bankGurenteeCertificateDescription);
+                                setOpennedModal("");
+                                setLabelValue(""), setSmShow(true), console.log("modal open"), setFieldValue(watch('bankGurenteeCertificateDescription') || null);
                               }}
                             ></ReportProblemIcon>
                           </div>
@@ -577,12 +537,12 @@ const dataIcons = props.dataForIcons;
                               <h2>{`${t("EXTENSION_ANY_OTHER_DOC_PDF")}`}</h2>
                                <ReportProblemIcon
                               style={{
-                                color: fieldIconColors.anyOtherDocumentDescription,
+                                color: getIconColor(t('EXTENSION_ANY_OTHER_DOC_PDF')),
                                 // display: showRemarks ? "none" : "block",
                               }}
                               onClick={() => {
-                                setOpennedModal("anyOtherDocumentDescription");
-                                setLabelValue("Amount (in fig)"), setSmShow(true), console.log("modal open"), setFieldValue(anyOtherDocumentDescription);
+                                setOpennedModal(t('EXTENSION_ANY_OTHER_DOC_PDF'));
+                                setLabelValue(t('EXTENSION_ANY_OTHER_DOC_PDF')); setSmShow(true), console.log("modal open"), setFieldValue(watch('anyOtherDocument') || null);
                               }}
                             ></ReportProblemIcon>
                             </Form.Label>
@@ -598,17 +558,17 @@ const dataIcons = props.dataForIcons;
                               <h2>{`${t("EXTENSION_BANK_GUARANTEE_PDF")}`}</h2>
                             </Form.Label> */}
                           </div>
-                          <div className={classes.fieldContainer}>
-                            <Form.Control className={classes.formControl} placeholder={apiResponse?.anyOtherDocumentDescription} disabled></Form.Control>
+                         <div className=" d-flex align-items-center">
+                    <input  className="form-control" disabled placeholder="" {...register("anyOtherDocumentDescription")} />
 
                             <ReportProblemIcon
                               style={{
-                                color: fieldIconColors.anyOtherDocumentDescription,
+                               color: getIconColor(""),
                                 // display: showRemarks ? "none" : "block",
                               }}
                               onClick={() => {
-                                setOpennedModal("anyOtherDocumentDescription");
-                                setLabelValue("Amount (in fig)"), setSmShow(true), console.log("modal open"), setFieldValue(anyOtherDocumentDescription);
+                                setOpennedModal("");
+                                setLabelValue(""), setSmShow(true), console.log("modal open"), setFieldValue(watch('anyOtherDocumentDescription') || null);
                               }}
                             ></ReportProblemIcon>
                           </div>

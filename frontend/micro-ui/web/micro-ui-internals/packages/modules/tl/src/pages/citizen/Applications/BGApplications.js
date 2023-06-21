@@ -164,7 +164,7 @@ const BGApplications = ({ view }) => {
     <div>
      
       <form>
-         <div className="card1" style={{ width: "126%", border: "5px solid #1266af" }}>
+         <div className="card1" style={{ width: "100%", border: "5px solid #1266af" }}>
             <h4 style={{ fontSize: "25px", marginLeft: "21px" }} className="text-left">{`${t("MY_APPLICATION_BG_REQUEST_FOR_RELEASE")}`}
               {/* Bank Guarantee-Request for Release */}
             </h4>

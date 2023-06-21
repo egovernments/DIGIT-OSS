@@ -1,60 +1,42 @@
-import React, { useState, useEffect, useTransition } from "react";
+import React, { useEffect, useState } from "react";
 import Button from "react-bootstrap/Button";
 import Col from "react-bootstrap/Col";
 import Form from "react-bootstrap/Form";
 import Row from "react-bootstrap/Row";
-import { useForm } from "react-hook-form";
 import { Card } from "react-bootstrap";
-import { IconButton } from "@mui/material";
-import FormControl from "@mui/material/FormControl";
-import { Dialog } from "@mui/material";
-import DialogActions from "@mui/material/DialogActions";
-import DialogContent from "@mui/material/DialogContent";
-import DialogContentText from "@mui/material/DialogContentText";
-import DialogTitle from "@mui/material/DialogTitle";
-import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
-import Table from "@mui/material/Table";
-import TableBody from "@mui/material/TableBody";
-import TableCell from "@mui/material/TableCell";
-import TableContainer from "@mui/material/TableContainer";
-import TableHead from "@mui/material/TableHead";
-import TableRow from "@mui/material/TableRow";
-import Paper from "@mui/material/Paper";
-import Radio from "@mui/material/Radio";
-import RadioGroup from "@mui/material/RadioGroup";
-import Visibility from "@mui/icons-material/Visibility";
-import FileUpload from "@mui/icons-material/FileUpload";
-import { getDocShareholding } from "../../ScrutinyDevelopment/docview.helper";
+import { useForm } from "react-hook-form";
 import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
-import ReportProblemIcon from "@mui/icons-material/ReportProblem";
-// import ModalChild from "../../Remarks/ModalChild";
-import Collapse from "react-bootstrap/Collapse";
 import { useStyles } from "../../css/personalInfoChild.style";
-import "../../css/personalInfoChild.style.js";
-import { FormHelperText,IconButton } from "@mui/material";
-import VisibilityIcon from "@mui/icons-material/Visibility";
-import FileDownloadIcon from "@mui/icons-material/FileDownload";
+import Collapse from "react-bootstrap/Collapse";
+import ReportProblemIcon from "@mui/icons-material/ReportProblem";
+import { useLocation, useParams } from "react-router-dom";
+import axios from "axios";
+import { FormControl, FormHelperText, InputLabel, MenuItem, Select, TextField } from "@mui/material";
+import Visibility from "@mui/icons-material/Visibility";
+import FileUpload from "@mui/icons-material/FileUpload";
 import { useTranslation } from "react-i18next";
+import { getDocShareholding } from "../../ScrutinyDevelopment/docview.helper";
 import ModalChild from "../../Remarks/ModalChild";
 
-
-
-function Extension (props) {
+function Extension ({ apiResponse, refreshScrutinyData, applicationNumber, passUncheckedList, passCheckedList, dataForIcons,applicationStatus }) {
   const userRoles = Digit.UserService.getUser()?.info?.roles.map((item) => item.code) || [];
   const showActionButton = userRoles.includes("AO_HQ");
   const showActionButton1 = userRoles.includes("CAO");
-  const {t}=useTranslation();
-  console.log("Externaldata", userRoles);
-  const [selects, setSelects] = useState();
+ const [selects, setSelects] = useState();
   const [showhide, setShowhide] = useState("");
- const apiData = props.apiResponse;
+  const [licenseData, setLicenseData] = useState();
+  const { id } = useParams();
+  const [showToastError, setShowToastError] = useState({ label: "", error: false, success: false });
+  const authToken = Digit.UserService.getUser()?.access_token || null;
+  const userInfo = Digit.UserService.getUser()?.info || {};
+  const { t } = useTranslation();
+  const { pathname: url } = useLocation();
   const [open, setOpen] = useState(false);
    const [open4, setOpen4] = useState(false);
    const [open3, setOpen3] = useState(false);
   const [open2, setOpen2] = useState(false);
-  const classes = useStyles();
-  const applicationStatus = props.applicationStatus;
+  // const applicationStatus = props.applicationStatus;
   // const [applicationNumber, setApplicationNumber] = useState();
   const [developerDataLabel, setDeveloperDataLabel] = useState([]);
   const handleshowhide = (event) => {
@@ -62,7 +44,11 @@ function Extension (props) {
 
     setShowhide(getuser);
   };
-// const dataIcons = props.dataForIcons;
+ const handleselects = (event) => {
+    const getu = event.target.value;
+
+    setSelects(getu);
+  };
   const {
     register,
     handleSubmit,
@@ -76,7 +62,10 @@ function Extension (props) {
   const Extension = (data) => {
     console.log(data);
   };
- 
+ const classes = useStyles();
+  const currentRemarks = (data) => {
+    props.showTable({ data: data.data });
+  };
 
   const [smShow, setSmShow] = useState(false);
   const [labelValue, setLabelValue] = useState("");
@@ -91,42 +80,54 @@ function Extension (props) {
     setOpen(false);
     window.location.href = `/digit-ui/employee`;
   };
-  const handlemodaldData = (data) => {
+ const handlemodaldData = (data) => {
     // setmodaldData(data.data);
     setSmShow(false);
     console.log("here", openedModal, data);
-    if (openedModal && data) {
-      setFieldIconColors({ ...fieldIconColors, [openedModal]: data.data.isApproved ? Colors.approved : Colors.disapproved });
-    }
+    // if (openedModal && data) {
+    //   setFieldIconColors({ ...fieldIconColors, [openedModal]: data.data.isApproved ? Colors.approved : Colors.disapproved });
+    // }
     setOpennedModal("");
     setLabelValue("");
   };
-  
   const [selectedFieldData, setSelectedFieldData] = useState();
   const [fieldValue, setFieldValue] = useState("");
-   const [loader, setLoading] = useState(false);
   const [openedModal, setOpennedModal] = useState("");
-  const [fieldIconColors, setFieldIconColors] = useState({
-    bgNumber: Colors.info,
-    issuingBank: Colors.info,
-    validity: Colors.info,
-    claimPeriod: Colors.info,
-    issuingBank: Colors.info,
-    amountInFig: Colors.info,
-    originCountry: Colors.info,
-    amountInWords: Colors.info,
-    dateOfAmendment: Colors.info,
-    amendmentExpiryDate: Colors.info,
-    amendmentClaimExpiryDate: Colors.info,
-    licenseApplied: Colors.info,
-    anyOtherDocumentDescription: Colors.info,
-    bankGurenteeCertificateDescription: Colors.info,
-    lciNotSigned: Colors.info,
-    parmanentAddress: Colors.info,
-    addressForCommunication: Colors.info,
-    authPerson: Colors.info,
-    emailForCommunication: Colors.info,
-  });
+useEffect(() => {
+    console.log("logger123...",dataForIcons)
+  }, [dataForIcons])
+
+   const [loader, setLoading] = useState(false);
+  
+
+  const setExtensionData = (details) => {
+    setValue("bgNumber", details?.bgNumber);
+    setValue("issuingBank", details?.issuingBank);
+    setValue("validity", details?.validity);
+    setValue("claimPeriod", details?.claimPeriod);
+    setValue("amountInFig", details?.amountInFig);
+    setValue("originCountry", details?.originCountry);
+    setValue("amountInWords", details?.amountInWords);
+    setValue("dateOfAmendment", details?.dateOfAmendment);
+    setValue("amendmentExpiryDate", details?.amendmentExpiryDate);
+    setValue("amendmentClaimExpiryDate", details?.amendmentClaimExpiryDate);
+    setValue("originCountry", details?.originCountry);
+    setValue("licenseApplied", details?.licenseApplied);
+    setValue("bankGurenteeCertificateDescription", details?.bankGurenteeCertificateDescription);
+    setValue("bankGurenteeCertificate", details?.bankGurenteeCertificate);
+    setValue("anyOtherDocumentDescription", details?.anyOtherDocumentDescription);
+    setValue("anyOtherDocument", details?.anyOtherDocument);
+  }
+
+   useEffect(() => {
+    if (apiResponse) {
+      setExtensionData(apiResponse)
+    }
+  }, [apiResponse])
+ const findfisrtObj = (list = [], label) => {
+    return list?.filter((item, index) => item.fieldIdL === label)?.[0] || {}
+  }
+
     const getIconColor = (label) => {
     if (findfisrtObj(dataForIcons?.egScrutiny, label)?.isApproved === 'In Order') {
       return Colors.approved;
@@ -140,116 +141,15 @@ function Extension (props) {
     return Colors.info
   }
 
-  const findfisrtObj = (list = [], label) => {
-    return list?.filter((item, index) => item.fieldIdL === label)?.[0] || {}
-  }
-
-  const fieldIdList = [
-    { label: "Bank Guarantee Number", key: "bgNumber" },
-    // { label: "Authorized Person Name", key: "issuingBank" },
-    // { label: "Autrhoized Mobile No", key: "validity" },
-    // { label: "Authorized MobileNo. 2 ", key: "claimPeriod" },
-    // { label: "Email ID", key: "amountInFig" },
-    // { label: "PAN No.", key: "issuingBank" },
-    // { label: "Address  1", key: "originCountry" },
-    // { label: "Village/City", key: "amountInWords" },
-    // { label: "Pincode", key: "dateOfAmendment" },
-    // { label: "Tehsil", key: "amendmentExpiryDate" },
-    // { label: "District", key: "amendmentClaimExpiryDate" },
-    // { label: "State", key: "licenseApplied" },
-    // { label: "Status (Individual/ Company/ Firm/ LLP etc.)", key: "anyOtherDocumentDescription" },
-    // { label: "LC-I signed by", key: "bankGurenteeCertificateDescription" },
-    // { label: "If LC-I is not signed by self (in case of an individual) nature of authorization (GPA/SPA)", key: "lciNotSigned" },
-    // { label: "Permanent address in case of individual/ registered office address in case other than individual", key: "parmanentAddress" },
-    // { label: "Address for communication", key: "addressForCommunication" },
-    // { label: "Name of the authorized person to sign the application", key: "authPerson" },
-    // { label: "Email ID for communication", key: "emailForCommunication" },
-  ];
-  const handleselects = (event) => {
-    const getu = event.target.value;
-
-    setSelects(getu);
-  };
-  const getColorofFieldIcon = () => {
-    let tempFieldColorState = fieldIconColors;
-    fieldIdList.forEach((item) => {
-      if (dataIcons !== null && dataIcons !== undefined) {
-        console.log("color method called");
-        const fieldPresent = dataIcons?.egScrutiny.filter((ele) => ele.fieldIdL === item.label);
-        console.log("filteration value111", fieldPresent, fieldPresent[0]?.isApproved);
-        if (fieldPresent && fieldPresent.length) {
-          console.log("filteration value111", fieldPresent, fieldPresent[0]?.isApproved);
-          tempFieldColorState = {
-            ...tempFieldColorState,
-            [item.key]:
-              fieldPresent[0].isApproved === "approved"
-                ? Colors.approved
-                : fieldPresent[0].isApproved === "disapproved"
-                ? Colors.disapproved
-                : fieldPresent[0].isApproved === "conditional"
-                ? Colors.conditional
-                : Colors.info,
-          };
-        }
-      }
-    });
-
-    setFieldIconColors(tempFieldColorState);
-  };
-   useEffect(() => {
-    if (apiResponse) {
-      setExtensionData(apiResponse)
-    }
-  }, [apiResponse])
-
- useEffect(() => {
-    if (apiData) {
-    setValue("bgNumber", apiData?.bgNumber);
-    // setValue("caseNo", details?.caseNo);
-    // setValue("naturePurpose", details?.naturePurpose);
-    // setValue("totalAreaSq", details?.totalAreaSq);
-    // setValue("cluDate", details?.cluDate);
-    // setValue("applicantName", details?.applicantName);
-    // setValue("expiryClu", details?.expiryClu);
-    // setValue("stageConstruction", details?.stageConstruction);
-    // setValue("mobile", details?.mobile);
-    // setValue("emailAddress", details?.emailAddress);
-    // setValue("address", details?.address);
-    // setValue("village", details?.village);
-    // setValue("pinCode", details?.pinCode);
-    // setValue("tehsil", details?.tehsil);
-    // setValue("reasonDelay", details?.reasonDelay);
-    // setValue("buildingPlanApprovalStatus", details?.buildingPlanApprovalStatus);
-    // setValue("zoningPlanApprovalDate", details?.zoningPlanApprovalDate);
-    // setValue("dateOfSanctionBuildingPlan", details?.dateOfSanctionBuildingPlan);
-    // setValue("appliedFirstTime", details?.appliedFirstTime);
-    // setValue("uploadbrIIIfileUrl", details?.uploadbrIIIfileUrl);
-    // setValue("cluPermissionLetterfileUrl", details?.cluPermissionLetterfileUrl);
-    // setValue("uploadPhotographsfileUrl", details?.uploadPhotographsfileUrl);
-    // setValue("receiptApplicationfileUrl", details?.receiptApplicationfileUrl);
-    // setValue("uploadBuildingPlanfileUrl", details?.uploadBuildingPlanfileUrl);
-    // setValue("indemnityBondfileUrl", details?.indemnityBondfileUrl);
-  }
-}, [apiData]);
-
-  useEffect(() => {
-    getColorofFieldIcon();
-    console.log("repeating1...");
-  }, [dataIcons]);
-
-  useEffect(() => {
-    if (labelValue) {
-      const fieldPresent = dataIcons?.egScrutiny.filter((ele) => ele.fieldIdL === labelValue);
-      setSelectedFieldData(fieldPresent[0]);
+  useEffect(()=>{
+    if(labelValue){
+      setSelectedFieldData(findfisrtObj(dataForIcons?.egScrutiny,labelValue))
     } else {
-      setSelectedFieldData(null);
+      setSelectedFieldData(null)
     }
-  }, [labelValue]);
-
-  const currentRemarks = (data) => {
-    props.showTable({ data: data.data });
-  };
-
+    console.log("regergerg",labelValue,selectedFieldData)
+  },[labelValue])
+  
 
   return (
     <form onSubmit={handleSubmit(Extension)}>
@@ -324,27 +224,20 @@ function Extension (props) {
                             </Form.Label>
                           </div>
                            <div className=" d-flex align-items-center">
-                    <input type="text" className="form-control" disabled placeholder="" {...register("bgNumber")} />
-                          {/* <div className={classes.fieldContainer}>
-                            <Form.Control className={classes.formControl} placeholder={apiResponse?.bgNumber} disabled></Form.Control> */}
+                    <input  className="form-control" disabled placeholder="" {...register("bgNumber")} />
 
                             <ReportProblemIcon
                               style={{
-                                // color: getIconColor(t('MY_APPLICATION_BG_GUARANTEE_NO')),
-                                color: fieldIconColors.bgNumber,
-                                // display: showRemarks ? "none" : "block", 
+                                color: getIconColor(t('MY_APPLICATION_BG_GUARANTEE_NO')),
                               }}
                               onClick={() => {
-                                setOpennedModal("bgNumber")
-                                setLabelValue(t('MY_APPLICATION_BG_GUARANTEE_NO'))
-                                setSmShow(true)
-                                setFieldValue(apiData !== null ? apiData.bgNumber : null);
-                              //  setFieldValue(watch('bgNumber') || null);
-                                // setFieldValue(apiResponse?.bgNumber);
+                                setOpennedModal(t('MY_APPLICATION_BG_GUARANTEE_NO'));
+                                setLabelValue(t('MY_APPLICATION_BG_GUARANTEE_NO'));
+                                setSmShow(true),
+                               setFieldValue(watch('bgNumber') || null);
                               }}
                             ></ReportProblemIcon>
                           </div>
-                          {/* <input type="text" className="form-control" placeholder="" {...register("amountInFig")} /> */}
                         </Form.Group>
                         <Form.Group as={Col} controlId="formGridLicence">
                           <div>
@@ -353,20 +246,16 @@ function Extension (props) {
                             </Form.Label>
                           </div>
                           <div className=" d-flex align-items-center">
-                    <input type="text" className="form-control" disabled placeholder="" {...register("issuingBank")} />
-                          {/* <div className={classes.fieldContainer}> */}
-                            {/* <Form.Control className={classes.formControl} placeholder={apiResponse?.issuingBank} disabled></Form.Control> */}
-
+                    <input  className="form-control" disabled placeholder="" {...register("issuingBank")} />
                             <ReportProblemIcon
                               style={{
                                 color: getIconColor(t("MY_APPLICATION_BG_GUARANTEE_ISSUE_DATE")),
                                 // display: showRemarks ? "none" : "block",
                               }}
                               onClick={() => {
-                                setOpennedModal("issuingBank")
-                                setLabelValue("Amount (in fig)")
-                                setSmShow(true)
-                                 console.log("modal open")
+                                setOpennedModal(t('MY_APPLICATION_BG_GUARANTEE_ISSUE_DATE'));
+                                setLabelValue(t('MY_APPLICATION_BG_GUARANTEE_ISSUE_DATE'));
+                                setSmShow(true),
                                  setFieldValue(watch('issuingBank') || null);
                               }}
                             ></ReportProblemIcon>
@@ -380,25 +269,21 @@ function Extension (props) {
                             </Form.Label>
                           </div>
                            <div className=" d-flex align-items-center">
-                    <input type="text" className="form-control" disabled placeholder="" {...register("validity")} />
-                          {/* <div className={classes.fieldContainer}> */}
-                            {/* <Form.Control className={classes.formControl} placeholder={apiResponse?.validity} disabled></Form.Control> */}
-
+                    <input  className="form-control" disabled placeholder="" {...register("validity")} />
                             <ReportProblemIcon
                               style={{
                                  color: getIconColor(t('BG_SUBMIT_EXPIRY_DATE')),
                                 // display: showRemarks ? "none" : "block",
                               }}
                               onClick={() => {
-                                setOpennedModal("validity")
-                                setLabelValue("Amount (in fig)")
-                                 setSmShow(true)
+                                setOpennedModal(t('BG_SUBMIT_EXPIRY_DATE'));
+                                setLabelValue(t('BG_SUBMIT_EXPIRY_DATE'));
+                                 setSmShow(true),
                                  console.log("modal open")
                                  setFieldValue(watch('validity') || null);
                               }}
                             ></ReportProblemIcon>
                           </div>
-                          {/* <input type="text" className="form-control" placeholder="" {...register("amountInFig")} /> */}
                         </Form.Group>
                          <Form.Group as={Col} controlId="formGridLicence">
                           <div>
@@ -407,14 +292,14 @@ function Extension (props) {
                             </Form.Label>
                           </div>
                            <div className=" d-flex align-items-center">
-                    <input type="text" className="form-control" disabled placeholder="" {...register("claimPeriod")} />
+                    <input  className="form-control" disabled placeholder="" {...register("claimPeriod")} />
                             <ReportProblemIcon
                               style={{
                                  color: getIconColor(t('MY_APPLICATION_BG_GUARANTEE_CLAIM_EXPIRY_DATE')),
                               }}
                               onClick={() => {
-                                setOpennedModal("claimPeriod");
-                                setLabelValue("Amount (in fig)"), setSmShow(true), console.log("modal open"),  setFieldValue(watch('claimPeriod') || null);
+                                setOpennedModal(t('MY_APPLICATION_BG_GUARANTEE_CLAIM_EXPIRY_DATE'));
+                                setLabelValue(t('MY_APPLICATION_BG_GUARANTEE_CLAIM_EXPIRY_DATE')); setSmShow(true), console.log("modal open"),  setFieldValue(watch('claimPeriod') || null);
                               }}
                             ></ReportProblemIcon>
                           </div>
@@ -429,14 +314,14 @@ function Extension (props) {
                             </Form.Label>
                           </div>
                           <div className=" d-flex align-items-center">
-                    <input type="text" className="form-control" disabled placeholder="" {...register("amountInFig")} />
+                    <input className="form-control" disabled placeholder="" {...register("amountInFig")} />
                             <ReportProblemIcon
                               style={{
                                  color: getIconColor(t('MY_APPLICATION_BG_GUARANTEE_AMOUNT')),
                               }}
                               onClick={() => {
-                                setOpennedModal("amountInFig");
-                                setLabelValue("Amount (in fig)"), setSmShow(true), console.log("modal open"), setFieldValue(watch('amountInFig') || null);;
+                                setOpennedModal(t('MY_APPLICATION_BG_GUARANTEE_AMOUNT'));
+                                setLabelValue(t('MY_APPLICATION_BG_GUARANTEE_AMOUNT')); setSmShow(true), console.log("modal open"), setFieldValue(watch('amountInFig') || null);;
                               }}
                             ></ReportProblemIcon>
                           </div>
@@ -449,18 +334,17 @@ function Extension (props) {
                             </Form.Label>
                           </div>
                           <div className=" d-flex align-items-center">
-                    <input type="text" className="form-control" disabled placeholder="" {...register("issuingBank")} />
+                    <input  className="form-control" disabled placeholder="" {...register("issuingBank")} />
                             <ReportProblemIcon
                               style={{
                                 color: getIconColor(t('EXTENSION_ISSUING_BANK')),
                               }}
                               onClick={() => {
-                                setOpennedModal("issuingBank");
-                                setLabelValue("Amount (in fig)"), setSmShow(true), console.log("modal open"),  setFieldValue(watch('issuingBank') || null);
+                                setOpennedModal(t('EXTENSION_ISSUING_BANK'));
+                                setLabelValue(t('EXTENSION_ISSUING_BANK')), setSmShow(true), console.log("modal open"),  setFieldValue(watch('issuingBank') || null);
                               }}
                             ></ReportProblemIcon>
                           </div>
-                          {/* <input type="text" className="form-control" placeholder="" {...register("amountInFig")} /> */}
                         </Form.Group>
                          <Form.Group as={Col} controlId="formGridLicence">
                           <div>
@@ -469,18 +353,18 @@ function Extension (props) {
                             </Form.Label>
                           </div>
                           <div className=" d-flex align-items-center">
-                    <input type="text" className="form-control" disabled placeholder="" {...register("originCountry")} />
+                    <input className="form-control" disabled placeholder="" {...register("originCountry")} />
                             <ReportProblemIcon
                               style={{
                                  color: getIconColor(t('BG_SUBMIT_COUNTRY_ORIGIN')),
                               }}
                               onClick={() => {
-                                setOpennedModal("originCountry");
-                                setLabelValue("Amount (in fig)"), setSmShow(true), console.log("modal open"), setFieldValue(watch('originCountry') || null);
+                                setOpennedModal(t('BG_SUBMIT_COUNTRY_ORIGIN'));
+                                setLabelValue(t('BG_SUBMIT_COUNTRY_ORIGIN')), setSmShow(true), console.log("modal open"), setFieldValue(watch('originCountry') || null);
                               }}
                             ></ReportProblemIcon>
                           </div>
-                          {/* <input type="text" className="form-control" placeholder="" {...register("amountInFig")} /> */}
+                        
                         </Form.Group>
                          <Form.Group as={Col} controlId="formGridLicence">
                           <div>
@@ -489,18 +373,17 @@ function Extension (props) {
                             </Form.Label>
                           </div>
                           <div className=" d-flex align-items-center">
-                    <input type="text" className="form-control" disabled placeholder="" {...register("amountInWords")} />
+                    <input  className="form-control" disabled placeholder="" {...register("amountInWords")} />
                             <ReportProblemIcon
                               style={{
                                 color: getIconColor(t('BG_SUBMIT_AMOUNT_IN_WORDS')),
                               }}
                               onClick={() => {
-                                setOpennedModal("amountInWords");
-                                setLabelValue("Amount (in fig)"), setSmShow(true), console.log("modal open"), setFieldValue(watch('amountInWords') || null);
+                                setOpennedModal(t('BG_SUBMIT_AMOUNT_IN_WORDS'));
+                                setLabelValue(t('BG_SUBMIT_AMOUNT_IN_WORDS')), setSmShow(true), console.log("modal open"), setFieldValue(watch('amountInWords') || null);
                               }}
                             ></ReportProblemIcon>
                           </div>
-                          {/* <input type="text" className="form-control" placeholder="" {...register("amountInFig")} /> */}
                         </Form.Group>
                         </Row>
             <br></br>
@@ -527,7 +410,7 @@ function Extension (props) {
         <span style={{ color: "#817f7f", fontSize: 14 }} className="">
           - BG Detail
         </span>
-        {open4 ? <RemoveIcon></RemoveIcon> : <AddIcon></AddIcon>}
+        {open3 ? <RemoveIcon></RemoveIcon> : <AddIcon></AddIcon>}
       </div>
       <Collapse in={open3}>
         <div className="card">
@@ -539,18 +422,17 @@ function Extension (props) {
                             </Form.Label>
                           </div>
                           <div className=" d-flex align-items-center">
-                    <input type="text" className="form-control" disabled placeholder="" {...register("bgNumber")} />
+                    <input className="form-control" disabled placeholder="" {...register("bgNumber")} />
                             <ReportProblemIcon
                               style={{
                                  color: getIconColor(t('MY_APPLICATION_BG_GUARANTEE_NO')),
                               }}
                               onClick={() => {
-                                setOpennedModal("bgNumber");
-                                setLabelValue("Amount (in fig)"), setSmShow(true), console.log("modal open"), setFieldValue(watch('bgNumber') || null);
+                                setOpennedModal(t('MY_APPLICATION_BG_GUARANTEE_NO'));
+                                setLabelValue(t('MY_APPLICATION_BG_GUARANTEE_NO')); setSmShow(true), console.log("modal open"), setFieldValue(watch('bgNumber') || null);
                               }}
                             ></ReportProblemIcon>
                           </div>
-                          {/* <input type="text" className="form-control" placeholder="" {...register("amountInFig")} /> */}
                         </Form.Group>
                         <Form.Group as={Col} controlId="formGridLicence">
                           <div>
@@ -566,8 +448,8 @@ function Extension (props) {
                                 color: getIconColor(t('EXTENSION_DATE_OF_AMENDMENT')),
                               }}
                               onClick={() => {
-                                setOpennedModal("dateOfAmendment");
-                                setLabelValue("Amount (in fig)"), setSmShow(true), console.log("modal open"), setFieldValue(watch('dateOfAmendment') || null);
+                                setOpennedModal(t('EXTENSION_DATE_OF_AMENDMENT'));
+                                setLabelValue(t('EXTENSION_DATE_OF_AMENDMENT')); setSmShow(true), console.log("modal open"), setFieldValue(watch('dateOfAmendment') || null);
                               }}
                             ></ReportProblemIcon>
                           </div>
@@ -580,14 +462,14 @@ function Extension (props) {
                             </Form.Label>
                           </div>
                           <div className=" d-flex align-items-center">
-                    <input type="text" className="form-control" disabled placeholder="" {...register("amendmentExpiryDate")} />
+                    <input className="form-control" disabled placeholder="" {...register("amendmentExpiryDate")} />
                             <ReportProblemIcon
                               style={{
                                 color: getIconColor(t('EXTENSION_AMENDMENT_EXPIRY_DATE')),
                               }}
                               onClick={() => {
-                                setOpennedModal("amendmentExpiryDate");
-                                setLabelValue("Amount (in fig)"), setSmShow(true), console.log("modal open"), setFieldValue(watch('amendmentExpiryDate') || null);
+                                setOpennedModal(t('EXTENSION_AMENDMENT_EXPIRY_DATE'));
+                                setLabelValue(t('EXTENSION_AMENDMENT_EXPIRY_DATE')); setSmShow(true), console.log("modal open"), setFieldValue(watch('amendmentExpiryDate') || null);
                               }}
                             ></ReportProblemIcon>
                           </div>
@@ -600,18 +482,17 @@ function Extension (props) {
                             </Form.Label>
                           </div>
                            <div className=" d-flex align-items-center">
-                    <input type="text" className="form-control" disabled placeholder="" {...register("amendmentClaimExpiryDate")} />
+                    <input  className="form-control" disabled placeholder="" {...register("amendmentClaimExpiryDate")} />
                             <ReportProblemIcon
                               style={{
                                 color: getIconColor(t('EXTENSION_AMENDMENT_CLAIM_EXPIRY_DATE')),
                               }}
                               onClick={() => {
-                                setOpennedModal("amendmentClaimExpiryDate");
-                                setLabelValue("Amount (in fig)"), setSmShow(true), console.log("modal open"), setFieldValue(watch('amendmentClaimExpiryDate') || null);
+                                setOpennedModal(t('EXTENSION_AMENDMENT_CLAIM_EXPIRY_DATE'));
+                                setLabelValue(t('EXTENSION_AMENDMENT_CLAIM_EXPIRY_DATE')); setSmShow(true), console.log("modal open"), setFieldValue(watch('amendmentClaimExpiryDate') || null);
                               }}
                             ></ReportProblemIcon>
                           </div>
-                          {/* <input type="text" className="form-control" placeholder="" {...register("amountInFig")} /> */}
                         </Form.Group>
                         </Row>
                          <Row className="col-12">
@@ -622,18 +503,17 @@ function Extension (props) {
                             </Form.Label>
                           </div>
                            <div className=" d-flex align-items-center">
-                    <input type="text" className="form-control" disabled placeholder="" {...register("amountInFig")} />
+                    <input className="form-control" disabled placeholder="" {...register("amountInFig")} />
                             <ReportProblemIcon
                               style={{
                                 color: getIconColor(t('MY_APPLICATION_BG_GUARANTEE_AMOUNT')),
                               }}
                               onClick={() => {
-                                setOpennedModal("amountInFig");
-                                setLabelValue("Amount (in fig)"), setSmShow(true), console.log("modal open"), setFieldValue(watch('amountInFig') || null);
+                                setOpennedModal(t('MY_APPLICATION_BG_GUARANTEE_AMOUNT'));
+                                setLabelValue(t('MY_APPLICATION_BG_GUARANTEE_AMOUNT')); setSmShow(true), console.log("modal open"), setFieldValue(watch('amountInFig') || null);
                               }}
                             ></ReportProblemIcon>
                           </div>
-                          {/* <input type="text" className="form-control" placeholder="" {...register("amountInFig")} /> */}
                         </Form.Group>
                         <Form.Group as={Col} controlId="formGridLicence">
                           <div>
@@ -642,14 +522,14 @@ function Extension (props) {
                             </Form.Label>
                           </div>
                           <div className=" d-flex align-items-center">
-                    <input type="text" className="form-control" disabled placeholder="" {...register("issuingBank")} />
+                    <input className="form-control" disabled placeholder="" {...register("issuingBank")} />
                             <ReportProblemIcon
                               style={{
                                 color: getIconColor(t('EXTENSION_ISSUING_BANK')),
                               }}
                               onClick={() => {
-                                setOpennedModal("issuingBank");
-                                setLabelValue("Amount (in fig)"), setSmShow(true), console.log("modal open"), setFieldValue(watch('issuingBank') || null);
+                                setOpennedModal(t('EXTENSION_ISSUING_BANK'));
+                                setLabelValue(t('EXTENSION_ISSUING_BANK')); setSmShow(true), console.log("modal open"), setFieldValue(watch('issuingBank') || null);
                               }}
                             ></ReportProblemIcon>
                           </div>
@@ -668,8 +548,8 @@ function Extension (props) {
                                 color: getIconColor(t('BG_SUBMIT_COUNTRY_ORIGIN')),
                               }}
                               onClick={() => {
-                                setOpennedModal("originCountry");
-                                setLabelValue("Amount (in fig)"), setSmShow(true), console.log("modal open"), setFieldValue(watch('originCountry') || null);
+                                setOpennedModal(t('BG_SUBMIT_COUNTRY_ORIGIN'));
+                                setLabelValue(t('BG_SUBMIT_COUNTRY_ORIGIN')); setSmShow(true), console.log("modal open"), setFieldValue(watch('originCountry') || null);
                               }}
                             ></ReportProblemIcon>
                           </div>
@@ -688,8 +568,8 @@ function Extension (props) {
                                 color: getIconColor(t('BG_SUBMIT_AMOUNT_IN_WORDS')),
                               }}
                               onClick={() => {
-                                setOpennedModal("amountInWords");
-                                setLabelValue("Amount (in fig)"), setSmShow(true), console.log("modal open"), setFieldValue(watch('amountInWords') || null);
+                                setOpennedModal(t('BG_SUBMIT_AMOUNT_IN_WORDS'));
+                                setLabelValue(t('BG_SUBMIT_AMOUNT_IN_WORDS')); setSmShow(true), console.log("modal open"), setFieldValue(watch('amountInWords') || null);
                               }}
                             ></ReportProblemIcon>
                           </div>
@@ -709,15 +589,15 @@ function Extension (props) {
                             </Form.Label>
                           </div>
                           <div className=" d-flex align-items-center">
-                    <input type="text" className="form-control" disabled placeholder="" {...register("licenseApplied")} />
+                    <input  className="form-control" disabled placeholder="" {...register("licenseApplied")} />
 
                             <ReportProblemIcon
                               style={{
                                 color: getIconColor(t('BG_SUBMIT_HARDCOPY_SUBMITTED_TCP')),
                               }}
                               onClick={() => {
-                                setOpennedModal("licenseApplied");
-                                setLabelValue("Amount (in fig)"), setSmShow(true), console.log("modal open"), setFieldValue(watch('licenseApplied') || null);
+                                setOpennedModal(t('BG_SUBMIT_HARDCOPY_SUBMITTED_TCP'));
+                                setLabelValue(t('BG_SUBMIT_HARDCOPY_SUBMITTED_TCP')); setSmShow(true), console.log("modal open"), setFieldValue(watch('licenseApplied') || null);
                               }}
                             ></ReportProblemIcon>
                           </div>
@@ -756,8 +636,8 @@ function Extension (props) {
                                 color: getIconColor(t('EXTENSION_BANK_GUARANTEE_PDF')),
                               }}
                               onClick={() => {
-                                setOpennedModal("bankGurenteeCertificateDescription");
-                                setLabelValue("Amount (in fig)"), setSmShow(true), console.log("modal open"), setFieldValue(watch('bankGurenteeCertificateDescription') || null);
+                                setOpennedModal(t('EXTENSION_BANK_GUARANTEE_PDF'));
+                                setLabelValue(t('EXTENSION_BANK_GUARANTEE_PDF')); setSmShow(true), console.log("modal open"), setFieldValue(watch('bankGurenteeCertificateDescription') || null);
                               }}
                             ></ReportProblemIcon>
                             </Form.Label>
@@ -774,14 +654,14 @@ function Extension (props) {
                             </Form.Label> */}
                           </div>
                           <div className=" d-flex align-items-center">
-                    <input type="text" className="form-control" disabled placeholder="" {...register("bankGurenteeCertificateDescription")} />
+                    <input  className="form-control" disabled placeholder="" {...register("bankGurenteeCertificateDescription")} />
                             <ReportProblemIcon
                               style={{
                                 color: getIconColor(t('EXTENSION_BANK_GUARANTEE_PDF')),
                               }}
                               onClick={() => {
-                                setOpennedModal("bankGurenteeCertificateDescription");
-                                setLabelValue("Amount (in fig)"), setSmShow(true), console.log("modal open"), setFieldValue(watch('bankGurenteeCertificateDescription') || null);
+                                setOpennedModal(t('EXTENSION_BANK_GUARANTEE_PDF'));
+                                setLabelValue(t('EXTENSION_BANK_GUARANTEE_PDF')); setSmShow(true), console.log("modal open"), setFieldValue(watch('bankGurenteeCertificateDescription') || null);
                               }}
                             ></ReportProblemIcon>
                           </div>
@@ -804,8 +684,8 @@ function Extension (props) {
                                 color: getIconColor(t('EXTENSION_ANY_OTHER_DOC_PDF')),
                               }}
                               onClick={() => {
-                                setOpennedModal("bankGurenteeCertificateDescription");
-                                setLabelValue("Amount (in fig)"), setSmShow(true), console.log("modal open"), setFieldValue(watch('bankGurenteeCertificateDescription') || null);
+                                setOpennedModal(t('EXTENSION_ANY_OTHER_DOC_PDF'));
+                                setLabelValue(t('EXTENSION_ANY_OTHER_DOC_PDF')); setSmShow(true), console.log("modal open"), setFieldValue(watch('bankGurenteeCertificateDescription') || null);
                               }}
                             ></ReportProblemIcon>
                             </Form.Label>
@@ -829,8 +709,8 @@ function Extension (props) {
                                 // display: showRemarks ? "none" : "block",
                               }}
                               onClick={() => {
-                                setOpennedModal("anyOtherDocumentDescription");
-                                setLabelValue("Amount (in fig)"), setSmShow(true), console.log("modal open"), setFieldValue(watch('anyOtherDocumentDescription') || null);
+                                setOpennedModal(t('EXTENSION_BANK_GUARANTEE_PDF'));
+                                setLabelValue(t('EXTENSION_BANK_GUARANTEE_PDF')); setSmShow(true), console.log("modal open"), setFieldValue(watch('anyOtherDocumentDescription') || null);
                               }}
                             ></ReportProblemIcon>
                           </div>

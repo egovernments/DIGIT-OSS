@@ -287,7 +287,7 @@ function ReleaseNew(props) {
                             <th class="fw-normal">{`${t("EXTENSION_TYPE")}`}</th>
                             <th class="fw-normal">{`${t("EXTENSION_ATTACHMENT_DESCRIPTION")}`}</th>
                              <th class="fw-normal">{`${t("EXTENSION_UPLOAD_DOC")}`}</th>
-                              <th class="fw-normal">{`${t("EXTENSION_ACTION")}`}</th>
+                              {/* <th class="fw-normal">{`${t("EXTENSION_ACTION")}`}</th> */}
                           </tr>
                         </thead>
                         <tbody>
@@ -313,7 +313,7 @@ function ReleaseNew(props) {
                                       </a>
                                     )}
                                   </div></td>
-                              <td><DeleteIcon style={{ fill: "#ff1a1a" }} /></td>
+                              {/* <td><DeleteIcon style={{ fill: "#ff1a1a" }} /></td> */}
                           </tr>
                            <tr>
                             <td>2</td>
@@ -337,7 +337,7 @@ function ReleaseNew(props) {
                                       </a>
                                     )}
                                   </div></td>
-                               <td><DeleteIcon style={{ fill: "#ff1a1a" }} /></td>
+                               {/* <td><DeleteIcon style={{ fill: "#ff1a1a" }} /></td> */}
                           </tr>
                            <tr>
                             <td>3</td>
@@ -359,7 +359,7 @@ function ReleaseNew(props) {
                                       </a>
                                     )}
                                   </div></td>
-                              <td><DeleteIcon style={{ fill: "#ff1a1a" }} /></td>
+                              {/* <td><DeleteIcon style={{ fill: "#ff1a1a" }} /></td> */}
                           </tr>
                         </tbody>
                         </div>
