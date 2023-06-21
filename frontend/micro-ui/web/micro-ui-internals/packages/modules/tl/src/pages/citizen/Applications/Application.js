@@ -108,6 +108,39 @@ const MyApplications = ({ view }) => {
     },
   }));
 
+  const showPdf = async (id) => {
+    const token = window?.localStorage?.getItem("token");
+    setLoader(true);
+    const payload = {
+      RequestInfo: {
+        apiId: "Rainmaker",
+        ver: ".01",
+        ts: null,
+        action: "_update",
+        did: "1",
+        key: "",
+        msgId: "20170310130900|en_IN",
+        authToken: token,
+        userInfo: userInfo,
+      },
+    };
+    try {
+      const Resp = await axios.post(`/tl-services/new/license/pdf?applicationNumber=${id}`, payload, { responseType: "arraybuffer" });
+      setLoader(false);
+      const pdfBlob = new Blob([Resp.data], { type: "application/pdf" });
+      const pdfUrl = URL.createObjectURL(pdfBlob);
+      const link = document.createElement("a");
+      link.href = pdfUrl;
+      link.download = "file.pdf";
+      link.click();
+      window.URL.revokeObjectURL(pdfUrl);
+      // window.open(pdfUrl);
+    } catch (error) {
+      setLoader(false);
+      return error;
+    }
+  };
+
   return (
     <div>
       {loader && <Spinner></Spinner>}
@@ -314,10 +347,10 @@ const MyApplications = ({ view }) => {
                       {item?.status}
                     </StyledTableCell>
                     <StyledTableCell component="th" scope="row">
-                      <button type="button" class="btn btn-primary"></button>
+                      {item?.action == "PAID" && item?.status == "APPLIED" && <button type="button" class="btn btn-primary"></button>}
                     </StyledTableCell>
                     <StyledTableCell component="th" scope="row">
-                      <button type="button" class="btn btn-primary"></button>
+                      <button onClick={() => showPdf(item?.applicationNumber)} type="button" class="btn btn-primary"></button>
                     </StyledTableCell>
                     <StyledTableCell component="th" scope="row">
                       <button type="button" class="btn btn-danger"></button>
