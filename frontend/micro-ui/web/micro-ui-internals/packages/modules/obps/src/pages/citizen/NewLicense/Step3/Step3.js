@@ -1489,7 +1489,7 @@ const LandScheduleForm = (props) => {
                               type="date"
                               {...register("sectionFour")}
                               className="form-control"
-                              min="1900-01-01"
+                              min="1947-01-01"
                               max={convertEpochToDate(new Date().setFullYear(new Date().getFullYear()))}
                             />
                             <h3 className="error-message" style={{ color: "red" }}>
@@ -1507,7 +1507,7 @@ const LandScheduleForm = (props) => {
                               type="date"
                               className="form-control"
                               {...register("sectionSix")}
-                              min="1900-01-01"
+                              min="1947-01-01"
                               max={convertEpochToDate(new Date().setFullYear(new Date().getFullYear()))}
                             />
                             <h3 className="error-message" style={{ color: "red" }}>
@@ -1526,7 +1526,7 @@ const LandScheduleForm = (props) => {
                               type="date"
                               className="form-control"
                               {...register("rewardDate")}
-                              min="1900-01-01"
+                              min="1947-01-01"
                               max={convertEpochToDate(new Date().setFullYear(new Date().getFullYear()))}
                             />
                             <h3 className="error-message" style={{ color: "red" }}>
