@@ -39,7 +39,15 @@ const ScrutinyDetails = ({ onSelect, userType, formData, config }) => {
   const { data, isLoading, refetch } = Digit.Hooks.obps.useScrutinyDetails(tenantId, formData?.data?.scrutinyNumber, {
     enabled: true,
   });
-  const [floors, setFloors] = useState([0])
+  const [floors, setFloors] = useState(
+    [
+      {
+        floor:"",
+        coverageArea:""
+      }
+    ]
+    )
+
   const {register,watch,setValue,getValues,handleSubmit,formState: { errors },} = useForm();
 
   function getFloorData(block) {
@@ -149,11 +157,12 @@ const ScrutinyDetails = ({ onSelect, userType, formData, config }) => {
   const onSkip = () => onSelect();
 
   const goNext = () => {
+    console.log("log123...",checkingFlow,formData)
     if (checkingFlow === "OCBPA") {
       if (!formData?.id) {
         let payload = {};
         payload.edcrNumber = formData?.edcrNumber?.edcrNumber ? formData?.edcrNumber?.edcrNumber : formData?.data?.scrutinyNumber?.edcrNumber;
-        payload.riskType = formData?.data?.riskType;
+        payload.riskType = t(`WF_BPA_${riskType}`);
         payload.applicationType = formData?.data?.applicationType;
         payload.serviceType = formData?.data?.serviceType;
 
@@ -163,7 +172,11 @@ const ScrutinyDetails = ({ onSelect, userType, formData, config }) => {
         payload.workflow = { action: "INITIATE" };
         payload.accountId = accountId;
         payload.documents = null;
-
+        payload.floors = floors;
+        payload.basementPosition = {
+          distanceFromLeftSide: getValues().distanceFromLeftSide,
+          distanceFromRightSide: getValues().distanceFromRightSide
+        }
         // Additonal details
         payload.additionalDetails = {};
         if (formData?.data?.holdingNumber) payload.additionalDetails.holdingNo = formData?.data?.holdingNumber;
@@ -194,7 +207,15 @@ const ScrutinyDetails = ({ onSelect, userType, formData, config }) => {
       }
     } else {
       console.log("Logger123.......", config.key, subOccupancyObject)
-      onSelect(config.key, subOccupancyObject);
+      let payload = {}
+      payload.floors = floors;
+      payload.riskType = t(`WF_BPA_${riskType}`);
+      payload.basementPosition = {
+        distanceFromLeftSide: getValues().distanceFromLeftSide,
+        distanceFromRightSide: getValues().distanceFromRightSide
+      }
+      payload.subOccupancy = subOccupancyObject
+      onSelect(config.key, payload);
     }
   };
 
@@ -231,7 +252,18 @@ const ScrutinyDetails = ({ onSelect, userType, formData, config }) => {
   }
 
   const addFloor = () => {
-    setFloors([...floors, floors.length]);
+    setFloors([...floors, 
+      {
+        floor:"",
+        coverageArea:""
+      }
+    ]);
+  }
+
+  const setFloor = (key,value,index) => {
+    let temp = floors;
+    temp[index][key] = value;
+    setFloors([...temp]);
   }
 
   if (isMdmsLoading) return <Loader />
@@ -314,7 +346,8 @@ const ScrutinyDetails = ({ onSelect, userType, formData, config }) => {
           {
             floors.map((item, index) => (
               <div className="row mb-1 mt-2">
-                <select placeholder={t("Number of Floor")} className="form-control col-10" >
+                <select placeholder={t("Number of Floor")} className="form-control col-10" value={item.floor} onChange={(e)=>setFloor("floor",e.target.value,index)} >
+                  <option value={""}>Select Floor</option>
                   <option value={"Ground Floor"}>Ground Floor</option>
                   <option value={"First Floor"}>First Floor</option>
                   <option value={"Second Floor"}>Second Floor</option>
@@ -325,18 +358,8 @@ const ScrutinyDetails = ({ onSelect, userType, formData, config }) => {
                   <button type="button" className="btn btn-danger" onClick={()=>deleteFloor(index)}>Remove</button>
                   </div>
 
-                  <input className="form-control w-100 col-12" placeholder={t("BPA_SCRUTINY_DETAILS_FLOOR_WISE_COVERAGE_AREA")} {...register("floorWiseCoverageArea"+index+1, {
-                      minLength:{
-                        value:2,
-                        message:"Invalid Value"
-                      },
-                      maxLength:{
-                        value:10,
-                        message:"Invalid Value"
-                      },
-                      required: "Fields can't be blank",
-                    })}/>
-                    <FormHelperText error={Boolean(errors?.["floorWiseCoverageArea"+index+1])}>{errors?.["floorWiseCoverageArea"+index+1]?.message}</FormHelperText>
+                  <input className="form-control w-100 col-12" placeholder={t("BPA_SCRUTINY_DETAILS_COVERAGE_AREA")} value={item.coverageArea} onChange={(e)=>setFloor("coverageArea",e.target.value,index)}/>
+                    {/* <FormHelperText error={Boolean(errors?.["floorWiseCoverageArea"+index+1])}>{errors?.["floorWiseCoverageArea"+index+1]?.message}</FormHelperText> */}
 
               </div>
             ))

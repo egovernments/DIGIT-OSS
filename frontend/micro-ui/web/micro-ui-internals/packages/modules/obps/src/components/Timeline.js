@@ -32,7 +32,7 @@ const getAction = (flow) => {
     default: actions = [
       'BPA_STEPPER_SCRUTINY_DETAILS_HEADER',
       'BPA_OWNER_AND_DOCUMENT_DETAILS_LABEL',
-      'BPA_NOC_DETAILS_SUMMARY',
+      'BPA_PAYMENT_DETAILS_SUMMARY',
       'BPA_STEPPER_SUMMARY_HEADER',
     ]
   }

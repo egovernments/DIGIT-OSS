@@ -33,6 +33,7 @@ const OwnerDetails = ({ t, config, onSelect, userType, formData }) => {
     const [fields, setFeilds] = useState(
         (formData?.owners && formData?.owners?.owners) || [{ name: "", gender: "", mobileNumber: null, isPrimaryOwner: true }]
     );
+    const [email, setEmail] = useState("");
 
     useEffect(() => {
         var flag = 0;
@@ -120,7 +121,18 @@ const OwnerDetails = ({ t, config, onSelect, userType, formData }) => {
         units[i].name = e.target.value;
         setName(e.target.value);
         setFeilds(units);
-        if (units[i].gender && units[i].mobileNumber && units[i].name) {
+        if (units[i].gender && units[i].mobileNumber && units[i].name && units[i].email) {
+            setCanmovenext(false);
+        }
+    }
+
+    function setOwnerEmail(i, e) {
+        let units = [...fields];
+        units[i].email = e.target.value;
+        setEmail(e.target.value);
+        setFeilds(units);
+        if (units[i].gender && units[i].mobileNumber && units[i].name && units[i].email) {
+            console.log("log12345...",units, canmovenext )
             setCanmovenext(false);
         }
     }
@@ -130,7 +142,7 @@ const OwnerDetails = ({ t, config, onSelect, userType, formData }) => {
         units[i].gender = value;
         setGender(value);
         setFeilds(units);
-        if (units[i].gender && units[i].mobileNumber && units[i].name) {
+        if (units[i].gender && units[i].mobileNumber && units[i].name && units[i].email) {
             setCanmovenext(false);
         }
     }
@@ -139,7 +151,7 @@ const OwnerDetails = ({ t, config, onSelect, userType, formData }) => {
         units[i].mobileNumber = e.target.value;
         setMobileNumber(e.target.value);
         setFeilds(units);
-        if (units[i].gender && units[i].mobileNumber && units[i].name) {
+        if (units[i].gender && units[i].mobileNumber && units[i].name && units[i].email) {
             setCanmovenext(false);
         }
     }
@@ -157,19 +169,21 @@ const OwnerDetails = ({ t, config, onSelect, userType, formData }) => {
 
     function getusageCategoryAPI(arr) {
         let usageCat = ""
-        arr.map((ob, i) => {
+        console.log("wfwefwefwefwef0",arr)
+        arr?.map((ob, i) => {
             usageCat = usageCat + (i !== 0 ? "," : "") + ob.code;
         });
         return usageCat;
     }
 
     function getUnitsForAPI(subOccupancyData) {
-        const ob = subOccupancyData?.subOccupancy;
+        const ob = subOccupancyData?.subOccupancy?.subOccupancy;
         const blocksDetails = subOccupancyData?.data?.edcrDetails?.planDetail?.blocks || [];
         let units = [];
         if (ob) {
             let result = Object.entries(ob);
-            result.map((unit, index) => {
+            console.log("resultsssssss",result,ob)
+            result?.map((unit, index) => {
                 units.push({
                     blockIndex: index,
                     floorNo: unit[0].split("_")[1],
@@ -241,6 +255,7 @@ const OwnerDetails = ({ t, config, onSelect, userType, formData }) => {
 
     const goNext = () => {
         setError(null);
+        console.log("log12345...", formData)
         if (ismultiple == true && fields.length == 1) {
             window.scrollTo(0, 0);
             setError("BPA_ERROR_MULTIPLE_OWNER");
@@ -248,7 +263,8 @@ const OwnerDetails = ({ t, config, onSelect, userType, formData }) => {
         else {
             let owner = formData.owners;
             let ownerStep;
-            ownerStep = { ...owner, owners: fields, ownershipCategory: ownershipCategory };
+            ownerStep = { ...owner, owners: fields, ownershipCategory: ownershipCategory, documents: getValues() };
+            console.log("log12345...123", ownerStep,getValues(),formData,!formData?.id)
 
             if (!formData?.id) {
                 setIsDisable(true);
@@ -266,9 +282,9 @@ const OwnerDetails = ({ t, config, onSelect, userType, formData }) => {
                 });
                 let payload = {};
                 payload.edcrNumber = formData?.edcrNumber?.edcrNumber ? formData?.edcrNumber?.edcrNumber : formData?.data?.scrutinyNumber?.edcrNumber;
-                payload.riskType = formData?.data?.riskType;
-                payload.applicationType = formData?.data?.applicationType;
-                payload.serviceType = formData?.data?.serviceType;
+                payload.riskType = formData?.riskType || formData?.subOccupancy?.riskType ;
+                payload.applicationType = formData?.data?.applicationType || formData?.applicationType;
+                payload.serviceType = formData?.data?.serviceType || formData?.serviceType;
 
                 const userInfo = Digit.UserService.getUser();
                 const accountId = userInfo?.info?.uuid;
@@ -297,7 +313,22 @@ const OwnerDetails = ({ t, config, onSelect, userType, formData }) => {
                 payload.landInfo.owners = conversionOwners;
                 payload.landInfo.ownershipCategory = ownershipCategory.code;
                 payload.landInfo.tenantId = formData?.address?.city?.code;
+                payload.subOccupancy = formData?.subOccupancy;
+                payload.ownerDocs = {
+                    formBRSI: getValues()?.formBRSI,
+                    formBRSII: getValues()?.formBRSII,
+                    formBRSV : getValues()?.formBRSV,
+                    anAfidavitFromOwner : getValues()?.anAfidavitFromOwner,
+                    certificateRegardingTheFunctionality : getValues()?.certificateRegardingTheFunctionality,
+                    copyOfZoningPlan : getValues()?.copyOfZoningPlan,
+                    ownershipDocuments : getValues()?.ownershipDocuments,
+                    siteReport : getValues()?.siteReport,
+                    structuralStabilityCertificate : getValues()?.structuralStabilityCertificate,
+                    copyOfSaleDeed : getValues()?.copyOfSaleDeed,
+                    copyOfApprovedZoning : getValues()?.copyOfApprovedZoning,
+                    copyOfAffidavitClarifying : getValues()?.copyOfAffidavitClarifying
 
+                }
                 //for units
                 const blockOccupancyDetails = formData;
                 payload.landInfo.unit = getUnitsForAPI(blockOccupancyDetails);
@@ -305,7 +336,8 @@ const OwnerDetails = ({ t, config, onSelect, userType, formData }) => {
                 let nameOfAchitect = sessionStorage.getItem("BPA_ARCHITECT_NAME");
                 let parsedArchitectName = nameOfAchitect ? JSON.parse(nameOfAchitect) : "ARCHITECT";
                 payload.additionalDetails.typeOfArchitect = parsedArchitectName;
-                // create BPA call
+                // create BPA 
+                console.log("payload123...")
                 Digit.OBPSService.create({ BPA: payload }, tenantId)
                     .then((result, err) => {
                         if (result?.BPA?.length > 0) {
@@ -426,6 +458,7 @@ const OwnerDetails = ({ t, config, onSelect, userType, formData }) => {
         formState: { errors },
         control,
         watch,
+        getValues,
         setValue,
     } = useForm({});
 
@@ -534,6 +567,26 @@ const OwnerDetails = ({ t, config, onSelect, userType, formData }) => {
                                                 <div style={{ position: "relative", zIndex: "100", right: "35px", marginTop: "-24px", marginRight: Webview ? "-20px" : "-20px" }} onClick={(e) => getOwnerDetails(index, e)}> <SearchIcon /> </div>
                                             </div>
                                         </div>
+
+                                        <CardLabel>{`${t("CORE_COMMON_EMAIL")} *`}</CardLabel>
+                                        <TextInput
+                                            style={{ background: "#FAFAFA" }}
+                                            t={t}
+                                            type={"text"}
+                                            isMandatory={false}
+                                            optionKey="i18nKey"
+                                            name="name"
+                                            value={field.email}
+                                            onChange={(e) => setOwnerEmail(index, e)}
+                                            {...(validation = {
+                                                isRequired: true,
+                                                pattern: "[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}",
+                                                type: "text",
+                                                title: t("TL_EMAIL_ERROR_MESSAGE"),
+                                            })}
+                                        />
+
+
                                         <CardLabel>{`${t("CORE_COMMON_NAME")} *`}</CardLabel>
                                         <TextInput
                                             style={{ background: "#FAFAFA" }}
@@ -586,83 +639,83 @@ const OwnerDetails = ({ t, config, onSelect, userType, formData }) => {
                         ) : null}
 
 
-<div className="row-12 mt-3">
-                    {/* {showhide === "COD" && ( */}
-                    <div className="card">
-                        <div className="table table-bordered table-responsive">
-                            {/* <caption>List of users</caption> */}
-                            <thead>
-                                <tr>
-                                    <th class="fw-normal">{t("SR_NO")}</th>
-                                    <th class="fw-normal">{t("FIELD_NAME")}</th>
-                                    <th class="fw-normal">{t("UPLOAD_DOCUMENTS")}</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {documentsList.map((item, index) => (
-                                    <tr key={index}>
-                                        <th class="fw-normal">{index + 1}</th>
-                                        <td>{item.label}</td>
+                        <div className="row-12 mt-3">
+                            {/* {showhide === "COD" && ( */}
+                            <div className="card">
+                                <div className="table table-bordered table-responsive">
+                                    {/* <caption>List of users</caption> */}
+                                    <thead>
+                                        <tr>
+                                            <th class="fw-normal">{t("SR_NO")}</th>
+                                            <th class="fw-normal">{t("FIELD_NAME")}</th>
+                                            <th class="fw-normal">{t("UPLOAD_DOCUMENTS")}</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {documentsList.map((item, index) => (
+                                            <tr key={index}>
+                                                <th class="fw-normal">{index + 1}</th>
+                                                <td>{item.label}</td>
 
-                                        {watch(item.fileName) ? (
-                                            <td>
-                                                <div className="d-flex justify-content-center">
-                                                    <label title="Upload Document" for={item.selectorKey}>
-                                                        {" "}
-                                                        <FileUpload style={{ cursor: "pointer" }} color="info" className="icon" for={item.selectorKey} />
-                                                    </label>
-                                                    <input
-                                                        id={item.selectorKey}
-                                                        type="file"
-                                                        placeholder=""
-                                                        className="form-control d-none"
-                                                        onChange={(e) => uploadFile(e.target.files[0], item.fileName)}
-                                                    ></input>
+                                                {watch(item.fileName) ? (
+                                                    <td>
+                                                        <div className="d-flex justify-content-center">
+                                                            <label title="Upload Document" for={item.selectorKey}>
+                                                                {" "}
+                                                                <FileUpload style={{ cursor: "pointer" }} color="info" className="icon" for={item.selectorKey} />
+                                                            </label>
+                                                            <input
+                                                                id={item.selectorKey}
+                                                                type="file"
+                                                                placeholder=""
+                                                                className="form-control d-none"
+                                                                onChange={(e) => uploadFile(e.target.files[0], item.fileName)}
+                                                            ></input>
 
-                                                    {watch(item.fileName) && (
-                                                        <a onClick={() => getDocShareholding(watch(item.fileName), setLoader)} className="btn btn-sm ">
-                                                            <Visibility color="info" className="icon" />
-                                                        </a>
-                                                    )}
-                                                </div>
-                                            </td>
-                                        ) : (
-                                            <td>
-                                                <div className="d-flex justify-content-center">
-                                                    <label title="Upload Document" for={item.selectorKey}>
-                                                        {" "}
-                                                        <FileUpload style={{ cursor: "pointer" }} color="info" className="icon" for={item.selectorKey} />
-                                                    </label>
-                                                    <input
-                                                        id={item.selectorKey}
-                                                        type="file"
-                                                        placeholder=""
-                                                        className="form-control d-none"
-                                                        {...register(item.selectorKey, { required: "This Document is required" })}
-                                                        onChange={(e) => uploadFile(e.target.files[0], item.fileName)}
-                                                    ></input>
+                                                            {watch(item.fileName) && (
+                                                                <a onClick={() => getDocShareholding(watch(item.fileName), setLoader)} className="btn btn-sm ">
+                                                                    <Visibility color="info" className="icon" />
+                                                                </a>
+                                                            )}
+                                                        </div>
+                                                    </td>
+                                                ) : (
+                                                    <td>
+                                                        <div className="d-flex justify-content-center">
+                                                            <label title="Upload Document" for={item.selectorKey}>
+                                                                {" "}
+                                                                <FileUpload style={{ cursor: "pointer" }} color="info" className="icon" for={item.selectorKey} />
+                                                            </label>
+                                                            <input
+                                                                id={item.selectorKey}
+                                                                type="file"
+                                                                placeholder=""
+                                                                className="form-control d-none"
+                                                                {...register(item.selectorKey, { required: "This Document is required" })}
+                                                                onChange={(e) => uploadFile(e.target.files[0], item.fileName)}
+                                                            ></input>
 
-                                                    {watch(item.fileName) && (
-                                                        <a onClick={() => getDocShareholding(watch(item.fileName), setLoader)} className="btn btn-sm "></a>
-                                                    )}
-                                                </div>
+                                                            {watch(item.fileName) && (
+                                                                <a onClick={() => getDocShareholding(watch(item.fileName), setLoader)} className="btn btn-sm "></a>
+                                                            )}
+                                                        </div>
 
-                                                <h3 className="error-message" style={{ color: "red" }}>
-                                                    {errors?.[item.selectorKey] && errors?.[item.selectorKey]?.message}
-                                                </h3>
-                                            </td>
-                                        )}
-                                    </tr>
-                                ))}
-                            </tbody>
+                                                        <h3 className="error-message" style={{ color: "red" }}>
+                                                            {errors?.[item.selectorKey] && errors?.[item.selectorKey]?.message}
+                                                        </h3>
+                                                    </td>
+                                                )}
+                                            </tr>
+                                        ))}
+                                    </tbody>
+                                </div>
+                            </div>
+
                         </div>
-                    </div>
-
-                </div>
                     </div> : <Loader />
                 }
 
-                
+
             </FormStep>
             {showToast && <Toast
                 error={showToast?.error}
