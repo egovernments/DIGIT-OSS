@@ -50,6 +50,7 @@ const NewBuildingPermit = () => {
   };
 
   const handleSelect = (key, data, skipStep, isFromCreateApi) => {
+    console.log("log12345...",key,data,skipStep,isFromCreateApi)
     if (isFromCreateApi) setParams(data);
     else if(key=== "")
     setParams({...data});
