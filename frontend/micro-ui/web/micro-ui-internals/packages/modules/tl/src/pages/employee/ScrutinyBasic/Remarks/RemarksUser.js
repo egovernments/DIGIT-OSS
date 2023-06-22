@@ -63,7 +63,7 @@ function FullScreenDialog(props) {
   };
 
 
-  console.log("newdataPAFullScreen", remarksDataRole);
+  // console.log("newdataPAFullScreen", remarksDataRole);
 
   // ///////////////////////
   const [open14, setOpen14] = useState(false);
@@ -72,6 +72,42 @@ function FullScreenDialog(props) {
 
   
   console.log("remarksinputFieldValue" , inputFieldValue3,inputFieldValue2 ,inputFieldValue);
+  const [remarksDataExternal, setRemarksDataExternal] = useState();
+  // if (inputFieldValue3 !== null ) {
+     const setRoleDataModal = async () =>{
+ 
+    const dataToSend = {
+          RequestInfo: {
+              apiId: "Rainmaker",
+              action: "_create",
+              did: 1,
+              key: "",
+              msgId: "20170310130900|en_IN",
+              ts: 0,
+              ver: ".01",
+              authToken: authToken,
+             
+          },
+      };
+      try {
+          const Resp = await axios.post(`/land-services/egscrutiny/_search4?applicationNumber=${id}&roles=${inputFieldValue3}`, dataToSend).then((response) => {
+              return response.data;
+          });
+    
+          console.log("RemarksSection", Resp);
+       
+          setRemarksDataExternal(Resp?.egScrutiny);
+          
+      } catch (error) {
+        
+          console.log(error);
+      }
+    
+    };
+  // }
+
+
+ 
 
 
   return (
@@ -130,9 +166,10 @@ function FullScreenDialog(props) {
             >
      */}
       <div style={{ position: "relative", width: "100%", display: "flex", margin: 2 }}>
-     <Row style={{  marginRight:10, marginLeft:10}}>
-      {/* {remarksDataExternal !== null ?  (
-                      remarksDataExternal?.egScrutiny?.map((el, index) => {
+     <Row style={{  marginRight:40, marginLeft:20}}>
+    
+      {/* {remarksDataRole !== null ?  (
+                     remarksDataRole?.map((el, index) => {
                         return (
                           <div>
                             <table colSpan = "2" className="table table-bordered" style={{ backgroundColor: "#ddf2cf" }}>
@@ -326,6 +363,215 @@ function FullScreenDialog(props) {
                       ) : (
                         <p></p>
                       )} */}
+
+
+
+<button type="submit" onClick={setRoleDataModal}>{inputFieldValue3}</button>
+
+
+{remarksDataExternal !== null ?  (
+                     remarksDataExternal?.map((el, index) => {
+                        return (
+
+                          <div>
+                             {el?.approvedfiledDetails !== null ? (
+       el?.approvedfiledDetails?.map((data, i) => {
+                  return (
+                          <table colSpan = "2" className="table table-bordered" >
+                <thead style={{ backgroundColor: "#ddf2cf" }}>
+
+                  <tr className="border-bottom-0">
+                    <th class="fw-normal pb-0 border-bottom-0 align-top">
+                      Sr.No
+                    </th>
+                    <th class="fw-normal pb-0 border-bottom-0 align-top">
+                      Filed Name
+                    </th>
+                    <th class="fw-normal pb-0 border-bottom-0 align-top">
+                      Filed value
+                    </th>
+                    <th class="fw-normal pb-0 border-bottom-0 align-top">
+                      Status
+                    </th>
+
+                    <th class="fw-normal pb-0 border-bottom-0 align-top">
+                      Remarks
+                    </th>
+                  </tr>
+                  <tr>
+
+                  </tr>
+
+
+                </thead>
+                 <tbody>
+             
+                
+                
+                       <tr >
+
+                            <td>
+                              {i + 1}
+                            </td>
+                            <td>
+                              <b>{data.name}</b>
+                            </td>
+                            <td>
+                              <b>{data.value}</b>
+                            </td>
+
+                            <td>
+                              <b>{data.isApproved}</b>
+                            </td>
+                            <td>
+                           
+                              <i>{<div dangerouslySetInnerHTML={{__html: data.remarks}}/>}</i>
+                            </td>
+
+                          </tr>
+                          </tbody>
+                      </table>
+                             );
+                            })
+                          ) : (
+                            <p></p>
+                          )}
+                      
+                            <br></br>
+                      
+             
+                 {el?.condApprovedfiledDetails !== null ? (
+       el?.condApprovedfiledDetails?.map((data1, i1) => {
+                  return (
+                    <table colSpan = "2" className="table table-bordered" >
+                <thead style={{ backgroundColor: "#ddf2cf" }}>
+
+                  <tr className="border-bottom-0">
+                    <th class="fw-normal pb-0 border-bottom-0 align-top">
+                      Sr.No
+                    </th>
+                    <th class="fw-normal pb-0 border-bottom-0 align-top">
+                      Filed Name
+                    </th>
+                    <th class="fw-normal pb-0 border-bottom-0 align-top">
+                      Filed value
+                    </th>
+                    <th class="fw-normal pb-0 border-bottom-0 align-top">
+                      Status
+                    </th>
+
+                    <th class="fw-normal pb-0 border-bottom-0 align-top">
+                      Remarks
+                    </th>
+                  </tr>
+                  <tr>
+
+                  </tr>
+
+
+                </thead>
+                 <tbody>
+                
+                       <tr >
+
+                            <td>
+                              {i1 + 1}
+                            </td>
+                            <td>
+                              <b>{data1.name}</b>
+                            </td>
+                            <td>
+                              <b>{data1.value}</b>
+                            </td>
+
+                            <td>
+                              <b>{data1.isApproved}</b>
+                            </td>
+                            <td>
+                           
+                              <i>{<div dangerouslySetInnerHTML={{__html: data1.remarks}}/>}</i>
+                            </td>
+
+                          </tr>
+
+                          </tbody>
+                      </table>
+                             );
+                            })
+                          ) : (
+                            <p></p>
+                          )}
+                      
+                            <br></br>
+                            
+             
+                 {el?.disApprovedfiledDetails !== null ? (
+       el?.disApprovedfiledDetails?.map((data2, i2s) => {
+                  return (
+                    <table colSpan = "2" className="table table-bordered" >
+                <thead style={{ backgroundColor: "#ddf2cf" }}>
+
+                  <tr className="border-bottom-0">
+                    <th class="fw-normal pb-0 border-bottom-0 align-top">
+                      Sr.No
+                    </th>
+                    <th class="fw-normal pb-0 border-bottom-0 align-top">
+                      Filed Name
+                    </th>
+                    <th class="fw-normal pb-0 border-bottom-0 align-top">
+                      Filed value
+                    </th>
+                    <th class="fw-normal pb-0 border-bottom-0 align-top">
+                      Status
+                    </th>
+
+                    <th class="fw-normal pb-0 border-bottom-0 align-top">
+                      Remarks
+                    </th>
+                  </tr>
+                  <tr>
+
+                  </tr>
+
+
+                </thead>
+                 <tbody>
+                
+                       <tr >
+
+                            <td>
+                              {i2s + 1}
+                            </td>
+                            <td>
+                              <b>{data2.name}</b>
+                            </td>
+                            <td>
+                              <b>{data2.value}</b>
+                            </td>
+
+                            <td>
+                              <b>{data2.isApproved}</b>
+                            </td>
+                            <td>
+                           
+                              <i>{<div dangerouslySetInnerHTML={{__html: data2.remarks}}/>}</i>
+                            </td>
+
+                          </tr>
+                          </tbody>
+                      </table>
+                             );
+                            })
+                          ) : (
+                            <p></p>
+                          )}
+                      
+                          </div>
+);
+})
+) : (
+<p></p>
+)}
 
                       {/* <DataGridDemo
                       
