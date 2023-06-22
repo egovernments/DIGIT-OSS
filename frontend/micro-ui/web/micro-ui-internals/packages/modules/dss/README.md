@@ -52,6 +52,7 @@ const initDigitUI = () => {
 # Changelog
 
 ```bash
+1.5.31 Horizontal Bar chart alignment fixes
 1.5.30 Added enhancement for pie chart using variant flag according to new requirements. Refer CustomPieChart component.
 1.5.29 DSS UI alignment fixes for Horizontal Metric and bar chart
 1.5.28 added the support for the dynamic icon in the metric chart by adding flag iconName

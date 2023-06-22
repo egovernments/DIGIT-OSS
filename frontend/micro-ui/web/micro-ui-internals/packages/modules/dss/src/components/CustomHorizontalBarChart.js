@@ -129,8 +129,8 @@ const CustomHorizontalBarChart = ({
        height={300}
        margin={{
          top: 5,
-         right: 5,
-         left: 5,
+         right: 2,
+         left: 2,
          bottom: 5,
        }}
      >
@@ -138,12 +138,12 @@ const CustomHorizontalBarChart = ({
          <NoData t={t} />
        ) : (
          <BarChart
-           width="100%"
+           width="98%"
            height="100%"
            margin={{
              top: 2,
-             right: 5,
-             left: 5,
+             right: 2,
+             left: 2,
              bottom: 2,
            }}
            layout={layout}
@@ -161,13 +161,13 @@ const CustomHorizontalBarChart = ({
                angle: -90,
                position: "insideLeft",
                dy: 50,
-               fontSize: "15px",
+               fontSize: "14px",
                fill: "#505A5F",
              }}
              tickCount={10}
              tickFormatter={tickFormatter}
              unit={id === "fsmCapacityUtilization" ? "%" : ""}
-             width={layout === "vertical" ? 120 : 60}
+             width={layout === "vertical" ? 80 : 60}
            />
            <XAxis display={"none"} dataKey={xDataKey} type={xAxisType} tick={{ fontSize: "14px", fill: "#505A5F" }} tickCount={10} tickFormatter={tickFormatter} />
            {bars?.map((bar, idx) => ( <Bar key={idx} dataKey={t(bar)} fill={barColors[idx]} stackId={bars?.length > 2 ? 1 : idx} >

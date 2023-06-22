@@ -85,7 +85,7 @@ const Layout = ({ rowData,forHome=false }) => {
             updateChip={onChipChange}
             showDownload={visualizer?.charts?.[0].chartType === "table"}
             showSearch={visualizer?.charts?.[0].chartType === "table"}
-            className={`${visualizer?.charts?.[0].chartType === "table" && "fullWidth"} ${visualizer?.horizontalBarv2 ? "dss-horizontal-v2" : ""}`}
+            className={`${visualizer?.charts?.[0].chartType === "table" ? "fullWidth" : visualizer?.charts?.[0]?.horizontalBarv2 ? "dss-horizontal-v2" : ""}`}
             onChange={(e) => onSearch(e.target.value)}
           >
             {/* {visualizer.charts.map((chart, key) => renderChart(chart, key))} */}
