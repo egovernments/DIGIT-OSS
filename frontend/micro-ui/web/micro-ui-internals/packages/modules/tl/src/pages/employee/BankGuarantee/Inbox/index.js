@@ -8,7 +8,7 @@ import { Header } from "@egovernments/digit-ui-react-components";
 
 const BankGuaranteePlan = ({
   parentRoute,
-  businessService = ["BG_NEW" ,"BG_MORTGAGE"],
+  businessService = ["BG_NEW" ,"BG_MORTGAGE", "BG_RELEASE"],
   initialStates = {},
   filterComponent,
   isInbox

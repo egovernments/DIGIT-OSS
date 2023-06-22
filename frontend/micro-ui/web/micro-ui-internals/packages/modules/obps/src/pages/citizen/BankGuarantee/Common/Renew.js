@@ -85,11 +85,12 @@ function RenewNew() {
     const token = window?.localStorage?.getItem("token");
     const userInfo = Digit.UserService.getUser()?.info || {};
     const applicationNo = data?.newBankGuaranteeList?.[0]?.applicationNumber
+     console.log("applicationNo",applicationNo)
     try {
       const postDistrict = {
         NewBankGuaranteeRequest: [
           {
-            applicationNumber:"HR_BG_NEW_20230227000483",
+            applicationNumber:applicationNo,
             ...data,
             updateType:"EXTEND",
            originCountry:data?.originCountry?.label
@@ -327,7 +328,7 @@ function RenewNew() {
                              <th class="fw-normal">{`${t("EXTENSION_UPLOAD_DOC")}`}
                              {/* Upload document */}
                              </th>
-                              <th class="fw-normal">{`${t("EXTENSION_ACTION")}`}</th>
+                              {/* <th class="fw-normal">{`${t("EXTENSION_ACTION")}`}</th> */}
                           </tr>
                         </thead>
                         <tbody>
@@ -353,7 +354,7 @@ function RenewNew() {
                                       </a>
                                     )}
                                   </div></td>
-                               <td><DeleteIcon style={{ fill: "#ff1a1a" }} /></td>
+                               {/* <td><DeleteIcon style={{ fill: "#ff1a1a" }} /></td> */}
                           </tr>
                            <tr>
                             <td>2</td>
@@ -377,7 +378,7 @@ function RenewNew() {
                                       </a>
                                     )}
                                   </div></td>
-                               <td><DeleteIcon style={{ fill: "#ff1a1a" }} /></td>
+                               {/* <td><DeleteIcon style={{ fill: "#ff1a1a" }} /></td> */}
                           </tr>
                         </tbody>
                         </div>
