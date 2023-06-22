@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { FormStep, TextArea, LabelFieldPair, CardLabel } from "@egovernments/digit-ui-react-components";
 import Timeline from "../components/TLTimelineInFSM";
 
-const TLSelectLandmark = ({ t, config, onSelect, formData, userType }) => {
+const TLSelectLandMark = ({ t, config, onSelect, formData, userType }) => {
   const [landmark, setLandmark] = useState();
 
   const [error, setError] = useState("");
@@ -67,4 +67,4 @@ const TLSelectLandmark = ({ t, config, onSelect, formData, userType }) => {
   );
 };
 
-export default TLSelectLandmark;
+export default TLSelectLandMark;

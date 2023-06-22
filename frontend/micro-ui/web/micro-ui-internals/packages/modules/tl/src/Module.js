@@ -28,7 +28,7 @@ import TradeLicenseList  from "./pages/citizen/Renewal/TradeLicenseList";
 import TLWFApplicationTimeline from "./pageComponents/TLWFApplicationTimeline";  
 import SelectOtherTradeDetails from "./pageComponents/SelectOtherTradeDetails";
 import TLSelectStreet from "./pageComponents/TLSelectStreet";
-import TLSelectLandmark from "./pageComponents/TLSelectLandmark";
+import TLSelectLandmark from "./pageComponents/TLSelectLandMark";
 import TLSelectOwnerAddress from "./pageComponents/TLSelectOwnerAddress";
 
 import TLOwnerDetailsEmployee from "./pageComponents/TLOwnerDetailsEmployee";
