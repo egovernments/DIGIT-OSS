@@ -249,11 +249,11 @@ const [smShow, setSmShow] = useState(false);
                                     JE Head Quarter
                                 </th>
                                 <th class="fw-normal py-0 border-top-0">
-                                    AD Head Quarter
+                                    AD/JD Head Quarter
                                 </th>
-                                <th class="fw-normal py-0 border-top-0">
+                                {/* <th class="fw-normal py-0 border-top-0">
                                     JD Head Quarter
-                                </th>
+                                </th> */}
                                 <th class="fw-normal py-0 border-top-0">
                                     DA/ADA Head Quarter
                                 </th>
@@ -264,22 +264,22 @@ const [smShow, setSmShow] = useState(false);
                                     ATP Head Quarter
                                 </th>
                                 <th class="fw-normal py-0 border-top-0">
-                                    Patwari Filed
+                                    Patwari Field
                                 </th>
                                 <th class="fw-normal py-0 border-top-0">
-                                    JE Filed
+                                    JE Field
                                 </th>
                                 <th class="fw-normal py-0 border-top-0">
-                                    AD Filed
+                                    AD Field
                                 </th>
                                 <th class="fw-normal py-0 border-top-0">
-                                    DA/ADA Filed
+                                    DA/ADA Field
                                 </th>
-                                <th class="fw-normal py-0 border-top-0">
+                                {/* <th class="fw-normal py-0 border-top-0">
                                     AO Filed
-                                </th>
+                                </th> */}
                                 <th class="fw-normal py-0 border-top-0">
-                                    ATP Filed
+                                    ATP Field
                                 </th>
 
 
@@ -303,10 +303,12 @@ const [smShow, setSmShow] = useState(false);
                                             <Label style={{  fontSize:14}}>{t(item?.name)}</Label>
 
                                         </td>
+                                    
+                                
                                         
                                         
                                         {
-                                            item.employees?.find((item, index) => (item.role === "Patwari" || "Patwari_HQ"))?getDataGri(item.employees?.find((item, index) => (item.role === "Patwari" || "Patwari_HQ")),item): <td></td>
+                                            item.employees?.find((item, index) => (item.role === "Patwari" || "Patwari_HQ" || "PATWARI"))?getDataGri(item.employees?.find((item, index) => (item.role === "Patwari" || "Patwari_HQ" || "PATWARI")),item): <td></td>
 
                                         }
                                             
@@ -314,7 +316,7 @@ const [smShow, setSmShow] = useState(false);
                                        
                                             
                                                 {
-                                            item.employees?.find((item, index) => (item.role === "JE_HQ"))?getDataGri(item.employees?.find((item, index) => (item.role === "JE_HQ")),item): <td></td>
+                                            item.employees?.find((item, index) => (item.role === "JE_HQ"|| "Junior Engineer" || "Jr Engineer" || "Junier Engineer" || "JE" ))?getDataGri(item.employees?.find((item, index) => (item.role === "JE_HQ"|| "Junior Engineer" || "Jr Engineer" || "Junier Engineer" || "JE" )),item): <td></td>
 
                                                 }
                                                 {/* {
@@ -327,52 +329,59 @@ const [smShow, setSmShow] = useState(false);
                                             item.employees?.find((item, index) => (item.role === "JE_HQ"))?.length?getDataGri(item.employees?.find((item, index) => (item.role === "JE_HQ")),item): <td></td>
 
                                                 } */}
+                                                
+                                                
+
                                             {
-                                            item.employees?.find((item, index) => (item.role === "AD_HQ"))?getDataGri(item.employees?.find((item, index) => (item.role === "AD_HQ")),item): <td></td>
+                                            item.employees?.find((item, index) => (item.role === "JD_HQ" || "JD" || "Junior Draftsman" || "SD_HQ" ||"Senior Draftmans" || "AD_HQ" || "Assistant Draftsman" ))?getDataGri(item.employees?.find((item, index) => (item.role === "JD_HQ" || "JD" || "Junior Draftsman" || "SD_HQ" ||"Senior Draftmans" || "AD_HQ" || "Assistant Draftsman")),item): <td></td>
 
                                                 }
                                             {
-                                            item.employees?.find((item, index) => (item.role === ("DA_HQ" || "ADA_HQ")))?getDataGri(item.employees?.find((item, index) => (item.role === ("DA_HQ" || "ADA_HQ"))),item): <td></td>
+                                            item.employees?.find((item, index) => (item.role === ("DA_HQ" || "District Attorney" || "DDA_HQ" ||  "ADA_HQ" ||  "Assistant District Atorney")))?getDataGri(item.employees?.find((item, index) => (item.role === ("DA_HQ" || "District Attorney" || "DDA_HQ" ||  "ADA_HQ" ||  "Assistant District Atorney"))),item): <td></td>
 
                                                 }
                                             {
-                                            item.employees?.find((item, index) => (item.role === "AO_HQ"))?getDataGri(item.employees?.find((item, index) => (item.role === "AO_HQ")),item): <td></td>
+                                            item.employees?.find((item, index) => (item.role === "CAO" || "CAO_HQ" || "AO" || "AO_HQ" ))?getDataGri(item.employees?.find((item, index) => (item.role === "CAO" || "CAO_HQ" || "AO" || "AO_HQ")),item): <td></td>
 
                                                 }
+
+
                                        
                                             {
-                                            item.employees?.find((item, index) => (item.role === "ATP_HQ"))?getDataGri(item.employees?.find((item, index) => (item.role === "ATP_HQ")),item): <td></td>
+                                            item.employees?.find((item, index) => (item.role === "ATP_HQ" || "ATP" || "ATP HQ" ))?getDataGri(item.employees?.find((item, index) => (item.role === "ATP_HQ" || "ATP" || "ATP HQ")),item): <td></td>
 
                                                 }
-                                            {
+                                            {/* {
                                             item.employees?.find((item, index) => (item.role === "ATP_HQ"))?getDataGri(item.employees?.find((item, index) => (item.role === "ATP_HQ")),item): <td></td>
 
-                                                }
+                                                } */}
+                                                
                                             {
-                                            item.employees?.find((item, index) => (item.role === "Patwari_Filed"))?getDataGri(item.employees?.find((item, index) => (item.role === "Patwari_Filed")),item): <td></td>
+                                            item.employees?.find((item, index) => (item.role === "Patwari_FIELD" || "PATWARI Field" ))?getDataGri(item.employees?.find((item, index) => (item.role === "Patwari_FIELD" || "PATWARI Field" )),item): <td></td>
 
                                                 }
                                             {/* {
                                             item.employees?.find((item, index) => (item.role === "Patwari_Filed"))?getDataGri(item.employees?.find((item, index) => (item.role === "Patwari_Filed")),item): <td></td>
 
-                                                } */}
+                                                } */}  
                                             {
-                                            item.employees?.find((item, index) => (item.role === "JE_Filed"))?getDataGri(item.employees?.find((item, index) => (item.role === "JE_Filed")),item): <td></td>
+                                            item.employees?.find((item, index) => (item.role === "JE_FIELD" || "Junior Engineer Field" ))?getDataGri(item.employees?.find((item, index) => (item.role === "JE_FIELD" || "Junior Engineer Field" )),item): <td></td>
+
+                                                }
+                                                 
+                                            {
+                                            item.employees?.find((item, index) => (item.role === ( "JD_FIELD" || "Junior Draftsman Field" || "SD_FIELD" || "AD_FIELD" || "Draftsman Field" )))?getDataGri(item.employees?.find((item, index) => (item.role === ( "JD_FIELD" || "Junior Draftsman Field" || "SD_FIELD" || "AD_FIELD" || "Draftsman Field"))),item): <td></td>
 
                                                 }
                                             {
-                                            item.employees?.find((item, index) => (item.role === ("DA_Filed" || "ADA_Filed")))?getDataGri(item.employees?.find((item, index) => (item.role === ("DA_Filed" || "ADA_Filed"))),item): <td></td>
+                                            // item.employees?.find((item, index) => (item.role === "AO_Filed"))?getDataGri(item.employees?.find((item, index) => (item.role === "AO_Filed")),item): <td></td>
 
                                                 }
                                             {
-                                            item.employees?.find((item, index) => (item.role === "AO_Filed"))?getDataGri(item.employees?.find((item, index) => (item.role === "AO_Filed")),item): <td></td>
+                                            item.employees?.find((item, index) => (item.role === "ATP_FIELD" || "ATP Field" ))?getDataGri(item.employees?.find((item, index) => (item.role === "ATP_FIELD" || "ATP Field" )),item): <td></td>
 
                                                 }
-                                            {
-                                            item.employees?.find((item, index) => (item.role === "ATP_Filed"))?getDataGri(item.employees?.find((item, index) => (item.role === "ATP_Filed")),item): <td></td>
-
-                                                }
-                                       
+                                                    
                                         
                                         {/* <td>
                                             {item.employees?.find((item, index) => (item.role === "AO_Filed"))?.isApproved || ""}
