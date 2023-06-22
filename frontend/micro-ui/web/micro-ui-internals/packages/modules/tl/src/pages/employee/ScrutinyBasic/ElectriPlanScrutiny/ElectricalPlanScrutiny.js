@@ -10,7 +10,7 @@ import { getDocShareholding } from "../ScrutinyDevelopment/docview.helper";
 import ModalChild from "../Remarks/ModalChild/";
 import ReportProblemIcon from "@mui/icons-material/ReportProblem";
 import "../css/personalInfoChild.style.js";
-import { useStyles } from "../css/personalInfoChild.style.js";
+import { useStyles } from "../css/personalInfoChild.style.js"; 
 import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
 import Collapse from "react-bootstrap/Collapse";

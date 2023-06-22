@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import Button from "react-bootstrap/Button";
 import Col from "react-bootstrap/Col";
 import Form from "react-bootstrap/Form";
@@ -13,20 +13,28 @@ import Collapse from "react-bootstrap/Collapse";
 import { useStyles } from "../../css/personalInfoChild.style";
 import "../../css/personalInfoChild.style.js";
 import { IconButton } from "@mui/material";
-import VisibilityIcon from "@mui/icons-material/Visibility";
-import FileDownloadIcon from "@mui/icons-material/FileDownload";
+import Visibility from "@mui/icons-material/Visibility";
+import FileDownload from "@mui/icons-material/FileDownload";
 import DownloadForOfflineIcon from "@mui/icons-material/DownloadForOffline";
 import { getDocShareholding } from "../../ScrutinyDevelopment/docview.helper";
+import { ScrutinyRemarksContext } from "../../../../../../context/remarks-data-context";
 
 const SubmitNew = (props) => {
+  // const applicationStatus = props.applicationStatus;
   let user = Digit.UserService.getUser();
+  const userInfo = Digit.UserService.getUser()?.info || {};
+  const userRolesArray = userInfo?.roles.filter((user) => user.code !== "EMPLOYEE");
+  const filterDataRole = userRolesArray?.[0]?.code;
   const userRoles = user?.info?.roles?.map((e) => e.code) || [];
+  
+  // const userRoles = user?.info?.roles?.map((e) => e.code) || [];
   const showRemarks = userRoles.some((item) => item === "SO_HQ");
-  console.log("roleSO_HQ", showRemarks);
+  // console.log("roleSO_HQ", showRemarks);
 
   const [selects, setSelects] = useState();
-  const [showhide, setShowhide] = useState("");
+  const [showhide, setShowhide] = useState(""); 
   const [open2, setOpen2] = useState(false);
+  const { remarksData, iconStates } = useContext(ScrutinyRemarksContext);
   const dataIcons = props.dataForIcons;
   const apiResponse = props.apiResponse;
   const handleshowhide = (event) => {

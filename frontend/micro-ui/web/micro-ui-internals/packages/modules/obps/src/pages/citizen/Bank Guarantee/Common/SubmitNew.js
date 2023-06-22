@@ -40,7 +40,7 @@ function SubmitNew() {
           ver: ".01",
           authToken: token,
         },
-        NewBankGuaranteeRequest: {
+        NewBankGuaranteeRequest: [{
           tenantId: tenantId,
           additionalDetails: null,
           additionalDocuments: null,
@@ -48,7 +48,7 @@ function SubmitNew() {
           workflowComment: null,
           workflowAssignee: null,
           ...data,
-        },
+        }],
       };
       const Resp = await axios.post("/tl-services/bank/guarantee/_create", postDistrict);
       setServicePlanDataLabel(Resp.data);

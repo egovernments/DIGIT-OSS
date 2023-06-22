@@ -134,8 +134,11 @@ const BGApplications = ({ view }) => {
           authToken: token,
           userInfo: userInfo
         },};
-      const Resp = await axios.post(`/tl-services/bank/guarantee/_search?applicationNumber=${bgType}`, loiRequest);
-      console.log ("RESp",Resp.data)
+        console.log ("RESp",watch("applicationNumber"))
+        // const queryParam = new 
+      const Resp = await axios.post(`/tl-services/bank/guarantee/_search?${watch("numberType").value === "1"? "applicationNumber="+watch("applicationNumber")?.label : ""}${watch("numberType").value === "3"? "loiNumber="+watch("applicationNumber")?.label : ""}${watch("numberType").value === "2"? "licenceNumber="+watch("applicationNumber")?.label : ""}`, loiRequest);
+      
+
       setClaimPeriod(Resp?.data?.newBankGuaranteeList?.[0]?.claimPeriod);
       setBgNumber(Resp?.data?.newBankGuaranteeList?.[0]?.bgNumber);
       setIssuingBank(Resp?.data?.newBankGuaranteeList?.[0]?.issuingBank);
@@ -152,13 +155,16 @@ const BGApplications = ({ view }) => {
   };
      
   console.log("DATADFFG",selectTypeData , loiAppLicNo , bgType);
- 
+
+    useEffect(()=>{
+           setValue("applicationNumber",{})
+    },[watch("numberType")])
 
   return (
     <div>
      
       <form>
-         <div className="card1" style={{ width: "126%", border: "5px solid #1266af" }}>
+         <div className="card1" style={{ width: "100%", border: "5px solid #1266af" }}>
             <h4 style={{ fontSize: "25px", marginLeft: "21px" }} className="text-left">{`${t("MY_APPLICATION_BG_REQUEST_FOR_RELEASE")}`}
               {/* Bank Guarantee-Request for Release */}
             </h4>
@@ -290,27 +296,27 @@ const BGApplications = ({ view }) => {
                         <label>{`${t("MY_APPLICATION_BG_GUARANTEE_NO")}`}
                         {/* Bank Guarantee No */}
                         </label>
-                        <input type="text" className="form-control" {...register("bgNumber")} value={bgNumber}/>
+                        <input type="text" className="form-control" {...register("bgNumber")} value={bgNumber} disabled/>
                       </div>
                        <div className="col col-3">
                         <label>{`${t("MY_APPLICATION_BG_GUARANTEE_ISSUE_DATE")}`}
                         {/* Bank Guarantee Issue date */}
                         </label>
-                        <input type="date" className="form-control" {...register("issuingBank")} value={issuingBank}/>
+                        <input type="text" className="form-control" {...register("issuingBank")} value={issuingBank} disabled/>
                       </div>
                        <div className="col col-2">
                         <label>{`${t("BG_SUBMIT_EXPIRY_DATE")}`}</label>
-                        <input type="date" className="form-control" {...register("validity")} value={validity}/>
+                        <input type="text" className="form-control" {...register("validity")} value={validity} disabled/>
                       </div>
                        <div className="col col-2">
                         <label>{`${t("MY_APPLICATION_BG_GUARANTEE_CLAIM_EXPIRY_DATE")}`}
                         {/* Claim expiry date */}
                         </label>
-                        <input type="text" className="form-control"  {...register("claimPeriod")} value={claimPeriod}/>
+                        <input type="text" className="form-control"  {...register("claimPeriod")} value={claimPeriod} disabled/>
                       </div>
                       <div className="col col-2">
                         <label>{`${t("MY_APPLICATION_BG_GUARANTEE_AMOUNT")}`}</label>
-                        <input type="text" className="form-control"  {...register("amountInFig")} value={amountInFig}/>
+                        <input type="text" className="form-control"  {...register("amountInFig")} value={amountInFig} disabled/>
                       </div>
                        <br></br>
                         <div className="row gy-3">

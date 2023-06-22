@@ -64,9 +64,9 @@ const ActionModal = (props) => {
   if (props?.businessService.includes("BG_NEW")) {
     return <BankGuaranteePlanModal {...props} />;
   }
-  if (props?.businessService.includes("BG_MORTGAGE")) {
-    return <BankGuaranteePlanModal {...props} />;
-  }
+  // if (props?.businessService.includes("BG_MORTGAGE")) {
+  //   return <BankGuaranteePlanModal {...props} />;
+  // }
   if (props?.businessService.includes("SURREND_OF_LICENSE")) {
     return <SurrenderActionModal {...props} />;
   }
