@@ -32,7 +32,11 @@ const Layout = ({ rowData,forHome=false }) => {
       case "table":
         return <CustomTable data={chart} onSearch={searchQuery} chip={chip} title={title} />;
       case "donut":
-        return <CustomPieChart data={chart} title={title} />;
+        return <CustomPieChart 
+                  data={chart} 
+                  title={title} 
+                  variant={chart?.variant} 
+               />;
       case "line":
         return <CustomAreaChart data={chart} title={title} />;
       case "horizontalBar":
