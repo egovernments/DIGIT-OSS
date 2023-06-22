@@ -100,7 +100,7 @@ const App = ({ path }) => {
         <PrivateRoute path={`${path}/submitNew`} component={SubmitNew} />
         <PrivateRoute path={`${path}/renew/:id`} component={RenewNew} />
         <PrivateRoute path={`${path}/replace`} component={Replace} />
-        <PrivateRoute path={`${path}/release`} component={ReleaseNew} />
+        <PrivateRoute path={`${path}/release/:id`} component={ReleaseNew} />
         <PrivateRoute path={`${path}/step-one`} component={Step1} />
         <PrivateRoute path={`${path}/step-two`} component={Step2} />
         <PrivateRoute path={`${path}/step-three`} component={Step3} />

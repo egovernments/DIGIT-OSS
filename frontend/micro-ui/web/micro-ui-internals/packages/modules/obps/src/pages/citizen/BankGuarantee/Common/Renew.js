@@ -83,45 +83,7 @@ function RenewNew() {
       return error.message;
     }
   };
-    const handleApplLoiNumber = async (e) => {
-    const token = window?.localStorage?.getItem("token");
-    // const licenceNumber = apiData?.length ? watch("licenceNo")?.value : watch("licenceNo");
-    // const loiNumber = apiData?.length ? watch("licenceNo")?.value : watch("licenceNo");
-    // const applicationNumber = apiData?.length ? watch("licenceNo")?.value : watch("licenceNo");
-    try {
-      const loiRequest = {
-         RequestInfo: {
-          api_id: "Rainmaker",
-          ver: "v1",
-          ts: 0,
-          action: "_search",
-          did: "",
-          key:"",
-          msg_id: "090909",
-          authToken: token,
-          userInfo: userInfo
-        },};
-        console.log ("RESp",watch("applicationNumber"))
-        // const queryParam = new 
-      const Resp = await axios.post(`/tl-services/bank/guarantee/_search?${watch("numberType").value === "1"? "applicationNumber="+watch("applicationNumber")?.label : ""}${watch("numberType").value === "3"? "loiNumber="+watch("applicationNumber")?.label : ""}${watch("numberType").value === "2"? "licenceNumber="+watch("applicationNumber")?.label : ""}`, loiRequest);
-      
-
-      setClaimPeriod(Resp?.data?.newBankGuaranteeList?.[0]?.claimPeriod);
-      setBgNumber(Resp?.data?.newBankGuaranteeList?.[0]?.bgNumber);
-      setIssuingBank(Resp?.data?.newBankGuaranteeList?.[0]?.issuingBank);
-      setamountFig(Resp?.data?.newBankGuaranteeList?.[0]?.amountInFig);
-      setamountWords(Resp?.data?.newBankGuaranteeList?.[0]?.amountInWords);
-      setValidity(Resp?.data?.newBankGuaranteeList?.[0]?.validity);
-      setApplicationNumber(watch("applicationNumber").label)
-      console.log("applicationNo",watch("applicationNumber"))
-     
-     
-    } catch (error) {
-      console.log(error);
-    }
-
    
-  };
     const bankRenew = async (data) => {
     console.log("data",data)
     const token = window?.localStorage?.getItem("token");

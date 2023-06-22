@@ -331,7 +331,7 @@ const BGApplications = ({ view }) => {
                         </div>
                 <div class="col-sm-6 text-right">
                   <button type="submit"  class="btn btn-primary btn-md center-block">
-                    <a href="/digit-ui/citizen/obps/release">{`${t("MY_APPLICATION_BG_RELEASE")}`}</a>
+                    <a href={`/digit-ui/citizen/obps/release/${applicationNumber}`}>{`${t("MY_APPLICATION_BG_RELEASE")}`}</a>
                   
                   </button>
                 </div>
