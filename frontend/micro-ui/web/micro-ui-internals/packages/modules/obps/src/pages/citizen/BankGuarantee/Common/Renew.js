@@ -26,7 +26,9 @@ import CusToaster from "../../../../components/Toaster";
 import { Modal, ModalHeader, ModalBody, ModalFooter, Label } from "reactstrap";
 import { Input } from "antd";
 import ReactMultiSelect from "../../../../../../../react-components/src/atoms/ReactMultiSelect";
+import SubmitNew from "./SubmitNew";
 import { useTranslation } from "react-i18next";
+import { useParams } from "react-router-dom/cjs/react-router-dom.min";
 function RenewNew() {
   const [selects, setSelects] = useState();
   const [showhide, setShowhide] = useState("");
@@ -35,6 +37,8 @@ function RenewNew() {
   const [open4, setOpen4] = useState(false);
   const [open3, setOpen3] = useState(false);
   const {t}=useTranslation();
+  const {id} = useParams();
+  const [applicationNumber, setApplicationNumber] = useState('');
    const [showToastError, setShowToastError] = useState({ label: "", error: false, success: false });
   const handleshowhide = (event) => {
     const getuser = event.target.value;
@@ -79,7 +83,45 @@ function RenewNew() {
       return error.message;
     }
   };
- 
+    const handleApplLoiNumber = async (e) => {
+    const token = window?.localStorage?.getItem("token");
+    // const licenceNumber = apiData?.length ? watch("licenceNo")?.value : watch("licenceNo");
+    // const loiNumber = apiData?.length ? watch("licenceNo")?.value : watch("licenceNo");
+    // const applicationNumber = apiData?.length ? watch("licenceNo")?.value : watch("licenceNo");
+    try {
+      const loiRequest = {
+         RequestInfo: {
+          api_id: "Rainmaker",
+          ver: "v1",
+          ts: 0,
+          action: "_search",
+          did: "",
+          key:"",
+          msg_id: "090909",
+          authToken: token,
+          userInfo: userInfo
+        },};
+        console.log ("RESp",watch("applicationNumber"))
+        // const queryParam = new 
+      const Resp = await axios.post(`/tl-services/bank/guarantee/_search?${watch("numberType").value === "1"? "applicationNumber="+watch("applicationNumber")?.label : ""}${watch("numberType").value === "3"? "loiNumber="+watch("applicationNumber")?.label : ""}${watch("numberType").value === "2"? "licenceNumber="+watch("applicationNumber")?.label : ""}`, loiRequest);
+      
+
+      setClaimPeriod(Resp?.data?.newBankGuaranteeList?.[0]?.claimPeriod);
+      setBgNumber(Resp?.data?.newBankGuaranteeList?.[0]?.bgNumber);
+      setIssuingBank(Resp?.data?.newBankGuaranteeList?.[0]?.issuingBank);
+      setamountFig(Resp?.data?.newBankGuaranteeList?.[0]?.amountInFig);
+      setamountWords(Resp?.data?.newBankGuaranteeList?.[0]?.amountInWords);
+      setValidity(Resp?.data?.newBankGuaranteeList?.[0]?.validity);
+      setApplicationNumber(watch("applicationNumber").label)
+      console.log("applicationNo",watch("applicationNumber"))
+     
+     
+    } catch (error) {
+      console.log(error);
+    }
+
+   
+  };
     const bankRenew = async (data) => {
     console.log("data",data)
     const token = window?.localStorage?.getItem("token");
@@ -90,7 +132,8 @@ function RenewNew() {
       const postDistrict = {
         NewBankGuaranteeRequest: [
           {
-            applicationNumber:applicationNo,
+            applicationNumber:id,
+            
             ...data,
             updateType:"EXTEND",
            originCountry:data?.originCountry?.label
@@ -140,7 +183,7 @@ function RenewNew() {
           alignContent: "center",
         }}
       >
-        <span style={{ color: "#817f7f", fontSize: 14 }} className="">
+        <span style={{ color: "#817f7f", fontSize: 14 }} className="" >
           - BG Detail
         </span>
         {open4 ? <RemoveIcon></RemoveIcon> : <AddIcon></AddIcon>}

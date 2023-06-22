@@ -24,6 +24,7 @@ const selectTypeData = [
 const BGApplications = ({ view }) => {
   const { t } = useTranslation();
   const history = useHistory();
+  const[applicationNumber,setApplicationNumber]= useState("");
   const [open2, setOpen2] = useState(false);
   const [open3, setOpen3] = useState(false);
   const [open4, setOpen4] = useState(false);
@@ -145,6 +146,8 @@ const BGApplications = ({ view }) => {
       setamountFig(Resp?.data?.newBankGuaranteeList?.[0]?.amountInFig);
       setamountWords(Resp?.data?.newBankGuaranteeList?.[0]?.amountInWords);
       setValidity(Resp?.data?.newBankGuaranteeList?.[0]?.validity);
+      setApplicationNumber(watch("applicationNumber").label)
+      console.log("applicationNo",watch("applicationNumber"))
      
      
     } catch (error) {
@@ -334,7 +337,7 @@ const BGApplications = ({ view }) => {
                 </div>
                 <div class="col-sm-6 text-right">
                   <button id="btnSearch" class="btn btn-primary btn-md center-block" style={{ marginTop: "-143px", marginRight: "-458px" }}>
-                     <a href="/digit-ui/citizen/obps/renew">{`${t("MY_APPLICATION_BG_EXTENSION")}`}</a>
+                     <a href={`/digit-ui/citizen/obps/renew/${applicationNumber}`}>{`${t("MY_APPLICATION_BG_EXTENSION")}`}</a>
                   </button>
                 </div>
                         </div>
