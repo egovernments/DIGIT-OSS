@@ -36,6 +36,7 @@ function ReleaseNew(props) {
  const [showToastError, setShowToastError] = useState({ label: "", error: false, success: false });
   const [ServicePlanDataLabel, setServicePlanDataLabel] = useState([]);
   const{t}=useTranslation();
+  const {id} = useParams();
   const handleshowhide = (event) => {
     const getuser = event.target.value;
 
@@ -75,7 +76,8 @@ function ReleaseNew(props) {
       const postDistrict = {
         NewBankGuaranteeRequest: [
           {
-            applicationNumber:"HR_BG_NEW_20230227000483",
+            
+             applicationNumber:id,
             ...data,
             updateType:"RELEASE",
              bankGuaranteeReplacedWith:data?.bankGuaranteeReplacedWith?.value,

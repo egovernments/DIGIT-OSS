@@ -26,7 +26,9 @@ import CusToaster from "../../../../components/Toaster";
 import { Modal, ModalHeader, ModalBody, ModalFooter, Label } from "reactstrap";
 import { Input } from "antd";
 import ReactMultiSelect from "../../../../../../../react-components/src/atoms/ReactMultiSelect";
+import SubmitNew from "./SubmitNew";
 import { useTranslation } from "react-i18next";
+import { useParams } from "react-router-dom/cjs/react-router-dom.min";
 function RenewNew() {
   const [selects, setSelects] = useState();
   const [showhide, setShowhide] = useState("");
@@ -35,6 +37,8 @@ function RenewNew() {
   const [open4, setOpen4] = useState(false);
   const [open3, setOpen3] = useState(false);
   const {t}=useTranslation();
+  const {id} = useParams();
+  const [applicationNumber, setApplicationNumber] = useState('');
    const [showToastError, setShowToastError] = useState({ label: "", error: false, success: false });
   const handleshowhide = (event) => {
     const getuser = event.target.value;
@@ -79,7 +83,7 @@ function RenewNew() {
       return error.message;
     }
   };
- 
+   
     const bankRenew = async (data) => {
     console.log("data",data)
     const token = window?.localStorage?.getItem("token");
@@ -90,7 +94,8 @@ function RenewNew() {
       const postDistrict = {
         NewBankGuaranteeRequest: [
           {
-            applicationNumber:applicationNo,
+            applicationNumber:id,
+            
             ...data,
             updateType:"EXTEND",
            originCountry:data?.originCountry?.label
@@ -140,7 +145,7 @@ function RenewNew() {
           alignContent: "center",
         }}
       >
-        <span style={{ color: "#817f7f", fontSize: 14 }} className="">
+        <span style={{ color: "#817f7f", fontSize: 14 }} className="" >
           - BG Detail
         </span>
         {open4 ? <RemoveIcon></RemoveIcon> : <AddIcon></AddIcon>}
