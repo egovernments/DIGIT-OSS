@@ -35,10 +35,16 @@ const ScrutinyDetails = ({ onSelect, userType, formData, config }) => {
   const checkingFlow = formData?.uiFlow?.flow;
   const [showToast, setShowToast] = useState(null);
   const stateCode = Digit.ULBService.getStateId();
-  const { isMdmsLoading, data: mdmsData } = Digit.Hooks.obps.useMDMS(stateCode, "BPA", ["SubOccupancyType"]);
+  const { isMdmsLoading, data: mdmsData } = Digit.Hooks.obps.useMDMS(stateCode, "BPA", ["SubOccupancyType","RiskTypeComputation"]);
+
   const { data, isLoading, refetch } = Digit.Hooks.obps.useScrutinyDetails(tenantId, formData?.data?.scrutinyNumber, {
     enabled: true,
   });
+
+
+  useEffect(()=>{
+    console.log("logg12345...",mdmsData,isMdmsLoading)
+  },[mdmsData])
   const [floors, setFloors] = useState(
     [
       {
