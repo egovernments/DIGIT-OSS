@@ -217,12 +217,14 @@ const FeesChargesForm = (props) => {
         {data?.map((item, index) => {
           return (
             <div>
-              <table key={index} className="table table-bordered" style={{ backgroundColor: "rgb(251 251 253))", width: "629px" }}>
+              <table key={index} className="table table-bordered" style={{ backgroundColor: "rgb(251 251 253))", width: "80%" }}>
                 <thead>
                   <tr>
                     <th>Purpose</th>
                     <td style={{ textAlign: "right" }}>{item?.purpose}</td>
-                    <td style={{ textAlign: "right" }}>Formulae and Charges</td>
+                    <td style={{ textAlign: "right" }}>
+                      <b>Calculations</b>{" "}
+                    </td>
                   </tr>
                   <tr>
                     <th>Conversion Charges (In Rs.)</th>
