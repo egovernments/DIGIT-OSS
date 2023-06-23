@@ -47,6 +47,7 @@ import { DigitUI } from "@egovernments/digit-ui-module-core";
 # Changelog
 
 ```bash
+1.5.37 fixed hiding upload drawer icons.
 1.5.36 fixed after clicking on change password and then try to save profile without changing password showing error.
 1.5.35 fixed user profile email was prefilled when clicking on change password
 1.5.34 fixed module not found redirection issue
