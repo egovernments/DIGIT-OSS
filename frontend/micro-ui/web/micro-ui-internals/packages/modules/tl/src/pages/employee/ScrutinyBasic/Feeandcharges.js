@@ -127,7 +127,7 @@ const feeandcharges = props.feeandchargesData
                   </tr> */}
                   <tr>
                     <th>Conversion Charges (In Rs.)</th>
-                    <td style={{ textAlign: "right" }}> {item?.conversionChargesCal?.toLocaleString()}</td>
+                    <td style={{ textAlign: "right" }}> {item?.conversionChargesCal?.toLocaleString(undefined, {maximumFractionDigits:2})}</td>
                     <td style={{ textAlign: "right" }}> {item?.conversionFormula}</td>
                   </tr>
                  
@@ -139,7 +139,7 @@ const feeandcharges = props.feeandchargesData
                   </tr> */}
                   <tr>
                     <th>External Development Charges (In Rs.)</th>
-                    <td style={{ textAlign: "right" }}>{item?.externalDevelopmentChargesCal?.toLocaleString()}</td>
+                    <td style={{ textAlign: "right" }}>{item?.externalDevelopmentChargesCal?.toLocaleString(undefined, {maximumFractionDigits:2})}</td>
                     <td style={{ textAlign: "right" }}>{item?.edcFormula}</td>
                   </tr>
                  
@@ -149,7 +149,7 @@ const feeandcharges = props.feeandchargesData
                   </tr> */}
                   <tr>
                     <th>License Fee Charges (In Rs.)</th>
-                    <td style={{ textAlign: "right" }}>{item?.licenseFeeChargesCal?.toLocaleString()}</td>
+                    <td style={{ textAlign: "right" }}>{item?.licenseFeeChargesCal?.toLocaleString(undefined, {maximumFractionDigits:2})}</td>
                     <td style={{ textAlign: "right" }}>{item?.licenceFormula}</td>
                   </tr>
                   
@@ -159,7 +159,7 @@ const feeandcharges = props.feeandchargesData
                   </tr> */}
                   <tr>
                     <th>Scrutiny Fee Charges (In Rs.)</th>
-                    <td style={{ textAlign: "right" }}>{item?.scrutinyFeeChargesCal?.toLocaleString()}</td>
+                    <td style={{ textAlign: "right" }}>{item?.scrutinyFeeChargesCal?.toLocaleString(undefined, {maximumFractionDigits:2})}</td>
                     <td style={{ textAlign: "right" }}>{item?.scrutinyFormula}</td>
                   </tr>
                   
@@ -169,7 +169,7 @@ const feeandcharges = props.feeandchargesData
                   </tr> */}
                   <tr>
                     <th>State Infrastructure Development Charges (In Rs.)</th>
-                    <td style={{ textAlign: "right" }}>{item?.stateInfrastructureDevelopmentChargesCal?.toLocaleString()}</td>
+                    <td style={{ textAlign: "right" }}>{item?.stateInfrastructureDevelopmentChargesCal?.toLocaleString(undefined, {maximumFractionDigits:2})}</td>
                     <td style={{ textAlign: "right" }}>{item?.stateInfraFormula}</td>
                   </tr>
                 </tbody>

@@ -142,7 +142,7 @@ const TopBar = ({
               // )
               
               }
-             <b style={{fontSize:18}}>{designation} {designationName}</b> 
+             <b style={{fontSize:18}}>{designation}</b> <p>({designationName})</p> 
              {/* <b style={{fontSize:18}}></b>  */}
             </div>
             {/* <div className="left">{showLanguageChange && <ChangeLanguage dropdown={true} />}</div> */}
