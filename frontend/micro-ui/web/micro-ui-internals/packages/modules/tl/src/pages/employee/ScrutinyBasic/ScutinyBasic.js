@@ -50,6 +50,8 @@ import HistoryList from "./ScrutinyDevelopment/HistoryList";
 import Spinner from "../../../components/Loader";
 import ApplicationPurpose from "../AdditionalDocument/ApplicationPurpose";
 import FullScreenDialog from "./Remarks/RemarksUser";
+import BasicTable from "./ScrutinyDevelopment/UserRemarks";
+import BaseTableGrid from "./ServicePlanScrutniy/BaseTableGrid";
 // import HelpPost from "../Material/TextArea";
 
 const ScrutitnyForms = ({ apiResponse, applicationNumber, refreshScrutinyData ,profrmaID, histeroyData,additionalDocResponData, applicationStatus ,mDMSData ,applicationimp ,dataProfrmaFileds, dataMDMS }) => {
@@ -113,6 +115,14 @@ const {remarksData,notingRemarksData,iconStates,rolesDate,handleRoles,handleGetF
   const [open15, setOpen15] = useState(false);
   const [open16, setOpen16] = useState(false);
   const [open17, setOpen17] = useState(false);
+  const [open18, setOpen18] = useState(false);
+
+  const [smShow, setSmShow] = useState(false);
+// const [roleDataModal, setRoleDataModal] = useState([]);
+  const [docModal, setDocModal] = useState(false);
+  const handlemodaldData = () => {
+    setSmShow(false);
+  };
   // const [open6, setOpen6] = useState(false);
   // const [open6, setOpen6] = useState(false);
   // const [apiResponse, setApiResponse] = useState({});
@@ -1714,7 +1724,9 @@ console.log("userInFODATA123" , userInfo);
       
       <div
             className="collapse-header"
-            onClick={() => setOpen15(!open15)}
+            onClick={() => {
+              setOpen15(!open15); 
+              setSmShow(true);}}
             aria-controls="example-collapse-text"
             aria-expanded={open15}
             style={{
@@ -1741,7 +1753,54 @@ console.log("userInFODATA123" , userInfo);
               style={{ marginTop: 12, paddingLeft: 12, paddingRight: 12 }}
              >
       <div style={{ position: "relative", width: "100%", height: "100%", display: "flex" }}>
-      <DataGridDemo
+      <BaseTableGrid
+           passmodalData={handlemodaldData}
+           displaymodal={smShow}
+         
+           onClose={() => { setSmShow(false); setDocModal(false) }}
+          // applicationNumber={applicationNumber}
+          // dataForIcons={rolesDate}
+          // applicationStatus={applicationStatus}
+          // remarksData={remarksData}
+          >
+          
+          </BaseTableGrid>
+          {/* <FullScreenDialog/> */}
+      </div>
+      </div>
+      </Collapse>
+
+
+      {/* <div
+            className="collapse-header"
+            onClick={() => setOpen18(!open18)}
+            aria-controls="example-collapse-text"
+            aria-expanded={open18}
+            style={{
+              background: "#E9E5DE",
+              padding: "0.25rem 1.25rem",
+              borderRadius: "0.25rem",
+              fontWeight: "600",
+              display: "flex",
+              cursor: "pointer",
+              color: "#817f7f",
+              justifyContent: "space-between",
+              alignContent: "center",
+            }}
+          >
+            <span style={{ color: "#817f7f", fontSize: 16 }} className="">
+              
+              ONLINE LICENSE APPLICATION SCRUTINY PROFORMA
+             
+            </span>
+            {open18 ? <RemoveIcon></RemoveIcon> : <AddIcon></AddIcon>}
+          </div>
+          <Collapse in={open18}>
+            <div id="example-collapse-text"
+              style={{ marginTop: 12, paddingLeft: 12, paddingRight: 12 }}
+             >
+      <div style={{ position: "relative", width: "100%", height: "100%", display: "flex" }}>
+      <BasicTable
           
           applicationNumber={applicationNumber}
           dataForIcons={rolesDate}
@@ -1749,11 +1808,11 @@ console.log("userInFODATA123" , userInfo);
           remarksData={remarksData}
           >
           
-          </DataGridDemo>
-          {/* <FullScreenDialog/> */}
+          </BasicTable>
+       
       </div>
       </div>
-      </Collapse>
+      </Collapse> */}
 
 
       {/* <div

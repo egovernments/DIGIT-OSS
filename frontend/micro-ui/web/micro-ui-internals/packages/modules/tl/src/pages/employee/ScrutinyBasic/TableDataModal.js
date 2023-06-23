@@ -67,7 +67,7 @@ function TableDialog(props) {
    
 
        <Modal
-       class="modal fade"
+      //  class="modal fade"
         id="exampleModalScrollable" 
         tabindex="-1"
          role="dialog" 
@@ -75,16 +75,16 @@ function TableDialog(props) {
          aria-hidden="true"
        scrollable={true}
        
-    //   size="lg"
-    //   class="modal fade bd-example-modal-xl"
-    //   tabindex="-1"
-    //    role="dialog" 
+      size="md"
+      class="modal fade bd-example-modal-md"
+      // tabindex="-1"
+      //  role="dialog" 
  
       show={smShow}
       
     //   aria-labelledby="contained-modal-title-vcenter"
       centered
-      style={{ position: "fixed", left: "50%", top: "50%", transform: "translate(-50% , -50%)" , height:400 }}
+      style={{ position: "fixed", left: "50%", top: "50%", transform: "translate(-50% , -50%)" ,  width: "revert" }}
       onHide={props.onClose}
     >
       <Modal.Header closeButton in={open14}>

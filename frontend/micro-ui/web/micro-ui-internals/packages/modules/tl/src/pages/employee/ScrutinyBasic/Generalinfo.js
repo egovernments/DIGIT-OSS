@@ -357,7 +357,7 @@ const Genarelinfo = (props) => {
       { label: "NWL_APPLICANT_RECTANGLE_NUMBER_LAND_SCHEDULE", key: "rectangleNo" }, 
       { label: "Killa", key: "killa" }, 
       { label: "NWL_APPLICANT_TOTAL_AREA_LAND_SCHEDULE", key: "consolidatedTotal" }, 
-      { label: "NWL_APPLICANT_TOTAL_AREA_LAND_SCHEDULE", key: "nonConsolidatedTotal" }, 
+      { label: "NWL_APPLICANT_TOTAL_AREA_NON_LAND_SCHEDULE", key: "nonConsolidatedTotal" }, 
       { label: "NWL_APPLICANT_NAME_OF_LAND_OWNER_LAND_SCHEDULE", key: "landOwner" }, 
       { label: "NWL_APPLICANT_CONSLIDATION_TYPE_LAND_SCHEDULE", key: "consolidationType" }, 
       { label: "NWL_APPLICANT_TYPE_OF_LAND_SCHEDULE", key: "typeLand" }, 
@@ -696,6 +696,7 @@ const Genarelinfo = (props) => {
                             {`${t("NWL_APPLICANT_PURPOSE_OF_LICENCE")}`}
                             <span class="text-danger font-weight-bold mx-2">*</span>
                           </label> */}
+                          &nsp; &nsp; &nsp;
                       {`${t("NWL_APPLICANT_DISTRICT_LAND_SCHEDULE")}`}
                       {/* District    */}
                     </th>
@@ -705,6 +706,7 @@ const Genarelinfo = (props) => {
                     </th>
                     <th class="fw-normal pb-0 border-bottom-0 align-top">
                       {/* Zone     */}
+                      &nsp; &nsp; &nsp;&nsp; &nsp; &nsp;
                       {`${t("NWL_APPLICANT_ZONE_LAND_SCHEDULE")}`}
                     </th>
                     <th class="fw-normal pb-0 border-bottom-0 align-top">
@@ -713,11 +715,13 @@ const Genarelinfo = (props) => {
                     </th>
                     <th class="fw-normal pb-0 border-bottom-0 align-top">
                       {/* Tehsil     */}
+                      &nsp; &nsp; &nsp;&nsp; &nsp; &nsp;
                       {`${t("NWL_APPLICANT_TEHSIL_LAND_SCHEDULE")}`}
 
                     </th>
                     <th class="fw-normal pb-0 border-bottom-0 align-top">
                       {/* Revenue Estate    */}
+                      &nsp; &nsp; &nsp;&nsp; &nsp; &nsp;&nsp; &nsp; &nsp;
                       {`${t("NWL_APPLICANT_REVENUE_ESTATE_LAND_SCHEDULE")}`}
                     </th>
                     <th class="fw-normal pb-0 border-bottom-0 align-top">
@@ -824,10 +828,10 @@ const Genarelinfo = (props) => {
                       {/* Total Area */}
                       {`${t("NWL_APPLICANT_TOTAL_AREA_LAND_SCHEDULE")}`}
                     </th>
-                    <th class="fw-normal pb-0 border-bottom-0 align-top">
+                    {/* <th class="fw-normal pb-0 border-bottom-0 align-top">
                       Action Remarks
 
-                    </th>
+                    </th> */}
 
                   </tr>
                   <tr className="border-top-0">
@@ -1371,11 +1375,11 @@ display: hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_DATA_OF_REGI
                       <ReportProblemIcon
                         style={{
 
-                          display: hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_TOTAL_AREA_LAND_SCHEDULE") ? "block" : "none",
+                          display: hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_TOTAL_AREA_NON_LAND_SCHEDULE") ? "block" : "none",
                           color: fieldIconColors.nonConsolidatedTotal
                         }}
                         onClick={() => {
-                          setLabelValue("NWL_APPLICANT_TOTAL_AREA_LAND_SCHEDULE"),
+                          setLabelValue("NWL_APPLICANT_TOTAL_AREA_NON_LAND_SCHEDULE"),
                             setOpennedModal("nonConsolidatedTotal")
                           setSmShow(true),
                             setDocModal(false),
@@ -1562,9 +1566,18 @@ display: hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_DATA_OF_REGI
             {/* <div style={{ position: "relative", marginBottom: 40 }}>
               <Button onClick={() => props.passUncheckedList({ data: uncheckedValue, purpose: purpose })}>Submit</Button>
             </div> */}
-            <div className="row" style={{ margin: 10 , textAlign:"right"}}>
-              totalArea : {applicantInfoPersonal?.totalArea}
+
+<div class="row">
+              <div class="col-sm-6 text-left">
+               
+              </div>
+              <div class="col-sm-6 text-right">
+              {`${t("NWL_APPLICANT_TOTAL_AREA_LAND_SCHEDULE")}`}  : {applicantInfoPersonal?.totalArea}
+              </div>
             </div>
+            {/* <div className="row" style={{ margin: 10 , textAlign:""}}>
+            {`${t("NWL_APPLICANT_TOTAL_AREA_LAND_SCHEDULE")}`}  : {applicantInfoPersonal?.totalArea}
+            </div> */}
 
           </Form.Group>
 
