@@ -35,26 +35,27 @@ const ScrutinyDetails = ({ onSelect, userType, formData, config }) => {
   const checkingFlow = formData?.uiFlow?.flow;
   const [showToast, setShowToast] = useState(null);
   const stateCode = Digit.ULBService.getStateId();
-  const { isMdmsLoading, data: mdmsData } = Digit.Hooks.obps.useMDMS(stateCode, "BPA", ["SubOccupancyType","RiskTypeComputation"]);
+  const { isMdmsLoading, data: mdmsData } = Digit.Hooks.obps.useMDMS(stateCode, "BPA", ["SubOccupancyType", "RiskTypeComputation"]);
 
   const { data, isLoading, refetch } = Digit.Hooks.obps.useScrutinyDetails(tenantId, formData?.data?.scrutinyNumber, {
     enabled: true,
   });
 
 
-  useEffect(()=>{
-    console.log("logg12345...",mdmsData,isMdmsLoading)
-  },[mdmsData])
+  useEffect(() => {
+    5
+    console.log("logg12345...", mdmsData, isMdmsLoading)
+  }, [mdmsData])
   const [floors, setFloors] = useState(
     [
       {
-        floor:"",
-        coverageArea:""
+        floor: "",
+        coverageArea: ""
       }
     ]
-    )
+  )
 
-  const {register,watch,setValue,getValues,handleSubmit,formState: { errors },} = useForm();
+  const { register, watch, setValue, getValues, handleSubmit, formState: { errors }, } = useForm();
 
   function getFloorData(block) {
     let floors = [];
@@ -163,7 +164,7 @@ const ScrutinyDetails = ({ onSelect, userType, formData, config }) => {
   const onSkip = () => onSelect();
 
   const goNext = () => {
-    console.log("log123...",checkingFlow,formData)
+    console.log("log123...", checkingFlow, formData)
     if (checkingFlow === "OCBPA") {
       if (!formData?.id) {
         let payload = {};
@@ -253,20 +254,20 @@ const ScrutinyDetails = ({ onSelect, userType, formData, config }) => {
 
   const deleteFloor = (index) => {
     let tempArray = floors;
-    tempArray.splice(index,1);
+    tempArray.splice(index, 1);
     setFloors([...tempArray]);
   }
 
   const addFloor = () => {
-    setFloors([...floors, 
-      {
-        floor:"",
-        coverageArea:""
-      }
+    setFloors([...floors,
+    {
+      floor: "",
+      coverageArea: ""
+    }
     ]);
   }
 
-  const setFloor = (key,value,index) => {
+  const setFloor = (key, value, index) => {
     let temp = floors;
     temp[index][key] = value;
     setFloors([...temp]);
@@ -340,19 +341,20 @@ const ScrutinyDetails = ({ onSelect, userType, formData, config }) => {
 
           <Row
             className="border-none"
-            label={t("BPA_SCRUTINY_DETAILS_FLOOR_WISE_COVERAGE_AREA")}
+            label={t("BPA_SCRUTINY_DETAILS_TOTAL_FLOOR_COVERAGE_AREA")}
             text={data?.planDetail?.blocks?.[0]?.building?.totalFloorArea}
           ></Row>
 
 
-          <div className="d-flex justify-content-end ">
+          <div className="d-flex justify-content-between ">
+            <h2>{t("BPA_SCRUTINY_DETAILS_FLOOR_WISE_COVERAGE_AREA")}</h2>
             <button type="button" className="btn btn-primary" onClick={addFloor}>Add Floor</button>
           </div>
 
           {
             floors.map((item, index) => (
               <div className="row mb-1 mt-2">
-                <select placeholder={t("Number of Floor")} className="form-control col-10" value={item.floor} onChange={(e)=>setFloor("floor",e.target.value,index)} >
+                <select placeholder={t("Number of Floor")} className="form-control col-10" value={item.floor} onChange={(e) => setFloor("floor", e.target.value, index)} >
                   <option value={""}>Select Floor</option>
                   <option value={"Ground Floor"}>Ground Floor</option>
                   <option value={"First Floor"}>First Floor</option>
@@ -361,16 +363,17 @@ const ScrutinyDetails = ({ onSelect, userType, formData, config }) => {
                 </select>
 
                 <div className="col-1">
-                  <button type="button" className="btn btn-danger" onClick={()=>deleteFloor(index)}>Remove</button>
-                  </div>
+                  <button type="button" className="btn btn-danger" onClick={() => deleteFloor(index)}>Remove</button>
+                </div>
 
-                  <input className="form-control w-100 col-12" placeholder={t("BPA_SCRUTINY_DETAILS_COVERAGE_AREA")} value={item.coverageArea} onChange={(e)=>setFloor("coverageArea",e.target.value,index)}/>
-                    {/* <FormHelperText error={Boolean(errors?.["floorWiseCoverageArea"+index+1])}>{errors?.["floorWiseCoverageArea"+index+1]?.message}</FormHelperText> */}
-
+                <input className="form-control w-100 col-10" placeholder={t("BPA_SCRUTINY_DETAILS_COVERAGE_AREA")} value={item.coverageArea} onChange={(e) => setFloor("coverageArea", e.target.value, index)} />
+                {/* <FormHelperText error={Boolean(errors?.["floorWiseCoverageArea"+index+1])}>{errors?.["floorWiseCoverageArea"+index+1]?.message}</FormHelperText> */}
+                <div className="col-1">
+                </div>
               </div>
             ))
           }
-          
+
           <Row
             className="border-none"
             label={t("BPA_HEIGHT_FROM_GROUND_LEVEL_FROM_MUMTY")}
@@ -440,30 +443,30 @@ const ScrutinyDetails = ({ onSelect, userType, formData, config }) => {
           ></Row>
 
           <input className="form-control w-100 p-2 mb-2" type="number" placeholder="Distance from left side" {...register("distanceFromLeftSide", {
-                      minLength:{
-                        value:1,
-                        message:"Invalid Value"
-                      },
-                      maxLength:{
-                        value:10,
-                        message:"Invalid Value"
-                      },
-                      required: "Fields can't be blank",
-                    })}/>
-                    <FormHelperText error={Boolean(errors?.["distanceFromLeftSide"])}>{errors?.["distanceFromLeftSide"]?.message}</FormHelperText>
-                    
+            minLength: {
+              value: 1,
+              message: "Invalid Value"
+            },
+            maxLength: {
+              value: 10,
+              message: "Invalid Value"
+            },
+            required: "Fields can't be blank",
+          })} />
+          <FormHelperText error={Boolean(errors?.["distanceFromLeftSide"])}>{errors?.["distanceFromLeftSide"]?.message}</FormHelperText>
+
           <input className="form-control w-100 p-2 mb-2" type="number" placeholder="Distance from right side" {...register("distanceFromRightSide", {
-                      minLength:{
-                        value:1,
-                        message:"Invalid Value"
-                      },
-                      maxLength:{
-                        value:10,
-                        message:"Invalid Value"
-                      },
-                      required: "Fields can't be blank",
-                    })}/>
-                    <FormHelperText error={Boolean(errors?.["distanceFromRightSide"])}>{errors?.["distanceFromRightSide"]?.message}</FormHelperText>
+            minLength: {
+              value: 1,
+              message: "Invalid Value"
+            },
+            maxLength: {
+              value: 10,
+              message: "Invalid Value"
+            },
+            required: "Fields can't be blank",
+          })} />
+          <FormHelperText error={Boolean(errors?.["distanceFromRightSide"])}>{errors?.["distanceFromRightSide"]?.message}</FormHelperText>
 
           {/* <TextField variant="outlined" label={"Distance from left side"}/>
             <TextField variant="outlined" label={"Distance from right side"}/> */}

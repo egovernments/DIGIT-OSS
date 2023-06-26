@@ -8,7 +8,7 @@ import { Header } from "@egovernments/digit-ui-react-components";
 
 const LowMediumInbox = ({
   parentRoute,
-  businessService = ["SURREND_OF_LICENSE"],
+  businessService = ["BPA_LOW"],
   initialStates = {},
   filterComponent,
   isInbox
@@ -30,7 +30,7 @@ const LowMediumInbox = ({
     ? { limit: 100, offset: 0, sortBy: sortParams?.[0]?.id, sortOrder: sortParams?.[0]?.desc ? "DESC" : "ASC" }
     : { limit: pageSize, offset: pageOffset, sortBy: sortParams?.[0]?.id, sortOrder: sortParams?.[0]?.desc ? "DESC" : "ASC" };
 
-    const { isFetching, isLoading: hookLoading, searchResponseKey, data, searchFields, ...rest } = Digit.Hooks.obps.useSLInbox({
+    const { isFetching, isLoading: hookLoading, searchResponseKey, data, searchFields, ...rest } = Digit.Hooks.obps.useBPALowInbox({
     tenantId,
     filters: { ...searchParams, ...paginationParams, sortParams },
     config: {}

@@ -150,7 +150,7 @@ const { remarksData,iconStates,handleGetFiledsStatesById,handleGetRemarkssValues
   }, [applicationNumber]);
 
   useEffect(()=>{
-    setBusinessService("TECHNICAL_PROFESSIONAL");
+    setBusinessService("BPA_LOW");
     if(applicationNumber){
       handleGetFiledsStatesById(applicationNumber);
     }

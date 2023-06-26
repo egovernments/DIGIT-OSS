@@ -314,7 +314,7 @@ const OwnerDetails = ({ t, config, onSelect, userType, formData }) => {
                 payload.landInfo.ownershipCategory = ownershipCategory.code;
                 payload.landInfo.tenantId = formData?.address?.city?.code;
                 payload.subOccupancy = formData?.subOccupancy;
-                payload.ownerDocs = {
+                payload.landInfo.owners.ownerDocs = {
                     formBRSI: getValues()?.formBRSI,
                     formBRSII: getValues()?.formBRSII,
                     formBRSV : getValues()?.formBRSV,

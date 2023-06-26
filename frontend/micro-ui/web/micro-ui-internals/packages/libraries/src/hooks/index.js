@@ -195,6 +195,7 @@ import WSSearchMdmsTypes from "./ws/WSSearchMdmsTypes";
 import usewsTenants from "./ws/useTenants";
 import useWaterSearch from "./ws/useWaterSearch";
 import useSewarageSearch from "./ws/useSewarageSearch";
+import useBPALowInbox from "./obps/useBPALowInbox";
 
 const pgr = {
   useComplaintDetails,
@@ -353,7 +354,7 @@ const obps = {
   useCCInbox,
   useECOCSInbox,
   useEOCPInbox,
-
+  useBPALowInbox
 };
 
 const events = {

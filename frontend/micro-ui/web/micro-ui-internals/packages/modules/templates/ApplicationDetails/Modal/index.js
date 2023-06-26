@@ -18,6 +18,7 @@ import ExtensionCluModal from "./ExtensionCluModal";
 import CompletionLicModal from "./CompletionActionModal";
 import TechnicalProfessionalModal from "./TechnicalProfessionalModal";
 import ExtensionLicModal from "./extensionConstructionModal";
+import LowMediumModal from "./LowMediumModal";
 
 const ActionModal = (props) => {
   if (props?.businessService.includes("PT")) {
@@ -82,6 +83,9 @@ const ActionModal = (props) => {
   if (props?.businessService.includes("TECHNICAL_PROFESSIONAL")) {
     return <TechnicalProfessionalModal {...props} />;
     }
+    if (props?.businessService.includes("BPA_LOW")) {
+      return <LowMediumModal {...props} />;
+      }
    if (props?.businessService.includes("CONSTRUCTION_OF_COMMUNITY")) {
     return <ExtensionLicModal {...props} />;
   }
