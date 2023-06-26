@@ -7,15 +7,14 @@
     "packages/css",
     "example",
     "packages/react-components",
-    "packages/modules/bills",
     "packages/modules/common",
     "packages/modules/core",
     "packages/modules/dss",
     "packages/modules/engagement",
+    "packages/modules/pgr",
     "packages/modules/pt",
     "packages/modules/tl",
-    "packages/modules/ws",
-    "packages/modules/fsm"
+    "packages/modules/ws"
   ],
   "author": "Abhinav Kushwaha <abhinav.kushwaha@egovernments.org>",
   "license": "MIT",
@@ -57,8 +56,8 @@
     "build:pt": "cd packages/modules/pt && yarn build",
     "buildD:commonPt": "cd packages/modules/commonPt && yarn build",
     "build:core": "cd packages/modules/core && yarn build",
-    "buildD:pgr": "cd packages/modules/pgr && yarn build",
-    "build:fsm": "cd packages/modules/fsm && yarn build",
+    "build:pgr": "cd packages/modules/pgr && yarn build",
+    "buildD:fsm": "cd packages/modules/fsm && yarn build",
     "build:dss": "cd packages/modules/dss && yarn build",
     "buildD:mcollect": "cd packages/modules/mCollect && yarn build",
     "buildD:receipts": "cd packages/modules/receipts && yarn build",
@@ -68,7 +67,7 @@
     "build:engagement": "cd packages/modules/engagement && yarn build",
     "buildD:noc": "cd packages/modules/noc && yarn build",
     "build:ws": "cd packages/modules/ws && yarn build",
-    "build:bills": "cd packages/modules/bills && yarn build",
+    "buildD:bills": "cd packages/modules/bills && yarn build",
     "buildR:reports": "cd packages/modules/reports && yarn build",
     "deploy:jenkins": "./scripts/jenkins.sh"
   },
@@ -85,8 +84,7 @@
   "dependencies": {
     "lodash": "4.17.21",
     "microbundle-crl": "0.13.11"
-  },
-  "resolutions": {
+  } ,"resolutions": {
     "**/babel-loader": "8.2.2",
     "**/@babel/core": "7.14.0",
     "**/@babel/preset-env": "7.14.0",
