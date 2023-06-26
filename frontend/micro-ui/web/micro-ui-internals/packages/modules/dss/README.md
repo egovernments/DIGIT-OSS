@@ -52,6 +52,7 @@ const initDigitUI = () => {
 # Changelog
 
 ```bash
+1.5.32 Percentage symbol showing in Yaxis ticker and left alignment of label for FSM Capacity Utilization 
 1.5.31 Horizontal Bar chart alignment fixes
 1.5.30 Added enhancement for pie chart using variant flag according to new requirements. Refer CustomPieChart component.
 1.5.29 DSS UI alignment fixes for Horizontal Metric and bar chart
