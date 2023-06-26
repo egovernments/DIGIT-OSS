@@ -191,15 +191,15 @@ const CustomPieChart = ({ dataKey = "value", data, setChartDenomination,variant=
         <NoData t={t} />
       ) : (
         variant === "pieChartv2" ? 
-        <ResponsiveContainer width="99%" height={500}>
-          <PieChart cy={100} >
+        <ResponsiveContainer width="94%" maxHeight={chartData?.length > 3 ? 500 : 400}>
+          <PieChart cy={100} width="100%">
             <Pie
               data={chartData}
               dataKey={dataKey}
-              cy={150}
+              cy={125}
               style={{ cursor: response?.responseData?.drillDownChartId !== "none" ? "pointer" : "default" }}
-              innerRadius={checkChartID(id) && !mobileView ? 90 : 100} ///Charts in rows(which contains 2 charts) are little bigger in size than charts in rows(which contains 3 charts) charts
-              outerRadius={checkChartID(id) && !mobileView ? 110 : 120}
+              innerRadius={checkChartID(id) && !mobileView ? 60 : 80} ///Charts in rows(which contains 2 charts) are little bigger in size than charts in rows(which contains 3 charts) charts
+              outerRadius={checkChartID(id) && !mobileView ? 90 : 100}
               margin={{ top: isPieClicked ? 0 : 5 }}
               fill="#8884d8"
               label={variant==="pieChartv2" ? renderCustomLabel : null}
@@ -230,14 +230,15 @@ const CustomPieChart = ({ dataKey = "value", data, setChartDenomination,variant=
               wrapperStyle={
                 chartData?.length > 6
                   ? {
-                      paddingRight: checkChartID(id) && !mobileView ? 60 : 0, ///Padding for 2 charts in a row cases
+                      paddingRight: checkChartID(id) && !mobileView ? 30 : 0, ///Padding for 2 charts in a row cases
                       overflowY: "scroll",
                       height: 250,
                       width: "35%",
                       overflowX: "auto",
                       paddingTop: -20,
+                      paddingBottom: -20
                     }
-                  : { paddingRight: checkChartID(id) && !mobileView ? 60 : 0,paddingLeft:checkChartID(id) && !mobileView ? 60 : 0, width: "100%", overflowX: "auto",marginTop:"3rem", marginLeft:"1rem" } ///Padding for 2 charts in a row cases
+                  : { paddingRight: checkChartID(id) && !mobileView ? 30 : 0,paddingLeft:checkChartID(id) && !mobileView ? 30 : 0, width: "100%", overflowX: "auto",marginTop:"0px", marginLeft:"1.5rem" } ///Padding for 2 charts in a row cases
               }
             />
           </PieChart>

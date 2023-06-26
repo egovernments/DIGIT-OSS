@@ -125,53 +125,55 @@ const CustomHorizontalBarChart = ({
     <Fragment>
       {horizontalBarv2 ? 
        <ResponsiveContainer
-       width="94%"
-       height={300}
+       width="100%"
+       height={chartData?.length === 0 ? 300 : chartData?.length === 1 ? 80 : chartData?.length * 42 + 10}
        margin={{
          top: 5,
-         right: 2,
-         left: 2,
-         bottom: 5,
+         right: 16,
+         left: 0,
+         bottom: 0,
        }}
      >
        {chartData?.length === 0 || !chartData ? (
          <NoData t={t} />
        ) : (
-         <BarChart
-           width="98%"
+         <BarChart 
+           width="100%"
            height="100%"
            margin={{
-             top: 2,
-             right: 2,
-             left: 2,
-             bottom: 2,
+             top: 0,
+             right: 24,
+             left: 0,
+             bottom: 0,
            }}
            layout={layout}
            data={chartData}
-           barGap={2}
-           barSize={40}
+           barCategoryGap={20}
+           barGap={0}
          >
            <CartesianGrid display={"none"} strokeDasharray="2 2"/>
            <YAxis
              dataKey={yDataKey}
              type={yAxisType}
-             tick={{ fontSize: "15px", fill: "#828282" }}
+             axisLine={true}
+             tickLine={false}
+            //  domain={[-100, 'dataMax']}
+             tick={{ fontSize: "14px"}}
              label={{
                value: yAxisLabel,
-               angle: -90,
-               position: "insideLeft",
-               dy: 50,
+               angle: 90,
+               position: "left",
                fontSize: "14px",
                fill: "#505A5F",
              }}
              tickCount={10}
              tickFormatter={tickFormatter}
              unit={id === "fsmCapacityUtilization" ? "%" : ""}
-             width={layout === "vertical" ? 80 : 60}
+             width={layout === "vertical" ? 78 : 60}
            />
            <XAxis display={"none"} dataKey={xDataKey} type={xAxisType} tick={{ fontSize: "14px", fill: "#505A5F" }} tickCount={10} tickFormatter={tickFormatter} />
-           {bars?.map((bar, idx) => ( <Bar key={idx} dataKey={t(bar)} fill={barColors[idx]} stackId={bars?.length > 2 ? 1 : idx} >
-          <LabelList dataKey={t(bar)} position={"right"} offset={"3"} fill={"#828282"} />
+           {bars?.map((bar, idx) => ( <Bar key={idx} dataKey={t(bar)} fill={barColors[idx]} stackId={bars?.length > 2 ? 1 : idx} barSize={22} >
+           <LabelList dataKey={t(bar)} position={"right"} offset={"3"} fill={"#828282"} />
           </Bar>
        ))}
            {/* <Legend formatter={renderLegend} iconType="circle" /> */}
