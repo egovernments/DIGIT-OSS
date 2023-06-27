@@ -299,7 +299,7 @@ const LowMediumCard = (props) => {
 
         <div class="col-md-10 bg-light text-right" style={{ position: "relative", marginBottom: 30 }}>
           {showModal ? (
-            <ActionModal
+            <ActionModal 
               t={t}
               action={selectedAction}
               tenantId={tenantId}

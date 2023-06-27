@@ -169,7 +169,7 @@ const ScrutinyDetails = ({ onSelect, userType, formData, config }) => {
       if (!formData?.id) {
         let payload = {};
         payload.edcrNumber = formData?.edcrNumber?.edcrNumber ? formData?.edcrNumber?.edcrNumber : formData?.data?.scrutinyNumber?.edcrNumber;
-        payload.riskType = t(`WF_BPA_${riskType}`);
+        payload.riskType = t(`WF_BPA_${riskType}`).toUpperCase();
         payload.applicationType = formData?.data?.applicationType;
         payload.serviceType = formData?.data?.serviceType;
 
@@ -216,7 +216,7 @@ const ScrutinyDetails = ({ onSelect, userType, formData, config }) => {
       console.log("Logger123.......", config.key, subOccupancyObject)
       let payload = {}
       payload.floors = floors;
-      payload.riskType = t(`WF_BPA_${riskType}`);
+      payload.riskType = t(`WF_BPA_${riskType}`).toUpperCase();
       payload.basementPosition = {
         distanceFromLeftSide: getValues().distanceFromLeftSide,
         distanceFromRightSide: getValues().distanceFromRightSide

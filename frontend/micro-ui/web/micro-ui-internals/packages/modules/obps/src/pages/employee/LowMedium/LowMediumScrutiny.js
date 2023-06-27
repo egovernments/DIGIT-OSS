@@ -1166,7 +1166,7 @@ function LowMediumScrutiny({ apiResponse, refreshScrutinyData, applicationNumber
                             <h3 className="mt-3 mb-4" style={{ fontSize: "22px", fontWeight: "600" }}>{t('BPA_BUILDING_PROPOSED_AREA_HEADER')}</h3>
                             <Row className="col-12">
 
-                                <div className="col col-3">
+                                <div className="col col-3"> 
                                     <FormControl className="w-100">
                                         <h2 className="FormLable">
                                             {`${t("BPA_PROPOSED_FLOOR_WISE_COVERAGED_AREA_HEADER")}`} <span style={{ color: "red" }}>*</span>

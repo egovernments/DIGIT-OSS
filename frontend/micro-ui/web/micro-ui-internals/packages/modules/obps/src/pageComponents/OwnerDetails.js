@@ -198,7 +198,7 @@ const OwnerDetails = ({ t, config, onSelect, userType, formData }) => {
 
     function getBlockIds(arr) {
         let blockId = {};
-        arr.map((ob, ind) => {
+        arr?.map((ob, ind) => {
             blockId[`Block_${ob.floorNo}`] = ob.id;
         });
         return blockId;
@@ -282,7 +282,7 @@ const OwnerDetails = ({ t, config, onSelect, userType, formData }) => {
                 });
                 let payload = {};
                 payload.edcrNumber = formData?.edcrNumber?.edcrNumber ? formData?.edcrNumber?.edcrNumber : formData?.data?.scrutinyNumber?.edcrNumber;
-                payload.riskType = formData?.riskType || formData?.subOccupancy?.riskType ;
+                payload.riskType = formData?.riskType?.toUpperCase() || formData?.subOccupancy?.riskType?.toUpperCase() ;
                 payload.applicationType = formData?.data?.applicationType || formData?.applicationType;
                 payload.serviceType = formData?.data?.serviceType || formData?.serviceType;
 
@@ -314,7 +314,12 @@ const OwnerDetails = ({ t, config, onSelect, userType, formData }) => {
                 payload.landInfo.ownershipCategory = ownershipCategory.code;
                 payload.landInfo.tenantId = formData?.address?.city?.code;
                 payload.subOccupancy = formData?.subOccupancy;
-                payload.landInfo.owners.ownerDocs = {
+                
+                //for units
+                const blockOccupancyDetails = formData;
+                payload.landInfo.unit = getUnitsForAPI(blockOccupancyDetails);
+
+                payload.landInfo.ownerDocs = {
                     formBRSI: getValues()?.formBRSI,
                     formBRSII: getValues()?.formBRSII,
                     formBRSV : getValues()?.formBRSV,
@@ -329,9 +334,6 @@ const OwnerDetails = ({ t, config, onSelect, userType, formData }) => {
                     copyOfAffidavitClarifying : getValues()?.copyOfAffidavitClarifying
 
                 }
-                //for units
-                const blockOccupancyDetails = formData;
-                payload.landInfo.unit = getUnitsForAPI(blockOccupancyDetails);
 
                 let nameOfAchitect = sessionStorage.getItem("BPA_ARCHITECT_NAME");
                 let parsedArchitectName = nameOfAchitect ? JSON.parse(nameOfAchitect) : "ARCHITECT";
