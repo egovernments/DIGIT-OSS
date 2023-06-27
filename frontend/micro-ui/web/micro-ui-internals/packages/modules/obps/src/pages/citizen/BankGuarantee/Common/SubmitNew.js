@@ -15,7 +15,7 @@ import ReactMultiSelect from "../../../../../../../react-components/src/atoms/Re
 import IconButton from "@mui/material/IconButton";
 import CloseIcon from "@mui/icons-material/Close";
 import Typography from "@mui/material/Typography";
-import FileUpload from "@mui/icons-material/FileUpload";
+import FileUpload from "@mui/icons-material/FileUpload"; 
 import ArrowCircleUpIcon from "@mui/icons-material/ArrowCircleUp";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import ReleaseNew from "./Release";
@@ -80,6 +80,7 @@ function SubmitNew() {
 // {
 //   label: "SPE", value: "SPE"
 // }];
+
   const bankSubmitNew = async (data) => {
     const token = window?.localStorage?.getItem("token");
     console.log("token", token);
@@ -196,7 +197,7 @@ function SubmitNew() {
     };
     try {
       const Resp = await axios.post(
-        `/tl-services/bank/guarantee/_search?typeOfBg=${getValues("typeOfBg")}&loiNumber=${getValues("loiNumber")}`,
+        `/tl-services/bank/guarantee/_search?typeOfBg=${watch("typeOfBg").label}&loiNumber=${watch("loiNumber")}`,
         payload
       );
       const Submitform = Resp?.data?.newBankGuaranteeList[0];
@@ -388,7 +389,7 @@ function SubmitNew() {
                 name="businessService"
                 id="businessService1"
                 value="BG_NEW"
-                 onClick={handleLoiNumber}
+                 onClick={submitNewFormSubmitHandler}
                 onChange={(e) => handleshowhide(e)}
               />
               &nbsp; {`${t("BG_SUBMIT_BANK_GUARANTEE")}`}

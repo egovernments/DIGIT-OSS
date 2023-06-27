@@ -49,6 +49,9 @@ import ExternalSection from "./CurrentRemarks/CurrentExternalSection";
 import HistoryList from "./ScrutinyDevelopment/HistoryList";
 import Spinner from "../../../components/Loader";
 import ApplicationPurpose from "../AdditionalDocument/ApplicationPurpose";
+import FullScreenDialog from "./Remarks/RemarksUser";
+import BasicTable from "./ScrutinyDevelopment/UserRemarks";
+import BaseTableGrid from "./ServicePlanScrutniy/BaseTableGrid";
 // import HelpPost from "../Material/TextArea";
 
 const ScrutitnyForms = ({ apiResponse, applicationNumber, refreshScrutinyData ,profrmaID, histeroyData,additionalDocResponData, applicationStatus ,mDMSData ,applicationimp ,dataProfrmaFileds, dataMDMS }) => {
@@ -111,6 +114,15 @@ const {remarksData,notingRemarksData,iconStates,rolesDate,handleRoles,handleGetF
   const [open14, setOpen14] = useState(false);
   const [open15, setOpen15] = useState(false);
   const [open16, setOpen16] = useState(false);
+  const [open17, setOpen17] = useState(false);
+  const [open18, setOpen18] = useState(false);
+
+  const [smShow, setSmShow] = useState(false);
+// const [roleDataModal, setRoleDataModal] = useState([]);
+  const [docModal, setDocModal] = useState(false);
+  const handlemodaldData = () => {
+    setSmShow(false);
+  };
   // const [open6, setOpen6] = useState(false);
   // const [open6, setOpen6] = useState(false);
   // const [apiResponse, setApiResponse] = useState({});
@@ -694,7 +706,7 @@ const handleAccountClick = async () =>{
   };
  
   try {
-      const Resp = await axios.post(`/land-services/egscrutiny/_search4?applicationNumber=${applicationNumber}&roles=AO_HQ,CAO,CAO_HQ,AO,SO,SO_HQ`, dataToSend).then((response) => {
+      const Resp = await axios.post(`/land-services/egscrutiny/_search4?applicationNumber=${applicationNumber}&roles=Accounts,Accounts Officer,AO_HQ,CAO,CAO_HQ,AO,SO,SO_HQ`, dataToSend).then((response) => {
           return response.data;
       });
 
@@ -730,7 +742,7 @@ const handleDrawingClick = async () =>{
       },
   };
   try {
-      const Resp = await axios.post(`/land-services/egscrutiny/_search4?applicationNumber=${applicationNumber}&roles=SD_HQ,JD_HQ,PA,PA_HQ,ADA_HQ,AD_HQ,JE_HQ,ASST_JE_HQ`, dataToSend).then((response) => {
+      const Resp = await axios.post(`/land-services/egscrutiny/_search4?applicationNumber=${applicationNumber}&roles=Drawing Branch,Drafts Man,SD_HQ,Draftsman,Senior Draftmans,Assistant Draftsman,JD,Junior Draftsman,JD_HQ,PA,PA_HQ,ADA_HQ,AD_HQ,JE_HQ,ASST_JE_HQ`, dataToSend).then((response) => {
           return response.data;
       });
 
@@ -761,7 +773,7 @@ const handleLegalClick = async () =>{
       },
   };
   try {
-      const Resp = await axios.post(`/land-services/egscrutiny/_search4?applicationNumber=${applicationNumber}&roles=DA,DDA,ADA,DA_HQ,DDA_HQ,ADA_HQ,`, dataToSend).then((response) => {
+      const Resp = await axios.post(`/land-services/egscrutiny/_search4?applicationNumber=${applicationNumber}&roles=DA,DDA,ADA,DA_HQ,DDA_HQ,ADA_HQ,Assistant District Atorney,District Attorney`, dataToSend).then((response) => {
           return response.data;
       });
 
@@ -791,7 +803,7 @@ const handleRevnueClick = async () =>{
       },
   };
   try {
-      const Resp = await axios.post(`/land-services/egscrutiny/_search4?applicationNumber=${applicationNumber}&roles=Naib Tehsildar,Patwari_HQ,Patwari`, dataToSend).then((response) => {
+      const Resp = await axios.post(`/land-services/egscrutiny/_search4?applicationNumber=${applicationNumber}&roles=Naib Tehsildar,Patwari_HQ,Patwari,Naib Tehsildar,Patwari,PATWARI`, dataToSend).then((response) => {
           return response.data;
       });
 
@@ -821,7 +833,7 @@ const handleTechinicalClick = async () =>{
       },
   };
   try {
-      const Resp = await axios.post(`/land-services/egscrutiny/_search4?applicationNumber=${applicationNumber}&roles=Personal Assistant,JD_HQ,PA,PA_HQ,JE,Assistant,JE_HQ,Junior Engineer`, dataToSend).then((response) => {
+      const Resp = await axios.post(`/land-services/egscrutiny/_search4?applicationNumber=${applicationNumber}&roles=Personal Assistant,JD_HQ,PA,PA_HQ,JE,Assistant,JE_HQ,Junior Engineer,Junier Engineer,Jr Engineer`, dataToSend).then((response) => {
           return response.data;
       });
 
@@ -851,7 +863,7 @@ const handleMainClick = async () =>{
       },
   };
   try {
-      const Resp = await axios.post(`/land-services/egscrutiny/_search4?applicationNumber=${applicationNumber}&roles=STPEnforcement Office HQ,DTP_HQ,DTP,ATP_HQ,ATP,STP_HQ,STP,CTP_HQ,CTP,DTCP_HQ`, dataToSend).then((response) => {
+      const Resp = await axios.post(`/land-services/egscrutiny/_search4?applicationNumber=${applicationNumber}&roles=DGTCP,District Town Planner,DISTRICT TOWN PLANNER,STPEnforcement Office HQ,DTP_HQ,DTP,ATP_HQ,ATP,STP_HQ,STP,CTP_HQ,CTP,DTCP_HQ`, dataToSend).then((response) => {
           return response.data;
       });
 
@@ -882,7 +894,7 @@ const handleDTPFieldClick = async () =>{
       },
   };
   try {
-      const Resp = await axios.post(`/land-services/egscrutiny/_search4?applicationNumber=${applicationNumber}&roles=DTP_FIELD,DTP Field,Patwari_FIELD,PATWARI Field,Patwari,PATWARI Circle,PATWARI,JE_FIELD,JD_FIELD,SD_FIELD,Z`, dataToSend).then((response) => {
+      const Resp = await axios.post(`/land-services/egscrutiny/_search4?applicationNumber=${applicationNumber}&roles=Planning Assistant Field,Accounts Field,Personal Assistant Field,Junior Draftsman Field,DTP_FIELD,DB Field,ATP Field,Draftsman Field,DTP Field,Patwari_FIELD,PATWARI Field,Patwari,PATWARI Circle,PATWARI,JE_FIELD,JD_FIELD,SD_FIELD,Junior Engineer Field,Draftsman Field,Assistant District Atorney Field`, dataToSend).then((response) => {
           return response.data;
       });
 
@@ -912,7 +924,7 @@ const handleSTPFieldClick = async () =>{
       },
   };
   try {
-      const Resp = await axios.post(`/land-services/egscrutiny/_search4?applicationNumber=${applicationNumber}&roles=STPEnforcement Office-Gurugram,STP Circle,STP_Circle,STP Office-Gurugram,STP Office-Faridabad,STP Office-Panchkula,STP Office-Rohtak,STP Office-Hisar,JE_HQ`, dataToSend).then((response) => {
+      const Resp = await axios.post(`/land-services/egscrutiny/_search4?applicationNumber=${applicationNumber}&roles=STPEnforcement Office-Gurugram,STP Circle,STP_Circle,STP Office-Gurugram,STP Office-Faridabad,STP Office-Panchkula,STP Office-Rohtak,STP Office-Hisar,STP Circle`, dataToSend).then((response) => {
           return response.data;
       });
 
@@ -1008,7 +1020,32 @@ console.log("userInFODATA123" , userInfo);
               additionalDocRespon={additionalDocResponData}
             ></Personalinfo>
           </div>
-          <div>
+          <div
+            className="collapse-header"
+            onClick={() => setOpen17(!open17) }
+            aria-controls="example-collapse-text"
+            aria-expanded={open17}
+            style={{
+              background: "#f1f1f1",
+              padding: "0.25rem 1.25rem",
+              borderRadius: "0.25rem",
+              fontWeight: "600",
+              display: "flex",
+              cursor: "pointer",
+              color: "#817f7f",
+              justifyContent: "space-between",
+              alignContent: "center",
+            }}
+          >
+            <span style={{ color: "#817f7f", fontSize: 16 }} className="">
+           Application Purpose & Land schedule
+              
+            </span>
+            {open4 ? <RemoveIcon></RemoveIcon> : <AddIcon></AddIcon>}
+          </div>
+          <Collapse in={open17}>
+            <div style={{ position: "relative", maxWidth: "100%", padding: 2 }}>
+            <div>
             <Genarelinfo
               generalInfoRef={generalInfoRef}
               passUncheckedList={getUncheckedGeneralinfos}
@@ -1043,8 +1080,12 @@ console.log("userInFODATA123" , userInfo);
               mDMSData={mDMSData}
               additionalDocRespon={additionalDocResponData}
             ></Developerinfo>
-            {/* </Col> */}
+          
           </div>
+          </div>
+        
+          </Collapse>
+
           <div>
             <AppliedLandinfo
               appliedInfoRef={appliedInfoRef}
@@ -1683,7 +1724,9 @@ console.log("userInFODATA123" , userInfo);
       
       <div
             className="collapse-header"
-            onClick={() => setOpen15(!open15)}
+            onClick={() => {
+              setOpen15(!open15); 
+              setSmShow(true);}}
             aria-controls="example-collapse-text"
             aria-expanded={open15}
             style={{
@@ -1699,7 +1742,7 @@ console.log("userInFODATA123" , userInfo);
             }}
           >
             <span style={{ color: "#817f7f", fontSize: 16 }} className="">
-              {/* - Current Remarks Scruitny  */}
+              
               ONLINE LICENSE APPLICATION SCRUTINY PROFORMA
              
             </span>
@@ -1710,17 +1753,66 @@ console.log("userInFODATA123" , userInfo);
               style={{ marginTop: 12, paddingLeft: 12, paddingRight: 12 }}
              >
       <div style={{ position: "relative", width: "100%", height: "100%", display: "flex" }}>
-      <DataGridDemo
+      <BaseTableGrid
+           passmodalData={handlemodaldData}
+           displaymodal={smShow}
+         
+           onClose={() => { setSmShow(false); setDocModal(false) }}
+          // applicationNumber={applicationNumber}
+          // dataForIcons={rolesDate}
+          // applicationStatus={applicationStatus}
+          // remarksData={remarksData}
+          >
+          
+          </BaseTableGrid>
+          {/* <FullScreenDialog/> */}
+      </div>
+      </div>
+      </Collapse>
+
+
+      {/* <div
+            className="collapse-header"
+            onClick={() => setOpen18(!open18)}
+            aria-controls="example-collapse-text"
+            aria-expanded={open18}
+            style={{
+              background: "#E9E5DE",
+              padding: "0.25rem 1.25rem",
+              borderRadius: "0.25rem",
+              fontWeight: "600",
+              display: "flex",
+              cursor: "pointer",
+              color: "#817f7f",
+              justifyContent: "space-between",
+              alignContent: "center",
+            }}
+          >
+            <span style={{ color: "#817f7f", fontSize: 16 }} className="">
+              
+              ONLINE LICENSE APPLICATION SCRUTINY PROFORMA
+             
+            </span>
+            {open18 ? <RemoveIcon></RemoveIcon> : <AddIcon></AddIcon>}
+          </div>
+          <Collapse in={open18}>
+            <div id="example-collapse-text"
+              style={{ marginTop: 12, paddingLeft: 12, paddingRight: 12 }}
+             >
+      <div style={{ position: "relative", width: "100%", height: "100%", display: "flex" }}>
+      <BasicTable
           
           applicationNumber={applicationNumber}
           dataForIcons={rolesDate}
           applicationStatus={applicationStatus}
           remarksData={remarksData}
           >
-          </DataGridDemo>
+          
+          </BasicTable>
+       
       </div>
       </div>
-      </Collapse>
+      </Collapse> */}
 
 
       {/* <div
@@ -1753,6 +1845,9 @@ console.log("userInFODATA123" , userInfo);
       
        histeroyData={histeroyData}
        applicationStatus={applicationStatus}
+      //  remarksDatas={remarksData}
+      //  dataForIcons={rolesDate}
+      //  applicationNumber={applicationNumber}
        ></HistoryList>
     
       </div>

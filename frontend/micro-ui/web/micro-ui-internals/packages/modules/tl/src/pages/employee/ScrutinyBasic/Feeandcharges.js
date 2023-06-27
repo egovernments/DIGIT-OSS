@@ -55,6 +55,7 @@ const feeandcharges = props.feeandchargesData
   const {
     register,
     handleSubmit,
+    setValue,
     formState: { errors },
   } = useForm([{ XLongitude: "", YLatitude: "" }]);
   const [showhide0, setShowhide0] = useState("No");
@@ -117,30 +118,59 @@ const feeandcharges = props.feeandchargesData
                 <thead>
                 <tr>
                     <th>Purpose</th>
-                    <td>{item?.purpose}</td>
+                    <td style={{ textAlign: "right" }}>{item?.purpose}</td>
+                    <td style={{ textAlign: "right" }}>Formulae and Charges</td>
                   </tr>
+                  {/* <tr>
+                    <th>Conversion Charges (Formula)</th>
+                    <td style={{ textAlign: "right" }}> {item?.conversionFormula}</td>
+                  </tr> */}
                   <tr>
                     <th>Conversion Charges (In Rs.)</th>
-                    <td> {item?.conversionChargesCal}</td>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <th>External Development Charges (In Rs.)</th>
-                    <td>{item?.externalDevelopmentChargesCal}</td>
-                  </tr>
-                  <tr>
-                    <th>License Fee Charges (In Rs.)</th>
-                    <td>{item?.licenseFeeChargesCal}</td>
+                    <td style={{ textAlign: "right" }}> {item?.conversionChargesCal?.toLocaleString(undefined, {maximumFractionDigits:2})}</td>
+                    <td style={{ textAlign: "right" }}> {item?.conversionFormula}</td>
                   </tr>
                  
+                </thead>
+                <tbody>
+                {/* <tr>
+                    <th>External Development Charges (Formula)</th>
+                    <td style={{ textAlign: "right" }}>{item?.edcFormula}</td>
+                  </tr> */}
+                  <tr>
+                    <th>External Development Charges (In Rs.)</th>
+                    <td style={{ textAlign: "right" }}>{item?.externalDevelopmentChargesCal?.toLocaleString(undefined, {maximumFractionDigits:2})}</td>
+                    <td style={{ textAlign: "right" }}>{item?.edcFormula}</td>
+                  </tr>
+                 
+                  {/* <tr>
+                    <th>License Fee Charges (Formula)</th>
+                    <td style={{ textAlign: "right" }}>{item?.licenceFormula}</td>
+                  </tr> */}
+                  <tr>
+                    <th>License Fee Charges (In Rs.)</th>
+                    <td style={{ textAlign: "right" }}>{item?.licenseFeeChargesCal?.toLocaleString(undefined, {maximumFractionDigits:2})}</td>
+                    <td style={{ textAlign: "right" }}>{item?.licenceFormula}</td>
+                  </tr>
+                  
+                  {/* <tr>
+                    <th>Scrutiny Fee Charges (Formula)</th>
+                    <td style={{ textAlign: "right" }}>{item?.scrutinyFormula}</td>
+                  </tr> */}
                   <tr>
                     <th>Scrutiny Fee Charges (In Rs.)</th>
-                    <td>{item?.scrutinyFeeChargesCal}</td>
+                    <td style={{ textAlign: "right" }}>{item?.scrutinyFeeChargesCal?.toLocaleString(undefined, {maximumFractionDigits:2})}</td>
+                    <td style={{ textAlign: "right" }}>{item?.scrutinyFormula}</td>
                   </tr>
+                  
+                  {/* <tr>
+                    <th>State Infrastructure Development Charges (Formula)</th>
+                    <td style={{ textAlign: "right" }}>{item?.stateInfraFormula}</td>
+                  </tr> */}
                   <tr>
                     <th>State Infrastructure Development Charges (In Rs.)</th>
-                    <td>{item?.stateInfrastructureDevelopmentChargesCal}</td>
+                    <td style={{ textAlign: "right" }}>{item?.stateInfrastructureDevelopmentChargesCal?.toLocaleString(undefined, {maximumFractionDigits:2})}</td>
+                    <td style={{ textAlign: "right" }}>{item?.stateInfraFormula}</td>
                   </tr>
                 </tbody>
               </table>
@@ -157,7 +187,9 @@ const feeandcharges = props.feeandchargesData
   };
 // console.log("Tree123" , data);
 
-
+// setValue("payableNow", feeAndChargesData?.feesTypeCalculationDto?.[0]?.payableNow?.toLocaleString());
+// setValue("totalScrutinyFee", feeAndChargesData?.feesTypeCalculationDto?.[0]?.totalScrutinyFee?.toLocaleString());
+// setValue("totalLicenseFee", feeAndChargesData?.feesTypeCalculationDto?.[0]?.totalLicenceFee?.toLocaleString());
 
 
   return (
@@ -463,6 +495,8 @@ const feeandcharges = props.feeandchargesData
     {feeAndChargesData?.feesTypeCalculationDto && (
                     <div>
                       <Tree data={feeAndChargesData?.feesTypeCalculationDto} />
+                     
+
                     </div>
                   )}
                  
@@ -470,36 +504,39 @@ const feeandcharges = props.feeandchargesData
                         {feeandcharges?.totalScruitnyFee}
                       </div> */}
 </Row>
+{feeAndChargesData?.feesTypeCalculationDto?.map((item, index) => (
 <Row>
 <Col className="col col-4" >
                             <h4 >
-                          {/* Total Scruitny Fee */}
+                      
                           {`${t("NWL_APPLICANT_FEE_TOTAL_SCRUITNY_FEE")}`}
                           </h4>
-                              <input type="text" className="form-control" placeholder={feeAndChargesData?.feesTypeCalculationDto?.[0]?.totalScruitnyFee} disabled />
+                              <input type="text" className="form-control" disabled  placeholder={item?.totalScruitnyFee?.toLocaleString()} />
                             </Col>
                             
                           
 
                             <Col className="col col-4" >
                             <h4 >
-                            {/* Total Licence Fee */}
+                          
                             {`${t("NWL_APPLICANT_FEE_TOTAL_LICENCE_FEE")}`}
                             </h4>
-                              <input type="text" className="form-control" placeholder={feeAndChargesData?.feesTypeCalculationDto?.[0]?.totalLicenceFee} disabled />
+                              <input type="text" className="form-control" placeholder={item?.totalLicenceFee?.toLocaleString()} disabled />
                             </Col>
                          
                             <Col className="col col-4" >
                             <h4 >
-                            {/* Total Fee */}
+                  
                             {`${t("NWL_APPLICANT_FEE_TOTAL_FEE")}`}
                             </h4>
-                              <input type="text" className="form-control" placeholder={feeAndChargesData?.feesTypeCalculationDto?.[0]?.totalFee} disabled />
+                              <input type="text" className="form-control" placeholder={item?.totalFee?.toLocaleString()}  disabled />
                             </Col>
                           
                             
                           
                           </Row>
+                        ))
+                        } 
 
               </Form.Group>
             </Card>

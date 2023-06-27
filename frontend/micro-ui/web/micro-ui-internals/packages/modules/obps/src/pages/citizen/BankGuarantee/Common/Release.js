@@ -36,6 +36,7 @@ function ReleaseNew(props) {
  const [showToastError, setShowToastError] = useState({ label: "", error: false, success: false });
   const [ServicePlanDataLabel, setServicePlanDataLabel] = useState([]);
   const{t}=useTranslation();
+  const {id} = useParams();
   const handleshowhide = (event) => {
     const getuser = event.target.value;
 
@@ -75,7 +76,8 @@ function ReleaseNew(props) {
       const postDistrict = {
         NewBankGuaranteeRequest: [
           {
-            applicationNumber:"HR_BG_NEW_20230227000483",
+            
+             applicationNumber:id,
             ...data,
             updateType:"RELEASE",
              bankGuaranteeReplacedWith:data?.bankGuaranteeReplacedWith?.value,
@@ -287,7 +289,7 @@ function ReleaseNew(props) {
                             <th class="fw-normal">{`${t("EXTENSION_TYPE")}`}</th>
                             <th class="fw-normal">{`${t("EXTENSION_ATTACHMENT_DESCRIPTION")}`}</th>
                              <th class="fw-normal">{`${t("EXTENSION_UPLOAD_DOC")}`}</th>
-                              <th class="fw-normal">{`${t("EXTENSION_ACTION")}`}</th>
+                              {/* <th class="fw-normal">{`${t("EXTENSION_ACTION")}`}</th> */}
                           </tr>
                         </thead>
                         <tbody>
@@ -313,7 +315,7 @@ function ReleaseNew(props) {
                                       </a>
                                     )}
                                   </div></td>
-                              <td><DeleteIcon style={{ fill: "#ff1a1a" }} /></td>
+                              {/* <td><DeleteIcon style={{ fill: "#ff1a1a" }} /></td> */}
                           </tr>
                            <tr>
                             <td>2</td>
@@ -337,7 +339,7 @@ function ReleaseNew(props) {
                                       </a>
                                     )}
                                   </div></td>
-                               <td><DeleteIcon style={{ fill: "#ff1a1a" }} /></td>
+                               {/* <td><DeleteIcon style={{ fill: "#ff1a1a" }} /></td> */}
                           </tr>
                            <tr>
                             <td>3</td>
@@ -359,7 +361,7 @@ function ReleaseNew(props) {
                                       </a>
                                     )}
                                   </div></td>
-                              <td><DeleteIcon style={{ fill: "#ff1a1a" }} /></td>
+                              {/* <td><DeleteIcon style={{ fill: "#ff1a1a" }} /></td> */}
                           </tr>
                         </tbody>
                         </div>

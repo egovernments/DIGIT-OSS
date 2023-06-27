@@ -152,11 +152,45 @@ const PersonalinfoChild = (props) => {
     uploadBoardResolution: Colors.info,
     shareholdingPatterns: Colors.info,
     DirectorsInformation: Colors.info,
-    directorsInformation: Colors.info
+    directorsInformationdeveloper: Colors.info
 
   })
 
-  const fieldIdList = [{ label: "Developer", key: "developer" }, { label: "Authorized Person Name", key: "authPersonName" }, { label: "Autrhoized Mobile No", key: "authMobileNo1" }, { label: "Alternate MobileNo. 2 ", key: "authMobileNo2" }, { label: "Developer's Email", key: "developerEmail" }, { label: "PAN No.", key: "pan" }, { label: "Village/City", key: "city" }, { label: "Pincode", key: "pin" }, { label: "Tehsil", key: "tehsil" }, { label: "District", key: "district" }, { label: "State", key: "state" }, { label: "Status (Individual/ Company/ Firm/ LLP etc.)", key: "type" }, { label: "LC-I signed by", key: "lciSignedBy" }, { label: "If LC-I is not signed by self (in case of an individual) nature of authorization (GPA/SPA)", key: "lciNotSigned" }, { label: "Permanent address in case of individual/ registered office address in case other than individual", key: "parmanentAddress" }, { label: "Address for communication", key: "addressForCommunication" }, { label: "Name of the authorized person to sign the application", key: "authorized" }, { label: "Emailid for Authorized signatory", key: "emailForCommunication" }, { label: "NWL_APPLICANT_DEVELOPER_TYPE", key: "developerType" }, { label: "Address", key: "registeredAddress" }, { label: "CSR Number", key: "cin_Number" }, { label: "Email Id", key: "developeremail" }, { label: "Developer's Name", key: "developerName" }, { label: "Developer's PAN", key: "developerPan" }, { label: "Registered Address", key: "registeredAddress2" }, { label: "GST Number", key: "gst_Number" }, { label: "Board Resolution", key: "uploadBoardResolution" }, { label: "Digital Signature", key: "uploadDigitalSignaturePdf" }, { label: "Developer's Mobile No", key: "developerMobileNo" }, { label: "Developer's DOB", key: "developerdob" }, { label: "Pan No", key: "authPan" }, { label: "Shareholding Patterns", key: "shareholdingPatterns" }, { label: "Director Information as per MCA", key: "DirectorsInformation" }, { label: "Director Information", key: "directorsInformation" }]
+  const fieldIdList = [
+  { label: "Developer", key: "developer" } , 
+  { label: "NWL_APPLICANT_AUTHORIZED_NAME", key: "authPersonName" },
+  { label: "NWL_APPLICANT_AUTHORIZED_MOBILE_NO", key: "authMobileNo1" },
+  { label: "Alternate MobileNo. 2 ", key: "authMobileNo2" },
+  { label: "NWL_APPLICANT_DEVELOPER_EMAILID", key: "developerEmail" },
+  { label: "PAN No.", key: "pan" },
+  { label: "Village/City", key: "city" },
+  { label: "Pincode", key: "pin" },
+  { label: "Tehsil", key: "tehsil" },
+  { label: "District", key: "district" },
+  { label: "State", key: "state" },
+  { label: "Status (Individual/ Company/ Firm/ LLP etc.)", key: "type" },
+  { label: "LC-I signed by", key: "lciSignedBy" },  
+  { label: "If LC-I is not signed by self (in case of an individual) nature of authorization (GPA/SPA)", key: "lciNotSigned" }, 
+  { label: "Permanent address in case of individual/ registered office address in case other than individual", key: "parmanentAddress" }, 
+  { label: "Address for communication", key: "addressForCommunication" },
+  { label: "Name of the authorized person to sign the application", key: "authorized" },
+  { label: "NWL_APPLICANT_EMAILID_FOR_AUTHORIZED_SINGNATORY", key: "emailForCommunication" }, 
+  { label: "NWL_APPLICANT_DEVELOPER_TYPE", key: "developerType" }, 
+  { label: "Address", key: "registeredAddress" }, 
+  { label: "NWL_APPLICANT_CIN_NUMBER", key: "cin_Number" }, 
+  { label: "Email Id", key: "developeremail" }, 
+  { label: "NWL_APPLICANT_DEVELOPER_NAME", key: "developerName" }, 
+  { label: "NWL_APPLICANT_PAN_NUMBER", key: "developerPan" }, 
+  { label: "NWL_APPLICANT_DEVELOPER_ADDRESS", key: "registeredAddress2" }, 
+  { label: "NWL_APPLICANT_GST_NUMBER", key: "gst_Number" }, 
+  { label: "NWL_APPLICANT_BOARD_RESOLUTION", key: "uploadBoardResolution" }, 
+  { label: "NWL_APPLICANT_DIGITAL_SIGNATURE", key: "uploadDigitalSignaturePdf" },
+  { label: "NWL_APPLICANT_LLP_NUMBER", key: "developerMobileNo" },
+  { label: "Developer's DOB", key: "developerdob" },
+  { label: "NWL_APPLICANT_AUTHORIZED_PAN_NUMBER", key: "authPan" }, 
+  { label: "NWL_APPLICANT_SHAREHOLDING_PATTERNS", key: "shareholdingPatterns" },
+  { label: "NWL_APPLICANT_1_DIRECTOR_INFOMATION_AS_PER_MCA", key: "DirectorsInformation" }, 
+  { label: "NWL_APPLICANT_1_DIRECTOR_INFOMATION_AS_PER_DEVELOPER", key: "directorsInformationdeveloper" }]
 
 
 
@@ -321,12 +355,12 @@ const PersonalinfoChild = (props) => {
                 &nbsp;&nbsp;
                 <ReportProblemIcon
                   style={{
-                    display:  hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_DEVELOPER_NAME") ? "block" : "none",
+                    display: hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_DEVELOPER_NAME") ? "block" : "none",
                     color: fieldIconColors.developerName
                   }}
                   onClick={() => {
                     setOpennedModal("developerName")
-                    setLabelValue("Developer's Name"),
+                    setLabelValue("NWL_APPLICANT_DEVELOPER_NAME"),
                       setSmShow(true),
                       setDocModal(false),
                       console.log("modal open"),
@@ -367,7 +401,7 @@ const PersonalinfoChild = (props) => {
                 }}
                 onClick={() => {
                   setOpennedModal("registeredAddress2")
-                  setLabelValue("Registered Address"),
+                  setLabelValue("NWL_APPLICANT_DEVELOPER_ADDRESS"),
                     setSmShow(true),
                     setDocModal(false),
                     console.log("modal open"),
@@ -379,6 +413,43 @@ const PersonalinfoChild = (props) => {
 
             </div>
           </Col>
+          {personalinfo?.devDetail?.addInfo?.showDevTypeFields != "Company"  &&
+          <Col md={4} xxl lg="4">
+            <div>
+              <label htmlFor="EmailId">
+                {`${t("NWL_APPLICANT_DEVELOPER_EMAILID")}`}
+                <span class="text-danger font-weight-bold mx-2">*</span>
+              </label>
+              
+            </div>
+
+            <div style={{ display: "flex" }}>
+              <Form.Control className={classes.formControl}
+                placeholder={personalinfo !== null ? personalinfo?.devDetail?.addInfo?.email : null}
+                disabled></Form.Control>
+              &nbsp;&nbsp;
+              <ReportProblemIcon
+                style={{
+                  display: hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_DEVELOPER_EMAILID") ? "block" : "none",
+                  color: fieldIconColors.developerEmail
+                }}
+                onClick={() => {
+                  setOpennedModal("developerEmail")
+                  setLabelValue("NWL_APPLICANT_DEVELOPER_EMAILID"),
+                    setSmShow(true),
+                    setDocModal(false),
+                    console.log("modal open"),
+                    setFieldValue(personalinfo !== null ? personalinfo?.devDetail?.addInfo?.email : null);
+                }}
+              ></ReportProblemIcon>
+            </div>
+          </Col>
+}
+{personalinfo?.devDetail?.addInfo?.showDevTypeFields != "Individual" &&
+        personalinfo?.devDetail?.addInfo?.showDevTypeFields != "Hindu Undivided Family" &&
+        personalinfo?.devDetail?.addInfo?.showDevTypeFields != "Partnership Firm" &&
+        personalinfo?.devDetail?.addInfo?.showDevTypeFields != "Limited Liability Partnership" &&
+        personalinfo?.devDetail?.addInfo?.showDevTypeFields != "Proprietorship Firm" &&
           <Col md={4} xxl lg="4">
             <div>
               <label htmlFor="EmailId">
@@ -394,7 +465,7 @@ const PersonalinfoChild = (props) => {
 
             <div style={{ display: "flex" }}>
               <Form.Control className={classes.formControl}
-                placeholder={personalinfo !== null ? personalinfo?.devDetail?.addInfo?.email : null}
+                placeholder={personalinfo !== null ? personalinfo?.devDetail?.addInfo?.emailId : null}
                 disabled></Form.Control>
               &nbsp;&nbsp;
               <ReportProblemIcon
@@ -404,7 +475,7 @@ const PersonalinfoChild = (props) => {
                 }}
                 onClick={() => {
                   setOpennedModal("developerEmail")
-                  setLabelValue("Developer's Email"),
+                  setLabelValue("NWL_APPLICANT_DEVELOPER_EMAILID"),
                     setSmShow(true),
                     setDocModal(false),
                     console.log("modal open"),
@@ -413,6 +484,7 @@ const PersonalinfoChild = (props) => {
               ></ReportProblemIcon>
             </div>
           </Col>
+}
           <Col md={4} xxl lg="4">
             <div>
               <label htmlFor="DeveloperType">
@@ -461,11 +533,7 @@ const PersonalinfoChild = (props) => {
                   {`${t("NWL_APPLICANT_CIN_NUMBER")}`}
                   <span class="text-danger font-weight-bold mx-2">*</span>
                 </label>
-                {/* <Form.Label>
-        <h5 className={classes.formLabel}>CIN Number &nbsp;</h5>
-      </Form.Label>
-      <span className={classes.required}>*</span> &nbsp;&nbsp; */}
-              </div>
+             </div>
               <div className={classes.fieldContainer}>
                 <Form.Control
                   className={classes.formControl}
@@ -482,7 +550,7 @@ const PersonalinfoChild = (props) => {
                   }}
                   onClick={() => {
                     setOpennedModal("cin_Number")
-                    setLabelValue("CIN Number"),
+                    setLabelValue("NWL_APPLICANT_CIN_NUMBER"),
                       setSmShow(true),
                       setDocModal(false),
                       console.log("modal open"),
@@ -523,7 +591,7 @@ const PersonalinfoChild = (props) => {
                   }}
                   onClick={() => {
                     setOpennedModal("developerPan")
-                    setLabelValue("Developer's PAN"),
+                    setLabelValue("NWL_APPLICANT_PAN_NUMBER"),
                       setSmShow(true),
                       setDocModal(false),
                       console.log("modal open"),
@@ -564,7 +632,7 @@ const PersonalinfoChild = (props) => {
                   }}
                   onClick={() => {
                     setOpennedModal("gst_Number")
-                    setLabelValue("GST Number"),
+                    setLabelValue("NWL_APPLICANT_GST_NUMBER"),
                       setSmShow(true),
                       setDocModal(false),
                       console.log("modal open"),
@@ -608,7 +676,7 @@ const PersonalinfoChild = (props) => {
                   }}
                   onClick={() => {
                     setOpennedModal("developerMobileNo")
-                    setLabelValue("Developer's Mobile No"),
+                    setLabelValue("NWL_APPLICANT_LLP_NUMBER"),
                       setSmShow(true),
                       setDocModal(false),
                       console.log("modal open"),
@@ -714,7 +782,7 @@ const PersonalinfoChild = (props) => {
               }}
               onClick={() => {
                 setOpennedModal("DirectorsInformation")
-                setLabelValue("Director Information as per MCA"),
+                setLabelValue("NWL_APPLICANT_1_DIRECTOR_INFOMATION_AS_PER_MCA"),
                   setSmShow(true),
                   setDocModal(false),
                   console.log("modal open"),
@@ -801,11 +869,11 @@ const PersonalinfoChild = (props) => {
               style={{
                 display: hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_1_DIRECTOR_INFOMATION_AS_PER_DEVELOPER") ? "block" : "none",
 
-                color: fieldIconColors.directorsInformation
+                color: fieldIconColors.directorsInformationdeveloper
               }}
               onClick={() => {
-                setOpennedModal("directorsInformation")
-                setLabelValue("Director Information"),
+                setOpennedModal("directorsInformationdeveloper")
+                setLabelValue("NWL_APPLICANT_1_DIRECTOR_INFOMATION_AS_PER_DEVELOPER"),
                   setSmShow(true),
                   setDocModal(false),
                   console.log("modal open"),
@@ -848,37 +916,37 @@ const PersonalinfoChild = (props) => {
                         <div className="row">
 
                           <div className="btn btn-sm col-md-6">
-                            <IconButton 
-                            style={{
-                              color: " #1266af",
-                              fontSize: " 12px",
-                              fontWeight: "bold",
-                              cursor: "pointer",
-                              textDecorationLine: "underline",
-                            }}
-                            onClick={() => {
-                              if (item?.uploadPdf) getDocShareholding(item?.uploadPdf, setLoader);
-                              else setShowToastError({ label: "No Document here", error: true, success: false });
-                            }}
-                            
+                            <IconButton
+                              style={{
+                                color: " #1266af",
+                                fontSize: " 12px",
+                                fontWeight: "bold",
+                                cursor: "pointer",
+                                textDecorationLine: "underline",
+                              }}
+                              onClick={() => {
+                                if (item?.uploadPdf) getDocShareholding(item?.uploadPdf, setLoader);
+                                else setShowToastError({ label: "No Document here", error: true, success: false });
+                              }}
+
                             // onClick={() => getDocShareholding(item?.uploadPdf)}
                             >
                               <Visibility color="info" className="icon" /></IconButton>
 
                           </div>
                           <div className="btn btn-sm col-md-6">
-                            <IconButton 
-                             style={{
-                              color: " #1266af",
-                              fontSize: " 12px",
-                              fontWeight: "bold",
-                              cursor: "pointer",
-                              textDecorationLine: "underline",
-                            }}
-                            onClick={() => {
-                              if (item?.uploadPdf) getDocShareholding(item?.uploadPdf, setLoader);
-                              else setShowToastError({ label: "No Document here", error: true, success: false });
-                            }}
+                            <IconButton
+                              style={{
+                                color: " #1266af",
+                                fontSize: " 12px",
+                                fontWeight: "bold",
+                                cursor: "pointer",
+                                textDecorationLine: "underline",
+                              }}
+                              onClick={() => {
+                                if (item?.uploadPdf) getDocShareholding(item?.uploadPdf, setLoader);
+                                else setShowToastError({ label: "No Document here", error: true, success: false });
+                              }}
                             // onClick={() => getDocShareholding(item?.uploadPdf)}
                             >
                               <FileDownload color="primary" className="mx-1" />
@@ -915,7 +983,7 @@ const PersonalinfoChild = (props) => {
               }}
               onClick={() => {
                 setOpennedModal("shareholdingPatterns")
-                setLabelValue("Shareholding Patterns"),
+                setLabelValue("NWL_APPLICANT_SHAREHOLDING_PATTERNS"),
                   setSmShow(true),
                   setDocModal(false),
                   console.log("modal open"),
@@ -963,18 +1031,18 @@ const PersonalinfoChild = (props) => {
                         <div className="row">
                           {/* <button className="btn btn-sm col-md-6" onClick={()=>getDocShareholding(item?.uploadPdf)} > */}
                           <div className="btn btn-sm col-md-4">
-                            <IconButton 
-                            style={{
-                              color: " #1266af",
-                              fontSize: " 12px",
-                              fontWeight: "bold",
-                              cursor: "pointer",
-                              textDecorationLine: "underline",
-                            }}
-                            onClick={() => {
-                              if (item?.uploadPdf) getDocShareholding(item?.uploadPdf, setLoader);
-                              else setShowToastError({ label: "No Document here", error: true, success: false });
-                            }}
+                            <IconButton
+                              style={{
+                                color: " #1266af",
+                                fontSize: " 12px",
+                                fontWeight: "bold",
+                                cursor: "pointer",
+                                textDecorationLine: "underline",
+                              }}
+                              onClick={() => {
+                                if (item?.uploadPdf) getDocShareholding(item?.uploadPdf, setLoader);
+                                else setShowToastError({ label: "No Document here", error: true, success: false });
+                              }}
                             // onClick={() => getDocShareholding(item?.uploadPdf)}
                             >
                               <Visibility color="info" className="icon" /></IconButton>
@@ -983,18 +1051,18 @@ const PersonalinfoChild = (props) => {
                           {/* <button className="btn btn-sm col-md-6" onClick={() => window.open(item?.uploadPdf)} >
                                       <FileDownload color="primary" /> */}
                           <div className="btn btn-sm col-md-4">
-                            <IconButton 
-                            style={{
-                              color: " #1266af",
-                              fontSize: " 12px",
-                              fontWeight: "bold",
-                              cursor: "pointer",
-                              textDecorationLine: "underline",
-                            }}
-                            onClick={() => {
-                              if (item?.uploadPdf) getDocShareholding(item?.uploadPdf, setLoader);
-                              else setShowToastError({ label: "No Document here", error: true, success: false });
-                            }}
+                            <IconButton
+                              style={{
+                                color: " #1266af",
+                                fontSize: " 12px",
+                                fontWeight: "bold",
+                                cursor: "pointer",
+                                textDecorationLine: "underline",
+                              }}
+                              onClick={() => {
+                                if (item?.uploadPdf) getDocShareholding(item?.uploadPdf, setLoader);
+                                else setShowToastError({ label: "No Document here", error: true, success: false });
+                              }}
                             // onClick={() => getDocShareholding(item?.uploadPdf)}
                             >
                               <FileDownload color="primary" className="mx-1" />
@@ -1060,7 +1128,7 @@ const PersonalinfoChild = (props) => {
               }}
               onClick={() => {
                 setOpennedModal("authPersonName")
-                setLabelValue("Authorized Person Name"),
+                setLabelValue("NWL_APPLICANT_AUTHORIZED_NAME"),
                   setSmShow(true),
                   setDocModal(false),
                   console.log("modal open"),
@@ -1121,7 +1189,7 @@ const PersonalinfoChild = (props) => {
               }}
               onClick={() => {
                 setOpennedModal("authMobileNo1")
-                setLabelValue("Autrhoized Mobile No"),
+                setLabelValue("NWL_APPLICANT_AUTHORIZED_MOBILE_NO"),
                   setSmShow(true),
                   setDocModal(false),
                   console.log("modal open"),
@@ -1157,7 +1225,7 @@ const PersonalinfoChild = (props) => {
               }}
               onClick={() => {
                 setOpennedModal("emailForCommunication")
-                setLabelValue("Emailid for Authorized signatory"),
+                setLabelValue("NWL_APPLICANT_EMAILID_FOR_AUTHORIZED_SINGNATORY"),
                   setSmShow(true),
                   setDocModal(false),
                   console.log("modal open"),
@@ -1197,7 +1265,7 @@ const PersonalinfoChild = (props) => {
               }}
               onClick={() => {
                 setOpennedModal("authPan")
-                setLabelValue("Pan No"),
+                setLabelValue("NWL_APPLICANT_AUTHORIZED_PAN_NUMBER"),
                   setSmShow(true),
                   setDocModal(false),
                   console.log("modal open"),
@@ -1271,7 +1339,7 @@ const PersonalinfoChild = (props) => {
                 }}
                 onClick={() => {
                   setOpennedModal("uploadDigitalSignaturePdf")
-                  setLabelValue("Digital Signature"),
+                  setLabelValue("NWL_APPLICANT_DIGITAL_SIGNATURE"),
                     setSmShow(true),
                     setDocModal(true),
                     console.log("modal open"),
@@ -1286,11 +1354,7 @@ const PersonalinfoChild = (props) => {
         </Col>
         <Col md={4} xxl lg="4">
           <div>
-            {/* <Form.Label>
-
-              <h5 className={classes.formLabel} >Board Resolution &nbsp;</h5>
-            </Form.Label>
-            <span className={classes.required}>*</span> */}
+            
 
             <label htmlFor="PAN" className="card-title fw-bold">
               {`${t("NWL_APPLICANT_BOARD_RESOLUTION")}`}
@@ -1299,12 +1363,7 @@ const PersonalinfoChild = (props) => {
           </div>
 
           <div className={classes.fieldContainer}>
-            {/* <Form.Control
-              className={classes.formControl}
-              placeholder={personalinfo !== null ? personalinfo?.devDetail?.aurthorizedUserInfoArray?.[0]?.uploadDigitalSignaturePdf : null}
-              disabled
-            ></Form.Control> */}
-            {/* <div className="row"> */}
+         
 
             <div className="btn btn-sm col-md-2">
               <IconButton
@@ -1350,7 +1409,7 @@ const PersonalinfoChild = (props) => {
                 }}
                 onClick={() => {
                   setOpennedModal("uploadBoardResolution")
-                  setLabelValue("Board Resolution"),
+                  setLabelValue("NWL_APPLICANT_BOARD_RESOLUTION"),
                     setSmShow(true),
                     setDocModal(true),
                     console.log("modal open"),

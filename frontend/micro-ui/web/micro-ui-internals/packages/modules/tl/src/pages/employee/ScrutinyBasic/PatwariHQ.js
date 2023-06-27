@@ -8,22 +8,27 @@ import BackspaceIcon from '@mui/icons-material/Backspace';
 import { IconButton } from "@mui/material";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
+import { useTranslation } from "react-i18next";
+import { Label } from "@egovernments/digit-ui-react-components";
+import TextSnippetIcon from '@mui/icons-material/TextSnippet';
 
 import {
     Box,
     Collapse,
 } from "@mui/material";
+import TableDialog from "./TableDataModal";
 
 
 const DataGridDemo = (props) => {
     const applicant = props.dataForIcons;
     const applicants = props.remarksData;
 
-    console.log("newdataPA", applicants);
-    console.log("newdatahapp", applicant);
+    console.log("newdataPAdsfdf", applicants);
+    console.log("newdatahappdsfdf", applicant);
 
     const [chatSheet, setChatSheet] = useState([])
     const [expanded, setExpanded] = useState({})
+    const { t } = useTranslation();
 
     // const [open, setOpen] = useState(false);
     // const [handleshow19, sethandleshow19] = useState(false);
@@ -70,21 +75,28 @@ const DataGridDemo = (props) => {
         }
     }
 
+
+    const [open, setOpen] = useState(false);
+    const [smShow, setSmShow] = useState(false);
+    const [docModal, setDocModal] = useState(false);
+    const handlemodaldData = () => {
+        setSmShow(false);
+    };
+    const [fieldValue, setFieldValue] = useState("");
+
     const getDataGri = (element, item) => {
         return (
             <React.Fragment>
                 {
                     element?.isApproved === "Not In Order" && (
                         <td
-                        style={{ backgroundColor: "#ff0000" }}
+                            style={{ backgroundColor: "#ff0000" }}
                         >
 
                             <p onClick={() => handleExpend(element.role, item.name, !expanded?.[element?.role]?.[item?.name])}>
                                 {element?.isApproved}
                             </p>
-
-                            {expanded?.[element?.role]?.[item?.name] && (
-                                <Card style={{ border: "black", backgroundColor: "#ff0000" }}>
+                            {/* <Card style={{ border: "black", backgroundColor: "#ff0000" }}>
                                     <div>
 
                                         {element?.remarks}
@@ -92,7 +104,22 @@ const DataGridDemo = (props) => {
                                     <button style={{ textAlign: "left" }} onClick={() => handleExpend(element.role, item.name, !expanded?.[element?.role]?.[item?.name])}>
                                         <BackspaceIcon></BackspaceIcon>
                                     </button>
-                                </Card>
+                                </Card> */}
+                            {expanded?.[element?.role]?.[item?.name] && (
+
+                                <TextSnippetIcon
+
+                                    onClick={() => {
+
+                                        setSmShow(true);
+
+                                        setFieldValue(element?.remarks !== null ? element?.remarks : null);
+                                        // setFieldValue2(el.designation !== null ? el.designation : null);
+                                        // setFieldValue3(el.role !== null ? el.role : null);
+                                    }}
+                                >
+
+                                </TextSnippetIcon>
                             )}
                         </td>
                     )
@@ -102,14 +129,12 @@ const DataGridDemo = (props) => {
                 {
                     element?.isApproved === "Conditional" && (
                         <td
-                         style={{ backgroundColor: "#2874A6" }}
+                            style={{ backgroundColor: "#2874A6" }}
                         >
                             <p onClick={() => handleExpend(element.role, item.name, !expanded?.[element?.role]?.[item?.name])}>
                                 {element?.isApproved}
                             </p>
-
-                            {expanded?.[element?.role]?.[item?.name] && (
-                                <Card style={{ border: "black", backgroundColor: "#2874A6" }}>
+                            {/* <Card style={{ border: "black", backgroundColor: "#2874A6" }}>
                                     <div>
 
                                         {element?.remarks}
@@ -117,7 +142,22 @@ const DataGridDemo = (props) => {
                                     <button style={{ textAlign: "left" }} onClick={() => handleExpend(element.role, item.name, !expanded?.[element?.role]?.[item?.name])}>
                                         <BackspaceIcon></BackspaceIcon>
                                     </button>
-                                </Card>
+                                </Card> */}
+                            {expanded?.[element?.role]?.[item?.name] && (
+
+                                <TextSnippetIcon
+
+                                    onClick={() => {
+
+                                        setSmShow(true);
+
+                                        setFieldValue(element?.remarks !== null ? element?.remarks : null);
+                                        // setFieldValue2(el.designation !== null ? el.designation : null);
+                                        // setFieldValue3(el.role !== null ? el.role : null);
+                                    }}
+                                >
+
+                                </TextSnippetIcon>
                             )}
                         </td>
                     )
@@ -126,15 +166,13 @@ const DataGridDemo = (props) => {
                 }
                 {
                     element?.isApproved === "In Order" && (
-                        <td 
-                        style={{ backgroundColor: "#09cb3d" }}
+                        <td
+                            style={{ backgroundColor: "#09cb3d" }}
                         >
                             <p onClick={() => handleExpend(element.role, item.name, !expanded?.[element?.role]?.[item?.name])}>
                                 {element?.isApproved}
                             </p>
-
-                            {expanded?.[element?.role]?.[item?.name] && (
-                                <Card style={{ border: "black", backgroundColor: "#09cb3d" }}>
+                            {/* <Card style={{ border: "black", backgroundColor: "#09cb3d" }}>
                                     <div>
 
                                         {element?.remarks}
@@ -142,7 +180,21 @@ const DataGridDemo = (props) => {
                                     <button style={{ textAlign: "left" }} onClick={() => handleExpend(element.role, item.name, !expanded?.[element?.role]?.[item?.name])}>
                                         <BackspaceIcon></BackspaceIcon>
                                     </button>
-                                </Card>
+                                </Card> */}
+                            {expanded?.[element?.role]?.[item?.name] && (
+                                <TextSnippetIcon
+
+                                    onClick={() => {
+
+                                        setSmShow(true);
+
+                                        setFieldValue(element?.remarks !== null ? element?.remarks : null);
+                                        // setFieldValue2(el.designation !== null ? el.designation : null);
+                                        // setFieldValue3(el.role !== null ? el.role : null);
+                                    }}
+                                >
+
+                                </TextSnippetIcon>
                             )}
                         </td>
                     )
@@ -163,10 +215,20 @@ const DataGridDemo = (props) => {
     return (
         <Form ref={props.generalInfoRef}>
 
-<Form.Group className="justify-content-center" controlId="formBasicEmail" style={{ border: "2px solid #e9ecef", margin: 10, padding: 20 , display:"grid"}}>
-          
- <div style={{ overflow: "scroll" }}>
-                    <Card style={{ textAlign: "center" }}>ONLINE LICENSE APPLICATION SCRUTINY PROFORMA</Card>
+            <TableDialog
+
+                passmodalData={handlemodaldData}
+                displaymodal={smShow}
+
+                onClose={() => { setSmShow(false); setDocModal(false) }}
+                fieldValue={fieldValue}
+
+            ></TableDialog>
+
+            <Form.Group className="justify-content-center" controlId="formBasicEmail" style={{ border: "2px solid #e9ecef", margin: 10, padding: 20, display: "grid" }}>
+
+                <div style={{ overflow: "scroll", height: "680px" }}>
+                    {/* <Card style={{ textAlign: "center" ,backgroundColor: "#FFD954" ,maxHeight:680 }}>ONLINE LICENSE APPLICATION SCRUTINY PROFORMA</Card> */}
                     <table className="table table-bordered">
                         <thead>
 
@@ -178,9 +240,12 @@ const DataGridDemo = (props) => {
                                     File Name
                                 </th>
 
-                               
+
                                 <th class="fw-normal py-0 border-top-0">
                                     Patwari Head Quarter
+                                </th>
+                                <th class="fw-normal py-0 border-top-0">
+                                Naib Tehsildar Head Quarter
                                 </th>
 
                                 <th class="fw-normal py-0 border-top-0">
@@ -193,10 +258,22 @@ const DataGridDemo = (props) => {
                                     JD Head Quarter
                                 </th>
                                 <th class="fw-normal py-0 border-top-0">
-                                    DA/ADA Head Quarter
+                                    SD Head Quarter
+                                </th>
+                                <th class="fw-normal py-0 border-top-0">
+                                    DA Head Quarter
+                                </th>
+                                <th class="fw-normal py-0 border-top-0">
+                                    ADA Head Quarter
                                 </th>
                                 <th class="fw-normal py-0 border-top-0">
                                     AO Head Quarter
+                                </th>
+                                <th class="fw-normal py-0 border-top-0">
+                                    CAO Head Quarter
+                                </th>
+                                <th class="fw-normal py-0 border-top-0">
+                                    SO Head Quarter
                                 </th>
                                 <th class="fw-normal py-0 border-top-0">
                                     ATP Head Quarter
@@ -211,11 +288,14 @@ const DataGridDemo = (props) => {
                                     AD Filed
                                 </th>
                                 <th class="fw-normal py-0 border-top-0">
-                                    DA/ADA Filed
+                                    DA Filed
                                 </th>
                                 <th class="fw-normal py-0 border-top-0">
-                                    AO Filed
+                                    ADA Filed
                                 </th>
+                                {/* <th class="fw-normal py-0 border-top-0">
+                                    AO Filed
+                                </th> */}
                                 <th class="fw-normal py-0 border-top-0">
                                     ATP Filed
                                 </th>
@@ -237,80 +317,99 @@ const DataGridDemo = (props) => {
                                         </td>
                                         <td>
 
-                                            {item?.name}
+
+                                            <Label style={{ fontSize: 14 }}>{t(item?.name)}</Label>
 
                                         </td>
-                                        
-                                        
+
+
                                         {
-                                            item.employees?.find((item, index) => (item.role === "Patwari"))?getDataGri(item.employees?.find((item, index) => (item.role === "Patwari")),item): <td></td>
+                                            item.employees?.find((item, index) => (item?.role === "Patwari") || (item?.role === "Patwari_HQ") || (item.role === "PATWARI") ) ? getDataGri(item.employees?.find((item, index) => (item?.role === "Patwari") || (item?.role === "Patwari_HQ") || (item.role === "PATWARI")), item) : <td></td>
 
                                         }
-                                            
-                                        
+                                        {
+                                            item.employees?.find((item, index) => (item.role === "Naib Tehsildar")) ? getDataGri(item.employees?.find((item, index) =>  (item.role === "Naib Tehsildar")), item) : <td></td>
+
+                                        }
+
+                                              {
+                                            item.employees?.find((item, index) => (item?.role === "JE_HQ") || (item?.role === "Junior Engineer") || (item.role === "Jr Engineer") || (item.role === "Junier Engineer") || (item.role === "JE")) ? getDataGri(item.employees?.find((item, index) => (item?.role === "JE_HQ") || (item?.role === "Junior Engineer") || (item.role === "Jr Engineer") || (item.role === "Junier Engineer")||(item.role === "JE")), item) : <td></td>
+
+                                        }
                                        
-                                            
-                                                {
-                                            item.employees?.find((item, index) => (item.role === "JE_HQ"))?getDataGri(item.employees?.find((item, index) => (item.role === "JE_HQ")),item): <td></td>
+                                        {
+                                            item.employees?.find((item, index) => (item?.role === "Assistant Draftsman") || (item.role === "AD_HQ") ) ? getDataGri(item.employees?.find((item, index) => (item?.role === "JD_HQ") || (item?.role === "Assistant Draftsman") || (item.role === "AD_HQ") || (item.role === "Senior Draftmans") || (item.role === "JD") || (item.role === "SD_HQ") ||(item?.role === "Junior Draftsman")), item) : <td></td>
 
-                                                }
-                                                {/* {
-                                            item.employees?.find((item, index) => (item.role === "JD_HQ"))?getDataGri(item.employees?.find((item, index) => (item.role === "JD_HQ")),item): <td></td>
+                                        }
+                                        {
+                                            item.employees?.find((item, index) => (item?.role === "JD_HQ") ||  (item.role === "JD") || (item?.role === "Junior Draftsman")) ? getDataGri(item.employees?.find((item, index) => (item?.role === "JD_HQ") || (item.role === "Senior Draftmans") || (item.role === "JD") || (item?.role === "Junior Draftsman")), item) : <td></td>
 
-                                                } */}
-                                          
+                                        }
+                                        {
+                                            item.employees?.find((item, index) => (item.role === "Senior Draftmans") || (item.role === "SD_HQ") ) ? getDataGri(item.employees?.find((item, index) => (item.role === "Senior Draftmans") ||  (item.role === "SD_HQ")), item) : <td></td>
 
-                                            {/* {
-                                            item.employees?.find((item, index) => (item.role === "JE_HQ"))?.length?getDataGri(item.employees?.find((item, index) => (item.role === "JE_HQ")),item): <td></td>
+                                        }
 
-                                                } */}
-                                            {
-                                            item.employees?.find((item, index) => (item.role === "AD_HQ"))?getDataGri(item.employees?.find((item, index) => (item.role === "AD_HQ")),item): <td></td>
+                                        {
+                                            item.employees?.find((item, index) =>  (item?.role === "DA_HQ") || (item?.role === "District Attorney") || (item.role === "DDA_HQ")) ? getDataGri(item.employees?.find((item, index) => (item?.role === "DA_HQ") || (item?.role === "District Attorney") || (item.role === "DDA_HQ")), item) : <td></td>
 
-                                                }
-                                            {
-                                            item.employees?.find((item, index) => (item.role === ("DA_HQ" || "ADA_HQ")))?getDataGri(item.employees?.find((item, index) => (item.role === ("DA_HQ" || "ADA_HQ"))),item): <td></td>
+                                        }
+                                        {
+                                            item.employees?.find((item, index) =>  (item.role === "ADA_HQ") || (item.role === "Assistant District Atorney")) ? getDataGri(item.employees?.find((item, index) => (item.role === "ADA_HQ") || (item.role === "Assistant District Atorney")), item) : <td></td>
 
-                                                }
-                                            {
-                                            item.employees?.find((item, index) => (item.role === "AO_HQ"))?getDataGri(item.employees?.find((item, index) => (item.role === "AO_HQ")),item): <td></td>
+                                        }
+                                        {
+                                            item.employees?.find((item, index) =>  (item.role === "AO_HQ") || (item.role === "AO") || (item.role === "SO")) ? getDataGri(item.employees?.find((item, index) =>  (item.role === "AO_HQ") || (item.role === "AO") ), item) : <td></td>
 
-                                                }
-                                       
-                                            {
-                                            item.employees?.find((item, index) => (item.role === "ATP_HQ"))?getDataGri(item.employees?.find((item, index) => (item.role === "ATP_HQ")),item): <td></td>
+                                        }
+                                        {
+                                            item.employees?.find((item, index) => (item?.role === "CAO") || (item?.role === "CAO_HQ")) ? getDataGri(item.employees?.find((item, index) => (item?.role === "CAO") || (item?.role === "CAO_HQ") ), item) : <td></td>
 
-                                                }
-                                            {
-                                            item.employees?.find((item, index) => (item.role === "ATP_HQ"))?getDataGri(item.employees?.find((item, index) => (item.role === "ATP_HQ")),item): <td></td>
+                                        }
+                                        {
+                                            item.employees?.find((item, index) => (item.role === "SO")) ? getDataGri(item.employees?.find((item, index) =>  (item.role === "SO")), item) : <td></td>
 
-                                                }
-                                            {
+                                        }
+
+                                        {
+                                            item.employees?.find((item, index) => (item.role === "ATP_HQ") || (item?.role === "ATP") || (item.role === "ATP HQ")) ? getDataGri(item.employees?.find((item, index) => (item.role === "ATP_HQ") || (item?.role === "ATP") || (item.role === "ATP HQ")), item) : <td></td>
+
+                                        }
+                                        {/* {
+                                            item.employees?.find((item, index) => (item.role === "ATP_HQ")) ? getDataGri(item.employees?.find((item, index) => (item.role === "ATP_HQ")), item) : <td></td>
+
+                                        } */}
+                                        {
+                                            item.employees?.find((item, index) => (item.role === "Patwari_Filed")) ? getDataGri(item.employees?.find((item, index) => (item.role === "Patwari_Filed")), item) : <td></td>
+
+                                        }
+                                        {/* {
                                             item.employees?.find((item, index) => (item.role === "Patwari_Filed"))?getDataGri(item.employees?.find((item, index) => (item.role === "Patwari_Filed")),item): <td></td>
 
-                                                }
-                                            {/* {
-                                            item.employees?.find((item, index) => (item.role === "Patwari_Filed"))?getDataGri(item.employees?.find((item, index) => (item.role === "Patwari_Filed")),item): <td></td>
-
                                                 } */}
-                                            {
-                                            item.employees?.find((item, index) => (item.role === "JE_Filed"))?getDataGri(item.employees?.find((item, index) => (item.role === "JE_Filed")),item): <td></td>
+                                        {
+                                            item.employees?.find((item, index) => (item.role === "JE_Filed")) ? getDataGri(item.employees?.find((item, index) => (item.role === "JE_Filed")), item) : <td></td>
 
-                                                }
-                                            {
-                                            item.employees?.find((item, index) => (item.role === ("DA_Filed" || "ADA_Filed")))?getDataGri(item.employees?.find((item, index) => (item.role === ("DA_Filed" || "ADA_Filed"))),item): <td></td>
+                                        }
+                                        {
+                                            item.employees?.find((item, index) => (item.role ===  "DA_Filed") ) ? getDataGri(item.employees?.find((item, index) => (item.role === "DA_Filed")), item) : <td></td>
 
-                                                }
-                                            {
-                                            item.employees?.find((item, index) => (item.role === "AO_Filed"))?getDataGri(item.employees?.find((item, index) => (item.role === "AO_Filed")),item): <td></td>
+                                        }
+                                        {
+                                            item.employees?.find((item, index) =>  (item.role === "ADA_Filed")) ? getDataGri(item.employees?.find((item, index) => 
+                                            (item.role === "ADA_Filed")), item) : <td></td>
 
-                                                }
-                                            {
-                                            item.employees?.find((item, index) => (item.role === "ATP_Filed"))?getDataGri(item.employees?.find((item, index) => (item.role === "ATP_Filed")),item): <td></td>
+                                        }
+                                        {/* {
+                                            item.employees?.find((item, index) => (item.role === "AO_Filed")) ? getDataGri(item.employees?.find((item, index) => (item.role === "AO_Filed")), item) : <td></td>
 
-                                                }
-                                       
-                                        
+                                        } */}
+                                        {
+                                            item.employees?.find((item, index) => (item.role === "ATP_Filed")) ? getDataGri(item.employees?.find((item, index) => (item.role === "ATP_Filed")), item) : <td></td>
+
+                                        }
+
+
                                         {/* <td>
                                             {item.employees?.find((item, index) => (item.role === "AO_Filed"))?.isApproved || ""}
                                             {getDataGri(item.employees?.find((item, index) => (item.role === "AO_Filed")),item)}
@@ -425,7 +524,7 @@ const DataGridDemo = (props) => {
 
             </Form.Group>
             <br></br>
-            
+
 
             {/* <Dialog
     open={open}

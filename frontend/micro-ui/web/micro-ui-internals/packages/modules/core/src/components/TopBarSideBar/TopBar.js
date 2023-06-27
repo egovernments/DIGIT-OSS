@@ -26,9 +26,10 @@ const TopBar = ({
 }) => {
   const [profilePic, setProfilePic] = React.useState(null);
   const userInfo = Digit.UserService.getUser()?.info || {};
-  // const userRolesArray = userInfo?.roles.filter((user) => user.code !=="EMPLOYEE" );
+  // const userRolesArray = userInfo?.roles.filter((user) => user.name !== "Employee" );
   // const filterDataRole = userRolesArray?.[0]?.code;
   const designation = userInfo?.name;
+  const designationName = userInfo?.roles?.[1]?.name;
   console.log("userInfodesignation" ,userInfo);
   
 
@@ -141,8 +142,8 @@ const TopBar = ({
               // )
               
               }
-             <b style={{fontSize:18}}>{designation}</b> 
-             {/* <b style={{fontSize:18}}>{designation}</b>  */}
+             <b style={{fontSize:18}}>{designation}</b> <p>({designationName})</p> 
+             {/* <b style={{fontSize:18}}></b>  */}
             </div>
             {/* <div className="left">{showLanguageChange && <ChangeLanguage dropdown={true} />}</div> */}
             {userDetails?.access_token && (
@@ -183,6 +184,7 @@ const TopBar = ({
           </div>
         )}
       </span>
+      
     </div>
   );
 };

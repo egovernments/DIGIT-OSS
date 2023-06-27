@@ -1,5 +1,5 @@
 
-import React, { useState, useRef  ,useContext} from "react";
+import React, { useState, useRef ,useEffect  ,useContext} from "react";
 import JoditEditor from "jodit-react";
 // import { Editor } from "react-draft-wysiwyg";
 // import "./styles.css";
@@ -7,6 +7,9 @@ import { Row, Col, Card, Container, Form, Button } from "react-bootstrap";
 import { useParams } from "react-router-dom";
 import axios from "axios";
 import { ScrutinyRemarksContext } from "../../../../../context/remarks-data-context";
+
+
+
 
 export default function DemoParinted({ modal = false, state, setState , applicationStatus}) {
   const editor = useRef(null);
@@ -39,64 +42,252 @@ const {handleRoles, handleGetFiledsStatesById, handleGetRemarkssValues , handleG
   const contentFieldChanaged = (data) => {
 
     setPost({ ...post, 'content': data })
+    // const handlemodalsubmit = async () => {
+  
+      const postData = {
+             requestInfo: {
+               api_id: "1",
+               ver: "1",
+               ts: null,
+               action: "create",
+               did: "",
+               key: "",
+               msg_id: "",
+               requester_id: "",
+               authToken: authToken,
+             },
+             egScrutiny: {
+               applicationId: id,
+               comment: post.content,
+               fieldValue: "true",
+               fieldIdL: "Noting",
+               isApproved: "Noting",
+               isLOIPart: "",
+               userid: userInfo?.id || null,
+               serviceId: "123",
+               documentId: null,
+               // ts: dateTime.toUTCString(),
+               bussinessServiceName : "NewTL",
+               designation : designation,
+               name : userInfo?.name || null,
+               employeeName : userInfo?.name || null,
+              role : filterDataRole,
+              applicationStatus : applicationStatus
+             },
+           };
+     
+           try {
+             const Resp = axios.post("/land-services/egscrutiny/_create?status=submit", postData, {}).then((response) => {
+               return response.data;
+             });
+           } catch (error) {
+             console.log(error);
+           }
+           handleGetNotingRemarkssValues(id)
+           // handleGetFiledsStatesById(id);
+           // handleGetRemarkssValues(id);
+           // handleRoles(id)
+           // console.log("response from API", Resp);
+           // props?.remarksUpdate({ data: RemarksDeveloper.data });
+         // } else {
+         //   props?.passmodalData();
+         // }
+      //  };
 
 
 }
 
-// console.log("DATAEDI435435", editorState ,convertedContent , setState );
 
 
 const handlemodalsubmit = async () => {
-    // if (status) {
- const postData = {
-        requestInfo: {
-          api_id: "1",
-          ver: "1",
-          ts: null,
-          action: "create",
-          did: "",
-          key: "",
-          msg_id: "",
-          requester_id: "",
-          authToken: authToken,
-        },
-        egScrutiny: {
-          applicationId: id,
-          comment: post.content,
-          fieldValue: "true",
-          fieldIdL: "Noting",
-          isApproved: "Noting",
-          isLOIPart: "",
-          userid: userInfo?.id || null,
-          serviceId: "123",
-          documentId: null,
-          // ts: dateTime.toUTCString(),
-          bussinessServiceName : "NewTL",
-          designation : designation,
-          name : userInfo?.name || null,
-          employeeName : userInfo?.name || null,
-         role : filterDataRole,
-         applicationStatus : applicationStatus
-        },
-      };
+  
+  const postData = {
+         requestInfo: {
+           api_id: "1",
+           ver: "1",
+           ts: null,
+           action: "create",
+           did: "",
+           key: "",
+           msg_id: "",
+           requester_id: "",
+           authToken: authToken,
+         },
+         egScrutiny: {
+           applicationId: id,
+           comment: post.content,
+           fieldValue: "true",
+           fieldIdL: "Noting",
+           isApproved: "Noting",
+           isLOIPart: "",
+           userid: userInfo?.id || null,
+           serviceId: "123",
+           documentId: null,
+           // ts: dateTime.toUTCString(),
+           bussinessServiceName : "NewTL",
+           designation : designation,
+           name : userInfo?.name || null,
+           employeeName : userInfo?.name || null,
+          role : filterDataRole,
+          applicationStatus : applicationStatus
+         },
+       };
+ 
+       try {
+         const Resp = await axios.post("/land-services/egscrutiny/_create?status=submit", postData, {}).then((response) => {
+           return response.data;
+         });
+       } catch (error) {
+         console.log(error);
+       }
+       handleGetNotingRemarkssValues(id)
+       // handleGetFiledsStatesById(id);
+       // handleGetRemarkssValues(id);
+       // handleRoles(id)
+       // console.log("response from API", Resp);
+       // props?.remarksUpdate({ data: RemarksDeveloper.data });
+     // } else {
+     //   props?.passmodalData();
+     // }
+   };
 
-      try {
-        const Resp = await axios.post("/land-services/egscrutiny/_create?status=submit", postData, {}).then((response) => {
-          return response.data;
-        });
-      } catch (error) {
-        console.log(error);
-      }
-      handleGetNotingRemarkssValues(id)
-      // handleGetFiledsStatesById(id);
-      // handleGetRemarkssValues(id);
-      // handleRoles(id)
-      // console.log("response from API", Resp);
-      // props?.remarksUpdate({ data: RemarksDeveloper.data });
-    // } else {
-    //   props?.passmodalData();
-    // }
-  };
+
+// console.log("DATAEDI435435", editorState ,convertedContent , setState );
+
+
+// const datacomments = post.content !== null;
+// const applicationsStatusa = applicationStatus;
+// useEffect(() => {
+  
+//   setInterval((applicationsStatusa ,datacomments ) => {
+//     (() => {
+//       ;
+      
+//       const postData = {   
+//       requestInfo: {
+//         api_id: "1",
+//         ver: "1",
+//         ts: null,
+//         action: "create",
+//         did: "",
+//         key: "",
+//         msg_id: "",
+//         requester_id: "",
+//         authToken: authToken,
+//       },
+//       egScrutiny: {
+//         applicationId: id,
+//         comment: datacomments,
+//         fieldValue: "true",
+//         fieldIdL: "Noting",
+//         isApproved: "Noting",
+//         isLOIPart: "",
+//         userid: userInfo?.id || null,
+//         serviceId: "123",
+//         documentId: null,
+//         // ts: dateTime.toUTCString(),
+//         bussinessServiceName : "NewTL",
+//         designation : designation,
+//         name : userInfo?.name || null,
+//         employeeName : userInfo?.name || null,
+//        role : filterDataRole,
+//        applicationStatus : applicationsStatusa
+//       },
+//     };
+//       try {
+//         const Resps = await axios.post("/land-services/egscrutiny/_create?status=submit", postData, {}).then((response) => {
+//           return response.data;
+//         });
+//       } catch (error) {
+//         console.log(error);
+//       }
+//       // normal
+//       //   .then(({ data }) => {
+//       //     console.log(data);
+//       //     console.log(data["Time Series (5min)"]);
+//       //     for (let key in data["Time Series (5min)"]) {
+//       //       setStocksX((prev) => [...prev, key]);
+//       //       setStocksY((prev) => [
+//       //         ...prev,
+//       //         data["Time Series (5min)"][key]["1. open"]
+//       //       ]);
+//       //     }
+//       //     //console.log(stocksX, stocksY);
+//       //   });
+//       //   normal
+//     })();
+//   }, 30000);
+// });
+
+
+// var timer ;
+
+// function startTimer(){
+//   console.log("Time Start Now");
+//   timer = setInterval(function(){
+//     console.log("FuctionalApiCall");
+//     const handlemodalsubmit = async () => {
+  
+//       const postData = {
+//              requestInfo: {
+//                api_id: "1",
+//                ver: "1",
+//                ts: null,
+//                action: "create",
+//                did: "",
+//                key: "",
+//                msg_id: "",
+//                requester_id: "",
+//                authToken: authToken,
+//              },
+//              egScrutiny: {
+//                applicationId: id,
+//                comment: post.content,
+//                fieldValue: "true",
+//                fieldIdL: "Noting",
+//                isApproved: "Noting",
+//                isLOIPart: "",
+//                userid: userInfo?.id || null,
+//                serviceId: "123",
+//                documentId: null,
+//                // ts: dateTime.toUTCString(),
+//                bussinessServiceName : "NewTL",
+//                designation : designation,
+//                name : userInfo?.name || null,
+//                employeeName : userInfo?.name || null,
+//               role : filterDataRole,
+//               applicationStatus : applicationStatus
+//              },
+//            };
+     
+//            try {
+//              const Resp = await axios.post("/land-services/egscrutiny/_create?status=submit", postData, {}).then((response) => {
+//                return response.data;
+//              });
+//            } catch (error) {
+//              console.log(error);
+//            }
+//            handleGetNotingRemarkssValues(id)
+//            // handleGetFiledsStatesById(id);
+//            // handleGetRemarkssValues(id);
+//            // handleRoles(id)
+//            // console.log("response from API", Resp);
+//            // props?.remarksUpdate({ data: RemarksDeveloper.data });
+//          // } else {
+//          //   props?.passmodalData();
+//          // }
+//        };
+//   }, 50000);
+// }
+// function stoptimer(){
+//   console.log("Stop Time Now");
+//   clearInterval(timer);
+// }
+
+
+
+
+
 
 
 // const handlemodalsubmit = (event) => {
@@ -135,10 +326,17 @@ console.log("AkashNEWFile" , content , editor , config ,post.content);
                                ref={editor}
                                 value={post.content}
 
-                                onChange={(newContent) => contentFieldChanaged(newContent)}
+                                onChange={(newContent) => {contentFieldChanaged(newContent)}}
+                                // onClick={startTimer}
                             />
-      <Button style={{ textAlign: "right" }} onClick={handlemodalsubmit}>
+      {/* <Button style={{ textAlign: "right" }} onClick={handlemodalsubmit}>
             Save Noting
+          </Button>
+      <Button style={{ textAlign: "right" }} onClick={startTimer}>
+            Save Noting
+          </Button> */}
+      <Button style={{ textAlign: "right" }} onClick={handlemodalsubmit}>
+           Final Noting
           </Button>
       <div dangerouslySetInnerHTML={{ __html: content }} />
     </div>

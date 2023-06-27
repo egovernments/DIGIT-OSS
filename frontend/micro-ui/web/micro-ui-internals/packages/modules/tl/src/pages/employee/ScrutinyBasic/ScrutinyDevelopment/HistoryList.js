@@ -25,7 +25,8 @@ import AddPost from "../../Material/TextEditor";
 import DemoParinted from "./DemoParint";
 import BasicTable from "./UserRemarks";
 import { convertDateToEpoch, convertEpochToDate, convertEpochToDateDMY } from "../../../../utils";
-// import FullScreenDialog from "../Remarks/RemarksUser";
+import FullScreenDialog from "../Remarks/RemarksUser";
+import ScrollToTop from "@egovernments/digit-ui-react-components/src/atoms/ScrollToTop";
 
 // import { Scrollbars } from 'react-custom-scrollbars';
 
@@ -102,6 +103,14 @@ const HistoryList = (props) => {
         console.log("log123DisA", tempArray);
         setDisapprovedList(tempArray);
       }
+      // const ScrollToBottom = () =>{
+      //   window.scroll({
+      //     top:document.documentElement.scrollHeight,
+      //     behavior:'smooth',
+      //   });
+
+      // };
+      // ScrollToBottom();
     }, [remarkDataResp]
   )
 
@@ -208,6 +217,7 @@ const toggleshown4 = applicationStatus => {
 }
 const [open, setOpen] = useState(false);
 const [smShow, setSmShow] = useState(false);
+// const [roleDataModal, setRoleDataModal] = useState([]);
   const [docModal, setDocModal] = useState(false);
   const handlemodaldData = () => {
     setSmShow(false);
@@ -253,6 +263,11 @@ const Resp = await axios.post(`/tl-services/new/license/pdf?applicationNumber=${
 //   console.log(error);
 // }
 };
+
+
+
+
+
   return (
    
     <Container
@@ -266,7 +281,7 @@ const Resp = await axios.post(`/tl-services/new/license/pdf?applicationNumber=${
         marginTop: 5,
       }}
     >
-      
+       {/* <ScrollToTop /> */}
       <Row class="remarkshelp">
         <div 
         class="concludingremarks"
@@ -422,16 +437,18 @@ const Resp = await axios.post(`/tl-services/new/license/pdf?applicationNumber=${
       
             <div>
               <Form.Group>
-              {/* <FullScreenDialog
+              <FullScreenDialog
              
              passmodalData={handlemodaldData}
              displaymodal={smShow}
            
              onClose={() => { setSmShow(false); setDocModal(false) }}
-             fieldValue={fieldValue}
+             fieldValue={id}
              fieldValue2={fieldValue2}
              fieldValue3={fieldValue3}
-></FullScreenDialog> */}
+></FullScreenDialog>
+
+
                <div>
                {remarkDataResp !== null ?  (
                       remarkDataResp?.map((el, index) => {
@@ -440,44 +457,22 @@ const Resp = await axios.post(`/tl-services/new/license/pdf?applicationNumber=${
                          {/* <Button variant="outlined" onClick={handleClickOpen}>
         Open full-screen dialog
       </Button> */}
-                         <div style={{width:20}}>
+                                          
+                                          <div style={{width:20}}>
                          <TextSnippetIcon
                   
-                  // onClick={() => {
+                  onClick={() => {
                  
-                  //   setSmShow(true);
-                  //   // setDocModal(false);
-                  //   setFieldValue(el.employeeName !== null ? el.employeeName : null);
-                  //   setFieldValue2(el.designation !== null ? el.designation : null);
-                  //   setFieldValue3(el.role !== null ? el.role : null);
-                  // }}
+                    setSmShow(true);
+                   
+                   
+                    setFieldValue(el.employeeName !== null ? el.employeeName : null);
+                    setFieldValue2(el.designation !== null ? el.designation : null);
+                    setFieldValue3(el.role !== null ? el.role : null);
+                  }}
                 ></TextSnippetIcon>
                          </div>
-                         
-
-                         {el?.notingDetail !== null ?  (
-                      el?.notingDetail?.map((item , i) => {
-                        return (
-                          <div>
-                            
-                         
-                         <b>{item?.isApproved}# {index + 1}</b>
-                            <br></br>
-                         <i>{<div dangerouslySetInnerHTML={{__html: item.remarks}}/>}</i>
-
-                    
-                             
-                          </div>
-                        );
-                      })
-                    ) : (
-                      <p></p>
-                    )}
-
-{/* {data.includes(el.employeeName) && (
-                    <Box > */}
-        {/* {el?.performaFieldDetail?.[0]?.isApproved === "Proforma" && */}
-
+                  
 <div >
 <Box>
 <Row>
@@ -496,9 +491,10 @@ const Resp = await axios.post(`/tl-services/new/license/pdf?applicationNumber=${
                        </IconButton>
                        </p> */}
                         
-                            
+                        <b>Proforma # {index + 1}</b>
                            
                            {/* {dataThree.includes(el.applicationStatus) && (   */}
+                           {el?.performaFieldDetail?.[0]?.isApproved == "Proforma"  &&     
                 <table colSpan = "2" className="table table-bordered" style={{ backgroundColor: "#ddf2cf" }}>
                   <thead>
 
@@ -553,19 +549,57 @@ const Resp = await axios.post(`/tl-services/new/license/pdf?applicationNumber=${
                               </td>
 
                             </tr>
+                         
                                );
                               })
                             ) : (
                               <p></p>
                             )}
-                         </tbody>
+                            </tbody>
                         </table>
+                      }
                         {/* )}  */}
                   </Row>
                     </Box>
              
                       
                       </div>
+
+
+                      
+                         
+
+                        
+
+
+                         {el?.notingDetail !== null ?  (
+                      el?.notingDetail?.map((item , i) => {
+                        return (
+                          <div>
+                            
+                         
+                         
+
+                            <b>{item?.isApproved}# {index + 1}</b>
+
+
+                            <br></br>
+                         <i>{<div dangerouslySetInnerHTML={{__html: item.remarks}}/>}</i>
+
+                    
+                             
+                          </div>
+                        );
+                      })
+                    ) : (
+                      <p></p>
+                    )}
+
+{/* {data.includes(el.employeeName) && (
+                    <Box > */}
+        {/* {el?.performaFieldDetail?.[0]?.isApproved === "Proforma" && */}
+
+
           {/* }             */}
 
 
@@ -578,9 +612,12 @@ const Resp = await axios.post(`/tl-services/new/license/pdf?applicationNumber=${
                      </Row>
                      <Row style={{ margin: 4 }}>
 
-                     <p style={{ textAlign: "right" }}>{el?.ts}</p>
+                     
                      <b style={{ textAlign: "right" }}>
-             
+                     <p style={{ textAlign: "right" }}>
+                      
+                      {convertEpochToDateDMY(el?.createdOn)} {el?.ts}</p> 
+                    
                    </b>
                     </Row>
                     <hr></hr>

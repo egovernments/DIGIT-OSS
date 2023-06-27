@@ -108,10 +108,75 @@ const MyApplications = ({ view }) => {
     },
   }));
 
+  const showPdf = async (id) => {
+    const token = window?.localStorage?.getItem("token");
+    setLoader(true);
+    const payload = {
+      RequestInfo: {
+        apiId: "Rainmaker",
+        ver: ".01",
+        ts: null,
+        action: "_update",
+        did: "1",
+        key: "",
+        msgId: "20170310130900|en_IN",
+        authToken: token,
+        userInfo: userInfo,
+      },
+    };
+    try {
+      const Resp = await axios.post(`/tl-services/new/license/pdf?applicationNumber=${id}`, payload, { responseType: "arraybuffer" });
+      setLoader(false);
+      const pdfBlob = new Blob([Resp.data], { type: "application/pdf" });
+      const pdfUrl = URL.createObjectURL(pdfBlob);
+      const link = document.createElement("a");
+      link.href = pdfUrl;
+      link.download = "file.pdf";
+      link.click();
+      window.URL.revokeObjectURL(pdfUrl);
+    } catch (error) {
+      setLoader(false);
+      return error;
+    }
+  };
+
+  const downloadPayment = async (id) => {
+    const token = window?.localStorage?.getItem("token");
+    setLoader(true);
+    const payload = {
+      RequestInfo: {
+        apiId: "Rainmaker",
+        ver: ".01",
+        ts: null,
+        action: "_update",
+        did: "1",
+        key: "",
+        msgId: "20170310130900|en_IN",
+        authToken: token,
+        userInfo: userInfo,
+      },
+    };
+    try {
+      const Resp = await axios.post(`/tl-services/payment/pdf?applicationNumber=${id}`, payload, { responseType: "arraybuffer" });
+      setLoader(false);
+      const pdfBlob = new Blob([Resp.data], { type: "application/pdf" });
+      const pdfUrl = URL.createObjectURL(pdfBlob);
+      const link = document.createElement("a");
+      link.href = pdfUrl;
+      link.download = "file.pdf";
+      link.click();
+      window.URL.revokeObjectURL(pdfUrl);
+    } catch (error) {
+      setLoader(false);
+      return error;
+    }
+  };
+
   return (
     <div>
-      {loader && <Spinner></Spinner>}
+      {loader && <Spinner />}
       <Header>{`${t("TL_MY_APPLICATIONS_HEADER")}`}</Header>
+      {/* <Col md={12} lg={12} mb={3}> */}
       <div className="row mb-3">
         {/* <div style={{ position: "relative", zIndex: "12" }} className="col col-4 mt-3">
           <h6>
@@ -137,7 +202,10 @@ const MyApplications = ({ view }) => {
             />
           </h6>
         </div>
+        <div className="col col-4 mt-3"></div>
+        <div className="col col-4 mt-3"></div>
       </div>
+      {/* </Col> */}
       {/* <table className="customers" id="customers" style={{ borderCollapse: "collapse", width: "100%" }}>
 
       <div className="row mb-3">
@@ -261,68 +329,82 @@ const MyApplications = ({ view }) => {
         })}
       </table> */}
 
-      <Col md={12} lg={12} mb={3}>
-        <Paper sx={{ width: "100%", overflow: "hidden", marginY: 2 }}>
-          <TableContainer sx={{ maxHeight: 500 }}>
-            <Table stickyHeader aria-label="sticky table">
-              <TableHead>
-                <TableRow>
-                  {/* <StyledTableCell >ID</StyledTableCell> */}
-                  <StyledTableCell>Tenant Id</StyledTableCell>
-                  <StyledTableCell>Business Service</StyledTableCell>
-                  <StyledTableCell>Application Number</StyledTableCell>
-                  <StyledTableCell>Application Date</StyledTableCell>
-                  <StyledTableCell>Action</StyledTableCell>
-                  <StyledTableCell> Status</StyledTableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {data?.Licenses?.map((item, index) => {
-                  return (
-                    <StyledTableRow sx={{ "&:last-child td, &:last-child th": { border: 0 } }}>
-                      {/* <StyledTableCell component="th" scope="row">
+      {/* <Col md={12} lg={12} mb={3}> */}
+      <Paper sx={{ overflow: "hidden", marginY: 2 }}>
+        <TableContainer sx={{ maxHeight: 500 }}>
+          <Table stickyHeader aria-label="sticky table">
+            <TableHead>
+              <TableRow>
+                {/* <StyledTableCell >ID</StyledTableCell> */}
+                <StyledTableCell>Tenant Id</StyledTableCell>
+                <StyledTableCell>Business Service</StyledTableCell>
+                <StyledTableCell>Application Number</StyledTableCell>
+                <StyledTableCell>Application Date</StyledTableCell>
+                <StyledTableCell>Action</StyledTableCell>
+                <StyledTableCell>status</StyledTableCell>
+                <StyledTableCell> Payment Receipt</StyledTableCell>
+                <StyledTableCell> Downlaod Application</StyledTableCell>
+                <StyledTableCell>Withdraw</StyledTableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {data?.Licenses?.map((item, index) => {
+                return (
+                  <StyledTableRow sx={{ "&:last-child td, &:last-child th": { border: 0 } }}>
+                    {/* <StyledTableCell component="th" scope="row">
                             {item?.id}
                             </StyledTableCell> */}
-                      <StyledTableCell>{item?.tenantId}</StyledTableCell>
-                      <StyledTableCell>{item?.businessService}</StyledTableCell>
-                      <StyledTableCell
-                        style={{ textDecoration: "underline blue 1px", cursor: "pointer", border: "1px solid #ddd", padding: " 8px" }}
-                        onClick={() => {
-                          window.localStorage.setItem("ApplicationStatus", item?.status);
-                          history.push({
-                            pathname: "/digit-ui/citizen/obps/tab",
-                            search: `?id=${item?.applicationNumber}`,
-                          });
-                        }}
-                      >
-                        {item?.applicationNumber}
-                      </StyledTableCell>
-                      <StyledTableCell component="th" scope="row">
-                        {convertEpochToDateDMY(item?.auditDetails?.createdTime)}
-                      </StyledTableCell>
-                      <StyledTableCell component="th" scope="row">
-                        {item?.action}
-                      </StyledTableCell>
-                      <StyledTableCell component="th" scope="row">
-                        {item?.status}
-                      </StyledTableCell>
-                    </StyledTableRow>
-                  );
-                })}
-              </TableBody>
-            </Table>
-          </TableContainer>
-          <TablePagination
-            rowsPerPageOptions={[10, 25, 100]}
-            component="div"
-            count={data?.length}
-            rowsPerPage={rowsPerPage}
-            page={page}
-            onPageChange={handleChangePage}
-            onRowsPerPageChange={handleChangeRowsPerPage}
-          />
-        </Paper>
-      </Col>
+                    <StyledTableCell>{item?.tenantId}</StyledTableCell>
+                    <StyledTableCell>{item?.businessService}</StyledTableCell>
+                    <StyledTableCell
+                      style={{ textDecoration: "underline blue 1px", cursor: "pointer", border: "1px solid #ddd", padding: " 8px" }}
+                      onClick={() => {
+                        window.localStorage.setItem("ApplicationStatus", item?.status);
+                        history.push({
+                          pathname: "/digit-ui/citizen/obps/tab",
+                          search: `?id=${item?.applicationNumber}`,
+                        });
+                      }}
+                    >
+                      {item?.applicationNumber}
+                    </StyledTableCell>
+                    <StyledTableCell component="th" scope="row">
+                      {convertEpochToDateDMY(item?.auditDetails?.createdTime)}
+                    </StyledTableCell>
+                    <StyledTableCell component="th" scope="row">
+                      {item?.action}
+                    </StyledTableCell>
+                    <StyledTableCell component="th" scope="row">
+                      {item?.status}
+                    </StyledTableCell>
+                    <StyledTableCell component="th" scope="row">
+                      {item?.action == "PAID" && item?.status == "APPLIED" && (
+                        <button onClick={() => downloadPayment(item?.applicationNumber)} type="button" class="btn btn-primary"></button>
+                      )}
+                    </StyledTableCell>
+                    <StyledTableCell component="th" scope="row">
+                      <button onClick={() => showPdf(item?.applicationNumber)} type="button" class="btn btn-primary"></button>
+                    </StyledTableCell>
+                    <StyledTableCell component="th" scope="row">
+                      <button type="button" class="btn btn-danger"></button>
+                    </StyledTableCell>
+                  </StyledTableRow>
+                );
+              })}
+            </TableBody>
+          </Table>
+        </TableContainer>
+        <TablePagination
+          rowsPerPageOptions={[10, 25, 100]}
+          component="div"
+          count={data?.length}
+          rowsPerPage={rowsPerPage}
+          page={page}
+          onPageChange={handleChangePage}
+          onRowsPerPageChange={handleChangeRowsPerPage}
+        />
+      </Paper>
+      {/* </Col> */}
     </div>
 
     /* <Card>

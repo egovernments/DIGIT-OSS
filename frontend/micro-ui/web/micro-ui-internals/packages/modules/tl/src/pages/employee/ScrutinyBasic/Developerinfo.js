@@ -313,11 +313,12 @@ const Developerinfo = (props) => {
     iocGasPipeline: Colors.info,
     nallah: Colors.info,
     anyRevenueRasta: Colors.info,
-    anyMarginalLand: Colors.info,
+    utilityLine: Colors.info,
     utilityLine: Colors.info,
     documentsAsAnnexures: Colors.info,
     landSchedule: Colors.info,
     copyOfMutation: Colors.info,
+    copyOfMutationDoc: Colors.info,
     copyOfJamabandi: Colors.info,
     detailsOfLease: Colors.info,
     addSalesDeed: Colors.info,
@@ -333,7 +334,9 @@ const Developerinfo = (props) => {
     proposedLayoutOfPlan: Colors.info,
     uploadPreviouslyLayoutPlan: Colors.info,
     landCompensationReceived: Colors.info,
+    landCompensation: Colors.info,
     statusOfRelease: Colors.info,
+    statusOfReleases: Colors.info,
     dateOfAward: Colors.info,
     dateOfRelease: Colors.info,
     siteDetails: Colors.info,
@@ -353,6 +356,26 @@ const Developerinfo = (props) => {
     giftDeedHibbanama: Colors.info,
     adjoiningOwnLand: color.info,
     joiningOwnLand: Colors.info,
+    dateAwaedNotification: Colors.info,
+    approachFromProposedSector: Colors.info,
+    NHSRAccess: Colors.info,
+    awardDate: Colors.info,
+    whetherAcquired: Colors.info,
+    whetherConstructed: Colors.info,
+    serviceSectorRoadAcquired: Colors.info,
+    serviceSectorRoadConstructed: Colors.info,
+    approachFromInternalCirculation: Colors.info,
+    internalAndSectoralWidth: Colors.info,
+    whetherAcquiredForInternalCirculation: Colors.info,
+    whetherConstructedForInternalCirculation: Colors.info,
+    parentLicenceApproach: Colors.info,
+    availableExistingApproach: Colors.info,
+    sectorAndDevelopmentWidth: Colors.info,
+    compactBlock: Colors.info,
+    othersLandFall: Colors.info,
+    passingOtherFeature: Colors.info,
+    irrevocableConsentYes: Colors.info,
+    constructedRowWidth: Colors.info,
   })
 
   const fieldIdList = [{ label: "Whether licence applied for additional area", key: "licenceApplied" },
@@ -367,37 +390,40 @@ const Developerinfo = (props) => {
   { label: "Third Party Remark", key: "thirdPartyRemark" },
   { label: "Third Party Document", key: "thirdPartyDoc" },
   { label: "Whether licence applied under Migration policy", key: "migrationPolicy" },
-  { label: "Any encumbrance with respect to following", key: "encumbrance" },
-  { label: "Existing litigation, if any, concerning applied land including co-sharers and collaborator", key: "existinglitigation" },
-  { label: "Court orders, if any, affecting applied land", key: "courtOrders" },
-  { label: "Any insolvency/liquidation proceedings against the land owner(s)/ collaborating developed", key: "anyInsolvency" },
-  { label: "Remark", key: "insolvencyRemark" },
-  { label: "As per applied land", key: "asPerAppliedLand" }, { label: "Revenue rasta", key: "revenueRasta" },
-  { label: "Watercourse running", key: "waterCourseRunning" },
-  { label: "Whether in Compact Block", key: "whetherInCompactBlock" },
+  { label: "NWL_APPLICANT_ANY_ENCUMBRANCE_WITH_RESPECT_TO_FOLLOWING", key: "encumbrance" },
+  { label: "NWL_APPLICANT_EXISTING_LITIGATION_IF_ANY_CONCERNING_APPLIED_LAND", key: "existinglitigation" },
+  { label: "NWL_APPLICANT_COURT_ORDERS_IF_ANY_AFFECTING_APPLIED_LAND", key: "courtOrders" },
+  { label: "NWL_APPLICANT_ANY_INSOLVENCY_LIQUIDATION_PROCEESSDING_AGAINST_THE_LAND_OWING", key: "anyInsolvency" },
+  { label: "NWL_APPLICANT_ANY_INSOLVENCY_Y_REMARKS_LAND_OWING", key: "insolvencyRemark" },
+  { label: "NWL_APPLICANT_AS_PER_APPLIED_LAND_SHAJRA_PLAN", key: "asPerAppliedLand" },
+  { label: "NWL_APPLICANT_REVENUE_RASTA_SHAJRA_PLAN", key: "revenueRasta" },
+  { label: "NWL_APPLICANT_WATERCOURSE_SHAJRA_PLAN", key: "waterCourseRunning" },
+  { label: "NWL_APPLICANT_WHETHER_IN_COMPACT_BLOCK_SHAJRA_PLAN", key: "whetherInCompactBlock" },
   { label: "Land Sandwiched", key: "landSandwiche" },
-  { label: "Acquisition status", key: "acquisitionStatus" },
-  { label: "Date of section 4 notification", key: "dateOfSection4Notification" },
-  { label: "Date of section 6 notification", key: "dateOfSection6Notification" },
-  { label: "Orders Upload", key: "ordersUpload" },
+  { label: "NWL_APPLICANT_ACQUISITION_STATUS_SHAJRA_PLAN", key: "acquisitionStatus" },
+  { label: "NWL_APPLICANT_ACQUISITION_STATUS_Y_DATE_SECTION4_SHAJRA_PLAN", key: "dateOfSection4Notification" },
+  { label: "NWL_APPLICANT_ACQUISITION_STATUS_Y_DATE_SECTION6_SHAJRA_PLAN", key: "dateOfSection6Notification" },
+  { label: "NWL_APPLICANT_ACQUISITION_STATUS_Y_DATE_AWAED_SHAJRA_PLAN", key: "dateAwaedNotification" },
+  { label: "NWL_APPLICANT_WHETER_LAND_RELEASED_EXCLUDED_FROM_AQUSITION_DATE_AWAED_SHAJRA_PLAN", key: "ordersUpload" },
   { label: "whether the applied site is approachable from the proposed 18/24 m internal sectoral plan road/sector dividing road", key: "internalSectoralPlan" },
-  { label: "vacant", key: "vacant" },
+  { label: "NWL_APPLICANT_4_A_VACANT_SHAJRA_PLAN", key: "vacant" },
   { label: "Construction", key: "construction" },
-  { label: "HT line", key: "htLine" },
-  { label: "IOC Gas Pipeline", key: "iocGasPipeline" },
-  { label: "Nallah", key: "nallah" },
-  { label: "Any revenue rasta/road", key: "anyRevenueRasta" },
-  { label: "Any marginal land", key: "anyMarginalLand" },
+  { label: "NWL_APPLICANT_4_B_HT_LINE_SHAJRA_PLAN", key: "htLine" },
+  { label: "NWL_APPLICANT_4_C_IOC_GAS_PIPELINE_SHAJRA_PLAN", key: "iocGasPipeline" },
+  { label: "NWL_APPLICANT_4_D_NALLAH_SHAJRA_PLAN", key: "nallah" },
+  { label: "NWL_APPLICANT_4_E_ANY_REVENUE_REVENUE_RASTA_ROAD_PASSING_THROUGH_PROPOSED_SITE_SHAJRA_PLAN", key: "anyRevenueRasta" },
+  { label: "NWL_APPLICANT_F_UTILITY_PERMIT_LINE_SHAJRA_PLAN", key: "utilityLine" },
   { label: "Utility Line", key: "utilityLine" },
   { label: "Enclose the following documents as Annexures", key: "documentsAsAnnexures" },
-  { label: "Land schedule", key: "landSchedule" },
-  { label: "Copy of Mutation", key: "copyOfMutation" },
-  { label: "Copy of Jamabandi", key: "copyOfJamabandi" },
-  { label: "Details of lease / patta, if any", key: "detailsOfLease" },
-  { label: "Add Sales/deed/exchange", key: "addSalesDeed" },
-  { label: "Copy of spa/GPA/board resolution", key: "copyofSpaBoard" },
+  { label: "NWL_APPLICANT_LAND_SCHEDULE", key: "landSchedule" },
+  { label: "NWL_APPLICANT_AQUSITION_Y_COPY_OF_RELEASE_ORDER_SHAJRA_PLAN", key: "copyOfMutation" },
+  { label: "NWL_APPLICANT_COPY_OF_MUTATIION", key: "copyOfMutationDoc" },
+  { label: "NWL_APPLICANT_COPY_OF_JAMABANDI", key: "copyOfJamabandi" },
+  { label: "NWL_APPLICANT_DETAILS_OF_LEASE_PATTA", key: "detailsOfLease" },
+  { label: "NWL_APPLICANT_SALES_DEED_EXCHANGE_DEED", key: "addSalesDeed" },
+  { label: "NWL_APPLICANT_COPY_OF_SPA_GPA_BOARD", key: "copyofSpaBoard" },
   { label: "Revised Land Schedule", key: "revisedLansSchedule" },
-  { label: "Copy of Shajra Plan", key: "copyOfShajraPlan" },
+  { label: "NWL_APPLICANT_E_E1_IF_Y_COPY_OF_GIFT_DEED_SHAJRA_PLAN", key: "copyOfShajraPlan" },
   { label: "Date", key: "dateMigration" },
   { label: "Khasra number", key: "khasraNumber" },
   { label: "Area", key: "areaMigration" },
@@ -410,26 +436,42 @@ const Developerinfo = (props) => {
   { label: "Download Previously approved Layout Plan", key: "uploadPreviouslyLayoutPlan" },
   { label: "Validity of Parent Licence", key: "validityOfParentLicence" },
   { label: "Approved Layout of Plan/ Site plan for(GH)Showing Area(s)/Proposed migration", key: "approvedLayoutOfPlan" },
-  { label: "Whether land compensation received", key: "landCompensationReceived" },
-  { label: "Status of release", key: "statusOfRelease" },
+  { label: "NWL_APPLICANT_AQUSITION_Y_WHETER_LAND_COMPENSATION_SHAJRA_PLAN", key: "landCompensation" },
+  { label: "NWL_APPLICANT_WHETHER_Y_WHETER_LITIGATION_REGARDING_RELEASE_OF_LAND_SHAJRA_PLAN", key: "landCompensationReceived" },
+  { label: "NWL_APPLICANT_AQUSITION_Y_STATUS_OF_RELEASE_SHAJRA_PLAN", key: "statusOfRelease" },
+  { label: "NWL_APPLICANT_AQUSITION_Y_CWP_SLP_NUMBER_SHAJRA_PLAN", key: "statusOfReleases" },
   { label: "Date of Award", key: "dateOfAward" },
-  { label: "Date of Release", key: "dateOfRelease" },
-  { label: "Site Details", key: "siteDetails" },
-  { label: "(h) Details of existing approach as per policy dated 20-10-20", key: "siteApproachable" },
-  { label: "(a)  Approach available from minimum 4 karam (22 ft) wide revenue rasta", key: "minimumApproachFour" },
-  { label: "(b) Approach available from minimum 11 feet wide revenue rasta and applied site abuts acquired alignment of the sector road and there is no stay regarding construction on the land falling under the abutting sector road", key: "minimumApproachEleven" },
-  { label: "(c) Applied site abouts already constructed sector road or internal circulation road of approved sectoral plan (of min. 18m/24m width as the case may be) provided its entire stretch required for approach is licenced and is further leading upto atleast 4 karam wide revenue rasta.", key: "applicantHasDonated" },
-  { label: "(d) Applied land is accessible from a minimum 4 karam wide rasta through adjoining own land of the applicant (but not applied for licence)", key: "joiningOwnLand" },
-  { label: "(d1)  If applicable, whether the applicant has donated at least 4 karam wide strip from its adjoining own land in favour of the Gram Panchayat/Municipality, in order to connect the applied site to existing 4 karam rasta?", key: "landOwnerDonated" },
-  { label: "(e) Applied land is accessible from a minimum 4 karam wide rasta through adjoining other’s land", key: "adjoiningOthersLand" },
+  { label: "NWL_APPLICANT_AQUSITION_Y_DATE_OF_RELEASE_SHAJRA_PLAN", key: "dateOfRelease" },
+  { label: "NWL_APPLICANT_AQUSITION_Y_SITE_DETAILS_SHAJRA_PLAN", key: "siteDetails" },
+  { label: "NWL_APPLICANT_DETAILS_OF_EXISTING_APPROACH_AS_PER_POLICY_SHAJRA_PLAN", key: "siteApproachable" },
+  { label: "NWL_APPLICANT_APPROACH_AVAILABLE_FROM_MINIMUN_KARAM_SHAJRA_PLAN", key: "minimumApproachFour" },
+  { label: "NWL_APPLICANT_APPROACH_AVAILABLE_FROM_MINIMUN_FEET_WIDE_REVENUE_SHAJRA_PLAN", key: "minimumApproachEleven" },
+  { label: "NWL_APPLICANT_APPLIED_SITE__ABOUTS_ALREADY_CONSTRUCTED_SECTOR_ROAD_SHAJRA_PLAN", key: "alreadyConstructedSector" },
+  { label: "NWL_APPLICANT_D_D1_IF_APPLICABLE_WHETHER_THE_APPLICATION_HAS_DONATED_SHAJRA_PLAN", key: "applicantHasDonated" },
+  { label: "NWL_APPLICANT_APPLIED_LAND_IS_ACCESSIBLE_FROM_A_MINIMUN_THROUGH_ADJOINING_SHAJRA_PLAN", key: "adjoiningOwnLand" },
+  { label: "NWL_APPLICANT_E_Y_E1_WHETHER_THE_LAND-OWNER_OF_THE_ADJOINING_DONATED_KARAM_SHAJRA_PLAN", key: "landOwnerDonated" },
+  { label: "NWL_APPLICANT_E_APPLIED_LAND_IS_ACCESSIBLE_FROM_MINIMUN_KARAM_SHAJRA_PLAN", key: "adjoiningOthersLand" },
   { label: "(e1) whether the land-owner of the adjoining land has donated at least 4 karam wide strip of land to the Gram Panchayat/Municipality, in a manner that the applied site gets connected to existing public rasta of atleast 4 karam width?", key: "siteApproachable" },
   { label: "whether the applied site is approachable from the proposed 18/24 m internal sectoral plan road/sector dividing road.", key: "siteApproachable" },
-  { label: "Upload copy of Gift Deed/ Hibbanama", key: "giftDeedHibbanama" },
-  // { label: "(h) Details of existing approach as per policy dated 20-10-20", key: "siteApproachable" },
-  // { label: "(h) Details of existing approach as per policy dated 20-10-20", key: "siteApproachable" },
-  // { label: "(h) Details of existing approach as per policy dated 20-10-20", key: "siteApproachable" },
-  // { label: "(h) Details of existing approach as per policy dated 20-10-20", key: "siteApproachable" },
-  // { label: "(h) Details of existing approach as per policy dated 20-10-20", key: "siteApproachable" },
+  { label: "NWL_APPLICANT_D_D1_IF_Y_COPY_OF_GIFT_DEED_SHAJRA_PLAN", key: "giftDeedHibbanama" },
+  { label: "NWL_APPLICANT_N_A_ENTER_WIDTH_IN_METERS_SHAJRA_PLAN", key: "constructedRowWidth" },
+  { label: "NWL_APPLICANT_N_B_WHETHER_IRREVOCABLE_CONSENT_FROM_SUCH_DEVELOPER_COLONIZER_SHAJRA_PLAN", key: "irrevocableConsentYes" },
+  { label: "NWL_APPLICANT_N_C_ACCESS_FROM_NH_SR_SHAJRA_PLAN", key: "NHSRAccess" },
+  { label: "NWL_APPLICANT_N_I_SITE_APPROACHABLE_FROM_PROPOSED_SECTOR_ROAD_SHAJRA_PLAN", key: "approachFromProposedSector" },
+  { label: "NWL_APPLICANT_N_ENTER_WIDTH_IN_METERS_SHAJRA_PLAN", key: "sectorAndDevelopmentWidth" },
+  { label: "NWL_APPLICANT_N_B_WHETHER_ACQUIRED_SHAJRA_PLAN", key: "whetherAcquired" },
+  { label: "NWL_APPLICANT_N_C_WHETHER_CONSTRUCTED_SHAJRA_PLAN", key: "whetherConstructed" },
+  { label: "NWL_APPLICANT_N_D_WHETHER_SERVICE_ROAD_ALONG_SECTOR_ROAD_ACQURIED_SHAJRA_PLAN", key: "serviceSectorRoadAcquired" },
+  { label: "NWL_APPLICANT_N_D_WHETHER_SERVICE_ROAD_ALONG_E_SECTOR_ROAD_CONSTRUCTED_SHAJRA_PLAN", key: "serviceSectorRoadConstructed" },
+  { label: "NWL_APPLICANT_N_2_SITE_APPROACHABLE_FROM_INTERNAL_CIRCULATION_SECTORAL_ROAD_SHAJRA_PLAN", key: "approachFromInternalCirculation" },
+  { label: "NWL_APPLICANT_N_2_SITE_APPROACHABLE_A_ENTER_WIDTH_IN_METERS_SHAJRA_PLAN", key: "internalAndSectoralWidth" },
+  { label: "NWL_APPLICANT_N_2_B_WHETHER_ACQUIRED_SHAJRA_PLAN", key: "whetherAcquiredForInternalCirculation" },
+  { label: "NWL_APPLICANT_N_2_C_WHETHER_CONSTRUCTED_SHAJRA_PLAN", key: "whetherConstructedForInternalCirculation" },
+  { label: "NWL_APPLICANT_N_2_J_WHETHER_APPROACH_FROM_PARENT_LICENCE_SHAJRA_PLAN", key: "parentLicenceApproach" },
+  { label: "NWL_APPLICANT_N_2_K_ANY_OTHER_TYPE_OF_EXISITING_APPROACH_AVAILABLE_SHAJRA_PLAN", key: "availableExistingApproach" },
+  { label: "NWL_APPLICANT_G_COMPACT_BLOCK_SHAJRA_PLAN", key: "compactBlock" },
+  { label: "NWL_APPLICANT_H_WHETHER_OTHERS_LAND_FALL_SHAJRA_PLAN", key: "othersLandFall" },
+  { label: "NWL_APPLICANT_J_ANY_OTHERS_PASSING_THROUGH_SITE_SHAJRA_PLAN", key: "passingOtherFeature" },
   // { label: "(h) Details of existing approach as per policy dated 20-10-20", key: "siteApproachable" },
   // { label: "(h) Details of existing approach as per policy dated 20-10-20", key: "siteApproachable" },
   // { label: "(h) Details of existing approach as per policy dated 20-10-20", key: "siteApproachable" },
@@ -508,7 +550,7 @@ const Developerinfo = (props) => {
         applicationStatus={applicationStatus}
       ></ModalChild>
   
-      <div
+      {/* <div
         className="collapse-header"
         onClick={() => setOpen(!open)}
         aria-controls="example-collapse-text"
@@ -531,15 +573,15 @@ const Developerinfo = (props) => {
         {open ? <RemoveIcon></RemoveIcon> : <AddIcon></AddIcon>}
       </div>
       <Collapse in={open}>
-        <div id="example-collapse-text">
+        <div id="example-collapse-text"> */}
         {/* {!additionalDocResponData?.AdditionalDocumentReport?.[0]?.applicantInfo == null && */}
-        <div>
+        {/* <div>
             <LandSchedule
             additionalDocRespon={additionalDocResponData}
            
             />
        
-          </div>
+          </div> */}
           
 {/* } */}
 
@@ -1206,7 +1248,7 @@ const Developerinfo = (props) => {
 
 
               {/* <h5>
-                2. Any encumbrance with respect to following :&nbsp;&nbsp;
+                2. NWL_APPLICANT_ANY_ENCUMBRANCE_WITH_RESPECT_TO_FOLLOWING :&nbsp;&nbsp;
               </h5> */}
               <label htmlFor="Developer Details">
               {`${t("NWL_APPLICANT_ANY_ENCUMBRANCE_WITH_RESPECT_TO_FOLLOWING")}`}
@@ -1244,7 +1286,7 @@ const Developerinfo = (props) => {
                     color: fieldIconColors.encumbrance
                   }}
                   onClick={() => {
-                    setLabelValue("Any encumbrance with respect to following"),
+                    setLabelValue("NWL_APPLICANT_ANY_ENCUMBRANCE_WITH_RESPECT_TO_FOLLOWING"),
                       setOpennedModal("encumbrance")
                     setSmShow(true),
                       setDocModal(false),
@@ -1316,7 +1358,7 @@ const Developerinfo = (props) => {
             <hr className="mb-3" />
             <Row className={classes.formLabel}>
               {/* <h6 >
-                (ii) Existing litigation, if any, concerning applied land including co-sharers and collaborator.
+                (ii) NWL_APPLICANT_EXISTING_LITIGATION_IF_ANY_CONCERNING_APPLIED_LAND.
               </h6> */}
               <label htmlFor="Developer Details">
                 {`${t("NWL_APPLICANT_EXISTING_LITIGATION_IF_ANY_CONCERNING_APPLIED_LAND")}`}
@@ -1333,7 +1375,7 @@ const Developerinfo = (props) => {
                     color: fieldIconColors.existinglitigation
                   }}
                   onClick={() => {
-                    setLabelValue("Existing litigation, if any, concerning applied land including co-sharers and collaborator"),
+                    setLabelValue("NWL_APPLICANT_EXISTING_LITIGATION_IF_ANY_CONCERNING_APPLIED_LAND"),
                       setOpennedModal("existinglitigation")
                     setSmShow(true),
                       setDocModal(false),
@@ -1353,7 +1395,7 @@ const Developerinfo = (props) => {
 
                     <div >
                       <hr className="mb-3" />
-                      {/* <h6 > Court orders, if any, affecting applied land   </h6> */}
+                      {/* <h6 > NWL_APPLICANT_COURT_ORDERS_IF_ANY_AFFECTING_APPLIED_LAND   </h6> */}
                       <label htmlFor="Developer Details">
                         {`${t("NWL_APPLICANT_COURT_ORDERS_IF_ANY_AFFECTING_APPLIED_LAND")}`}
                         <span class="text-danger font-weight-bold mx-2">*</span>
@@ -1369,7 +1411,7 @@ const Developerinfo = (props) => {
                           color: fieldIconColors.courtOrders
                         }}
                         onClick={() => {
-                          setLabelValue("Court orders, if any, affecting applied land"),
+                          setLabelValue("NWL_APPLICANT_COURT_ORDERS_IF_ANY_AFFECTING_APPLIED_LAND"),
                             setOpennedModal("courtOrders")
                           setSmShow(true),
                             setDocModal(false),
@@ -1449,7 +1491,7 @@ const Developerinfo = (props) => {
                       color: fieldIconColors.anyInsolvency
                     }}
                     onClick={() => {
-                      setLabelValue("Any insolvency/liquidation proceedings against the land owner(s)/ collaborating developed"),
+                      setLabelValue("NWL_APPLICANT_ANY_INSOLVENCY_LIQUIDATION_PROCEESSDING_AGAINST_THE_LAND_OWING"),
                         setOpennedModal("anyInsolvency")
                       setSmShow(true),
                         setDocModal(false),
@@ -1486,7 +1528,7 @@ const Developerinfo = (props) => {
                         color: fieldIconColors.insolvencyRemark
                       }}
                       onClick={() => {
-                        setLabelValue("Remark"),
+                        setLabelValue("NWL_APPLICANT_ANY_INSOLVENCY_Y_REMARKS_LAND_OWING"),
                           setOpennedModal("insolvencyRemark")
                         setSmShow(true),
                           setDocModal(false),
@@ -1508,10 +1550,11 @@ const Developerinfo = (props) => {
                       <IconButton onClick={() => getDocShareholding(landScheduleData?.insolvencyDoc)}>
                         <DownloadForOfflineIcon color="primary" className="mx-1" />
                       </IconButton>
+                      <IconButton onClick={() => getDocShareholding(landScheduleData?.insolvencyDoc)}>
+                        <Visibility color="primary" className="mx-1" />
+                      </IconButton>
                     </Col>
-                    <Col className="ms-auto" md={4} xxl lg="4">
-
-                    </Col>
+                   
                   </div>
 
                 )}
@@ -1528,7 +1571,7 @@ const Developerinfo = (props) => {
             <div className="row mx-1">
               <div className="col col-3 p-1">
                 <h6>
-                  {/* (a) As per applied land */}
+                  {/* (a) NWL_APPLICANT_AS_PER_APPLIED_LAND_SHAJRA_PLAN */}
                   {`${t("NWL_APPLICANT_AS_PER_APPLIED_LAND_SHAJRA_PLAN")}`}
 
                   <div className="d-flex flex-row align-items-center my-1 ">
@@ -1543,7 +1586,7 @@ const Developerinfo = (props) => {
                         color: fieldIconColors.asPerAppliedLand
                       }}
                       onClick={() => {
-                        setLabelValue("As per applied land"),
+                        setLabelValue("NWL_APPLICANT_AS_PER_APPLIED_LAND_SHAJRA_PLAN"),
                           setOpennedModal("asPerAppliedLand")
                         setSmShow(true),
                           setDocModal(false),
@@ -1577,8 +1620,8 @@ const Developerinfo = (props) => {
                 }
 
 
-{
-                  landScheduleData?.appliedLand === "N" &&
+{/* {
+                  landScheduleData?.appliedLand === "N" && */}
                   <div className="row ml-1 mr-2">
                     <div className="col  p-1" >
                       {/* <h6>Download Document</h6> */}
@@ -1595,9 +1638,9 @@ const Developerinfo = (props) => {
                   
                   </div>
 
-                }
+                {/* }
 {
-                  landScheduleData?.appliedLand === "N" &&
+                  landScheduleData?.appliedLand === "N" && */}
                   <div className="row ml-1 mr-2">
                       <div className="col  p-1" >
                       {/* <h6>Download Document</h6> */}
@@ -1615,7 +1658,7 @@ const Developerinfo = (props) => {
                     </div>
                  
 
-                }
+                {/* } */}
                  
 
               </div>
@@ -1639,7 +1682,7 @@ const Developerinfo = (props) => {
                       color: fieldIconColors.revenueRasta
                     }}
                     onClick={() => {
-                      setLabelValue("Revenue rasta"),
+                      setLabelValue("NWL_APPLICANT_REVENUE_RASTA_SHAJRA_PLAN"),
                         setOpennedModal("revenueRasta")
                       setSmShow(true),
                         setDocModal(false),
@@ -1685,7 +1728,7 @@ const Developerinfo = (props) => {
                       color: fieldIconColors.waterCourseRunning
                     }}
                     onClick={() => {
-                      setLabelValue("Watercourse running"),
+                      setLabelValue("NWL_APPLICANT_WATERCOURSE_SHAJRA_PLAN"),
                         setOpennedModal("waterCourseRunning")
                       setSmShow(true),
                         setDocModal(false),
@@ -1708,15 +1751,15 @@ const Developerinfo = (props) => {
               </div>
               <div className="col col-3 p-1">
                 {/* <h6>
-                  (d)&nbsp;Whether in Compact Block
+                  (d)&nbsp;NWL_APPLICANT_WHETHER_IN_COMPACT_BLOCK_SHAJRA_PLAN
                 </h6> */}
                 {`${t("NWL_APPLICANT_WHETHER_IN_COMPACT_BLOCK_SHAJRA_PLAN")}`}
 
                 <div className="d-flex flex-row align-items-center my-1 ">
 
-                  <input type="radio" disabled value="Yes" checked={landScheduleData?.compactBlock === "Y" ? true : false} />
+                  <input type="radio" disabled value="Yes" checked={landScheduleData?.whetherCompactBlock === "Y" ? true : false} />
                   <label className="m-0  mx-2" for="Yes">Yes</label>&nbsp;&nbsp;
-                  <input type="radio" disabled value="No" checked={landScheduleData?.compactBlock === "N" ? true : false} />
+                  <input type="radio" disabled value="No" checked={landScheduleData?.whetherCompactBlock === "N" ? true : false} />
                   <label className="m-0 mx-2" for="No">No</label>
                   <ReportProblemIcon
                     style={{
@@ -1724,18 +1767,18 @@ const Developerinfo = (props) => {
                       color: fieldIconColors.whetherInCompactBlock
                     }}
                     onClick={() => {
-                      setLabelValue("Whether in Compact Block"),
+                      setLabelValue("NWL_APPLICANT_WHETHER_IN_COMPACT_BLOCK_SHAJRA_PLAN"),
                         setOpennedModal("whetherInCompactBlock")
                       setSmShow(true),
                         setDocModal(false),
                         console.log("modal open"),
-                        setFieldValue(landScheduleData?.compactBlock === "Y" ? "Yes" : landScheduleData?.compactBlock === "N" ? "No" : null);
+                        setFieldValue(landScheduleData?.whetherCompactBlock === "Y" ? "Yes" : landScheduleData?.whetherCompactBlock === "N" ? "No" : null);
                     }}
                   ></ReportProblemIcon>
                 </div>
 
 
-                {landScheduleData?.compactBlock === "Y" && (
+                {landScheduleData?.whetherCompactBlock === "Y" && (
                   <div className="row ml-1 mr-2">
                     <div className="col col p-1">
                       {`${t("NWL_APPLICANT_WHETHER_IN_COMPACT_BLOCK_SEPARATED_SHAJRA_PLAN")}`}
@@ -1750,7 +1793,7 @@ const Developerinfo = (props) => {
                   </div>
                 )}
 
-{landScheduleData?.compactBlock === "N" && (
+{landScheduleData?.whetherCompactBlock === "N" && (
                   <div className="row ml-1 mr-2">
                     <div className="col">
                       {`${t("NWL_APPLICANT_WHETHER_IN_COMPACT_BLOCK_SEPARATED_SHAJRA_PLAN")}`}
@@ -1764,7 +1807,7 @@ const Developerinfo = (props) => {
                     <div className="col col-4">
                     {`${t("NWL_APPLICANT_WHETHER_IN_COMPACT_BLOCK_POCKET_SHAJRA_PLAN")}`}
                    
-                    <Form.Control placeholder={landScheduleData?.compactBlockRemark}
+                    <Form.Control placeholder={landScheduleData?.pocket}
                       className={classes.formLabel}
                         disabled></Form.Control>
                             </div>
@@ -1822,7 +1865,7 @@ const Developerinfo = (props) => {
               </div> */}
               <div className="col col-3 p-1">
                 {/* <h6>
-                  (f) Acquisition status
+                  (f) NWL_APPLICANT_ACQUISITION_STATUS_SHAJRA_PLAN
                 </h6> */}
                 {`${t("NWL_APPLICANT_ACQUISITION_STATUS_SHAJRA_PLAN")}`}
 
@@ -1837,7 +1880,7 @@ const Developerinfo = (props) => {
                       color: fieldIconColors.acquisitionStatus
                     }}
                     onClick={() => {
-                      setLabelValue("Acquisition status"),
+                      setLabelValue("NWL_APPLICANT_ACQUISITION_STATUS_SHAJRA_PLAN"),
                         setOpennedModal("acquisitionStatus")
                       setSmShow(true),
                         setDocModal(false),
@@ -1864,7 +1907,7 @@ const Developerinfo = (props) => {
                                 color: fieldIconColors.dateOfSection4Notification
                               }}
                               onClick={() => {
-                                setLabelValue("Date of section 4 notification"),
+                                setLabelValue("NWL_APPLICANT_ACQUISITION_STATUS_Y_DATE_SECTION4_SHAJRA_PLAN"),
                                   setOpennedModal("dateOfSection4Notification")
                                 setSmShow(true),
                                   setDocModal(false),
@@ -1881,7 +1924,7 @@ const Developerinfo = (props) => {
                       <div className="col col-12">
                         <div>
                           {`${t("NWL_APPLICANT_ACQUISITION_STATUS_Y_DATE_SECTION6_SHAJRA_PLAN")}`}
-                          {/* <label className="m-0">Date of section 6 notification</label> */}
+               
                           <div className="d-flex flex-row align-items-center my-1 ">
                             <Form.Control
 
@@ -1893,7 +1936,7 @@ const Developerinfo = (props) => {
                                 color: fieldIconColors.dateOfSection6Notification
                               }}
                               onClick={() => {
-                                setLabelValue("Date of section 6 notification"),
+                                setLabelValue("NWL_APPLICANT_ACQUISITION_STATUS_Y_DATE_SECTION6_SHAJRA_PLAN"),
                                   setOpennedModal("dateOfSection6Notification")
                                 setSmShow(true),
                                   setDocModal(false),
@@ -1902,7 +1945,7 @@ const Developerinfo = (props) => {
                               }}
                             ></ReportProblemIcon>
                           </div>
-                          {/* <Form.Control style={{ maxWidth: 200, marginTop: 10 }} disabled></Form.Control> */}
+                   
                         </div>
                       </div>
                     </div>
@@ -1920,11 +1963,11 @@ const Developerinfo = (props) => {
                           <ReportProblemIcon
                             style={{
                               display: hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_ACQUISITION_STATUS_Y_DATE_AWAED_SHAJRA_PLAN") ? "block" : "none",
-                              color: fieldIconColors.dateOfSection6Notification
+                              color: fieldIconColors.dateAwaedNotification
                             }}
                             onClick={() => {
-                              setLabelValue("Date of section 6 notification"),
-                                setOpennedModal("dateOfSection6Notification")
+                              setLabelValue("NWL_APPLICANT_ACQUISITION_STATUS_Y_DATE_AWAED_SHAJRA_PLAN"),
+                                setOpennedModal("dateAwaedNotification")
                               setSmShow(true),
                                 setDocModal(false),
                                 console.log("modal open"),
@@ -1964,7 +2007,7 @@ const Developerinfo = (props) => {
                           color: fieldIconColors.ordersUpload
                         }}
                         onClick={() => {
-                          setLabelValue("Orders Upload"),
+                          setLabelValue("NWL_APPLICANT_WHETER_LAND_RELEASED_EXCLUDED_FROM_AQUSITION_DATE_AWAED_SHAJRA_PLAN"),
                             setOpennedModal("ordersUpload")
                           setSmShow(true),
                             setDocModal(false),
@@ -1995,15 +2038,15 @@ const Developerinfo = (props) => {
                             <ReportProblemIcon
                               style={{
                                 display: hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_AQUSITION_Y_WHETER_LAND_COMPENSATION_SHAJRA_PLAN") ? "block" : "none",
-                                color: fieldIconColors.landCompensationReceived
+                                color: fieldIconColors.landCompensation
                               }}
                               onClick={() => {
-                                setLabelValue("Whether land compensation received"),
-                                  setOpennedModal("landCompensationReceived")
+                                setLabelValue("NWL_APPLICANT_AQUSITION_Y_WHETER_LAND_COMPENSATION_SHAJRA_PLAN"),
+                                  setOpennedModal("landCompensation")
                                 setSmShow(true),
                                   setDocModal(false),
                                   console.log("modal open"),
-                                  setFieldValue(landScheduleData?.compensationReceived === "Y" ? "Yes" : landScheduleData?.compensationReceived === "N" ? "No" : null);
+                                  setFieldValue(landScheduleData?.landCompensation === "Y" ? "Yes" : landScheduleData?.landCompensation === "N" ? "No" : null);
                               }}
                             ></ReportProblemIcon>
 
@@ -2032,7 +2075,7 @@ const Developerinfo = (props) => {
                                   color: fieldIconColors.statusOfRelease
                                 }}
                                 onClick={() => {
-                                  setLabelValue("Status of release"),
+                                  setLabelValue("NWL_APPLICANT_AQUSITION_Y_STATUS_OF_RELEASE_SHAJRA_PLAN"),
                                     setOpennedModal("statusOfRelease")
                                   setSmShow(true),
                                     setDocModal(false),
@@ -2065,7 +2108,7 @@ const Developerinfo = (props) => {
                                   color: fieldIconColors.dateOfRelease
                                 }}
                                 onClick={() => {
-                                  setLabelValue("Date of Release"),
+                                  setLabelValue("NWL_APPLICANT_AQUSITION_Y_DATE_OF_RELEASE_SHAJRA_PLAN"),
                                     setOpennedModal("dateOfRelease")
                                   setSmShow(true),
                                     setDocModal(false),
@@ -2099,7 +2142,7 @@ const Developerinfo = (props) => {
                                     color: fieldIconColors.copyOfMutation
                                   }}
                                   onClick={() => {
-                                    setLabelValue("Copy of Mutation"),
+                                    setLabelValue("NWL_APPLICANT_AQUSITION_Y_COPY_OF_RELEASE_ORDER_SHAJRA_PLAN"),
                                       setOpennedModal("copyOfMutation")
                                     setSmShow(true),
                                       setDocModal(true),
@@ -2145,7 +2188,7 @@ const Developerinfo = (props) => {
                                   color: fieldIconColors.siteDetails
                                 }}
                                 onClick={() => {
-                                  setLabelValue("Site Details"),
+                                  setLabelValue("NWL_APPLICANT_AQUSITION_Y_SITE_DETAILS_SHAJRA_PLAN"),
                                     setOpennedModal("siteDetails")
                                   setSmShow(true),
                                     setDocModal(false),
@@ -2167,9 +2210,9 @@ const Developerinfo = (props) => {
                           {/* <InfoIcon style={{color:"blue"}}/>  */}
                           <div className="d-flex flex-row align-items-center my-1 ">
                             {/* <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled></Form.Control> */}
-                            <input type="radio" disabled value="Yes" checked={landScheduleData?.landCompensation === "Y" ? true : false} />
+                            <input type="radio" disabled value="Yes" checked={landScheduleData?.litigationRegardingLandRelease === "Y" ? true : false} />
                             <label className="m-0  mx-2" for="Yes">Yes</label>&nbsp;&nbsp;
-                            <input type="radio" disabled value="No" checked={landScheduleData?.landCompensation === "N" ? true : false} />
+                            <input type="radio" disabled value="No" checked={landScheduleData?.litigationRegardingLandRelease === "N" ? true : false} />
                             <label className="m-0 mx-2" for="No">No</label>
 
                             <ReportProblemIcon
@@ -2178,12 +2221,12 @@ const Developerinfo = (props) => {
                                 color: fieldIconColors.landCompensationReceived
                               }}
                               onClick={() => {
-                                setLabelValue("Whether land compensation received"),
+                                setLabelValue("NWL_APPLICANT_WHETHER_Y_WHETER_LITIGATION_REGARDING_RELEASE_OF_LAND_SHAJRA_PLAN"),
                                   setOpennedModal("landCompensationReceived")
                                 setSmShow(true),
                                   setDocModal(false),
                                   console.log("modal open"),
-                                  setFieldValue(landScheduleData?.compensationReceived === "Y" ? "Yes" : landScheduleData?.compensationReceived === "N" ? "No" : null);
+                                  setFieldValue(landScheduleData?.litigationRegardingLandRelease === "Y" ? "Yes" : landScheduleData?.litigationRegardingLandRelease === "N" ? "No" : null);
                               }}
                             ></ReportProblemIcon>
 
@@ -2211,11 +2254,11 @@ const Developerinfo = (props) => {
                                 <ReportProblemIcon
                                   style={{
                                     display: hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_AQUSITION_Y_CWP_SLP_NUMBER_SHAJRA_PLAN") ? "block" : "none",
-                                    color: fieldIconColors.statusOfRelease
+                                    color: fieldIconColors.statusOfReleases
                                   }}
                                   onClick={() => {
-                                    setLabelValue("Status of release"),
-                                      setOpennedModal("statusOfRelease")
+                                    setLabelValue("NWL_APPLICANT_AQUSITION_Y_CWP_SLP_NUMBER_SHAJRA_PLAN"),
+                                      setOpennedModal("statusOfReleases")
                                     setSmShow(true),
                                       setDocModal(false),
                                       console.log("modal open"),
@@ -2261,7 +2304,7 @@ const Developerinfo = (props) => {
                       color: fieldIconColors.siteApproachable
                     }}
                     onClick={() => {
-                      setLabelValue("(h)  Details of existing approach as per policy dated 20-10-20."),
+                      setLabelValue("NWL_APPLICANT_DETAILS_OF_EXISTING_APPROACH_AS_PER_POLICY_SHAJRA_PLAN"),
                         setOpennedModal("siteApproachable")
                       setSmShow(true),
                         setDocModal(false),
@@ -2277,7 +2320,7 @@ const Developerinfo = (props) => {
                     <div className="row">
                       <div class="col-sm-7 text-left">
                         <h6>
-                          {/* (a)  Approach available from minimum 4 karam (22 ft) wide revenue rasta */}
+                          {/* NWL_APPLICANT_APPROACH_AVAILABLE_FROM_MINIMUN_KARAM_SHAJRA_PLAN */}
                           {`${t("NWL_APPLICANT_APPROACH_AVAILABLE_FROM_MINIMUN_KARAM_SHAJRA_PLAN")}`}
                         </h6>
 
@@ -2300,7 +2343,7 @@ const Developerinfo = (props) => {
                             color: fieldIconColors.ordersUpload
                           }}
                           onClick={() => {
-                            setLabelValue("(a)  Approach available from minimum 4 karam (22 ft) wide revenue rasta"),
+                            setLabelValue("NWL_APPLICANT_APPROACH_AVAILABLE_FROM_MINIMUN_KARAM_SHAJRA_PLAN"),
                               setOpennedModal("minimumApproachFour")
                             setSmShow(true),
                               setDocModal(false),
@@ -2336,7 +2379,7 @@ const Developerinfo = (props) => {
                             color: fieldIconColors.minimumApproachEleven
                           }}
                           onClick={() => {
-                            setLabelValue("(b) Approach available from minimum 11 feet wide revenue rasta and applied site abuts acquired alignment of the sector road and there is no stay regarding construction on the land falling under the abutting sector road"),
+                            setLabelValue("NWL_APPLICANT_APPROACH_AVAILABLE_FROM_MINIMUN_FEET_WIDE_REVENUE_SHAJRA_PLAN"),
                               setOpennedModal("minimumApproachEleven")
                             setSmShow(true),
                               setDocModal(false),
@@ -2372,7 +2415,7 @@ const Developerinfo = (props) => {
                             color: fieldIconColors.alreadyConstructedSector
                           }}
                           onClick={() => {
-                            setLabelValue("(c) Applied site abouts already constructed sector road or internal circulation road of approved sectoral plan (of min. 18m/24m width as the case may be) provided its entire stretch required for approach is licenced and is further leading upto atleast 4 karam wide revenue rasta."),
+                            setLabelValue("NWL_APPLICANT_APPLIED_SITE__ABOUTS_ALREADY_CONSTRUCTED_SECTOR_ROAD_SHAJRA_PLAN"),
                               setOpennedModal("alreadyConstructedSector")
                             setSmShow(true),
                               setDocModal(false),
@@ -2406,11 +2449,11 @@ const Developerinfo = (props) => {
                         <ReportProblemIcon
                           style={{
                             display: hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_APPLIED_LAND_IS_ACCESSIBLE_FROM_A_MINIMUN_THROUGH_ADJOINING_SHAJRA_PLAN") ? "block" : "none",
-                            color: fieldIconColors.joiningOwnLand
+                            color: fieldIconColors.adjoiningOwnLand
                           }}
                           onClick={() => {
-                            setLabelValue("(d)  Applied land is accessible from a minimum 4 karam wide rasta through adjoining own land of the applicant (but not applied for licence)"),
-                              setOpennedModal("joiningOwnLand")
+                            setLabelValue("NWL_APPLICANT_APPLIED_LAND_IS_ACCESSIBLE_FROM_A_MINIMUN_THROUGH_ADJOINING_SHAJRA_PLAN"),
+                              setOpennedModal("adjoiningOwnLand")
                             setSmShow(true),
                               setDocModal(false),
                               console.log("modal open"),
@@ -2425,7 +2468,6 @@ const Developerinfo = (props) => {
                       <div className="row">
                         <div class="col-sm-7 text-left">
                           <h6>
-                            {/* (d1)  If applicable, whether the applicant has donated at least 4 karam wide strip from its adjoining own land in favour of the Gram Panchayat/Municipality, in order to connect the applied site to existing 4 karam rasta? */}
                             {`${t("NWL_APPLICANT_D_D1_IF_APPLICABLE_WHETHER_THE_APPLICATION_HAS_DONATED_SHAJRA_PLAN")}`}
                           </h6>
 
@@ -2439,31 +2481,17 @@ const Developerinfo = (props) => {
                             <label className="m-0  mx-2" for="Yes">Yes</label>&nbsp;&nbsp;
                             <input type="radio" disabled value="No" checked={landScheduleData?.applicantHasDonated === "N" ? true : false} />
                             <label className="m-0 mx-2" for="No">NO</label>
-                            {/* <ReportProblemIcon
-                              style={{
-                               display: hideRemarksPatwari && showReportProblemIcon("Address") ? "block" : "none",
-                                color: fieldIconColors.applicantHasDonated
-                              }}
-                              onClick={() => {
-                                setLabelValue("(d1)  If applicable, whether the applicant has donated at least 4 karam wide strip from its adjoining own land in favour of the Gram Panchayat/Municipality, in order to connect the applied site to existing 4 karam rasta?"),
-                                  setOpennedModal("applicantHasDonated")
-                                 setSmShow(true),
-                     setDocModal(false),
-                                  console.log("modal open"),
-                                  setFieldValue(landScheduleData?.applicantHasDonated === "Y" ? "Yes" : landScheduleData?.applicantHasDonated === "N" ? "No" : null);
-                              }}
-                            ></ReportProblemIcon> */}
-                          </div>
+                           </div>
                         </div>
                         <div class="col-sm-1 text-right">
                           <ReportProblemIcon
                             style={{
                               display: hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_D_D1_IF_APPLICABLE_WHETHER_THE_APPLICATION_HAS_DONATED_SHAJRA_PLAN") ? "block" : "none",
-                              color: fieldIconColors.joiningOwnLand
+                              color: fieldIconColors.applicantHasDonated
                             }}
                             onClick={() => {
-                              setLabelValue("(d)  Applied land is accessible from a minimum 4 karam wide rasta through adjoining own land of the applicant (but not applied for licence)"),
-                                setOpennedModal("joiningOwnLand")
+                              setLabelValue("NWL_APPLICANT_D_D1_IF_APPLICABLE_WHETHER_THE_APPLICATION_HAS_DONATED_SHAJRA_PLAN"),
+                                setOpennedModal("applicantHasDonated")
                               setSmShow(true),
                                 setDocModal(false),
                                 console.log("modal open"),
@@ -2480,7 +2508,7 @@ const Developerinfo = (props) => {
                         <div className="col col-3 p-1">
 
                           <h6>
-                            {/* Upload copy of Gift Deed/ Hibbanama */}
+                          
                             {`${t("NWL_APPLICANT_D_D1_IF_Y_COPY_OF_GIFT_DEED_SHAJRA_PLAN")}`}
                           </h6>
 
@@ -2495,7 +2523,7 @@ const Developerinfo = (props) => {
                                 color: fieldIconColors.giftDeedHibbanama
                               }}
                               onClick={() => {
-                                setLabelValue("Upload copy of Gift Deed/ Hibbanama"),
+                                setLabelValue("NWL_APPLICANT_D_D1_IF_Y_COPY_OF_GIFT_DEED_SHAJRA_PLAN"),
                                   setOpennedModal("giftDeedHibbanama")
                                 setSmShow(true),
                                   setDocModal(true),
@@ -2532,7 +2560,7 @@ const Developerinfo = (props) => {
                             color: fieldIconColors.ordersUpload
                           }}
                           onClick={() => {
-                            setLabelValue("(e)  Applied land is accessible from a minimum 4 karam wide rasta through adjoining other’s land"),
+                            setLabelValue("NWL_APPLICANT_E_APPLIED_LAND_IS_ACCESSIBLE_FROM_MINIMUN_KARAM_SHAJRA_PLAN"),
                               setOpennedModal("adjoiningOthersLand")
                             setSmShow(true),
                               setDocModal(false),
@@ -2569,7 +2597,7 @@ const Developerinfo = (props) => {
                               color: fieldIconColors.landOwnerDonated
                             }}
                             onClick={() => {
-                              setLabelValue("(e1)  whether the land-owner of the adjoining land has donated at least 4 karam wide strip of land to the Gram Panchayat/Municipality, in a manner that the applied site gets connected to existing public rasta of atleast 4 karam width?"),
+                              setLabelValue("NWL_APPLICANT_E_Y_E1_WHETHER_THE_LAND-OWNER_OF_THE_ADJOINING_DONATED_KARAM_SHAJRA_PLAN"),
                                 setOpennedModal("landOwnerDonated")
                               setSmShow(true),
                                 setDocModal(false),
@@ -2599,7 +2627,7 @@ const Developerinfo = (props) => {
                               color: fieldIconColors.copyOfShajraPlan
                             }}
                             onClick={() => {
-                              setLabelValue("Copy of Shajra Plan"),
+                              setLabelValue("NWL_APPLICANT_E_E1_IF_Y_COPY_OF_GIFT_DEED_SHAJRA_PLAN"),
                                 setOpennedModal("copyOfShajraPlan")
                               setSmShow(true),
                                 setDocModal(true),
@@ -2627,7 +2655,7 @@ const Developerinfo = (props) => {
                         </label>
                       </div>
                       <div class="col-sm-3 text-right">
-                        <Form.Control placeholder={landScheduleData !== null ? landScheduleData?.anyOtherRemark : null}
+                        <Form.Control placeholder={landScheduleData !== null ? landScheduleData?.constructedRowWidth : null}
                           className={classes.formLabel}
                           disabled></Form.Control>
                       </div>
@@ -2635,15 +2663,16 @@ const Developerinfo = (props) => {
                         <ReportProblemIcon
                           style={{
                             display: hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_N_A_ENTER_WIDTH_IN_METERS_SHAJRA_PLAN") ? "block" : "none",
-                            color: fieldIconColors.ordersUpload
+                            color: fieldIconColors.constructedRowWidth
                           }}
                           onClick={() => {
-                            setLabelValue("Orders Upload"),
-                              setOpennedModal("ordersUpload")
+                            setLabelValue("NWL_APPLICANT_N_A_ENTER_WIDTH_IN_METERS_SHAJRA_PLAN"),
+                              setOpennedModal("constructedRowWidth")
                             setSmShow(true),
                               setDocModal(false),
                               console.log("modal open"),
-                              setFieldValue(landScheduleData?.approachFromProposedSector === "Y" ? "Yes" : landScheduleData?.approachFromProposedSector === "N" ? "No" : null);
+                              setFieldValue(landScheduleData !== null ? landScheduleData?.constructedRowWidth : null);
+                            
                           }}
                         ></ReportProblemIcon>
                       </div>
@@ -2687,9 +2716,9 @@ const Developerinfo = (props) => {
                       <div class="col-sm-3 text-right">
                         <div className="d-flex flex-row align-items-center my-2 ">
                           &nbsp;&nbsp;
-                          <input type="radio" disabled value="Yes" checked={landScheduleData?.approachFromProposedSector === "Y" ? true : false} />
+                          <input type="radio" disabled value="Yes" checked={landScheduleData?.irrevocableConsentYes === "Y" ? true : false} />
                           <label className="m-0  mx-2" for="Yes">Yes</label>&nbsp;&nbsp;
-                          <input type="radio" disabled value="No" checked={landScheduleData?.approachFromProposedSector === "N" ? true : false} />
+                          <input type="radio" disabled value="No" checked={landScheduleData?.irrevocableConsentYes === "N" ? true : false} />
                           <label className="m-0 mx-2" for="No">No</label>
                         </div>
                       </div>
@@ -2697,15 +2726,15 @@ const Developerinfo = (props) => {
                         <ReportProblemIcon
                           style={{
                             display: hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_N_B_WHETHER_IRREVOCABLE_CONSENT_FROM_SUCH_DEVELOPER_COLONIZER_SHAJRA_PLAN") ? "block" : "none",
-                            color: fieldIconColors.ordersUpload
+                            color: fieldIconColors.irrevocableConsentYes
                           }}
                           onClick={() => {
-                            setLabelValue("Orders Upload"),
-                              setOpennedModal("ordersUpload")
+                            setLabelValue("NWL_APPLICANT_N_B_WHETHER_IRREVOCABLE_CONSENT_FROM_SUCH_DEVELOPER_COLONIZER_SHAJRA_PLAN"),
+                              setOpennedModal("irrevocableConsentYes")
                             setSmShow(true),
                               setDocModal(false),
                               console.log("modal open"),
-                              setFieldValue(landScheduleData?.approachFromProposedSector === "Y" ? "Yes" : landScheduleData?.approachFromProposedSector === "N" ? "No" : null);
+                              setFieldValue(landScheduleData?.irrevocableConsentYes === "Y" ? "Yes" : landScheduleData?.irrevocableConsentYes === "N" ? "No" : null);
                           }}
                         ></ReportProblemIcon>
                       </div>
@@ -2723,9 +2752,9 @@ const Developerinfo = (props) => {
                       <div class="col-sm-3 text-right">
                         <div className="d-flex flex-row align-items-center my-2 ">
                           &nbsp;&nbsp;
-                          <input type="radio" disabled value="Yes" checked={landScheduleData?.approachFromProposedSector === "Y" ? true : false} />
+                          <input type="radio" disabled value="Yes" checked={landScheduleData?.NHSRAccess === "Y" ? true : false} />
                           <label className="m-0  mx-2" for="Yes">Yes</label>&nbsp;&nbsp;
-                          <input type="radio" disabled value="No" checked={landScheduleData?.approachFromProposedSector === "N" ? true : false} />
+                          <input type="radio" disabled value="No" checked={landScheduleData?.NHSRAccess === "N" ? true : false} />
                           <label className="m-0 mx-2" for="No">No</label>
                         </div>
                       </div>
@@ -2733,38 +2762,56 @@ const Developerinfo = (props) => {
                         <ReportProblemIcon
                           style={{
                             display: hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_N_C_ACCESS_FROM_NH_SR_SHAJRA_PLAN") ? "block" : "none",
-                            color: fieldIconColors.ordersUpload
+                            color: fieldIconColors.NHSRAccess
                           }}
                           onClick={() => {
-                            setLabelValue("Orders Upload"),
-                              setOpennedModal("ordersUpload")
+                            setLabelValue("NWL_APPLICANT_N_C_ACCESS_FROM_NH_SR_SHAJRA_PLAN"),
+                              setOpennedModal("NHSRAccess")
                             setSmShow(true),
                               setDocModal(false),
                               console.log("modal open"),
-                              setFieldValue(landScheduleData?.approachFromProposedSector === "Y" ? "Yes" : landScheduleData?.approachFromProposedSector === "N" ? "No" : null);
+                              setFieldValue(landScheduleData?.NHSRAccess === "Y" ? "Yes" : landScheduleData?.NHSRAccess === "N" ? "No" : null);
                           }}
                         ></ReportProblemIcon>
                       </div>
-                      {/* {watch("NHSRAccess") === "Y" && (
-                            <div className="col col-3 mt-3">
-                              <h2 style={{ display: "flex" }}>'Upload access permission from competent authority</h2>
-                              <label>
-                                <FileUpload style={{ cursor: "pointer" }} color="primary" />
-                                <input
-                                  type="file"
-                                  style={{ display: "none" }}
-                                  onChange={(e) => getDocumentData(e?.target?.files[0], "accessPermissionAuthority")}
-                                  accept="application/pdf/jpeg/png"
-                                />
-                              </label>
-                              {watch("accessPermissionAuthority") && (
-                                <a onClick={() => getDocShareholding(watch("accessPermissionAuthority"), setLoader)} className="btn btn-sm ">
-                                  <VisibilityIcon color="info" className="icon" />
-                                </a>
-                              )}
-                            </div>
-                          )} */}
-                    </div>
+                      {landScheduleData?.NHSRAccess === "Y" && (
+                        <div className="col col-3 mt-3">
+                        <h2 style={{ display: "flex" }}>{`${t("NWL_APPLICANT_UPLOAD_ACCESS_PERMISSION")}`}</h2>
+                        <div className="d-flex flex-row align-items-center my-1 ">
+        
+                          <IconButton onClick={() => getDocShareholding(landScheduleData?.accessPermissionAuthority)}>
+                            <DownloadForOfflineIcon color="primary" className="mx-1" />
+                          </IconButton>
+                          {/* <ReportProblemIcon
+                            style={{
+                              display: hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_SHAJRA_PLAN_DOCUMENT") ? "block" : "none",
+                              color: fieldIconColors.copyOfShajraPlan
+                            }}
+                            onClick={() => {
+                              setLabelValue("NWL_APPLICANT_SHAJRA_PLAN_DOCUMENT"),
+                                setOpennedModal("copyOfShajraPlan")
+                              setSmShow(true),
+                                setDocModal(true),
+                                console.log("modal open"),
+                                setFieldValue(landScheduleData !== null ? landScheduleData?.copyOfShajraPlan : null);
+                            }}
+                          ></ReportProblemIcon> */}
+                        </div>
+                      </div>
+                      )}
+                      </div>
+                  
+                     
+                            
+                              
+                    {/* //           {watch("accessPermissionAuthority") && (
+                    //             <a onClick={() => getDocShareholding(watch("accessPermissionAuthority"), setLoader)} className="btn btn-sm ">
+                    //               <VisibilityIcon color="info" className="icon" />
+                    //             </a>
+                    //           )}
+                    //         </div>
+                    //       )}
+                    // </div> */}
                     <br></br>
                     <h5 className="text-black  mb-2">
                       {/* (i)  Details of proposed approach. */}
@@ -2784,11 +2831,11 @@ const Developerinfo = (props) => {
                         <ReportProblemIcon
                           style={{
                             display: hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_N_I_SITE_APPROACHABLE_FROM_PROPOSED_SECTOR_ROAD_SHAJRA_PLAN") ? "block" : "none",
-                            color: fieldIconColors.ordersUpload
+                            color: fieldIconColors.approachFromProposedSector
                           }}
                           onClick={() => {
-                            setLabelValue("Orders Upload"),
-                              setOpennedModal("ordersUpload")
+                            setLabelValue("NWL_APPLICANT_N_I_SITE_APPROACHABLE_FROM_PROPOSED_SECTOR_ROAD_SHAJRA_PLAN"),
+                              setOpennedModal("approachFromProposedSector")
                             setSmShow(true),
                               setDocModal(false),
                               console.log("modal open"),
@@ -2810,20 +2857,20 @@ const Developerinfo = (props) => {
                                 className={classes.formLabel}
 
                                 disabled
-                                placeholder={landScheduleData?.awardDate}
+                                placeholder={landScheduleData?.sectorAndDevelopmentWidth}
                               ></Form.Control>
                               <ReportProblemIcon
                                 style={{
                                   display: hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_N_ENTER_WIDTH_IN_METERS_SHAJRA_PLAN") ? "block" : "none",
-                                  color: fieldIconColors.ordersUpload
+                                  color: fieldIconColors.sectorAndDevelopmentWidth
                                 }}
                                 onClick={() => {
-                                  setLabelValue("Orders Upload"),
-                                    setOpennedModal("ordersUpload")
+                                  setLabelValue("NWL_APPLICANT_N_ENTER_WIDTH_IN_METERS_SHAJRA_PLAN"),
+                                    setOpennedModal("sectorAndDevelopmentWidth")
                                   setSmShow(true),
                                     setDocModal(false),
                                     console.log("modal open"),
-                                    setFieldValue(landScheduleData?.orderUpload === "Y" ? "Yes" : landScheduleData?.orderUpload === "N" ? "No" : null);
+                                    setFieldValue(landScheduleData !== null ? landScheduleData?.sectorAndDevelopmentWidth : null);
                                 }}
                               ></ReportProblemIcon>
                             </div>
@@ -2867,15 +2914,15 @@ const Developerinfo = (props) => {
                               <ReportProblemIcon
                                 style={{
                                   display: hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_N_B_WHETHER_ACQUIRED_SHAJRA_PLAN") ? "block" : "none",
-                                  color: fieldIconColors.ordersUpload
+                                  color: fieldIconColors.whetherAcquired
                                 }}
                                 onClick={() => {
-                                  setLabelValue("Orders Upload"),
-                                    setOpennedModal("ordersUpload")
+                                  setLabelValue("NWL_APPLICANT_N_B_WHETHER_ACQUIRED_SHAJRA_PLAN"),
+                                    setOpennedModal("whetherAcquired")
                                   setSmShow(true),
                                     setDocModal(false),
                                     console.log("modal open"),
-                                    setFieldValue(landScheduleData?.orderUpload === "Y" ? "Yes" : landScheduleData?.orderUpload === "N" ? "No" : null);
+                                    setFieldValue(landScheduleData?.whetherAcquired === "Y" ? "Yes" : landScheduleData?.whetherAcquired === "N" ? "No" : null);
                                 }}
                               ></ReportProblemIcon>
                             </div>
@@ -2893,15 +2940,15 @@ const Developerinfo = (props) => {
                               <ReportProblemIcon
                                 style={{
                                   display: hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_N_C_WHETHER_CONSTRUCTED_SHAJRA_PLAN") ? "block" : "none",
-                                  color: fieldIconColors.ordersUpload
+                                  color: fieldIconColors.whetherConstructed
                                 }}
                                 onClick={() => {
-                                  setLabelValue("Orders Upload"),
-                                    setOpennedModal("ordersUpload")
+                                  setLabelValue("NWL_APPLICANT_N_C_WHETHER_CONSTRUCTED_SHAJRA_PLAN"),
+                                    setOpennedModal("whetherConstructed")
                                   setSmShow(true),
                                     setDocModal(false),
                                     console.log("modal open"),
-                                    setFieldValue(landScheduleData?.orderUpload === "Y" ? "Yes" : landScheduleData?.orderUpload === "N" ? "No" : null);
+                                    setFieldValue(landScheduleData?.whetherConstructed === "Y" ? "Yes" : landScheduleData?.whetherConstructed === "N" ? "No" : null);
                                 }}
                               ></ReportProblemIcon>
                             </div>
@@ -2919,15 +2966,15 @@ const Developerinfo = (props) => {
                               <ReportProblemIcon
                                 style={{
                                   display: hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_N_D_WHETHER_SERVICE_ROAD_ALONG_SECTOR_ROAD_ACQURIED_SHAJRA_PLAN") ? "block" : "none",
-                                  color: fieldIconColors.ordersUpload
+                                  color: fieldIconColors.serviceSectorRoadAcquired
                                 }}
                                 onClick={() => {
-                                  setLabelValue("Orders Upload"),
-                                    setOpennedModal("ordersUpload")
+                                  setLabelValue("NWL_APPLICANT_N_D_WHETHER_SERVICE_ROAD_ALONG_SECTOR_ROAD_ACQURIED_SHAJRA_PLAN"),
+                                    setOpennedModal("serviceSectorRoadAcquired")
                                   setSmShow(true),
                                     setDocModal(false),
                                     console.log("modal open"),
-                                    setFieldValue(landScheduleData?.orderUpload === "Y" ? "Yes" : landScheduleData?.orderUpload === "N" ? "No" : null);
+                                    setFieldValue(landScheduleData?.serviceSectorRoadAcquired === "Y" ? "Yes" : landScheduleData?.serviceSectorRoadAcquired === "N" ? "No" : null);
                                 }}
                               ></ReportProblemIcon>
                             </div>
@@ -2945,15 +2992,15 @@ const Developerinfo = (props) => {
                               <ReportProblemIcon
                                 style={{
                                   display: hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_N_D_WHETHER_SERVICE_ROAD_ALONG_E_SECTOR_ROAD_CONSTRUCTED_SHAJRA_PLAN") ? "block" : "none",
-                                  color: fieldIconColors.ordersUpload
+                                  color: fieldIconColors.serviceSectorRoadConstructed
                                 }}
                                 onClick={() => {
-                                  setLabelValue("Orders Upload"),
-                                    setOpennedModal("ordersUpload")
+                                  setLabelValue("NWL_APPLICANT_N_D_WHETHER_SERVICE_ROAD_ALONG_E_SECTOR_ROAD_CONSTRUCTED_SHAJRA_PLAN"),
+                                    setOpennedModal("serviceSectorRoadConstructed")
                                   setSmShow(true),
                                     setDocModal(false),
                                     console.log("modal open"),
-                                    setFieldValue(landScheduleData?.orderUpload === "Y" ? "Yes" : landScheduleData?.orderUpload === "N" ? "No" : null);
+                                    setFieldValue(landScheduleData?.serviceSectorRoadConstructed === "Y" ? "Yes" : landScheduleData?.serviceSectorRoadConstructed === "N" ? "No" : null);
                                 }}
                               ></ReportProblemIcon>
                             </div>
@@ -2975,15 +3022,15 @@ const Developerinfo = (props) => {
                         <ReportProblemIcon
                           style={{
                             display: hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_N_2_SITE_APPROACHABLE_FROM_INTERNAL_CIRCULATION_SECTORAL_ROAD_SHAJRA_PLAN") ? "block" : "none",
-                            color: fieldIconColors.ordersUpload
+                            color: fieldIconColors.approachFromInternalCirculation
                           }}
                           onClick={() => {
-                            setLabelValue("Orders Upload"),
-                              setOpennedModal("ordersUpload")
+                            setLabelValue("NWL_APPLICANT_N_2_SITE_APPROACHABLE_FROM_INTERNAL_CIRCULATION_SECTORAL_ROAD_SHAJRA_PLAN"),
+                              setOpennedModal("approachFromInternalCirculation")
                             setSmShow(true),
                               setDocModal(false),
                               console.log("modal open"),
-                              setFieldValue(landScheduleData?.orderUpload === "Y" ? "Yes" : landScheduleData?.orderUpload === "N" ? "No" : null);
+                              setFieldValue(landScheduleData?.approachFromInternalCirculation === "Y" ? "Yes" : landScheduleData?.approachFromInternalCirculation === "N" ? "No" : null);
                           }}
                         ></ReportProblemIcon>
                       </div>
@@ -3000,20 +3047,20 @@ const Developerinfo = (props) => {
                                 className={classes.formLabel}
 
                                 disabled
-                                placeholder={landScheduleData?.sectorAndDevelopmentWidth}
+                                placeholder={landScheduleData?.internalAndSectoralWidth}
                               ></Form.Control>
                               <ReportProblemIcon
                                 style={{
                                   display: hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_N_2_SITE_APPROACHABLE_A_ENTER_WIDTH_IN_METERS_SHAJRA_PLAN") ? "block" : "none",
-                                  color: fieldIconColors.ordersUpload
+                                  color: fieldIconColors.internalAndSectoralWidth
                                 }}
                                 onClick={() => {
-                                  setLabelValue("Orders Upload"),
-                                    setOpennedModal("ordersUpload")
+                                  setLabelValue("NWL_APPLICANT_N_2_SITE_APPROACHABLE_A_ENTER_WIDTH_IN_METERS_SHAJRA_PLAN"),
+                                    setOpennedModal("internalAndSectoralWidth")
                                   setSmShow(true),
                                     setDocModal(false),
                                     console.log("modal open"),
-                                    setFieldValue(landScheduleData?.orderUpload === "Y" ? "Yes" : landScheduleData?.orderUpload === "N" ? "No" : null);
+                                    setFieldValue(landScheduleData?.internalAndSectoralWidth === "Y" ? "Yes" : landScheduleData?.internalAndSectoralWidth === "N" ? "No" : null);
                                 }}
                               ></ReportProblemIcon>
                             </div>
@@ -3022,22 +3069,22 @@ const Developerinfo = (props) => {
                               {`${t("NWL_APPLICANT_N_2_B_WHETHER_ACQUIRED_SHAJRA_PLAN")}`}
                             </h6>
                             <div className="d-flex flex-row align-items-center my-1 ">
-                              <input type="radio" disabled value="Yes" checked={landScheduleData?.sectorAndDevelopmentWidth === "Y" ? true : false} />
+                              <input type="radio" disabled value="Yes" checked={landScheduleData?.whetherAcquiredForInternalCirculation === "Y" ? true : false} />
                               <label className="m-0  mx-2" for="Yes">Yes</label>&nbsp;&nbsp;
-                              <input type="radio" disabled value="No" checked={landScheduleData?.sectorAndDevelopmentWidth === "N" ? true : false} />
+                              <input type="radio" disabled value="No" checked={landScheduleData?.whetherAcquiredForInternalCirculation === "N" ? true : false} />
                               <label className="m-0 mx-2" for="No">No</label>
                               <ReportProblemIcon
                                 style={{
                                   display: hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_N_2_B_WHETHER_ACQUIRED_SHAJRA_PLAN") ? "block" : "none",
-                                  color: fieldIconColors.ordersUpload
+                                  color: fieldIconColors.whetherAcquiredForInternalCirculation
                                 }}
                                 onClick={() => {
-                                  setLabelValue("Orders Upload"),
-                                    setOpennedModal("ordersUpload")
+                                  setLabelValue("NWL_APPLICANT_N_2_B_WHETHER_ACQUIRED_SHAJRA_PLAN"),
+                                    setOpennedModal("whetherAcquiredForInternalCirculation")
                                   setSmShow(true),
                                     setDocModal(false),
                                     console.log("modal open"),
-                                    setFieldValue(landScheduleData?.orderUpload === "Y" ? "Yes" : landScheduleData?.orderUpload === "N" ? "No" : null);
+                                    setFieldValue(landScheduleData?.whetherAcquiredForInternalCirculation === "Y" ? "Yes" : landScheduleData?.whetherAcquiredForInternalCirculation === "N" ? "No" : null);
                                 }}
                               ></ReportProblemIcon>
                             </div>
@@ -3046,22 +3093,22 @@ const Developerinfo = (props) => {
                               {`${t("NWL_APPLICANT_N_2_C_WHETHER_CONSTRUCTED_SHAJRA_PLAN")}`}
                             </h6>
                             <div className="d-flex flex-row align-items-center my-1 ">
-                              <input type="radio" disabled value="Yes" checked={landScheduleData?.sectorAndDevelopmentWidth === "Y" ? true : false} />
+                              <input type="radio" disabled value="Yes" checked={landScheduleData?.whetherConstructedForInternalCirculation === "Y" ? true : false} />
                               <label className="m-0  mx-2" for="Yes">Yes</label>&nbsp;&nbsp;
-                              <input type="radio" disabled value="No" checked={landScheduleData?.sectorAndDevelopmentWidth === "N" ? true : false} />
+                              <input type="radio" disabled value="No" checked={landScheduleData?.whetherConstructedForInternalCirculation === "N" ? true : false} />
                               <label className="m-0 mx-2" for="No">No</label>
                               <ReportProblemIcon
                                 style={{
                                   display: hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_N_2_C_WHETHER_CONSTRUCTED_SHAJRA_PLAN") ? "block" : "none",
-                                  color: fieldIconColors.ordersUpload
+                                  color: fieldIconColors.whetherConstructedForInternalCirculation
                                 }}
                                 onClick={() => {
-                                  setLabelValue("Orders Upload"),
-                                    setOpennedModal("ordersUpload")
+                                  setLabelValue("NWL_APPLICANT_N_2_C_WHETHER_CONSTRUCTED_SHAJRA_PLAN"),
+                                    setOpennedModal("whetherConstructedForInternalCirculation")
                                   setSmShow(true),
                                     setDocModal(false),
                                     console.log("modal open"),
-                                    setFieldValue(landScheduleData?.orderUpload === "Y" ? "Yes" : landScheduleData?.orderUpload === "N" ? "No" : null);
+                                    setFieldValue(landScheduleData?.whetherConstructedForInternalCirculation === "Y" ? "Yes" : landScheduleData?.whetherConstructedForInternalCirculation === "N" ? "No" : null);
                                 }}
                               ></ReportProblemIcon>
                             </div>
@@ -3084,23 +3131,23 @@ const Developerinfo = (props) => {
                         {/* <InfoIcon style={{color:"blue"}}/>  */}
                         <div className="d-flex flex-row align-items-center my-1 ">
                           {/* <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled></Form.Control> */}
-                          <input type="radio" disabled value="Yes" checked={landScheduleData?.landCompensation === "Y" ? true : false} />
+                          <input type="radio" disabled value="Yes" checked={landScheduleData?.parentLicenceApproach === "Y" ? true : false} />
                           <label className="m-0  mx-2" for="Yes">Yes</label>&nbsp;&nbsp;
-                          <input type="radio" disabled value="No" checked={landScheduleData?.landCompensation === "N" ? true : false} />
+                          <input type="radio" disabled value="No" checked={landScheduleData?.parentLicenceApproach === "N" ? true : false} />
                           <label className="m-0 mx-2" for="No">No</label>
 
                           <ReportProblemIcon
                             style={{
                               display: hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_N_2_J_WHETHER_APPROACH_FROM_PARENT_LICENCE_SHAJRA_PLAN") ? "block" : "none",
-                              color: fieldIconColors.landCompensationReceived
+                              color: fieldIconColors.parentLicenceApproach
                             }}
                             onClick={() => {
-                              setLabelValue("Whether land compensation received"),
-                                setOpennedModal("landCompensationReceived")
+                              setLabelValue("NWL_APPLICANT_N_2_J_WHETHER_APPROACH_FROM_PARENT_LICENCE_SHAJRA_PLAN"),
+                                setOpennedModal("parentLicenceApproach")
                               setSmShow(true),
                                 setDocModal(false),
                                 console.log("modal open"),
-                                setFieldValue(landScheduleData?.compensationReceived === "Y" ? "Yes" : landScheduleData?.compensationReceived === "N" ? "No" : null);
+                                setFieldValue(landScheduleData?.parentLicenceApproach === "Y" ? "Yes" : landScheduleData?.parentLicenceApproach === "N" ? "No" : null);
                             }}
                           ></ReportProblemIcon>
 
@@ -3238,28 +3285,55 @@ const Developerinfo = (props) => {
                   {`${t("NWL_APPLICANT_N_2_K_ANY_OTHER_TYPE_OF_EXISITING_APPROACH_AVAILABLE_SHAJRA_PLAN")}`}
                   <div className="d-flex flex-row align-items-center my-1 ">
 
-                    <input type="radio" disabled value="Yes" checked={landScheduleData?.siteApproachable === "Y" ? true : false} />
+                    <input type="radio" disabled value="Yes" checked={landScheduleData?.availableExistingApproach === "Y" ? true : false} />
                     <label className="m-0  mx-2" for="Yes">Yes</label>&nbsp;&nbsp;
-                    <input type="radio" disabled value="No" checked={landScheduleData?.siteApproachable === "N" ? true : false} />
+                    <input type="radio" disabled value="No" checked={landScheduleData?.availableExistingApproach === "N" ? true : false} />
                     <label className="m-0 mx-2" for="No">No</label>
                     <ReportProblemIcon
                       style={{
                         display: hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_N_2_K_ANY_OTHER_TYPE_OF_EXISITING_APPROACH_AVAILABLE_SHAJRA_PLAN") ? "block" : "none",
-                        color: fieldIconColors.internalSectoralPlan
+                        color: fieldIconColors.availableExistingApproach
                       }}
                       onClick={() => {
-                        setLabelValue("whether the applied site is approachable from the proposed 18/24 m internal sectoral plan road/sector dividing road"),
-                          setOpennedModal("internalSectoralPlan")
+                        setLabelValue("NWL_APPLICANT_N_2_K_ANY_OTHER_TYPE_OF_EXISITING_APPROACH_AVAILABLE_SHAJRA_PLAN"),
+                          setOpennedModal("availableExistingApproach")
                         setSmShow(true),
                           setDocModal(false),
                           console.log("modal open"),
-                          setFieldValue(landScheduleData?.siteApproachable === "Y" ? "Yes" : landScheduleData?.siteApproachable === "N" ? "No" : null);
+                          setFieldValue(landScheduleData?.availableExistingApproach === "Y" ? "Yes" : landScheduleData?.availableExistingApproach === "N" ? "No" : null);
                       }}
                     ></ReportProblemIcon>
                   </div>
                 </h6>
 
               </div>
+              {/* Today */}
+              {/* {landScheduleData?.availableExistingApproach === "Y" &&  (
+                      <div className="row">
+                        
+                        <div className="col col-3">
+                          <h2 style={{ display: "flex" }}>
+                            {`${t("NWL_APPLICANT_DOCUMENT_UPLOAD")}`}
+                            Upload document
+                          </h2>
+                          <label>
+                            <FileUpload style={{ cursor: "pointer" }} color="primary" />
+                            <input
+                              type="file"
+                              style={{ display: "none" }}
+                              onChange={(e) => getDocumentData(e?.target?.files[0], "availableExistingApproachDoc")}
+                              accept="application/pdf/jpeg/png"
+                            />
+                          </label>
+                          {watch("availableExistingApproachDoc") && (
+                            <a onClick={() => getDocShareholding(watch("availableExistingApproachDoc"), setLoader)} className="btn btn-sm ">
+                              <VisibilityIcon color="info" className="icon" />
+                            </a>
+                          )}
+                        </div>
+
+                      </div>
+                    )} */}
             </div>
             <hr className="my-3" />
             <h5 className="text-black ml-2 mb-2">
@@ -3284,7 +3358,7 @@ const Developerinfo = (props) => {
                       color: fieldIconColors.vacant
                     }}
                     onClick={() => {
-                      setLabelValue("vacant"),
+                      setLabelValue("NWL_APPLICANT_4_A_VACANT_SHAJRA_PLAN"),
                         setOpennedModal("vacant")
                       setSmShow(true),
                         setDocModal(false),
@@ -3378,7 +3452,7 @@ const Developerinfo = (props) => {
 
               <div className="col col-4 p-1">
                 <h6 >
-                  {/* (b) HT line */}
+                  {/* (b) NWL_APPLICANT_4_B_HT_LINE_SHAJRA_PLAN */}
                   {`${t("NWL_APPLICANT_4_B_HT_LINE_SHAJRA_PLAN")}`}
                 </h6>
                 <div className="d-flex flex-row align-items-center my-1 ">
@@ -3393,7 +3467,7 @@ const Developerinfo = (props) => {
                       color: fieldIconColors.htLine
                     }}
                     onClick={() => {
-                      setLabelValue("HT line"),
+                      setLabelValue("NWL_APPLICANT_4_B_HT_LINE_SHAJRA_PLAN"),
                         setOpennedModal("htLine")
                       setSmShow(true),
                         setDocModal(false),
@@ -3435,7 +3509,7 @@ const Developerinfo = (props) => {
               </div>
               <div className="col col-4 p-1">
                 <h6 >
-                  {/* (C) IOC Gas Pipeline */}
+                  {/* (C) NWL_APPLICANT_4_C_IOC_GAS_PIPELINE_SHAJRA_PLAN */}
                   {`${t("NWL_APPLICANT_4_C_IOC_GAS_PIPELINE_SHAJRA_PLAN")}`}
                 </h6>
 
@@ -3450,7 +3524,7 @@ const Developerinfo = (props) => {
                       color: fieldIconColors.iocGasPipeline
                     }}
                     onClick={() => {
-                      setLabelValue("IOC Gas Pipeline"),
+                      setLabelValue("NWL_APPLICANT_4_C_IOC_GAS_PIPELINE_SHAJRA_PLAN"),
                         setOpennedModal("iocGasPipeline")
                       setSmShow(true),
                         setDocModal(false),
@@ -3513,7 +3587,7 @@ const Developerinfo = (props) => {
                       color: fieldIconColors.nallah
                     }}
                     onClick={() => {
-                      setLabelValue("Nallah"),
+                      setLabelValue("NWL_APPLICANT_4_D_NALLAH_SHAJRA_PLAN"),
                         setOpennedModal("nallah")
                       setSmShow(true),
                         setDocModal(false),
@@ -3570,7 +3644,7 @@ const Developerinfo = (props) => {
                       color: fieldIconColors.anyRevenueRasta
                     }}
                     onClick={() => {
-                      setLabelValue("Any revenue rasta/road"),
+                      setLabelValue("NWL_APPLICANT_4_E_ANY_REVENUE_REVENUE_RASTA_ROAD_PASSING_THROUGH_PROPOSED_SITE_SHAJRA_PLAN"),
                         setOpennedModal("anyRevenueRasta")
                       setSmShow(true),
                         setDocModal(false),
@@ -3637,8 +3711,8 @@ const Developerinfo = (props) => {
                       color: fieldIconColors.utilityLine
                     }}
                     onClick={() => {
-                      setLabelValue("Any marginal land"),
-                        setOpennedModal("anyMarginalLand")
+                      setLabelValue("NWL_APPLICANT_F_UTILITY_PERMIT_LINE_SHAJRA_PLAN"),
+                        setOpennedModal("utilityLine")
                       setSmShow(true),
                         setDocModal(false),
                         console.log("modal open"),
@@ -3670,7 +3744,7 @@ const Developerinfo = (props) => {
                       </label>
                       {/* <input type="text" className="form-control" disabled placeholder={landScheduleData?.marginalLandRemark} /> */}
                       <Form.Control
-                        placeholder={landScheduleData?.utilityWidth}
+                        placeholder={landScheduleData?.utilityRemark}
                         className={classes.formLabel}
                         disabled></Form.Control>
                     </div>
@@ -3688,34 +3762,34 @@ const Developerinfo = (props) => {
                 </h6>
 
                 <div className="d-flex flex-row align-items-center my-1 ">
-                  <input type="radio" disabled value="Yes" checked={landScheduleData?.utilityLine === "Y" ? true : false} />
+                  <input type="radio" disabled value="Yes" checked={landScheduleData?.compactBlock === "Y" ? true : false} />
                   <label className="m-0  mx-2" for="Yes">Yes</label>&nbsp;&nbsp;
-                  <input type="radio" disabled value="No" checked={landScheduleData?.utilityLine === "N" ? true : false} />
+                  <input type="radio" disabled value="No" checked={landScheduleData?.compactBlock === "N" ? true : false} />
                   <label className="m-0 mx-2" for="No">No</label>
                   <ReportProblemIcon
                     style={{
                       display: hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_G_COMPACT_BLOCK_SHAJRA_PLAN") ? "block" : "none",
-                      color: fieldIconColors.utilityLine
+                      color: fieldIconColors.compactBlock
                     }}
                     onClick={() => {
-                      setLabelValue("Utility Line"),
-                        setOpennedModal("utilityLine")
+                      setLabelValue("NWL_APPLICANT_G_COMPACT_BLOCK_SHAJRA_PLAN"),
+                        setOpennedModal("compactBlock")
                       setSmShow(true),
                         setDocModal(false),
                         console.log("modal open"),
-                        setFieldValue(landScheduleData?.utilityLine === "Y" ? "Yes" : landScheduleData?.utilityLine === "N" ? "No" : null);
+                        setFieldValue(landScheduleData?.compactBlock === "Y" ? "Yes" : landScheduleData?.compactBlock === "N" ? "No" : null);
                     }}
                   ></ReportProblemIcon>
                 </div>
 
-                {landScheduleData?.utilityLine === "Y" && (
+                {landScheduleData?.compactBlock === "Y" && (
                   <div className="row ">
                     <div className="col col-12">
                       <label>
                         {`${t("NWL_APPLICANT_REMARKS_SHAJRA_PLAN")}`}
                       </label>
 
-                      <Form.Control placeholder={landScheduleData?.utilityWidth}
+                      <Form.Control placeholder={landScheduleData?.compactBlockRemark}
 
                         className={classes.formLabel}
                         disabled></Form.Control>
@@ -3733,14 +3807,14 @@ const Developerinfo = (props) => {
                     </div> */}
                   </div>
                 )}
-                {landScheduleData?.utilityLine === "N" && (
+                {landScheduleData?.compactBlock === "N" && (
                   <div className="col col">
                     <label>
                       {`${t("NWL_APPLICANT_REMARKS_SHAJRA_PLAN")}`}
 
                     </label>
 
-                    <Form.Control placeholder={landScheduleData?.utilityRemark}
+                    <Form.Control placeholder={landScheduleData?.compactBlockRemark}
 
                       className={classes.formLabel}
                       disabled></Form.Control>
@@ -3759,34 +3833,34 @@ const Developerinfo = (props) => {
                 </h6>
 
                 <div className="d-flex flex-row align-items-center my-1 ">
-                  <input type="radio" disabled value="Yes" checked={landScheduleData?.utilityLine === "Y" ? true : false} />
+                  <input type="radio" disabled value="Yes" checked={landScheduleData?.othersLandFall === "Y" ? true : false} />
                   <label className="m-0  mx-2" for="Yes">Yes</label>&nbsp;&nbsp;
-                  <input type="radio" disabled value="No" checked={landScheduleData?.utilityLine === "N" ? true : false} />
+                  <input type="radio" disabled value="No" checked={landScheduleData?.othersLandFall === "N" ? true : false} />
                   <label className="m-0 mx-2" for="No">No</label>
                   <ReportProblemIcon
                     style={{
                       display: hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_H_WHETHER_OTHERS_LAND_FALL_SHAJRA_PLAN") ? "block" : "none",
-                      color: fieldIconColors.utilityLine
+                      color: fieldIconColors.othersLandFall
                     }}
                     onClick={() => {
-                      setLabelValue("Utility Line"),
-                        setOpennedModal("utilityLine")
+                      setLabelValue("NWL_APPLICANT_H_WHETHER_OTHERS_LAND_FALL_SHAJRA_PLAN"),
+                        setOpennedModal("othersLandFall")
                       setSmShow(true),
                         setDocModal(false),
                         console.log("modal open"),
-                        setFieldValue(landScheduleData?.utilityLine === "Y" ? "Yes" : landScheduleData?.utilityLine === "N" ? "No" : null);
+                        setFieldValue(landScheduleData?.othersLandFall === "Y" ? "Yes" : landScheduleData?.othersLandFall === "N" ? "No" : null);
                     }}
                   ></ReportProblemIcon>
                 </div>
 
-                {landScheduleData?.utilityLine === "Y" && (
+                {landScheduleData?.othersLandFall === "Y" && (
                   <div className="row ">
                     <div className="col col-12">
                       <label>
                         {`${t("NWL_APPLICANT_REMARKS_SHAJRA_PLAN")}`}
                       </label>
 
-                      <Form.Control placeholder={landScheduleData?.utilityWidth}
+                      <Form.Control placeholder={landScheduleData?.othersLandFallRemark}
 
                         className={classes.formLabel}
                         disabled></Form.Control>
@@ -3794,14 +3868,14 @@ const Developerinfo = (props) => {
 
                   </div>
                 )}
-                {landScheduleData?.utilityLine === "N" && (
+                {landScheduleData?.othersLandFall === "N" && (
                   <div className="col col">
                     <label>
                       {`${t("NWL_APPLICANT_REMARKS_SHAJRA_PLAN")}`}
 
                     </label>
 
-                    <Form.Control placeholder={landScheduleData?.utilityRemark}
+                    <Form.Control placeholder={landScheduleData?.othersLandFallRemark}
 
                       className={classes.formLabel}
                       disabled></Form.Control>
@@ -3889,34 +3963,34 @@ const Developerinfo = (props) => {
                   </h6>
 
                   <div className="d-flex flex-row align-items-center my-1 ">
-                    <input type="radio" disabled value="Yes" checked={landScheduleData?.utilityLine === "Y" ? true : false} />
+                    <input type="radio" disabled value="Yes" checked={landScheduleData?.passingOtherFeature === "Y" ? true : false} />
                     <label className="m-0  mx-2" for="Yes">Yes</label>&nbsp;&nbsp;
-                    <input type="radio" disabled value="No" checked={landScheduleData?.utilityLine === "N" ? true : false} />
+                    <input type="radio" disabled value="No" checked={landScheduleData?.passingOtherFeature === "N" ? true : false} />
                     <label className="m-0 mx-2" for="No">No</label>
                     <ReportProblemIcon
                       style={{
                         display: hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_J_ANY_OTHERS_PASSING_THROUGH_SITE_SHAJRA_PLAN") ? "block" : "none",
-                        color: fieldIconColors.utilityLine
+                        color: fieldIconColors.passingOtherFeature
                       }}
                       onClick={() => {
-                        setLabelValue("Utility Line"),
-                          setOpennedModal("utilityLine")
+                        setLabelValue("NWL_APPLICANT_J_ANY_OTHERS_PASSING_THROUGH_SITE_SHAJRA_PLAN"),
+                          setOpennedModal("passingOtherFeature")
                         setSmShow(true),
                           setDocModal(false),
                           console.log("modal open"),
-                          setFieldValue(landScheduleData?.utilityLine === "Y" ? "Yes" : landScheduleData?.utilityLine === "N" ? "No" : null);
+                          setFieldValue(landScheduleData?.passingOtherFeature === "Y" ? "Yes" : landScheduleData?.passingOtherFeature === "N" ? "No" : null);
                       }}
                     ></ReportProblemIcon>
                   </div>
 
-                  {landScheduleData?.utilityLine === "Y" && (
+                  {landScheduleData?.passingOtherFeature === "Y" && (
                     <div className="row ">
                       <div className="col col-12">
                         <label>
                           {`${t("NWL_APPLICANT_DETAILS_THEREOF_SHAJRA_PLAN")}`}
                         </label>
 
-                        <Form.Control placeholder={landScheduleData?.utilityWidth}
+                        <Form.Control placeholder={landScheduleData?.detailsThereof}
 
                           className={classes.formLabel}
                           disabled></Form.Control>
@@ -3924,7 +3998,7 @@ const Developerinfo = (props) => {
 
                     </div>
                   )}
-                  {landScheduleData?.utilityLine === "N" && (
+                  {/* {landScheduleData?.utilityLine === "N" && (
                     <div className="col col">
                       <label>
                         {`${t("NWL_APPLICANT_DETAILS_THEREOF_SHAJRA_PLAN")}`}
@@ -3937,7 +4011,7 @@ const Developerinfo = (props) => {
                         disabled></Form.Control>
                     </div>
 
-                  )}
+                  )} */}
                 </div>
               </div>
             </div>
@@ -3947,20 +4021,21 @@ const Developerinfo = (props) => {
               {/* 5. Enclose the following documents as Annexures&nbsp;&nbsp; */}
               <div className="d-flex flex-row align-items-center my-1 ">
                 {/* <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled placeholder={landScheduleData?.documentsAsAnnexures}></Form.Control> */}
-                <ReportProblemIcon
+                {/* heading */}
+                {/* <ReportProblemIcon
                   style={{
                     display: hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_5_ENCLOSE_THE_FOLLOWING_DOCUMENTS_AS_ANNEXURES") ? "block" : "none",
                     color: fieldIconColors.documentsAsAnnexures
                   }}
                   onClick={() => {
-                    setLabelValue("Enclose the following documents as Annexures"),
+                    setLabelValue("NWL_APPLICANT_5_ENCLOSE_THE_FOLLOWING_DOCUMENTS_AS_ANNEXURES"),
                       setOpennedModal("documentsAsAnnexures")
                     setSmShow(true),
                       setDocModal(false),
                       console.log("modal open"),
                       setFieldValue(landScheduleData !== null ? landScheduleData?.documentsAsAnnexures : null);
                   }}
-                ></ReportProblemIcon>
+                ></ReportProblemIcon> */}
               </div>
             </h5>
             <div className="row mx-1">
@@ -3973,13 +4048,17 @@ const Developerinfo = (props) => {
                   <IconButton onClick={() => getDocShareholding(landScheduleData?.landSchedule)}>
                     <DownloadForOfflineIcon color="primary" className="mx-1" />
                   </IconButton>
+
+                  <IconButton onClick={() => getDocShareholding(landScheduleData?.landSchedule)}>
+                        <Visibility color="primary" className="mx-1" />
+                      </IconButton>
                   <ReportProblemIcon
                     style={{
                       display: hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_LAND_SCHEDULE") ? "block" : "none",
                       color: fieldIconColors.landSchedule
                     }}
                     onClick={() => {
-                      setLabelValue("Land schedule"),
+                      setLabelValue("NWL_APPLICANT_LAND_SCHEDULE"),
                         setOpennedModal("landSchedule")
                       setSmShow(true),
                         setDocModal(true),
@@ -3998,14 +4077,18 @@ const Developerinfo = (props) => {
                   <IconButton onClick={() => getDocShareholding(landScheduleData?.mutation)}>
                     <DownloadForOfflineIcon color="primary" className="mx-1" />
                   </IconButton>
+
+                  <IconButton onClick={() => getDocShareholding(landScheduleData?.mutation)}>
+                        <Visibility color="primary" className="mx-1" />
+                      </IconButton>
                   <ReportProblemIcon
                     style={{
                       display: hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_COPY_OF_MUTATIION") ? "block" : "none",
-                      color: fieldIconColors.copyOfMutation
+                      color: fieldIconColors.copyOfMutationDoc
                     }}
                     onClick={() => {
-                      setLabelValue("Copy of Mutation"),
-                        setOpennedModal("copyOfMutation")
+                      setLabelValue("NWL_APPLICANT_COPY_OF_MUTATIION"),
+                        setOpennedModal("copyOfMutationDoc")
                       setSmShow(true),
                         setDocModal(true),
                         console.log("modal open"),
@@ -4023,13 +4106,17 @@ const Developerinfo = (props) => {
                   <IconButton onClick={() => getDocShareholding(landScheduleData?.jambandhi)}>
                     <DownloadForOfflineIcon color="primary" className="mx-1" />
                   </IconButton>
+
+                  <IconButton onClick={() => getDocShareholding(landScheduleData?.jambandhi)}>
+                        <Visibility color="primary" className="mx-1" />
+                      </IconButton>
                   <ReportProblemIcon
                     style={{
                       display: hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_COPY_OF_JAMABANDI") ? "block" : "none",
                       color: fieldIconColors.copyOfJamabandi
                     }}
                     onClick={() => {
-                      setLabelValue("Copy of Jamabandi"),
+                      setLabelValue("NWL_APPLICANT_COPY_OF_JAMABANDI"),
                         setOpennedModal("copyOfJamabandi")
                       setSmShow(true),
                         setDocModal(true),
@@ -4041,7 +4128,7 @@ const Developerinfo = (props) => {
               </div>
               <div className="col col-3 p-1">
                 <h6>
-                  {/* Details of lease / patta, if any */}
+                  {/* NWL_APPLICANT_DETAILS_OF_LEASE_PATTA */}
 
                   {`${t("NWL_APPLICANT_DETAILS_OF_LEASE_PATTA")}`}
                 </h6>
@@ -4049,13 +4136,18 @@ const Developerinfo = (props) => {
                   <IconButton onClick={() => getDocShareholding(landScheduleData?.detailsOfLease)}>
                     <DownloadForOfflineIcon color="primary" className="mx-1" />
                   </IconButton>
+
+                  <IconButton onClick={() => getDocShareholding(landScheduleData?.detailsOfLease)}>
+                        <Visibility color="primary" className="mx-1" />
+                      </IconButton>
+
                   <ReportProblemIcon
                     style={{
                       display: hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_DETAILS_OF_LEASE_PATTA") ? "block" : "none",
                       color: fieldIconColors.detailsOfLease
                     }}
                     onClick={() => {
-                      setLabelValue("Details of lease / patta, if any"),
+                      setLabelValue("NWL_APPLICANT_DETAILS_OF_LEASE_PATTA"),
                         setOpennedModal("detailsOfLease")
                       setSmShow(true),
                         setDocModal(true),
@@ -4071,7 +4163,7 @@ const Developerinfo = (props) => {
               <div className="col col-3 p-1">
                 {/* &nbsp;&nbsp; */}
                 <h6>
-                  {/* Add Sales/deed/exchange */}
+                  {/* NWL_APPLICANT_SALES_DEED_EXCHANGE_DEED */}
                   {`${t("NWL_APPLICANT_SALES_DEED_EXCHANGE_DEED")}`}
                 </h6>
                 {/* &nbsp;&nbsp; */}
@@ -4080,13 +4172,17 @@ const Developerinfo = (props) => {
                     <DownloadForOfflineIcon color="primary" className="mx-1" />
                   </IconButton>
 
+                  <IconButton onClick={() => getDocShareholding(landScheduleData?.addSalesDeed)}>
+                        <Visibility color="primary" className="mx-1" />
+                      </IconButton>
+
                   <ReportProblemIcon
                     style={{
                       display: hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_SALES_DEED_EXCHANGE_DEED") ? "block" : "none",
                       color: fieldIconColors.addSalesDeed
                     }}
                     onClick={() => {
-                      setLabelValue("Add Sales/deed/exchange"),
+                      setLabelValue("NWL_APPLICANT_SALES_DEED_EXCHANGE_DEED"),
                         setOpennedModal("addSalesDeed")
                       setSmShow(true),
                         setDocModal(true),
@@ -4098,20 +4194,25 @@ const Developerinfo = (props) => {
               </div>
               <div className="col col-3 p-1">
                 <h6>
-                  {/* Copy of spa/GPA/board resolution */}
+                  {/* NWL_APPLICANT_COPY_OF_SPA_GPA_BOARD */}
                   {`${t("NWL_APPLICANT_COPY_OF_SPA_GPA_BOARD")}`}
                 </h6>
                 <div className="d-flex flex-row align-items-center my-1 ">
                   <IconButton onClick={() => getDocShareholding(landScheduleData?.copyofSpaBoard)}>
                     <DownloadForOfflineIcon color="primary" className="mx-1" />
                   </IconButton>
+
+                  <IconButton onClick={() => getDocShareholding(landScheduleData?.copyofSpaBoard)}>
+                        <Visibility color="primary" className="mx-1" />
+                      </IconButton>
+
                   <ReportProblemIcon
                     style={{
                       display: hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_COPY_OF_SPA_GPA_BOARD") ? "block" : "none",
                       color: fieldIconColors.copyofSpaBoard
                     }}
                     onClick={() => {
-                      setLabelValue("Copy of spa/GPA/board resolution"),
+                      setLabelValue("NWL_APPLICANT_COPY_OF_SPA_GPA_BOARD"),
                         setOpennedModal("copyofSpaBoard")
                       setSmShow(true),
                         setDocModal(true),
@@ -4147,7 +4248,7 @@ const Developerinfo = (props) => {
 
               <div className="col col-3 p-1">
                 <h6>
-                  {/* Copy of Shajra Plan */}
+                  {/* NWL_APPLICANT_SHAJRA_PLAN_DOCUMENT */}
                   {`${t("NWL_APPLICANT_SHAJRA_PLAN_DOCUMENT")}`}
                 </h6>
                 <div className="d-flex flex-row align-items-center my-1 ">
@@ -4155,13 +4256,18 @@ const Developerinfo = (props) => {
                   <IconButton onClick={() => getDocShareholding(landScheduleData?.copyOfShajraPlan)}>
                     <DownloadForOfflineIcon color="primary" className="mx-1" />
                   </IconButton>
+
+                  <IconButton onClick={() => getDocShareholding(landScheduleData?.copyOfShajraPlan)}>
+                        <Visibility color="primary" className="mx-1" />
+                      </IconButton>
+
                   <ReportProblemIcon
                     style={{
                       display: hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_SHAJRA_PLAN_DOCUMENT") ? "block" : "none",
                       color: fieldIconColors.copyOfShajraPlan
                     }}
                     onClick={() => {
-                      setLabelValue("Copy of Shajra Plan"),
+                      setLabelValue("NWL_APPLICANT_SHAJRA_PLAN_DOCUMENT"),
                         setOpennedModal("copyOfShajraPlan")
                       setSmShow(true),
                         setDocModal(true),
@@ -4178,8 +4284,8 @@ const Developerinfo = (props) => {
               <Button onClick={() => props.passUncheckedList({ data: uncheckedValue })}>Submit</Button>
             </div> */}
           </Form.Group>
-        </div>
-      </Collapse>
+        {/* </div>
+      </Collapse> */}
     </Form>
   );
 };

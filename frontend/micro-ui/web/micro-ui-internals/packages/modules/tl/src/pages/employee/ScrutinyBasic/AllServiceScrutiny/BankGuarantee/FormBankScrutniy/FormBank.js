@@ -8,16 +8,19 @@ import React, { useState, useRef, useEffect, useContext } from "react";
 // import HistoryList from "./History";
 // import ScrutinyDevelopment from "../../ScrutinyDevelopment/ScrutinyDevelopment";
 import ScrutinyDevelopment from "../../../ScrutinyDevelopment/ScrutinyDevelopment";
-import { ScrutinyRemarksContext } from "../../../../../../../context/remarks-data-context";
+import { ScrutinyRemarksContext } from "../../../../../../../context/remarks-data-context"
 
 import { Button, Row, Col } from "react-bootstrap";
 import { useForkRef } from "@mui/material";
 import axios from "axios";
 import SubmitNew from "../SubmitNew";
+import Extension from "../Extension";
+import Release from "../Release";
+
 
 // import AddIcon from "@mui/icons-material/Add";
 
-const FormBank = ({apiResponse,applicationNumber,refreshScrutinyData,setAdditionalDetails,histeroyData,idwDataTreade,edcDataTreade,applicationStatus }) => {
+const FormBank = ({apiResponse,applicationNumber,refreshScrutinyData,histeroyData,applicationStatus }) => {
   const [purpose, setPurpose] = useState("");
   const jeLandInfoRef = useRef();
 
@@ -31,7 +34,7 @@ const FormBank = ({apiResponse,applicationNumber,refreshScrutinyData,setAddition
   const [displayAppliedLand, setDisplayAppliedLandInfo] = useState([]);
   const [displayFeeandCharges, setDisplayFeeandChargesInfo] = useState([]);
 
-const { remarksData,iconStates,handleGetFiledsStatesById,handleGetRemarkssValues,setBusinessService } = useContext(ScrutinyRemarksContext);
+const { remarksData,iconStates,handleGetFiledsStatesById,handleGetRemarkssValues,rolesDate,handleRoles } = useContext(ScrutinyRemarksContext);
   const [displayJeLand, setDisplayJeLand] = useState([]);
   const [ActiveKey, setActiveKey] = useState(1);
   const [defaultHeightPersonal, setDefaultHeightPersonal] = useState(0);
@@ -150,8 +153,7 @@ const { remarksData,iconStates,handleGetFiledsStatesById,handleGetRemarkssValues
     }
   }, [applicationNumber]);
 
-  useEffect(()=>{
-    setBusinessService("BG_NEW");
+ useEffect(()=>{
     if(applicationNumber){
       handleGetFiledsStatesById(applicationNumber);
     }
@@ -219,11 +221,11 @@ const { remarksData,iconStates,handleGetFiledsStatesById,handleGetRemarkssValues
       setDefaultheightFee(0);
     }
   };
-//   console.log("scrutiny form api get", apiResponse !== undefined ? apiResponse?.ApplicantInfo : apiResponse);
-//   console.log(
-//     "scrutiny form api get1",
-//     apiResponse !== undefined ? apiResponse?.ApplicantPurpose : apiResponse
-//   );
+  // console.log("scrutiny form api get", apiResponse !== undefined ? apiResponse?.ApplicantInfo : apiResponse);
+  // console.log(
+  //   "scrutiny form api get1",  
+  //   apiResponse !== undefined ? apiResponse?.ApplicantPurpose : apiResponse
+  // );
 //   // console.log("scrutiny form api get2", apiResponse !== undefined ? apiResponse?.LandSchedule : apiResponse);
 //   console.log("remarks api", remarksData.egScrutiny !== undefined ? remarksData.egScrutiny : null);
 
@@ -249,7 +251,26 @@ const { remarksData,iconStates,handleGetFiledsStatesById,handleGetRemarkssValues
            applicationStatus={applicationStatus}
            ></SubmitNew>
          </div>
-        
+         <div 
+       
+         >
+      <Extension
+      // setAdditionalDetails = {setAdditionalDetails}
+      apiResponse={apiResponse}
+           refreshScrutinyData={refreshScrutinyData}
+           applicationNumber={applicationNumber}
+      ></Extension>
+      </div>
+       <div 
+       
+         >
+      <Release
+      // setAdditionalDetails = {setAdditionalDetails}
+      apiResponse={apiResponse}
+           refreshScrutinyData={refreshScrutinyData}
+           applicationNumber={applicationNumber}
+      ></Release>
+      </div>
         </div>
       </div>
       <div style={{ position: "relative", width: "100%", display: "flex", marginBottom: 2 }}>

@@ -26,7 +26,9 @@ import CusToaster from "../../../../components/Toaster";
 import { Modal, ModalHeader, ModalBody, ModalFooter, Label } from "reactstrap";
 import { Input } from "antd";
 import ReactMultiSelect from "../../../../../../../react-components/src/atoms/ReactMultiSelect";
+import SubmitNew from "./SubmitNew";
 import { useTranslation } from "react-i18next";
+import { useParams } from "react-router-dom/cjs/react-router-dom.min";
 function RenewNew() {
   const [selects, setSelects] = useState();
   const [showhide, setShowhide] = useState("");
@@ -35,6 +37,8 @@ function RenewNew() {
   const [open4, setOpen4] = useState(false);
   const [open3, setOpen3] = useState(false);
   const {t}=useTranslation();
+  const {id} = useParams();
+  const [applicationNumber, setApplicationNumber] = useState('');
    const [showToastError, setShowToastError] = useState({ label: "", error: false, success: false });
   const handleshowhide = (event) => {
     const getuser = event.target.value;
@@ -79,17 +83,19 @@ function RenewNew() {
       return error.message;
     }
   };
- 
+   
     const bankRenew = async (data) => {
     console.log("data",data)
     const token = window?.localStorage?.getItem("token");
     const userInfo = Digit.UserService.getUser()?.info || {};
     const applicationNo = data?.newBankGuaranteeList?.[0]?.applicationNumber
+     console.log("applicationNo",applicationNo)
     try {
       const postDistrict = {
         NewBankGuaranteeRequest: [
           {
-            applicationNumber:"HR_BG_NEW_20230227000483",
+            applicationNumber:id,
+            
             ...data,
             updateType:"EXTEND",
            originCountry:data?.originCountry?.label
@@ -139,7 +145,7 @@ function RenewNew() {
           alignContent: "center",
         }}
       >
-        <span style={{ color: "#817f7f", fontSize: 14 }} className="">
+        <span style={{ color: "#817f7f", fontSize: 14 }} className="" >
           - BG Detail
         </span>
         {open4 ? <RemoveIcon></RemoveIcon> : <AddIcon></AddIcon>}
@@ -327,7 +333,7 @@ function RenewNew() {
                              <th class="fw-normal">{`${t("EXTENSION_UPLOAD_DOC")}`}
                              {/* Upload document */}
                              </th>
-                              <th class="fw-normal">{`${t("EXTENSION_ACTION")}`}</th>
+                              {/* <th class="fw-normal">{`${t("EXTENSION_ACTION")}`}</th> */}
                           </tr>
                         </thead>
                         <tbody>
@@ -353,7 +359,7 @@ function RenewNew() {
                                       </a>
                                     )}
                                   </div></td>
-                               <td><DeleteIcon style={{ fill: "#ff1a1a" }} /></td>
+                               {/* <td><DeleteIcon style={{ fill: "#ff1a1a" }} /></td> */}
                           </tr>
                            <tr>
                             <td>2</td>
@@ -377,7 +383,7 @@ function RenewNew() {
                                       </a>
                                     )}
                                   </div></td>
-                               <td><DeleteIcon style={{ fill: "#ff1a1a" }} /></td>
+                               {/* <td><DeleteIcon style={{ fill: "#ff1a1a" }} /></td> */}
                           </tr>
                         </tbody>
                         </div>

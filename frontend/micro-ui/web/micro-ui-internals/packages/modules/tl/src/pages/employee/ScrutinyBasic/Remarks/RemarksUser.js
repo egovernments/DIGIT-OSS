@@ -1,8 +1,8 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useState, useRef, useEffect, useContext  } from "react";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import { TextInput, Label, SubmitBar, LinkLabel, ActionBar, CloseSvg, DatePicker, MobileNumber } from "@egovernments/digit-ui-react-components";
-import { Form, Col, Row } from "react-bootstrap";
+import {Card, Form, Col, Row } from "react-bootstrap";
 import axios from "axios";
 import { useStyles } from "./styles/modalChild.style";
 import { useParams } from "react-router-dom";
@@ -11,6 +11,7 @@ import { useParams } from "react-router-dom";
 // import { getDocShareholding } from "../ScrutinyDevelopment/docview.helper";
 // import Visibility from "@mui/icons-material/Visibility";
 // import FileDownload from "@mui/icons-material/FileDownload";
+
 import { IconButton } from "@mui/material";
 import { useTranslation } from "react-i18next";
 import { useLocation } from "react-router-dom";
@@ -20,15 +21,26 @@ import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
 
 import Collapse from "react-bootstrap/Collapse";
+import DataGridDemo from "../PatwariHQ";
+import { ScrutinyRemarksContext } from "../../../../../context/remarks-data-context";
 
 
 
 function FullScreenDialog(props) {
 
+  const {remarksData,notingRemarksData,iconStates,rolesDate,handleRoles,handleGetFiledsStatesById,handleGetRemarkssValues,handleGetNotingRemarkssValues } = useContext(ScrutinyRemarksContext);
+
+
+
+  
+  
+
+
   const userInfo = Digit.UserService.getUser()?.info || {};
   const classes = useStyles();
   const smShow = props.displaymodal;
   const docModal = props.disPlayDoc;
+  const remarksDataRole = props.remarksDataExternal;
   const [RemarksDeveloper, setDeveloperRemarks] = useState("");
   const [RemarksEntered, setRemarksEntered] = useState("");
   const [yesOrNoClicked, setIsYesorNoClicked] = useState();
@@ -51,85 +63,76 @@ function FullScreenDialog(props) {
   };
 
 
-
+  // console.log("newdataPAFullScreen", remarksDataRole);
 
   // ///////////////////////
   const [open14, setOpen14] = useState(false);
-  const [remarksDataExternal, setRemarksDataExternal] = useState({});
+  
   const [loader, setLoader] = useState(false);
 
-  const handleDrawingClick = async () =>{
-    // setLoader(true);
-
+  
+  console.log("remarksinputFieldValue" , inputFieldValue3,inputFieldValue2 ,inputFieldValue);
+  const [remarksDataExternal, setRemarksDataExternal] = useState();
+  // if (inputFieldValue3 !== null ) {
+     const setRoleDataModal = async () =>{
+ 
     const dataToSend = {
-        RequestInfo: {
-            apiId: "Rainmaker",
-            action: "_create",
-            did: 1,
-            key: "",
-            msgId: "20170310130900|en_IN",
-            ts: 0,
-            ver: ".01",
-            authToken: authToken,
-           
-        },
+          RequestInfo: {
+              apiId: "Rainmaker",
+              action: "_create",
+              did: 1,
+              key: "",
+              msgId: "20170310130900|en_IN",
+              ts: 0,
+              ver: ".01",
+              authToken: authToken,
+             
+          },
+      };
+      try {
+          const Resp = await axios.post(`/land-services/egscrutiny/_search4?applicationNumber=${id}&roles=${inputFieldValue3}`, dataToSend).then((response) => {
+              return response.data;
+          });
+    
+          console.log("RemarksSection", Resp);
+       
+          setRemarksDataExternal(Resp?.egScrutiny);
+          
+      } catch (error) {
+        
+          console.log(error);
+      }
+    
     };
-    try {
-        const Resp = axios.post(`/land-services/egscrutiny/_search4?applicationNumber=${id}&roles=${inputFieldValue3}`, dataToSend).then((response) => {
-            return response.data;
-        });
-  
-        console.log("RemarksSection", Resp);
-        // setLoader(false);
-        setRemarksDataExternal(Resp);
-        smShow == false
-    } catch (error) {
-      // setLoader(false);
-        console.log(error);
-    }
-  
-  };
+  // }
 
-
-
-
-  //////////////////////////
 
  
 
-
-
-  useEffect(() => {
-    handleDrawingClick();
-  }, [])
-  
-  console.log("remarksDataExternal" , remarksDataExternal);
 
   return (
     <div>
        {/* {loader && <Spinner></Spinner>} */}
 
        <Modal
-      size="lg"
-      class="modal fade bd-example-modal-xl"
-      tabindex="-1"
-       role="dialog" 
-      //  aria-labelledby="myExtraLargeModalLabel"
-        // aria-hidden="true"
-  
-    // className="modal-lg modal-center"
+       class="modal fade"
+       id="exampleModalScrollable" 
+       tabindex="-1"
+        role="dialog" 
+        aria-labelledby="exampleModalScrollableTitle" 
+        aria-hidden="true"
+      scrollable={true}
+     
       show={smShow}
-      // aria-labelledby="example-modal-sizes-title-sm"
-      aria-labelledby="contained-modal-title-vcenter"
+      
       centered
-      style={{ position: "fixed", left: "50%", top: "50%", transform: "translate(-50% , -50%)" }}
+      style={{ position: "fixed", left: "50%", top: "50%", transform: "translate(-50% , -50%)" , height:700 ,marginTop: "50px"  }}
       onHide={props.onClose}
     >
-      <Modal.Header closeButton in={open14}>
-        <Modal.Title id="example-modal-sizes-title-sm">
+      <Modal.Header closeButton in={open14} style={{ textAlign: "center" ,backgroundColor: "#FFD954" ,marginLeft:"3%", maxWidth:"95%" }}>
+     
+        ONLINE LICENSE APPLICATION SCRUTINY SINGLE USER
       
-
-        </Modal.Title>
       </Modal.Header>
       
       {/* <div
@@ -163,9 +166,10 @@ function FullScreenDialog(props) {
             >
      */}
       <div style={{ position: "relative", width: "100%", display: "flex", margin: 2 }}>
-     <Row style={{  marginRight:10, marginLeft:10}}>
-      {remarksDataExternal !== null ?  (
-                      remarksDataExternal?.egScrutiny?.map((el, index) => {
+     <Row style={{  marginRight:40, marginLeft:20}}>
+    
+      {/* {remarksDataRole !== null ?  (
+                     remarksDataRole?.map((el, index) => {
                         return (
                           <div>
                             <table colSpan = "2" className="table table-bordered" style={{ backgroundColor: "#ddf2cf" }}>
@@ -358,7 +362,226 @@ function FullScreenDialog(props) {
                         })
                       ) : (
                         <p></p>
-                      )}
+                      )} */}
+
+
+
+<button type="submit" onClick={setRoleDataModal}>{inputFieldValue3}</button>
+
+
+{remarksDataExternal !== null ?  (
+                     remarksDataExternal?.map((el, index) => {
+                        return (
+
+                          <div>
+                             {el?.approvedfiledDetails !== null ? (
+       el?.approvedfiledDetails?.map((data, i) => {
+                  return (
+                          <table colSpan = "2" className="table table-bordered" >
+                <thead style={{ backgroundColor: "#ddf2cf" }}>
+
+                  <tr className="border-bottom-0">
+                    <th class="fw-normal pb-0 border-bottom-0 align-top">
+                      Sr.No
+                    </th>
+                    <th class="fw-normal pb-0 border-bottom-0 align-top">
+                      Filed Name
+                    </th>
+                    <th class="fw-normal pb-0 border-bottom-0 align-top">
+                      Filed value
+                    </th>
+                    <th class="fw-normal pb-0 border-bottom-0 align-top">
+                      Status
+                    </th>
+
+                    <th class="fw-normal pb-0 border-bottom-0 align-top">
+                      Remarks
+                    </th>
+                  </tr>
+                  <tr>
+
+                  </tr>
+
+
+                </thead>
+                 <tbody>
+             
+                
+                
+                       <tr >
+
+                            <td>
+                              {i + 1}
+                            </td>
+                            <td>
+                              <b>{data.name}</b>
+                            </td>
+                            <td>
+                              <b>{data.value}</b>
+                            </td>
+
+                            <td>
+                              <b>{data.isApproved}</b>
+                            </td>
+                            <td>
+                           
+                              <i>{<div dangerouslySetInnerHTML={{__html: data.remarks}}/>}</i>
+                            </td>
+
+                          </tr>
+                          </tbody>
+                      </table>
+                             );
+                            })
+                          ) : (
+                            <p></p>
+                          )}
+                      
+                            <br></br>
+                      
+             
+                 {el?.condApprovedfiledDetails !== null ? (
+       el?.condApprovedfiledDetails?.map((data1, i1) => {
+                  return (
+                    <table colSpan = "2" className="table table-bordered" >
+                <thead style={{ backgroundColor: "#ddf2cf" }}>
+
+                  <tr className="border-bottom-0">
+                    <th class="fw-normal pb-0 border-bottom-0 align-top">
+                      Sr.No
+                    </th>
+                    <th class="fw-normal pb-0 border-bottom-0 align-top">
+                      Filed Name
+                    </th>
+                    <th class="fw-normal pb-0 border-bottom-0 align-top">
+                      Filed value
+                    </th>
+                    <th class="fw-normal pb-0 border-bottom-0 align-top">
+                      Status
+                    </th>
+
+                    <th class="fw-normal pb-0 border-bottom-0 align-top">
+                      Remarks
+                    </th>
+                  </tr>
+                  <tr>
+
+                  </tr>
+
+
+                </thead>
+                 <tbody>
+                
+                       <tr >
+
+                            <td>
+                              {i1 + 1}
+                            </td>
+                            <td>
+                              <b>{data1.name}</b>
+                            </td>
+                            <td>
+                              <b>{data1.value}</b>
+                            </td>
+
+                            <td>
+                              <b>{data1.isApproved}</b>
+                            </td>
+                            <td>
+                           
+                              <i>{<div dangerouslySetInnerHTML={{__html: data1.remarks}}/>}</i>
+                            </td>
+
+                          </tr>
+
+                          </tbody>
+                      </table>
+                             );
+                            })
+                          ) : (
+                            <p></p>
+                          )}
+                      
+                            <br></br>
+                            
+             
+                 {el?.disApprovedfiledDetails !== null ? (
+       el?.disApprovedfiledDetails?.map((data2, i2s) => {
+                  return (
+                    <table colSpan = "2" className="table table-bordered" >
+                <thead style={{ backgroundColor: "#ddf2cf" }}>
+
+                  <tr className="border-bottom-0">
+                    <th class="fw-normal pb-0 border-bottom-0 align-top">
+                      Sr.No
+                    </th>
+                    <th class="fw-normal pb-0 border-bottom-0 align-top">
+                      Filed Name
+                    </th>
+                    <th class="fw-normal pb-0 border-bottom-0 align-top">
+                      Filed value
+                    </th>
+                    <th class="fw-normal pb-0 border-bottom-0 align-top">
+                      Status
+                    </th>
+
+                    <th class="fw-normal pb-0 border-bottom-0 align-top">
+                      Remarks
+                    </th>
+                  </tr>
+                  <tr>
+
+                  </tr>
+
+
+                </thead>
+                 <tbody>
+                
+                       <tr >
+
+                            <td>
+                              {i2s + 1}
+                            </td>
+                            <td>
+                              <b>{data2.name}</b>
+                            </td>
+                            <td>
+                              <b>{data2.value}</b>
+                            </td>
+
+                            <td>
+                              <b>{data2.isApproved}</b>
+                            </td>
+                            <td>
+                           
+                              <i>{<div dangerouslySetInnerHTML={{__html: data2.remarks}}/>}</i>
+                            </td>
+
+                          </tr>
+                          </tbody>
+                      </table>
+                             );
+                            })
+                          ) : (
+                            <p></p>
+                          )}
+                      
+                          </div>
+);
+})
+) : (
+<p></p>
+)}
+
+                      {/* <DataGridDemo
+                      
+                      remarksData={remarksData}
+                      dataForIcons={rolesDate}
+                      >
+                    </DataGridDemo> */}
+                      </Row>
+                      <Row>
+
                       </Row>
         </div>
       {/* </div>
