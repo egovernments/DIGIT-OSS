@@ -68,29 +68,11 @@ public class UserService {
 		if (owner != null) {
 			userDetailResponse = userExists(owner);
 
-			if (userDetailResponse != null && !CollectionUtils.isEmpty(userDetailResponse.getUser())) {
-// 				owner = userDetailResponse.getUser().get(0);
-				Integer count = repository.getVehicleCount(vehicleRequest, "ACTIVE");
-
-				for (int i = 0; i < userDetailResponse.getUser().size(); i++) {
-					if (count > 0
-							&& vehicleRequest.getVehicle().getOwner().getMobileNumber()
-									.equals(userDetailResponse.getUser().get(i).getMobileNumber())
-							&& !userDetailResponse.getUser().get(i).getUuid()
-									.equals(vehicleRequest.getVehicle().getOwner().getUuid())) {
-
-						throw new CustomException(VehicleErrorConstants.ALREADY_DRIVER_EXIST,
-								VehicleErrorConstants.VEHICLE_ERROR_MESSAGE);
-
-					}
-				}
-			}
 			if (!isUpdate) {
 				if (userDetailResponse != null && !CollectionUtils.isEmpty(userDetailResponse.getUser())) {
-					throw new CustomException(VehicleErrorConstants.ALREADY_DRIVER_EXIST,
-							VehicleErrorConstants.VEHICLE_ERROR_MESSAGE);
-				}
-				owner = createVehicleOwner(owner, vehicleRequest.getRequestInfo());
+					owner = userDetailResponse.getUser().get(0);
+				} else
+					owner = createVehicleOwner(owner, vehicleRequest.getRequestInfo());
 			} else {
 
 				HashMap<String, String> errorMap = new HashMap<>();

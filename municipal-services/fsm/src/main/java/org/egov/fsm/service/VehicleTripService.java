@@ -85,7 +85,7 @@ public class VehicleTripService {
 			vehicleId = vehicleTripsForApplication.get(0).getVehicle().getId();
 
 		}
-		if (!vehicleId.equalsIgnoreCase(fsmRequest.getFsm().getVehicleId())) {
+		if (vehicleId != null && !vehicleId.equalsIgnoreCase(fsmRequest.getFsm().getVehicleId())) {
 
 			decreaseTripWhileUpdate(fsmRequest, fsm, oldNumberOfTrips);
 			increaseUpdateTripDetails(fsmRequest.getFsm().getNoOfTrips(), fsmRequest, fsm);
