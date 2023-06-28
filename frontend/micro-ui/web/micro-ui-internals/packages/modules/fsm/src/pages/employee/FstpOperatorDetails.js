@@ -139,7 +139,6 @@ const FstpOperatorDetails = () => {
         history.location.pathname.includes("new") ? handleCreate() : handleSubmit();
       default:
         setSelectedAction();
-        console.debug("default case");
         break;
     }
   }, [selectedAction]);
@@ -155,9 +154,23 @@ const FstpOperatorDetails = () => {
 
   const handleSubmit = () => {
     const wasteCombined = tripDetails.reduce((acc, trip) => acc + trip.volume, 0);
-    if (applicationNos && (!wasteCollected || wasteCollected > wasteCombined || wasteCollected > vehicle.vehicle.tankCapacity)) {
-      setErrors({ wasteRecieved: "ES_FSTP_INVALID_WASTE_AMOUNT" });
-      wasteRecievedRef.current.scrollIntoView({ behavior: "smooth", block: "center" });
+    if (applicationNos) {
+      if (!wasteCollected) {
+        setErrors({ wasteRecieved: "ES_FSTP_INVALID_WASTE" });
+        wasteRecievedRef.current.scrollIntoView({
+          behavior: "smooth",
+          block: "center",
+        });
+        return;
+      }
+      if (wasteCollected > wasteCombined || wasteCollected > vehicle.vehicle.tankCapacity) {
+        setErrors({ wasteRecieved: "ES_FSTP_INVALID_WASTE_AMOUNT" });
+        wasteRecievedRef.current.scrollIntoView({
+          behavior: "smooth",
+          block: "center",
+        });
+        return;
+      }
       return;
     }
     if (tripStartTime === null) {
@@ -426,7 +439,7 @@ const FstpOperatorDetails = () => {
     <div>
       <Header styles={{ marginLeft: "16px" }}>{t("ES_INBOX_VEHICLE_LOG")}</Header>
       <Card>
-        <StatusTable styles={{ marginLeft: "16ox" }}>
+        <StatusTable styles={{ marginLeft: "16px" }}>
           {vehicleData?.map((row, index) => (
             <Row
               rowContainerStyle={
