@@ -90,11 +90,10 @@ const ColumnMetricData = ({data, setChartDenomination, index }) => {
             visibility: "visible"
           }}
         >
-          <span style={{ fontWeight: "500", color: "white" }}>{`${showDateOrCount?.[id]?.count ? `${showDateOrCount?.[id]?.count} ` : ""}${t(`TIP_${data.name}`)}`}</span>
+          <span style={{ fontWeight: "500", color: "white" }}>{t(`TIP_${data.name}`)}</span>
         </span>
-        
         </div>
-        <div style={{ textAlign: "center", paddingTop: "0px", wordWrap: "break-word" }}>{`${showDateOrCount?.[id]?.count ? `${showDateOrCount?.[id]?.count} ` : ""}${t(`${data.name}`)}`}</div>
+        <div style={{ textAlign: "center", paddingTop: "0px", wordWrap: "break-word" }}>{`${response?.responseData?.data?.[0]?.plots?.[2]?.value != 0 ? `${response?.responseData?.data?.[0]?.plots?.[2]?.value} ` : ""}${t(`${data.name}`)}`}</div>
       </div>
       
     );

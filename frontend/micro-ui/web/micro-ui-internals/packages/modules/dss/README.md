@@ -52,6 +52,7 @@ const initDigitUI = () => {
 # Changelog
 
 ```bash
+1.5.34 Count config added for Metric chart
 1.5.33 Horizontal Bar and Pie chart alignment fixes
 1.5.32 Percentage symbol showing in Yaxis ticker and left alignment of label for FSM Capacity Utilization 
 1.5.31 Horizontal Bar chart alignment fixes
