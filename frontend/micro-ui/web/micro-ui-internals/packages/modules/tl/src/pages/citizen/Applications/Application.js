@@ -172,6 +172,48 @@ const MyApplications = ({ view }) => {
     }
   };
 
+  const withdrawlPayment = async (id) => {
+    const token = window?.localStorage?.getItem("token");
+    setLoader(true);
+    const payload = {
+      Licenses: [
+        {
+          applicationNumber: id,
+           action: "WITHDRAWL",
+           tenantId: "hr",
+           businessService: "TL",
+          licenseType: "PERMANENT",
+          status:"WITHDRAWL"
+          
+        }
+      ],
+      RequestInfo: {
+        apiId: "Rainmaker",
+        ver: ".01",
+        ts: null,
+        did: "1",
+        key: "",
+        msgId: "20170310130900|en_IN",
+        authToken: token,
+        userInfo: userInfo,
+      },
+    };
+    try {
+      const Resp = await axios.post(`/tl-services/v1/_update`, payload, { responseType: "arraybuffer" });
+      setLoader(false);
+      const pdfBlob = new Blob([Resp.data], { type: "application/pdf" });
+      const pdfUrl = URL.createObjectURL(pdfBlob);
+      const link = document.createElement("a");
+      link.href = pdfUrl;
+      link.download = "file.pdf";
+      link.click();
+      window.URL.revokeObjectURL(pdfUrl);
+    } catch (error) {
+      setLoader(false);
+      return error;
+    }
+  };
+
   return (
     <div>
       {loader && <Spinner />}
@@ -386,7 +428,7 @@ const MyApplications = ({ view }) => {
                       <button onClick={() => showPdf(item?.applicationNumber)} type="button" class="btn btn-primary"></button>
                     </StyledTableCell>
                     <StyledTableCell component="th" scope="row">
-                      <button type="button" class="btn btn-danger"></button>
+                      <button onClick={() => withdrawlPayment(item?.applicationNumber)} type="button" class="btn btn-danger"></button>
                     </StyledTableCell>
                   </StyledTableRow>
                 );
