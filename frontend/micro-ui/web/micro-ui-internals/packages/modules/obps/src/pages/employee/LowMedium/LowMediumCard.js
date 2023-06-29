@@ -30,7 +30,7 @@ const LowMediumCard = (props) => {
   const [isEnableLoader, setIsEnableLoader] = useState(false);
   const [isWarningPop, setWarningPopUp] = useState(false);
   const [showhide19, setShowhide19] = useState("true");
-  const [businessService, setBusinessService] = useState("TECHNICAL_PROFESSIONAL");
+  const [businessService, setBusinessService] = useState("BPA_LOW");
   const [moduleCode, setModuleCode] = useState("TL");
   const [scrutinyDetails, setScrutinyDetails] = useState();
   // const [applicationNumber,setApplicationNumber] = useState("");
@@ -181,7 +181,7 @@ const LowMediumCard = (props) => {
 
   const submitAction = async (data = {}, nocData = false, isOBPS = {}) => {
     let tempdata = data || {};
-    tempdata.Licenses[0].tradeLicenseDetail.tradeType = "TECHNICAL_PROFESSIONAL";
+    tempdata.Licenses[0].tradeLicenseDetail.tradeType = "BPA_LOW";
     console.log("logger log1223", tempdata);
     // return;
     try {
@@ -299,7 +299,7 @@ const LowMediumCard = (props) => {
 
         <div class="col-md-10 bg-light text-right" style={{ position: "relative", marginBottom: 30 }}>
           {showModal ? (
-            <ActionModal
+            <ActionModal 
               t={t}
               action={selectedAction}
               tenantId={tenantId}
@@ -308,7 +308,7 @@ const LowMediumCard = (props) => {
               applicationDetails={applicationDetails}
               applicationData={{
                 ...applicationDetails?.applicationData,
-                workflowCode: applicationDetails?.applicationData?.workflowCode || "TECHNICAL_PROFESSIONAL",
+                workflowCode: applicationDetails?.applicationData?.workflowCode || "BPA_LOW",
               }}
               closeModal={closeModal}
               submitAction={submitAction}

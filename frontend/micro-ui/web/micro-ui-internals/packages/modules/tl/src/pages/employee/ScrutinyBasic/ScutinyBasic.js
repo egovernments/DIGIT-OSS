@@ -66,7 +66,7 @@ const ScrutitnyForms = ({ apiResponse, applicationNumber, refreshScrutinyData ,p
   
   const [purpose, setPurpose] = useState("");
   const jeLandInfoRef = useRef();
-  const { register, handleSubmit , watch , setValue} = useForm();
+  const { register, handleSubmit , watch , setValue, formState:{errors}} = useForm();
   
   const { id } = useParams();
   const [displayPersonal, setDisplayPersonalInfo] = useState([]);
@@ -1184,6 +1184,8 @@ console.log("userInFODATA123" , userInfo);
           register = {register}
           setValue = {setValue}
           dataProfrmaFileds ={dataProfrmaFileds}
+          watch={watch}
+          errors={errors}
               // style={{}}
          />
            {/* <input as="textarea" rows={1} type="text" className="form-control" placeholder="" {...register("landOwnerA")}/> */}

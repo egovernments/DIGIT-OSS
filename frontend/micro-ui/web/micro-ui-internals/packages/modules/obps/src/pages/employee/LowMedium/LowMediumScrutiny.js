@@ -20,7 +20,7 @@ import { useLocation } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import axios from "axios";
 import Visibility from "@mui/icons-material/Visibility";
-import { getDocShareholding } from "../docview.helper"; 
+import { getDocShareholding } from "../docview.helper";
 
 function LowMediumScrutiny({ apiResponse, refreshScrutinyData, applicationNumber, passUncheckedList, passCheckedList, dataForIcons, applicationStatus }) {
 
@@ -69,26 +69,80 @@ function LowMediumScrutiny({ apiResponse, refreshScrutinyData, applicationNumber
 
     const documentsList = [
         {
-            label: t('QULAIFICATION_CERTIFICATES'),
-            fileName: "qualificationCertificate",
-            selectorKey: "qualificationCertificateFile"
+            label: t("Form BRS – I "),
+            fileName: "formBRSI",
+            selectorKey: "formBRSIFile",
         },
         {
-            label: t('EXPERIENCE_CERTIFICATES'),
-            fileName: "experienceCertificate",
-            selectorKey: "experienceCertificateFile"
+            label: t("Form BRS - II "),
+            fileName: "formBRSII",
+            selectorKey: "formBRSIIFile",
         },
         {
-            label: t('COA_LETTER'),
-            fileName: "coaLetter",
-            selectorKey: "coaLetterFile"
+            label: t("Form BRS -V (A1) (up to 16.5 M Ht "),
+            fileName: "formBRSV",
+            selectorKey: "formBRSVFile",
         },
         {
-            label: t('IDENTITY_PROOF'),
-            fileName: "identifyProof",
-            selectorKey: "identifyProofFile"
+            label: t(`An Affidavit from the Owner for
+            ownership and Technical Person that they
+            have understood the provisions of the
+            zoning plan/Haryana Building Code 2017
+            (whichever is applicable) and shall not
+            deviate from the same`),
+            fileName: "anAfidavitFromOwner",
+            selectorKey: "anAfidavitFromOwnerFile",
         },
-    ]
+        {
+            label: t(`Certificate regarding the functionality of
+            services as obtained from colonizer by
+            owner/Technical Person`),
+            fileName: "certificateRegardingTheFunctionality",
+            selectorKey: "certificateRegardingTheFunctionalityFile",
+        },
+        {
+            label: t(` Copy of Zoning plan/Verification of
+            boundary duly verified by the colonizer`),
+            fileName: "copyOfZoningPlan",
+            selectorKey: "copyOfZoningPlanFile",
+        },
+        {
+            label: t(`Ownership documents duly verified by
+            the Technical Person`),
+            fileName: "ownershipDocuments",
+            selectorKey: "ownershipDocumentsFile",
+        },
+        {
+            label: t(`Site report w.r.t. any construction at the
+            applied site and on adjoining plots`),
+            fileName: "siteReport",
+            selectorKey: "siteReportFile",
+        },
+        {
+            label: t(`Structural Stability Certificate as
+            applicable from Haryana Building code
+            2017`),
+            fileName: "structuralStabilityCertificate",
+            selectorKey: "structuralStabilityCertificateFile",
+        },
+        {
+            label: t(`Copy of sale deed/Allotment Letter`),
+            fileName: "copyOfSaleDeed",
+            selectorKey: "copyOfSaleDeedFile",
+        },
+        {
+            label: t(`Copy of approved zoning plan certified by
+            the Technical Person`),
+            fileName: "copyOfApprovedZoning",
+            selectorKey: "copyOfApprovedZoningFile",
+        },
+        {
+            label: t(`Copy of affidavit clarifying the status of
+            roof right`),
+            fileName: "copyOfAffidavitClarifying",
+            selectorKey: "copyOfAffidavitClarifyingFile",
+        },
+    ];
 
     const [fileStoreId, setFileStoreId] = useState({});
     const [selectedFiles, setSelectedFiles] = useState([]);
@@ -288,7 +342,7 @@ function LowMediumScrutiny({ apiResponse, refreshScrutinyData, applicationNumber
                 }}
             >
                 <span style={{ color: "#817f7f" }} className="">
-                    Technical Professional
+                    {t("LOW_MEDIUM_RISK_BUILDINGS")}
                 </span>
                 {open2 ? <RemoveIcon></RemoveIcon> : <AddIcon></AddIcon>}
             </div>
@@ -297,7 +351,7 @@ function LowMediumScrutiny({ apiResponse, refreshScrutinyData, applicationNumber
                     <Card
                     // style={{ width: "126%", border: "5px solid #1266af" }}
                     >
-                        <h4 style={{ fontSize: "25px", marginLeft: "21px" }}>Technical Professional</h4>
+                        <h4 style={{ fontSize: "25px", marginLeft: "21px" }}>{t("LOW_MEDIUM_RISK_BUILDINGS")}</h4>
                         <div className="card">
                             <Row className="col-12">
 
@@ -312,25 +366,206 @@ function LowMediumScrutiny({ apiResponse, refreshScrutinyData, applicationNumber
                                     applicationStatus={applicationStatus}
                                 ></ModalChild>
 
-
                                 <div className="col col-3">
                                     <FormControl className="w-100">
                                         <h2 className="FormLable">
-                                            {`${t("NAME")}`} <span style={{ color: "red" }}>*</span>
+                                            {`${t("APPLICATION_DATE")}`} <span style={{ color: "red" }}>*</span>
                                         </h2>
                                         <div className="d-flex align-items-center">
 
-                                            <input className="form-control" disabled {...register("name")} />
+                                            <input className="form-control" disabled {...register("applicationDate")} />
                                             <ReportProblemIcon
                                                 style={{
-                                                    color: getIconColor(t('NAME')),
+                                                    color: getIconColor(t('APPLICATION_DATE')),
                                                 }}
                                                 className="ml-2"
                                                 onClick={() => {
                                                     setSmShow(true);
-                                                    setOpennedModal(t('NAME'));
-                                                    setLabelValue(t('NAME')),
-                                                        setFieldValue(watch('name') || null);
+                                                    setOpennedModal(t('APPLICATION_DATE'));
+                                                    setLabelValue(t('APPLICATION_DATE')),
+                                                        setFieldValue(watch('applicationDate') || null);
+                                                }}
+                                            ></ReportProblemIcon>
+                                        </div>
+                                    </FormControl>
+                                </div>
+
+
+                                <div className="col col-3">
+                                    <FormControl className="w-100">
+                                        <h2 className="FormLable">
+                                            {`${t("APPLICATION_TYPE")}`} <span style={{ color: "red" }}>*</span>
+                                        </h2>
+                                        <div className="d-flex align-items-center">
+
+                                            <input className="form-control" disabled {...register("applicationType")} />
+                                            <ReportProblemIcon
+                                                style={{
+                                                    color: getIconColor(t('APPLICATION_TYPE')),
+                                                }}
+                                                className="ml-2"
+                                                onClick={() => {
+                                                    setSmShow(true);
+                                                    setOpennedModal(t('APPLICATION_TYPE'));
+                                                    setLabelValue(t('APPLICATION_TYPE')),
+                                                        setFieldValue(watch('applicationType') || null);
+                                                }}
+                                            ></ReportProblemIcon>
+                                        </div>
+                                    </FormControl>
+                                </div>
+
+
+                                <div className="col col-3">
+                                    <FormControl className="w-100">
+                                        <h2 className="FormLable">
+                                            {`${t("SERVICE_TYPE")}`} <span style={{ color: "red" }}>*</span>
+                                        </h2>
+                                        <div className="d-flex align-items-center">
+
+                                            <input className="form-control" disabled {...register("serviceType")} />
+                                            <ReportProblemIcon
+                                                style={{
+                                                    color: getIconColor(t('SERVICE_TYPE')),
+                                                }}
+                                                className="ml-2"
+                                                onClick={() => {
+                                                    setSmShow(true);
+                                                    setOpennedModal(t('SERVICE_TYPE'));
+                                                    setLabelValue(t('SERVICE_TYPE')),
+                                                        setFieldValue(watch('serviceType') || null);
+                                                }}
+                                            ></ReportProblemIcon>
+                                        </div>
+                                    </FormControl>
+                                </div>
+
+
+                                <div className="col col-3">
+                                    <FormControl className="w-100">
+                                        <h2 className="FormLable">
+                                            {`${t("OCCUPANCY")}`} <span style={{ color: "red" }}>*</span>
+                                        </h2>
+                                        <div className="d-flex align-items-center">
+
+                                            <input className="form-control" disabled {...register("occupancy")} />
+                                            <ReportProblemIcon
+                                                style={{
+                                                    color: getIconColor(t('OCCUPANCY')),
+                                                }}
+                                                className="ml-2"
+                                                onClick={() => {
+                                                    setSmShow(true);
+                                                    setOpennedModal(t('OCCUPANCY'));
+                                                    setLabelValue(t('OCCUPANCY')),
+                                                        setFieldValue(watch('occupancy') || null);
+                                                }}
+                                            ></ReportProblemIcon>
+                                        </div>
+                                    </FormControl>
+                                </div>
+
+                                <div className="col col-3">
+                                    <FormControl className="w-100">
+                                        <h2 className="FormLable">
+                                            {`${t("RISK_TYPE")}`} <span style={{ color: "red" }}>*</span>
+                                        </h2>
+                                        <div className="d-flex align-items-center">
+
+                                            <input className="form-control" disabled {...register("riskType")} />
+                                            <ReportProblemIcon
+                                                style={{
+                                                    color: getIconColor(t('RISK_TYPE')),
+                                                }}
+                                                className="ml-2"
+                                                onClick={() => {
+                                                    setSmShow(true);
+                                                    setOpennedModal(t('RISK_TYPE'));
+                                                    setLabelValue(t('RISK_TYPE')),
+                                                        setFieldValue(watch('riskType') || null);
+                                                }}
+                                            ></ReportProblemIcon>
+                                        </div>
+                                    </FormControl>
+                                </div>
+
+
+                                <div className="col col-3">
+                                    <FormControl className="w-100">
+                                        <h2 className="FormLable">
+                                            {`${t("APPLICANT_NAME")}`} <span style={{ color: "red" }}>*</span>
+                                        </h2>
+                                        <div className="d-flex align-items-center">
+
+                                            <input className="form-control" disabled {...register("applicationName")} />
+                                            <ReportProblemIcon
+                                                style={{
+                                                    color: getIconColor(t('APPLICANT_NAME')),
+                                                }}
+                                                className="ml-2"
+                                                onClick={() => {
+                                                    setSmShow(true);
+                                                    setOpennedModal(t('APPLICANT_NAME'));
+                                                    setLabelValue(t('APPLICANT_NAME')),
+                                                        setFieldValue(watch('applicationName') || null);
+                                                }}
+                                            ></ReportProblemIcon>
+                                        </div>
+                                    </FormControl>
+                                </div>
+
+                            </Row>
+
+                            <br />
+
+                            <h3 className="mt-3 mb-4" style={{ fontSize: "22px", fontWeight: "600" }}>EDCR Details</h3>
+                            <Row className="col-12">
+
+                                <div className="col col-3">
+                                    <FormControl className="w-100">
+                                        <h2 className="FormLable">
+                                            {`${t("EDCR_NUMBER")}`} <span style={{ color: "red" }}>*</span>
+                                        </h2>
+                                        <div className="d-flex align-items-center">
+
+                                            <input className="form-control" disabled {...register("edcrNumber")} />
+                                            <ReportProblemIcon
+                                                style={{
+                                                    color: getIconColor(t('EDCR_NUMBER')),
+                                                }}
+                                                className="ml-2"
+                                                onClick={() => {
+                                                    setSmShow(true);
+                                                    setOpennedModal(t('EDCR_NUMBER'));
+                                                    setLabelValue(t('EDCR_NUMBER')),
+                                                        setFieldValue(watch('edcrNumber') || null);
+                                                }}
+                                            ></ReportProblemIcon>
+                                        </div>
+                                    </FormControl>
+                                </div>
+
+                                <div className="col col-3">
+                                    <FormControl className="w-100">
+                                        <h2 className="FormLable">
+                                            {`${t("PLAN_DIAGRAM")}`} <span style={{ color: "red" }}>*</span>
+                                        </h2>
+                                        <div className="d-flex align-items-center">
+
+                                            <a onClick={() => getDocShareholding(watch("planDiagram"), setLoader)} className="btn btn-sm ">
+                                                <Visibility color="info" className="icon" />
+                                            </a>
+
+                                            <ReportProblemIcon
+                                                style={{
+                                                    color: getIconColor(t('PLAN_DIAGRAM')),
+                                                }}
+                                                className="ml-2"
+                                                onClick={() => {
+                                                    setSmShow(true);
+                                                    setOpennedModal(t('PLAN_DIAGRAM'));
+                                                    setLabelValue(t('PLAN_DIAGRAM')),
+                                                        setFieldValue(watch('planDiagram') || null);
                                                 }}
                                             ></ReportProblemIcon>
                                         </div>
@@ -342,196 +577,58 @@ function LowMediumScrutiny({ apiResponse, refreshScrutinyData, applicationNumber
                                 <div className="col col-3">
                                     <FormControl className="w-100">
                                         <h2 className="FormLable">
-                                            {`${t("GENDER")}`} <span style={{ color: "red" }}>*</span>
+                                            {`${t("SCRUTINY_REPORT_OUTPUT")}`} <span style={{ color: "red" }}>*</span>
                                         </h2>
                                         <div className="d-flex align-items-center">
 
-                                            <input className="form-control" disabled {...register("gender")} />
+                                            <a onClick={() => getDocShareholding(watch("scrutinyReportOutput"), setLoader)} className="btn btn-sm ">
+                                                <Visibility color="info" className="icon" />
+                                            </a>
+                                            
                                             <ReportProblemIcon
                                                 style={{
-                                                    color: getIconColor(t('GENDER')),
+                                                    color: getIconColor(t('SCRUTINY_REPORT_OUTPUT')),
                                                 }}
                                                 className="ml-2"
                                                 onClick={() => {
                                                     setSmShow(true);
-                                                    setOpennedModal(t('GENDER'));
-                                                    setLabelValue(t('GENDER')),
-                                                        setFieldValue(watch('gender') || null);
+                                                    setOpennedModal(t('SCRUTINY_REPORT_OUTPUT'));
+                                                    setLabelValue(t('SCRUTINY_REPORT_OUTPUT')),
+                                                        setFieldValue(watch('scrutinyReportOutput') || null);
                                                 }}
                                             ></ReportProblemIcon>
                                         </div>
+
                                     </FormControl>
                                 </div>
 
 
-                                <div className="col col-3">
-                                    <FormControl className="w-100">
-                                        <h2 className="FormLable">
-                                            {`${t("MOBILE_NUMBER")}`} <span style={{ color: "red" }}>*</span>
-                                        </h2>
-                                        <div className="d-flex align-items-center">
+                            </Row>
 
-                                            <input className="form-control" disabled {...register("mobileNumber")} />
-                                            <ReportProblemIcon
-                                                style={{
-                                                    color: getIconColor(t('MOBILE_NUMBER')),
-                                                }}
-                                                className="ml-2"
-                                                onClick={() => {
-                                                    setSmShow(true);
-                                                    setOpennedModal(t('MOBILE_NUMBER'));
-                                                    setLabelValue(t('MOBILE_NUMBER')),
-                                                        setFieldValue(watch('mobileNumber') || null);
-                                                }}
-                                            ></ReportProblemIcon>
-                                        </div>
-                                    </FormControl>
-                                </div>
 
+                            <br />
+
+                            <h3 className="mt-3 mb-4" style={{ fontSize: "22px", fontWeight: "600" }}>Location Details</h3>
+                            <Row className="col-12">
 
                                 <div className="col col-3">
                                     <FormControl className="w-100">
                                         <h2 className="FormLable">
-                                            {`${t("DOB")}`} <span style={{ color: "red" }}>*</span>
+                                            {`${t("GIS")}`} <span style={{ color: "red" }}>*</span>
                                         </h2>
                                         <div className="d-flex align-items-center">
 
-                                            <input className="form-control" disabled {...register("dob")} />
+                                            <input className="form-control" disabled {...register("gis")} />
                                             <ReportProblemIcon
                                                 style={{
-                                                    color: getIconColor(t('DOB')),
+                                                    color: getIconColor(t('GIS')),
                                                 }}
                                                 className="ml-2"
                                                 onClick={() => {
                                                     setSmShow(true);
-                                                    setOpennedModal(t('DOB'));
-                                                    setLabelValue(t('DOB')),
-                                                        setFieldValue(watch('dob') || null);
-                                                }}
-                                            ></ReportProblemIcon>
-                                        </div>
-                                    </FormControl>
-                                </div>
-
-
-                                <div className="col col-3">
-                                    <FormControl className="w-100">
-                                        <h2 className="FormLable">
-                                            {`${t("EMAIL")}`} <span style={{ color: "red" }}>*</span>
-                                        </h2>
-                                        <div className="d-flex align-items-center">
-
-                                            <input className="form-control" disabled {...register("email")} />
-                                            <ReportProblemIcon
-                                                style={{
-                                                    color: getIconColor(t('EMAIL')),
-                                                }}
-                                                className="ml-2"
-                                                onClick={() => {
-                                                    setSmShow(true);
-                                                    setOpennedModal(t('EMAIL'));
-                                                    setLabelValue(t('EMAIL')),
-                                                        setFieldValue(watch('email') || null);
-                                                }}
-                                            ></ReportProblemIcon>
-                                        </div>
-                                    </FormControl>
-                                </div>
-
-
-                                <div className="col col-3">
-                                    <FormControl className="w-100">
-                                        <h2 className="FormLable">
-                                            {`${t("PAN_NUMBER")}`} <span style={{ color: "red" }}>*</span>
-                                        </h2>
-                                        <div className="d-flex align-items-center">
-
-                                            <input className="form-control" disabled {...register("pan")} />
-                                            <ReportProblemIcon
-                                                style={{
-                                                    color: getIconColor(t('PAN_NUMBER')),
-                                                }}
-                                                className="ml-2"
-                                                onClick={() => {
-                                                    setSmShow(true);
-                                                    setOpennedModal(t('PAN_NUMBER'));
-                                                    setLabelValue(t('PAN_NUMBER')),
-                                                        setFieldValue(watch('pan') || null);
-                                                }}
-                                            ></ReportProblemIcon>
-                                        </div>
-                                    </FormControl>
-                                </div>
-
-
-                                <div className="col col-3">
-                                    <FormControl className="w-100">
-                                        <h2 className="FormLable">
-                                            {`${t("ADDRESS_LINE_1")}`} <span style={{ color: "red" }}>*</span>
-                                        </h2>
-                                        <div className="d-flex align-items-center">
-
-                                            <input className="form-control" disabled {...register("addressLine1")} />
-                                            <ReportProblemIcon
-                                                style={{
-                                                    color: getIconColor(t('ADDRESS_LINE_1')),
-                                                }}
-                                                className="ml-2"
-                                                onClick={() => {
-                                                    setSmShow(true);
-                                                    setOpennedModal(t('ADDRESS_LINE_1'));
-                                                    setLabelValue(t('ADDRESS_LINE_1')),
-                                                        setFieldValue(watch('addressLine1') || null);
-                                                }}
-                                            ></ReportProblemIcon>
-                                        </div>
-                                    </FormControl>
-                                </div>
-
-
-                                <div className="col col-3">
-                                    <FormControl className="w-100">
-                                        <h2 className="FormLable">
-                                            {`${t("ADDRESS_LINE_2")}`} <span style={{ color: "red" }}>*</span>
-                                        </h2>
-                                        <div className="d-flex align-items-center">
-
-                                            <input className="form-control" disabled {...register("addressLine2")} />
-                                            <ReportProblemIcon
-                                                style={{
-                                                    color: getIconColor(t('ADDRESS_LINE_2')),
-                                                }}
-                                                className="ml-2"
-                                                onClick={() => {
-                                                    setSmShow(true);
-                                                    setOpennedModal(t('ADDRESS_LINE_2'));
-                                                    setLabelValue(t('ADDRESS_LINE_2')),
-                                                        setFieldValue(watch('addressLine2') || null);
-                                                }}
-                                            ></ReportProblemIcon>
-                                        </div>
-                                    </FormControl>
-                                </div>
-
-
-                                <div className="col col-3">
-                                    <FormControl className="w-100">
-                                        <h2 className="FormLable">
-                                            {`${t("ADDRESS_LINE_3")}`} <span style={{ color: "red" }}>*</span>
-                                        </h2>
-                                        <div className="d-flex align-items-center">
-
-                                            <input className="form-control" disabled {...register("addressLine3")} />
-                                            <ReportProblemIcon
-                                                style={{
-                                                    color: getIconColor(t('ADDRESS_LINE_3')),
-                                                }}
-                                                className="ml-2"
-                                                onClick={() => {
-                                                    setSmShow(true);
-                                                    setOpennedModal(t('ADDRESS_LINE_3'));
-                                                    setLabelValue(t('ADDRESS_LINE_3')),
-                                                        setFieldValue(watch('addressLine3') || null);
+                                                    setOpennedModal(t('GIS'));
+                                                    setLabelValue(t('GIS')),
+                                                        setFieldValue(watch('gis') || null);
                                                 }}
                                             ></ReportProblemIcon>
                                         </div>
@@ -541,24 +638,25 @@ function LowMediumScrutiny({ apiResponse, refreshScrutinyData, applicationNumber
                                 <div className="col col-3">
                                     <FormControl className="w-100">
                                         <h2 className="FormLable">
-                                            {`${t("ADDRESS_LINED")}`} <span style={{ color: "red" }}>*</span>
+                                            {`${t("PIN")}`} <span style={{ color: "red" }}>*</span>
                                         </h2>
                                         <div className="d-flex align-items-center">
 
-                                            <input className="form-control" disabled {...register("addressLined")} />
+                                            <input className="form-control" disabled {...register("pin")} />
                                             <ReportProblemIcon
                                                 style={{
-                                                    color: getIconColor(t('ADDRESS_LINED')),
+                                                    color: getIconColor(t('PIN')),
                                                 }}
                                                 className="ml-2"
                                                 onClick={() => {
                                                     setSmShow(true);
-                                                    setOpennedModal(t('ADDRESS_LINED'));
-                                                    setLabelValue(t('ADDRESS_LINED')),
-                                                        setFieldValue(watch('addressLined') || null);
+                                                    setOpennedModal(t('PIN'));
+                                                    setLabelValue(t('PIN')),
+                                                        setFieldValue(watch('pin') || null);
                                                 }}
                                             ></ReportProblemIcon>
                                         </div>
+
                                     </FormControl>
                                 </div>
 
@@ -591,21 +689,45 @@ function LowMediumScrutiny({ apiResponse, refreshScrutinyData, applicationNumber
                                 <div className="col col-3">
                                     <FormControl className="w-100">
                                         <h2 className="FormLable">
-                                            {`${t("PINCODE")}`} <span style={{ color: "red" }}>*</span>
+                                            {`${t("LOCALITY_MOHALLA")}`} <span style={{ color: "red" }}>*</span>
                                         </h2>
                                         <div className="d-flex align-items-center">
 
-                                            <input className="form-control" disabled {...register("pin")} />
+                                            <input className="form-control" disabled {...register("locality")} />
                                             <ReportProblemIcon
                                                 style={{
-                                                    color: getIconColor(t('PINCODE')),
+                                                    color: getIconColor(t('LOCALITY_MOHALLA')),
                                                 }}
                                                 className="ml-2"
                                                 onClick={() => {
                                                     setSmShow(true);
-                                                    setOpennedModal(t('PINCODE'));
-                                                    setLabelValue(t('PINCODE')),
-                                                        setFieldValue(watch('pin') || null);
+                                                    setOpennedModal(t('LOCALITY_MOHALLA'));
+                                                    setLabelValue(t('LOCALITY_MOHALLA')),
+                                                        setFieldValue(watch('locality') || null);
+                                                }}
+                                            ></ReportProblemIcon>
+                                        </div>
+                                    </FormControl>
+                                </div>
+
+                                <div className="col col-3">
+                                    <FormControl className="w-100">
+                                        <h2 className="FormLable">
+                                            {`${t("STREET_NAME")}`} <span style={{ color: "red" }}>*</span>
+                                        </h2>
+                                        <div className="d-flex align-items-center">
+
+                                            <input className="form-control" disabled {...register("street")} />
+                                            <ReportProblemIcon
+                                                style={{
+                                                    color: getIconColor(t('STREET_NAME')),
+                                                }}
+                                                className="ml-2"
+                                                onClick={() => {
+                                                    setSmShow(true);
+                                                    setOpennedModal(t('STREET_NAME'));
+                                                    setLabelValue(t('STREET_NAME')),
+                                                        setFieldValue(watch('street') || null);
                                                 }}
                                             ></ReportProblemIcon>
                                         </div>
@@ -616,24 +738,399 @@ function LowMediumScrutiny({ apiResponse, refreshScrutinyData, applicationNumber
                                 <div className="col col-3">
                                     <FormControl className="w-100">
                                         <h2 className="FormLable">
-                                            {`${t("VILLAGE")}`} <span style={{ color: "red" }}>*</span>
+                                            {`${t("LANDMARK")}`} <span style={{ color: "red" }}>*</span>
                                         </h2>
                                         <div className="d-flex align-items-center">
 
-                                            <input className="form-control" disabled {...register("village")} />
+                                            <input className="form-control" disabled {...register("landmark")} />
                                             <ReportProblemIcon
                                                 style={{
-                                                    color: getIconColor(t('VILLAGE')),
+                                                    color: getIconColor(t('LANDMARK')),
                                                 }}
                                                 className="ml-2"
                                                 onClick={() => {
                                                     setSmShow(true);
-                                                    setOpennedModal(t('VILLAGE'));
-                                                    setLabelValue(t('VILLAGE')),
-                                                        setFieldValue(watch('village') || null);
+                                                    setOpennedModal(t('LANDMARK'));
+                                                    setLabelValue(t('LANDMARK')),
+                                                        setFieldValue(watch('landmark') || null);
                                                 }}
                                             ></ReportProblemIcon>
                                         </div>
+                                    </FormControl>
+                                </div>
+
+
+                            </Row>
+
+                            <br />
+
+<h3 className="mt-3 mb-4" style={{ fontSize: "22px", fontWeight: "600" }}>Proposed Building Abstract</h3>
+<Row className="col-12">
+
+    <div className="col col-3">
+        <FormControl className="w-100">
+            <h2 className="FormLable">
+                {`${t("TOTAL_AREA")}`} <span style={{ color: "red" }}>*</span>
+            </h2>
+            <div className="d-flex align-items-center">
+
+                <input className="form-control" disabled {...register("totalArea")} />
+                <ReportProblemIcon
+                    style={{
+                        color: getIconColor(t('TOTAL_AREA')),
+                    }}
+                    className="ml-2"
+                    onClick={() => {
+                        setSmShow(true);
+                        setOpennedModal(t('TOTAL_AREA'));
+                        setLabelValue(t('TOTAL_AREA')),
+                            setFieldValue(watch('totalArea') || null);
+                    }}
+                ></ReportProblemIcon>
+            </div>
+        </FormControl>
+    </div>
+
+    <div className="col col-3">
+        <FormControl className="w-100">
+            <h2 className="FormLable">
+                {`${t("TOTAL_BUILTUP_AREA")}`} <span style={{ color: "red" }}>*</span>
+            </h2>
+            <div className="d-flex align-items-center">
+
+                <input className="form-control" disabled {...register("totalBuiltUPArea")} />
+                <ReportProblemIcon
+                    style={{
+                        color: getIconColor(t('TOTAL_BUILTUP_AREA')),
+                    }}
+                    className="ml-2"
+                    onClick={() => {
+                        setSmShow(true);
+                        setOpennedModal(t('TOTAL_BUILTUP_AREA'));
+                        setLabelValue(t('TOTAL_BUILTUP_AREA')),
+                            setFieldValue(watch('totalBuiltUPArea') || null);
+                    }}
+                ></ReportProblemIcon>
+            </div>
+
+        </FormControl>
+    </div>
+
+
+    <div className="col col-3">
+        <FormControl className="w-100">
+            <h2 className="FormLable">
+                {`${t("NUMBER_OF_FLOORS")}`} <span style={{ color: "red" }}>*</span>
+            </h2>
+            <div className="d-flex align-items-center">
+
+                <input className="form-control" disabled {...register("noOfFloors")} />
+                <ReportProblemIcon
+                    style={{
+                        color: getIconColor(t('NUMBER_OF_FLOORS')),
+                    }}
+                    className="ml-2"
+                    onClick={() => {
+                        setSmShow(true);
+                        setOpennedModal(t('NUMBER_OF_FLOORS'));
+                        setLabelValue(t('NUMBER_OF_FLOORS')),
+                            setFieldValue(watch('noOfFloors') || null);
+                    }}
+                ></ReportProblemIcon>
+            </div>
+        </FormControl>
+    </div>
+
+
+    <div className="col col-3">
+        <FormControl className="w-100">
+            <h2 className="FormLable">
+                {`${t("FLOOR")}`} <span style={{ color: "red" }}>*</span>
+            </h2>
+            <div className="d-flex align-items-center">
+
+                <input className="form-control" disabled {...register("floor")} />
+                <ReportProblemIcon
+                    style={{
+                        color: getIconColor(t('FLOOR')),
+                    }}
+                    className="ml-2"
+                    onClick={() => {
+                        setSmShow(true);
+                        setOpennedModal(t('FLOOR'));
+                        setLabelValue(t('FLOOR')),
+                            setFieldValue(watch('floor') || null);
+                    }}
+                ></ReportProblemIcon>
+            </div>
+        </FormControl>
+    </div>
+
+    <div className="col col-3">
+        <FormControl className="w-100">
+            <h2 className="FormLable">
+                {`${t("COVERAGE")}`} <span style={{ color: "red" }}>*</span>
+            </h2>
+            <div className="d-flex align-items-center">
+
+                <input className="form-control" disabled {...register("coverage")} />
+                <ReportProblemIcon
+                    style={{
+                        color: getIconColor(t('COVERAGE')),
+                    }}
+                    className="ml-2"
+                    onClick={() => {
+                        setSmShow(true);
+                        setOpennedModal(t('COVERAGE'));
+                        setLabelValue(t('COVERAGE')),
+                            setFieldValue(watch('coverage') || null);
+                    }}
+                ></ReportProblemIcon>
+            </div>
+        </FormControl>
+    </div>
+
+
+</Row>
+
+<br />
+
+<h3 className="mt-3 mb-4" style={{ fontSize: "22px", fontWeight: "600" }}>{t('BPA_BUILDING_SETBACK_HEADER')}</h3>
+<Row className="col-12">
+
+    <div className="col col-3">
+        <FormControl className="w-100">
+            <h2 className="FormLable">
+                {`${t("TOTAL_AREA")}`} <span style={{ color: "red" }}>*</span>
+            </h2>
+            <div className="d-flex align-items-center">
+
+                <input className="form-control" disabled {...register("totalArea")} />
+                <ReportProblemIcon
+                    style={{
+                        color: getIconColor(t('TOTAL_AREA')),
+                    }}
+                    className="ml-2"
+                    onClick={() => {
+                        setSmShow(true);
+                        setOpennedModal(t('TOTAL_AREA'));
+                        setLabelValue(t('TOTAL_AREA')),
+                            setFieldValue(watch('totalArea') || null);
+                    }}
+                ></ReportProblemIcon>
+            </div>
+        </FormControl>
+    </div>
+
+    <div className="col col-3">
+        <FormControl className="w-100">
+            <h2 className="FormLable">
+                {`${t("BPA_FRONT_AREA_HEADER")}`} <span style={{ color: "red" }}>*</span>
+            </h2>
+            <div className="d-flex align-items-center">
+
+                <input className="form-control" disabled {...register("frontArea")} />
+                <ReportProblemIcon
+                    style={{
+                        color: getIconColor(t('BPA_FRONT_AREA_HEADER')),
+                    }}
+                    className="ml-2"
+                    onClick={() => {
+                        setSmShow(true);
+                        setOpennedModal(t('BPA_FRONT_AREA_HEADER'));
+                        setLabelValue(t('BPA_FRONT_AREA_HEADER')),
+                            setFieldValue(watch('frontArea') || null);
+                    }}
+                ></ReportProblemIcon>
+            </div>
+
+        </FormControl>
+    </div>
+
+
+    <div className="col col-3">
+        <FormControl className="w-100">
+            <h2 className="FormLable">
+                {`${t("BPA_REAR_AREA_HEADER")}`} <span style={{ color: "red" }}>*</span>
+            </h2>
+            <div className="d-flex align-items-center">
+
+                <input className="form-control" disabled {...register("rearArea")} />
+                <ReportProblemIcon
+                    style={{
+                        color: getIconColor(t('BPA_REAR_AREA_HEADER')),
+                    }}
+                    className="ml-2"
+                    onClick={() => {
+                        setSmShow(true);
+                        setOpennedModal(t('BPA_REAR_AREA_HEADER'));
+                        setLabelValue(t('BPA_REAR_AREA_HEADER')),
+                            setFieldValue(watch('rearArea') || null);
+                    }}
+                ></ReportProblemIcon>
+            </div>
+        </FormControl>
+    </div>
+
+
+    <div className="col col-3">
+        <FormControl className="w-100">
+            <h2 className="FormLable">
+                {`${t("BPA_SCRUTINY_SIDE1_LABEL")}`} <span style={{ color: "red" }}>*</span>
+            </h2>
+            <div className="d-flex align-items-center">
+
+                <input className="form-control" disabled {...register("side1")} />
+                <ReportProblemIcon
+                    style={{
+                        color: getIconColor(t('BPA_SCRUTINY_SIDE1_LABEL')),
+                    }}
+                    className="ml-2"
+                    onClick={() => {
+                        setSmShow(true);
+                        setOpennedModal(t('BPA_SCRUTINY_SIDE1_LABEL'));
+                        setLabelValue(t('BPA_SCRUTINY_SIDE1_LABEL')),
+                            setFieldValue(watch('side1') || null);
+                    }}
+                ></ReportProblemIcon>
+            </div>
+        </FormControl>
+    </div>
+
+    <div className="col col-3">
+        <FormControl className="w-100">
+            <h2 className="FormLable">
+                {`${t("BPA_SCRUTINY_SIDE2_LABEL")}`} <span style={{ color: "red" }}>*</span>
+            </h2>
+            <div className="d-flex align-items-center">
+
+                <input className="form-control" disabled {...register("side2")} />
+                <ReportProblemIcon
+                    style={{
+                        color: getIconColor(t('BPA_SCRUTINY_SIDE2_LABEL')),
+                    }}
+                    className="ml-2"
+                    onClick={() => {
+                        setSmShow(true);
+                        setOpennedModal(t('BPA_SCRUTINY_SIDE2_LABEL'));
+                        setLabelValue(t('BPA_SCRUTINY_SIDE2_LABEL')),
+                            setFieldValue(watch('side2') || null);
+                    }}
+                ></ReportProblemIcon>
+            </div>
+        </FormControl>
+    </div>
+
+
+</Row>
+
+<br />
+
+<h3 className="mt-3 mb-4" style={{ fontSize: "22px", fontWeight: "600" }}>Basement Position</h3>
+<Row className="col-12">
+
+    <div className="col col-3">
+        <FormControl className="w-100">
+            <h2 className="FormLable">
+                {`${t("DISTANCE_FROM_LEFT")}`} <span style={{ color: "red" }}>*</span>
+            </h2>
+            <div className="d-flex align-items-center">
+
+                <input className="form-control" disabled {...register("distanceFromLeft")} />
+                <ReportProblemIcon
+                    style={{
+                        color: getIconColor(t('DISTANCE_FROM_LEFT')),
+                    }}
+                    className="ml-2"
+                    onClick={() => {
+                        setSmShow(true);
+                        setOpennedModal(t('DISTANCE_FROM_LEFT'));
+                        setLabelValue(t('DISTANCE_FROM_LEFT')),
+                            setFieldValue(watch('distanceFromLeft') || null);
+                    }}
+                ></ReportProblemIcon>
+            </div>
+        </FormControl>
+    </div>
+
+    <div className="col col-3">
+        <FormControl className="w-100">
+            <h2 className="FormLable">
+                {`${t("DISTANCE_FROM_RIGHT")}`} <span style={{ color: "red" }}>*</span>
+            </h2>
+            <div className="d-flex align-items-center">
+
+                <input className="form-control" disabled {...register("distanceFromRight")} />
+                <ReportProblemIcon
+                    style={{
+                        color: getIconColor(t('DISTANCE_FROM_RIGHT')),
+                    }}
+                    className="ml-2"
+                    onClick={() => {
+                        setSmShow(true);
+                        setOpennedModal(t('DISTANCE_FROM_RIGHT'));
+                        setLabelValue(t('DISTANCE_FROM_RIGHT')),
+                            setFieldValue(watch('distanceFromRight') || null);
+                    }}
+                ></ReportProblemIcon>
+            </div>
+
+        </FormControl>
+    </div>
+
+
+</Row>
+                            <br />
+
+                            <h3 className="mt-3 mb-4" style={{ fontSize: "22px", fontWeight: "600" }}>{t('BPA_BUILDING_EXISTING_FLOOR_AREA_HEADER')}</h3>
+                            <Row className="col-12">
+
+                                <div className="col col-3">
+                                    <FormControl className="w-100">
+                                        <h2 className="FormLable">
+                                            {`${t("BPA_EXISTING_AREA_OF_ALL_FLOOR_HEADER")}`} <span style={{ color: "red" }}>*</span>
+                                        </h2>
+                                        <div className="d-flex align-items-center">
+
+                                            <input className="form-control" disabled {...register("existingAreaOfAllFloor")} />
+                                            <ReportProblemIcon
+                                                style={{
+                                                    color: getIconColor(t('BPA_EXISTING_AREA_OF_ALL_FLOOR_HEADER')),
+                                                }}
+                                                className="ml-2"
+                                                onClick={() => {
+                                                    setSmShow(true);
+                                                    setOpennedModal(t('BPA_EXISTING_AREA_OF_ALL_FLOOR_HEADER'));
+                                                    setLabelValue(t('BPA_EXISTING_AREA_OF_ALL_FLOOR_HEADER')),
+                                                        setFieldValue(watch('existingAreaOfAllFloor') || null);
+                                                }}
+                                            ></ReportProblemIcon>
+                                        </div>
+                                    </FormControl>
+                                </div>
+
+                                <div className="col col-3">
+                                    <FormControl className="w-100">
+                                        <h2 className="FormLable">
+                                            {`${t("BPA_EXISTING_FAR_ACHIEVED_HEADER")}`} <span style={{ color: "red" }}>*</span>
+                                        </h2>
+                                        <div className="d-flex align-items-center">
+
+                                            <input className="form-control" disabled {...register("existingForAchieved")} />
+                                            <ReportProblemIcon
+                                                style={{
+                                                    color: getIconColor(t('BPA_EXISTING_FAR_ACHIEVED_HEADER')),
+                                                }}
+                                                className="ml-2"
+                                                onClick={() => {
+                                                    setSmShow(true);
+                                                    setOpennedModal(t('BPA_EXISTING_FAR_ACHIEVED_HEADER'));
+                                                    setLabelValue(t('BPA_EXISTING_FAR_ACHIEVED_HEADER')),
+                                                        setFieldValue(watch('existingForAchieved') || null);
+                                                }}
+                                            ></ReportProblemIcon>
+                                        </div>
+
                                     </FormControl>
                                 </div>
 
@@ -641,24 +1138,80 @@ function LowMediumScrutiny({ apiResponse, refreshScrutinyData, applicationNumber
                                 <div className="col col-3">
                                     <FormControl className="w-100">
                                         <h2 className="FormLable">
-                                            {`${t("TEHSIL")}`} <span style={{ color: "red" }}>*</span>
+                                            {`${t("PURCHASABLE_AREA")}`} <span style={{ color: "red" }}>*</span>
                                         </h2>
                                         <div className="d-flex align-items-center">
 
-                                            <input className="form-control" disabled {...register("tehsil")} />
+                                            <input className="form-control" disabled {...register("purchasableArea")} />
                                             <ReportProblemIcon
                                                 style={{
-                                                    color: getIconColor(t('TEHSIL')),
+                                                    color: getIconColor(t('PURCHASABLE_AREA')),
                                                 }}
                                                 className="ml-2"
                                                 onClick={() => {
                                                     setSmShow(true);
-                                                    setOpennedModal(t('TEHSIL'));
-                                                    setLabelValue(t('TEHSIL')),
-                                                    setFieldValue(watch('tehsil') || null);
+                                                    setOpennedModal(t('PURCHASABLE_AREA'));
+                                                    setLabelValue(t('PURCHASABLE_AREA')),
+                                                        setFieldValue(watch('purchasableArea') || null);
                                                 }}
                                             ></ReportProblemIcon>
                                         </div>
+                                    </FormControl>
+                                </div>
+
+
+                            </Row>
+                            <br />
+
+                            <h3 className="mt-3 mb-4" style={{ fontSize: "22px", fontWeight: "600" }}>{t('BPA_BUILDING_PROPOSED_AREA_HEADER')}</h3>
+                            <Row className="col-12">
+
+                                <div className="col col-3"> 
+                                    <FormControl className="w-100">
+                                        <h2 className="FormLable">
+                                            {`${t("BPA_PROPOSED_FLOOR_WISE_COVERAGED_AREA_HEADER")}`} <span style={{ color: "red" }}>*</span>
+                                        </h2>
+                                        <div className="d-flex align-items-center">
+
+                                            <input className="form-control" disabled {...register("proposedFloorWiseCoverageArea")} />
+                                            <ReportProblemIcon
+                                                style={{
+                                                    color: getIconColor(t('BPA_PROPOSED_FLOOR_WISE_COVERAGED_AREA_HEADER')),
+                                                }}
+                                                className="ml-2"
+                                                onClick={() => {
+                                                    setSmShow(true);
+                                                    setOpennedModal(t('BPA_PROPOSED_FLOOR_WISE_COVERAGED_AREA_HEADER'));
+                                                    setLabelValue(t('BPA_PROPOSED_FLOOR_WISE_COVERAGED_AREA_HEADER')),
+                                                        setFieldValue(watch('proposedFloorWiseCoverageArea') || null);
+                                                }}
+                                            ></ReportProblemIcon>
+                                        </div>
+                                    </FormControl>
+                                </div>
+
+                                <div className="col col-3">
+                                    <FormControl className="w-100">
+                                        <h2 className="FormLable">
+                                            {`${t("BPA_PROPOSED_TOTAL_AREA_HEADER")}`} <span style={{ color: "red" }}>*</span>
+                                        </h2>
+                                        <div className="d-flex align-items-center">
+
+                                            <input className="form-control" disabled {...register("proposedTotalArea")} />
+                                            <ReportProblemIcon
+                                                style={{
+                                                    color: getIconColor(t('BPA_PROPOSED_TOTAL_AREA_HEADER')),
+                                                }}
+                                                className="ml-2"
+                                                onClick={() => {
+                                                    setSmShow(true);
+                                                    setOpennedModal(t('BPA_PROPOSED_TOTAL_AREA_HEADER'));
+                                                    setLabelValue(t('BPA_PROPOSED_TOTAL_AREA_HEADER')),
+                                                        setFieldValue(watch('proposedTotalArea') || null);
+                                                }}
+                                            ></ReportProblemIcon>
+                                        </div>
+
                                     </FormControl>
                                 </div>
 
@@ -666,54 +1219,51 @@ function LowMediumScrutiny({ apiResponse, refreshScrutinyData, applicationNumber
                                 <div className="col col-3">
                                     <FormControl className="w-100">
                                         <h2 className="FormLable">
-                                            {`${t("STATE")}`} <span style={{ color: "red" }}>*</span>
+                                            {`${t("BPA_PROPOSED_BUILDUP_AREA_HEADER")}`} <span style={{ color: "red" }}>*</span>
                                         </h2>
                                         <div className="d-flex align-items-center">
 
-                                            <input className="form-control" disabled {...register("state")} />
+                                            <input className="form-control" disabled {...register("proposedBuiltUpArea")} />
                                             <ReportProblemIcon
                                                 style={{
-                                                    color: getIconColor(t('STATE')),
+                                                    color: getIconColor(t('BPA_PROPOSED_BUILDUP_AREA_HEADER')),
                                                 }}
                                                 className="ml-2"
                                                 onClick={() => {
                                                     setSmShow(true);
-                                                    setOpennedModal(t('STATE'));
-                                                    setLabelValue(t('STATE')),
-                                                        setFieldValue(watch('state') || null);
+                                                    setOpennedModal(t('BPA_PROPOSED_BUILDUP_AREA_HEADER'));
+                                                    setLabelValue(t('BPA_PROPOSED_BUILDUP_AREA_HEADER')),
+                                                        setFieldValue(watch('proposedBuiltUpArea') || null);
                                                 }}
                                             ></ReportProblemIcon>
                                         </div>
                                     </FormControl>
                                 </div>
-
 
                                 <div className="col col-3">
                                     <FormControl className="w-100">
                                         <h2 className="FormLable">
-                                            {`${t("DISTRICT")}`} <span style={{ color: "red" }}>*</span>
+                                            {`${t("BPA_PROPOSED_PURCHASABLE_AREA_HEADER")}`} <span style={{ color: "red" }}>*</span>
                                         </h2>
                                         <div className="d-flex align-items-center">
 
-                                            <input className="form-control" disabled {...register("district")} />
+                                            <input className="form-control" disabled {...register("proposedPurchasableArea")} />
                                             <ReportProblemIcon
                                                 style={{
-                                                    color: getIconColor(t('DISTRICT')),
+                                                    color: getIconColor(t('BPA_PROPOSED_PURCHASABLE_AREA_HEADER')),
                                                 }}
                                                 className="ml-2"
                                                 onClick={() => {
                                                     setSmShow(true);
-                                                    setOpennedModal(t('DISTRICT'));
-                                                    setLabelValue(t('DISTRICT')),
-                                                        setFieldValue(watch('district') || null);
+                                                    setOpennedModal(t('BPA_PROPOSED_PURCHASABLE_AREA_HEADER'));
+                                                    setLabelValue(t('BPA_PROPOSED_PURCHASABLE_AREA_HEADER')),
+                                                        setFieldValue(watch('proposedPurchasableArea') || null);
                                                 }}
                                             ></ReportProblemIcon>
                                         </div>
                                     </FormControl>
                                 </div>
 
-
-                               
                             </Row>
                             <br />
                             <Row>

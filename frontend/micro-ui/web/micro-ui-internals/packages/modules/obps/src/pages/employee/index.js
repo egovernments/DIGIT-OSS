@@ -133,7 +133,7 @@ const EmployeeApp = ({ path }) => {
               component={(props) => (
                 <LowMediumInbox
                   parentRoute={path}
-                  businessService={["LOW_MEDIUM"]}
+                  businessService={["BPA_LOW"]}
                   filterComponent="TL_INBOX_FILTER"
                   initialStates={{}}
                   isInbox={true}

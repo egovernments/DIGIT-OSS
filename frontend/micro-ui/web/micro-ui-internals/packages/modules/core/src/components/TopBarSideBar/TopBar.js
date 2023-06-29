@@ -29,7 +29,7 @@ const TopBar = ({
   // const userRolesArray = userInfo?.roles.filter((user) => user.name !== "Employee" );
   // const filterDataRole = userRolesArray?.[0]?.code;
   const designation = userInfo?.name;
-  const designationName = userInfo?.roles?.[1]?.name;
+  const designationName = userInfo?.roles?.find(ele=>ele.code !== "EMPLOYEE")?.name;
   console.log("userInfodesignation" ,userInfo);
   
 

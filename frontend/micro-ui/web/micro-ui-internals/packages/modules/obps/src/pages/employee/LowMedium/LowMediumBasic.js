@@ -150,7 +150,7 @@ const { remarksData,iconStates,handleGetFiledsStatesById,handleGetRemarkssValues
   }, [applicationNumber]);
 
   useEffect(()=>{
-    setBusinessService("TECHNICAL_PROFESSIONAL");
+    setBusinessService("BPA_LOW");
     if(applicationNumber){
       handleGetFiledsStatesById(applicationNumber);
     }
@@ -247,7 +247,7 @@ const { remarksData,iconStates,handleGetFiledsStatesById,handleGetRemarkssValues
            dataForIcons={iconStates}
            applicationStatus={applicationStatus}
            ></LowMediumScrutiny>
-         </div>
+         </div> 
         
         </div>
       </div>
