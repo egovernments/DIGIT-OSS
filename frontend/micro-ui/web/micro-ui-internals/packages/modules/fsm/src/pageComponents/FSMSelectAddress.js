@@ -5,6 +5,7 @@ import Timeline from "../components/TLTimelineInFSM";
 const SelectAddress = ({ t, config, onSelect, userType, formData }) => {
   const allCities = Digit.Hooks.fsm.useTenants();
   let tenantId = Digit.ULBService.getCurrentTenantId();
+  const home_city = Digit.SessionStorage.get("CITIZEN.COMMON.HOME.CITY");
 
   const { pincode, city } = formData?.address || "";
   const cities =
@@ -12,7 +13,8 @@ const SelectAddress = ({ t, config, onSelect, userType, formData }) => {
       ? allCities.filter((city) => city.code === tenantId)
       : pincode
       ? allCities.filter((city) => city?.pincode?.some((pin) => pin == pincode))
-      : allCities;
+      : // auto selecting city on the basis of city used as login
+        allCities.filter((city) => city.code === home_city.code);
 
   const [selectedCity, setSelectedCity] = useState(() => formData?.address?.city || Digit.SessionStorage.get("fsm.file.address.city") || null);
   const { data: fetchedLocalities } = Digit.Hooks.useBoundaryLocalities(
