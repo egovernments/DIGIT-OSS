@@ -112,7 +112,7 @@ const DriverDetails = (props) => {
       case "EDIT":
         return history.push("/digit-ui/employee/fsm/registry/modify-driver/" + dsoId);
       case "HOME":
-        return history.push(`/${window?.contextPath}/employee/fsm/registry?selectedTabs=DRIVER`);
+        return history.push("/digit-ui/employee/fsm/registry?selectedTabs=DRIVER");
       default:
         break;
     }

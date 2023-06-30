@@ -119,7 +119,7 @@ const VehicleDetails = (props) => {
       case "EDIT":
         return history.push("/digit-ui/employee/fsm/registry/modify-vehicle/" + vehicleNumber);
       case "HOME":
-        return history.push(`/${window?.contextPath}/employee/fsm/registry?selectedTabs=VEHICLE`);
+        return history.push("/digit-ui/employee/fsm/registry?selectedTabs=VEHICLE");
       default:
         break;
     }
