@@ -16,6 +16,7 @@ import { useParams } from "react-router-dom";
 import { checkCurrentScreen } from "../components/DSSCard";
 import FilterContext from "../components/FilterContext";
 import Filters from "../components/Filters";
+import CustomFilter from "../components/CustomFilter";
 import FiltersNational from "../components/FiltersNational";
 import Layout from "../components/Layout";
 
@@ -301,7 +302,13 @@ const DashBoard = ({ stateCode }) => {
             closeFilters={() => setIsFilterModalOpen(false)}
             isNational={isNational}
           />
-        ) : (
+        ) : dashboardConfig[0]?.filter == 'CustomFilter' && dashboardConfig[0]?.filterConfig ? (
+        <CustomFilter
+          t={t}
+          filterConfig={dashboardConfig[0]?.filterConfig}
+          isOpen={isFilterModalOpen}
+          closeFilters={() => setIsFilterModalOpen(false)}
+        />) : (
           <Filters
             t={t}
             showModuleFilter={!isNational && dashboardConfig?.[0]?.name.includes("OVERVIEW") ? true : false}

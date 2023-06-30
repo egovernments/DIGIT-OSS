@@ -40,6 +40,8 @@
         @apply absolute min-w-full z-20;
         div{
             @apply flex w-full bg-white;
+            justify-content: flex-start;
+            align-items: center;
             &:hover{
                 @apply bg-grey-mid;
             }
@@ -49,6 +51,8 @@
             }
             p{
                 padding: 12px;
+                margin-top: 5px;
+                margin-bottom: 5px;
                 @apply text-form-field text-text-primary;
             }
             .custom-checkbox{
