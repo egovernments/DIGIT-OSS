@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { Fragment, useEffect, useState } from "react";
 import { Row, Col, Card, Container, Button } from "react-bootstrap";
 import Collapse from "react-bootstrap/Collapse";
 import AddIcon from "@mui/icons-material/Add";
@@ -18,7 +18,7 @@ import { IconButton } from "@mui/material";
 import { getDocShareholding } from "../ScrutinyDevelopment/docview.helper";
 // const windowHeight = window !== undefined ? window.innerHeight : null;
 // const [open, setOpen] = useState(false);
-const DocumentScrutiny = ({developerType , iconColorState , getRemarkData, addInfo, devDetail, applicationStatus}) => {
+const DocumentScrutiny = ({ developerType, iconColorState, getRemarkData, addInfo, devDetail, applicationStatus }) => {
   const [open, setOpen] = useState(false);
   const classes = useStyles();
 
@@ -148,719 +148,829 @@ const DocumentScrutiny = ({developerType , iconColorState , getRemarkData, addIn
         <div id="example-collapse-text" style={{ marginTop: 5, paddingLeft: 5, paddingRight: 5 }}>
           {/* <FormControl >
             <div> */}
-              <Card >
-                <Row>
-                  <FormControl>
-                  {devDetail?.addInfo?.showDevTypeFields === "Individual" && (
-                    <div className="row ">
-                      <div className="form-group row">
-                        <div className="col-sm-12">
-                          <div>
-                            <Table className="table table-bordered ml-2" size="sm">
-                              <thead>
-                                <tr>
-                                  <th class="fw-normal">S.No.</th>
-                                  <th class="fw-normal">Licence Document Details</th>
-                                  <th class="fw-normal">Annexure </th>
-                                </tr>
-                              </thead>
-                              <tbody>
-                                <tr>
-                                  <td> 1 </td>
-                                  <td>
-                                   <p>
+          <Card >
+            <Row>
+              <FormControl>
+                {devDetail?.addInfo?.showDevTypeFields === "Individual" && (
+                  <div className="row ">
+                    <div className="form-group row">
+                      <div className="col-sm-12">
+                        <div>
+                          <Table className="table table-bordered ml-2" size="sm">
+                            <thead>
+                              <tr>
+                                <th class="fw-normal">S.No.</th>
+                                <th class="fw-normal">Licence Document Details</th>
+                                <th class="fw-normal">Annexure </th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              <tr>
+                                <td> 1 </td>
+                                <td>
+                                  <p>
                                     Any Other Relevant Documents
-                                    </p>
-                                 
-                                  </td>
-                                  <td>
-                                    <div className="row">
-                                      <div className="btn btn-sm col-md-6">
-                                        <IconButton onClick={() => getDocShareholding(devDetail?.licensesDoc?.[0]?.anyOtherDoc)}>
-                                          <VisibilityIcon color="info" className="icon" />
-                                        </IconButton>
-                                      </div>
-                                      <div className="btn btn-sm col-md-6">
-                                        <IconButton onClick={() => getDocShareholding(devDetail?.licensesDoc?.[0]?.anyOtherDoc)}>
-                                          <FileDownloadIcon color="info" className="icon" />
-                                        </IconButton>
-                                      </div>
-                                    </div>
-                                  </td>
-                                </tr>
+                                  </p>
 
-                              </tbody>
-                            </Table>
-                          </div>
+                                </td>
+                                <td>
+                                  <div className="row">
+                                    {
+                                      devDetail?.licensesDoc?.[0]?.anyOtherDoc &&
+                                      <Fragment>
+                                        <div className="btn btn-sm col-md-6">
+                                          <IconButton onClick={() => getDocShareholding(devDetail?.licensesDoc?.[0]?.anyOtherDoc)}>
+                                            <VisibilityIcon color="info" className="icon" />
+                                          </IconButton>
+                                        </div>
+                                        <div className="btn btn-sm col-md-6">
+                                          <IconButton onClick={() => getDocShareholding(devDetail?.licensesDoc?.[0]?.anyOtherDoc)}>
+                                            <FileDownloadIcon color="info" className="icon" />
+                                          </IconButton>
+                                        </div>
+                                      </Fragment>
+                                    }
+                                  </div>
+                                </td>
+                              </tr>
+
+                            </tbody>
+                          </Table>
                         </div>
                       </div>
                     </div>
-                  )}
-                  {devDetail?.addInfo?.showDevTypeFields === "Proprietorship Firm" && (
-                    <div className="row ">
-                      <div className="form-group row">
-                        <div className="col-sm-12">
-                          <div>
-                            <Table className="table table-bordered ml-2" size="sm">
-                              <thead>
-                                <tr>
-                                  <th class="fw-normal">S.No.</th>
-                                  <th class="fw-normal">Licence Document Details</th>
-                                  <th class="fw-normal">Annexure </th>
-                                </tr>
-                              </thead>
-                              <tbody>
-                                <tr>
-                                  <td> 1 </td>
-                                  <td>
-                                   <p>
+                  </div>
+                )}
+                {devDetail?.addInfo?.showDevTypeFields === "Proprietorship Firm" && (
+                  <div className="row ">
+                    <div className="form-group row">
+                      <div className="col-sm-12">
+                        <div>
+                          <Table className="table table-bordered ml-2" size="sm">
+                            <thead>
+                              <tr>
+                                <th class="fw-normal">S.No.</th>
+                                <th class="fw-normal">Licence Document Details</th>
+                                <th class="fw-normal">Annexure </th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              <tr>
+                                <td> 1 </td>
+                                <td>
+                                  <p>
                                     Any Other Relevant Documents
-                                    </p>
-                                 
-                                  </td>
-                                  <td>
-                                    <div className="row">
-                                      <div className="btn btn-sm col-md-6">
-                                        <IconButton onClick={() => getDocShareholding(devDetail?.licensesDoc?.[0]?.anyOtherDoc)}>
-                                          <VisibilityIcon color="info" className="icon" />
-                                        </IconButton>
-                                      </div>
-                                      <div className="btn btn-sm col-md-6">
-                                        <IconButton onClick={() => getDocShareholding(devDetail?.licensesDoc?.[0]?.anyOtherDoc)}>
-                                          <FileDownloadIcon color="info" className="icon" />
-                                        </IconButton>
-                                      </div>
-                                    </div>
-                                  </td>
-                                </tr>
+                                  </p>
 
-                              </tbody>
-                            </Table>
-                          </div>
+                                </td>
+                                <td>
+                                  <div className="row">
+                                    {
+                                      devDetail?.licensesDoc?.[0]?.anyOtherDoc &&
+                                      <Fragment>
+                                        <div className="btn btn-sm col-md-6">
+                                          <IconButton onClick={() => getDocShareholding(devDetail?.licensesDoc?.[0]?.anyOtherDoc)}>
+                                            <VisibilityIcon color="info" className="icon" />
+                                          </IconButton>
+                                        </div>
+                                        <div className="btn btn-sm col-md-6">
+                                          <IconButton onClick={() => getDocShareholding(devDetail?.licensesDoc?.[0]?.anyOtherDoc)}>
+                                            <FileDownloadIcon color="info" className="icon" />
+                                          </IconButton>
+                                        </div>
+                                      </Fragment>
+                                    }
+                                  </div>
+                                </td>
+                              </tr>
+
+                            </tbody>
+                          </Table>
                         </div>
                       </div>
                     </div>
-                  )}
-                   {devDetail?.addInfo?.showDevTypeFields === "Partnership Firm" && (
-                    <div className="row ">
-                      <div className="form-group row">
-                        <div className="col-sm-12">
-                          <div>
-                            <Table className="table table-bordered ml-2" size="sm">
-                              <thead>
-                                <tr>
-                                  <th class="fw-normal">S.No.</th>
-                                  <th class="fw-normal">Licence Document Details</th>
-                                  <th class="fw-normal">Annexure </th>
-                                </tr>
-                              </thead>
-                              <tbody>
-                                <tr>
-                                  <td> 1 </td>
-                                  <td>
-                                   <p>
+                  </div>
+                )}
+                {devDetail?.addInfo?.showDevTypeFields === "Partnership Firm" && (
+                  <div className="row ">
+                    <div className="form-group row">
+                      <div className="col-sm-12">
+                        <div>
+                          <Table className="table table-bordered ml-2" size="sm">
+                            <thead>
+                              <tr>
+                                <th class="fw-normal">S.No.</th>
+                                <th class="fw-normal">Licence Document Details</th>
+                                <th class="fw-normal">Annexure </th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              <tr>
+                                <td> 1 </td>
+                                <td>
+                                  <p>
                                     Any Other Relevant Documents
-                                    </p>
-                                 
-                                  </td>
-                                  <td>
-                                    <div className="row">
-                                      <div className="btn btn-sm col-md-6">
-                                        <IconButton onClick={() => getDocShareholding(devDetail?.licensesDoc?.[0]?.anyOtherDoc)}>
-                                          <VisibilityIcon color="info" className="icon" />
-                                        </IconButton>
-                                      </div>
-                                      <div className="btn btn-sm col-md-6">
-                                        <IconButton onClick={() => getDocShareholding(devDetail?.licensesDoc?.[0]?.anyOtherDoc)}>
-                                          <FileDownloadIcon color="info" className="icon" />
-                                        </IconButton>
-                                      </div>
-                                    </div>
-                                  </td>
-                                </tr>
+                                  </p>
 
-                              </tbody>
-                            </Table>
-                          </div>
+                                </td>
+                                <td>
+                                  <div className="row">
+                                    {
+                                      devDetail?.licensesDoc?.[0]?.anyOtherDoc &&
+                                      <Fragment>
+                                        <div className="btn btn-sm col-md-6">
+                                          <IconButton onClick={() => getDocShareholding(devDetail?.licensesDoc?.[0]?.anyOtherDoc)}>
+                                            <VisibilityIcon color="info" className="icon" />
+                                          </IconButton>
+                                        </div>
+                                        <div className="btn btn-sm col-md-6">
+                                          <IconButton onClick={() => getDocShareholding(devDetail?.licensesDoc?.[0]?.anyOtherDoc)}>
+                                            <FileDownloadIcon color="info" className="icon" />
+                                          </IconButton>
+                                        </div>
+                                      </Fragment>
+                                    }
+                                  </div>
+                                </td>
+                              </tr>
+
+                            </tbody>
+                          </Table>
                         </div>
                       </div>
                     </div>
-                  )}
-                   {/* || "Trust" || "Hindu Undivided Family" || "Limited Liability Partnership"  Partnership Firm */}
-                  {devDetail?.addInfo?.showDevTypeFields === "Company"  && (
-                     <div className="row ">
-                     <div className="form-group row">
-                       <div className="col-sm-12">
-                         <div>
-                           <Table className="table table-bordered ml-2" size="sm">
-                             <thead>
-                               <tr>
-                                 <th class="fw-normal">S.No.</th>
-                                 <th class="fw-normal">Licence Document Details</th>
-                                 <th class="fw-normal">Annexure </th>
-                               </tr>
-                             </thead>
-                             <tbody>
-                               <tr>
-                                 <td> 1 </td>
-                                 <td>
-                                <p>
-                                   Articles Of Association 
-                                   </p>
-                                
-                                 </td>
-                                 <td>
-                                   <div className="row">
-                                     <div className="btn btn-sm col-md-6">
-                                       <IconButton onClick={() => getDocShareholding(devDetail?.licensesDoc?.[0]?.articlesOfAssociation)}>
-                                         <VisibilityIcon color="info" className="icon" />
-                                       </IconButton>
-                                     </div>
-                                     <div className="btn btn-sm col-md-6">
-                                       <IconButton onClick={() => getDocShareholding(devDetail?.licensesDoc?.[0]?.articlesOfAssociation)}>
-                                         <FileDownloadIcon color="info" className="icon" />
-                                       </IconButton>
-                                     </div>
-                                   </div>
-                                 </td>
-                               </tr>
-                               <tr>
-                                 <td> 2</td>
-                                 <td>
-                                <p>
-                                Memorandum Of Association
-                                   </p>
-                                
-                                 </td>
-                                 <td>
-                                   <div className="row">
-                                     <div className="btn btn-sm col-md-6">
-                                       <IconButton onClick={() => getDocShareholding(devDetail?.licensesDoc?.[0]?.memorandumOfArticles)}>
-                                         <VisibilityIcon color="info" className="icon" />
-                                       </IconButton>
-                                     </div>
-                                     <div className="btn btn-sm col-md-6">
-                                       <IconButton onClick={() => getDocShareholding(devDetail?.licensesDoc?.[0]?.memorandumOfArticles)}>
-                                         <FileDownloadIcon color="info" className="icon" />
-                                       </IconButton>
-                                     </div>
-                                   </div>
-                                 </td>
-                               </tr>
-                               <tr>
-                                 <td> 3</td>
-                                 <td>
-                                <p>
-                                Any Other Relevant Documents
-                                   </p>
-                                
-                                 </td>
-                                 <td>
-                                  
-                                   <div className="row">
-                                     <div className="btn btn-sm col-md-6">
-                                       <IconButton onClick={() => getDocShareholding(devDetail?.licensesDoc?.[0]?.anyOtherDoc)}>
-                                         <VisibilityIcon color="info" className="icon" />
-                                       </IconButton>
-                                     </div>
-                                     <div className="btn btn-sm col-md-6">
-                                       <IconButton onClick={() => getDocShareholding(devDetail?.licensesDoc?.[0]?.anyOtherDoc)}>
-                                         <FileDownloadIcon color="info" className="icon" />
-                                       </IconButton>
-                                     </div>
-                                   </div>
-                                 </td>
-                               </tr>
-                             </tbody>
-                           </Table>
-                         </div>
-                       </div>
-                     </div>
-                   </div>
-                  )}
-                  {devDetail?.addInfo?.showDevTypeFields === "Trust"  && (
-                     <div className="row ">
-                     <div className="form-group row">
-                       <div className="col-sm-12">
-                         <div>
-                           <Table className="table table-bordered ml-2" size="sm">
-                             <thead>
-                               <tr>
-                                 <th class="fw-normal">S.No.</th>
-                                 <th class="fw-normal">Licence Document Details</th>
-                                 <th class="fw-normal">Annexure </th>
-                               </tr>
-                             </thead>
-                             <tbody>
-                               <tr>
-                                 <td> 1 </td>
-                                 <td>
-                                <p>
-                                   Articles Of Association 
-                                   </p>
-                                
-                                 </td>
-                                 <td>
-                                   <div className="row">
-                                     <div className="btn btn-sm col-md-6">
-                                       <IconButton onClick={() => getDocShareholding(devDetail?.licensesDoc?.[0]?.articlesOfAssociation)}>
-                                         <VisibilityIcon color="info" className="icon" />
-                                       </IconButton>
-                                     </div>
-                                     <div className="btn btn-sm col-md-6">
-                                       <IconButton onClick={() => getDocShareholding(devDetail?.licensesDoc?.[0]?.articlesOfAssociation)}>
-                                         <FileDownloadIcon color="info" className="icon" />
-                                       </IconButton>
-                                     </div>
-                                   </div>
-                                 </td>
-                               </tr>
-                               <tr>
-                                 <td> 2</td>
-                                 <td>
-                                <p>
-                                Memorandum Of Association
-                                   </p>
-                                
-                                 </td>
-                                 <td>
-                                   <div className="row">
-                                     <div className="btn btn-sm col-md-6">
-                                       <IconButton onClick={() => getDocShareholding(devDetail?.licensesDoc?.[0]?.memorandumOfArticles)}>
-                                         <VisibilityIcon color="info" className="icon" />
-                                       </IconButton>
-                                     </div>
-                                     <div className="btn btn-sm col-md-6">
-                                       <IconButton onClick={() => getDocShareholding(devDetail?.licensesDoc?.[0]?.memorandumOfArticles)}>
-                                         <FileDownloadIcon color="info" className="icon" />
-                                       </IconButton>
-                                     </div>
-                                   </div>
-                                 </td>
-                               </tr>
-                               <tr>
-                                 <td> 3</td>
-                                 <td>
-                                <p>
-                                Any Other Relevant Documents
-                                   </p>
-                                
-                                 </td>
-                                 <td>
-                                   <div className="row">
-                                     <div className="btn btn-sm col-md-6">
-                                       <IconButton onClick={() => getDocShareholding(devDetail?.licensesDoc?.[0]?.anyOtherDoc)}>
-                                         <VisibilityIcon color="info" className="icon" />
-                                       </IconButton>
-                                     </div>
-                                     <div className="btn btn-sm col-md-6">
-                                       <IconButton onClick={() => getDocShareholding(devDetail?.licensesDoc?.[0]?.anyOtherDoc)}>
-                                         <FileDownloadIcon color="info" className="icon" />
-                                       </IconButton>
-                                     </div>
-                                   </div>
-                                 </td>
-                               </tr>
-                             </tbody>
-                           </Table>
-                         </div>
-                       </div>
-                     </div>
-                   </div>
-                  )}
-                  {devDetail?.addInfo?.showDevTypeFields === "Institution"  && (
-                     <div className="row ">
-                     <div className="form-group row">
-                       <div className="col-sm-12">
-                         <div>
-                           <Table className="table table-bordered ml-2" size="sm">
-                             <thead>
-                               <tr>
-                                 <th class="fw-normal">S.No.</th>
-                                 <th class="fw-normal">Licence Document Details</th>
-                                 <th class="fw-normal">Annexure </th>
-                               </tr>
-                             </thead>
-                             <tbody>
-                               <tr>
-                                 <td> 1 </td>
-                                 <td>
-                                <p>
-                                   Articles Of Association 
-                                   </p>
-                                
-                                 </td>
-                                 <td>
-                                   <div className="row">
-                                     <div className="btn btn-sm col-md-6">
-                                       <IconButton onClick={() => getDocShareholding(devDetail?.licensesDoc?.[0]?.articlesOfAssociation)}>
-                                         <VisibilityIcon color="info" className="icon" />
-                                       </IconButton>
-                                     </div>
-                                     <div className="btn btn-sm col-md-6">
-                                       <IconButton onClick={() => getDocShareholding(devDetail?.licensesDoc?.[0]?.articlesOfAssociation)}>
-                                         <FileDownloadIcon color="info" className="icon" />
-                                       </IconButton>
-                                     </div>
-                                   </div>
-                                 </td>
-                               </tr>
-                               <tr>
-                                 <td> 2</td>
-                                 <td>
-                                <p>
-                                Memorandum Of Association
-                                   </p>
-                                
-                                 </td>
-                                 <td>
-                                   <div className="row">
-                                     <div className="btn btn-sm col-md-6">
-                                       <IconButton onClick={() => getDocShareholding(devDetail?.licensesDoc?.[0]?.memorandumOfArticles)}>
-                                         <VisibilityIcon color="info" className="icon" />
-                                       </IconButton>
-                                     </div>
-                                     <div className="btn btn-sm col-md-6">
-                                       <IconButton onClick={() => getDocShareholding(devDetail?.licensesDoc?.[0]?.memorandumOfArticles)}>
-                                         <FileDownloadIcon color="info" className="icon" />
-                                       </IconButton>
-                                     </div>
-                                   </div>
-                                 </td>
-                               </tr>
-                               <tr>
-                                 <td> 3</td>
-                                 <td>
-                                <p>
-                                Any Other Relevant Documents
-                                   </p>
-                                
-                                 </td>
-                                 <td>
-                                   <div className="row">
-                                     <div className="btn btn-sm col-md-6">
-                                       <IconButton onClick={() => getDocShareholding(devDetail?.licensesDoc?.[0]?.anyOtherDoc)}>
-                                         <VisibilityIcon color="info" className="icon" />
-                                       </IconButton>
-                                     </div>
-                                     <div className="btn btn-sm col-md-6">
-                                       <IconButton onClick={() => getDocShareholding(devDetail?.licensesDoc?.[0]?.anyOtherDoc)}>
-                                         <FileDownloadIcon color="info" className="icon" />
-                                       </IconButton>
-                                     </div>
-                                   </div>
-                                 </td>
-                               </tr>
-                             </tbody>
-                           </Table>
-                         </div>
-                       </div>
-                     </div>
-                   </div>
-                  )}
-                 {devDetail?.addInfo?.showDevTypeFields === "Hindu Undivided Family"  && (
-                     <div className="row ">
-                     <div className="form-group row">
-                       <div className="col-sm-12">
-                         <div>
-                           <Table className="table table-bordered ml-2" size="sm">
-                             <thead>
-                               <tr>
-                                 <th class="fw-normal">S.No.</th>
-                                 <th class="fw-normal">Licence Document Details</th>
-                                 <th class="fw-normal">Annexure </th>
-                               </tr>
-                             </thead>
-                             <tbody>
-                               <tr>
-                                 <td> 1 </td>
-                                 <td>
-                                <p>
-                                affidavit and PAN Card
-                                   </p>
-                                
-                                 </td>
-                                 <td>
-                                   <div className="row">
-                                     <div className="btn btn-sm col-md-6">
-                                       <IconButton onClick={() => getDocShareholding(devDetail?.licensesDoc?.[0]?.affidavitAndPancard)}>
-                                         <VisibilityIcon color="info" className="icon" />
-                                       </IconButton>
-                                     </div>
-                                     <div className="btn btn-sm col-md-6">
-                                       <IconButton onClick={() => getDocShareholding(devDetail?.licensesDoc?.[0]?.affidavitAndPancard)}>
-                                         <FileDownloadIcon color="info" className="icon" />
-                                       </IconButton>
-                                     </div>
-                                   </div>
-                                 </td>
-                               </tr>
-                               
-                               <tr>
-                                 <td> 2</td>
-                                 <td>
-                                <p>
-                                Any Other Relevant Documents
-                                   </p>
-                                
-                                 </td>
-                                 <td>
-                                   <div className="row">
-                                     <div className="btn btn-sm col-md-6">
-                                       <IconButton onClick={() => getDocShareholding(devDetail?.licensesDoc?.[0]?.anyOtherDoc)}>
-                                         <VisibilityIcon color="info" className="icon" />
-                                       </IconButton>
-                                     </div>
-                                     <div className="btn btn-sm col-md-6">
-                                       <IconButton onClick={() => getDocShareholding(devDetail?.licensesDoc?.[0]?.anyOtherDoc)}>
-                                         <FileDownloadIcon color="info" className="icon" />
-                                       </IconButton>
-                                     </div>
-                                   </div>
-                                 </td>
-                               </tr>
-                             </tbody>
-                           </Table>
-                         </div>
-                       </div>
-                     </div>
-                   </div>
-                  )}
-                   {devDetail?.addInfo?.showDevTypeFields === "Limited Liability Partnership"  && (
-                     <div className="row ">
-                     <div className="form-group row">
-                       <div className="col-sm-12">
-                         <div>
-                           <Table className="table table-bordered ml-2" size="sm">
-                             <thead>
-                               <tr>
-                                 <th class="fw-normal">S.No.</th>
-                                 <th class="fw-normal">Licence Document Details</th>
-                                 <th class="fw-normal">Annexure </th>
-                               </tr>
-                             </thead>
-                             <tbody>
-                               <tr>
-                                 <td> 1 </td>
-                                 <td>
-                                <p>
-                                   Articles Of Association 
-                                   </p>
-                                
-                                 </td>
-                                 <td>
-                                   <div className="row">
-                                     <div className="btn btn-sm col-md-6">
-                                       <IconButton onClick={() => getDocShareholding(devDetail?.licensesDoc?.[0]?.articlesOfAssociation)}>
-                                         <VisibilityIcon color="info" className="icon" />
-                                       </IconButton>
-                                     </div>
-                                     <div className="btn btn-sm col-md-6">
-                                       <IconButton onClick={() => getDocShareholding(devDetail?.licensesDoc?.[0]?.articlesOfAssociation)}>
-                                         <FileDownloadIcon color="info" className="icon" />
-                                       </IconButton>
-                                     </div>
-                                   </div>
-                                 </td>
-                               </tr>
-                               <tr>
-                                 <td> 2</td>
-                                 <td>
-                                <p>
-                                Memorandum Of Association
-                                   </p>
-                                
-                                 </td>
-                                 <td>
-                                   <div className="row">
-                                     <div className="btn btn-sm col-md-6">
-                                       <IconButton onClick={() => getDocShareholding(devDetail?.licensesDoc?.[0]?.memorandumOfArticles)}>
-                                         <VisibilityIcon color="info" className="icon" />
-                                       </IconButton>
-                                     </div>
-                                     <div className="btn btn-sm col-md-6">
-                                       <IconButton onClick={() => getDocShareholding(devDetail?.licensesDoc?.[0]?.memorandumOfArticles)}>
-                                         <FileDownloadIcon color="info" className="icon" />
-                                       </IconButton>
-                                     </div>
-                                   </div>
-                                 </td>
-                               </tr>
-                               <tr>
-                                 <td> 3 </td>
-                                 <td>
-                                <p>
-                                copy of registered irrevocable partnership deed
-                                   </p>
-                                
-                                 </td>
-                                 <td>
-                                   <div className="row">
-                                     <div className="btn btn-sm col-md-6">
-                                       <IconButton onClick={() => getDocShareholding(devDetail?.licensesDoc?.[0]?.registeredIrrevocablePaternshipDeed)}>
-                                         <VisibilityIcon color="info" className="icon" />
-                                       </IconButton>
-                                     </div>
-                                     <div className="btn btn-sm col-md-6">
-                                       <IconButton onClick={() => getDocShareholding(devDetail?.licensesDoc?.[0]?.registeredIrrevocablePaternshipDeed)}>
-                                         <FileDownloadIcon color="info" className="icon" />
-                                       </IconButton>
-                                     </div>
-                                   </div>
-                                 </td>
-                               </tr>
-                               <tr>
-                                 <td> 4</td>
-                                 <td>
-                                <p>
-                                Any Other Relevant Documents
-                                   </p>
-                                
-                                 </td>
-                                 <td>
-                                   <div className="row">
-                                     <div className="btn btn-sm col-md-6">
-                                       <IconButton onClick={() => getDocShareholding(devDetail?.licensesDoc?.[0]?.anyOtherDoc)}>
-                                         <VisibilityIcon color="info" className="icon" />
-                                       </IconButton>
-                                     </div>
-                                     <div className="btn btn-sm col-md-6">
-                                       <IconButton onClick={() => getDocShareholding(devDetail?.licensesDoc?.[0]?.anyOtherDoc)}>
-                                         <FileDownloadIcon color="info" className="icon" />
-                                       </IconButton>
-                                     </div>
-                                   </div>
-                                 </td>
-                               </tr>
-                               
-                             </tbody>
-                           </Table>
-                         </div>
-                       </div>
-                     </div>
-                   </div>
-                  )}
-                   {devDetail?.addInfo?.showDevTypeFields === "Firm"  && (
-                     <div className="row ">
-                     <div className="form-group row">
-                       <div className="col-sm-12">
-                         <div>
-                           <Table className="table table-bordered ml-2" size="sm">
-                             <thead>
-                               <tr>
-                                 <th class="fw-normal">S.No.</th>
-                                 <th class="fw-normal">Licence Document Details</th>
-                                 <th class="fw-normal">Annexure </th>
-                               </tr>
-                             </thead>
-                             <tbody>
-                               <tr>
-                                 <td> 1 </td>
-                                 <td>
-                                <p>
-                                   Articles Of Association 
-                                   </p>
-                                
-                                 </td>
-                                 <td>
-                                   <div className="row">
-                                     <div className="btn btn-sm col-md-6">
-                                       <IconButton onClick={() => getDocShareholding(devDetail?.licensesDoc?.[0]?.articlesOfAssociation)}>
-                                         <VisibilityIcon color="info" className="icon" />
-                                       </IconButton>
-                                     </div>
-                                     <div className="btn btn-sm col-md-6">
-                                       <IconButton onClick={() => getDocShareholding(devDetail?.licensesDoc?.[0]?.articlesOfAssociation)}>
-                                         <FileDownloadIcon color="info" className="icon" />
-                                       </IconButton>
-                                     </div>
-                                   </div>
-                                 </td>
-                               </tr>
-                               <tr>
-                                 <td> 2</td>
-                                 <td>
-                                <p>
-                                Memorandum Of Association
-                                   </p>
-                                
-                                 </td>
-                                 <td>
-                                   <div className="row">
-                                     <div className="btn btn-sm col-md-6">
-                                       <IconButton onClick={() => getDocShareholding(devDetail?.licensesDoc?.[0]?.memorandumOfArticles)}>
-                                         <VisibilityIcon color="info" className="icon" />
-                                       </IconButton>
-                                     </div>
-                                     <div className="btn btn-sm col-md-6">
-                                       <IconButton onClick={() => getDocShareholding(devDetail?.licensesDoc?.[0]?.memorandumOfArticles)}>
-                                         <FileDownloadIcon color="info" className="icon" />
-                                       </IconButton>
-                                     </div>
-                                   </div>
-                                 </td>
-                               </tr>
-                               <tr>
-                                 <td> 3 </td>
-                                 <td>
-                                <p>
-                                copy of registered irrevocable partnership deed
-                                   </p>
-                                
-                                 </td>
-                                 <td>
-                                   <div className="row">
-                                     <div className="btn btn-sm col-md-6">
-                                       <IconButton onClick={() => getDocShareholding(devDetail?.licensesDoc?.[0]?.boardDoc)}>
-                                         <VisibilityIcon color="info" className="icon" />
-                                       </IconButton>
-                                     </div>
-                                     <div className="btn btn-sm col-md-6">
-                                       <IconButton onClick={() => getDocShareholding(devDetail?.licensesDoc?.[0]?.boardDoc)}>
-                                         <FileDownloadIcon color="info" className="icon" />
-                                       </IconButton>
-                                     </div>
-                                   </div>
-                                 </td>
-                               </tr>
-                               <tr>
-                                 <td> 4</td>
-                                 <td>
-                                <p>
-                                Any Other Relevant Documents
-                                   </p>
-                                
-                                 </td>
-                                 <td>
-                                   <div className="row">
-                                     <div className="btn btn-sm col-md-6">
-                                       <IconButton onClick={() => getDocShareholding(devDetail?.licensesDoc?.[0]?.anyOtherDoc)}>
-                                         <VisibilityIcon color="info" className="icon" />
-                                       </IconButton>
-                                     </div>
-                                     <div className="btn btn-sm col-md-6">
-                                       <IconButton onClick={() => getDocShareholding(devDetail?.licensesDoc?.[0]?.anyOtherDoc)}>
-                                         <FileDownloadIcon color="info" className="icon" />
-                                       </IconButton>
-                                     </div>
-                                   </div>
-                                 </td>
-                               </tr>
-                               
-                             </tbody>
-                           </Table>
-                         </div>
-                       </div>
-                     </div>
-                   </div>
-                  )}
+                  </div>
+                )}
+                {/* || "Trust" || "Hindu Undivided Family" || "Limited Liability Partnership"  Partnership Firm */}
+                {devDetail?.addInfo?.showDevTypeFields === "Company" && (
+                  <div className="row ">
+                    <div className="form-group row">
+                      <div className="col-sm-12">
+                        <div>
+                          <Table className="table table-bordered ml-2" size="sm">
+                            <thead>
+                              <tr>
+                                <th class="fw-normal">S.No.</th>
+                                <th class="fw-normal">Licence Document Details</th>
+                                <th class="fw-normal">Annexure </th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              <tr>
+                                <td> 1 </td>
+                                <td>
+                                  <p>
+                                    Articles Of Association
+                                  </p>
 
-                  
-                  </FormControl>
-                </Row>
-              </Card>
-            </div>
-          {/* </FormControl>
+                                </td>
+                                <td>
+                                  <div className="row">
+                                    {
+                                      devDetail?.licensesDoc?.[0]?.articlesOfAssociation &&
+                                      <Fragment>
+                                        <div className="btn btn-sm col-md-6">
+                                          <IconButton onClick={() => getDocShareholding(devDetail?.licensesDoc?.[0]?.articlesOfAssociation)}>
+                                            <VisibilityIcon color="info" className="icon" />
+                                          </IconButton>
+                                        </div>
+                                        <div className="btn btn-sm col-md-6">
+                                          <IconButton onClick={() => getDocShareholding(devDetail?.licensesDoc?.[0]?.articlesOfAssociation)}>
+                                            <FileDownloadIcon color="info" className="icon" />
+                                          </IconButton>
+                                        </div>
+                                      </Fragment>
+                                    }
+                                  </div>
+                                </td>
+                              </tr>
+                              <tr>
+                                <td> 2</td>
+                                <td>
+                                  <p>
+                                    Memorandum Of Association
+                                  </p>
+
+                                </td>
+                                <td>
+                                  <div className="row">
+                                    {
+                                      devDetail?.licensesDoc?.[0]?.memorandumOfArticles &&
+                                      <Fragment>
+                                        <div className="btn btn-sm col-md-6">
+                                          <IconButton onClick={() => getDocShareholding(devDetail?.licensesDoc?.[0]?.memorandumOfArticles)}>
+                                            <VisibilityIcon color="info" className="icon" />
+                                          </IconButton>
+                                        </div>
+                                        <div className="btn btn-sm col-md-6">
+                                          <IconButton onClick={() => getDocShareholding(devDetail?.licensesDoc?.[0]?.memorandumOfArticles)}>
+                                            <FileDownloadIcon color="info" className="icon" />
+                                          </IconButton>
+                                        </div>
+                                      </Fragment>
+                                    }
+                                  </div>
+                                </td>
+                              </tr>
+                              <tr>
+                                <td> 3</td>
+                                <td>
+                                  <p>
+                                    Any Other Relevant Documents
+                                  </p>
+
+                                </td>
+                                <td>
+
+                                  <div className="row">
+                                    {
+                                      devDetail?.licensesDoc?.[0]?.anyOtherDoc &&
+                                      <Fragment>
+                                        <div className="btn btn-sm col-md-6">
+                                          <IconButton onClick={() => getDocShareholding(devDetail?.licensesDoc?.[0]?.anyOtherDoc)}>
+                                            <VisibilityIcon color="info" className="icon" />
+                                          </IconButton>
+                                        </div>
+                                        <div className="btn btn-sm col-md-6">
+                                          <IconButton onClick={() => getDocShareholding(devDetail?.licensesDoc?.[0]?.anyOtherDoc)}>
+                                            <FileDownloadIcon color="info" className="icon" />
+                                          </IconButton>
+                                        </div>
+                                      </Fragment>
+                                    }
+                                  </div>
+                                </td>
+                              </tr>
+                            </tbody>
+                          </Table>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                )}
+                {devDetail?.addInfo?.showDevTypeFields === "Trust" && (
+                  <div className="row ">
+                    <div className="form-group row">
+                      <div className="col-sm-12">
+                        <div>
+                          <Table className="table table-bordered ml-2" size="sm">
+                            <thead>
+                              <tr>
+                                <th class="fw-normal">S.No.</th>
+                                <th class="fw-normal">Licence Document Details</th>
+                                <th class="fw-normal">Annexure </th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              <tr>
+                                <td> 1 </td>
+                                <td>
+                                  <p>
+                                    Articles Of Association
+                                  </p>
+
+                                </td>
+                                <td>
+                                  <div className="row">
+                                    {
+                                      devDetail?.licensesDoc?.[0]?.articlesOfAssociation &&
+                                      <Fragment>
+                                        <div className="btn btn-sm col-md-6">
+                                          <IconButton onClick={() => getDocShareholding(devDetail?.licensesDoc?.[0]?.articlesOfAssociation)}>
+                                            <VisibilityIcon color="info" className="icon" />
+                                          </IconButton>
+                                        </div>
+                                        <div className="btn btn-sm col-md-6">
+                                          <IconButton onClick={() => getDocShareholding(devDetail?.licensesDoc?.[0]?.articlesOfAssociation)}>
+                                            <FileDownloadIcon color="info" className="icon" />
+                                          </IconButton>
+                                        </div>
+                                      </Fragment>
+                                    }
+                                  </div>
+                                </td>
+                              </tr>
+                              <tr>
+                                <td> 2</td>
+                                <td>
+                                  <p>
+                                    Memorandum Of Association
+                                  </p>
+
+                                </td>
+                                <td>
+                                  <div className="row">
+                                    {
+                                      devDetail?.licensesDoc?.[0]?.memorandumOfArticles &&
+                                      <Fragment>
+                                        <div className="btn btn-sm col-md-6">
+                                          <IconButton onClick={() => getDocShareholding(devDetail?.licensesDoc?.[0]?.memorandumOfArticles)}>
+                                            <VisibilityIcon color="info" className="icon" />
+                                          </IconButton>
+                                        </div>
+                                        <div className="btn btn-sm col-md-6">
+                                          <IconButton onClick={() => getDocShareholding(devDetail?.licensesDoc?.[0]?.memorandumOfArticles)}>
+                                            <FileDownloadIcon color="info" className="icon" />
+                                          </IconButton>
+                                        </div>
+                                      </Fragment>
+                                    }
+                                  </div>
+                                </td>
+                              </tr>
+                              <tr>
+                                <td> 3</td>
+                                <td>
+                                  <p>
+                                    Any Other Relevant Documents
+                                  </p>
+
+                                </td>
+                                <td>
+                                  <div className="row">
+                                    {
+                                      devDetail?.licensesDoc?.[0]?.anyOtherDoc &&
+                                      <Fragment>
+                                        <div className="btn btn-sm col-md-6">
+                                          <IconButton onClick={() => getDocShareholding(devDetail?.licensesDoc?.[0]?.anyOtherDoc)}>
+                                            <VisibilityIcon color="info" className="icon" />
+                                          </IconButton>
+                                        </div>
+                                        <div className="btn btn-sm col-md-6">
+                                          <IconButton onClick={() => getDocShareholding(devDetail?.licensesDoc?.[0]?.anyOtherDoc)}>
+                                            <FileDownloadIcon color="info" className="icon" />
+                                          </IconButton>
+                                        </div>
+                                      </Fragment>
+                                    }
+                                  </div>
+                                </td>
+                              </tr>
+                            </tbody>
+                          </Table>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                )}
+                {devDetail?.addInfo?.showDevTypeFields === "Institution" && (
+                  <div className="row ">
+                    <div className="form-group row">
+                      <div className="col-sm-12">
+                        <div>
+                          <Table className="table table-bordered ml-2" size="sm">
+                            <thead>
+                              <tr>
+                                <th class="fw-normal">S.No.</th>
+                                <th class="fw-normal">Licence Document Details</th>
+                                <th class="fw-normal">Annexure </th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              <tr>
+                                <td> 1 </td>
+                                <td>
+                                  <p>
+                                    Articles Of Association
+                                  </p>
+
+                                </td>
+                                <td>
+                                  <div className="row">
+                                    {
+                                      devDetail?.licensesDoc?.[0]?.articlesOfAssociation &&
+                                      <Fragment>
+                                        <div className="btn btn-sm col-md-6">
+                                          <IconButton onClick={() => getDocShareholding(devDetail?.licensesDoc?.[0]?.articlesOfAssociation)}>
+                                            <VisibilityIcon color="info" className="icon" />
+                                          </IconButton>
+                                        </div>
+                                        <div className="btn btn-sm col-md-6">
+                                          <IconButton onClick={() => getDocShareholding(devDetail?.licensesDoc?.[0]?.articlesOfAssociation)}>
+                                            <FileDownloadIcon color="info" className="icon" />
+                                          </IconButton>
+                                        </div>
+                                      </Fragment>
+                                    }
+                                  </div>
+                                </td>
+                              </tr>
+                              <tr>
+                                <td> 2</td>
+                                <td>
+                                  <p>
+                                    Memorandum Of Association
+                                  </p>
+
+                                </td>
+                                <td>
+                                  <div className="row">
+                                    {
+                                      devDetail?.licensesDoc?.[0]?.memorandumOfArticles &&
+                                      <Fragment>
+                                        <div className="btn btn-sm col-md-6">
+                                          <IconButton onClick={() => getDocShareholding(devDetail?.licensesDoc?.[0]?.memorandumOfArticles)}>
+                                            <VisibilityIcon color="info" className="icon" />
+                                          </IconButton>
+                                        </div>
+                                        <div className="btn btn-sm col-md-6">
+                                          <IconButton onClick={() => getDocShareholding(devDetail?.licensesDoc?.[0]?.memorandumOfArticles)}>
+                                            <FileDownloadIcon color="info" className="icon" />
+                                          </IconButton>
+                                        </div>
+                                      </Fragment>
+                                    }
+                                  </div>
+                                </td>
+                              </tr>
+                              <tr>
+                                <td> 3</td>
+                                <td>
+                                  <p>
+                                    Any Other Relevant Documents
+                                  </p>
+
+                                </td>
+                                <td>
+                                  <div className="row">
+                                    {
+                                      devDetail?.licensesDoc?.[0]?.anyOtherDoc &&
+                                      <Fragment>
+                                        <div className="btn btn-sm col-md-6">
+                                          <IconButton onClick={() => getDocShareholding(devDetail?.licensesDoc?.[0]?.anyOtherDoc)}>
+                                            <VisibilityIcon color="info" className="icon" />
+                                          </IconButton>
+                                        </div>
+                                        <div className="btn btn-sm col-md-6">
+                                          <IconButton onClick={() => getDocShareholding(devDetail?.licensesDoc?.[0]?.anyOtherDoc)}>
+                                            <FileDownloadIcon color="info" className="icon" />
+                                          </IconButton>
+                                        </div>
+                                      </Fragment>
+                                    }
+                                  </div>
+                                </td>
+                              </tr>
+                            </tbody>
+                          </Table>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                )}
+                {devDetail?.addInfo?.showDevTypeFields === "Hindu Undivided Family" && (
+                  <div className="row ">
+                    <div className="form-group row">
+                      <div className="col-sm-12">
+                        <div>
+                          <Table className="table table-bordered ml-2" size="sm">
+                            <thead>
+                              <tr>
+                                <th class="fw-normal">S.No.</th>
+                                <th class="fw-normal">Licence Document Details</th>
+                                <th class="fw-normal">Annexure </th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              <tr>
+                                <td> 1 </td>
+                                <td>
+                                  <p>
+                                    affidavit and PAN Card
+                                  </p>
+
+                                </td>
+                                <td>
+                                  <div className="row">
+                                    {
+                                      devDetail?.licensesDoc?.[0]?.affidavitAndPancard &&
+                                      <Fragment>
+                                        <div className="btn btn-sm col-md-6">
+                                          <IconButton onClick={() => getDocShareholding(devDetail?.licensesDoc?.[0]?.affidavitAndPancard)}>
+                                            <VisibilityIcon color="info" className="icon" />
+                                          </IconButton>
+                                        </div>
+                                        <div className="btn btn-sm col-md-6">
+                                          <IconButton onClick={() => getDocShareholding(devDetail?.licensesDoc?.[0]?.affidavitAndPancard)}>
+                                            <FileDownloadIcon color="info" className="icon" />
+                                          </IconButton>
+                                        </div>
+                                      </Fragment>
+                                    }
+                                  </div>
+                                </td>
+                              </tr>
+
+                              <tr>
+                                <td> 2</td>
+                                <td>
+                                  <p>
+                                    Any Other Relevant Documents
+                                  </p>
+
+                                </td>
+                                <td>
+                                  <div className="row">
+                                    {
+                                      devDetail?.licensesDoc?.[0]?.anyOtherDoc &&
+                                      <Fragment>
+                                        <div className="btn btn-sm col-md-6">
+                                          <IconButton onClick={() => getDocShareholding(devDetail?.licensesDoc?.[0]?.anyOtherDoc)}>
+                                            <VisibilityIcon color="info" className="icon" />
+                                          </IconButton>
+                                        </div>
+                                        <div className="btn btn-sm col-md-6">
+                                          <IconButton onClick={() => getDocShareholding(devDetail?.licensesDoc?.[0]?.anyOtherDoc)}>
+                                            <FileDownloadIcon color="info" className="icon" />
+                                          </IconButton>
+                                        </div>
+                                      </Fragment>
+                                    }
+                                  </div>
+                                </td>
+                              </tr>
+                            </tbody>
+                          </Table>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                )}
+                {devDetail?.addInfo?.showDevTypeFields === "Limited Liability Partnership" && (
+                  <div className="row ">
+                    <div className="form-group row">
+                      <div className="col-sm-12">
+                        <div>
+                          <Table className="table table-bordered ml-2" size="sm">
+                            <thead>
+                              <tr>
+                                <th class="fw-normal">S.No.</th>
+                                <th class="fw-normal">Licence Document Details</th>
+                                <th class="fw-normal">Annexure </th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              <tr>
+                                <td> 1 </td>
+                                <td>
+                                  <p>
+                                    Articles Of Association
+                                  </p>
+
+                                </td>
+                                <td>
+                                  <div className="row">
+                                    {
+                                      devDetail?.licensesDoc?.[0]?.articlesOfAssociation &&
+                                      <Fragment>
+                                        <div className="btn btn-sm col-md-6">
+                                          <IconButton onClick={() => getDocShareholding(devDetail?.licensesDoc?.[0]?.articlesOfAssociation)}>
+                                            <VisibilityIcon color="info" className="icon" />
+                                          </IconButton>
+                                        </div>
+                                        <div className="btn btn-sm col-md-6">
+                                          <IconButton onClick={() => getDocShareholding(devDetail?.licensesDoc?.[0]?.articlesOfAssociation)}>
+                                            <FileDownloadIcon color="info" className="icon" />
+                                          </IconButton>
+                                        </div>
+                                      </Fragment>
+                                    }
+                                  </div>
+                                </td>
+                              </tr>
+                              <tr>
+                                <td> 2</td>
+                                <td>
+                                  <p>
+                                    Memorandum Of Association
+                                  </p>
+
+                                </td>
+                                <td>
+                                  <div className="row">
+                                    {
+                                      devDetail?.licensesDoc?.[0]?.memorandumOfArticles &&
+                                      <Fragment>
+                                        <div className="btn btn-sm col-md-6">
+                                          <IconButton onClick={() => getDocShareholding(devDetail?.licensesDoc?.[0]?.memorandumOfArticles)}>
+                                            <VisibilityIcon color="info" className="icon" />
+                                          </IconButton>
+                                        </div>
+                                        <div className="btn btn-sm col-md-6">
+                                          <IconButton onClick={() => getDocShareholding(devDetail?.licensesDoc?.[0]?.memorandumOfArticles)}>
+                                            <FileDownloadIcon color="info" className="icon" />
+                                          </IconButton>
+                                        </div>
+                                      </Fragment>
+                                    }
+                                  </div>
+                                </td>
+                              </tr>
+                              <tr>
+                                <td> 3 </td>
+                                <td>
+                                  <p>
+                                    copy of registered irrevocable partnership deed
+                                  </p>
+
+                                </td>
+                                <td>
+                                  <div className="row">
+                                    {
+                                      devDetail?.licensesDoc?.[0]?.registeredIrrevocablePaternshipDeed &&
+                                      <Fragment>
+                                        <div className="btn btn-sm col-md-6">
+                                          <IconButton onClick={() => getDocShareholding(devDetail?.licensesDoc?.[0]?.registeredIrrevocablePaternshipDeed)}>
+                                            <VisibilityIcon color="info" className="icon" />
+                                          </IconButton>
+                                        </div>
+                                        <div className="btn btn-sm col-md-6">
+                                          <IconButton onClick={() => getDocShareholding(devDetail?.licensesDoc?.[0]?.registeredIrrevocablePaternshipDeed)}>
+                                            <FileDownloadIcon color="info" className="icon" />
+                                          </IconButton>
+                                        </div>
+                                      </Fragment>
+                                    }
+                                  </div>
+                                </td>
+                              </tr>
+                              <tr>
+                                <td> 4</td>
+                                <td>
+                                  <p>
+                                    Any Other Relevant Documents
+                                  </p>
+
+                                </td>
+                                <td>
+                                  <div className="row">
+                                    {
+                                      devDetail?.licensesDoc?.[0]?.anyOtherDoc &&
+                                      <Fragment>
+                                        <div className="btn btn-sm col-md-6">
+                                          <IconButton onClick={() => getDocShareholding(devDetail?.licensesDoc?.[0]?.anyOtherDoc)}>
+                                            <VisibilityIcon color="info" className="icon" />
+                                          </IconButton>
+                                        </div>
+                                        <div className="btn btn-sm col-md-6">
+                                          <IconButton onClick={() => getDocShareholding(devDetail?.licensesDoc?.[0]?.anyOtherDoc)}>
+                                            <FileDownloadIcon color="info" className="icon" />
+                                          </IconButton>
+                                        </div>
+                                      </Fragment>
+                                    }
+                                  </div>
+                                </td>
+                              </tr>
+
+                            </tbody>
+                          </Table>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                )}
+                {devDetail?.addInfo?.showDevTypeFields === "Firm" && (
+                  <div className="row ">
+                    <div className="form-group row">
+                      <div className="col-sm-12">
+                        <div>
+                          <Table className="table table-bordered ml-2" size="sm">
+                            <thead>
+                              <tr>
+                                <th class="fw-normal">S.No.</th>
+                                <th class="fw-normal">Licence Document Details</th>
+                                <th class="fw-normal">Annexure </th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              <tr>
+                                <td> 1 </td>
+                                <td>
+                                  <p>
+                                    Articles Of Association
+                                  </p>
+
+                                </td>
+                                <td>
+                                  <div className="row">
+                                    {
+                                      devDetail?.licensesDoc?.[0]?.articlesOfAssociation &&
+                                      <Fragment>
+                                        <div className="btn btn-sm col-md-6">
+                                          <IconButton onClick={() => getDocShareholding(devDetail?.licensesDoc?.[0]?.articlesOfAssociation)}>
+                                            <VisibilityIcon color="info" className="icon" />
+                                          </IconButton>
+                                        </div>
+                                        <div className="btn btn-sm col-md-6">
+                                          <IconButton onClick={() => getDocShareholding(devDetail?.licensesDoc?.[0]?.articlesOfAssociation)}>
+                                            <FileDownloadIcon color="info" className="icon" />
+                                          </IconButton>
+                                        </div>
+                                      </Fragment>
+                                    }
+                                  </div>
+                                </td>
+                              </tr>
+                              <tr>
+                                <td> 2</td>
+                                <td>
+                                  <p>
+                                    Memorandum Of Association
+                                  </p>
+
+                                </td>
+                                <td>
+                                  <div className="row">
+                                    {
+                                      devDetail?.licensesDoc?.[0]?.memorandumOfArticles &&
+                                      <Fragment>
+                                        <div className="btn btn-sm col-md-6">
+                                          <IconButton onClick={() => getDocShareholding(devDetail?.licensesDoc?.[0]?.memorandumOfArticles)}>
+                                            <VisibilityIcon color="info" className="icon" />
+                                          </IconButton>
+                                        </div>
+                                        <div className="btn btn-sm col-md-6">
+                                          <IconButton onClick={() => getDocShareholding(devDetail?.licensesDoc?.[0]?.memorandumOfArticles)}>
+                                            <FileDownloadIcon color="info" className="icon" />
+                                          </IconButton>
+                                        </div>
+                                      </Fragment>
+                                    }
+                                  </div>
+                                </td>
+                              </tr>
+                              <tr>
+                                <td> 3 </td>
+                                <td>
+                                  <p>
+                                    copy of registered irrevocable partnership deed
+                                  </p>
+
+                                </td>
+                                <td>
+                                  <div className="row">
+                                    {
+                                      devDetail?.licensesDoc?.[0]?.boardDoc &&
+                                      <Fragment>
+                                        <div className="btn btn-sm col-md-6">
+                                          <IconButton onClick={() => getDocShareholding(devDetail?.licensesDoc?.[0]?.boardDoc)}>
+                                            <VisibilityIcon color="info" className="icon" />
+                                          </IconButton>
+                                        </div>
+                                        <div className="btn btn-sm col-md-6">
+                                          <IconButton onClick={() => getDocShareholding(devDetail?.licensesDoc?.[0]?.boardDoc)}>
+                                            <FileDownloadIcon color="info" className="icon" />
+                                          </IconButton>
+                                        </div>
+                                      </Fragment>
+                                    }
+                                  </div>
+                                </td>
+                              </tr>
+                              <tr>
+                                <td> 4</td>
+                                <td>
+                                  <p>
+                                    Any Other Relevant Documents
+                                  </p>
+
+                                </td>
+                                <td>
+                                  <div className="row">
+                                    {
+                                      devDetail?.licensesDoc?.[0]?.anyOtherDoc &&
+                                      <Fragment>
+                                        <div className="btn btn-sm col-md-6">
+                                          <IconButton onClick={() => getDocShareholding(devDetail?.licensesDoc?.[0]?.anyOtherDoc)}>
+                                            <VisibilityIcon color="info" className="icon" />
+                                          </IconButton>
+                                        </div>
+                                        <div className="btn btn-sm col-md-6">
+                                          <IconButton onClick={() => getDocShareholding(devDetail?.licensesDoc?.[0]?.anyOtherDoc)}>
+                                            <FileDownloadIcon color="info" className="icon" />
+                                          </IconButton>
+                                        </div>
+                                      </Fragment>
+                                    }
+                                  </div>
+                                </td>
+                              </tr>
+
+                            </tbody>
+                          </Table>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+
+              </FormControl>
+            </Row>
+          </Card>
+        </div>
+        {/* </FormControl>
         </div> */}
       </Collapse>
     </div>

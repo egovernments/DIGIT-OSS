@@ -144,16 +144,16 @@ const businessService = applicationimp?.businessService
       show={smShow}
       aria-labelledby="contained-modal-title-vcenter"
       centered
-      style={{ position: "fixed", left: "50%", top: "50%", transform: "translate(-50% , -50%)" }}
+      style={{ position: "fixed", left: "50%", top: "50%", transform: "translate(-50% , -50%)", zIndex:"10000" }}
       onHide={props.onClose}
     >
        <form onSubmit={handleSubmit(submitForm)}>
       <Modal.Header closeButton>
         <Modal.Title id="example-modal-sizes-title-sm">
-   
+          Add Compliance
         </Modal.Title>
       </Modal.Header>
-      <Modal.Body>
+      <Modal.Body style={{height:"300px", overflow:"auto"}}>
         <h4>Proposed Condition Of LOI</h4>
       <Checkbox
         type="checkbox"
@@ -179,13 +179,15 @@ const businessService = applicationimp?.businessService
           </Col>
         </Form.Group>
         
+            
+      </Modal.Body>
+      <Modal.Footer>
         <div class="col-sm-12 text-right">
                 <button type="submit" id="btnSearch" class="btn btn-primary btn-md center-block">
                   Submit
                 </button>
               </div>
-            
-      </Modal.Body>
+      </Modal.Footer>
       </form>
     </Modal>
    

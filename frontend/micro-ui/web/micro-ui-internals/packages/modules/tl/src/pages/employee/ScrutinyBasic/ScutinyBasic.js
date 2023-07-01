@@ -1190,7 +1190,7 @@ console.log("userInFODATA123" , userInfo);
          />
            {/* <input as="textarea" rows={1} type="text" className="form-control" placeholder="" {...register("landOwnerA")}/> */}
           {/* <button type="submit" >save</button> */}
-          <div className="col-sm-2">
+          <div className="my-3">
             <Button style={{ textAlign: "right" }} value="Submit" id="Submit" type="submit">Save Performa</Button>
           </div>
             </form>
