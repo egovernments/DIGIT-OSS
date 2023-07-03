@@ -1,4 +1,5 @@
-import { addMonths, endOfYear, format, startOfYear, subYears,subSeconds,endOfToday } from "date-fns";
+import { addMonths, endOfYear, format, startOfYear, subYears,subSeconds,endOfToday, addDays, startOfDay, endOfDay, differenceInDays } from "date-fns";
+import { getFilterValue, getParsedRequest } from "./dynamicRequestGenerator";
 
 const amountFormatter = (value, denomination, t) => {
   const currencyFormatter = new Intl.NumberFormat("en-IN", { currency: "INR" });
@@ -58,6 +59,18 @@ export const getInitialRange = () => {
   return { startDate, endDate, title, duration };
 };
 
+export const getDatesBackFromToday = (numberOfDays) => {
+  const endDate = endOfDay(new Date());
+  const startDate = startOfDay(addDays(new Date(), - (numberOfDays-1)));
+  const title = `${format(startDate, "MMM d, yy")} - ${format(endDate, "MMM d, yy")}`;
+  const duration = Digit.Utils.dss.getDuration(startDate, endDate);
+  return { startDate, endDate, title, duration };
+};
+
+export const getDateDiffrenence = (startDate, endDate) => {
+  return differenceInDays(startDate, endDate);
+}
+
 export const getDefaultFinacialYear = () => {
   const currDate = new Date().getMonth();
   if (currDate < 3) {
@@ -105,3 +118,36 @@ export const getCitiesAvailable = (e, selectedDDRs) => {
     return false;
   }
 };
+
+export const getCustomFiltersDynamicValues = async (filterConfig, dynamicValues) => {
+  if (filterConfig && dynamicValues) {
+    filterConfig = filterConfig.map((filter) => {
+      if (filter?.source?.type == 'request') {
+        filter.source = getParsedRequest(filter.source, dynamicValues);
+      }
+      return filter;
+    })
+  }
+  return filterConfig;
+}
+
+export const getFilterOptionsForConfig = async (filterConfig) => {
+  let filtersData = {};
+  if (filterConfig) {
+    let requests = [];
+    filterConfig.forEach((filter) => {
+      if (filter?.source) {
+        requests.push(getFilterValue(filter))
+      }
+    })
+    await Promise.all(requests).then((res) => {
+      if (res && res.length) {
+        res.forEach((filterRes) => {
+          if (filterRes?.id && filterRes?.values)
+            filtersData[filterRes.id] = filterRes?.values;
+        })
+      }
+    });
+  }
+  return filtersData;
+}

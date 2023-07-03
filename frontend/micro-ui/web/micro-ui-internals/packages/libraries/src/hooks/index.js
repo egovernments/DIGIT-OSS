@@ -50,6 +50,8 @@ import useDashboardConfig from "./dss/useDashboardConfig";
 import useDSSDashboard from "./dss/useDSSDashboard";
 import useGetChart from "./dss/useGetChart";
 import useDssMdms from "./dss/useMDMS";
+import useGetCustomFilterValues from "./dss/useGetCustomFilterValues";
+import useGetCustomFilterRequestValues from './dss/useGetCustomFilterRequestValues';
 
 
 import useHRMSCount from "./hrms/useHRMSCount";
@@ -110,6 +112,8 @@ const dss = {
   useDashboardConfig,
   useDSSDashboard,
   useGetChart,
+  useGetCustomFilterValues,
+  useGetCustomFilterRequestValues
 };
 
 
