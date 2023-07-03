@@ -20,7 +20,8 @@ import { UICustomizations } from "./UICustomizations";
 var Digit = window.Digit || {};
 
 
-const enabledModules = [ "DSS", "HRMS",
+const enabledModules = [ 
+   "HRMS",
 //  "Engagement", "NDSS","QuickPayLinks", "Payment",
   "Utilities",
 //added to check fsm
