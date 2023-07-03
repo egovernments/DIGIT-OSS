@@ -44,9 +44,28 @@ import { DigitUI } from "@egovernments/digit-ui-module-core";
 
 ```
 
+# Mandatory changes to use following version
+
+```
+from 1.5.38 add the following utility method in micro-ui-internals/packages/libraries/src/utils/index.js
+
+const createFunction = (functionAsString) => {
+  return Function("return " + functionAsString)();
+};
+
+export as createFunction;
+
+similarly update line 76 of react-components/src/molecules/CustomDropdown.js
+
+with  
+ .filter((opt) => (opt?.hasOwnProperty("active") ? opt.active : true))
+
+```
+
 # Changelog
 
 ```bash
+1.5.38 enabled the admin mode for employee login which can be accessed through route employee/user/login?mode=admin and updated to use formcomposerv2
 1.5.37 fixed hiding upload drawer icons.
 1.5.36 fixed after clicking on change password and then try to save profile without changing password showing error.
 1.5.35 fixed user profile email was prefilled when clicking on change password
