@@ -146,7 +146,7 @@ def dump_kibana(**kwargs):
 def readulb(**kwargs):
     ulbs = []
     url = Variable.get('totalulb_url')
-    url = 'https://raw.githubusercontent.com/egovernments/punjab-mdms-data/master/data/pb/tenant/tenants.json'
+    url = 'https://raw.githubusercontent.com/eNagarsewaU/ukd-mdms-data/master/data/uk/tenant/tenants.json'
     json_data = requests.get(url)
     json_data = json.loads(json_data.text)
     tenants_array=json_data["tenants"]
@@ -301,7 +301,7 @@ def call_ingest_api(connection, access_token, user_info, payload, module,startda
         'timestamp' : startdate,
         'module' : module,
         'severity' : 'Info',
-        'state' : 'Punjab', 
+        'state' : 'UTTARAKHAND', 
         'message' : json.dumps(response)
     }
     es = Elasticsearch(host = "elasticsearch-data-v1.es-cluster", port = 9200)
