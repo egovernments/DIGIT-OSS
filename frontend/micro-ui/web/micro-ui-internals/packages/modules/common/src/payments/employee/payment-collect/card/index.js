@@ -29,6 +29,7 @@ const CardDetailsComponent = ({ ...props }) => {
   const [last4Digits, setLast4Digits] = useState(props?.value?.last4Digits);
   const [transactionNumber, setTransactionNumber] = useState(props?.value?.transactionNumber);
   const [reTransanctionNumber, setReTransanctionNumber] = useState(props?.value?.reTransanctionNumber);
+  const isFSM = window?.location.pathname.includes("FSM");
 
   useEffect(() => {
     if (props.onChange) {
@@ -55,6 +56,7 @@ const CardDetailsComponent = ({ ...props }) => {
               name="instrumentNumber"
               maxLength="4"
               minLength="4"
+              pattern={isFSM ? "^[0-9]+$" : null}
               required
               onChange={(e) => setLast4Digits(e.target.value)}
             />

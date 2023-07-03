@@ -207,7 +207,7 @@ const UserProfile = ({ stateCode, userType, cityDetails }) => {
         throw JSON.stringify({ type: "error", message: t("CORE_COMMON_PROFILE_EMAIL_INVALID") });
       }
 
-      if (currentPassword.length || newPassword.length || confirmPassword.length) {
+      if (changepassword && (currentPassword.length || newPassword.length || confirmPassword.length)) {
         if (newPassword !== confirmPassword) {
           throw JSON.stringify({ type: "error", message: t("CORE_COMMON_PROFILE_PASSWORD_MISMATCH") });
         }

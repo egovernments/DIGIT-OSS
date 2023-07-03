@@ -1,4 +1,4 @@
-import { BackButton, Dropdown, FormComposer, Loader, Toast } from "@egovernments/digit-ui-react-components";
+import { BackButton, Dropdown, FormComposer, FormComposerV2, Loader, Toast } from "@egovernments/digit-ui-react-components";
 import PropTypes from "prop-types";
 import React, { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
@@ -59,24 +59,28 @@ const Login = ({ config: propsConfig, t, isDisabled }) => {
   }, [user]);
 
   const onLogin = async (data) => {
-    if (!data.city) {
-      alert("Please Select City!");
-      return;
-    }
+    // if (!data.city) {
+    //   alert("Please Select City!");
+    //   return;
+    // }
     setDisable(true);
 
     const requestData = {
       ...data,
       userType: "EMPLOYEE",
     };
-    requestData.tenantId = data.city.code;
+    requestData.tenantId = data?.city?.code || Digit.ULBService.getStateId();
     delete requestData.city;
     try {
       const { UserRequest: info, ...tokens } = await Digit.UserService.authenticate(requestData);
       Digit.SessionStorage.set("Employee.tenantId", info?.tenantId);
       setUser({ info, ...tokens });
     } catch (err) {
-      setShowToast(err?.response?.data?.error_description ||( err?.message=="ES_ERROR_USER_NOT_PERMITTED" && t("ES_ERROR_USER_NOT_PERMITTED") )|| t("INVALID_LOGIN_CREDENTIALS"));
+      setShowToast(
+        err?.response?.data?.error_description ||
+          (err?.message == "ES_ERROR_USER_NOT_PERMITTED" && t("ES_ERROR_USER_NOT_PERMITTED")) ||
+          t("INVALID_LOGIN_CREDENTIALS")
+      );
       setTimeout(closeToast, 5000);
     }
     setDisable(false);
@@ -89,52 +93,58 @@ const Login = ({ config: propsConfig, t, isDisabled }) => {
   const onForgotPassword = () => {
     history.push(`/${window?.contextPath}/employee/user/forgot-password`);
   };
-
+  const defaultValue = {
+    code: Digit.ULBService.getStateId(),
+    name: Digit.Utils.locale.getTransformedLocale(`TENANT_TENANTS_${Digit.ULBService.getStateId()}`),
+  };
   const [userId, password, city] = propsConfig.inputs;
   const config = [
     {
       body: [
         {
-          label: t(userId.label),
-          type: userId.type,
+          label: "CORE_LOGIN_USERNAME",
+          type: "text",
           populators: {
-            name: userId.name,
+            name: "username",
           },
           isMandatory: true,
         },
         {
-          label: t(password.label),
-          type: password.type,
+          label: "CORE_LOGIN_PASSWORD",
+          type: "password",
           populators: {
-            name: password.name,
+            name: "password",
           },
           isMandatory: true,
         },
         {
-          label: t(city.label),
-          type: city.type,
-          populators: {
-            name: city.name,
-            customProps: {},
-            component: (props, customProps) => (
-              <Dropdown
-                option={cities}
-                className="login-city-dd"
-                optionKey="i18nKey"
-                select={(d) => {
-                  props.onChange(d);
-                }}
-                t={t}
-                {...customProps}
-              />
-            ),
-          },
           isMandatory: true,
+          type: "dropdown",
+          key: "city",
+          label: "CORE_COMMON_CITY",
+          disable: false,
+          populators: {
+            name: "city",
+            optionsKey: "name",
+            error: "ERR_HRMS_INVALID_CITY",
+            mdmsConfig: {
+              masterName: "tenants",
+              moduleName: "tenant",
+              localePrefix: "TENANT_TENANTS",
+              select:
+                "(data)=>{ return Array.isArray(data['tenant'].tenants) && Digit.Utils.getUnique(data['tenant'].tenants).map(ele=>({code:ele.code,name:Digit.Utils.locale.getTransformedLocale('TENANT_TENANTS_'+ele.code)}))}",
+            },
+          },
         },
       ],
     },
   ];
-
+  const { mode } = Digit.Hooks.useQueryParams();
+  if (mode === "admin" && config?.[0]?.body?.[2]?.disable == false && config?.[0]?.body?.[2]?.populators?.defaultValue == undefined) {
+    config[0].body[2].disable = true;
+    config[0].body[2].isMandatory = false;
+    config[0].body[2].populators.defaultValue = defaultValue;
+  }
   return isLoading || isStoreLoading ? (
     <Loader />
   ) : (
@@ -143,7 +153,7 @@ const Login = ({ config: propsConfig, t, isDisabled }) => {
         <BackButton variant="white" style={{ borderBottom: "none" }} />
       </div>
 
-      <FormComposer
+      <FormComposerV2
         onSubmit={onLogin}
         isDisabled={isDisabled || disable}
         noBoxShadow
@@ -160,7 +170,7 @@ const Login = ({ config: propsConfig, t, isDisabled }) => {
         buttonStyle={{ maxWidth: "100%", width: "100%" }}
       >
         <Header />
-      </FormComposer>
+      </FormComposerV2>
       {showToast && <Toast error={true} label={t(showToast)} onClose={closeToast} />}
       <div className="employee-login-home-footer" style={{ backgroundColor: "unset" }}>
         <img

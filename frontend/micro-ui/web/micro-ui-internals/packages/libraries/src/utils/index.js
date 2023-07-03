@@ -91,9 +91,18 @@ const getPattern = (type) => {
       return /^[a-zA-z0-9\s\\/\-]$/i;
   }
 };
-
+/*  
+Digit.Utils.getUnique()
+get unique elements from an array */
 const getUnique = (arr) => {
   return arr.filter((value, index, self) => self.indexOf(value) === index);
+};
+
+/*  
+Digit.Utils.createFunction()
+get function from a string */
+const createFunction = (functionAsString) => {
+  return Function("return " + functionAsString)();
 };
 
 const getStaticMapUrl = (latitude, longitude) => {
@@ -280,6 +289,7 @@ const getConfigModuleName = () => {
 };
 export default {
   pdf: PDFUtil,
+  createFunction,
   downloadReceipt,
   downloadBill,
   downloadPDFFromLink,

@@ -17,7 +17,7 @@ const DssBreadCrumb = ({ location }) => {
   const landingPageHiddenIn=["works-ui","sanitation-ui"];
   const crumbs = [
     {
-      path: `${window?.contextPath}/employee`,
+      path: `/${window?.contextPath}/employee`,
       content: t("ES_COMMON_HOME"),
       show: true,
     },
@@ -73,11 +73,16 @@ const Routes = ({ path, stateCode }) => {
 };
 
 const DSSModule = ({ stateCode, userType, tenants }) => {
-  const moduleCode = "DSS";
   // const { path, url } = useRouteMatch();
   const { path, url } = useRouteMatch();
   const language = Digit.StoreData.getCurrentLanguage();
-  const { isLoading, data: store } = Digit.Services.useStore({ stateCode, moduleCode, language });
+  const tenantId = Digit.ULBService.getCurrentTenantId();
+  const moduleCode = ["DSS","common-masters",tenantId];
+  const { isLoading, data: store } = Digit.Services.useStore({
+      stateCode,
+      moduleCode,
+      language,
+  });
 
   if (isLoading) {
     return <Loader />;

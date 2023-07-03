@@ -1,6 +1,6 @@
 {
   "name": "@egovernments/digit-ui-module-utilities",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "description": "Utilities Module UI",
   "main": "dist/index.js",
   "module": "dist/index.modern.js",

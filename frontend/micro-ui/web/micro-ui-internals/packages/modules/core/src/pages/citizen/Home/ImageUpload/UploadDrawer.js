@@ -66,7 +66,7 @@ function UploadDrawer({ setProfilePic, closeDrawer, userType, removeProfilePic ,
           right: "0",
           height: "20%",
           bottom: userType === "citizen" ? "2.5rem" : "0",
-          zIndex: "2",
+          zIndex: "1000",
         }}
       >
         <div

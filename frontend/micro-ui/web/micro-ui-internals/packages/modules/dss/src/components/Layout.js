@@ -32,7 +32,11 @@ const Layout = ({ rowData,forHome=false }) => {
       case "table":
         return <CustomTable data={chart} onSearch={searchQuery} chip={chip} title={title} />;
       case "donut":
-        return <CustomPieChart data={chart} title={title} />;
+        return <CustomPieChart 
+                  data={chart} 
+                  title={title} 
+                  variant={chart?.variant} 
+               />;
       case "line":
         return <CustomAreaChart data={chart} title={title} />;
       case "horizontalBar":
@@ -46,6 +50,9 @@ const Layout = ({ rowData,forHome=false }) => {
             xDataKey=""
             showDrillDown={false}
             title={title}
+            horizontalBarv2={chart.horizontalBarv2 ? true : false}
+            // horizontalBarv2={true} //for testing
+
           />
         );
       case "bar":
@@ -59,7 +66,7 @@ const Layout = ({ rowData,forHome=false }) => {
     switch (visualizer.vizType) {
       case "metric-collection":
         return (
-          <GenericChart header={visualizer.name} className="metricsTable" key={key} value={value} >
+          <GenericChart header={visualizer.name} className={`metricsTable ${visualizer?.isHorizontalChart?"dss-metric-horizontal":""}`} key={key} value={value} iconName={visualizer?.iconName}>
             <MetricChart data={visualizer} />
           </GenericChart>
         );
@@ -77,8 +84,8 @@ const Layout = ({ rowData,forHome=false }) => {
             chip={chip}
             updateChip={onChipChange}
             showDownload={visualizer?.charts?.[0].chartType === "table"}
-            showSearch={visualizer?.charts?.[0].chartType === "table"}
-            className={visualizer?.charts?.[0].chartType === "table" && "fullWidth"}
+            showSearch={visualizer?.charts?.[0].chartType === "table" && !visualizer?.noSearch}
+            className={`${visualizer?.charts?.[0].chartType === "table" && !visualizer?.isNotFullWidth ? "fullWidth" : visualizer?.charts?.[0]?.horizontalBarv2 ? "dss-horizontal-v2" : ""}`}
             onChange={(e) => onSearch(e.target.value)}
           >
             {/* {visualizer.charts.map((chart, key) => renderChart(chart, key))} */}

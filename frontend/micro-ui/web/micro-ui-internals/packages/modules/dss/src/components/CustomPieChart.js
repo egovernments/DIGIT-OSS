@@ -1,14 +1,14 @@
 import { Loader, RemoveableTag } from "@egovernments/digit-ui-react-components";
 import React, { useContext, useMemo, useState, Fragment, useEffect } from "react";
 import { useTranslation } from "react-i18next";
-import { Cell, Legend, Pie, PieChart, ResponsiveContainer, Tooltip } from "recharts";
+import { Cell, Legend, Pie, PieChart, ResponsiveContainer, Tooltip,Label } from "recharts";
 import FilterContext from "./FilterContext";
 import NoData from "./NoData";
 // ["#048BD0", "#FBC02D", "#8E29BF","#EA8A3B","#0BABDE","#6E8459"]
 const COLORS = ["#048BD0", "#FBC02D", "#8E29BF", "#EA8A3B", "#0BABDE", "#6E8459", "#D4351C", "#0CF7E4", "#F80BF4", "#22F80B"];
 const mobileView = innerWidth <= 640;
 
-const CustomPieChart = ({ dataKey = "value", data, setChartDenomination }) => {
+const CustomPieChart = ({ dataKey = "value", data, setChartDenomination,variant=undefined }) => {
   const { id } = data;
   const tenantId = Digit.ULBService.getCurrentTenantId();
   const { t } = useTranslation();
@@ -26,6 +26,7 @@ const CustomPieChart = ({ dataKey = "value", data, setChartDenomination }) => {
   });
 
   const chartData = useMemo(() => {
+    
     if (!response) return null;
     setChartDenomination(response?.responseData?.data?.[0]?.headerSymbol);
     const compareFn = (a, b) => b.value - a.value;
@@ -35,18 +36,35 @@ const CustomPieChart = ({ dataKey = "value", data, setChartDenomination }) => {
       return acc;
     }, []) 
     : response?.responseData?.data?.[0]?.plots.sort(compareFn).reduce((acc, plot, index) => {
-      // if (index < 4) acc = acc.concat(plot);
-      //else if (index === 4) acc = acc.concat({ label: null, name: "DSS.OTHERS", value: plot?.value, symbol: "amount" });
-      // else acc[3].value += plot?.value;
-      /* Commnted logic of pie chart which hides more that 4 and show max of 4*/
+      if(variant === "pieChartv2"){
+        if (index < 4) acc = acc.concat(plot);
+        else if (index === 4) acc = acc.concat({ label: null, name: "DSS.OTHERS", value: plot?.value, symbol: "amount" });
+        else acc[4].value += plot?.value;
+        // If types more than 4 then we'll show as others
+        /* Commnted logic of pie chart which hides more that 4 and show max of 4*/
+        return acc
+      }
       acc = acc.concat(plot);
       return acc;
     }, []);
   }, [response]);
 
-  const renderLegend = (value) => (
-    <span style={{ fontSize: "14px", color: "#505A5F" }}>{t(`COMMON_MASTERS_${value && Digit.Utils.locale.getTransformedLocale(value)}`)}</span>
-  );
+  const totalCount = chartData?.reduce((acc,item)=> acc + item?.value, 0)
+  
+
+  const renderLegend = (value,entry) => {
+
+    if(variant==="pieChartv2" && entry){
+      return (
+        <div style={{ display:"inline-flex",justifyContent:"space-between",fontSize: "16px",width:"90%",color:"black",height:"5px" }}>
+          <p style={{display:"inline-block",width:"8rem",alignItems:"flex-start",paddingLeft:"0.5rem"}}>{t(`COMMON_MASTERS_${value && Digit.Utils.locale.getTransformedLocale(value)}`)}</p>
+          <p style={{ display:"inline-block",width:"2rem",alignItems:"flex-end",fontWeight:"bold",fontSize:"20px" }}>{entry?.payload?.value}</p>
+        </div>
+      );
+    }
+
+    return  <span style={{ fontSize: "14px", color: "#505A5F" }}>{t(`COMMON_MASTERS_${value && Digit.Utils.locale.getTransformedLocale(value)}`)}</span>
+  }
 
   const renderCustomLabel = (args) => {
     const { value, endAngle, startAngle, x, cx, y, cy, percent, name } = args;
@@ -172,18 +190,19 @@ const CustomPieChart = ({ dataKey = "value", data, setChartDenomination }) => {
       {chartData?.length === 0 || !chartData ? (
         <NoData t={t} />
       ) : (
-        <ResponsiveContainer width="99%" height={340}>
-          <PieChart cy={100}>
+        variant === "pieChartv2" ? 
+        <ResponsiveContainer width="94%" maxHeight={chartData?.length > 3 ? 500 : 400}>
+          <PieChart cy={100} width="100%">
             <Pie
               data={chartData}
               dataKey={dataKey}
-              cy={150}
+              cy={125}
               style={{ cursor: response?.responseData?.drillDownChartId !== "none" ? "pointer" : "default" }}
-              innerRadius={checkChartID(id) && !mobileView ? 90 : 70} ///Charts in rows(which contains 2 charts) are little bigger in size than charts in rows(which contains 3 charts) charts
-              outerRadius={checkChartID(id) && !mobileView ? 110 : 90}
+              innerRadius={checkChartID(id) && !mobileView ? 60 : 80} ///Charts in rows(which contains 2 charts) are little bigger in size than charts in rows(which contains 3 charts) charts
+              outerRadius={checkChartID(id) && !mobileView ? 90 : 100}
               margin={{ top: isPieClicked ? 0 : 5 }}
               fill="#8884d8"
-              //label={renderCustomLabel}
+              label={variant==="pieChartv2" ? renderCustomLabel : null}
               labelLine={false}
               isAnimationActive={false}
               onClick={response?.responseData?.drillDownChartId !== "none" ? onPieClick : null}
@@ -191,30 +210,82 @@ const CustomPieChart = ({ dataKey = "value", data, setChartDenomination }) => {
               {response?.responseData?.data?.[0]?.plots.map((entry, index) => (
                 <Cell key={`cell-`} fill={COLORS[index % COLORS.length]} />
               ))}
+              {totalCount && <Label
+                value={`${t("RT_TOTAL")} : ${totalCount}`}
+                position="center"
+                fontSize={18}
+                fontWeight="bold"
+              />}
             </Pie>
             <Tooltip content={renderTooltip} />
             <Legend
               layout="vertical"
-              verticalAlign="middle"
-              align="right"
+              verticalAlign="bottom"
+              align="center"
               iconType="circle"
               formatter={renderLegend}
-              iconSize={10}
+              // formatter={(value, entry) => `${value} (${entry.value})`}
+              // formatter={(value,entry)=> renderCustomLabel(entry)}
+              iconSize={13}
               wrapperStyle={
                 chartData?.length > 6
                   ? {
-                      paddingRight: checkChartID(id) && !mobileView ? 60 : 0, ///Padding for 2 charts in a row cases
+                      paddingRight: checkChartID(id) && !mobileView ? 30 : 0, ///Padding for 2 charts in a row cases
                       overflowY: "scroll",
                       height: 250,
                       width: "35%",
                       overflowX: "auto",
                       paddingTop: -20,
+                      paddingBottom: -20
                     }
-                  : { paddingRight: checkChartID(id) && !mobileView ? 60 : 0, width: "27%", overflowX: "auto", paddingTop: -20 } ///Padding for 2 charts in a row cases
+                  : { paddingRight: checkChartID(id) && !mobileView ? 30 : 0,paddingLeft:checkChartID(id) && !mobileView ? 30 : 0, width: "100%", overflowX: "auto",marginTop:"0px", marginLeft:"1.5rem" } ///Padding for 2 charts in a row cases
               }
             />
           </PieChart>
-        </ResponsiveContainer>
+        </ResponsiveContainer>:
+        <ResponsiveContainer width="99%" height={340}>
+        <PieChart cy={100}>
+          <Pie
+            data={chartData}
+            dataKey={dataKey}
+            cy={150}
+            style={{ cursor: response?.responseData?.drillDownChartId !== "none" ? "pointer" : "default" }}
+            innerRadius={checkChartID(id) && !mobileView ? 90 : 70} ///Charts in rows(which contains 2 charts) are little bigger in size than charts in rows(which contains 3 charts) charts
+            outerRadius={checkChartID(id) && !mobileView ? 110 : 90}
+            margin={{ top: isPieClicked ? 0 : 5 }}
+            fill="#8884d8"
+            //label={renderCustomLabel}
+            labelLine={false}
+            isAnimationActive={false}
+            onClick={response?.responseData?.drillDownChartId !== "none" ? onPieClick : null}
+          >
+            {response?.responseData?.data?.[0]?.plots.map((entry, index) => (
+              <Cell key={`cell-`} fill={COLORS[index % COLORS.length]} />
+            ))}
+          </Pie>
+          <Tooltip content={renderTooltip} />
+          <Legend
+            layout="vertical"
+            verticalAlign="middle"
+            align="right"
+            iconType="circle"
+            formatter={renderLegend}
+            iconSize={10}
+            wrapperStyle={
+              chartData?.length > 6
+                ? {
+                    paddingRight: checkChartID(id) && !mobileView ? 60 : 0, ///Padding for 2 charts in a row cases
+                    overflowY: "scroll",
+                    height: 250,
+                    width: "35%",
+                    overflowX: "auto",
+                    paddingTop: -20,
+                  }
+                : { paddingRight: checkChartID(id) && !mobileView ? 60 : 0, width: "27%", overflowX: "auto", paddingTop: -20 } ///Padding for 2 charts in a row cases
+            }
+          />
+        </PieChart>
+      </ResponsiveContainer>
       )}
       {isPieClicked && (
         <div

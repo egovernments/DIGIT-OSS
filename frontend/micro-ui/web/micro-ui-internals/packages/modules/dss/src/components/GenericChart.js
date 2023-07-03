@@ -29,6 +29,7 @@ const GenericChart = ({
   chip = [],
   updateChip,
   value = {},
+  iconName=""
 }) => {
   const { t } = useTranslation();
   const tenantId = Digit.ULBService.getCurrentTenantId();
@@ -77,12 +78,14 @@ const GenericChart = ({
     return Digit.Download.Excel(chartData, t(header));
   };
   let headerName = t(Digit.Utils.locale.getTransformedLocale(header));
+  var IconComp = require("@egovernments/digit-ui-react-components")?.[iconName];
   return (
     <Card className={`chart-item ${className}`} ReactRef={chart}>
       <div className={`chartHeader ${showSearch && "column-direction"}`}>
         <div>
           {showHeader && (
             <CardLabel className={"dss-header-label"}>
+              {iconName&&IconComp&&<span><IconComp  className={"dss-primary"} /></span>}
               <span className={`tooltip ${headerName?.length < (isMobile ? 20 : 30) ? "dss-white-pre" : "dss-white-pre-line"}`}>
                 {headerName}
                 {chartDenomination?.toLowerCase() === "amount" && (

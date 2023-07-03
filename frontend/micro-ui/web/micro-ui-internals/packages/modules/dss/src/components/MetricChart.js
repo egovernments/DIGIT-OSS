@@ -38,6 +38,68 @@ const MetricData = ({ t, data, code }) => {
   );
 };
 
+const ColumnMetricData = ({data, setChartDenomination, index }) => {
+  const { id, chartType } = data;
+  const tenantId = Digit.ULBService.getCurrentTenantId();
+  const { t } = useTranslation();
+  const { value } = useContext(FilterContext);
+  const [showDateOrCount, setShowDateOrCount] = useState({});
+  const isMobile = window.Digit.Utils.browser.isMobile();
+  const { isLoading, data: response } = Digit.Hooks.dss.useGetChart({
+    key: id,
+    type: chartType,
+    tenantId,
+    requestDate: { ...value?.requestDate, startDate: value?.range?.startDate?.getTime(), endDate: value?.range?.endDate?.getTime() },
+    filters: value?.filters,
+    moduleLevel: value?.moduleLevel
+  });
+
+  useEffect(() => {
+    if (response) {
+      let plots = response?.responseData?.data?.[0]?.plots || null;
+      if (plots && Array.isArray(plots) && plots.length > 0 && plots?.every((e) => e.value))
+      setShowDateOrCount(oldstate=>({...oldstate,[id]:{
+          todaysDate: Digit.DateUtils.ConvertEpochToDate(plots?.[0]?.value),
+          lastUpdatedTime: Digit.DateUtils.ConvertEpochToTimeInHours(plots?.[1]?.value),
+          count: plots?.[2]?.value
+        }}));
+      index === 0 && setChartDenomination(response?.responseData?.data?.[0]?.headerSymbol);
+    } else {
+      setShowDateOrCount({});
+    }
+  }, [response]);
+
+  if (isLoading) {
+    return false;
+  }
+  
+    return (
+      <div style={{marginLeft: "8px", marginRight: "8px", maxWidth: "21%", flexDirection: "column", justifyContent: "center", alignItems: "center"}}>
+        {response ? <p className="heading-m" style={{ textAlign: "center", paddingTop: "0px", wordWrap: "break-word", paddingBottom: "0px", marginLeft: "0px"}}>
+            {`${Digit.Utils.dss.formatter(response?.responseData?.data?.[0]?.headerValue, response?.responseData?.data?.[0]?.headerSymbol, value?.denomination, true, t)}`}
+        </p> : <div style={{ whiteSpace: "pre" }}>{t("DSS_NO_DATA")}</div>}
+        <div className={`tooltip`} style={{marginLeft: "42px", paddingLeft: "32px"}}>
+        <span
+          className="tooltiptext"
+          style={{
+            fontSize: "medium",
+            width:"fit-content" ,
+            minWidth:  t(`TIP_${data.name}`).length < 20 ? t(`TIP_${data.name}`).length * 4 : 120,
+            maxWidth: 400,
+            whiteSpace: "normal",
+            visibility: "visible"
+          }}
+        >
+          <span style={{ fontWeight: "500", color: "white" }}>{t(`TIP_${data.name}`)}</span>
+        </span>
+        </div>
+        <div style={{ textAlign: "center", paddingTop: "0px", wordWrap: "break-word" }}>{`${response?.responseData?.data?.[0]?.plots?.[2]?.value != 0 ? `${response?.responseData?.data?.[0]?.plots?.[2]?.value} ` : ""}${t(`${data.name}`)}`}</div>
+      </div>
+      
+    );
+  
+};
+
 const MetricChartRow = ({ data, setChartDenomination, index }) => {
   const { id, chartType } = data;
   const tenantId = Digit.ULBService.getCurrentTenantId();
@@ -138,10 +200,15 @@ const MetricChart = ({ data, setChartDenomination }) => {
   const { charts } = data;
   return (
     <>
-    <span className="chart-metric-wrapper">
+    <span className={`chart-metric-wrapper`} style={{flexWrap: "wrap", display: "flex"}}>
   
       {charts.map((chart, index) => (
-        <MetricChartRow data={chart} key={index} index={index} setChartDenomination={setChartDenomination} />
+        
+        data?.isHorizontalChart ? (
+          <ColumnMetricData data={chart} key={index} index={index} setChartDenomination={setChartDenomination} />
+        ) : (
+          <MetricChartRow data={chart} key={index} index={index} setChartDenomination={setChartDenomination} />
+        )
       ))}
         </span>
     </>

@@ -18,7 +18,7 @@ var Digit = window.Digit || {};
 
 const enabledModules = [ "DSS", "HRMS",
 //  "Engagement", "NDSS","QuickPayLinks", "Payment",
-  "Utilities",
+  // "Utilities",
 //added to check fsm
 // "FSM"
 ];
@@ -61,7 +61,7 @@ const initDigitUI = () => {
   initDSSComponents();
   initHRMSComponents();
   initEngagementComponents();
-  initUtilitiesComponents();
+  // initUtilitiesComponents();
 
   const moduleReducers = (initData) => initData;
 
