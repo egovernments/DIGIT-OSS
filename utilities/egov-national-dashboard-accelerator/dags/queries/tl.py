@@ -972,7 +972,7 @@ tl_todays_collection_by_trade_type = {'path': 'dss-collection_v2/_search',
 
 
 
-tl_queries = [ tl_todays_trade_licenses]
+tl_queries = [ tl_todays_trade_licenses,tl_license_issued_by_boundary,tl_applications_moved_today]
 
 #the default payload for TL
 def empty_tl_payload(region, ulb, ward, date):
