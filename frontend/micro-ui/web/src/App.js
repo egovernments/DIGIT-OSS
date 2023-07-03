@@ -12,8 +12,6 @@ import { initUtilitiesComponents } from  "@egovernments/digit-ui-module-utilitie
 
 window.contextPath = window?.globalConfigs?.getConfig("CONTEXT_PATH");
 
-initLibraries();
-
 const enabledModules = ["DSS", "NDSS",  "Utilities",
 "HRMS", "Engagement"
 ];
@@ -32,9 +30,29 @@ const moduleReducers = (initData) => ({
   initData,
 });
 
+
+const initDigitUI = () => {
+  window.Digit.ComponentRegistryService.setupRegistry({});
+
+  initDSSComponents();
+  initHRMSComponents();
+  initEngagementComponents();
+  initUtilitiesComponents();
+
+ 
+  window.Digit.Customizations = {
+    PGR: {},
+    TL: TLCustomisations,
+    commonUiConfig: UICustomizations,
+  };
+};
+
+initLibraries().then(() => {
+  initDigitUI();
+});
+
 function App() {
-  window.contextPath =
-    window?.globalConfigs?.getConfig("CONTEXT_PATH") || "digit-ui";
+  window.contextPath = window?.globalConfigs?.getConfig("CONTEXT_PATH");
   const stateCode =
     window.globalConfigs?.getConfig("STATE_LEVEL_TENANT_ID") ||
     process.env.REACT_APP_STATE_LEVEL_TENANT_ID;
@@ -46,6 +64,7 @@ function App() {
       stateCode={stateCode}
       enabledModules={enabledModules}
       moduleReducers={moduleReducers}
+      // defaultLanding="employee"
     />
   );
 }
