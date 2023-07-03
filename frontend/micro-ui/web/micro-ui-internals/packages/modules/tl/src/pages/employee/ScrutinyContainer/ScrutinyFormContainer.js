@@ -678,32 +678,32 @@ const ScrutinyFormcontainer = (props) => {
       }}>
         <Card className="head-application1">
           <div className="d-flex justify-content-between">
-            <div className="">
+            <div className="px-3">
               <b><p className="head-font">Application Number:</p></b>
               <b><p className="head-font">{id}</p></b>
             </div>
-            <div className="">
+            <div className="px-3">
               <b><p className="head-font">Service Id: </p></b>
               <b><p className="head-font">
                 {/* {applicationData?.businessService} ask to renuka */}
                 Licence
               </p></b>
             </div>
-            <div className="">
+            <div className="px-3">
               <b><p className="head-font">TCP Application Number:</p></b>
               {/* {item.name.substring(0, 4)} */}
               <b><p className="head-font">{applicationData?.tcpApplicationNumber.substring(7, 20)}</p></b>
             </div>
-            <div className="">
+            <div className="px-3">
               <b><p className="head-font">TCP Case Number:</p></b>
               <b><p className="head-font">{applicationData?.tcpCaseNumber.substring(0, 7)}</p></b>
             </div>
-            <div className="">
+            <div className="px-3">
               <b><p className="head-font">TCP Diary Number: </p></b>
               <b><p className="head-font">{applicationData?.tcpDairyNumber}</p></b>
 
             </div>
-            <div className="">
+            <div className="px-3">
               <Button style={{ textAlign: "right" }} value="Submit" id="Submit" onChange1={handleChange} name="Submit" onClick={handleshow19}>View PDF</Button>
             </div>
           </div>
