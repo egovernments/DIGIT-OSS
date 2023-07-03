@@ -73,8 +73,8 @@ const CustomDropdown = ({ t, config, inputRef, label, onChange, value, errorStyl
       : (data) => {
           const optionsData = _.get(data, `${config?.mdmsConfig?.moduleName}.${config?.mdmsConfig?.masterName}`, []);
           return optionsData
-            .filter((opt) => opt?.active)
-            .map((opt) => ({ ...opt, name: `${config?.mdmsConfig?.localePrefix}_${Digit.Utils.locale.getTransformedLocale(opt.code)}` }));
+          .filter((opt) => (opt?.hasOwnProperty("active") ? opt.active : true))
+          .map((opt) => ({ ...opt, name: `${config?.mdmsConfig?.localePrefix}_${Digit.Utils.locale.getTransformedLocale(opt.code)}` }));
         },
     enabled: config?.mdmsConfig ? true : false,
   });

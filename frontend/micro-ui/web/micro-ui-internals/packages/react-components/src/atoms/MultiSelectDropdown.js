@@ -125,7 +125,7 @@ const MultiSelectDropdown = ({ options, optionsKey, selected = [], onSelect, def
       ) : null}
 
     </div>
-    {config.isDropdownWithChip ? <div className="tag-container">
+    {config?.isDropdownWithChip ? <div className="tag-container">
               {alreadyQueuedSelectedState.length > 0 &&
                 alreadyQueuedSelectedState.map((value, index) => {
                   return <RemoveableTag key={index} text={`${t(value[optionsKey]).slice(0, 22)} ...`} 
