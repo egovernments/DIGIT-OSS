@@ -982,7 +982,7 @@ def empty_tl_payload(region, ulb, ward, date):
         "ward": ward,
         "ulb": ulb,
         "region": region,
-        "state": "Punjab",
+        "state": "UTTARAKHAND",
         "metrics": {
             "transactions": 0,
             "todaysApplications": 0,
