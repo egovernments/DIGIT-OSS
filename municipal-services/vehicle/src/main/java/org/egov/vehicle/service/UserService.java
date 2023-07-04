@@ -216,6 +216,9 @@ public class UserService {
 		if (!StringUtils.isEmpty(owner.getMobileNumber())) {
 			ownerSearchRequest.setMobileNumber(owner.getMobileNumber());
 		}
+		if (!StringUtils.isEmpty(owner.getName())) {
+			ownerSearchRequest.setName(owner.getName());
+		}
 		StringBuilder uri = new StringBuilder(config.getUserHost()).append(config.getUserSearchEndpoint());
 		return ownerCall(ownerSearchRequest, uri);
 
