@@ -237,7 +237,7 @@ const DataGridDemo = (props) => {
                                     Sr.NO
                                 </th>
                                 <th class="fw-normal py-0 border-top-0">
-                                    File Name
+                                    Field Name
                                 </th>
 
 

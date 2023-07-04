@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, Fragment } from "react";
 import "bootstrap/dist/css/bootstrap.css";
 import { useForm } from "react-hook-form";
 import { Button, Form, FormLabel } from "react-bootstrap";
@@ -22,7 +22,7 @@ import ReportProblemIcon from "@mui/icons-material/ReportProblem";
 import { useStyles } from "../css/personalInfoChild.style";
 import { add } from "lodash";
 
-const CapacityScrutiny = ({ t, config, onSelect, showTable, formData, formDataValue, data, addInfo,applicationStatus , capacityScrutinyInfo, iconColorState ,showDevTypeFields,getRemarkData,mDMSData }) => {
+const CapacityScrutiny = ({ t, config, onSelect, showTable, formData, formDataValue, data, addInfo, applicationStatus, capacityScrutinyInfo, iconColorState, showDevTypeFields, getRemarkData, mDMSData }) => {
   const { pathname: url } = useLocation();
   // const userInfo = Digit.UserService.getUser();
   let validation = {};
@@ -35,7 +35,7 @@ const CapacityScrutiny = ({ t, config, onSelect, showTable, formData, formDataVa
   const [capacityDevelopColonyHdruAct, setModalCapacityDevelopColonyHdruAct] = useState(
     formDataValue?.DeveloperCapacity?.capacityDevelopColonyHdruAct || []
   );
- 
+
   const [capacityDevelopColonyLawAct, setCapacityDevelopColonyLawAct] = useState(formDataValue?.DeveloperCapacity?.capacityDevelopColonyLawAct || []);
   const [capacityDevelopAColony, setcapacityDevelopAColony] = useState([]);
 
@@ -89,47 +89,47 @@ const CapacityScrutiny = ({ t, config, onSelect, showTable, formData, formDataVa
   // const hideRemarks = userRoles.some((item)=>item === "CTP_HR" || item === "CTP_HQ" || item === "DTP_HR" || item === "DTP_HQ")
   // const hideRemarksPatwari = userRoles.some((item)=>item ==="Patwari_HQ")
 
-    // const applicationStatus = props.applicationStatus ;
+  // const applicationStatus = props.applicationStatus ;
   let user = Digit.UserService.getUser();
   const userInfo = Digit.UserService.getUser()?.info || {};
   const userRolesArray = userInfo?.roles.filter((user) => user.code !== "EMPLOYEE");
   const filterDataRole = userRolesArray?.[0]?.code;
   const userRoles = user?.info?.roles?.map((e) => e.code) || [];
-  
-  console.log("rolelogintime" , userRoles );
-  console.log("afterfilter12" , filterDataRole)
+
+  console.log("rolelogintime", userRoles);
+  console.log("afterfilter12", filterDataRole)
 
   // const mDMSData = props.mDMSData;
   const mDMSDataRole = mDMSData?.map((e) => e.role) || [];
   const hideRemarks = mDMSDataRole.includes(filterDataRole);
-  const applicationStatusMdms = mDMSData?.map((e) => e.applicationStatus) || [] ;
+  const applicationStatusMdms = mDMSData?.map((e) => e.applicationStatus) || [];
   const hideRemarksPatwari = applicationStatusMdms.some((item) => item === applicationStatus) || [];
-  const [fileddataName, setFiledDataName] = useState ();
+  const [fileddataName, setFiledDataName] = useState();
 
- useEffect(() =>{
-    if(mDMSData&&mDMSData?.length){
-      console.log("filedDataMdms" , mDMSData,mDMSData?.[0]?.field , mDMSData?.[0]?.field.map((item , index) => item.fields ));
-      setFiledDataName(mDMSData?.[0]?.field.map((item , index) => item.fields ))
-       
+  useEffect(() => {
+    if (mDMSData && mDMSData?.length) {
+      console.log("filedDataMdms", mDMSData, mDMSData?.[0]?.field, mDMSData?.[0]?.field.map((item, index) => item.fields));
+      setFiledDataName(mDMSData?.[0]?.field.map((item, index) => item.fields))
+
     }
-    
- },[mDMSData]
- )
- const showReportProblemIcon=(filedName)=>{
-   if (fileddataName&&fileddataName.length) {
+
+  }, [mDMSData]
+  )
+  const showReportProblemIcon = (filedName) => {
+    if (fileddataName && fileddataName.length) {
       let show = fileddataName.includes(filedName)
-      return show ;
+      return show;
     } else {
-      return false ;
+      return false;
     }
- }
- 
+  }
+
   // mDMSData?.map((e) => e.role)||[]
-  console.log("happyRole" , userRoles);
-  console.log("happyDate" , mDMSData);
-  console.log("happyROLE" , mDMSDataRole);
-  console.log("happyapplicationStatusMdms564654" , applicationStatusMdms);
-  console.log("happyDateHIDE45655" , hideRemarksPatwari,showReportProblemIcon("Purpose of colony"),hideRemarks);
+  console.log("happyRole", userRoles);
+  console.log("happyDate", mDMSData);
+  console.log("happyROLE", mDMSDataRole);
+  console.log("happyapplicationStatusMdms564654", applicationStatusMdms);
+  console.log("happyDateHIDE45655", hideRemarksPatwari, showReportProblemIcon("Purpose of colony"), hideRemarks);
 
 
 
@@ -381,11 +381,11 @@ const CapacityScrutiny = ({ t, config, onSelect, showTable, formData, formDataVa
   const [smShow, setSmShow] = useState(false);
   const [labelValue, setLabelValue] = useState("");
   const Colors = {
-    conditional:"#2874A6",
-    approved:"#09cb3d",
-    disapproved:"#ff0000",
-   
-    info:"#FFB602"
+    conditional: "#2874A6",
+    approved: "#09cb3d",
+    disapproved: "#ff0000",
+
+    info: "#FFB602"
   }
   const [selectedFieldData, setSelectedFieldData] = useState();
   const [fieldValue, setFieldValue] = useState("");
@@ -422,64 +422,64 @@ const CapacityScrutiny = ({ t, config, onSelect, showTable, formData, formDataVa
   { label: "Area of the project in acres ", key: "caution13" },
   { label: "(ii) Have you developed projects outside Haryana:-", key: "caution10" },]
 
-const iconStates = iconColorState
-console.log("RemarksColor", iconStates);
-const getColorofFieldIcon=()=>{
-  let tempFieldColorState = fieldIconColors;
-  fieldIdList.forEach((item)=>{
-    if (iconStates!==null && iconStates!==undefined) {
-      console.log("color method called");
-      const fieldPresent = iconStates.egScrutiny.filter(ele => (ele.fieldIdL===item.label));
-      console.log("filteration value", fieldPresent,fieldPresent[0]?.isApproved);
-      if(fieldPresent && fieldPresent.length){
-        console.log("filteration value1", fieldPresent,fieldPresent[0]?.isApproved);
-        tempFieldColorState = {...tempFieldColorState,[item.key]:fieldPresent[0].isApproved === "In Order" ?Colors.approved: fieldPresent[0].isApproved === "Not In Order" ? Colors.disapproved:fieldPresent[0].isApproved === "conditional" ? Colors.conditional:Colors.info}
-       
+  const iconStates = iconColorState
+  console.log("RemarksColor", iconStates);
+  const getColorofFieldIcon = () => {
+    let tempFieldColorState = fieldIconColors;
+    fieldIdList.forEach((item) => {
+      if (iconStates !== null && iconStates !== undefined) {
+        console.log("color method called");
+        const fieldPresent = iconStates.egScrutiny.filter(ele => (ele.fieldIdL === item.label));
+        console.log("filteration value", fieldPresent, fieldPresent[0]?.isApproved);
+        if (fieldPresent && fieldPresent.length) {
+          console.log("filteration value1", fieldPresent, fieldPresent[0]?.isApproved);
+          tempFieldColorState = { ...tempFieldColorState, [item.key]: fieldPresent[0].isApproved === "In Order" ? Colors.approved : fieldPresent[0].isApproved === "Not In Order" ? Colors.disapproved : fieldPresent[0].isApproved === "conditional" ? Colors.conditional : Colors.info }
+
+        }
       }
+    })
+
+    setFieldIconColors(tempFieldColorState);
+
+  };
+
+
+  useEffect(() => {
+    getColorofFieldIcon();
+    console.log("repeating1...",)
+  }, [iconStates])
+
+  useEffect(() => {
+    if (labelValue) {
+      const fieldPresent = iconStates.egScrutiny.filter(ele => (ele.fieldIdL === labelValue));
+      setSelectedFieldData(fieldPresent[0]);
+    } else {
+      setSelectedFieldData(null);
     }
-  })
-
-  setFieldIconColors(tempFieldColorState);
-
-};
-
-
-useEffect(()=>{
-  getColorofFieldIcon();
-  console.log("repeating1...",)
-},[iconStates])
-
-useEffect(()=>{
-  if(labelValue){
-    const fieldPresent = iconStates.egScrutiny.filter(ele => (ele.fieldIdL===labelValue));
-    setSelectedFieldData(fieldPresent[0]);
-  }else{
-    setSelectedFieldData(null);
-  }
-},[labelValue])
+  }, [labelValue])
 
 
 
-const currentRemarks = (data) => {
-  showTable({ data: data.data });
-};
+  const currentRemarks = (data) => {
+    showTable({ data: data.data });
+  };
 
-const handlemodaldData = (data) => {
-  // setmodaldData(data.data);
-  setSmShow(false);
-  console.log("here",openedModal,data);
-  if(openedModal && data){
-    setFieldIconColors({...fieldIconColors,[openedModal]:data.data.isApproved?Colors.approved:Colors.disapproved})
+  const handlemodaldData = (data) => {
+    // setmodaldData(data.data);
+    setSmShow(false);
+    console.log("here", openedModal, data);
+    if (openedModal && data) {
+      setFieldIconColors({ ...fieldIconColors, [openedModal]: data.data.isApproved ? Colors.approved : Colors.disapproved })
 
-    
-    // fieldPresent[0].isApproved === "approved" ?Colors.approved: fieldPresent[0].isApproved === "disapproved" ? Colors.disapproved:fieldPresent[0].isApproved === "conditional" ? Colors.conditional:Colors.info
-  }
+
+      // fieldPresent[0].isApproved === "approved" ?Colors.approved: fieldPresent[0].isApproved === "disapproved" ? Colors.disapproved:fieldPresent[0].isApproved === "conditional" ? Colors.conditional:Colors.info
+    }
     setOpennedModal("");
     setLabelValue("");
-};
+  };
 
-  console.log("happy akash" ,capacityScrutinyInfo);
-  console.log("happy akash2" , addInfo);
+  console.log("happy akash", capacityScrutinyInfo);
+  console.log("happy akash2", addInfo);
 
   return (
     <div>
@@ -492,7 +492,7 @@ const handlemodaldData = (data) => {
         fieldValue={fieldValue}
         remarksUpdate={currentRemarks}
         applicationStatus={applicationStatus}
-        // getRemarkData={props.getRemarkData}
+      // getRemarkData={props.getRemarkData}
       ></ModalChild>
 
       <div
@@ -521,8 +521,8 @@ const handlemodaldData = (data) => {
       <Collapse in={open}>
         <div id="example-collapse-text">
           <FormStep config={config} onSelect={submitTechdevData} onSkip={onSkip} t={t}>
-          {/* kit  {developerType} */}
-          
+            {/* kit  {developerType} */}
+
             {/* oti {addInfo?.showDevTypeFields} */}
 
             {addInfo?.showDevTypeFields === "Individual" && (
@@ -547,41 +547,47 @@ const handlemodaldData = (data) => {
                           <td>
                             {/* <input type="file" name="upload" placeholder="" class="employee-card-input" /> */}
                             <div className="row">
-                                  {/* <button className="btn btn-sm col-md-6">
+                              {/* <button className="btn btn-sm col-md-6">
                                     <VisibilityIcon color="info" className="icon" />
                                   </button>
                                   <button className="btn btn-sm col-md-6">
                                     <FileDownloadIcon color="primary" />
                                   </button> */}
-                                  
-                                 <div className="btn btn-sm col-md-6">
-                                   <IconButton onClick={()=>getDocShareholding(item?.agreementDoc)}>
+
+                              {
+                                item?.agreementDoc &&
+                                <Fragment>
+                                  <div className="btn btn-sm col-md-6">
+                                    <IconButton onClick={() => getDocShareholding(item?.agreementDoc)}>
                                       <VisibilityIcon color="info" className="icon" /></IconButton>
-                                      </div>
-                                 <div className="btn btn-sm col-md-6">
-                                  <IconButton onClick={()=>getDocShareholding(item?.agreementDoc)}>
+                                  </div>
+                                  <div className="btn btn-sm col-md-6">
+                                    <IconButton onClick={() => getDocShareholding(item?.agreementDoc)}>
                                       <FileDownloadIcon color="info" className="icon" /></IconButton>
-                                      </div>
-                                </div>
+                                  </div>
+                                </Fragment>
+                              }
+
+                            </div>
                           </td>
                           <td align="center" size="large">
-                             {JSON.stringify(hideRemarks)} 
-                  {/*  display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("X:Longitude") ? "block" : "none", */}
-                          <div>
-                            <ReportProblemIcon
-                  style={{
-                     display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("X:Longitude") ? "block" : "none",
-                    color: fieldIconColors.caution1
-                  }}
-                  onClick={() => {
-                    setOpennedModal("caution1")
-                    setLabelValue("Whether the Developer/ group company has earlier been granted permission to set up a colony under HDRU Act, 1975"),
-                      setSmShow(true),
-                      console.log("modal open"),
-                      setFieldValue(capacityScrutinyInfo !== null ? capacityScrutinyInfo?.caution1: null);
-                  }}
-                ></ReportProblemIcon>
-                </div>
+                            {JSON.stringify(hideRemarks)}
+                            {/*  display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("X:Longitude") ? "block" : "none", */}
+                            <div>
+                              <ReportProblemIcon
+                                style={{
+                                  display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("X:Longitude") ? "block" : "none",
+                                  color: fieldIconColors.caution1
+                                }}
+                                onClick={() => {
+                                  setOpennedModal("caution1")
+                                  setLabelValue("Whether the Developer/ group company has earlier been granted permission to set up a colony under HDRU Act, 1975"),
+                                    setSmShow(true),
+                                    console.log("modal open"),
+                                    setFieldValue(capacityScrutinyInfo !== null ? capacityScrutinyInfo?.caution1 : null);
+                                }}
+                              ></ReportProblemIcon>
+                            </div>
                           </td>
                         </tr>
                         <tr>
@@ -590,38 +596,42 @@ const handlemodaldData = (data) => {
                           <td>
                             {/* <input type="file" name="upload" placeholder="" class="employee-card-input" /> */}
                             <div className="row">
-                                  {/* <button className="btn btn-sm col-md-6">
+                              {/* <button className="btn btn-sm col-md-6">
                                     <VisibilityIcon color="info" className="icon" />
                                   </button>
                                   <button className="btn btn-sm col-md-6">
                                     <FileDownloadIcon color="primary" />
                                   </button> */}
-                                  
-                                 <div className="btn btn-sm col-md-6">
-                                   <IconButton onClick={()=>getDocShareholding(item?.agreementDoc)}>
+                              {
+                                item?.agreementDoc &&
+                                <Fragment>
+                                  <div className="btn btn-sm col-md-6">
+                                    <IconButton onClick={() => getDocShareholding(item?.agreementDoc)}>
                                       <VisibilityIcon color="info" className="icon" /></IconButton>
-                                      </div>
-                                 <div className="btn btn-sm col-md-6">
-                                  <IconButton onClick={()=>getDocShareholding(item?.agreementDoc)}>
+                                  </div>
+                                  <div className="btn btn-sm col-md-6">
+                                    <IconButton onClick={() => getDocShareholding(item?.agreementDoc)}>
                                       <FileDownloadIcon color="info" className="icon" /></IconButton>
-                                      </div>
-                                </div>
+                                  </div>
+                                </Fragment>
+                              }
+                            </div>
                           </td>
                           <td align="center" size="large">
-                          <div>
-                            <ReportProblemIcon
-                  style={{
-                    color: fieldIconColors.agreementDoc
-                  }}
-                  onClick={() => {
-                    setOpennedModal("caution2")
-                    setLabelValue("Bank statement for the last 3 years"),
-                      setSmShow(true),
-                      console.log("modal open"),
-                      setFieldValue(capacityScrutinyInfo !== null ? capacityScrutinyInfo?.agreementDoc: null);
-                  }}
-                ></ReportProblemIcon>
-                </div>
+                            <div>
+                              <ReportProblemIcon
+                                style={{
+                                  color: fieldIconColors.agreementDoc
+                                }}
+                                onClick={() => {
+                                  setOpennedModal("caution2")
+                                  setLabelValue("Bank statement for the last 3 years"),
+                                    setSmShow(true),
+                                    console.log("modal open"),
+                                    setFieldValue(capacityScrutinyInfo !== null ? capacityScrutinyInfo?.agreementDoc : null);
+                                }}
+                              ></ReportProblemIcon>
+                            </div>
                           </td>
                         </tr>
                       </tbody>
@@ -654,40 +664,44 @@ const handlemodaldData = (data) => {
                           <td>
                             {/* <input type="file" name="upload" placeholder="" class="employee-card-input" /> */}
                             <div className="row">
-                                  {/* <button className="btn btn-sm col-md-6">
+                              {/* <button className="btn btn-sm col-md-6">
                                     <VisibilityIcon color="info" className="icon" />
                                   </button>
                                   <button className="btn btn-sm col-md-6">
                                     <FileDownloadIcon color="primary" />
                                   </button> */}
-                                  
-                                 <div className="btn btn-sm col-md-6">
-                                   <IconButton onClick={()=>getDocShareholding(capacityScrutinyInfo?.documents?.companyBalanceSheet)}>
+                              {
+                                capacityScrutinyInfo?.documents?.companyBalanceSheet &&
+                                <Fragment>
+                                  <div className="btn btn-sm col-md-6">
+                                    <IconButton onClick={() => getDocShareholding(capacityScrutinyInfo?.documents?.companyBalanceSheet)}>
                                       <VisibilityIcon color="info" className="icon" /></IconButton>
-                                      </div>
-                                    
-                                 <div className="btn btn-sm col-md-6">
-                                  <IconButton onClick={()=>getDocShareholding(capacityScrutinyInfo?.documents?.companyBalanceSheet)}>
+                                  </div>
+
+                                  <div className="btn btn-sm col-md-6">
+                                    <IconButton onClick={() => getDocShareholding(capacityScrutinyInfo?.documents?.companyBalanceSheet)}>
                                       <FileDownloadIcon color="info" className="icon" /></IconButton>
-                                      </div>
-                                </div>
+                                  </div>
+                                </Fragment>
+                              }
+                            </div>
                           </td>
                           <td align="center" size="large">
-                          <div>
-                            <ReportProblemIcon
-                  style={{
-                     display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("X:Longitude") ? "block" : "none",
-                    color: fieldIconColors.caution3
-                  }}
-                  onClick={() => {
-                    setOpennedModal("caution3")
-                    setLabelValue("Balance sheet of last 3 years"),
-                      setSmShow(true),
-                      console.log("modal open"),
-                      setFieldValue(capacityScrutinyInfo !== null ? capacityScrutinyInfo?.documents?.companyBalanceSheet: null);
-                  }}
-                ></ReportProblemIcon>
-                </div>
+                            <div>
+                              <ReportProblemIcon
+                                style={{
+                                  display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("X:Longitude") ? "block" : "none",
+                                  color: fieldIconColors.caution3
+                                }}
+                                onClick={() => {
+                                  setOpennedModal("caution3")
+                                  setLabelValue("Balance sheet of last 3 years"),
+                                    setSmShow(true),
+                                    console.log("modal open"),
+                                    setFieldValue(capacityScrutinyInfo !== null ? capacityScrutinyInfo?.documents?.companyBalanceSheet : null);
+                                }}
+                              ></ReportProblemIcon>
+                            </div>
                           </td>
                         </tr>
                         <tr>
@@ -696,39 +710,43 @@ const handlemodaldData = (data) => {
                           <td>
                             {/* <input type="file" name="upload" placeholder="" class="employee-card-input" /> */}
                             <div className="row">
-                                  {/* <button className="btn btn-sm col-md-6">
+                              {/* <button className="btn btn-sm col-md-6">
                                     <VisibilityIcon color="info" className="icon" />
                                   </button>
                                   <button className="btn btn-sm col-md-6">
                                     <FileDownloadIcon color="primary" />
                                   </button> */}
-                                  
-                                 <div className="btn btn-sm col-md-6">
-                                   <IconButton onClick={()=>getDocShareholding(capacityScrutinyInfo?.documents?.paidUpCapital)}>
+                              {
+                                capacityScrutinyInfo?.documents?.paidUpCapital &&
+                                <Fragment>
+                                  <div className="btn btn-sm col-md-6">
+                                    <IconButton onClick={() => getDocShareholding(capacityScrutinyInfo?.documents?.paidUpCapital)}>
                                       <VisibilityIcon color="info" className="icon" /></IconButton>
-                                      </div>
-                                 <div className="btn btn-sm col-md-6">
-                                  <IconButton onClick={()=>getDocShareholding(capacityScrutinyInfo?.documents?.paidUpCapital)}>
+                                  </div>
+                                  <div className="btn btn-sm col-md-6">
+                                    <IconButton onClick={() => getDocShareholding(capacityScrutinyInfo?.documents?.paidUpCapital)}>
                                       <FileDownloadIcon color="info" className="icon" /></IconButton>
-                                      </div>
-                                </div>
-                         </td>
+                                  </div>
+                                </Fragment>
+                              }
+                            </div>
+                          </td>
                           <td align="center" size="large">
-                          <div>
-                            <ReportProblemIcon
-                  style={{
-                     display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("X:Longitude") ? "block" : "none",
-                    color: fieldIconColors.caution4
-                  }}
-                  onClick={() => {
-                    setOpennedModal("caution4")
-                    setLabelValue("Ps-3(Representing Paid-UP capital)"),
-                      setSmShow(true),
-                      console.log("modal open"),
-                      setFieldValue(capacityScrutinyInfo !== null ? capacityScrutinyInfo?.documents?.paidUpCapital: null);
-                  }}
-                ></ReportProblemIcon>
-                </div>
+                            <div>
+                              <ReportProblemIcon
+                                style={{
+                                  display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("X:Longitude") ? "block" : "none",
+                                  color: fieldIconColors.caution4
+                                }}
+                                onClick={() => {
+                                  setOpennedModal("caution4")
+                                  setLabelValue("Ps-3(Representing Paid-UP capital)"),
+                                    setSmShow(true),
+                                    console.log("modal open"),
+                                    setFieldValue(capacityScrutinyInfo !== null ? capacityScrutinyInfo?.documents?.paidUpCapital : null);
+                                }}
+                              ></ReportProblemIcon>
+                            </div>
                           </td>
                         </tr>
                         <tr>
@@ -737,39 +755,43 @@ const handlemodaldData = (data) => {
                           <td>
                             {/* <input type="file" name="upload" placeholder="" class="employee-card-input" /> */}
                             <div className="row">
-                                  {/* <button className="btn btn-sm col-md-6">
+                              {/* <button className="btn btn-sm col-md-6">
                                     <VisibilityIcon color="info" className="icon" />
                                   </button>
                                   <button className="btn btn-sm col-md-6">
                                     <FileDownloadIcon color="primary" />
                                   </button> */}
-                                  
-                                 <div className="btn btn-sm col-md-6">
-                                   <IconButton onClick={()=>getDocShareholding(capacityScrutinyInfo?.documents?.reservesAndSurplus)}>
+                              {
+                                capacityScrutinyInfo?.documents?.reservesAndSurplus &&
+                                <Fragment>
+                                  <div className="btn btn-sm col-md-6">
+                                    <IconButton onClick={() => getDocShareholding(capacityScrutinyInfo?.documents?.reservesAndSurplus)}>
                                       <VisibilityIcon color="info" className="icon" /></IconButton>
-                                      </div>
-                                 <div className="btn btn-sm col-md-6">
-                                  <IconButton onClick={()=>getDocShareholding(capacityScrutinyInfo?.documents?.reservesAndSurplus)}>
+                                  </div>
+                                  <div className="btn btn-sm col-md-6">
+                                    <IconButton onClick={() => getDocShareholding(capacityScrutinyInfo?.documents?.reservesAndSurplus)}>
                                       <FileDownloadIcon color="info" className="icon" /></IconButton>
-                                      </div>
-                                </div>
+                                  </div>
+                                </Fragment>
+                              }
+                            </div>
                           </td>
                           <td align="center" size="large">
-                          <div>
-                            <ReportProblemIcon
-                  style={{
-                     display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("X:Longitude") ? "block" : "none",
-                    color: fieldIconColors.caution5
-                  }}
-                  onClick={() => {
-                    setOpennedModal("caution5")
-                    setLabelValue("Reserves and surpluses"),
-                      setSmShow(true),
-                      console.log("modal open"),
-                      setFieldValue(capacityScrutinyInfo !== null ? capacityScrutinyInfo?.documents?.reservesAndSurplus: null);
-                  }}
-                ></ReportProblemIcon>
-                </div>
+                            <div>
+                              <ReportProblemIcon
+                                style={{
+                                  display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("X:Longitude") ? "block" : "none",
+                                  color: fieldIconColors.caution5
+                                }}
+                                onClick={() => {
+                                  setOpennedModal("caution5")
+                                  setLabelValue("Reserves and surpluses"),
+                                    setSmShow(true),
+                                    console.log("modal open"),
+                                    setFieldValue(capacityScrutinyInfo !== null ? capacityScrutinyInfo?.documents?.reservesAndSurplus : null);
+                                }}
+                              ></ReportProblemIcon>
+                            </div>
                           </td>
                         </tr>
                         <tr>
@@ -778,39 +800,43 @@ const handlemodaldData = (data) => {
                           <td>
                             {/* <input type="file" name="upload" placeholder="" class="employee-card-input" /> */}
                             <div className="row">
-                                  {/* <button className="btn btn-sm col-md-6">
+                              {/* <button className="btn btn-sm col-md-6">
                                     <VisibilityIcon color="info" className="icon" />
                                   </button>
                                   <button className="btn btn-sm col-md-6">
                                     <FileDownloadIcon color="primary" />
                                   </button> */}
-                                  
-                                 <div className="btn btn-sm col-md-6">
-                                   <IconButton onClick={()=>getDocShareholding(capacityScrutinyInfo?.documents?.anyOtherDoc)}>
+                              {
+                                capacityScrutinyInfo?.documents?.anyOtherDoc &&
+                                <Fragment>
+                                  <div className="btn btn-sm col-md-6">
+                                    <IconButton onClick={() => getDocShareholding(capacityScrutinyInfo?.documents?.anyOtherDoc)}>
                                       <VisibilityIcon color="info" className="icon" /></IconButton>
-                                      </div>
-                                 <div className="btn btn-sm col-md-6">
-                                  <IconButton onClick={()=>getDocShareholding(capacityScrutinyInfo?.documents?.anyOtherDoc)}>
+                                  </div>
+                                  <div className="btn btn-sm col-md-6">
+                                    <IconButton onClick={() => getDocShareholding(capacityScrutinyInfo?.documents?.anyOtherDoc)}>
                                       <FileDownloadIcon color="info" className="icon" /></IconButton>
-                                      </div>
-                                </div>
-                         </td>
+                                  </div>
+                                </Fragment>
+                              }
+                            </div>
+                          </td>
                           <td align="center" size="large">
-                          <div>
-                            <ReportProblemIcon
-                  style={{
-                     display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("X:Longitude") ? "block" : "none",
-                    color: fieldIconColors.caution6
-                  }}
-                  onClick={() => {
-                    setOpennedModal("caution6")
-                    setLabelValue("Any other documents (in the case of the company)"),
-                      setSmShow(true),
-                      console.log("modal open"),
-                      setFieldValue(capacityScrutinyInfo !== null ? capacityScrutinyInfo?.documents?.anyOtherDoc: null);
-                  }}
-                ></ReportProblemIcon>
-                </div>
+                            <div>
+                              <ReportProblemIcon
+                                style={{
+                                  display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("X:Longitude") ? "block" : "none",
+                                  color: fieldIconColors.caution6
+                                }}
+                                onClick={() => {
+                                  setOpennedModal("caution6")
+                                  setLabelValue("Any other documents (in the case of the company)"),
+                                    setSmShow(true),
+                                    console.log("modal open"),
+                                    setFieldValue(capacityScrutinyInfo !== null ? capacityScrutinyInfo?.documents?.anyOtherDoc : null);
+                                }}
+                              ></ReportProblemIcon>
+                            </div>
                           </td>
                         </tr>
                       </tbody>
@@ -819,7 +845,7 @@ const handlemodaldData = (data) => {
                 </div>
               </div>
             )}
-           
+
 
             <div className="card-body">
               <p>1. I/ We hereby submit the following information/ enclose the relevant documents:-</p>
@@ -827,13 +853,13 @@ const handlemodaldData = (data) => {
                 (i) Whether the Developer has earlier been granted permission to set up a colony under HDRU Act, 1975: *{" "}
               </p>
               <div className="d-flex flex-row align-items-center ml-4">
-                <input type="radio" value="Yes" checked={capacityScrutinyInfo?.permissionGrantedHRDU === "Y"?true:false}  disabled />
+                <input type="radio" value="Yes" checked={capacityScrutinyInfo?.permissionGrantedHRDU === "Y" ? true : false} disabled />
                 <label className="m-0  mx-1" for="Yes">Yes</label>
-                <input type="radio" value="No"  checked={capacityScrutinyInfo?.permissionGrantedHRDU === "N"?true:false} disabled />
+                <input type="radio" value="No" checked={capacityScrutinyInfo?.permissionGrantedHRDU === "N" ? true : false} disabled />
                 <label className="m-0 mx-2" for="No">No</label>
                 <ReportProblemIcon
                   style={{
-                     display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("X:Longitude") ? "block" : "none",
+                    display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("X:Longitude") ? "block" : "none",
                     color: fieldIconColors.caution7
                   }}
                   onClick={() => {
@@ -841,79 +867,79 @@ const handlemodaldData = (data) => {
                     setLabelValue("Whether the Developer has earlier been granted permission to set up a colony under HDRU Act,1975:"),
                       setSmShow(true),
                       console.log("modal open"),
-                      setFieldValue(capacityScrutinyInfo !== null ? capacityScrutinyInfo?.permissionGrantedHRDU: null);
+                      setFieldValue(capacityScrutinyInfo !== null ? capacityScrutinyInfo?.permissionGrantedHRDU : null);
                   }}
                 ></ReportProblemIcon>
 
               </div>
               <div>
                 {capacityScrutinyInfo?.permissionGrantedHRDU === "Y" && (
-                <div className="card-body">
-                  {/* <h5 className="card-h">Add/Remove Authorized Users</h5> */}
-                  <div className="table-bd">
-                    <Table className="table table-bordered">
-                      <thead>
-                        <tr>
-                       <th class="fw-normal">S. no</th>
-                                                    <th class="fw-normal"> Licence No. </th>
-                                                    <th class="fw-normal">Date of grant of license</th>
-                                                    <th class="fw-normal">Purpose of colony</th>
-                                                    <th class="fw-normal">Validity of Licence</th>
-                                                    {/* <th class="fw-normal">Technical Expert Engaged</th>
+                  <div className="card-body">
+                    {/* <h5 className="card-h">Add/Remove Authorized Users</h5> */}
+                    <div className="table-bd">
+                      <Table className="table table-bordered">
+                        <thead>
+                          <tr>
+                            <th class="fw-normal">S. no</th>
+                            <th class="fw-normal"> Licence No. </th>
+                            <th class="fw-normal">Date of grant of license</th>
+                            <th class="fw-normal">Purpose of colony</th>
+                            <th class="fw-normal">Validity of Licence</th>
+                            {/* <th class="fw-normal">Technical Expert Engaged</th>
                                                     <th class="fw-normal">Degrees of Engineer</th>
                                                     <th class="fw-normal">Degrees of Architect</th>
                                                     <th class="fw-normal">Degrees of Town Planner</th> */}
-                                                    <th class="fw-normal">Actions</th>
-                          {/* <th>Remove</th> */}
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {/* {capacityDevelopColonyHdruAct.length > 0
+                            <th class="fw-normal">Actions</th>
+                            {/* <th>Remove</th> */}
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {/* {capacityDevelopColonyHdruAct.length > 0
                           ? capacityDevelopColonyHdruAct.map((elementInArray, input) => {
                               return ( */}
 
-                        {
-                          capacityScrutinyInfo?.capacityDevelopColonyHdruAct?.map((item,index)=>(
+                          {
+                            capacityScrutinyInfo?.capacityDevelopColonyHdruAct?.map((item, index) => (
 
-                            <tr>
-                            <td>{index+1}</td>
-                            <td>
-                              <input
-                                type="text"
-                                // value={item?.licenceNumber}
-                                placeholder={item?.licenceNumber}
-                                class="employee-card-input"
-                                disabled
-                              />
-                            </td>
-                            <td>
-                              <input
-                                type="text"
-                                // value={item?.nameOfDeveloper}
-                                placeholder={item?.grantLicence}
-                                class="employee-card-input"
-                                disabled
-                              />
-                            </td>
-                            <td>
-                              <input
-                                type="text"
-                                // value={item?.purposeOfColony}
-                                placeholder={item?.purposeOfColony}
-                                class="employee-card-input"
-                                disabled
-                              />
-                            </td>
-                            <td>
-                              <input
-                                type="text"
-                                // Validity of Licence
-                                placeholder={item?.validatingLicence}
-                                class="employee-card-input"
-                                disabled
-                              />
-                            </td>
-                            {/* <td>
+                              <tr>
+                                <td>{index + 1}</td>
+                                <td>
+                                  <input
+                                    type="text"
+                                    // value={item?.licenceNumber}
+                                    placeholder={item?.licenceNumber}
+                                    class="employee-card-input"
+                                    disabled
+                                  />
+                                </td>
+                                <td>
+                                  <input
+                                    type="text"
+                                    // value={item?.nameOfDeveloper}
+                                    placeholder={item?.grantLicence}
+                                    class="employee-card-input"
+                                    disabled
+                                  />
+                                </td>
+                                <td>
+                                  <input
+                                    type="text"
+                                    // value={item?.purposeOfColony}
+                                    placeholder={item?.purposeOfColony}
+                                    class="employee-card-input"
+                                    disabled
+                                  />
+                                </td>
+                                <td>
+                                  <input
+                                    type="text"
+                                    // Validity of Licence
+                                    placeholder={item?.validatingLicence}
+                                    class="employee-card-input"
+                                    disabled
+                                  />
+                                </td>
+                                {/* <td>
                               <input
                                 type="text"
                                
@@ -922,7 +948,7 @@ const handlemodaldData = (data) => {
                                 disabled
                               />
                             </td> */}
-                            {/* <td>
+                                {/* <td>
                               <div className="row">
                               
                                  <div className="btn btn-sm col-md-6">
@@ -936,7 +962,7 @@ const handlemodaldData = (data) => {
                                       </div>
                               </div>
                             </td> */}
-                            {/* <td>
+                                {/* <td>
                               <div className="row">
                                 
                                
@@ -952,7 +978,7 @@ const handlemodaldData = (data) => {
                                  
                               </div>
                             </td> */}
-                            {/* <td>
+                                {/* <td>
                               <div className="row">
                                 
                                
@@ -968,7 +994,7 @@ const handlemodaldData = (data) => {
                                  
                               </div>
                             </td> */}
-                            {/* <td>
+                                {/* <td>
                             <div className="btn btn-sm col-md-6">
                             <ReportProblemIcon
                   style={{
@@ -987,16 +1013,16 @@ const handlemodaldData = (data) => {
                             
 
                             </td> */}
-                          </tr>
+                              </tr>
 
-                          ))
-                        }
+                            ))
+                          }
 
-                       
-                      </tbody>
-                    </Table>
-                    <div>
-                      {/* <div>
+
+                        </tbody>
+                      </Table>
+                      <div>
+                        {/* <div>
                         <Modal size="lg" isOpen={modal} toggle={() => setmodal(!modal)}>
                           <ModalHeader toggle={() => setmodal(!modal)}></ModalHeader>
 
@@ -1072,70 +1098,70 @@ const handlemodaldData = (data) => {
                           <ModalFooter toggle={() => setmodal(!modal)}></ModalFooter>
                         </Modal>
                       </div> */}
-                    </div>
+                      </div>
 
-                    {/* <br></br> */}
-                    {/* <br></br> */}
+                      {/* <br></br> */}
+                      {/* <br></br> */}
+                    </div>
                   </div>
-                </div>
-                )} 
+                )}
               </div>
 
-<br></br>
-{capacityScrutinyInfo?.permissionGrantedHRDU === "N" && (
-<div>
-<div className="hl"></div>
-              <p className="ml-3">
-              (ii) Have you developed projects outside Haryana:-
-                
-              </p>
-              <div className="ml-3" >
-                  <input
-                    type="radio"
-                    value="Yes"
-                    
-                    className="mx-2 mt-1"
-      checked={capacityScrutinyInfo?.technicalCapacityOutsideHaryana === "Y" ?true:false}
-                   
-                    disabled
-                  />
-                  <label className="m-0  mx-1" for="Yes">Yes</label>
+              <br></br>
+              {capacityScrutinyInfo?.permissionGrantedHRDU === "N" && (
+                <div>
+                  <div className="hl"></div>
+                  <p className="ml-3">
+                    (ii) Have you developed projects outside Haryana:-
 
-                  <input
-                    type="radio"
-                    value="No"
-                    
-                    className="mx-2 mt-1"
-                    checked={capacityScrutinyInfo?.technicalCapacityOutsideHaryana === "N" ?true:false}
-                  
-                    disabled
-                  />
-                  <label className="m-0 mx-2" for="No">No</label>
-                  <ReportProblemIcon
-                    style={{
-                       display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("X:Longitude") ? "block" : "none",
-                      color:fieldIconColors.caution10
-                    }}
-                    onClick={() => {
-                      setOpennedModal("caution10")
-                      setLabelValue("(ii) Have you developed projects outside Haryana:-"),
-                      setSmShow(true),
-                      console.log("modal open"),
-                      setFieldValue(capacityScrutinyInfo !== null ? capacityScrutinyInfo?.technicalCapacityOutsideHaryana: null);
-                    }}
-                  ></ReportProblemIcon>
-                </div>
-               
-                
-                <br></br>
+                  </p>
+                  <div className="ml-3" >
+                    <input
+                      type="radio"
+                      value="Yes"
 
-              
+                      className="mx-2 mt-1"
+                      checked={capacityScrutinyInfo?.technicalCapacityOutsideHaryana === "Y" ? true : false}
 
-                {capacityScrutinyInfo?.technicalCapacityOutsideHaryana  === "Y" && (
-               <div className="row "> 
-                  {/* <div className="form-group row"> */}
-                    <div className="col-sm-12">
-                      {/* <Col xs="12" md="12" sm="12">
+                      disabled
+                    />
+                    <label className="m-0  mx-1" for="Yes">Yes</label>
+
+                    <input
+                      type="radio"
+                      value="No"
+
+                      className="mx-2 mt-1"
+                      checked={capacityScrutinyInfo?.technicalCapacityOutsideHaryana === "N" ? true : false}
+
+                      disabled
+                    />
+                    <label className="m-0 mx-2" for="No">No</label>
+                    <ReportProblemIcon
+                      style={{
+                        display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("X:Longitude") ? "block" : "none",
+                        color: fieldIconColors.caution10
+                      }}
+                      onClick={() => {
+                        setOpennedModal("caution10")
+                        setLabelValue("(ii) Have you developed projects outside Haryana:-"),
+                          setSmShow(true),
+                          console.log("modal open"),
+                          setFieldValue(capacityScrutinyInfo !== null ? capacityScrutinyInfo?.technicalCapacityOutsideHaryana : null);
+                      }}
+                    ></ReportProblemIcon>
+                  </div>
+
+
+                  <br></br>
+
+
+
+                  {capacityScrutinyInfo?.technicalCapacityOutsideHaryana === "Y" && (
+                    <div className="row ">
+                      {/* <div className="form-group row"> */}
+                      <div className="col-sm-12">
+                        {/* <Col xs="12" md="12" sm="12">
                         <Table className="table table-bordered" size="sm">
                           <thead>
                             <tr>
@@ -1183,83 +1209,83 @@ const handlemodaldData = (data) => {
                           </tbody>
                         </Table>
                       </Col> */}
-                      <Row>
-                                    <Col md={4} xxl lg="4">
-                                        <label htmlFor="project" className="text"> Name of Project </label>
-                                      
-                                         <div className={classes.fieldContainer}>
-                              <Form.Control 
-                               placeholder={capacityScrutinyInfo?.technicalCapacityOutsideHaryanaDetails?.project} 
-                               disabled></Form.Control>
-                               &nbsp;&nbsp;
-                               <ReportProblemIcon
-                  style={{
-                     display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("X:Longitude") ? "block" : "none",
-                    color: fieldIconColors.caution8
-                  }}
-                  onClick={() => {
-                    setOpennedModal("caution8")
-                    setLabelValue("Name of Project"),
-                      setSmShow(true),
-                      console.log("modal open"),
-                      setFieldValue(capacityScrutinyInfo !== null ? capacityScrutinyInfo?.technicalCapacityOutsideHaryanaDetails?.project: null);
-                  }}
-                ></ReportProblemIcon>
-            </div>
+                        <Row>
+                          <Col md={4} xxl lg="4">
+                            <label htmlFor="project" className="text"> Name of Project </label>
 
-                                    </Col>
+                            <div className={classes.fieldContainer}>
+                              <Form.Control
+                                placeholder={capacityScrutinyInfo?.technicalCapacityOutsideHaryanaDetails?.project}
+                                disabled></Form.Control>
+                              &nbsp;&nbsp;
+                              <ReportProblemIcon
+                                style={{
+                                  display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("X:Longitude") ? "block" : "none",
+                                  color: fieldIconColors.caution8
+                                }}
+                                onClick={() => {
+                                  setOpennedModal("caution8")
+                                  setLabelValue("Name of Project"),
+                                    setSmShow(true),
+                                    console.log("modal open"),
+                                    setFieldValue(capacityScrutinyInfo !== null ? capacityScrutinyInfo?.technicalCapacityOutsideHaryanaDetails?.project : null);
+                                }}
+                              ></ReportProblemIcon>
+                            </div>
 
-                                    <Col md={4} xxl lg="4">
-                                        <label htmlFor="authority" className="text">Name of Authority</label>
-                                           <div className={classes.fieldContainer}>
-                              <Form.Control 
-                               placeholder={capacityScrutinyInfo?.technicalCapacityOutsideHaryanaDetails?.authority} 
-                               disabled></Form.Control>
-                               &nbsp;&nbsp;
-                               <ReportProblemIcon
-                  style={{
-                     display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("X:Longitude") ? "block" : "none",
-                    color: fieldIconColors.caution9
-                  }}
-                  onClick={() => {
-                    setOpennedModal("caution9")
-                    setLabelValue("Name of Authority"),
-                      setSmShow(true),
-                      console.log("modal open"),
-                      setFieldValue(capacityScrutinyInfo !== null ? capacityScrutinyInfo?.technicalCapacityOutsideHaryanaDetails?.authority: null);
-                  }}
-                ></ReportProblemIcon>
-            </div>
+                          </Col>
 
-                                    </Col>
+                          <Col md={4} xxl lg="4">
+                            <label htmlFor="authority" className="text">Name of Authority</label>
+                            <div className={classes.fieldContainer}>
+                              <Form.Control
+                                placeholder={capacityScrutinyInfo?.technicalCapacityOutsideHaryanaDetails?.authority}
+                                disabled></Form.Control>
+                              &nbsp;&nbsp;
+                              <ReportProblemIcon
+                                style={{
+                                  display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("X:Longitude") ? "block" : "none",
+                                  color: fieldIconColors.caution9
+                                }}
+                                onClick={() => {
+                                  setOpennedModal("caution9")
+                                  setLabelValue("Name of Authority"),
+                                    setSmShow(true),
+                                    console.log("modal open"),
+                                    setFieldValue(capacityScrutinyInfo !== null ? capacityScrutinyInfo?.technicalCapacityOutsideHaryanaDetails?.authority : null);
+                                }}
+                              ></ReportProblemIcon>
+                            </div>
 
-                                    <Col md={4} xxl lg="4">
-                                        <label htmlFor="statusOfDevelopment" className="text"> Status of Development </label>
-                                        
-                                           <div className={classes.fieldContainer}>
-                              <Form.Control 
-                               placeholder={capacityScrutinyInfo?.technicalCapacityOutsideHaryanaDetails?.statusOfDevelopment} 
-                               disabled></Form.Control>
-                               &nbsp;&nbsp;
-                               <ReportProblemIcon
-                  style={{
-                     display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("X:Longitude") ? "block" : "none",
-                    color: fieldIconColors.caution11
-                  }}
-                  onClick={() => {
-                    setOpennedModal("caution11")
-                    setLabelValue("Status of Development"),
-                      setSmShow(true),
-                      console.log("modal open"),
-                      setFieldValue(capacityScrutinyInfo !== null ? capacityScrutinyInfo?.technicalCapacityOutsideHaryanaDetails?.statusOfDevelopment: null);
-                  }}
-                ></ReportProblemIcon>
-            </div>
+                          </Col>
 
-                                    </Col>
-                                </Row>
-                                <Row>
-                                {/* <Col md={4} xxl lg="4">
+                          <Col md={4} xxl lg="4">
+                            <label htmlFor="statusOfDevelopment" className="text"> Status of Development </label>
+
+                            <div className={classes.fieldContainer}>
+                              <Form.Control
+                                placeholder={capacityScrutinyInfo?.technicalCapacityOutsideHaryanaDetails?.statusOfDevelopment}
+                                disabled></Form.Control>
+                              &nbsp;&nbsp;
+                              <ReportProblemIcon
+                                style={{
+                                  display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("X:Longitude") ? "block" : "none",
+                                  color: fieldIconColors.caution11
+                                }}
+                                onClick={() => {
+                                  setOpennedModal("caution11")
+                                  setLabelValue("Status of Development"),
+                                    setSmShow(true),
+                                    console.log("modal open"),
+                                    setFieldValue(capacityScrutinyInfo !== null ? capacityScrutinyInfo?.technicalCapacityOutsideHaryanaDetails?.statusOfDevelopment : null);
+                                }}
+                              ></ReportProblemIcon>
+                            </div>
+
+                          </Col>
+                        </Row>
+                        <Row>
+                          {/* <Col md={4} xxl lg="4">
                                         <label htmlFor="statusOfDevelopment" className="text"> Permission letter  </label>
                                         
                                            <div className={classes.fieldContainer}>
@@ -1283,57 +1309,57 @@ const handlemodaldData = (data) => {
             </div>
 
                                     </Col> */}
-                                    <Col md={4} xxl lg="4">
-                                        <label htmlFor="statusOfDevelopment" className="text">Area of the project in acres </label>
-                                        
-                                           <div className={classes.fieldContainer}>
-                              <Form.Control 
-                               placeholder={capacityScrutinyInfo?.technicalCapacityOutsideHaryanaDetails?.projectArea} 
-                               disabled></Form.Control>
-                               &nbsp;&nbsp;
-                               <ReportProblemIcon
-                  style={{
-                     display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("X:Longitude") ? "block" : "none",
-                    color: fieldIconColors.caution13
-                  }}
-                  onClick={() => {
-                    setOpennedModal("caution13")
-                    setLabelValue("Area of the project in acres "),
-                      setSmShow(true),
-                      console.log("modal open"),
-                      setFieldValue(capacityScrutinyInfo !== null ? capacityScrutinyInfo?.capacityScrutinyInfo?.technicalCapacityOutsideHaryanaDetails?.projectArea: null);
-                  }}
-                ></ReportProblemIcon>
-            </div>
+                          <Col md={4} xxl lg="4">
+                            <label htmlFor="statusOfDevelopment" className="text">Area of the project in acres </label>
 
-                                    </Col>
-                                    <Col md={4} xxl lg="4">
-                                        <label htmlFor="statusOfDevelopment" className="text">Location </label>
-                                        
-                                           <div className={classes.fieldContainer}>
-                              <Form.Control 
-                               placeholder={capacityScrutinyInfo?.technicalCapacityOutsideHaryanaDetails?.location} 
-                               disabled></Form.Control>
-                               &nbsp;&nbsp;
-                               <ReportProblemIcon
-                  style={{
-                     display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("X:Longitude") ? "block" : "none",
-                    color: fieldIconColors.caution14
-                  }}
-                  onClick={() => {
-                    setOpennedModal("caution14")
-                    setLabelValue("Location"),
-                      setSmShow(true),
-                      console.log("modal open"),
-                      setFieldValue(capacityScrutinyInfo !== null ? capacityScrutinyInfo?.technicalCapacityOutsideHaryanaDetails?.location: null);
-                  }}
-                ></ReportProblemIcon>
-            </div>
+                            <div className={classes.fieldContainer}>
+                              <Form.Control
+                                placeholder={capacityScrutinyInfo?.technicalCapacityOutsideHaryanaDetails?.projectArea}
+                                disabled></Form.Control>
+                              &nbsp;&nbsp;
+                              <ReportProblemIcon
+                                style={{
+                                  display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("X:Longitude") ? "block" : "none",
+                                  color: fieldIconColors.caution13
+                                }}
+                                onClick={() => {
+                                  setOpennedModal("caution13")
+                                  setLabelValue("Area of the project in acres "),
+                                    setSmShow(true),
+                                    console.log("modal open"),
+                                    setFieldValue(capacityScrutinyInfo !== null ? capacityScrutinyInfo?.capacityScrutinyInfo?.technicalCapacityOutsideHaryanaDetails?.projectArea : null);
+                                }}
+                              ></ReportProblemIcon>
+                            </div>
 
-                                    </Col>
-                                </Row>
-                                <Row>
-                                {/* <Col md={4} xxl lg="4">
+                          </Col>
+                          <Col md={4} xxl lg="4">
+                            <label htmlFor="statusOfDevelopment" className="text">Location </label>
+
+                            <div className={classes.fieldContainer}>
+                              <Form.Control
+                                placeholder={capacityScrutinyInfo?.technicalCapacityOutsideHaryanaDetails?.location}
+                                disabled></Form.Control>
+                              &nbsp;&nbsp;
+                              <ReportProblemIcon
+                                style={{
+                                  display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("X:Longitude") ? "block" : "none",
+                                  color: fieldIconColors.caution14
+                                }}
+                                onClick={() => {
+                                  setOpennedModal("caution14")
+                                  setLabelValue("Location"),
+                                    setSmShow(true),
+                                    console.log("modal open"),
+                                    setFieldValue(capacityScrutinyInfo !== null ? capacityScrutinyInfo?.technicalCapacityOutsideHaryanaDetails?.location : null);
+                                }}
+                              ></ReportProblemIcon>
+                            </div>
+
+                          </Col>
+                        </Row>
+                        <Row>
+                          {/* <Col md={4} xxl lg="4">
                                         <label htmlFor="statusOfDevelopment" className="text">Any other document/ Photo</label>
                                         
                                            <div className={classes.fieldContainer}>
@@ -1357,25 +1383,25 @@ const handlemodaldData = (data) => {
             </div>
 
                                     </Col> */}
-                                </Row>
+                        </Row>
+                      </div>
+                      {/* </div> */}
                     </div>
-                  {/* </div> */}
-            </div>
-               )}  
-      
-              </div>
-               )} 
+                  )}
+
+                </div>
+              )}
 
 
-<br></br>
-<div className="hl"></div>
-                        {/* <p >
+              <br></br>
+              <div className="hl"></div>
+              {/* <p >
                             (iii) In case of technical capacity of company/firm developed projects outside Haryana:-
                         </p> */}
 
-                        <div >
-                    
-              {/* <div >
+              <div >
+
+                {/* <div >
                             <input
                                 type="radio"
                                 value="Y"
@@ -1414,8 +1440,8 @@ const handlemodaldData = (data) => {
                   }}
                 ></ReportProblemIcon>
                             </div> */}
-                            {/* {capacityScrutinyInfo?.technicalCapacityOutsideHaryana === "Y" && ( */}
-                                {/* <Row>
+                {/* {capacityScrutinyInfo?.technicalCapacityOutsideHaryana === "Y" && ( */}
+                {/* <Row>
                                     <Col md={4} xxl lg="4">
                                         <label htmlFor="project" className="text"> Project </label>
                                       
@@ -1490,13 +1516,13 @@ const handlemodaldData = (data) => {
 
                                     </Col>
                                 </Row> */}
-                           {/* )}  */}
-                        </div>
+                {/* )}  */}
+              </div>
 
 
 
-<br></br>
-{/* <div className="hl"></div>
+              <br></br>
+              {/* <div className="hl"></div>
                         <p>
                             (iv). In case of technical capacity sought from another
                             company/firm who has already obtained license(s) under act of
@@ -1840,7 +1866,7 @@ const handlemodaldData = (data) => {
                         </div> */}
 
 
-{/* <div className="hl"></div>
+              {/* <div className="hl"></div>
               <p>(v) Whether any technical expert(s) engaged   &nbsp;&nbsp;&nbsp;
                 <div className="d-flex flex-row align-items-center ml-2">
                   <input type="radio" value="Yes"  className="mx-2 mt-1" checked={capacityScrutinyInfo?.technicalExpert === "Y" ? true : false} disabled />
@@ -2157,7 +2183,7 @@ const handlemodaldData = (data) => {
                   </div>
                 )}
               </div> */}
-             
+
 
             </div>
           </FormStep>

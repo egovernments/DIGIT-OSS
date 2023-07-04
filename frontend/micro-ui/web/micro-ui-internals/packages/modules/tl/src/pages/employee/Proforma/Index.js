@@ -88,6 +88,8 @@ const getDynamicFileds = (type , data, validation ) => {
             <React.Fragment>
              <div className="textareaProforma" style={{
               display: "flex",
+              marginTop: "20px",
+              marginBottom: "10px"
               // width: "1250px",
               // marginTop: "15px",
              }}>
@@ -95,12 +97,19 @@ const getDynamicFileds = (type , data, validation ) => {
               {(data?.label && !data?.name?.includes("Remarks")) && <input type="hidden" value={data.label} {...register(data?.name+"Label")} />}
               {data?.options?.map((it, inx) => {
                 return (
-                  <div key={inx}>
+                  <div key={inx} 
+                  style={{
+                    margin: "0px 5px",
+                    display: "flex",
+                    alignItems:"baseline"
+                  }}>
                     <input
                       type="radio"
                       className="d-flex"
                       id={it?.value}
-                      
+                      style={{
+                        margin: "0px 5px"
+                      }}
                       value={it?.value}
                       {...register(data?.name,validation)}
                     />

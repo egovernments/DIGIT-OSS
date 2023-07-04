@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { Fragment, useEffect, useState } from "react";
 import { Button, Form } from "react-bootstrap";
 import { Card, Row, Col } from "react-bootstrap";
 import Modal from "react-bootstrap/Modal";
@@ -341,51 +341,51 @@ const Genarelinfo = (props) => {
     nameAuthSign: Colors.info,
     registeringAuthorityDoc: Colors.info,
     consolidatedTotal: color.info,
-    nonConsolidatedTotal:color.info,
+    nonConsolidatedTotal: color.info,
 
   })
 
   const fieldIdList = [
-      { label: "NWL_APPLICANT_PURPOSE_OF_LICENCE", key: "purpose" },
-      { label: "NWL_APPLICANT_DISTRICT_LAND_SCHEDULE", key: "district" },
-      { label: "State", key: "state" },
-      { label: "Development Plan", key: "developmentPlan" },
-      { label: "NWL_APPLICANT_ZONE_LAND_SCHEDULE", key: "potential" }, 
-      { label: "NWL_APPLICANT_SECTOR_LAND_SCHEDULE", key: "sector" }, 
-      { label: "NWL_APPLICANT_TEHSIL_LAND_SCHEDULE", key: "tehsil" }, 
-      { label: "NWL_APPLICANT_REVENUE_ESTATE_LAND_SCHEDULE", key: "revenue" }, 
-      { label: "NWL_APPLICANT_RECTANGLE_NUMBER_LAND_SCHEDULE", key: "rectangleNo" }, 
-      { label: "Killa", key: "killa" }, 
-      { label: "NWL_APPLICANT_TOTAL_AREA_LAND_SCHEDULE", key: "consolidatedTotal" }, 
-      { label: "NWL_APPLICANT_TOTAL_AREA_NON_LAND_SCHEDULE", key: "nonConsolidatedTotal" }, 
-      { label: "NWL_APPLICANT_NAME_OF_LAND_OWNER_LAND_SCHEDULE", key: "landOwner" }, 
-      { label: "NWL_APPLICANT_CONSLIDATION_TYPE_LAND_SCHEDULE", key: "consolidationType" }, 
-      { label: "NWL_APPLICANT_TYPE_OF_LAND_SCHEDULE", key: "typeLand" }, 
-      { label: "NWL_APPLICANT_RECTANGLE_NO_MUSTIL_LAND_SCHEDULE", key: "editRectangleNo" }, 
-      { label: "NWL_APPLICANT_KHEWATS_NUMBER_CHANGED_LAND_SCHEDULE", key: "editKhewats" }, 
-      { label: "NWL_APPLICANT_NAME_OF_THE_LAND_OWNER_AS_PER_MUTATION_LAND_SCHEDULE", key: "landOwnerRegistry" }, 
-      { label: "NWL_APPLICANT_DEVELOPED_IN_COLLABORATION_LAND_SCHEDULE", key: "collaboration" }, 
-      { label: "NWL_APPLICANT_CHANGE_IN_INFORMATION_LAND_SCHEDULE", key: "isChange" }, 
-      { label: "NWL_APPLICANT_KANAL_LAND_SCHEDULE", key: "kanal" }, 
-      { label: "NWL_APPLICANT_KHEWATS_NUMBER_LAND_SCHEDULE", key: "rectaNo" }, 
-      { label: "NWL_APPLICANT_MARLA_LAND_SCHEDULE", key: "marla" }, 
-      { label: "NWL_APPLICANT_SARSAI_LAND_SCHEDULE", key: "sarsai" }, 
-      { label: "NWL_APPLICANT_BIGHA_LAND_SCHEDULE", key: "bigha" }, 
-      { label: "NWL_APPLICANT_BISWA_LAND_SCHEDULE", key: "biswa" }, 
-      { label: "NWL_APPLICANT_BISWANSI_LAND_SCHEDULE", key: "biswansi" }, 
-      { label: "Collaboration Agreement", key: "collabrationAgreement" }, 
-      { label: "NWL_APPLICANT_NAME_OF_THE_DEVELOPER_COMPANY_LAND_SCHEDULE", key: "developerCompany" }, 
-      { label: "NWL_APPLICANT_DATA_OF_REGISTERING_COLLOABORATION_AGREEMENT_LAND_SCHEDULE", key: "agreementValidFrom" }, 
-      { label: "Date of Registering", key: "dateOfRegistering" }, 
-      { label: "NWL_APPLICANT_NAME_OF_AUTHORIZED_SIGNATORY_ON_BEHALF_OF_LAND_OWNER", key: "authSignature" }, 
-      { label: "NWL_APPLICANT_NAME_OF_AUTHORIZED_SIGNATORY_ON_BEHALF_OF_DEVELOPER", key: "nameAuthSign" }, 
-      { label: "Date of Validity", key: "dateOfValidity" }, 
-      { label: "NWL_APPLICANT_REGISTERING_AUTHORITY_DOCUMENT_LAND_SCHEDULE", key: "registeringAuthorityDoc" }, 
-      { label: "NWL_APPLICANT_WHETER_COLLABORATION_AGREEMENT_IRREVOCABLE_LAND_SCHEDULE", key: "agreementIrrevocialble" }, 
-      { label: "Name of Authorized Signatory Developer", key: "nameOfAuthSignatory" }, 
-      { label: "Name of Authorized Signatory Developer", key: "nameOfAuthSignatoryDeveloper" }, 
-      { label: "NWL_APPLICANT_REGISTERING_AUTHORITY_LAND_SCHEDULE", key: "registeringAuthority" }, 
-      { label: "NWL_APPLICANT_HADBAST_NUMBER_LAND_SCHEDULE", key: "hadbastNo" }];
+    { label: "NWL_APPLICANT_PURPOSE_OF_LICENCE", key: "purpose" },
+    { label: "NWL_APPLICANT_DISTRICT_LAND_SCHEDULE", key: "district" },
+    { label: "State", key: "state" },
+    { label: "Development Plan", key: "developmentPlan" },
+    { label: "NWL_APPLICANT_ZONE_LAND_SCHEDULE", key: "potential" },
+    { label: "NWL_APPLICANT_SECTOR_LAND_SCHEDULE", key: "sector" },
+    { label: "NWL_APPLICANT_TEHSIL_LAND_SCHEDULE", key: "tehsil" },
+    { label: "NWL_APPLICANT_REVENUE_ESTATE_LAND_SCHEDULE", key: "revenue" },
+    { label: "NWL_APPLICANT_RECTANGLE_NUMBER_LAND_SCHEDULE", key: "rectangleNo" },
+    { label: "Killa", key: "killa" },
+    { label: "NWL_APPLICANT_TOTAL_AREA_LAND_SCHEDULE", key: "consolidatedTotal" },
+    { label: "NWL_APPLICANT_TOTAL_AREA_NON_LAND_SCHEDULE", key: "nonConsolidatedTotal" },
+    { label: "NWL_APPLICANT_NAME_OF_LAND_OWNER_LAND_SCHEDULE", key: "landOwner" },
+    { label: "NWL_APPLICANT_CONSLIDATION_TYPE_LAND_SCHEDULE", key: "consolidationType" },
+    { label: "NWL_APPLICANT_TYPE_OF_LAND_SCHEDULE", key: "typeLand" },
+    { label: "NWL_APPLICANT_RECTANGLE_NO_MUSTIL_LAND_SCHEDULE", key: "editRectangleNo" },
+    { label: "NWL_APPLICANT_KHEWATS_NUMBER_CHANGED_LAND_SCHEDULE", key: "editKhewats" },
+    { label: "NWL_APPLICANT_NAME_OF_THE_LAND_OWNER_AS_PER_MUTATION_LAND_SCHEDULE", key: "landOwnerRegistry" },
+    { label: "NWL_APPLICANT_DEVELOPED_IN_COLLABORATION_LAND_SCHEDULE", key: "collaboration" },
+    { label: "NWL_APPLICANT_CHANGE_IN_INFORMATION_LAND_SCHEDULE", key: "isChange" },
+    { label: "NWL_APPLICANT_KANAL_LAND_SCHEDULE", key: "kanal" },
+    { label: "NWL_APPLICANT_KHEWATS_NUMBER_LAND_SCHEDULE", key: "rectaNo" },
+    { label: "NWL_APPLICANT_MARLA_LAND_SCHEDULE", key: "marla" },
+    { label: "NWL_APPLICANT_SARSAI_LAND_SCHEDULE", key: "sarsai" },
+    { label: "NWL_APPLICANT_BIGHA_LAND_SCHEDULE", key: "bigha" },
+    { label: "NWL_APPLICANT_BISWA_LAND_SCHEDULE", key: "biswa" },
+    { label: "NWL_APPLICANT_BISWANSI_LAND_SCHEDULE", key: "biswansi" },
+    { label: "Collaboration Agreement", key: "collabrationAgreement" },
+    { label: "NWL_APPLICANT_NAME_OF_THE_DEVELOPER_COMPANY_LAND_SCHEDULE", key: "developerCompany" },
+    { label: "NWL_APPLICANT_DATA_OF_REGISTERING_COLLOABORATION_AGREEMENT_LAND_SCHEDULE", key: "agreementValidFrom" },
+    { label: "Date of Registering", key: "dateOfRegistering" },
+    { label: "NWL_APPLICANT_NAME_OF_AUTHORIZED_SIGNATORY_ON_BEHALF_OF_LAND_OWNER", key: "authSignature" },
+    { label: "NWL_APPLICANT_NAME_OF_AUTHORIZED_SIGNATORY_ON_BEHALF_OF_DEVELOPER", key: "nameAuthSign" },
+    { label: "Date of Validity", key: "dateOfValidity" },
+    { label: "NWL_APPLICANT_REGISTERING_AUTHORITY_DOCUMENT_LAND_SCHEDULE", key: "registeringAuthorityDoc" },
+    { label: "NWL_APPLICANT_WHETER_COLLABORATION_AGREEMENT_IRREVOCABLE_LAND_SCHEDULE", key: "agreementIrrevocialble" },
+    { label: "Name of Authorized Signatory Developer", key: "nameOfAuthSignatory" },
+    { label: "Name of Authorized Signatory Developer", key: "nameOfAuthSignatoryDeveloper" },
+    { label: "NWL_APPLICANT_REGISTERING_AUTHORITY_LAND_SCHEDULE", key: "registeringAuthority" },
+    { label: "NWL_APPLICANT_HADBAST_NUMBER_LAND_SCHEDULE", key: "hadbastNo" }];
 
 
   const getColorofFieldIcon = () => {
@@ -478,76 +478,76 @@ const Genarelinfo = (props) => {
         <div id="example-collapse-text"> */}
 
 
-         
-          <div>
-            <ApplicationPurpose
-              additionalDocRespon={additionalDocResponData}
 
-            />
+      <div>
+        <ApplicationPurpose
+          additionalDocRespon={additionalDocResponData}
 
-          </div>
+        />
 
-          {/* } */}
+      </div>
 
-
-
-
-
-          <Form.Group className="justify-content-center" controlId="formBasicEmail" style={{ border: "2px solid #e9ecef", margin: 10, padding: 20 }}>
+      {/* } */}
 
 
 
 
 
-            <Row className="ml-auto" style={{ marginBottom: 5 }}>
-              <Col md={4} xxl lg="3" className={classes.formLabel}>
-                {/* <Form.Label>
+      <Form.Group className="justify-content-center" controlId="formBasicEmail" style={{ border: "2px solid #e9ecef", margin: 10, padding: 20 }}>
+
+
+
+
+
+        <Row className="ml-auto" style={{ marginBottom: 5 }}>
+          <Col md={4} xxl lg="3" className={classes.formLabel}>
+            {/* <Form.Label>
                
                   <h5 >
                     Purpose Of Licence  <span style={{ color: "red" }}>*</span>
                   </h5>
                 </Form.Label> */}
-                <label className="card-title fw-bold" style={{ margin: 10 }} htmlFor="Developer Details">
-                  {`${t("NWL_APPLICANT_PURPOSE_OF_LICENCE")}`}
-                  <span class="text-danger font-weight-bold mx-2">*</span>
-                </label>
+            <label className="card-title fw-bold" style={{ margin: 10 }} htmlFor="Developer Details">
+              {`${t("NWL_APPLICANT_PURPOSE_OF_LICENCE")}`}
+              <span class="text-danger font-weight-bold mx-2">*</span>
+            </label>
 
-                <div className="d-flex flex-row  align-items-center">
-                  <Form.Control
-                    type="text"
-                    placeholder={applicantInfoPersonal !== null ? applicantInfoPersonal?.purpose : null}
+            <div className="d-flex flex-row  align-items-center">
+              <Form.Control
+                type="text"
+                placeholder={applicantInfoPersonal !== null ? applicantInfoPersonal?.purpose : null}
 
-                    // height={30}
-                    // style={{ maxWidth: 200, marginRight: 5 }}
-                    disabled
-                  >
+                // height={30}
+                // style={{ maxWidth: 200, marginRight: 5 }}
+                disabled
+              >
 
-                  </Form.Control>
-                  {/* {JSON.stringify(userRoles)}
+              </Form.Control>
+              {/* {JSON.stringify(userRoles)}
                     {JSON.stringify(hideRemarks)} */}
-                  {/*  display: hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_PURPOSE_OF_LICENCE") ? "block" : "none", */}
-                  <ReportProblemIcon
-                    style={{
-                      display: hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_PURPOSE_OF_LICENCE") ? "block" : "none",
+              {/*  display: hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_PURPOSE_OF_LICENCE") ? "block" : "none", */}
+              <ReportProblemIcon
+                style={{
+                  display: hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_PURPOSE_OF_LICENCE") ? "block" : "none",
 
-                      color: fieldIconColors.purpose
-                    }}
-                    onClick={() => {
-                      setOpennedModal("purpose")
-                      setLabelValue("NWL_APPLICANT_PURPOSE_OF_LICENCE"),
-                        setSmShow(true),
-                        setDocModal(false),
-                        console.log("modal open"),
-                        setFieldValue(applicantInfoPersonal !== null ? applicantInfoPersonal?.purpose : null);
-                    }}
-                  ></ReportProblemIcon>
-                  {/* <ModalChild
+                  color: fieldIconColors.purpose
+                }}
+                onClick={() => {
+                  setOpennedModal("purpose")
+                  setLabelValue("NWL_APPLICANT_PURPOSE_OF_LICENCE"),
+                    setSmShow(true),
+                    setDocModal(false),
+                    console.log("modal open"),
+                    setFieldValue(applicantInfoPersonal !== null ? applicantInfoPersonal?.purpose : null);
+                }}
+              ></ReportProblemIcon>
+              {/* <ModalChild
                     labelmodal={labelValue}
                     passmodalData={handlemodaldData}
                     isYesorNoChecked={handleYesOrNochecked}
                     displaymodal={smShow}
                   ></ModalChild> */}
-                  {/* <ModalChild
+              {/* <ModalChild
                     labelmodal={labelValue}
                     passmodalData={handlemodaldData}
                     isYesorNoChecked={handleYesOrNochecked}
@@ -557,9 +557,9 @@ const Genarelinfo = (props) => {
                     fieldValue={fieldValue}
                   // remarksUpdate={currentRemarks}
                   ></ModalChild> */}
-                </div>
-              </Col>
-              {/* <div className="col col-3">
+            </div>
+          </Col>
+          {/* <div className="col col-3">
                 <label htmlFor="potential">
                   <h5 className={classes.formLabel}>
                     Potential Zone:<span style={{ color: "red" }}>*</span>
@@ -671,798 +671,868 @@ const Genarelinfo = (props) => {
                 </div>
                
               </Col> */}
-            </Row>
+        </Row>
 
-            <div className="ml-auto" style={{ marginTop: 20 }}>
-              <h2 style={{ fontSize: 24 }}> Land schedule</h2>
-              <p className="ml-3 mt-1">
+        <div className="ml-auto" style={{ marginTop: 20 }}>
+          <h2 style={{ fontSize: 24 }}> Land schedule</h2>
+          <p className="ml-3 mt-1">
 
 
-                Note: The term “Collaboration agreement" shall include all Development agreements/ Joint Venture agreements/ Joint Development agreements/ Memorandum of Understanding etc. and similar agreements registered with competent authority.
-              </p>
-              <p className="ml-3 mt-1">
-                <b>(i) Khasra-wise information to be provided in the following format</b>
-              </p>
-            </div>
-            <br></br>
+            Note: The term “Collaboration agreement" shall include all Development agreements/ Joint Venture agreements/ Joint Development agreements/ Memorandum of Understanding etc. and similar agreements registered with competent authority.
+          </p>
+          <p className="ml-3 mt-1">
+            <b>(i) Khasra-wise information to be provided in the following format</b>
+          </p>
+        </div>
+        <br></br>
 
-            <div style={{ overflow: "scroll" }}>
-              <table className="table table-bordered">
-                <thead>
+        <div style={{ overflow: "scroll" }}>
+          <table className="table table-bordered">
+            <thead>
 
-                  <tr className="border-bottom-0">
-                    <th class="fw-normal pb-0 border-bottom-0 align-top">
-                      {/* <label  className="card-title fw-bold" style={{ margin: 10 }} htmlFor="Developer Details">
+              <tr className="border-bottom-0">
+                <th class="fw-normal pb-0 border-bottom-0 align-top">
+                  {/* <label  className="card-title fw-bold" style={{ margin: 10 }} htmlFor="Developer Details">
                             {`${t("NWL_APPLICANT_PURPOSE_OF_LICENCE")}`}
                             <span class="text-danger font-weight-bold mx-2">*</span>
                           </label> */}
-                          &nsp; &nsp; &nsp;
-                      {`${t("NWL_APPLICANT_DISTRICT_LAND_SCHEDULE")}`}
-                      {/* District    */}
-                    </th>
-                    <th class="fw-normal pb-0 border-bottom-0 align-top">
-                      {/* Development Plan    */}
-                      {`${t("NWL_APPLICANT_DEVELOPMENT_PLAN_LAND_SCHEDULE")}`}
-                    </th>
-                    <th class="fw-normal pb-0 border-bottom-0 align-top">
-                      {/* Zone     */}
-                      &nsp; &nsp; &nsp;&nsp; &nsp; &nsp;
-                      {`${t("NWL_APPLICANT_ZONE_LAND_SCHEDULE")}`}
-                    </th>
-                    <th class="fw-normal pb-0 border-bottom-0 align-top">
-                      {/* Sector    */}
-                      {`${t("NWL_APPLICANT_SECTOR_LAND_SCHEDULE")}`}
-                    </th>
-                    <th class="fw-normal pb-0 border-bottom-0 align-top">
-                      {/* Tehsil     */}
-                      &nsp; &nsp; &nsp;&nsp; &nsp; &nsp;
-                      {`${t("NWL_APPLICANT_TEHSIL_LAND_SCHEDULE")}`}
+                  {/* &nsp; &nsp; &nsp; */}
+                  {`${t("NWL_APPLICANT_DISTRICT_LAND_SCHEDULE")}`}
+                  {/* District    */}
+                </th>
+                <th class="fw-normal pb-0 border-bottom-0 align-top">
+                  {/* Development Plan    */}
+                  {`${t("NWL_APPLICANT_DEVELOPMENT_PLAN_LAND_SCHEDULE")}`}
+                </th>
+                <th class="fw-normal pb-0 border-bottom-0 align-top">
+                  {/* Zone     */}
+                  {/* &nsp; &nsp; &nsp;&nsp; &nsp; &nsp; */}
+                  {`${t("NWL_APPLICANT_ZONE_LAND_SCHEDULE")}`}
+                </th>
+                <th class="fw-normal pb-0 border-bottom-0 align-top">
+                  {/* Sector    */}
+                  {`${t("NWL_APPLICANT_SECTOR_LAND_SCHEDULE")}`}
+                </th>
+                <th class="fw-normal pb-0 border-bottom-0 align-top">
+                  {/* Tehsil     */}
+                  {/* &nsp; &nsp; &nsp;&nsp; &nsp; &nsp; */}
+                  {`${t("NWL_APPLICANT_TEHSIL_LAND_SCHEDULE")}`}
 
-                    </th>
-                    <th class="fw-normal pb-0 border-bottom-0 align-top">
-                      {/* Revenue Estate    */}
-                      &nsp; &nsp; &nsp;&nsp; &nsp; &nsp;&nsp; &nsp; &nsp;
-                      {`${t("NWL_APPLICANT_REVENUE_ESTATE_LAND_SCHEDULE")}`}
-                    </th>
-                    <th class="fw-normal pb-0 border-bottom-0 align-top">
-                      {/* Hadbast No.  */}
-                      {`${t("NWL_APPLICANT_HADBAST_NUMBER_LAND_SCHEDULE")}`}
-                    </th>
-                    <th class="fw-normal pb-0 border-bottom-0 align-top">
-                      {/* Rectangle No.   */}
-                      {`${t("NWL_APPLICANT_RECTANGLE_NUMBER_LAND_SCHEDULE")}`}
-                    </th>
-                    <th class="fw-normal pb-0 border-bottom-0 align-top">
-                      {/* Khasra No. */}
-                      {/* khewats No */}
-                      {`${t("NWL_APPLICANT_KHASRA_NUMBER_LAND_SCHEDULE")}`}
-                    </th>
-                    <th class="fw-normal pb-0 border-bottom-0 align-top">
-                      {/* Name of Land Owner */}
-                      {`${t("NWL_APPLICANT_NAME_OF_LAND_OWNER_LAND_SCHEDULE")}`}
+                </th>
+                <th class="fw-normal pb-0 border-bottom-0 align-top">
+                  {/* Revenue Estate    */}
+                  {/* &nsp; &nsp; &nsp;&nsp; &nsp; &nsp;&nsp; &nsp; &nsp; */}
+                  {`${t("NWL_APPLICANT_REVENUE_ESTATE_LAND_SCHEDULE")}`}
+                </th>
+                <th class="fw-normal pb-0 border-bottom-0 align-top">
+                  {/* Hadbast No.  */}
+                  {`${t("NWL_APPLICANT_HADBAST_NUMBER_LAND_SCHEDULE")}`}
+                </th>
+                <th class="fw-normal pb-0 border-bottom-0 align-top">
+                  {/* Rectangle No.   */}
+                  {`${t("NWL_APPLICANT_RECTANGLE_NUMBER_LAND_SCHEDULE")}`}
+                </th>
+                <th class="fw-normal pb-0 border-bottom-0 align-top">
+                  {/* Khasra No. */}
+                  {/* khewats No */}
+                  {`${t("NWL_APPLICANT_KHASRA_NUMBER_LAND_SCHEDULE")}`}
+                </th>
+                <th class="fw-normal pb-0 border-bottom-0 align-top">
+                  {/* Name of Land Owner */}
+                  {`${t("NWL_APPLICANT_NAME_OF_LAND_OWNER_LAND_SCHEDULE")}`}
 
-                    </th>
-                    <th class="fw-normal pb-0 border-bottom-0 align-top">
-                      {/* Type of land */}
-                      {`${t("NWL_APPLICANT_TYPE_OF_LAND_SCHEDULE")}`}
-                    </th>
-                    <th class="fw-normal pb-0 border-bottom-0 align-top">
-                      {/* change in information */}
-                      {`${t("NWL_APPLICANT_CHANGE_IN_INFORMATION_LAND_SCHEDULE")}`}
-                    </th>
+                </th>
+                <th class="fw-normal pb-0 border-bottom-0 align-top">
+                  {/* Type of land */}
+                  {`${t("NWL_APPLICANT_TYPE_OF_LAND_SCHEDULE")}`}
+                </th>
+                <th class="fw-normal pb-0 border-bottom-0 align-top">
+                  {/* change in information */}
+                  {`${t("NWL_APPLICANT_CHANGE_IN_INFORMATION_LAND_SCHEDULE")}`}
+                </th>
 
-                    <th class="fw-normal pb-0 border-bottom-0 align-top">
-                      {/* Rectangle No./Mustil(Changed) */}
-                      {`${t("NWL_APPLICANT_RECTANGLE_NO_MUSTIL_LAND_SCHEDULE")}`}
-                    </th>
-                    <th class="fw-normal pb-0 border-bottom-0 align-top">
-                      {/* khewats No(Changed) */}
-                      {`${t("NWL_APPLICANT_KHEWATS_NUMBER_CHANGED_LAND_SCHEDULE")}`}
-                    </th>
-                    <th class="fw-normal pb-0 border-bottom-0 align-top">
-                      {/* Name of the Land Ower as per Mutation/Jamabandi */}
-                      {`${t("NWL_APPLICANT_NAME_OF_THE_LAND_OWNER_AS_PER_MUTATION_LAND_SCHEDULE")}`}
-                    </th>
-                    <th class="fw-normal pb-0 border-bottom-0 align-top">
-                      {/* Whether Khasra been developed in collaboration   */}
-                      {`${t("NWL_APPLICANT_DEVELOPED_IN_COLLABORATION_LAND_SCHEDULE")}`}
-                    </th>
-                    <th class="fw-normal pb-0 border-bottom-0 align-top">
-                      {/* Name of the developer company */}
-                      {`${t("NWL_APPLICANT_NAME_OF_THE_DEVELOPER_COMPANY_LAND_SCHEDULE")}`}
-                    </th>
-                    <th class="fw-normal pb-0 border-bottom-0 align-top">
-                      {/* Date of registering collaboration agreement  */}
-                      {`${t("NWL_APPLICANT_DATA_OF_REGISTERING_COLLOABORATION_AGREEMENT_LAND_SCHEDULE")}`}
-                    </th>
-                    <th class="fw-normal pb-0 border-bottom-0 align-top">
-                      {/* Whether collaboration agreement irrevocable (Yes/No) */}
-                      {`${t("NWL_APPLICANT_WHETER_COLLABORATION_AGREEMENT_IRREVOCABLE_LAND_SCHEDULE")}`}
-                    </th>
-                    <th class="fw-normal pb-0 border-bottom-0 align-top">
-                      {/* Name of authorized signatory on behalf of land owner(s) */}
-                      {`${t("NWL_APPLICANT_NAME_OF_AUTHORIZED_SIGNATORY_ON_BEHALF_OF_LAND_OWNER")}`}
-                    </th>
-                    <th class="fw-normal pb-0 border-bottom-0 align-top">
-                      {/* Name of authorized signatory on behalf of developer */}
-                      {`${t("NWL_APPLICANT_NAME_OF_AUTHORIZED_SIGNATORY_ON_BEHALF_OF_DEVELOPER")}`}
-                    </th>
-                    <th class="fw-normal pb-0 border-bottom-0 align-top">
-                      {/* Registering Authority */}
-                      {`${t("NWL_APPLICANT_REGISTERING_AUTHORITY_LAND_SCHEDULE")}`}
-                    </th>
-                    <th class="fw-normal pb-0 border-bottom-0 align-top">
-                      {/* Registering Authority document */}
-                      {`${t("NWL_APPLICANT_REGISTERING_AUTHORITY_DOCUMENT_LAND_SCHEDULE")}`}
-                    </th>
-                    <th class="fw-normal pb-0 border-bottom-0 align-top">
-                      {/* Consolidation Type   */}
-                      {`${t("NWL_APPLICANT_CONSLIDATION_TYPE_LAND_SCHEDULE")}`}
-                    </th>
-                    <th class="fw-normal pb-0 border-bottom-0 align-top">
-                      {/* Kanal  */}
-                      {`${t("NWL_APPLICANT_KANAL_LAND_SCHEDULE")}`}
-                    </th>
-                    <th class="fw-normal pb-0 border-bottom-0 align-top">
-                      {/* Marla   */}
-                      {`${t("NWL_APPLICANT_MARLA_LAND_SCHEDULE")}`}
-                    </th>
-                    <th class="fw-normal pb-0 border-bottom-0 align-top">
-                      {/* Sarsai */}
-                      {`${t("NWL_APPLICANT_SARSAI_LAND_SCHEDULE")}`}
-                    </th>
-                    <th class="fw-normal pb-0 border-bottom-0 align-top">
-                      {/* Bigha  */}
-                      {`${t("NWL_APPLICANT_BIGHA_LAND_SCHEDULE")}`}
-                    </th>
-                    <th class="fw-normal pb-0 border-bottom-0 align-top">
-                      {/* Biswa  */}
-                      {`${t("NWL_APPLICANT_BISWA_LAND_SCHEDULE")}`}
-                    </th>
+                <th class="fw-normal pb-0 border-bottom-0 align-top">
+                  {/* Rectangle No./Mustil(Changed) */}
+                  {`${t("NWL_APPLICANT_RECTANGLE_NO_MUSTIL_LAND_SCHEDULE")}`}
+                </th>
+                <th class="fw-normal pb-0 border-bottom-0 align-top">
+                  {/* khewats No(Changed) */}
+                  {`${t("NWL_APPLICANT_KHEWATS_NUMBER_CHANGED_LAND_SCHEDULE")}`}
+                </th>
+                <th class="fw-normal pb-0 border-bottom-0 align-top">
+                  {/* Name of the Land Ower as per Mutation/Jamabandi */}
+                  {`${t("NWL_APPLICANT_NAME_OF_THE_LAND_OWNER_AS_PER_MUTATION_LAND_SCHEDULE")}`}
+                </th>
+                <th class="fw-normal pb-0 border-bottom-0 align-top">
+                  {/* Whether Khasra been developed in collaboration   */}
+                  {`${t("NWL_APPLICANT_DEVELOPED_IN_COLLABORATION_LAND_SCHEDULE")}`}
+                </th>
+                <th class="fw-normal pb-0 border-bottom-0 align-top">
+                  {/* Name of the developer company */}
+                  {`${t("NWL_APPLICANT_NAME_OF_THE_DEVELOPER_COMPANY_LAND_SCHEDULE")}`}
+                </th>
+                <th class="fw-normal pb-0 border-bottom-0 align-top">
+                  {/* Date of registering collaboration agreement  */}
+                  {`${t("NWL_APPLICANT_DATA_OF_REGISTERING_COLLOABORATION_AGREEMENT_LAND_SCHEDULE")}`}
+                </th>
+                <th class="fw-normal pb-0 border-bottom-0 align-top">
+                  {/* Whether collaboration agreement irrevocable (Yes/No) */}
+                  {`${t("NWL_APPLICANT_WHETER_COLLABORATION_AGREEMENT_IRREVOCABLE_LAND_SCHEDULE")}`}
+                </th>
+                <th class="fw-normal pb-0 border-bottom-0 align-top">
+                  {/* Name of authorized signatory on behalf of land owner(s) */}
+                  {`${t("NWL_APPLICANT_NAME_OF_AUTHORIZED_SIGNATORY_ON_BEHALF_OF_LAND_OWNER")}`}
+                </th>
+                <th class="fw-normal pb-0 border-bottom-0 align-top">
+                  {/* Name of authorized signatory on behalf of developer */}
+                  {`${t("NWL_APPLICANT_NAME_OF_AUTHORIZED_SIGNATORY_ON_BEHALF_OF_DEVELOPER")}`}
+                </th>
+                <th class="fw-normal pb-0 border-bottom-0 align-top">
+                  {/* Registering Authority */}
+                  {`${t("NWL_APPLICANT_REGISTERING_AUTHORITY_LAND_SCHEDULE")}`}
+                </th>
+                <th class="fw-normal pb-0 border-bottom-0 align-top">
+                  {/* Registering Authority document */}
+                  {`${t("NWL_APPLICANT_REGISTERING_AUTHORITY_DOCUMENT_LAND_SCHEDULE")}`}
+                </th>
+                <th class="fw-normal pb-0 border-bottom-0 align-top">
+                  {/* Consolidation Type   */}
+                  {`${t("NWL_APPLICANT_CONSLIDATION_TYPE_LAND_SCHEDULE")}`}
+                </th>
+                <th class="fw-normal pb-0 border-bottom-0 align-top">
+                  {/* Kanal  */}
+                  {`${t("NWL_APPLICANT_KANAL_LAND_SCHEDULE")}`}
+                </th>
+                <th class="fw-normal pb-0 border-bottom-0 align-top">
+                  {/* Marla   */}
+                  {`${t("NWL_APPLICANT_MARLA_LAND_SCHEDULE")}`}
+                </th>
+                <th class="fw-normal pb-0 border-bottom-0 align-top">
+                  {/* Sarsai */}
+                  {`${t("NWL_APPLICANT_SARSAI_LAND_SCHEDULE")}`}
+                </th>
+                <th class="fw-normal pb-0 border-bottom-0 align-top">
+                  {/* Bigha  */}
+                  {`${t("NWL_APPLICANT_BIGHA_LAND_SCHEDULE")}`}
+                </th>
+                <th class="fw-normal pb-0 border-bottom-0 align-top">
+                  {/* Biswa  */}
+                  {`${t("NWL_APPLICANT_BISWA_LAND_SCHEDULE")}`}
+                </th>
 
-                    <th class="fw-normal pb-0 border-bottom-0 align-top">
-                      {/* Biswansi  */}
-                      {`${t("NWL_APPLICANT_BISWANSI_LAND_SCHEDULE")}`}
-                    </th>
-                    <th class="fw-normal pb-0 border-bottom-0 align-top">
-                      {/* Total Area */}
-                      {`${t("NWL_APPLICANT_TOTAL_AREA_LAND_SCHEDULE")}`}
-                    </th>
-                    {/* <th class="fw-normal pb-0 border-bottom-0 align-top">
+                <th class="fw-normal pb-0 border-bottom-0 align-top">
+                  {/* Biswansi  */}
+                  {`${t("NWL_APPLICANT_BISWANSI_LAND_SCHEDULE")}`}
+                </th>
+                <th class="fw-normal pb-0 border-bottom-0 align-top">
+                  {/* Total Area */}
+                  {`${t("NWL_APPLICANT_TOTAL_AREA_LAND_SCHEDULE")}`}
+                </th>
+                {/* <th class="fw-normal pb-0 border-bottom-0 align-top">
                       Action Remarks
 
                     </th> */}
 
-                  </tr>
-                  <tr className="border-top-0">
-                    <th class="fw-normal py-0 border-top-0">
-                      <ReportProblemIcon
-                        style={{
-                          display: hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_DISTRICT_LAND_SCHEDULE") ? "block" : "none",
+              </tr>
+              <tr className="border-top-0">
+                <th class="fw-normal py-0 border-top-0">
+                  <ReportProblemIcon
+                    style={{
+                      display: hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_DISTRICT_LAND_SCHEDULE") ? "block" : "none",
 
-                          color: fieldIconColors.district
-                        }}
-                        onClick={() => {
-                          setLabelValue("NWL_APPLICANT_DISTRICT_LAND_SCHEDULE"),
-                            setOpennedModal("district")
-                          setSmShow(true),
-                            setDocModal(false),
+                      color: fieldIconColors.district
+                    }}
+                    onClick={() => {
+                      setLabelValue("NWL_APPLICANT_DISTRICT_LAND_SCHEDULE"),
+                        setOpennedModal("district")
+                      setSmShow(true),
+                        setDocModal(false),
 
-                            console.log("modal open"),
-                            // setFieldValue(applicantInfoPersonal !== null ? applicantInfoPersonal?.district : null);
-                            setFieldValue(applicantInfoPersonal?.AppliedLandDetails[0] !== null ? applicantInfoPersonal?.AppliedLandDetails[0]?.district?.label : null);
-                        }}
-                        // {item?.district?.label} 
-                      ></ReportProblemIcon></th>
-                    <th class="fw-normal py-0 border-top-0">
-                      <ReportProblemIcon
-                        style={{
-                          display: hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_DEVELOPMENT_PLAN_LAND_SCHEDULE") ? "block" : "none",
+                        console.log("modal open"),
+                        // setFieldValue(applicantInfoPersonal !== null ? applicantInfoPersonal?.district : null);
+                        setFieldValue(applicantInfoPersonal?.AppliedLandDetails[0] !== null ? applicantInfoPersonal?.AppliedLandDetails[0]?.district?.label : null);
+                    }}
+                  // {item?.district?.label} 
+                  ></ReportProblemIcon></th>
+                <th class="fw-normal py-0 border-top-0">
+                  <ReportProblemIcon
+                    style={{
+                      display: hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_DEVELOPMENT_PLAN_LAND_SCHEDULE") ? "block" : "none",
 
-                          color: fieldIconColors.developmentPlan
-                        }}
-                        onClick={() => {
-                          setLabelValue("Development Plan"),
-                            setOpennedModal("developmentPlan")
-                          setSmShow(true),
-                            setDocModal(false),
-                            console.log("modal open"),
-                            // setFieldValue(applicantInfoPersonal !== null ? applicantInfoPersonal?.district : null);
-                            setFieldValue(applicantInfoPersonal?.AppliedLandDetails[0] !== null ? applicantInfoPersonal?.AppliedLandDetails[0]?.developmentPlan?.label : null);
-                        }}
-                      ></ReportProblemIcon></th>
-                    <th class="fw-normal py-0 border-top-0">
-                      <ReportProblemIcon
-                        style={{
-                          display: hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_ZONE_LAND_SCHEDULE") ? "block" : "none",
+                      color: fieldIconColors.developmentPlan
+                    }}
+                    onClick={() => {
+                      setLabelValue("Development Plan"),
+                        setOpennedModal("developmentPlan")
+                      setSmShow(true),
+                        setDocModal(false),
+                        console.log("modal open"),
+                        // setFieldValue(applicantInfoPersonal !== null ? applicantInfoPersonal?.district : null);
+                        setFieldValue(applicantInfoPersonal?.AppliedLandDetails[0] !== null ? applicantInfoPersonal?.AppliedLandDetails[0]?.developmentPlan?.label : null);
+                    }}
+                  ></ReportProblemIcon></th>
+                <th class="fw-normal py-0 border-top-0">
+                  <ReportProblemIcon
+                    style={{
+                      display: hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_ZONE_LAND_SCHEDULE") ? "block" : "none",
 
-                          color: fieldIconColors.potential
-                        }}
-                        onClick={() => {
-                          setLabelValue("NWL_APPLICANT_ZONE_LAND_SCHEDULE"),
-                            setOpennedModal("potential")
-                          setSmShow(true),
-                            setDocModal(false),
-                            console.log("modal open"),
-                            // setFieldValue(applicantInfoPersonal !== null ? applicantInfoPersonal?.potential : null);
-                            setFieldValue(applicantInfoPersonal?.AppliedLandDetails[0] !== null ? applicantInfoPersonal?.AppliedLandDetails[0]?.potential : null);
-                        }}
-                      ></ReportProblemIcon>
-                    </th>
-                    <th class="fw-normal py-0 border-top-0">
-                      <ReportProblemIcon
-                        style={{
+                      color: fieldIconColors.potential
+                    }}
+                    onClick={() => {
+                      setLabelValue("NWL_APPLICANT_ZONE_LAND_SCHEDULE"),
+                        setOpennedModal("potential")
+                      setSmShow(true),
+                        setDocModal(false),
+                        console.log("modal open"),
+                        // setFieldValue(applicantInfoPersonal !== null ? applicantInfoPersonal?.potential : null);
+                        setFieldValue(applicantInfoPersonal?.AppliedLandDetails[0] !== null ? applicantInfoPersonal?.AppliedLandDetails[0]?.potential : null);
+                    }}
+                  ></ReportProblemIcon>
+                </th>
+                <th class="fw-normal py-0 border-top-0">
+                  <ReportProblemIcon
+                    style={{
 
-                          display: hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_SECTOR_LAND_SCHEDULE") ? "block" : "none",
-                          color: fieldIconColors.sector
-                        }}
-                        onClick={() => {
-                          setLabelValue("NWL_APPLICANT_SECTOR_LAND_SCHEDULE"),
-                            setOpennedModal("sector")
-                          setSmShow(true),
-                            setDocModal(false),
-                            console.log("modal open"),
-                            setFieldValue(applicantInfoPersonal?.AppliedLandDetails[0] !== null ? applicantInfoPersonal?.AppliedLandDetails[0]?.sector : null);
-                        }}
-                      ></ReportProblemIcon>
-                    </th>
-                    <th class="fw-normal py-0 border-top-0">
-                      <ReportProblemIcon
-                        style={{
+                      display: hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_SECTOR_LAND_SCHEDULE") ? "block" : "none",
+                      color: fieldIconColors.sector
+                    }}
+                    onClick={() => {
+                      setLabelValue("NWL_APPLICANT_SECTOR_LAND_SCHEDULE"),
+                        setOpennedModal("sector")
+                      setSmShow(true),
+                        setDocModal(false),
+                        console.log("modal open"),
+                        setFieldValue(applicantInfoPersonal?.AppliedLandDetails[0] !== null ? applicantInfoPersonal?.AppliedLandDetails[0]?.sector : null);
+                    }}
+                  ></ReportProblemIcon>
+                </th>
+                <th class="fw-normal py-0 border-top-0">
+                  <ReportProblemIcon
+                    style={{
 
-                          display: hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_TEHSIL_LAND_SCHEDULE") ? "block" : "none",
-                          color: fieldIconColors.tehsil
-                        }}
-                        onClick={() => {
-                          setLabelValue("NWL_APPLICANT_TEHSIL_LAND_SCHEDULE"),
-                            setOpennedModal("tehsil")
-                          setSmShow(true),
-                            setDocModal(false),
-                            console.log("modal open"),
-                            setFieldValue(applicantInfoPersonal?.AppliedLandDetails[0] !== null ? applicantInfoPersonal?.AppliedLandDetails[0]?.tehsil?.label : null);
-                        }}
-                      ></ReportProblemIcon>
-                    </th>
-                    <th class="fw-normal py-0 border-top-0">
-                      <ReportProblemIcon
-                        style={{
-                          display: hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_REVENUE_ESTATE_LAND_SCHEDULE") ? "block" : "none",
-                          color: fieldIconColors.revenue
-                        }}
-                        onClick={() => {
-                          setLabelValue("NWL_APPLICANT_REVENUE_ESTATE_LAND_SCHEDULE"),
-                            setOpennedModal("revenue")
-                          setSmShow(true),
-                            setDocModal(false),
-                            console.log("modal open"),
-                            setFieldValue(applicantInfoPersonal?.AppliedLandDetails[0] !== null ? applicantInfoPersonal?.AppliedLandDetails[0]?.revenueEstate?.label : null);
-                        }}
-                      ></ReportProblemIcon>
-                    </th>
-                    <th class="fw-normal py-0 border-top-0">
-                      <ReportProblemIcon
-                        style={{
-                          display: hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_HADBAST_NUMBER_LAND_SCHEDULE") ? "block" : "none",
+                      display: hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_TEHSIL_LAND_SCHEDULE") ? "block" : "none",
+                      color: fieldIconColors.tehsil
+                    }}
+                    onClick={() => {
+                      setLabelValue("NWL_APPLICANT_TEHSIL_LAND_SCHEDULE"),
+                        setOpennedModal("tehsil")
+                      setSmShow(true),
+                        setDocModal(false),
+                        console.log("modal open"),
+                        setFieldValue(applicantInfoPersonal?.AppliedLandDetails[0] !== null ? applicantInfoPersonal?.AppliedLandDetails[0]?.tehsil?.label : null);
+                    }}
+                  ></ReportProblemIcon>
+                </th>
+                <th class="fw-normal py-0 border-top-0">
+                  <ReportProblemIcon
+                    style={{
+                      display: hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_REVENUE_ESTATE_LAND_SCHEDULE") ? "block" : "none",
+                      color: fieldIconColors.revenue
+                    }}
+                    onClick={() => {
+                      setLabelValue("NWL_APPLICANT_REVENUE_ESTATE_LAND_SCHEDULE"),
+                        setOpennedModal("revenue")
+                      setSmShow(true),
+                        setDocModal(false),
+                        console.log("modal open"),
+                        setFieldValue(applicantInfoPersonal?.AppliedLandDetails[0] !== null ? applicantInfoPersonal?.AppliedLandDetails[0]?.revenueEstate?.label : null);
+                    }}
+                  ></ReportProblemIcon>
+                </th>
+                <th class="fw-normal py-0 border-top-0">
+                  <ReportProblemIcon
+                    style={{
+                      display: hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_HADBAST_NUMBER_LAND_SCHEDULE") ? "block" : "none",
 
-                          color: fieldIconColors.hadbastNo
-                        }}
-                        onClick={() => {
-                          setLabelValue("NWL_APPLICANT_HADBAST_NUMBER_LAND_SCHEDULE"),
-                            setOpennedModal("hadbastNo")
-                          setSmShow(true),
-                            setDocModal(false),
-                            console.log("modal open"),
-                            setFieldValue(applicantInfoPersonal?.AppliedLandDetails[0] !== null ? applicantInfoPersonal?.AppliedLandDetails[0]?.hadbastNo : null);
-                        }}
-                      ></ReportProblemIcon>
-                    </th>
-                    <th class="fw-normal py-0 border-top-0">
-                      <ReportProblemIcon
-                        style={{
-                          //  display: hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_PURPOSE_OF_LICENCE") ? "block" : "none",
-                          display: hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_RECTANGLE_NUMBER_LAND_SCHEDULE") ? "block" : "none",
-                          color: fieldIconColors.rectangleNo
-                        }}
-                        onClick={() => {
-                          setLabelValue("NWL_APPLICANT_RECTANGLE_NUMBER_LAND_SCHEDULE"),
-                            setOpennedModal("rectangleNo")
-                          setSmShow(true),
-                            setDocModal(false),
-                            console.log("modal open"),
-                            setFieldValue(applicantInfoPersonal?.AppliedLandDetails[0] !== null ? applicantInfoPersonal?.AppliedLandDetails[0]?.rectangleNo : null);
-                        }}
-                      ></ReportProblemIcon>
-                    </th>
-                    <th class="fw-normal py-0 border-top-0">
-                      <ReportProblemIcon
-                        style={{
-                          display: hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_KHEWATS_NUMBER_LAND_SCHEDULE") ? "block" : "none",
-                          color: fieldIconColors.rectaNo
-                        }}
-                        onClick={() => {
-                          setLabelValue("NWL_APPLICANT_KHEWATS_NUMBER_LAND_SCHEDULE"),
-                            setOpennedModal("rectaNo")
-                          setSmShow(true),
-                            setDocModal(false),
-                            console.log("modal open"),
-                            setFieldValue(applicantInfoPersonal?.AppliedLandDetails[0] !== null ? applicantInfoPersonal?.AppliedLandDetails[0]?.khewats : null);
-                        }}
-                      ></ReportProblemIcon>
-                    </th>
-                    <th class="fw-normal py-0 border-top-0">
-                      <ReportProblemIcon
-                        style={{
-                          display: hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_NAME_OF_LAND_OWNER_LAND_SCHEDULE") ? "block" : "none",
-                          color: fieldIconColors.landOwner
-                        }}
-                        onClick={() => {
-                          setLabelValue("NWL_APPLICANT_NAME_OF_LAND_OWNER_LAND_SCHEDULE"),
-                            setOpennedModal("landOwner")
-                          setSmShow(true),
-                            setDocModal(false),
-                            console.log("modal open"),
-                            setFieldValue(applicantInfoPersonal?.AppliedLandDetails[0] !== null ? applicantInfoPersonal?.AppliedLandDetails[0]?.landOwner : null);
-                        }}
-                      ></ReportProblemIcon>
-                    </th>
-                    <th class="fw-normal py-0 border-top-0">
-                      <ReportProblemIcon
-                        style={{
-                          //  display: hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_PURPOSE_OF_LICENCE") ? "block" : "none",
-                          // display: hideRemarksPatwari?"none":"block",
-                          display: hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_TYPE_OF_LAND_SCHEDULE") ? "block" : "none",
-                          color: fieldIconColors.typeLand
-                        }}
-                        onClick={() => {
-                          setLabelValue("NWL_APPLICANT_TYPE_OF_LAND_SCHEDULE"),
-                            setOpennedModal("typeLand")
-                          setSmShow(true),
-                            setDocModal(false),
-                            console.log("modal open"),
-                            setFieldValue(applicantInfoPersonal?.AppliedLandDetails[0] !== null ? applicantInfoPersonal?.AppliedLandDetails[0]?.typeLand?.label : null);
-                        }}
-                      ></ReportProblemIcon>
-                    </th>
-                    <th class="fw-normal py-0 border-top-0">
-                      <ReportProblemIcon
-                        style={{
-                          //  display: hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_PURPOSE_OF_LICENCE") ? "block" : "none",
-                          // display: hideRemarksPatwari?"none":"block",
-                          display: hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_CHANGE_IN_INFORMATION_LAND_SCHEDULE") ? "block" : "none",
-                          color: fieldIconColors.isChange
-                        }}
-                        onClick={() => {
-                          setLabelValue("NWL_APPLICANT_CHANGE_IN_INFORMATION_LAND_SCHEDULE"),
-                            setOpennedModal("isChange")
-                          setSmShow(true),
-                            setDocModal(false),
-                            console.log("modal open"),
-                            setFieldValue(applicantInfoPersonal?.AppliedLandDetails[0] !== null ? applicantInfoPersonal?.AppliedLandDetails[0]?.isChange : null);
-                        }}
-                      ></ReportProblemIcon>
-                    </th>
+                      color: fieldIconColors.hadbastNo
+                    }}
+                    onClick={() => {
+                      setLabelValue("NWL_APPLICANT_HADBAST_NUMBER_LAND_SCHEDULE"),
+                        setOpennedModal("hadbastNo")
+                      setSmShow(true),
+                        setDocModal(false),
+                        console.log("modal open"),
+                        setFieldValue(applicantInfoPersonal?.AppliedLandDetails[0] !== null ? applicantInfoPersonal?.AppliedLandDetails[0]?.hadbastNo : null);
+                    }}
+                  ></ReportProblemIcon>
+                </th>
+                <th class="fw-normal py-0 border-top-0">
+                  <ReportProblemIcon
+                    style={{
+                      //  display: hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_PURPOSE_OF_LICENCE") ? "block" : "none",
+                      display: hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_RECTANGLE_NUMBER_LAND_SCHEDULE") ? "block" : "none",
+                      color: fieldIconColors.rectangleNo
+                    }}
+                    onClick={() => {
+                      setLabelValue("NWL_APPLICANT_RECTANGLE_NUMBER_LAND_SCHEDULE"),
+                        setOpennedModal("rectangleNo")
+                      setSmShow(true),
+                        setDocModal(false),
+                        console.log("modal open"),
+                        setFieldValue(applicantInfoPersonal?.AppliedLandDetails[0] !== null ? applicantInfoPersonal?.AppliedLandDetails[0]?.rectangleNo : null);
+                    }}
+                  ></ReportProblemIcon>
+                </th>
+                <th class="fw-normal py-0 border-top-0">
+                  <ReportProblemIcon
+                    style={{
+                      display: hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_KHEWATS_NUMBER_LAND_SCHEDULE") ? "block" : "none",
+                      color: fieldIconColors.rectaNo
+                    }}
+                    onClick={() => {
+                      setLabelValue("NWL_APPLICANT_KHEWATS_NUMBER_LAND_SCHEDULE"),
+                        setOpennedModal("rectaNo")
+                      setSmShow(true),
+                        setDocModal(false),
+                        console.log("modal open"),
+                        setFieldValue(applicantInfoPersonal?.AppliedLandDetails[0] !== null ? applicantInfoPersonal?.AppliedLandDetails[0]?.khewats : null);
+                    }}
+                  ></ReportProblemIcon>
+                </th>
+                <th class="fw-normal py-0 border-top-0">
+                  <ReportProblemIcon
+                    style={{
+                      display: hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_NAME_OF_LAND_OWNER_LAND_SCHEDULE") ? "block" : "none",
+                      color: fieldIconColors.landOwner
+                    }}
+                    onClick={() => {
+                      setLabelValue("NWL_APPLICANT_NAME_OF_LAND_OWNER_LAND_SCHEDULE"),
+                        setOpennedModal("landOwner")
+                      setSmShow(true),
+                        setDocModal(false),
+                        console.log("modal open"),
+                        setFieldValue(applicantInfoPersonal?.AppliedLandDetails[0] !== null ? applicantInfoPersonal?.AppliedLandDetails[0]?.landOwner : null);
+                    }}
+                  ></ReportProblemIcon>
+                </th>
+                <th class="fw-normal py-0 border-top-0">
+                  <ReportProblemIcon
+                    style={{
+                      //  display: hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_PURPOSE_OF_LICENCE") ? "block" : "none",
+                      // display: hideRemarksPatwari?"none":"block",
+                      display: hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_TYPE_OF_LAND_SCHEDULE") ? "block" : "none",
+                      color: fieldIconColors.typeLand
+                    }}
+                    onClick={() => {
+                      setLabelValue("NWL_APPLICANT_TYPE_OF_LAND_SCHEDULE"),
+                        setOpennedModal("typeLand")
+                      setSmShow(true),
+                        setDocModal(false),
+                        console.log("modal open"),
+                        setFieldValue(applicantInfoPersonal?.AppliedLandDetails[0] !== null ? applicantInfoPersonal?.AppliedLandDetails[0]?.typeLand?.label : null);
+                    }}
+                  ></ReportProblemIcon>
+                </th>
+                <th class="fw-normal py-0 border-top-0">
+                  <ReportProblemIcon
+                    style={{
+                      //  display: hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_PURPOSE_OF_LICENCE") ? "block" : "none",
+                      // display: hideRemarksPatwari?"none":"block",
+                      display: hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_CHANGE_IN_INFORMATION_LAND_SCHEDULE") ? "block" : "none",
+                      color: fieldIconColors.isChange
+                    }}
+                    onClick={() => {
+                      setLabelValue("NWL_APPLICANT_CHANGE_IN_INFORMATION_LAND_SCHEDULE"),
+                        setOpennedModal("isChange")
+                      setSmShow(true),
+                        setDocModal(false),
+                        console.log("modal open"),
+                        setFieldValue(applicantInfoPersonal?.AppliedLandDetails[0] !== null ? applicantInfoPersonal?.AppliedLandDetails[0]?.isChange : null);
+                    }}
+                  ></ReportProblemIcon>
+                </th>
 
-                    <th class="fw-normal py-0 border-top-0">
-                      <ReportProblemIcon
-                        style={{
-                          //  display: hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_PURPOSE_OF_LICENCE") ? "block" : "none",
-                          // display: hideRemarksPatwari?"none":"block",
-                          display: hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_RECTANGLE_NO_MUSTIL_LAND_SCHEDULE") ? "block" : "none",
-                          color: fieldIconColors.editRectangleNo
-                        }}
-                        onClick={() => {
-                          setLabelValue("NWL_APPLICANT_RECTANGLE_NO_MUSTIL_LAND_SCHEDULE"),
-                            setOpennedModal("editRectangleNo")
-                          setSmShow(true),
-                            setDocModal(false),
-                            console.log("modal open"),
-                            setFieldValue(applicantInfoPersonal?.AppliedLandDetails[0] !== null ? applicantInfoPersonal?.AppliedLandDetails[0]?.editRectangleNo : null);
-                        }}
-                      ></ReportProblemIcon>
-                    </th>
-
-
-
-                    <th class="fw-normal py-0 border-top-0">
-                      {" "}
-                      <ReportProblemIcon
-                        style={{
-                          display: hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_KHEWATS_NUMBER_CHANGED_LAND_SCHEDULE") ? "block" : "none",
-                          color: fieldIconColors.editKhewats
-                        }}
-                        onClick={() => {
-                          setLabelValue("NWL_APPLICANT_KHEWATS_NUMBER_CHANGED_LAND_SCHEDULE"),
-                            setOpennedModal("editKhewats")
-                          setSmShow(true),
-                            setDocModal(false),
-                            console.log("modal open"),
-                            setFieldValue(applicantInfoPersonal?.AppliedLandDetails[0] !== null ? applicantInfoPersonal?.AppliedLandDetails[0]?.editKhewats : null);
-                        }}
-                      ></ReportProblemIcon>
-                    </th>
-
-                    <th class="fw-normal py-0 border-top-0">
-                      <ReportProblemIcon
-                        style={{
-
-                          display: hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_NAME_OF_THE_LAND_OWNER_AS_PER_MUTATION_LAND_SCHEDULE") ? "block" : "none",
-                          color: fieldIconColors.landOwnerRegistry
-                        }}
-                        onClick={() => {
-                          setLabelValue("NWL_APPLICANT_NAME_OF_THE_LAND_OWNER_AS_PER_MUTATION_LAND_SCHEDULE"),
-                            setOpennedModal("landOwnerRegistry")
-                          setSmShow(true),
-                            setDocModal(false),
-                            console.log("modal open"),
-                            setFieldValue(applicantInfoPersonal?.AppliedLandDetails[0] !== null ? applicantInfoPersonal?.AppliedLandDetails[0]?.landOwnerRegistry : null);
-                        }}
-                      ></ReportProblemIcon>
-                    </th>
+                <th class="fw-normal py-0 border-top-0">
+                  <ReportProblemIcon
+                    style={{
+                      //  display: hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_PURPOSE_OF_LICENCE") ? "block" : "none",
+                      // display: hideRemarksPatwari?"none":"block",
+                      display: hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_RECTANGLE_NO_MUSTIL_LAND_SCHEDULE") ? "block" : "none",
+                      color: fieldIconColors.editRectangleNo
+                    }}
+                    onClick={() => {
+                      setLabelValue("NWL_APPLICANT_RECTANGLE_NO_MUSTIL_LAND_SCHEDULE"),
+                        setOpennedModal("editRectangleNo")
+                      setSmShow(true),
+                        setDocModal(false),
+                        console.log("modal open"),
+                        setFieldValue(applicantInfoPersonal?.AppliedLandDetails[0] !== null ? applicantInfoPersonal?.AppliedLandDetails[0]?.editRectangleNo : null);
+                    }}
+                  ></ReportProblemIcon>
+                </th>
 
 
-                    <th class="fw-normal py-0 border-top-0">
-                      {" "}
-                      <ReportProblemIcon
-                        style={{
-                          display: hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_DEVELOPED_IN_COLLABORATION_LAND_SCHEDULE") ? "block" : "none",
-                          color: fieldIconColors.collaboration
-                        }}
-                        onClick={() => {
-                          setLabelValue("NWL_APPLICANT_DEVELOPED_IN_COLLABORATION_LAND_SCHEDULE"),
-                            setOpennedModal("collaboration")
-                          setSmShow(true),
-                            setDocModal(false),
-                            console.log("modal open"),
-                            setFieldValue(applicantInfoPersonal?.AppliedLandDetails[0] !== null ? applicantInfoPersonal?.AppliedLandDetails[0]?.collaboration : null);
-                        }}
-                      ></ReportProblemIcon>
-                    </th>
-                    <th class="fw-normal py-0 border-top-0">
-                      {" "}
-                      <ReportProblemIcon
-                        style={{
-                          display: hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_NAME_OF_THE_DEVELOPER_COMPANY_LAND_SCHEDULE") ? "block" : "none",
-                          color: fieldIconColors.developerCompany
-                        }}
-                        onClick={() => {
-                          setLabelValue("NWL_APPLICANT_NAME_OF_THE_DEVELOPER_COMPANY_LAND_SCHEDULE"),
-                            setOpennedModal("developerCompany")
-                          setSmShow(true),
-                            setDocModal(false),
-                            console.log("modal open"),
-                            setFieldValue(applicantInfoPersonal?.AppliedLandDetails[0] !== null ? applicantInfoPersonal?.AppliedLandDetails[0]?.developerCompany : null);
-                        }}
-                      ></ReportProblemIcon>
-                    </th>
-                    <th class="fw-normal py-0 border-top-0">
-                      {" "}
-                      <ReportProblemIcon
-         style={{
-display: hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_DATA_OF_REGISTERING_COLLOABORATION_AGREEMENT_LAND_SCHEDULE") ? "block" : "none",
-                          color: fieldIconColors.agreementValidFrom
-                        }}
-                        onClick={() => {
-                          setLabelValue("NWL_APPLICANT_DATA_OF_REGISTERING_COLLOABORATION_AGREEMENT_LAND_SCHEDULE"),
-                            setOpennedModal("agreementValidFrom")
-                          setSmShow(true),
-                            setDocModal(false),
-                            console.log("modal open"),
-                            setFieldValue(applicantInfoPersonal?.AppliedLandDetails[0] !== null ? applicantInfoPersonal?.AppliedLandDetails[0]?.agreementValidFrom : null);
-                        }}
-                      ></ReportProblemIcon>
-                    </th>
-                    <th class="fw-normal py-0 border-top-0">
-                      {" "}
-                      <ReportProblemIcon
-                        style={{
-                          display: hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_WHETER_COLLABORATION_AGREEMENT_IRREVOCABLE_LAND_SCHEDULE") ? "block" : "none",
-                          color: fieldIconColors.agreementIrrevocialble
-                        }}
-                        onClick={() => {
-                          setLabelValue("NWL_APPLICANT_WHETER_COLLABORATION_AGREEMENT_IRREVOCABLE_LAND_SCHEDULE"),
-                            setOpennedModal("agreementIrrevocialble")
-                          setSmShow(true),
-                            setDocModal(false),
-                            console.log("modal open"),
-                            setFieldValue(applicantInfoPersonal?.AppliedLandDetails[0] !== null ? applicantInfoPersonal?.AppliedLandDetails[0]?.agreementIrrevocialble : null);
-                        }}
-                      ></ReportProblemIcon>
-                    </th>
-                    <th class="fw-normal py-0 border-top-0">
-                      {" "}
-                      <ReportProblemIcon
-                        style={{
-                          display: hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_NAME_OF_AUTHORIZED_SIGNATORY_ON_BEHALF_OF_LAND_OWNER") ? "block" : "none",
-                          color: fieldIconColors.authSignature
-                        }}
-                        onClick={() => {
-                          setLabelValue("NWL_APPLICANT_NAME_OF_AUTHORIZED_SIGNATORY_ON_BEHALF_OF_LAND_OWNER"),
-                            setOpennedModal("authSignature")
-                          setSmShow(true),
-                            setDocModal(false),
-                            console.log("modal open"),
-                            setFieldValue(applicantInfoPersonal?.AppliedLandDetails[0] !== null ? applicantInfoPersonal?.AppliedLandDetails[0]?.authSignature : null);
-                        }}
-                      ></ReportProblemIcon>
-                    </th>
-                    <th class="fw-normal py-0 border-top-0">
-                      {" "}
-                      <ReportProblemIcon
-                        style={{
-                          display: hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_NAME_OF_AUTHORIZED_SIGNATORY_ON_BEHALF_OF_DEVELOPER") ? "block" : "none",
-                          color: fieldIconColors.nameAuthSign
-                        }}
-                        onClick={() => {
-                          setLabelValue("NWL_APPLICANT_NAME_OF_AUTHORIZED_SIGNATORY_ON_BEHALF_OF_DEVELOPERr"),
-                            setOpennedModal("nameAuthSign")
-                          setSmShow(true),
-                            setDocModal(false),
-                            console.log("modal open"),
-                            setFieldValue(applicantInfoPersonal?.AppliedLandDetails[0] !== null ? applicantInfoPersonal?.AppliedLandDetails[0]?.nameAuthSign : null);
-                        }}
-                      ></ReportProblemIcon>
-                    </th>
-                    <th class="fw-normal py-0 border-top-0">
-                      {" "}
-                      <ReportProblemIcon
-                        style={{
-                          display: hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_REGISTERING_AUTHORITY_LAND_SCHEDULE") ? "block" : "none",
-                          color: fieldIconColors.registeringAuthority
-                        }}
-                        onClick={() => {
-                          setLabelValue("NWL_APPLICANT_REGISTERING_AUTHORITY_LAND_SCHEDULE"),
-                            setOpennedModal("registeringAuthority")
-                          setSmShow(true),
-                            setDocModal(false),
-                            console.log("modal open"),
-                            setFieldValue(applicantInfoPersonal?.AppliedLandDetails[0] !== null ? applicantInfoPersonal?.AppliedLandDetails[0]?.registeringAuthority : null);
-                        }}
-                      ></ReportProblemIcon>
-                    </th>
-                    <th class="fw-normal py-0 border-top-0">
-                      <ReportProblemIcon
-                        style={{
-                          //  display: hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_PURPOSE_OF_LICENCE") ? "block" : "none",
-                          // display: hideRemarksPatwari?"none":"block",
-                          display: hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_REGISTERING_AUTHORITY_DOCUMENT_LAND_SCHEDULE") ? "block" : "none",
-                          color: fieldIconColors.registeringAuthorityDoc
-                        }}
-                        onClick={() => {
-                          setLabelValue("NWL_APPLICANT_REGISTERING_AUTHORITY_DOCUMENT_LAND_SCHEDULE"),
-                            setOpennedModal("registeringAuthorityDoc")
-                          setSmShow(true),
-                            setDocModal(true),
-                            console.log("modal open"),
-                            setFieldValue(applicantInfoPersonal?.AppliedLandDetails[0] !== null ? applicantInfoPersonal?.AppliedLandDetails[0]?.registeringAuthorityDoc : null);
-                        }}
-                      ></ReportProblemIcon>
-                    </th>
-                    <th class="fw-normal py-0 border-top-0">
-                      <ReportProblemIcon
-                        style={{
-                          display: hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_CONSLIDATION_TYPE_LAND_SCHEDULE") ? "block" : "none",
-                          color: fieldIconColors.consolidationType
-                        }}
-                        onClick={() => {
-                          setLabelValue("NWL_APPLICANT_CONSLIDATION_TYPE_LAND_SCHEDULE"),
-                            setOpennedModal("consolidationType")
-                          setSmShow(true),
-                            setDocModal(false),
-                            console.log("modal open"),
-                            setFieldValue(applicantInfoPersonal?.AppliedLandDetails[0] !== null ? applicantInfoPersonal?.AppliedLandDetails[0]?.consolidationType : null);
-                        }}
-                      ></ReportProblemIcon>
-                    </th>
-                    <th class="fw-normal py-0 border-top-0">
-                      <ReportProblemIcon
-                        style={{
-                          display: hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_KANAL_LAND_SCHEDULE") ? "block" : "none",
-                          color: fieldIconColors.kanal
-                        }}
-                        onClick={() => {
-                          setLabelValue("NWL_APPLICANT_KANAL_LAND_SCHEDULE"),
-                            setOpennedModal("kanal")
-                          setSmShow(true),
-                            setDocModal(false),
-                            console.log("modal open"),
-                            setFieldValue(applicantInfoPersonal?.AppliedLandDetails[0] !== null ? applicantInfoPersonal?.AppliedLandDetails[0]?.kanal : null);
-                        }}
-                      ></ReportProblemIcon>
 
-                    </th>
-                    <th class="fw-normal py-0 border-top-0">
-                      <ReportProblemIcon
-                        style={{
-                          display: hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_MARLA_LAND_SCHEDULE") ? "block" : "none",
-                          color: fieldIconColors.marla
-                        }}
-                        onClick={() => {
-                          setLabelValue("NWL_APPLICANT_MARLA_LAND_SCHEDULE"),
-                            setOpennedModal("marla")
-                          setSmShow(true),
-                            setDocModal(false),
-                            console.log("modal open"),
-                            setFieldValue(applicantInfoPersonal?.AppliedLandDetails[0] !== null ? applicantInfoPersonal?.AppliedLandDetails[0]?.marla : null);
-                        }}
-                      ></ReportProblemIcon>
-                    </th>
-                    <th class="fw-normal py-0 border-top-0">
-                      <ReportProblemIcon
-                        style={{
-                          display: hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_SARSAI_LAND_SCHEDULE") ? "block" : "none",
-                          color: fieldIconColors.sarsai
-                        }}
-                        onClick={() => {
-                          setLabelValue("NWL_APPLICANT_SARSAI_LAND_SCHEDULE"),
-                            setOpennedModal("sarsai")
-                          setSmShow(true),
-                            setDocModal(false),
-                            console.log("modal open"),
-                            setFieldValue(applicantInfoPersonal?.AppliedLandDetails[0] !== null ? applicantInfoPersonal?.AppliedLandDetails[0]?.sarsai : null);
-                        }}
-                      ></ReportProblemIcon>
-                    </th>
-                    <th class="fw-normal py-0 border-top-0">
-                      <ReportProblemIcon
-                        style={{
-                          display: hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_BIGHA_LAND_SCHEDULE") ? "block" : "none",
-                          color: fieldIconColors.bigha
-                        }}
-                        onClick={() => {
-                          setLabelValue("NWL_APPLICANT_BIGHA_LAND_SCHEDULE"),
-                            setOpennedModal("bigha")
-                          setSmShow(true),
-                            setDocModal(false),
-                            console.log("modal open"),
-                            setFieldValue(applicantInfoPersonal?.AppliedLandDetails[0] !== null ? applicantInfoPersonal?.AppliedLandDetails[0]?.bigha : null);
-                        }}
-                      ></ReportProblemIcon>
+                <th class="fw-normal py-0 border-top-0">
+                  {" "}
+                  <ReportProblemIcon
+                    style={{
+                      display: hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_KHEWATS_NUMBER_CHANGED_LAND_SCHEDULE") ? "block" : "none",
+                      color: fieldIconColors.editKhewats
+                    }}
+                    onClick={() => {
+                      setLabelValue("NWL_APPLICANT_KHEWATS_NUMBER_CHANGED_LAND_SCHEDULE"),
+                        setOpennedModal("editKhewats")
+                      setSmShow(true),
+                        setDocModal(false),
+                        console.log("modal open"),
+                        setFieldValue(applicantInfoPersonal?.AppliedLandDetails[0] !== null ? applicantInfoPersonal?.AppliedLandDetails[0]?.editKhewats : null);
+                    }}
+                  ></ReportProblemIcon>
+                </th>
 
-                    </th>
-                    <th class="fw-normal py-0 border-top-0">
-                      <ReportProblemIcon
-                        style={{
-                          display: hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_BISWA_LAND_SCHEDULE") ? "block" : "none",
-                          color: fieldIconColors.biswa
-                        }}
-                        onClick={() => {
-                          setLabelValue("NWL_APPLICANT_BISWA_LAND_SCHEDULE"),
-                            setOpennedModal("biswa")
-                          setSmShow(true),
-                            setDocModal(false),
-                            console.log("modal open"),
-                            setFieldValue(applicantInfoPersonal?.AppliedLandDetails[0] !== null ? applicantInfoPersonal?.AppliedLandDetails[0]?.biswa : null);
-                        }}
-                      ></ReportProblemIcon>
-                    </th>
-                    <th class="fw-normal py-0 border-top-0">
-                      <ReportProblemIcon
-                        style={{
-                          display: hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_BISWANSI_LAND_SCHEDULE") ? "block" : "none",
-                          color: fieldIconColors.biswansi
-                        }}
-                        onClick={() => {
-                          setLabelValue("NWL_APPLICANT_BISWANSI_LAND_SCHEDULE"),
-                            setOpennedModal("biswansi")
-                          setSmShow(true),
-                            setDocModal(false),
-                            console.log("modal open"),
-                            setFieldValue(applicantInfoPersonal?.AppliedLandDetails[0] !== null ? applicantInfoPersonal?.AppliedLandDetails[0]?.biswansi : null);
-                        }}
-                      ></ReportProblemIcon>
-                    </th>
-                    {applicantInfoPersonal?.AppliedLandDetails[0]?.consolidationType == "consolidated" &&
-                    <th class="fw-normal py-0 border-top-0">
-                      <ReportProblemIcon
-                        style={{
+                <th class="fw-normal py-0 border-top-0">
+                  <ReportProblemIcon
+                    style={{
 
-                          display: hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_TOTAL_AREA_LAND_SCHEDULE") ? "block" : "none",
-                          color: fieldIconColors.consolidatedTotal
-                        }}
-                        onClick={() => {
-                          setLabelValue("NWL_APPLICANT_TOTAL_AREA_LAND_SCHEDULE"),
-                            setOpennedModal("consolidatedTotal")
-                          setSmShow(true),
-                            setDocModal(false),
-                            console.log("modal open"),
-                            setFieldValue(applicantInfoPersonal?.AppliedLandDetails[0] !== null ? applicantInfoPersonal?.AppliedLandDetails[0]?.consolidatedTotal : null);
-                        }}
-                      ></ReportProblemIcon>
-                    </th>
-                     }
-                     {applicantInfoPersonal?.AppliedLandDetails[0]?.consolidationType == "non-consolidated" &&
-                      <th class="fw-normal py-0 border-top-0">
-                      <ReportProblemIcon
-                        style={{
+                      display: hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_NAME_OF_THE_LAND_OWNER_AS_PER_MUTATION_LAND_SCHEDULE") ? "block" : "none",
+                      color: fieldIconColors.landOwnerRegistry
+                    }}
+                    onClick={() => {
+                      setLabelValue("NWL_APPLICANT_NAME_OF_THE_LAND_OWNER_AS_PER_MUTATION_LAND_SCHEDULE"),
+                        setOpennedModal("landOwnerRegistry")
+                      setSmShow(true),
+                        setDocModal(false),
+                        console.log("modal open"),
+                        setFieldValue(applicantInfoPersonal?.AppliedLandDetails[0] !== null ? applicantInfoPersonal?.AppliedLandDetails[0]?.landOwnerRegistry : null);
+                    }}
+                  ></ReportProblemIcon>
+                </th>
 
-                          display: hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_TOTAL_AREA_NON_LAND_SCHEDULE") ? "block" : "none",
-                          color: fieldIconColors.nonConsolidatedTotal
-                        }}
-                        onClick={() => {
-                          setLabelValue("NWL_APPLICANT_TOTAL_AREA_NON_LAND_SCHEDULE"),
-                            setOpennedModal("nonConsolidatedTotal")
-                          setSmShow(true),
-                            setDocModal(false),
-                            console.log("modal open"),
-                            setFieldValue(applicantInfoPersonal?.AppliedLandDetails[0] !== null ? applicantInfoPersonal?.AppliedLandDetails[0]?.nonConsolidatedTotal : null);
-                        }}
-                      ></ReportProblemIcon>
-                    </th>
+
+                <th class="fw-normal py-0 border-top-0">
+                  {" "}
+                  <ReportProblemIcon
+                    style={{
+                      display: hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_DEVELOPED_IN_COLLABORATION_LAND_SCHEDULE") ? "block" : "none",
+                      color: fieldIconColors.collaboration
+                    }}
+                    onClick={() => {
+                      setLabelValue("NWL_APPLICANT_DEVELOPED_IN_COLLABORATION_LAND_SCHEDULE"),
+                        setOpennedModal("collaboration")
+                      setSmShow(true),
+                        setDocModal(false),
+                        console.log("modal open"),
+                        setFieldValue(applicantInfoPersonal?.AppliedLandDetails[0] !== null ? applicantInfoPersonal?.AppliedLandDetails[0]?.collaboration : null);
+                    }}
+                  ></ReportProblemIcon>
+                </th>
+                <th class="fw-normal py-0 border-top-0">
+                  {" "}
+                  <ReportProblemIcon
+                    style={{
+                      display: hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_NAME_OF_THE_DEVELOPER_COMPANY_LAND_SCHEDULE") ? "block" : "none",
+                      color: fieldIconColors.developerCompany
+                    }}
+                    onClick={() => {
+                      setLabelValue("NWL_APPLICANT_NAME_OF_THE_DEVELOPER_COMPANY_LAND_SCHEDULE"),
+                        setOpennedModal("developerCompany")
+                      setSmShow(true),
+                        setDocModal(false),
+                        console.log("modal open"),
+                        setFieldValue(applicantInfoPersonal?.AppliedLandDetails[0] !== null ? applicantInfoPersonal?.AppliedLandDetails[0]?.developerCompany : null);
+                    }}
+                  ></ReportProblemIcon>
+                </th>
+                <th class="fw-normal py-0 border-top-0">
+                  {" "}
+                  <ReportProblemIcon
+                    style={{
+                      display: hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_DATA_OF_REGISTERING_COLLOABORATION_AGREEMENT_LAND_SCHEDULE") ? "block" : "none",
+                      color: fieldIconColors.agreementValidFrom
+                    }}
+                    onClick={() => {
+                      setLabelValue("NWL_APPLICANT_DATA_OF_REGISTERING_COLLOABORATION_AGREEMENT_LAND_SCHEDULE"),
+                        setOpennedModal("agreementValidFrom")
+                      setSmShow(true),
+                        setDocModal(false),
+                        console.log("modal open"),
+                        setFieldValue(applicantInfoPersonal?.AppliedLandDetails[0] !== null ? applicantInfoPersonal?.AppliedLandDetails[0]?.agreementValidFrom : null);
+                    }}
+                  ></ReportProblemIcon>
+                </th>
+                <th class="fw-normal py-0 border-top-0">
+                  {" "}
+                  <ReportProblemIcon
+                    style={{
+                      display: hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_WHETER_COLLABORATION_AGREEMENT_IRREVOCABLE_LAND_SCHEDULE") ? "block" : "none",
+                      color: fieldIconColors.agreementIrrevocialble
+                    }}
+                    onClick={() => {
+                      setLabelValue("NWL_APPLICANT_WHETER_COLLABORATION_AGREEMENT_IRREVOCABLE_LAND_SCHEDULE"),
+                        setOpennedModal("agreementIrrevocialble")
+                      setSmShow(true),
+                        setDocModal(false),
+                        console.log("modal open"),
+                        setFieldValue(applicantInfoPersonal?.AppliedLandDetails[0] !== null ? applicantInfoPersonal?.AppliedLandDetails[0]?.agreementIrrevocialble : null);
+                    }}
+                  ></ReportProblemIcon>
+                </th>
+                <th class="fw-normal py-0 border-top-0">
+                  {" "}
+                  <ReportProblemIcon
+                    style={{
+                      display: hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_NAME_OF_AUTHORIZED_SIGNATORY_ON_BEHALF_OF_LAND_OWNER") ? "block" : "none",
+                      color: fieldIconColors.authSignature
+                    }}
+                    onClick={() => {
+                      setLabelValue("NWL_APPLICANT_NAME_OF_AUTHORIZED_SIGNATORY_ON_BEHALF_OF_LAND_OWNER"),
+                        setOpennedModal("authSignature")
+                      setSmShow(true),
+                        setDocModal(false),
+                        console.log("modal open"),
+                        setFieldValue(applicantInfoPersonal?.AppliedLandDetails[0] !== null ? applicantInfoPersonal?.AppliedLandDetails[0]?.authSignature : null);
+                    }}
+                  ></ReportProblemIcon>
+                </th>
+                <th class="fw-normal py-0 border-top-0">
+                  {" "}
+                  <ReportProblemIcon
+                    style={{
+                      display: hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_NAME_OF_AUTHORIZED_SIGNATORY_ON_BEHALF_OF_DEVELOPER") ? "block" : "none",
+                      color: fieldIconColors.nameAuthSign
+                    }}
+                    onClick={() => {
+                      setLabelValue("NWL_APPLICANT_NAME_OF_AUTHORIZED_SIGNATORY_ON_BEHALF_OF_DEVELOPERr"),
+                        setOpennedModal("nameAuthSign")
+                      setSmShow(true),
+                        setDocModal(false),
+                        console.log("modal open"),
+                        setFieldValue(applicantInfoPersonal?.AppliedLandDetails[0] !== null ? applicantInfoPersonal?.AppliedLandDetails[0]?.nameAuthSign : null);
+                    }}
+                  ></ReportProblemIcon>
+                </th>
+                <th class="fw-normal py-0 border-top-0">
+                  {" "}
+                  <ReportProblemIcon
+                    style={{
+                      display: hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_REGISTERING_AUTHORITY_LAND_SCHEDULE") ? "block" : "none",
+                      color: fieldIconColors.registeringAuthority
+                    }}
+                    onClick={() => {
+                      setLabelValue("NWL_APPLICANT_REGISTERING_AUTHORITY_LAND_SCHEDULE"),
+                        setOpennedModal("registeringAuthority")
+                      setSmShow(true),
+                        setDocModal(false),
+                        console.log("modal open"),
+                        setFieldValue(applicantInfoPersonal?.AppliedLandDetails[0] !== null ? applicantInfoPersonal?.AppliedLandDetails[0]?.registeringAuthority : null);
+                    }}
+                  ></ReportProblemIcon>
+                </th>
+                <th class="fw-normal py-0 border-top-0">
+                  <ReportProblemIcon
+                    style={{
+                      //  display: hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_PURPOSE_OF_LICENCE") ? "block" : "none",
+                      // display: hideRemarksPatwari?"none":"block",
+                      display: hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_REGISTERING_AUTHORITY_DOCUMENT_LAND_SCHEDULE") ? "block" : "none",
+                      color: fieldIconColors.registeringAuthorityDoc
+                    }}
+                    onClick={() => {
+                      setLabelValue("NWL_APPLICANT_REGISTERING_AUTHORITY_DOCUMENT_LAND_SCHEDULE"),
+                        setOpennedModal("registeringAuthorityDoc")
+                      setSmShow(true),
+                        setDocModal(true),
+                        console.log("modal open"),
+                        setFieldValue(applicantInfoPersonal?.AppliedLandDetails[0] !== null ? applicantInfoPersonal?.AppliedLandDetails[0]?.registeringAuthorityDoc : null);
+                    }}
+                  ></ReportProblemIcon>
+                </th>
+                <th class="fw-normal py-0 border-top-0">
+                  <ReportProblemIcon
+                    style={{
+                      display: hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_CONSLIDATION_TYPE_LAND_SCHEDULE") ? "block" : "none",
+                      color: fieldIconColors.consolidationType
+                    }}
+                    onClick={() => {
+                      setLabelValue("NWL_APPLICANT_CONSLIDATION_TYPE_LAND_SCHEDULE"),
+                        setOpennedModal("consolidationType")
+                      setSmShow(true),
+                        setDocModal(false),
+                        console.log("modal open"),
+                        setFieldValue(applicantInfoPersonal?.AppliedLandDetails[0] !== null ? applicantInfoPersonal?.AppliedLandDetails[0]?.consolidationType : null);
+                    }}
+                  ></ReportProblemIcon>
+                </th>
+                <th class="fw-normal py-0 border-top-0">
+                  <ReportProblemIcon
+                    style={{
+                      display: hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_KANAL_LAND_SCHEDULE") ? "block" : "none",
+                      color: fieldIconColors.kanal
+                    }}
+                    onClick={() => {
+                      setLabelValue("NWL_APPLICANT_KANAL_LAND_SCHEDULE"),
+                        setOpennedModal("kanal")
+                      setSmShow(true),
+                        setDocModal(false),
+                        console.log("modal open"),
+                        setFieldValue(applicantInfoPersonal?.AppliedLandDetails[0] !== null ? applicantInfoPersonal?.AppliedLandDetails[0]?.kanal : null);
+                    }}
+                  ></ReportProblemIcon>
+
+                </th>
+                <th class="fw-normal py-0 border-top-0">
+                  <ReportProblemIcon
+                    style={{
+                      display: hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_MARLA_LAND_SCHEDULE") ? "block" : "none",
+                      color: fieldIconColors.marla
+                    }}
+                    onClick={() => {
+                      setLabelValue("NWL_APPLICANT_MARLA_LAND_SCHEDULE"),
+                        setOpennedModal("marla")
+                      setSmShow(true),
+                        setDocModal(false),
+                        console.log("modal open"),
+                        setFieldValue(applicantInfoPersonal?.AppliedLandDetails[0] !== null ? applicantInfoPersonal?.AppliedLandDetails[0]?.marla : null);
+                    }}
+                  ></ReportProblemIcon>
+                </th>
+                <th class="fw-normal py-0 border-top-0">
+                  <ReportProblemIcon
+                    style={{
+                      display: hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_SARSAI_LAND_SCHEDULE") ? "block" : "none",
+                      color: fieldIconColors.sarsai
+                    }}
+                    onClick={() => {
+                      setLabelValue("NWL_APPLICANT_SARSAI_LAND_SCHEDULE"),
+                        setOpennedModal("sarsai")
+                      setSmShow(true),
+                        setDocModal(false),
+                        console.log("modal open"),
+                        setFieldValue(applicantInfoPersonal?.AppliedLandDetails[0] !== null ? applicantInfoPersonal?.AppliedLandDetails[0]?.sarsai : null);
+                    }}
+                  ></ReportProblemIcon>
+                </th>
+                <th class="fw-normal py-0 border-top-0">
+                  <ReportProblemIcon
+                    style={{
+                      display: hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_BIGHA_LAND_SCHEDULE") ? "block" : "none",
+                      color: fieldIconColors.bigha
+                    }}
+                    onClick={() => {
+                      setLabelValue("NWL_APPLICANT_BIGHA_LAND_SCHEDULE"),
+                        setOpennedModal("bigha")
+                      setSmShow(true),
+                        setDocModal(false),
+                        console.log("modal open"),
+                        setFieldValue(applicantInfoPersonal?.AppliedLandDetails[0] !== null ? applicantInfoPersonal?.AppliedLandDetails[0]?.bigha : null);
+                    }}
+                  ></ReportProblemIcon>
+
+                </th>
+                <th class="fw-normal py-0 border-top-0">
+                  <ReportProblemIcon
+                    style={{
+                      display: hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_BISWA_LAND_SCHEDULE") ? "block" : "none",
+                      color: fieldIconColors.biswa
+                    }}
+                    onClick={() => {
+                      setLabelValue("NWL_APPLICANT_BISWA_LAND_SCHEDULE"),
+                        setOpennedModal("biswa")
+                      setSmShow(true),
+                        setDocModal(false),
+                        console.log("modal open"),
+                        setFieldValue(applicantInfoPersonal?.AppliedLandDetails[0] !== null ? applicantInfoPersonal?.AppliedLandDetails[0]?.biswa : null);
+                    }}
+                  ></ReportProblemIcon>
+                </th>
+                <th class="fw-normal py-0 border-top-0">
+                  <ReportProblemIcon
+                    style={{
+                      display: hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_BISWANSI_LAND_SCHEDULE") ? "block" : "none",
+                      color: fieldIconColors.biswansi
+                    }}
+                    onClick={() => {
+                      setLabelValue("NWL_APPLICANT_BISWANSI_LAND_SCHEDULE"),
+                        setOpennedModal("biswansi")
+                      setSmShow(true),
+                        setDocModal(false),
+                        console.log("modal open"),
+                        setFieldValue(applicantInfoPersonal?.AppliedLandDetails[0] !== null ? applicantInfoPersonal?.AppliedLandDetails[0]?.biswansi : null);
+                    }}
+                  ></ReportProblemIcon>
+                </th>
+                {applicantInfoPersonal?.AppliedLandDetails[0]?.consolidationType == "consolidated" &&
+                  <th class="fw-normal py-0 border-top-0">
+                    <ReportProblemIcon
+                      style={{
+
+                        display: hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_TOTAL_AREA_LAND_SCHEDULE") ? "block" : "none",
+                        color: fieldIconColors.consolidatedTotal
+                      }}
+                      onClick={() => {
+                        setLabelValue("NWL_APPLICANT_TOTAL_AREA_LAND_SCHEDULE"),
+                          setOpennedModal("consolidatedTotal")
+                        setSmShow(true),
+                          setDocModal(false),
+                          console.log("modal open"),
+                          setFieldValue(applicantInfoPersonal?.AppliedLandDetails[0] !== null ? applicantInfoPersonal?.AppliedLandDetails[0]?.consolidatedTotal : null);
+                      }}
+                    ></ReportProblemIcon>
+                  </th>
                 }
-                  </tr>
-                </thead>
-                <tbody>
-                  {
-                    applicantInfoPersonal?.AppliedLandDetails?.map((item, index) => (
+                {applicantInfoPersonal?.AppliedLandDetails[0]?.consolidationType == "non-consolidated" &&
+                  <th class="fw-normal py-0 border-top-0">
+                    <ReportProblemIcon
+                      style={{
 
-                      <tr key={index}>
-                        <td>
-                          <input type="text" className="form-control" title={item?.district?.label} placeholder={item?.district?.label} disabled />
-                        </td>
-                        <td>
-                          <input type="text" className="form-control" title={item?.developmentPlan?.label} placeholder={item?.developmentPlan?.label} disabled />
-                        </td>
-                        <td>
-                          <input type="text" className="form-control" placeholder={item?.potential} disabled />
-                        </td>
-                        <td>
-                          <input type="text" className="form-control" placeholder={item?.sector} disabled />
-                        </td>
-                        <td>
-                          <input type="text" className="form-control" title={item?.tehsil?.label} placeholder={item?.tehsil?.label} disabled />
-                        </td>
-                        <td>
-                          <input type="text" className="form-control" title={item?.revenueEstate?.label} placeholder={item?.revenueEstate?.label} disabled />
-                        </td>
-                        <td>
-                          <input type="text" className="form-control" placeholder={item?.hadbastNo} disabled />
-                        </td>
-                        <td>
-                          <input type="text" className="form-control" placeholder={item?.rectangleNo} disabled />
-                        </td>
-                        <td>
-                          <input type="text" className="form-control" placeholder={item?.khewats} disabled />
-                        </td>
-                        <td class="text-center">
-                          <input type="text" className="form-control" title={item?.landOwner} placeholder={item?.landOwner} disabled />
-                        </td>
-                        <td class="text-center">
-                          <input type="text" className="form-control" title={item?.typeLand?.label} placeholder={item?.typeLand?.label} disabled />
-                        </td>
-                        <td class="text-center">
-                          <input type="text" className="form-control" title={item?.isChange} placeholder="N/A" value={item?.isChange} disabled />
-                        </td>
-                        <td class="text-center">
-                          <input type="text" className="form-control" title={item?.editRectangleNo} placeholder="N/A" value={item?.editRectangleNo} disabled />
-                        </td>
-                        <td class="text-center">
-                          <input type="text" className="form-control" title={item?.editKhewats} placeholder={item?.editKhewats} disabled />
-                        </td>
-                        <td class="text-center">
-                          <input type="text" className="form-control" title={item?.landOwnerRegistry} placeholder={item?.landOwnerRegistry} disabled />
-                        </td>
-                        <td class="text-center">
-                          <input type="text" className="form-control" title={item?.collaboration} placeholder={item?.collaboration} disabled />
-                        </td>
-                        <td class="text-center">
-                          <input type="text" className="form-control" title={item?.developerCompany} placeholder={item?.developerCompany} disabled />
-                        </td>
-                        <td class="text-center">
-                          <input type="text" className="form-control" title={item?.agreementValidFrom} placeholder={item?.agreementValidFrom} disabled />
-                        </td>
-                        <td class="text-center">
-                          <input type="text" className="form-control" title={item?.agreementIrrevocialble} placeholder={item?.agreementIrrevocialble} disabled />
-                        </td>
-                        <td class="text-center">
-                          <input type="text" className="form-control" title={item?.authSignature} placeholder={item?.authSignature} disabled />
-                        </td>
-                        <td class="text-center">
-                          <input type="text" className="form-control" title={item?.nameAuthSign} placeholder={item?.nameAuthSign} disabled />
-                        </td>
-                        <td class="text-center">
-                          <input type="text" className="form-control" title={item?.registeringAuthority} placeholder={item?.registeringAuthority} disabled />
-                        </td>
-                        <td class="text-center">
+                        display: hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_TOTAL_AREA_NON_LAND_SCHEDULE") ? "block" : "none",
+                        color: fieldIconColors.nonConsolidatedTotal
+                      }}
+                      onClick={() => {
+                        setLabelValue("NWL_APPLICANT_TOTAL_AREA_NON_LAND_SCHEDULE"),
+                          setOpennedModal("nonConsolidatedTotal")
+                        setSmShow(true),
+                          setDocModal(false),
+                          console.log("modal open"),
+                          setFieldValue(applicantInfoPersonal?.AppliedLandDetails[0] !== null ? applicantInfoPersonal?.AppliedLandDetails[0]?.nonConsolidatedTotal : null);
+                      }}
+                    ></ReportProblemIcon>
+                  </th>
+                }
+              </tr>
+            </thead>
+            <tbody>
+              {
+                applicantInfoPersonal?.AppliedLandDetails?.map((item, index) => (
+
+                  <tr key={index}>
+                    <td>
+                      <p className="table-value">
+                      {item?.district?.label}
+                      </p>
+                      {/* <input type="text" className="form-control" title={item?.district?.label} placeholder={item?.district?.label} disabled /> */}
+                    </td>
+                    <td>
+                    <p className="table-value">
+                      {item?.developmentPlan?.label}
+                      </p>
+                      {/* <input type="text" className="form-control" title={item?.developmentPlan?.label} placeholder={item?.developmentPlan?.label} disabled /> */}
+                    </td>
+                    <td>
+                    <p className="table-value">
+                      {item?.potential}
+                      </p>
+                      {/* <input type="text" className="form-control" placeholder={item?.potential} disabled /> */}
+                    </td>
+                    <td>
+                    <p className="table-value">
+                      {item?.sector}
+                      </p>
+                      {/* <input type="text" className="form-control" placeholder={item?.sector} disabled /> */}
+                    </td>
+                    <td>
+                    <p className="table-value">
+                      {item?.tehsil?.label}
+                      </p>
+                      {/* <input type="text" className="form-control" title={item?.tehsil?.label} placeholder={item?.tehsil?.label} disabled /> */}
+                    </td>
+                    <td>
+                    <p className="table-value">
+                      {item?.revenueEstate?.label}
+                      </p>
+                      {/* <input type="text" className="form-control" title={item?.revenueEstate?.label} placeholder={item?.revenueEstate?.label} disabled /> */}
+                    </td>
+                    <td>
+                    <p className="table-value">
+                      {item?.hadbastNo}
+                      </p>
+                      {/* <input type="text" className="form-control" placeholder={item?.hadbastNo} disabled /> */}
+                    </td>
+                    <td>
+                    <p className="table-value">
+                      {item?.rectangleNo}
+                      </p>
+                      {/* <input type="text" className="form-control" placeholder={item?.rectangleNo} disabled /> */}
+                    </td>
+                    <td>
+                    <p className="table-value">
+                      {item?.khewats}
+                      </p>
+                      {/* <input type="text" className="form-control" placeholder={item?.khewats} disabled /> */}
+                    </td>
+                    <td class="text-center">
+                    <p className="table-value">
+                      {item?.landOwner}
+                      </p>
+                      {/* <input type="text" className="form-control" title={item?.landOwner} placeholder={item?.landOwner} disabled /> */}
+                    </td>
+                    <td class="text-center">
+                    <p className="table-value">
+                      {item?.typeLand?.label}
+                      </p>
+                      {/* <input type="text" className="form-control" title={item?.typeLand?.label} placeholder={item?.typeLand?.label} disabled /> */}
+                    </td>
+                    <td class="text-center">
+                    <p className="table-value">
+                      {item?.isChange}
+                      </p>
+                      {/* <input type="text" className="form-control" title={item?.isChange} placeholder="N/A" value={item?.isChange} disabled /> */}
+                    </td>
+                    <td class="text-center">
+                    <p className="table-value">
+                      {item?.editRectangleNo}
+                      </p>
+                      {/* <input type="text" className="form-control" title={item?.editRectangleNo} placeholder="N/A" value={item?.editRectangleNo} disabled /> */}
+                    </td>
+                    <td class="text-center">
+                    <p className="table-value">
+                      {item?.editKhewats}
+                      </p>
+                      {/* <input type="text" className="form-control" title={item?.editKhewats} placeholder={item?.editKhewats} disabled /> */}
+                    </td>
+                    <td class="text-center">
+                    <p className="table-value">
+                      {item?.landOwnerRegistry}
+                      </p>
+                      {/* <input type="text" className="form-control" title={item?.landOwnerRegistry} placeholder={item?.landOwnerRegistry} disabled /> */}
+                    </td>
+                    <td class="text-center">
+                    <p className="table-value">
+                      {item?.collaboration}
+                      </p>
+                      {/* <input type="text" className="form-control" title={item?.collaboration} placeholder={item?.collaboration} disabled /> */}
+                    </td>
+                    <td class="text-center">
+                    <p className="table-value">
+                      {item?.developerCompany}
+                      </p>
+                      {/* <input type="text" className="form-control" title={item?.developerCompany} placeholder={item?.developerCompany} disabled /> */}
+                    </td>
+                    <td class="text-center">
+                    <p className="table-value">
+                      {item?.agreementValidFrom}
+                      </p>
+                      {/* <input type="text" className="form-control" title={item?.agreementValidFrom} placeholder={item?.agreementValidFrom} disabled /> */}
+                    </td>
+                    <td class="text-center">
+                    <p className="table-value">
+                      {item?.agreementIrrevocialble}
+                      </p>
+                      {/* <input type="text" className="form-control" title={item?.agreementIrrevocialble} placeholder={item?.agreementIrrevocialble} disabled /> */}
+                    </td>
+                    <td class="text-center">
+                    <p className="table-value">
+                      {item?.authSignature}
+                      </p>
+                      {/* <input type="text" className="form-control" title={item?.authSignature} placeholder={item?.authSignature} disabled /> */}
+                    </td>
+                    <td class="text-center">
+                    <p className="table-value">
+                      {item?.nameAuthSign}
+                      </p>
+                      {/* <input type="text" className="form-control" title={item?.nameAuthSign} placeholder={item?.nameAuthSign} disabled /> */}
+                    </td>
+                    <td class="text-center">
+                    <p className="table-value">
+                      {item?.registeringAuthority}
+                      </p>
+                      {/* <input type="text" className="form-control" title={item?.registeringAuthority} placeholder={item?.registeringAuthority} disabled /> */}
+                    </td>
+                    <td class="text-center">
+
+                      {
+                        item?.registeringAuthorityDoc &&
+                        <Fragment>
                           <div className="btn btn-sm col-md-6">
 
                             <IconButton
@@ -1500,89 +1570,119 @@ display: hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_DATA_OF_REGI
                               <FileDownload color="primary" className="mx-1" />
                             </IconButton>
                           </div>
-                          {/* <input type="text" className="form-control" title={item?.registeringAuthorityDoc} placeholder={item?.registeringAuthorityDoc} disabled /> */}
-                        </td>
-                        <td class="text-center">
-                          <input type="text" className="form-control" title={item?.consolidationType} placeholder={item?.consolidationType} disabled />
-                        </td>
-                        <td class="text-center">
-                          {" "}
-                          <input type="text" className="form-control" title={item?.kanal} placeholder={item?.kanal} disabled />{" "}
-                        </td>
-                        <td class="text-center">
-                          <input type="text" className="form-control" title={item?.marla} placeholder={item?.marla} disabled />
-                        </td>
-                        <td class="text-center">
-                          <input type="text" className="form-control" title={item?.sarsai} placeholder={item?.sarsai} disabled />
-                        </td>
-                        <td class="text-center">
-                          <input type="text" className="form-control" title={item?.bigha} placeholder={item?.bigha} disabled />
-                        </td>
-                        <td class="text-center">
-                          <input type="text" className="form-control" title={item?.biswa} placeholder={item?.biswa} disabled />
-                        </td>
-                        <td class="text-center">
-                          <input type="text" className="form-control" title={item?.biswansi} placeholder={item?.biswansi} disabled />
-                        </td>
-                        {item?.consolidationType == "non-consolidated" &&
-                          <td class="text-center">
-                            <input type="text" className="form-control" title={item?.nonConsolidatedTotal} placeholder={item?.nonConsolidatedTotal} disabled />
-                          </td>
-                        }
-                        {item?.consolidationType == "consolidated" &&
-                          <td class="text-center">
-                            <input type="text" className="form-control" title={item?.consolidatedTotal} placeholder={item?.consolidatedTotal} disabled />
-                          </td>
-                        }
-                        <td class="text-center">
-                          {/* <th class="fw-normal py-0 border-top-0"> */}
-                          <ReportProblemIcon
-                            style={{
-                              display: hideRemarksPatwari && showReportProblemIcon("Total Area (in acres)") ? "block" : "none",
 
-                              color: fieldIconColors.district
-                            }}
-                            onClick={() => {
-                              setLabelValue("Land schedule Table"),
-                                setOpennedModal("district")
-                              setSmShow(true),
-                                setDocModal(false),
-                                console.log("modal open"),
-                                setFieldValue(applicantInfoPersonal !== null ? applicantInfoPersonal?.district : null);
-                              // setFieldValue(applicantInfoPersonal?.AppliedLandDetails[0] !== null ? applicantInfoPersonal?.AppliedLandDetails : null);
-                            }}
-                          ></ReportProblemIcon>
-                          {/* </th> */}
-                        </td>
-                      </tr>
-                    ))
-                  }
-                </tbody>
-              </table>
+                        </Fragment>
+                      }
+                      {/* <input type="text" className="form-control" title={item?.registeringAuthorityDoc} placeholder={item?.registeringAuthorityDoc} disabled /> */}
+                    </td>
+                    <td class="text-center">
+                    <p className="table-value">
+                      {item?.consolidationType}
+                      </p>
+                      {/* <input type="text" className="form-control" title={item?.consolidationType} placeholder={item?.consolidationType} disabled /> */}
+                    </td>
+                    <td class="text-center">
+                      {" "}
+                      <p className="table-value">
+                      {item?.kanal}
+                      </p>
+                      {/* <input type="text" className="form-control" title={item?.kanal} placeholder={item?.kanal} disabled />{" "} */}
+                    </td>
+                    <td class="text-center">
+                    <p className="table-value">
+                      {item?.marla}
+                      </p>
+                      {/* <input type="text" className="form-control" title={item?.marla} placeholder={item?.marla} disabled /> */}
+                    </td>
+                    <td class="text-center">
+                    <p className="table-value">
+                      {item?.sarsai}
+                      </p>
+                      {/* <input type="text" className="form-control" title={item?.sarsai} placeholder={item?.sarsai} disabled /> */}
+                    </td>
+                    <td class="text-center">
+                    <p className="table-value">
+                      {item?.bigha}
+                      </p>
+                      {/* <input type="text" className="form-control" title={item?.bigha} placeholder={item?.bigha} disabled /> */}
+                    </td>
+                    <td class="text-center">
+                    <p className="table-value">
+                      {item?.biswa}
+                      </p>
+                      {/* <input type="text" className="form-control" title={item?.biswa} placeholder={item?.biswa} disabled /> */}
+                    </td>
+                    <td class="text-center">
+                    <p className="table-value">
+                      {item?.biswansi}
+                      </p>
+                      {/* <input type="text" className="form-control" title={item?.biswansi} placeholder={item?.biswansi} disabled /> */}
+                    </td>
+                    {item?.consolidationType == "non-consolidated" &&
+                      <td class="text-center">
+                        <p className="table-value">
+                        {item?.nonConsolidatedTotal}
+                      </p>
+                        {/* <input type="text" className="form-control" title={item?.nonConsolidatedTotal} placeholder={item?.nonConsolidatedTotal} disabled /> */}
+                      </td>
+                    }
+                    {item?.consolidationType == "consolidated" &&
+                      <td class="text-center">
+                        <p className="table-value">
+                        {item?.consolidatedTotal}
+                      </p>
+                        {/* <input type="text" className="form-control" title={item?.consolidatedTotal} placeholder={item?.consolidatedTotal} disabled /> */}
+                      </td>
+                    }
+                    <td class="text-center">
+                      {/* <th class="fw-normal py-0 border-top-0"> */}
+                      <ReportProblemIcon
+                        style={{
+                          display: hideRemarksPatwari && showReportProblemIcon("Total Area (in acres)") ? "block" : "none",
 
-            </div>
-            {/* </div>
+                          color: fieldIconColors.district
+                        }}
+                        onClick={() => {
+                          setLabelValue("Land schedule Table"),
+                            setOpennedModal("district")
+                          setSmShow(true),
+                            setDocModal(false),
+                            console.log("modal open"),
+                            setFieldValue(applicantInfoPersonal !== null ? applicantInfoPersonal?.district : null);
+                          // setFieldValue(applicantInfoPersonal?.AppliedLandDetails[0] !== null ? applicantInfoPersonal?.AppliedLandDetails : null);
+                        }}
+                      ></ReportProblemIcon>
+                      {/* </th> */}
+                    </td>
+                  </tr>
+                ))
+              }
+            </tbody>
+          </table>
+
+        </div>
+        {/* </div>
       </Collapse> */}
-            {/* <div style={{ position: "relative", marginBottom: 40 }}>
+        {/* <div style={{ position: "relative", marginBottom: 40 }}>
               <Button onClick={() => props.passUncheckedList({ data: uncheckedValue, purpose: purpose })}>Submit</Button>
             </div> */}
 
-<div class="row">
-              <div class="col-sm-6 text-left">
-               
-              </div>
-              <div class="col-sm-6 text-right">
-              {`${t("NWL_APPLICANT_TOTAL_AREA_LAND_SCHEDULE")}`}  : {applicantInfoPersonal?.totalArea}
-              </div>
-            </div>
-            {/* <div className="row" style={{ margin: 10 , textAlign:""}}>
+        <div class="row">
+          <div class="col-sm-6 text-left">
+
+          </div>
+          <div class="col-sm-6 text-right">
+            {`${t("NWL_APPLICANT_TOTAL_AREA_LAND_SCHEDULE")}`}  : {applicantInfoPersonal?.totalArea}
+          </div>
+        </div>
+        {/* <div className="row" style={{ margin: 10 , textAlign:""}}>
             {`${t("NWL_APPLICANT_TOTAL_AREA_LAND_SCHEDULE")}`}  : {applicantInfoPersonal?.totalArea}
             </div> */}
 
-          </Form.Group>
+      </Form.Group>
 
 
-          {/* <div>
+      {/* <div>
             <Developerinfo
               developerInfoRef={developerInfoRef}
               purpose={apiResponse ? apiResponse?.ApplicantPurpose?.purpose : null}
@@ -1598,7 +1698,7 @@ display: hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_DATA_OF_REGI
           
           </div> */}
 
-        {/* </div>
+      {/* </div>
       </Collapse> */}
       {showToastError && (
         <CusToaster

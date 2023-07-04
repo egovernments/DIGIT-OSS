@@ -127,7 +127,7 @@ function BaseTableGrid(props) {
       show={smShow}
       
       centered
-      style={{ position: "fixed", left: "50%", top: "50%", transform: "translate(-50% , -50%)" , height:700 ,marginTop: "50px"  }}
+      style={{ position: "fixed", left: "50%", top: "50%", transform: "translate(-50% , -50%)" , height:600 ,marginTop: "50px", zIndex: "10000"  }}
       onHide={props.onClose}
     >
       <Modal.Header closeButton in={open14} style={{ textAlign: "center" ,backgroundColor: "#FFD954" , maxWidth:"100%", fontSize: "x-large",paddingLeft: "16%" }}>
@@ -138,7 +138,7 @@ function BaseTableGrid(props) {
       
       
 
-      <Modal.Body>
+      <Modal.Body >
 
       <div style={{ position: "relative", width: "100%", display: "flex", margin: 2 }}>
      <Row style={{  marginRight:40, marginLeft:20}}>
