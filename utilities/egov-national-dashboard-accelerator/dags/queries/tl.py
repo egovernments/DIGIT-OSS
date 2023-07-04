@@ -18,7 +18,7 @@ tl_license_issued_by_boundary = {'path': 'tlindex-v1-enriched/_search',
           "must_not": [
             {{
               "term": {{
-                "Data.tradelicense.tenantId.keyword": "pb.testing"
+                "Data.tradelicense.tenantId.keyword": "uk.testing"
               }}
             }}
           ],
@@ -90,7 +90,7 @@ tl_collection_adhoc_penalty = {
       "must_not": [
         {{
           "term": {{
-            "domainobject.tenantId.keyword": "pb.testing"
+            "domainobject.tenantId.keyword": "uk.testing"
           }}
         }}, {{
               "terms": {{
@@ -193,7 +193,7 @@ tl_collection_adhoc_rebate = {'path': 'dss-collection_v2/_search',
       "must_not": [
         {{
           "term": {{
-            "domainobject.tenantId.keyword": "pb.testing"
+            "domainobject.tenantId.keyword": "uk.testing"
           }}
         }}, {{
               "terms": {{
@@ -302,7 +302,7 @@ tl_collection_tax = {'path': 'dss-collection_v2/_search',
       "must_not": [
         {{
           "term": {{
-            "domainobject.tenantId.keyword": "pb.testing"
+            "domainobject.tenantId.keyword": "uk.testing"
           }}
         }}, {{
               "terms": {{
@@ -411,7 +411,7 @@ tl_todays_trade_licenses = {'path': 'tlindex-v1-enriched/_search',
           "must_not": [
             {{
               "term": {{
-                "Data.tradelicense.tenantId.keyword": "pb.testing"
+                "Data.tradelicense.tenantId.keyword": "uk.testing"
               }}
             }}
           ],
@@ -492,7 +492,7 @@ tl_total_transactions = {'path': 'dss-collection_v2/_search',
           "must_not": [
             {{
               "term": {{
-                "dataObject.tenantId.keyword": "pb.testing"
+                "dataObject.tenantId.keyword": "uk.testing"
               }}
             }},
             {{
@@ -586,7 +586,7 @@ tl_applications_moved_today = {'path': 'tlindex-v1-enriched/_search',
           "must_not": [
             {{
               "term": {{
-                "Data.tradelicense.tenantId.keyword": "pb.testing"
+                "Data.tradelicense.tenantId.keyword": "uk.testing"
               }}
             }}
           ],
@@ -679,7 +679,7 @@ tl_collections_by_trade_category = {'path': 'dss-collection_v2/_search',
           "must_not": [
             {{
               "term": {{
-                "dataObject.tenantId.keyword": "pb.testing"
+                "dataObject.tenantId.keyword": "uk.testing"
               }}
             }},
             {{
@@ -777,7 +777,7 @@ tl_license_issued_within_sla = {'path': 'tlindex-v1-enriched/_search',
           "must_not": [
             {{
               "term": {{
-               "Data.tradelicense.tenantId.keyword": "pb.testing"
+               "Data.tradelicense.tenantId.keyword": "uk.testing"
               }}
             }}
           ],
@@ -887,7 +887,7 @@ tl_todays_collection_by_trade_type = {'path': 'dss-collection_v2/_search',
       "must_not": [
         {{
           "term": {{
-            "dataObject.tenantId.keyword": "pb.testing"
+            "dataObject.tenantId.keyword": "uk.testing"
           }}
         }},
         {{
@@ -982,7 +982,7 @@ def empty_tl_payload(region, ulb, ward, date):
         "ward": ward,
         "ulb": ulb,
         "region": region,
-        "state": "UTTARAKHAND",
+        "state": "Uttarakhand",
         "metrics": {
             "transactions": 0,
             "todaysApplications": 0,
