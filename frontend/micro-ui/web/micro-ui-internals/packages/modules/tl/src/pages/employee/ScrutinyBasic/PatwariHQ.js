@@ -127,7 +127,7 @@ const DataGridDemo = (props) => {
 
                 }
                 {
-                    element?.isApproved === "Conditional" && (
+                    element?.isApproved === "Order With Conditions" && (
                         <td
                             style={{ backgroundColor: "#2874A6" }}
                         >
