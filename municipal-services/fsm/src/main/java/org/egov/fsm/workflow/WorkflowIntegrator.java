@@ -175,23 +175,27 @@ public class WorkflowIntegrator {
 	public Double getAdditionalDetails(Object additionalDetails) {
 
 		ObjectMapper mapper = new ObjectMapper();
-		Object additionalDetailsObject = new Object();
+		Map<String, Object> fsmAdditionalDetails = new HashMap<>();
 
-		if (additionalDetails instanceof ObjectNode)
-			additionalDetailsObject = mapper.convertValue(additionalDetails, Object.class);
-		else
-			additionalDetailsObject = additionalDetails;
-
-		Map<String, String> fsmAdditionalDetails = additionalDetailsObject != null
-				? (Map<String, String>) additionalDetailsObject
-				: new HashMap<>();
+		if (additionalDetails instanceof ObjectNode) {
+			fsmAdditionalDetails = mapper.convertValue(additionalDetails, Map.class);
+		} else if (additionalDetails instanceof Map) {
+			fsmAdditionalDetails = (Map<String, Object>) additionalDetails;
+		}
 
 		Double tripAmount = Double.valueOf(0.0);
 
-		if (fsmAdditionalDetails != null && fsmAdditionalDetails.get("tripAmount") != null)
-			tripAmount = Double.valueOf((String) fsmAdditionalDetails.get("tripAmount"));
+		if (fsmAdditionalDetails != null && fsmAdditionalDetails.get("tripAmount") != null) {
+			Object tripAmountObj = fsmAdditionalDetails.get("tripAmount");
+			if (tripAmountObj instanceof String) {
+				tripAmount = Double.valueOf((String) tripAmountObj);
+			} else if (tripAmountObj instanceof Integer) {
+				tripAmount = Double.valueOf((Integer) tripAmountObj);
+			}
+		}
 
 		return tripAmount;
 	}
+
 
 }
