@@ -7,10 +7,10 @@ import { DigitUI } from "@egovernments/digit-ui-module-core";
 import { initDSSComponents } from "@egovernments/digit-ui-module-dss";
 import { initEngagementComponents } from "@egovernments/digit-ui-module-engagement";
 import { initHRMSComponents } from "@egovernments/digit-ui-module-hrms";
-import { initUtilitiesComponents } from  "@egovernments/digit-ui-module-utilities";
-import { initSampleComponents } from  "@egovernments/digit-ui-module-sample";
+import { initUtilitiesComponents } from "@egovernments/digit-ui-module-utilities";
+import { initSampleComponents } from "@egovernments/digit-ui-module-sample";
 
-import {initMuktaCustomisations} from "@egovernments/digit-ui-customisation-mukta";
+import { initMuktaCustomisations } from "@egovernments/digit-ui-customisation-mukta";
 
 import "@egovernments/digit-ui-custom-css/example/index.css";
 
@@ -19,15 +19,14 @@ import { UICustomizations } from "./UICustomizations";
 
 var Digit = window.Digit || {};
 
-
-const enabledModules = [ 
-   "HRMS",
-//  "Engagement", "NDSS","QuickPayLinks", "Payment",
+const enabledModules = [
+  "HRMS",
+  //  "Engagement", "NDSS","QuickPayLinks", "Payment",
   "Utilities",
-//added to check fsm
-// "FSM"
-"Mukta",
-"Sample",
+  //added to check fsm
+  // "FSM"
+  "Mukta",
+  "Sample",
 ];
 
 const initTokens = (stateCode) => {
@@ -75,15 +74,16 @@ const initDigitUI = () => {
 
   window.Digit.Customizations = {
     PGR: pgrCustomizations,
-    commonUiConfig: UICustomizations
-
+    commonUiConfig: UICustomizations,
   };
 
-  const stateCode = window?.globalConfigs?.getConfig("STATE_LEVEL_TENANT_ID") || "pb";
+  const stateCode = window?.globalConfigs?.getConfig("STATE_LEVEL_TENANT_ID") || "pg";
   initTokens(stateCode);
   initMuktaCustomisations();
-
-  ReactDOM.render(<DigitUI stateCode={stateCode} enabledModules={enabledModules} moduleReducers={moduleReducers} />, document.getElementById("root"));
+  ReactDOM.render(
+    <DigitUI stateCode={stateCode} enabledModules={enabledModules} moduleReducers={moduleReducers} defaultLanding="employee" />,
+    document.getElementById("root")
+  );
 };
 
 initLibraries().then(() => {
