@@ -65,6 +65,7 @@ with
 # Changelog
 
 ```bash
+1.5.39 Show the Toast when password changed and need to logout from profile page
 1.5.38 enabled the admin mode for employee login which can be accessed through route employee/user/login?mode=admin and updated to use formcomposerv2
 1.5.37 fixed hiding upload drawer icons.
 1.5.36 fixed after clicking on change password and then try to save profile without changing password showing error.

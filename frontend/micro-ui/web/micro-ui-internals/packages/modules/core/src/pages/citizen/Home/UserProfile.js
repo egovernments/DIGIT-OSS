@@ -257,6 +257,7 @@ const UserProfile = ({ stateCode, userType, cityDetails }) => {
             const { responseInfo: changePasswordResponseInfo } = res;
             if (changePasswordResponseInfo?.status && changePasswordResponseInfo.status === "200") {
               showToast("success", t("CORE_COMMON_PROFILE_UPDATE_SUCCESS_WITH_PASSWORD"), 5000);
+              setTimeout(() => Digit.UserService.logout(), 2000);
             } else {
               throw "";
             }
