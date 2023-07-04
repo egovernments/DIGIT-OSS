@@ -1,6 +1,6 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { Fragment, useEffect, useRef, useState } from 'react';
 // import AddPost from '../Material/TextEditor';
-import Collapse from "react-bootstrap/Collapse";  
+import Collapse from "react-bootstrap/Collapse";
 import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
 import { getDocShareholding } from '../ScrutinyBasic/ScrutinyDevelopment/docview.helper';
@@ -9,60 +9,59 @@ import VisibilityIcon from "@mui/icons-material/Visibility";
 import FileDownloadIcon from "@mui/icons-material/FileDownload";
 import { convertEpochToDate, convertEpochToDateDMY } from '../../../utils';
 
-function ApplicantInfo (prop)
-{
+function ApplicantInfo(prop) {
 
- const additionalDocref=useRef()
+  const additionalDocref = useRef()
   const additionalDocResponData = prop.additionalDocRespon;
-  const[formValues, setFormValues]= useState([{name:'', email:'', address:''}]);
-  const[msg, setMsg]= useState('');
+  const [formValues, setFormValues] = useState([{ name: '', email: '', address: '' }]);
+  const [msg, setMsg] = useState('');
   const dateTime = new Date();
-  const[newDocAdd, setNewDocAdd]= useState('');
+  const [newDocAdd, setNewDocAdd] = useState('');
   const [open, setOpen] = useState(false);
 
-  const handleInputChange=(index, event)=>{
-    let data= [...formValues];
-    data[index][event.target.name]= event.target.value;
+  const handleInputChange = (index, event) => {
+    let data = [...formValues];
+    data[index][event.target.name] = event.target.value;
     setFormValues(data);
   }
-const addFields=()=>{
-    let addField= {name:'', email:'', address:''};
+  const addFields = () => {
+    let addField = { name: '', email: '', address: '' };
     setFormValues([...formValues, addField])
-}
+  }
 
-const removeFields=(index)=>{
- let data= [...formValues];
- data.splice(index,1);
- setFormValues(data);
-}
+  const removeFields = (index) => {
+    let data = [...formValues];
+    data.splice(index, 1);
+    setFormValues(data);
+  }
 
-const handleSubmit=(e)=>{
+  const handleSubmit = (e) => {
     e.preventDefault();
     console.log(formValues);
     // axios.post("", formValues);
     setMsg("Data Saved Successfully");
 
-}
-useEffect(() => {
-if(additionalDocResponData?.AdditionalDocumentReport?.length){
-   additionalDocref.current.classList.add("blinkComponentScrutiny")
-}
-},[additionalDocResponData])
+  }
+  useEffect(() => {
+    if (additionalDocResponData?.AdditionalDocumentReport?.length) {
+      additionalDocref.current.classList.add("blinkComponentScrutiny")
+    }
+  }, [additionalDocResponData])
 
-const handleDOc = () =>{
-  additionalDocref.current.classList.remove("blinkComponentScrutiny")
-}
+  const handleDOc = () => {
+    additionalDocref.current.classList.remove("blinkComponentScrutiny")
+  }
 
-console.log("additionalDocResponData" , additionalDocResponData);
+  console.log("additionalDocResponData", additionalDocResponData);
 
 
-    return(
-        <React.Fragment>
-          
-            <div
+  return (
+    <React.Fragment>
+
+      <div
         className="collapse-header"
         ref={additionalDocref}
-        onClick={() => {handleDOc();setOpen(!open)}}
+        onClick={() => { handleDOc(); setOpen(!open) }}
         aria-controls="example-collapse-text"
         aria-expanded={open}
         style={{
@@ -75,96 +74,101 @@ console.log("additionalDocResponData" , additionalDocResponData);
           color: "#817f7f",
           justifyContent: "space-between",
           alignContent: "center",
-         }}
-         
+        }}
+
       >
         {/* <span style={{ color: "#817f7f" }} className="">
           AdditionalDocument
         </span> */}
         <span style={{ color: "#817f7f", fontSize: 14 }} className="">
-              - Additional Document
-            </span>
+          - Additional Document
+        </span>
         {open ? <RemoveIcon></RemoveIcon> : <AddIcon></AddIcon>}
       </div>
 
       <Collapse in={open}>
         <div id="example-collapse-text">
-        {/* <div className="container">
+          {/* <div className="container">
             <div className="row"> */}
-                {/* <div className="col-md-12">                        */}
-                    <div className="col-md-12">
-                    <h5 className='mt-3 mb-3' style={{textAlign: "center"}}><b>AdditionalDocument</b></h5>                       
-{/*                     
+          {/* <div className="col-md-12">                        */}
+          <div className="col-md-12">
+            <h5 className='mt-3 mb-3' style={{ textAlign: "center" }}><b>AdditionalDocument</b></h5>
+            {/*                     
                     {additionalDocResponData?.AdditionalDocumentReport?.map((item) => ( */}
-                      <table className="table table-bordered">
-                      <thead>                        
-                      <tr>                       
-                      <th>Sr. No</th>
-                      <th>Application Section</th>
-                      <th>Document Description</th>
-                      <th>
-                       Download Document
-                      </th>
-                      
-                  
-                      <th>Date</th>
-                      </tr>
-                      </thead>
-                      
-                     <tbody>
-                        {additionalDocResponData?.AdditionalDocumentReport?.[0]?.applicantInfo?.map( (input, index)=>(
-                            <tr key={index}>                        
+            <table className="table table-bordered">
+              <thead>
+                <tr>
+                  <th>Sr. No</th>
+                  <th>Application Section</th>
+                  <th>Document Description</th>
+                  <th>
+                    Download Document
+                  </th>
+
+
+                  <th>Date</th>
+                </tr>
+              </thead>
+
+              <tbody>
+                {additionalDocResponData?.AdditionalDocumentReport?.[0]?.applicantInfo?.map((input, index) => (
+                  <tr key={index}>
                     <td>{index + 1}</td>
                     <td>
-                    
-                       {input?.applicationSection}
-                         </td>
-                    <td>
-                    
-                       {input?.documentName}
-                         </td>
-                    <td>
-                  
-                        {/* {input?.document} */}
-                        <div className="row">
-                                      <div className="btn btn-sm col-md-4">
-                                        <IconButton onClick={() => getDocShareholding(input?.document)}>
-                                          <VisibilityIcon color="info" className="icon" />
-                                        </IconButton>
-                                      </div>
-                                      <div className="btn btn-sm col-md-4">
-                                        <IconButton onClick={() => getDocShareholding(input?.document)}>
-                                          <FileDownloadIcon color="info" className="icon" />
-                                        </IconButton>
-                                      </div>
-                                    </div>
-                        </td>
-                    <td>
-        
-                        {/* {input?.Date} */}
-                      {convertEpochToDateDMY(input?.date)} 
-                      {/* {convertEpochToDate(input?.date)} */}
-                  {/* <p>{convertEpochToDate(input?.date)}
-                  {convertEpochToDate(input?.date)}</p> */}
-                        </td>
 
-                    </tr> 
-                         ) )
-                        }   
-                      </tbody> 
-                               
-                    </table>
-{/* )) }                           */}
-                                          
-                       
-                
-                </div>
-            
-       
-                 </div>
+                      {input?.applicationSection}
+                    </td>
+                    <td>
+
+                      {input?.documentName}
+                    </td>
+                    <td>
+
+                      {/* {input?.document} */}
+                      <div className="row">
+                        {
+                          input?.document &&
+                          <Fragment>
+                            <div className="btn btn-sm col-md-4">
+                              <IconButton onClick={() => getDocShareholding(input?.document)}>
+                                <VisibilityIcon color="info" className="icon" />
+                              </IconButton>
+                            </div>
+                            <div className="btn btn-sm col-md-4">
+                              <IconButton onClick={() => getDocShareholding(input?.document)}>
+                                <FileDownloadIcon color="info" className="icon" />
+                              </IconButton>
+                            </div>
+                          </Fragment>
+                        }
+                      </div>
+                    </td>
+                    <td>
+
+                      {/* {input?.Date} */}
+                      {convertEpochToDateDMY(input?.date)}
+                      {/* {convertEpochToDate(input?.date)} */}
+                      {/* <p>{convertEpochToDate(input?.date)}
+                  {convertEpochToDate(input?.date)}</p> */}
+                    </td>
+
+                  </tr>
+                ))
+                }
+              </tbody>
+
+            </table>
+            {/* )) }                           */}
+
+
+
+          </div>
+
+
+        </div>
       </Collapse>
 
-        </React.Fragment>
-    );
+    </React.Fragment>
+  );
 }
 export default ApplicantInfo;
