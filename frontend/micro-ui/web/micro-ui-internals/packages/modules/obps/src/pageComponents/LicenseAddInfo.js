@@ -47,7 +47,7 @@ import { convertEpochToDate } from "../utils/index";
 import Spinner from "../components/Loader/index";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Checkbox from "@mui/material/Checkbox";
-
+import moment from "moment";
 import { styled } from "@mui/material/styles";
 import Paper from "@mui/material/Paper";
 import Table from "@mui/material/Table";
@@ -753,6 +753,7 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
         }
         setCompanyName(Resp.data.companyName);
         setIncorporation(Resp.data.incorporationDate);
+        console.log("data",Resp.data.incorporationDate)
         setUserEmailInd(Resp.data.email);
         //console.log(Resp.data.Email)
         setRegistered(Resp.data.registeredAddress);
@@ -1647,9 +1648,9 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
                             </label>
                             <input
                               type="date"
-                              date={incorporationDate}
-                              value={incorporationDate}
-                              placeholder={incorporationDate}
+                              date={moment(Date(incorporationDate)).format("YYYY-MM-DD")}
+                              value={moment(Date(incorporationDate)).format("YYYY-MM-DD")}
+                              placeholder={moment(Date(incorporationDate)).format("YYYY-MM-DD")}
                               onChange={(e) => setIncorporation(e.target.value)}
                               className="form-control"
                               disabled={showDevTypeFields === "Company"}

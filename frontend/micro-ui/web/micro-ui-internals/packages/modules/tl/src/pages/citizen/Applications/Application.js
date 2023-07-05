@@ -228,7 +228,7 @@ const MyApplications = ({ view }) => {
         </div> */}
         <div className="col col-4 mt-3">
           <h6>
-            Search
+            
             <input
               type="text"
               className="form-control"
