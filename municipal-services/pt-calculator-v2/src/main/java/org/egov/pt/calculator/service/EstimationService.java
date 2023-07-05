@@ -1219,7 +1219,9 @@ public class EstimationService {
 
 	public Map<String, Object> getApplicableMasterData(List<Object> masterList, String usage,
 			String reasonForTransfer) {
-
+		log.info("masterList:: ",masterList );
+		log.info("usage:: ",usage );
+		log.info("reasonForTransfer:: ",reasonForTransfer );
 		Map<String, Object> objToBeReturned = null;
 		Map<String, Object> convertedMasterList = null;
 
@@ -1229,7 +1231,6 @@ public class EstimationService {
 
 			convertedMasterList = objMap;
 			}
-
 		Map<String, Object> usageMap = (Map<String, Object>) convertedMasterList.get(usage);
 		List<Object> reasonForTransferList = (List<Object>) usageMap.get(reasonForTransfer);
 
