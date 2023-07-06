@@ -5,7 +5,7 @@ import { DSSService } from "../../services/elements/DSS";
 const getRequest = (type, code, requestDate, filters, moduleLevel = "", addlFilter, indexKeyForEmptyModule) => {
   let newFilter = { ...{ ...filters, ...addlFilter } };
   let updatedFilter = Object.keys(newFilter)
-    .filter((ele) => newFilter[ele].length > 0)
+    .filter((ele) => newFilter[ele]?.length > 0)
     .reduce((acc, curr) => {
       acc[curr] = newFilter[curr];
       return acc;
@@ -16,7 +16,7 @@ const getRequest = (type, code, requestDate, filters, moduleLevel = "", addlFilt
       visualizationCode: code,
       queryType: "",
       filters: updatedFilter,
-      moduleLevel: indexKeyForEmptyModule?.includes(code)? "" : moduleLevel,
+      moduleLevel: indexKeyForEmptyModule?.includes(code) ? "" : moduleLevel,
       aggregationFactors: null,
       requestDate,
     },
@@ -38,12 +38,8 @@ const defaultSelect = (data) => {
 
 const useGetChart = (args) => {
   const { key, type, tenantId, requestDate, filters, moduleLevel, addlFilter } = args;
-  const indexKeyForEmptyModule = [
-    "nssPtCitizenFeedbackScore",
-    "nssPtCitizenServiceDeliveryIndex",
-    "sdssPtCitizenFeedbackScore",
-  ];
-  return useQuery(
+  const indexKeyForEmptyModule = ["nssPtCitizenFeedbackScore", "nssPtCitizenServiceDeliveryIndex", "sdssPtCitizenFeedbackScore"];
+  const results = useQuery(
     [args],
     () =>
       DSSService.getCharts({
@@ -56,9 +52,10 @@ const useGetChart = (args) => {
       select: defaultSelect,
       refetchOnMount: true,
       retry: false,
-      refetchOnWindowFocus: false
+      refetchOnWindowFocus: false,
     }
   );
+  return results;
 };
 
 export default useGetChart;
