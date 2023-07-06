@@ -148,7 +148,7 @@ const businessService = applicationimp?.businessService
       onHide={props.onClose}
     >
        <form onSubmit={handleSubmit(submitForm)}>
-      <Modal.Header closeButton>
+      <Modal.Header closeButton style={{ textAlign: "center" ,backgroundColor: "#FFD954" , maxWidth:"100%", fontSize: "x-large",paddingLeft: "16%" }}>
         <Modal.Title id="example-modal-sizes-title-sm">
           Add Compliance
         </Modal.Title>

@@ -1258,7 +1258,7 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
                           <tr>
                             <th>Sr. No</th>
                             <th>Name</th>
-                            <th>Designition</th>
+                            <th>Designation</th>
                             <th>Aadhar Number</th>
                             <th>Pan Number</th>
                             <th>Date of Birth (DOB)</th>
