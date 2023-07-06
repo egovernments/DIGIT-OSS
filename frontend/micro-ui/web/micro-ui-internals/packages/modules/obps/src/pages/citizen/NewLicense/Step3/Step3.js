@@ -599,6 +599,9 @@ const LandScheduleForm = (props) => {
                                 </h2>
                               </label>
                               <input type="text" {...register("specify")} className="form-control" pattern="[A-Za-z]+" />
+                              <h3 className="error-message" style={{ color: "red" }}>
+                              {errors?.specify && errors?.specify?.message}
+                            </h3>
                             </div>
                             <div className="col col-lg-4 col-md-6 col-sm-6 mb-2">
                               <h2>
@@ -2503,6 +2506,9 @@ const LandScheduleForm = (props) => {
                               </h2>
                             </label>
                             <input type="text" className="form-control" {...register("roadRemark")} />
+                            <h3 className="error-message" style={{ color: "red" }}>
+                              {errors?.roadRemark && errors?.roadRemark?.message}
+                            </h3>
                           </div>
                         </div>
                       )}
@@ -2556,6 +2562,9 @@ const LandScheduleForm = (props) => {
                               </h2>
                             </label>
                             <input type="text" className="form-control" {...register("utilityRemark")} />
+                            <h3 className="error-message" style={{ color: "red" }}>
+                              {errors?.utilityRemark && errors?.utilityRemark?.message}
+                            </h3>
                           </div>
                         </div>
                       )}
@@ -2620,6 +2629,9 @@ const LandScheduleForm = (props) => {
                               </h2>
                             </label>
                             <input type="text" className="form-control" {...register("othersLandFallRemark")} />
+                            <h3 className="error-message" style={{ color: "red" }}>
+                              {errors?.othersLandFallRemark && errors?.othersLandFallRemark?.message}
+                            </h3>
                           </div>
                         </div>
                       )}

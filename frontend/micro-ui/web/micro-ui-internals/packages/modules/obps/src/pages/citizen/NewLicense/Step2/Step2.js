@@ -22,6 +22,7 @@ import CusToaster from "../../../../components/Toaster";
 import InfoIcon from "@mui/icons-material/Info";
 import Tooltip from "@mui/material/Tooltip";
 import { useTranslation } from "react-i18next";
+import { getMaxNorms, getMinimumNorms } from "./validation.helper";
 
 const applicationType = [
   { label: "New Licence", value: "newLicence" },
@@ -595,6 +596,7 @@ const ApllicantPuropseForm = (props) => {
       return { value: data?.purposeCode, label: data?.name };
     });
     setPurposeOptions({ data: purpose, isLoading: false });
+    console.log("logger12345",purpose);
   }, [PurposeType]);
 
   useEffect(() => {
@@ -2119,12 +2121,16 @@ const ApllicantPuropseForm = (props) => {
                         </b>
                         &nbsp;&nbsp;&nbsp;&nbsp;
                         <label htmlFor="nonConsolidationTypekacha">
-                          <input {...register("nonConsolidationType")} type="radio" value="kachha" id="nonConsolidationTypekacha" />
+                          <input {...register("nonConsolidationType",{
+                              required: " Please Select Non Consolidation Type"
+                            })} type="radio" value="kachha" id="nonConsolidationTypekacha" />
                           &nbsp; Kachha &nbsp;&nbsp;
                         </label>
                         <label htmlFor="nonConsolidatedTypepucha">
                           <input
-                            {...register("nonConsolidationType")}
+                            {...register("nonConsolidationType",{
+                              required: " Please Select Non Consolidation Type"
+                            })}
                             type="radio"
                             value="pucka"
                             id="nonConsolidatedTypepucha"
@@ -2138,6 +2144,11 @@ const ApllicantPuropseForm = (props) => {
                         </label>
                       </h2>
                     </div>
+
+                    <h3 className="error-message" style={{ color: "red" }}>
+                    {errors?.nonConsolidationType && errors?.nonConsolidationType?.message}
+                  </h3>
+
                   </div>
                 )}
 
@@ -2196,6 +2207,14 @@ const ApllicantPuropseForm = (props) => {
                                   value: 99,
                                   message: "Maximum length exceeded",
                                 },
+                                min: {
+                                  value: getMinimumNorms(watch("purpose").label,watch("potential").label),
+                                  message: "I should be "+getMinimumNorms(watch("purpose").label,watch("potential").label)+" acres minimum"
+                                },
+                                max: {
+                                  value: getMaxNorms(watch("purpose").label,watch("potential").label),
+                                  message: "I should be "+getMinimumNorms(watch("purpose").label,watch("potential").label)+" acres maximum"
+                                },
                                 validate: {
                                   required: (value) => {
                                     if (!value && watch("consolidationType") == "consolidated") return "This field is required";
@@ -2218,6 +2237,14 @@ const ApllicantPuropseForm = (props) => {
                                   value: 99,
                                   message: "Maximum length exceeded",
                                 },
+                                min: {
+                                  value: getMinimumNorms(watch("purpose").label,watch("potential").label),
+                                  message: "I should be "+getMinimumNorms(watch("purpose").label,watch("potential").label)+" acres minimum"
+                                },
+                                max: {
+                                  value: getMaxNorms(watch("purpose").label,watch("potential").label),
+                                  message: "I should be "+getMinimumNorms(watch("purpose").label,watch("potential").label)+" acres maximum"
+                                },
                                 validate: {
                                   required: (value) => {
                                     if (!value && watch("consolidationType") == "consolidated") return "This field is required";
@@ -2239,6 +2266,14 @@ const ApllicantPuropseForm = (props) => {
                                 maxLength: {
                                   value: 99,
                                   message: "Maximum length exceeded",
+                                },
+                                min: {
+                                  value: getMinimumNorms(watch("purpose").label,watch("potential").label),
+                                  message: "I should be "+getMinimumNorms(watch("purpose").label,watch("potential").label)+" acres minimum"
+                                },
+                                max: {
+                                  value: getMaxNorms(watch("purpose").label,watch("potential").label),
+                                  message: "I should be "+getMinimumNorms(watch("purpose").label,watch("potential").label)+" acres maximum"
                                 },
                                 validate: {
                                   required: (value) => {
@@ -2309,6 +2344,14 @@ const ApllicantPuropseForm = (props) => {
                                 value: 99,
                                 message: "Maximum length exceeded",
                               },
+                              min: {
+                                value: getMinimumNorms(watch("purpose").label,watch("potential").label),
+                                message: "I should be "+getMinimumNorms(watch("purpose").label,watch("potential").label)+" acres minimum"
+                              },
+                              max: {
+                                value: getMaxNorms(watch("purpose").label,watch("potential").label),
+                                message: "I should be "+getMinimumNorms(watch("purpose").label,watch("potential").label)+" acres maximum"
+                              },
                               validate: {
                                 required: (value) => {
                                   if (!value && watch("consolidationType") == "non-consolidated") return "This field is required";
@@ -2321,8 +2364,8 @@ const ApllicantPuropseForm = (props) => {
                           </h3>
                           <label htmlFor="sumBigha">
                             Total:
-                            {watch("nonConsolidationType") == "kachha" && watch("bigha") * 1008}
-                            {watch("nonConsolidationType") == "pucka" && watch("bigha") * 3025}
+                            {watch("nonConsolidationType") == "kachha" && Number(watch("bigha")) * 1008}
+                            {watch("nonConsolidationType") == "pucka" && Number(watch("bigha")) * 3025}
                           </label>
                           &nbsp;&nbsp;
                         </td>
@@ -2336,6 +2379,14 @@ const ApllicantPuropseForm = (props) => {
                                 value: 99,
                                 message: "Maximum length exceeded",
                               },
+                              min: {
+                                value: getMinimumNorms(watch("purpose").label,watch("potential").label),
+                                message: "I should be "+getMinimumNorms(watch("purpose").label,watch("potential").label)+" acres minimum"
+                              },
+                              max: {
+                                value: getMaxNorms(watch("purpose").label,watch("potential").label),
+                                message: "I should be "+getMinimumNorms(watch("purpose").label,watch("potential").label)+" acres maximum"
+                              },
                               validate: {
                                 required: (value) => {
                                   if (!value && watch("consolidationType") == "non-consolidated") return "This field is required";
@@ -2348,8 +2399,8 @@ const ApllicantPuropseForm = (props) => {
                           </h3>
                           <label htmlFor="sumBiswa">
                             Total:
-                            {watch("nonConsolidationType") == "kachha" && (watch("biswa") * 50.41)?.toFixed(3)}
-                            {watch("nonConsolidationType") == "pucka" && (watch("biswa") * 151.25)?.toFixed(3)}
+                            {watch("nonConsolidationType") == "kachha" && (Number(watch("biswa")) * 50.41)?.toFixed(3)}
+                            {watch("nonConsolidationType") == "pucka" && (Number(watch("biswa")) * 151.25)?.toFixed(3)}
                           </label>
                           &nbsp;&nbsp;
                         </td>
@@ -2363,6 +2414,14 @@ const ApllicantPuropseForm = (props) => {
                                 value: 99,
                                 message: "Maximum length exceeded",
                               },
+                              min: {
+                                value: getMinimumNorms(watch("purpose").label,watch("potential").label),
+                                message: "I should be "+getMinimumNorms(watch("purpose").label,watch("potential").label)+" acres minimum"
+                              },
+                              max: {
+                                value: getMaxNorms(watch("purpose").label,watch("potential").label),
+                                message: "I should be "+getMinimumNorms(watch("purpose").label,watch("potential").label)+" acres maximum"
+                              },
                               validate: {
                                 required: (value) => {
                                   if (!value && watch("consolidationType") == "non-consolidated") return "This field is required";
@@ -2375,8 +2434,8 @@ const ApllicantPuropseForm = (props) => {
                           </h3>
                           <label htmlFor="sumBiswansi">
                             Total:
-                            {watch("nonConsolidationType") == "kachha" && (watch("biswansi") * 2.52)?.toFixed(3)}
-                            {watch("nonConsolidationType") == "pucka" && (watch("biswansi") * 7.56)?.toFixed(3)}
+                            {watch("nonConsolidationType") == "kachha" && (Number(watch("biswansi")) * 2.52)?.toFixed(3)}
+                            {watch("nonConsolidationType") == "pucka" && (Number(watch("biswansi")) * 7.56)?.toFixed(3)}
                           </label>
                           &nbsp;&nbsp;
                         </td>
