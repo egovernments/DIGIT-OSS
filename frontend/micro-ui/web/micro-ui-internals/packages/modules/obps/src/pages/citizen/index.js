@@ -56,6 +56,7 @@ import LowMedium from "./NewLicense/AllService/Module/BuildingPlanApproval/LowMe
 import AdditionalDocument from "./NewLicense/AllService/Module/AdditionalDocument/AdditionalDocument";
 import Payment from "./NewLicense/AllService/Module/Payment/Payment";
 import ExtensionClu from "./NewLicense/AllService/Module/ExtensionClu/ExtensionClu";
+import MapComponent from "./DGPSMap";
 
 const App = ({ path }) => {
   const location = useLocation();
@@ -135,6 +136,7 @@ const App = ({ path }) => {
         <PrivateRoute path={`${path}/payment`} component={Payment} />
         <PrivateRoute path={`${path}/LayoutPlanClu`} component={LayoutPlanClu} />
         <PrivateRoute path={`${path}/ExtensionClu`} component={ExtensionClu} />
+        {/* <Route path={`${path}/dgpsMap`} component={MapComponent}/> */}
         {/* .............................................................................. */}
 
         {/* <PrivateRoute path={`${path}/Beneficialscrutiny`} component={Beneficialscrutiny} />

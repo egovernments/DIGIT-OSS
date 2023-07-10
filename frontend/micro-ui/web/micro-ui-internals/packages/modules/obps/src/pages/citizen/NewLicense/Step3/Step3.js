@@ -173,6 +173,8 @@ const LandScheduleForm = (props) => {
     setYypeOfLand({ data: landType, isLoading: false });
   }, [LandData]);
 
+  const [fieldArray, setFieldArray] = useState([])
+
   const {
     register,
     handleSubmit,
@@ -186,7 +188,7 @@ const LandScheduleForm = (props) => {
   } = useForm({
     mode: "onChange",
     reValidateMode: "onChange",
-    resolver: yupResolver(VALIDATION_SCHEMA),
+    resolver: yupResolver(VALIDATION_SCHEMA(fieldArray)),
     // resolver: yupResolver(modal ? MODAL_VALIDATION_SCHEMA : VALIDATION_SCHEMA),
     shouldFocusError: true,
     defaultValues: {
@@ -206,6 +208,10 @@ const LandScheduleForm = (props) => {
     control,
     name: "surroundingsObj",
   });
+
+  useEffect(()=>{
+    setFieldArray(fields)
+  },[fields])
 
   const handleFunction = (val) => {
     for (let i = 0; i < val - 1; i++) {
@@ -1957,7 +1963,7 @@ const LandScheduleForm = (props) => {
                             </label>
                           </div>
                           <div class="col-sm-3 text-right">
-                            <input type="number" {...register("constructedRowWidth")} className="form-control" />
+                            <input  {...register("constructedRowWidth")} className="form-control" />
                             <h3 className="error-message" style={{ color: "red" }}>
                               {errors?.constructedRowWidth && errors?.constructedRowWidth?.message}
                             </h3>
@@ -2064,7 +2070,7 @@ const LandScheduleForm = (props) => {
                     </div>
                     <div className="ml-4">
                       <h2>
-                        (1)&nbsp;&nbsp;
+                        {/* (1)&nbsp;&nbsp; */}
                         {`${t("NWL_APPLICANT_N_I_SITE_APPROACHABLE_FROM_PROPOSED_SECTOR_ROAD_SHAJRA_PLAN")}`}
                         {/*  Site approachable from proposed sector road/ Development Plan Road. */}
                         &nbsp;&nbsp;
@@ -2085,7 +2091,10 @@ const LandScheduleForm = (props) => {
                               {`${t("NWL_APPLICANT_N_ENTER_WIDTH_IN_METERS_SHAJRA_PLAN")}`}
                               {/* Enter Width in Meters */}
                             </label>
-                            <input type="number" {...register("sectorAndDevelopmentWidth")} className="form-control" />
+                            <input {...register("sectorAndDevelopmentWidth")} className="form-control" />
+                            <h3 className="error-message" style={{ color: "red" }}>
+                              {errors?.sectorAndDevelopmentWidth && errors?.sectorAndDevelopmentWidth?.message}
+                            </h3>
                           </div>
                           <h2>
                             &nbsp;&nbsp;
@@ -2169,7 +2178,10 @@ const LandScheduleForm = (props) => {
                               {`${t("NWL_APPLICANT_N_2_SITE_APPROACHABLE_A_ENTER_WIDTH_IN_METERS_SHAJRA_PLAN")}`}
                               {/* Enter Width in Meters */}
                             </label>
-                            <input type="number" {...register("internalAndSectoralWidth")} className="form-control" />
+                            <input  {...register("internalAndSectoralWidth")} className="form-control" />
+                            <h3 className="error-message" style={{ color: "red" }}>
+                              {errors?.internalAndSectoralWidth && errors?.internalAndSectoralWidth?.message}
+                            </h3>
                           </div>
                           <h2>
                             &nbsp;&nbsp;
@@ -2656,6 +2668,9 @@ const LandScheduleForm = (props) => {
                               </h2>
                             </label>
                             <input type="text" className="form-control" {...register(`surroundingsObj.${index}.pocketName`)} />
+                            <h3 className="error-message" style={{ color: "red" }}>
+                              {errors?.surroundingsObj?.[index]?.pocketName && errors?.surroundingsObj?.[index].pocketName?.message}
+                            </h3>
                           </div>
                           <div className="col col-2">
                             <label>
@@ -2665,6 +2680,9 @@ const LandScheduleForm = (props) => {
                               </h2>
                             </label>
                             <input type="text" className="form-control" {...register(`surroundingsObj.${index}.north`)} />
+                            <h3 className="error-message" style={{ color: "red" }}>
+                              {errors?.surroundingsObj?.[index]?.north && errors?.surroundingsObj?.[index].north?.message}
+                            </h3>
                           </div>
                           <div className="col col-2">
                             <label>
@@ -2674,6 +2692,9 @@ const LandScheduleForm = (props) => {
                               </h2>
                             </label>
                             <input type="text" className="form-control" {...register(`surroundingsObj.${index}.south`)} />
+                            <h3 className="error-message" style={{ color: "red" }}>
+                              {errors?.surroundingsObj?.[index]?.south && errors?.surroundingsObj?.[index].south?.message}
+                            </h3>
                           </div>
                           <div className="col col-2">
                             <label>
@@ -2683,6 +2704,9 @@ const LandScheduleForm = (props) => {
                               </h2>
                             </label>
                             <input type="text" className="form-control" {...register(`surroundingsObj.${index}.east`)} />
+                            <h3 className="error-message" style={{ color: "red" }}>
+                              {errors?.surroundingsObj?.[index]?.east && errors?.surroundingsObj?.[index].east?.message}
+                            </h3>
                           </div>
                           <div className="col col-2">
                             <label>
@@ -2692,6 +2716,9 @@ const LandScheduleForm = (props) => {
                               </h2>
                             </label>
                             <input type="text" className="form-control" {...register(`surroundingsObj.${index}.west`)} />
+                            <h3 className="error-message" style={{ color: "red" }}>
+                              {errors?.surroundingsObj?.[index]?.west && errors?.surroundingsObj?.[index].west?.message}
+                            </h3>
                           </div>
                         </div>
                       </div>

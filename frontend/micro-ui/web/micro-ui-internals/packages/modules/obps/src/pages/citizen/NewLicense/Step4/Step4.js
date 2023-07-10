@@ -605,6 +605,77 @@ const AppliedDetailForm = (props) => {
     );
   };
 
+
+  const [kmlFile, setKmlFile] = useState(null);
+
+  const handleFileUpload = (event) => {
+    const file = event.target.files[0];
+    const reader = new FileReader();
+
+    // reader.onload = () => {
+    //   setKmlFile(reader.result);
+    // };
+
+    // reader.readAsText(file);
+    setKmlFile(URL.createObjectURL(file))
+  };
+
+  const openMapWindow = async () => {
+    const key = globalConfigs?.getConfig("GMAPS_API_KEY");
+    console.log("regerg",kmlFile)
+    const url = await getDocShareholding(watch("dgpsFileStoreId"), setLoader,true)
+    console.log("URL",url)
+    if (kmlFile) {
+      
+      // window.localStorage.setItem('kmlFile', kmlFile);
+      // window.open('/map', '_blank');
+      
+      // return;
+      const mapHtml = `
+      <!DOCTYPE html>
+<html>
+<head>
+  <title>Display KML on Google Maps</title>
+  <script src="https://maps.googleapis.com/maps/api/js?key=${key}"></script>
+</head>
+<body>
+  <div id="map" style="height: 500px; width: 100%;"></div>
+      <button id="renderBtn" onclick="initializeMap()" style="display:none;" >Render BTN</button>
+  <script>
+    function initializeMap() {
+      var mapOptions = {
+        zoom: 11,
+        center: new google.maps.LatLng(50.45, 30.52)
+      };
+
+      var map = new google.maps.Map(document.getElementById('map'), mapOptions);
+      var kmlUrl = '${url}';
+
+      var kmlOptions = {
+        preserveViewport: false,
+        map: map
+      };
+
+      var kmlLayer = new google.maps.KmlLayer(kmlUrl, kmlOptions);
+
+      console.log("logger123...",kmlLayer,kmlUrl)
+    }
+
+    google.maps.event.addDomListener(window, 'load', initializeMap);
+    initializeMap();
+  </script>
+</body>
+</html>
+
+      `;
+
+      const mapWindow = window.open("","blank")
+      mapWindow.document.write(mapHtml);
+      mapWindow.document.getElementById("renderBtn").click();
+    }
+  };
+
+
   return (
     <div>
       <ScrollToTop />
@@ -629,7 +700,7 @@ const AppliedDetailForm = (props) => {
             <Form.Group className="justify-content-center" controlId="formBasicEmail">
               <Row className="ml-auto" style={{ marginBottom: 5 }}>
                 <div className="ml-auto">
-                  <Button
+                  {/* <Button
                     type="button"
                     variant="primary"
                     onClick={() => {
@@ -638,8 +709,48 @@ const AppliedDetailForm = (props) => {
                     }}
                   >
                     {`${t("NWL_APPLICANT_DGPS_POINTS_DOCUMENTS")}`}
-                    {/* Enter DGPS points */}
-                  </Button>
+                  </Button> */}
+                  {/* Enter DGPS points */}
+
+                  <div className="col col-3">
+                    <h6 style={{ display: "flex" }}>
+                      {`${t("UPLOAD_DGPS_POINTS")}`}
+                      {/* Layout Plan pdf */}
+                      <span style={{ color: "red" }}>*</span>
+                    </h6>
+                    <label>
+                      <FileUpload style={{ cursor: "pointer" }} color="primary" />
+                      <input
+                        type="file"
+                        style={{ display: "none" }}
+                        onChange={(e) => {
+                          const checkType = e?.target?.files[0]?.type;
+                          console.log("ergergergreg",checkType)
+                          // if (checkType != ".kml") {
+                          //   setShowToastError({ label: "Please select .kml file", error: true, success: false });
+                          // } else {
+                            handleFileUpload(e);
+                            getDocumentData(e?.target?.files[0], "dgpsFileStoreId");
+                          // }
+                        }}
+                        accept=".kml"
+                      />
+                    </label>
+                    {watch("dgpsFileStoreId") && (
+                      // <a onClick={() => getDocShareholding(watch("dgpsFileStoreId"), setLoader,true)} className="btn btn-sm ">
+                      //   <VisibilityIcon color="info" className="icon" />
+                      // </a>
+                      <Button
+                        type="button"
+                        variant="primary"
+                        onClick={() => {
+                          openMapWindow()
+                        }}
+                      >
+                        {`${t("VIEW_DGPS_POINT_ON_MAP")}`}
+                      </Button>
+                    )}
+                  </div>
                 </div>
 
                 <div className="mt-5">
@@ -975,7 +1086,7 @@ const AppliedDetailForm = (props) => {
                             type="number"
                             className="form-control"
                             {...register(`dgpsDetails.${index}.longitude`)}
-                            // onBlur={() => setShowError({ ...showError, [`dgpsPointLongitude${index}`]: true })}
+                          // onBlur={() => setShowError({ ...showError, [`dgpsPointLongitude${index}`]: true })}
                           />
                           {/* {showError?.[`dgpsPointLongitude${index}`] && !validateXvalue(watch("dgpsDetails")[index].longitude) ? (
                             <CardLabelError style={{ color: "red" }}>
@@ -991,7 +1102,7 @@ const AppliedDetailForm = (props) => {
                               type="number"
                               className="form-control"
                               {...register(`dgpsDetails.${index}.latitude`)}
-                              // onBlur={() => setShowError({ ...showError, [`dgpsPointLatitude${index}`]: true })}
+                            // onBlur={() => setShowError({ ...showError, [`dgpsPointLatitude${index}`]: true })}
                             />
                             {index > 3 && (
                               <button type="button" style={{ marginLeft: "40px" }} className="btn btn-primary" onClick={() => remove(index)}>
@@ -1024,9 +1135,9 @@ const AppliedDetailForm = (props) => {
                 type="submit"
                 style={{ width: "190px" }}
                 class="btn btn-primary btn-md center-block mt-3"
-                // onClick={() => {
-                //   validateDgpsPoint();
-                // }}
+              // onClick={() => {
+              //   validateDgpsPoint();
+              // }}
               >
                 Submit
               </button>
