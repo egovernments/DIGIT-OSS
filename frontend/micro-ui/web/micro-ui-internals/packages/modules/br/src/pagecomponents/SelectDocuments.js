@@ -29,7 +29,6 @@ const SelectDocuments = ({ t, config, onSelect, userType, formData, setError: se
 
   const { isLoading, data } = Digit.Hooks.pt.usePropertyMDMS(stateId, "PropertyTax", [
     "UsageCategory",
-    "OccupancyType",
     "Floor",
     "OwnerType",
     "OwnerShipCategory",
@@ -61,7 +60,7 @@ const SelectDocuments = ({ t, config, onSelect, userType, formData, setError: se
 
   return (
     <div>
-      {isMutation ? <CardSectionHeader>{t("PT_MUTATION_DOCUMENTS_HEADER")} </CardSectionHeader> : null}
+      {isMutation ? <CardSectionHeader>{t("DOCUMENTS")} </CardSectionHeader> : null}
       {propertyTaxDocuments?.map((document, index) => {
         // if (document.code === "OWNER.SPECIALCATEGORYPROOF") {
         //   if (formData?.owners?.every((user) => user.ownerType.code === "NONE" || !user.ownerType?.code)) {
