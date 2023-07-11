@@ -1530,9 +1530,9 @@ const Genarelinfo = (props) => {
                     </td>
                     <td class="text-center">
 
-                      {
+                      {/* {
                         item?.registeringAuthorityDoc &&
-                        <Fragment>
+                        <Fragment> */}
                           <div className="btn btn-sm col-md-6">
 
                             <IconButton
@@ -1571,8 +1571,8 @@ const Genarelinfo = (props) => {
                             </IconButton>
                           </div>
 
-                        </Fragment>
-                      }
+                        {/* </Fragment>
+                      } */}
                       {/* <input type="text" className="form-control" title={item?.registeringAuthorityDoc} placeholder={item?.registeringAuthorityDoc} disabled /> */}
                     </td>
                     <td class="text-center">

@@ -14,6 +14,13 @@ import jsPDF from 'jspdf'
 import ScrutitnyForms from "../ScrutinyBasic/ScutinyBasic";
 import Spinner from "../../../components/Loader";
 
+import { Dialog, stepIconClasses } from "@mui/material";
+import DialogActions from "@mui/material/DialogActions";
+import DialogContent from "@mui/material/DialogContent";
+import DialogContentText from "@mui/material/DialogContentText";
+import DialogTitle from "@mui/material/DialogTitle";
+import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 
 
 const ScrutinyFormcontainer = (props) => {
@@ -43,7 +50,7 @@ const ScrutinyFormcontainer = (props) => {
   const [scrutinyDetails, setScrutinyDetails] = useState();
   const [additionalDocResponData, SetAdditionalDocResponData] = useState();
   const [status, setStatus] = useState();
-
+  const [open1, setOpen1] = useState(false);
   const [applicationDetails, setApplicationDetails] = useState();
   const [lastUpdate, SetLastUpdate] = useState();
   const [workflowDetails, setWorkflowDetails] = useState();
@@ -73,6 +80,7 @@ const ScrutinyFormcontainer = (props) => {
   console.log("roleCodeUseAPi", roleCodeUseAPi);
   console.log("showRemarksSection", showRemarksSection);
 
+ 
 
 
   const handleshow19 = async (e) => {
@@ -270,7 +278,7 @@ const ScrutinyFormcontainer = (props) => {
 
                   "name": "PerformaNewLicence",
 
-                  "filter": `[?(${query} && @.applicationStatus =='${Resp?.Licenses[0]?.status}')]`
+                  "filter": `[?((${query}) && @.applicationStatus =='${Resp?.Licenses[0]?.status}')]`
 
                 },
 
@@ -634,6 +642,7 @@ const ScrutinyFormcontainer = (props) => {
 
     setTimeout(() => {
       closeModal()
+      // setOpen1(true);
       window.location.href = `/digit-ui/employee/tl/inbox`
     }, 3000);
   };
@@ -663,6 +672,10 @@ const ScrutinyFormcontainer = (props) => {
   useEffect(() => {
     getScrutinyData();
   }, [])
+
+  const handalfinal = () => {
+    setOpen1(false);
+  }
 
   console.log("meri update34", lastUpdate)
   return (
@@ -814,7 +827,31 @@ const ScrutinyFormcontainer = (props) => {
     </DialogActions>
 
     </Dialog> */}
-
+           <Dialog open1={open1} onClose={submitAction} aria-labelledby="alert-dialog-title" aria-describedby="alert-dialog-description" style={{
+    textAlign: "center",
+    color: "#ffff",
+    backgroundColor: "#000000b0"}}>
+          <DialogTitle id="alert-dialog-title" style={{ fontSize: "xx-large", background: "#000000b0" , color: "#ffff"}}>Application Submission</DialogTitle>
+          <DialogContent style={{ background: "#000000b0"}}>
+            <DialogContentText id="alert-dialog-description" style={{textAlign: "center", color: "#ffff" , fontSize: "x-large"}}>
+              <p ><CheckCircleIcon style={{fontSize: "-webkit-xxx-large;"}}></CheckCircleIcon></p>
+              <p>
+                Thank You {" "}
+                {/* <span>
+                  <CheckCircleOutlineIcon style={{ color: "blue", variant: "filled" }} />
+                </span> */}
+              </p>
+              <p>
+                Application was been submitted successfully !!<span style={{ padding: "5px", color: "blue" }}></span> 
+              </p>
+            </DialogContentText>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={handalfinal} autoFocus>
+              Ok
+            </Button>
+          </DialogActions>
+        </Dialog>
 
         </Row>
       </Row>

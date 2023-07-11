@@ -143,6 +143,8 @@ const DataGridDemo = (props) => {
                                         <BackspaceIcon></BackspaceIcon>
                                     </button>
                                 </Card> */}
+                                
+
                             {expanded?.[element?.role]?.[item?.name] && (
 
                                 <TextSnippetIcon

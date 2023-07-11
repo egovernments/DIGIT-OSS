@@ -34,6 +34,7 @@ import { array } from "yup";
 import { useTranslation } from "react-i18next";
 import { useLocation } from "react-router-dom";
 import DetailsOfAppliedlandDoc from "../AdditionalDocument/DetailsOfAppliedlandDoc";
+import CusToaster from "../../../components/Toaster";
 
 
 const AppliedLandinfo = (props) => {
@@ -43,6 +44,8 @@ const AppliedLandinfo = (props) => {
 
   const { t } = useTranslation();
   const { pathname: url } = useLocation();
+  const [loader, setLoader] = useState(false);
+  const [showToastError, setShowToastError] = useState({ label: "", error: false, success: false });
 
   const additionalDocResponData = props.additionalDocRespon;
   const dataIcons = props.dataForIcons;
@@ -1759,7 +1762,7 @@ const AppliedLandinfo = (props) => {
                       {`${t("NWL_APPLICANT_DGPS_DOCUMENTS_LAYOUT_PLAN_DXF")}`}
                       <div style={{ display: "flex" }}>
 
-                        {
+                        {/* {
                           DetailsofAppliedLand?.DetailsAppliedLandPlot?.layoutPlanDxf &&
                           <Fragment>
                             <IconButton onClick={() => getDocShareholding(DetailsofAppliedLand?.DetailsAppliedLandPlot?.layoutPlanDxf)}>
@@ -1769,7 +1772,42 @@ const AppliedLandinfo = (props) => {
                               <Visibility color="primary" className="mx-1" />
                             </IconButton>
                           </Fragment>
-                        }
+                        } */}
+
+<IconButton
+  style={{
+    color: " #1266af",
+    fontSize: " 12px",
+    fontWeight: "bold",
+    cursor: "pointer",
+    textDecorationLine: "underline",
+  }}
+  onClick={() => {
+    if (DetailsofAppliedLand?.DetailsAppliedLandPlot?.layoutPlanDxf) getDocShareholding(DetailsofAppliedLand?.DetailsAppliedLandPlot?.layoutPlanDxf, setLoader);
+    else setShowToastError({ label: "No Document here", error: true, success: false });
+  }}>
+
+ 
+
+  <DownloadForOfflineIcon color="info" className="icon" />
+  </IconButton>
+
+
+<IconButton
+  style={{
+    color: " #1266af",
+    fontSize: " 12px",
+    fontWeight: "bold",
+    cursor: "pointer",
+    textDecorationLine: "underline",
+  }}
+  onClick={() => {
+    if (DetailsofAppliedLand?.DetailsAppliedLandPlot?.layoutPlanDxf) getDocShareholding(DetailsofAppliedLand?.DetailsAppliedLandPlot?.layoutPlanDxf, setLoader);
+    else setShowToastError({ label: "No Document here", error: true, success: false });
+  }}>
+  
+  <Visibility color="primary" className="mx-1" />
+</IconButton>
                         <ReportProblemIcon
                           style={{
                             display: hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_DGPS_POINTS_DOCUMENT") ? "block" : "none",
@@ -1792,7 +1830,7 @@ const AppliedLandinfo = (props) => {
                       {/* Layout Plan PDF */}
                       {`${t("NWL_APPLICANT_DGPS_DOCUMENTS_LAYOUT_PLAN_PDF")}`}
                       <div style={{ display: "flex" }}>
-                        {
+                        {/* {
                           DetailsofAppliedLand?.DetailsAppliedLandPlot?.layoutPlanPdf &&
                           <Fragment>
                             <IconButton onClick={() => getDocShareholding(DetailsofAppliedLand?.DetailsAppliedLandPlot?.layoutPlanPdf)}>
@@ -1802,7 +1840,41 @@ const AppliedLandinfo = (props) => {
                               <Visibility color="primary" className="mx-1" />
                             </IconButton>
                           </Fragment>
-                        }
+                        } */}
+                        <IconButton
+  style={{
+    color: " #1266af",
+    fontSize: " 12px",
+    fontWeight: "bold",
+    cursor: "pointer",
+    textDecorationLine: "underline",
+  }}
+  onClick={() => {
+    if (DetailsofAppliedLand?.DetailsAppliedLandPlot?.layoutPlanPdf) getDocShareholding(DetailsofAppliedLand?.DetailsAppliedLandPlot?.layoutPlanPdf, setLoader);
+    else setShowToastError({ label: "No Document here", error: true, success: false });
+  }}>
+
+ 
+
+  <DownloadForOfflineIcon color="info" className="icon" />
+  </IconButton>
+
+
+<IconButton
+  style={{
+    color: " #1266af",
+    fontSize: " 12px",
+    fontWeight: "bold",
+    cursor: "pointer",
+    textDecorationLine: "underline",
+  }}
+  onClick={() => {
+    if (DetailsofAppliedLand?.DetailsAppliedLandPlot?.layoutPlanPdf) getDocShareholding(DetailsofAppliedLand?.DetailsAppliedLandPlot?.layoutPlanPdf, setLoader);
+    else setShowToastError({ label: "No Document here", error: true, success: false });
+  }}>
+  
+  <Visibility color="primary" className="mx-1" />
+</IconButton>
                         <ReportProblemIcon
                           style={{
 
@@ -1827,7 +1899,7 @@ const AppliedLandinfo = (props) => {
                       {`${t("NWL_APPLICANT_DGPS_DOCUMENTS_UNDERTAKING")}`}
 
                       <div style={{ display: "flex" }}>
-                        {
+                        {/* {
                           DetailsofAppliedLand?.DetailsAppliedLandPlot?.undertaking &&
                           <Fragment>
                             <IconButton onClick={() => getDocShareholding(DetailsofAppliedLand?.DetailsAppliedLandPlot?.undertaking)}>
@@ -1837,7 +1909,42 @@ const AppliedLandinfo = (props) => {
                               <Visibility color="primary" className="mx-1" />
                             </IconButton>
                           </Fragment>
-                        }
+                        } */}
+
+<IconButton
+  style={{
+    color: " #1266af",
+    fontSize: " 12px",
+    fontWeight: "bold",
+    cursor: "pointer",
+    textDecorationLine: "underline",
+  }}
+  onClick={() => {
+    if (DetailsofAppliedLand?.DetailsAppliedLandPlot?.undertaking) getDocShareholding(DetailsofAppliedLand?.DetailsAppliedLandPlot?.undertaking, setLoader);
+    else setShowToastError({ label: "No Document here", error: true, success: false });
+  }}>
+
+ 
+
+  <DownloadForOfflineIcon color="info" className="icon" />
+  </IconButton>
+
+
+<IconButton
+  style={{
+    color: " #1266af",
+    fontSize: " 12px",
+    fontWeight: "bold",
+    cursor: "pointer",
+    textDecorationLine: "underline",
+  }}
+  onClick={() => {
+    if (DetailsofAppliedLand?.DetailsAppliedLandPlot?.undertaking) getDocShareholding(DetailsofAppliedLand?.DetailsAppliedLandPlot?.undertaking, setLoader);
+    else setShowToastError({ label: "No Document here", error: true, success: false });
+  }}>
+  
+  <Visibility color="primary" className="mx-1" />
+</IconButton>
 
                         <ReportProblemIcon
                           style={{
@@ -1866,7 +1973,7 @@ const AppliedLandinfo = (props) => {
                         {/* Any other relevant documen */}
                         {`${t("NWL_APPLICANT_DGPS_DOCUMENTS_DEVELOPMENT_PLAN")}`}
                         <div style={{ display: "flex" }}>
-                          {
+                          {/* {
                             DetailsofAppliedLand?.DetailsAppliedLandPlot?.layoutPlanPdf &&
                             <Fragment>
                               <IconButton onClick={() => getDocShareholding(DetailsofAppliedLand?.DetailsAppliedLandPlot?.layoutPlanPdf)}>
@@ -1877,7 +1984,42 @@ const AppliedLandinfo = (props) => {
                                 <Visibility color="primary" className="mx-1" />
                               </IconButton>
                             </Fragment>
-                          }
+                          } */}
+
+<IconButton
+  style={{
+    color: " #1266af",
+    fontSize: " 12px",
+    fontWeight: "bold",
+    cursor: "pointer",
+    textDecorationLine: "underline",
+  }}
+  onClick={() => {
+    if (DetailsofAppliedLand?.DetailsAppliedLandPlot?.layoutPlanPdf) getDocShareholding(DetailsofAppliedLand?.DetailsAppliedLandPlot?.layoutPlanPdf, setLoader);
+    else setShowToastError({ label: "No Document here", error: true, success: false });
+  }}>
+
+ 
+
+  <DownloadForOfflineIcon color="info" className="icon" />
+  </IconButton>
+
+
+<IconButton
+  style={{
+    color: " #1266af",
+    fontSize: " 12px",
+    fontWeight: "bold",
+    cursor: "pointer",
+    textDecorationLine: "underline",
+  }}
+  onClick={() => {
+    if (DetailsofAppliedLand?.DetailsAppliedLandPlot?.layoutPlanPdf) getDocShareholding(DetailsofAppliedLand?.DetailsAppliedLandPlot?.layoutPlanPdf, setLoader);
+    else setShowToastError({ label: "No Document here", error: true, success: false });
+  }}>
+  
+  <Visibility color="primary" className="mx-1" />
+</IconButton>
                           <ReportProblemIcon
                             style={{
                               display: hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_DGPS_DOCUMENTS_DEVELOPMENT_PLAN") ? "block" : "none",
@@ -1905,7 +2047,7 @@ const AppliedLandinfo = (props) => {
 
 
                         <div style={{ display: "flex" }}>
-                          {
+                          {/* {
                             DetailsofAppliedLand?.DetailsAppliedLand?.planCrossSection &&
                             <Fragment>
                               <IconButton onClick={() => getDocShareholding(DetailsofAppliedLand?.DetailsAppliedLand?.planCrossSection)}>
@@ -1915,7 +2057,43 @@ const AppliedLandinfo = (props) => {
                                 <Visibility color="primary" className="mx-1" />
                               </IconButton>
                             </Fragment>
-                          }
+                          } */}
+
+
+<IconButton
+  style={{
+    color: " #1266af",
+    fontSize: " 12px",
+    fontWeight: "bold",
+    cursor: "pointer",
+    textDecorationLine: "underline",
+  }}
+  onClick={() => {
+    if (DetailsofAppliedLand?.DetailsAppliedLandPlot?.sectoralPlan) getDocShareholding(DetailsofAppliedLand?.DetailsAppliedLandPlot?.sectoralPlan, setLoader);
+    else setShowToastError({ label: "No Document here", error: true, success: false });
+  }}>
+
+ 
+
+  <DownloadForOfflineIcon color="info" className="icon" />
+  </IconButton>
+
+
+<IconButton
+  style={{
+    color: " #1266af",
+    fontSize: " 12px",
+    fontWeight: "bold",
+    cursor: "pointer",
+    textDecorationLine: "underline",
+  }}
+  onClick={() => {
+    if (DetailsofAppliedLand?.DetailsAppliedLandPlot?.sectoralPlan) getDocShareholding(DetailsofAppliedLand?.DetailsAppliedLandPlot?.sectoralPlan, setLoader);
+    else setShowToastError({ label: "No Document here", error: true, success: false });
+  }}>
+  
+  <Visibility color="primary" className="mx-1" />
+</IconButton>
                           <ReportProblemIcon
                             style={{
                               display: hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_DGPS_DOCUMENTS_SECTORAL_PLAN") ? "block" : "none",
@@ -1926,7 +2104,7 @@ const AppliedLandinfo = (props) => {
                                 setOpennedModal("planCrossSection")
                               setSmShow(true),
                                 console.log("modal open"),
-                                setFieldValue();
+                                setFieldValue(DetailsofAppliedLand !== null ? DetailsofAppliedLand?.DetailsAppliedLandPlot?.sectoralPlan : null);
                             }}
                           ></ReportProblemIcon>
                         </div>
@@ -1939,7 +2117,7 @@ const AppliedLandinfo = (props) => {
                         {`${t("NWL_APPLICANT_DGPS_DOCUMENTS_EXPLANATORY_NOTE")}`}
 
                         <div style={{ display: "flex" }}>
-                          {
+                          {/* {
                             DetailsofAppliedLand?.DetailsAppliedLand?.publicHealthServices &&
                             <Fragment>
                               <IconButton onClick={() => getDocShareholding(DetailsofAppliedLand?.DetailsAppliedLand?.publicHealthServices)}>
@@ -1950,7 +2128,43 @@ const AppliedLandinfo = (props) => {
                                 <Visibility color="primary" className="mx-1" />
                               </IconButton>
                             </Fragment>
-                          }
+                          } */}
+
+
+<IconButton
+  style={{
+    color: " #1266af",
+    fontSize: " 12px",
+    fontWeight: "bold",
+    cursor: "pointer",
+    textDecorationLine: "underline",
+  }}
+  onClick={() => {
+    if (DetailsofAppliedLand?.DetailsAppliedLandPlot?.explanatoryNote) getDocShareholding(DetailsofAppliedLand?.DetailsAppliedLandPlot?.explanatoryNote, setLoader);
+    else setShowToastError({ label: "No Document here", error: true, success: false });
+  }}>
+
+ 
+
+  <DownloadForOfflineIcon color="info" className="icon" />
+  </IconButton>
+
+
+<IconButton
+  style={{
+    color: " #1266af",
+    fontSize: " 12px",
+    fontWeight: "bold",
+    cursor: "pointer",
+    textDecorationLine: "underline",
+  }}
+  onClick={() => {
+    if (DetailsofAppliedLand?.DetailsAppliedLandPlot?.explanatoryNote) getDocShareholding(DetailsofAppliedLand?.DetailsAppliedLandPlot?.explanatoryNote, setLoader);
+    else setShowToastError({ label: "No Document here", error: true, success: false });
+  }}>
+  
+  <Visibility color="primary" className="mx-1" />
+</IconButton>
                           <ReportProblemIcon
                             style={{
                               display: hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_DGPS_DOCUMENTS_EXPLANATORY_NOTE") ? "block" : "none",
@@ -1961,7 +2175,7 @@ const AppliedLandinfo = (props) => {
                                 setOpennedModal("publicHealthServices")
                               setSmShow(true),
                                 console.log("modal open"),
-                                setFieldValue();
+                                setFieldValue(DetailsofAppliedLand !== null ? DetailsofAppliedLand?.DetailsAppliedLandPlot?.explanatoryNote : null);
                             }}
                           ></ReportProblemIcon>
                         </div>
@@ -1977,7 +2191,7 @@ const AppliedLandinfo = (props) => {
 
                         <div style={{ display: "flex" }}>
 
-                          {
+                          {/* {
                             DetailsofAppliedLand?.DetailsAppliedLand?.designRoad &&
                             <Fragment>
                               <IconButton onClick={() => getDocShareholding(DetailsofAppliedLand?.DetailsAppliedLand?.designRoad)}>
@@ -1988,7 +2202,41 @@ const AppliedLandinfo = (props) => {
                                 <Visibility color="primary" className="mx-1" />
                               </IconButton>
                             </Fragment>
-                          }
+                          } */}
+                                                               <IconButton
+  style={{
+    color: " #1266af",
+    fontSize: " 12px",
+    fontWeight: "bold",
+    cursor: "pointer",
+    textDecorationLine: "underline",
+  }}
+  onClick={() => {
+    if (DetailsofAppliedLand?.DetailsAppliedLandPlot?.guideMap) getDocShareholding(DetailsofAppliedLand?.DetailsAppliedLandPlot?.guideMap, setLoader);
+    else setShowToastError({ label: "No Document here", error: true, success: false });
+  }}>
+
+ 
+
+  <DownloadForOfflineIcon color="info" className="icon" />
+  </IconButton>
+
+
+<IconButton
+  style={{
+    color: " #1266af",
+    fontSize: " 12px",
+    fontWeight: "bold",
+    cursor: "pointer",
+    textDecorationLine: "underline",
+  }}
+  onClick={() => {
+    if (DetailsofAppliedLand?.DetailsAppliedLandPlot?.guideMap) getDocShareholding(DetailsofAppliedLand?.DetailsAppliedLandPlot?.guideMap, setLoader);
+    else setShowToastError({ label: "No Document here", error: true, success: false });
+  }}>
+  
+  <Visibility color="primary" className="mx-1" />
+</IconButton>
 
 
                           <ReportProblemIcon
@@ -2001,7 +2249,7 @@ const AppliedLandinfo = (props) => {
                                 setOpennedModal("designRoad")
                               setSmShow(true),
                                 console.log("modal open"),
-                                setFieldValue();
+                                setFieldValue(DetailsofAppliedLand !== null ? DetailsofAppliedLand?.DetailsAppliedLandPlot?.guideMap : null);
                             }}
                           ></ReportProblemIcon>
                         </div>
@@ -2014,7 +2262,7 @@ const AppliedLandinfo = (props) => {
                         {`${t("NWL_APPLICANT_DGPS_DOCUMENTS_INDEMNITY_BOND")}`}
 
                         <div style={{ display: "flex" }}>
-                          {
+                          {/* {
                             DetailsofAppliedLand?.DetailsAppliedLand?.designSewarage &&
                             <Fragment>
                               <IconButton onClick={() => getDocShareholding(DetailsofAppliedLand?.DetailsAppliedLand?.designSewarage)}>
@@ -2025,7 +2273,41 @@ const AppliedLandinfo = (props) => {
                                 <Visibility color="primary" className="mx-1" />
                               </IconButton>
                             </Fragment>
-                          }
+                          } */}
+                                         <IconButton
+  style={{
+    color: " #1266af",
+    fontSize: " 12px",
+    fontWeight: "bold",
+    cursor: "pointer",
+    textDecorationLine: "underline",
+  }}
+  onClick={() => {
+    if (DetailsofAppliedLand?.DetailsAppliedLandPlot?.idemnityBondDoc) getDocShareholding(DetailsofAppliedLand?.DetailsAppliedLandPlot?.idemnityBondDoc, setLoader);
+    else setShowToastError({ label: "No Document here", error: true, success: false });
+  }}>
+
+ 
+
+  <DownloadForOfflineIcon color="info" className="icon" />
+  </IconButton>
+
+
+<IconButton
+  style={{
+    color: " #1266af",
+    fontSize: " 12px",
+    fontWeight: "bold",
+    cursor: "pointer",
+    textDecorationLine: "underline",
+  }}
+  onClick={() => {
+    if (DetailsofAppliedLand?.DetailsAppliedLandPlot?.idemnityBondDoc) getDocShareholding(DetailsofAppliedLand?.DetailsAppliedLandPlot?.idemnityBondDoc, setLoader);
+    else setShowToastError({ label: "No Document here", error: true, success: false });
+  }}>
+  
+  <Visibility color="primary" className="mx-1" />
+</IconButton>
 
                           <ReportProblemIcon
                             style={{
@@ -2037,7 +2319,7 @@ const AppliedLandinfo = (props) => {
                                 setOpennedModal("designSewarage")
                               setSmShow(true),
                                 console.log("modal open"),
-                                setFieldValue();
+                                setFieldValue(DetailsofAppliedLand !== null ? DetailsofAppliedLand?.DetailsAppliedLandPlot?.idemnityBondDoc : null);
                             }}
                           ></ReportProblemIcon>
                         </div>
@@ -2053,7 +2335,7 @@ const AppliedLandinfo = (props) => {
                         {`${t("NWL_APPLICANT_DGPS_DOCUMENTS_ANY_OTHER_RELEVANT_DOCUMENT")}`}
 
                         <div style={{ display: "flex" }}>
-                          {
+                          {/* {
                             DetailsofAppliedLand?.DetailsAppliedLand?.designDisposal &&
                             <Fragment>
                               <IconButton onClick={() => getDocShareholding(DetailsofAppliedLand?.DetailsAppliedLand?.designDisposal)}>
@@ -2064,7 +2346,41 @@ const AppliedLandinfo = (props) => {
                                 <Visibility color="primary" className="mx-1" />
                               </IconButton>
                             </Fragment>
-                          }
+                          } */}
+                           <IconButton
+  style={{
+    color: " #1266af",
+    fontSize: " 12px",
+    fontWeight: "bold",
+    cursor: "pointer",
+    textDecorationLine: "underline",
+  }}
+  onClick={() => {
+    if (DetailsofAppliedLand?.DetailsAppliedLandPlot?.designDisposal) getDocShareholding(DetailsofAppliedLand?.DetailsAppliedLandPlot?.designDisposal, setLoader);
+    else setShowToastError({ label: "No Document here", error: true, success: false });
+  }}>
+
+ 
+
+  <DownloadForOfflineIcon color="info" className="icon" />
+  </IconButton>
+
+
+<IconButton
+  style={{
+    color: " #1266af",
+    fontSize: " 12px",
+    fontWeight: "bold",
+    cursor: "pointer",
+    textDecorationLine: "underline",
+  }}
+  onClick={() => {
+    if (DetailsofAppliedLand?.DetailsAppliedLandPlot?.designDisposal) getDocShareholding(DetailsofAppliedLand?.DetailsAppliedLandPlot?.designDisposal, setLoader);
+    else setShowToastError({ label: "No Document here", error: true, success: false });
+  }}>
+  
+  <Visibility color="primary" className="mx-1" />
+</IconButton>
 
                           <ReportProblemIcon
                             style={{
@@ -2076,7 +2392,7 @@ const AppliedLandinfo = (props) => {
                                 setOpennedModal("designDisposal")
                               setSmShow(true),
                                 console.log("modal open"),
-                                setFieldValue();
+                                setFieldValue(DetailsofAppliedLand !== null ? DetailsofAppliedLand?.DetailsAppliedLandPlot?.idemnityBondDoc : null);
                             }}
                           ></ReportProblemIcon>
                         </div>
@@ -2270,11 +2586,19 @@ const AppliedLandinfo = (props) => {
 
               </Col>
             </Row>
-            {/* <Row>
-              <MapSelection></MapSelection>
-            </Row> */}
+          
 
           </Form.Group>
+          {showToastError && (
+        <CusToaster
+          label={showToastError?.label}
+          success={showToastError?.success}
+          error={showToastError?.error}
+          onClose={() => {
+            setShowToastError({ label: "", success: false, error: false });
+          }}
+        />
+      )}
 
         </div>
       </Collapse>

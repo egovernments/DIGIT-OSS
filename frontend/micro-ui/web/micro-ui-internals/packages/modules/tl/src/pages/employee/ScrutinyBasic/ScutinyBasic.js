@@ -1149,9 +1149,10 @@ console.log("userInFODATA123" , userInfo);
 
           <div  style={{ position: "relative", maxWidth: "100%", padding: 2 }}>
             
-
+    {dataMDMS?.["common-masters"]?.PerformaNewLicence?.[0]?.active === true &&
   
  <div>
+
             <div
             className="collapse-header"
             onClick={() => setOpen2(!open2) }
@@ -1198,7 +1199,7 @@ console.log("userInFODATA123" , userInfo);
           </Collapse>
           </div>
           
- 
+          }
 
 
       <div
