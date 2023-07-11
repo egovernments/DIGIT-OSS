@@ -91,9 +91,9 @@ const FeesChargesForm = (props) => {
       const Resp = await axios.post(`/tl-calculator/v1/_getPaymentEstimate`, payload);
       CalculationApi(Resp?.data?.feesTypeCalculationDto);
       setCalculatedData(Resp.data);
-      setValue("payableNow", Resp.data?.totalFee?.toLocaleString());
-      setValue("totalScrutinyFee", Resp.data?.totalScruitnyFee?.toLocaleString());
-      setValue("totalLicenseFee", Resp.data?.totalLicenceFee?.toLocaleString());
+      setValue("payableNow", Resp.data?.totalFee?.toLocaleString('en-IN'));
+      setValue("totalScrutinyFee", Resp.data?.totalScruitnyFee?.toLocaleString('en-IN'));
+      setValue("totalLicenseFee", Resp.data?.totalLicenceFee?.toLocaleString('en-IN'));
     } catch (error) {
       return error;
     }
@@ -228,30 +228,30 @@ const FeesChargesForm = (props) => {
                   </tr>
                   <tr>
                     <th>Conversion Charges (In Rs.)</th>
-                    <td style={{ textAlign: "right" }}> {item?.conversionChargesCal?.toLocaleString()}</td>
+                    <td style={{ textAlign: "right" }}> {item?.conversionChargesCal?.toLocaleString('en-IN')}</td>
                     <td style={{ textAlign: "right" }}>{item?.conversionFormula}</td>
                   </tr>
                 </thead>
                 <tbody>
                   <tr>
                     <th>External Development Charges (In Rs.)</th>
-                    <td style={{ textAlign: "right" }}>{item?.externalDevelopmentChargesCal?.toLocaleString()}</td>
+                    <td style={{ textAlign: "right" }}>{item?.externalDevelopmentChargesCal?.toLocaleString('en-IN')}</td>
                     <td style={{ textAlign: "right" }}>{item?.edcFormula}</td>
                   </tr>
                   <tr>
                     <th>License Fee Charges (In Rs.)</th>
-                    <td style={{ textAlign: "right" }}>{item?.licenseFeeChargesCal?.toLocaleString()}</td>
+                    <td style={{ textAlign: "right" }}>{item?.licenseFeeChargesCal?.toLocaleString('en-IN')}</td>
                     <td style={{ textAlign: "right" }}>{item?.licenceFormula}</td>
                   </tr>
 
                   <tr>
                     <th>Scrutiny Fee Charges (In Rs.)</th>
-                    <td style={{ textAlign: "right" }}>{item?.scrutinyFeeChargesCal?.toLocaleString()}</td>
+                    <td style={{ textAlign: "right" }}>{item?.scrutinyFeeChargesCal?.toLocaleString('en-IN')}</td>
                     <td style={{ textAlign: "right" }}>{item?.scrutinyFormula}</td>
                   </tr>
                   <tr>
                     <th>State Infrastructure Development Charges (In Rs.)</th>
-                    <td style={{ textAlign: "right" }}>{item?.stateInfrastructureDevelopmentChargesCal?.toLocaleString()}</td>
+                    <td style={{ textAlign: "right" }}>{item?.stateInfrastructureDevelopmentChargesCal?.toLocaleString('en-IN')}</td>
                     <td style={{ textAlign: "right" }}>{item?.stateInfraFormula}</td>
                   </tr>
                 </tbody>
@@ -306,7 +306,7 @@ const FeesChargesForm = (props) => {
                         {`${t("NWL_APPLICANT_FEE_TOTAL_SCRUITNY_FEE")}`}
                         {/* Total Scrutiny Fee */}
                       </h6>
-                      <input type="text" className="form-control" disabled {...register("totalScrutinyFee")} />
+                      <input type="text" className="form-control"  disabled {...register("totalScrutinyFee" )} />
                     </div>
                     <div className="col col-4">
                       <h6>
