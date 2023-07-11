@@ -1709,18 +1709,18 @@ const ApllicantPuropseForm = (props) => {
                               value: 30,
                               message: "Maximum length exceeded",
                             },
-                            // validate: {
-                            //   required: (value) => {
-                            //     if (!value && watch("collaboration") == "Y") return "This field is required";
-                            //   },
-                            // },
+                            validate: {
+                              required: (value) => {
+                                if (!value && watch("collaboration") == "Y") return "This field is required";
+                              },
+                            },
                           })}
                           placeholder=""
                           type="text"
                         />
-                        {/* <h3 className="error-message" style={{ color: "red" }}>
+                        <h3 className="error-message" style={{ color: "red" }}>
                           {errors?.developerCompany && errors?.developerCompany?.message}
-                        </h3> */}
+                        </h3>
                       </div>
                       <div className="col col-lg-4 col-md-6 col-sm-6 mb-2">
                         <label>
@@ -1736,18 +1736,18 @@ const ApllicantPuropseForm = (props) => {
                           className="form-control"
                           placeholder=""
                           {...register("agreementValidFrom", {
-                            // validate: {
-                            //   required: (value) => {
-                            //     if (!value && watch("collaboration") == "Y") return "This field is required";
-                            //     return true;
-                            //   },
-                            // },
+                            validate: {
+                              required: (value) => {
+                                if (!value && watch("collaboration") == "Y") return "This field is required";
+                                return true;
+                              },
+                            },
                           })}
                           max={convertEpochToDate(new Date().setFullYear(new Date().getFullYear()))}
                         />
-                        {/* <h3 className="error-message" style={{ color: "red" }}>
+                        <h3 className="error-message" style={{ color: "red" }}>
                           {errors?.agreementValidFrom && errors?.agreementValidFrom?.message}
-                        </h3> */}
+                        </h3>
                       </div>
                       <div className="col col-lg-4 col-md-6 col-sm-6 mb-2">
                         <h2>
@@ -1759,12 +1759,12 @@ const ApllicantPuropseForm = (props) => {
                         <label htmlFor="agreementIrrevocialbleyes">
                           <input
                             {...register("agreementIrrevocialble", {
-                              // validate: {
-                              //   required: (value) => {
-                              //     if (!value && watch("collaboration") == "Y") return "This field is required";
-                              //     return true;
-                              //   },
-                              // },
+                              validate: {
+                                required: (value) => {
+                                  if (!value && watch("collaboration") == "Y") return "This field is required";
+                                  return true;
+                                },
+                              },
                             })}
                             type="radio"
                             value="Y"
@@ -1775,12 +1775,12 @@ const ApllicantPuropseForm = (props) => {
                         <label htmlFor="agreementIrrevocialbleno">
                           <input
                             {...register("agreementIrrevocialble", {
-                              // validate: {
-                              //   required: (value) => {
-                              //     if (!value && watch("collaboration") == "Y") return "This field is required";
-                              //     return true;
-                              //   },
-                              // },
+                              validate: {
+                                required: (value) => {
+                                  if (!value && watch("collaboration") == "Y") return "This field is required";
+                                  return true;
+                                },
+                              },
                             })}
                             type="radio"
                             value="N"
@@ -1788,9 +1788,9 @@ const ApllicantPuropseForm = (props) => {
                           />
                           &nbsp;&nbsp; No &nbsp;&nbsp;
                         </label>
-                        {/* <h3 className="error-message" style={{ color: "red" }}>
+                        <h3 className="error-message" style={{ color: "red" }}>
                           {errors?.agreementIrrevocialble && errors?.agreementValidFrom?.message}
-                        </h3> */}
+                        </h3>
                       </div>
                       <div className="col col-lg-4 col-md-6 col-sm-6 mb-2 mt-3">
                         <label>
@@ -1809,17 +1809,17 @@ const ApllicantPuropseForm = (props) => {
                               value: 99,
                               message: "Maximum length exceeded",
                             },
-                            // validate: {
-                            //   required: (value) => {
-                            //     if (!value && watch("collaboration") == "Y") return "This field is required";
-                            //     return true;
-                            //   },
-                            // },
+                            validate: {
+                              required: (value) => {
+                                if (!value && watch("collaboration") == "Y") return "This field is required";
+                                return true;
+                              },
+                            },
                           })}
                         />
-                        {/* <h3 className="error-message" style={{ color: "red" }}>
+                        <h3 className="error-message" style={{ color: "red" }}>
                           {errors?.authSignature && errors?.authSignature?.message}
-                        </h3> */}
+                        </h3>
                       </div>
                       <div className="col col-lg-4 col-md-6 col-sm-6 mb-2 mt-3">
                         <label>
@@ -1841,17 +1841,17 @@ const ApllicantPuropseForm = (props) => {
                               value: 99,
                               message: "Maximum length exceeded",
                             },
-                            // validate: {
-                            //   required: (value) => {
-                            //     if (!value && watch("collaboration") == "Y") return "This field is required";
-                            //     return true;
-                            //   },
-                            // },
+                            validate: {
+                              required: (value) => {
+                                if (!value && watch("collaboration") == "Y") return "This field is required";
+                                return true;
+                              },
+                            },
                           })}
                         />
-                        {/* <h3 className="error-message" style={{ color: "red" }}>
+                        <h3 className="error-message" style={{ color: "red" }}>
                           {errors?.nameAuthSign && errors?.nameAuthSign?.message}
-                        </h3> */}
+                        </h3>
                       </div>
                       <div className="col col-lg-4 col-md-6 col-sm-6 mb-2 mt-3">
                         <label>
@@ -1866,21 +1866,21 @@ const ApllicantPuropseForm = (props) => {
                           className="form-control"
                           placeholder=""
                           {...register("registeringAuthority", {
-                            // validate: {
-                            //   maxLength: {
-                            //     value: 99,
-                            //     message: "Maximum length exceeded",
-                            //   },
-                            //   required: (value) => {
-                            //     if (!value && watch("collaboration") == "Y") return true;
-                            //     return "This field is required";
-                            //   },
-                            // },
+                            validate: {
+                              maxLength: {
+                                value: 99,
+                                message: "Maximum length exceeded",
+                              },
+                              required: (value) => {
+                                if (!value && watch("collaboration") == "Y") return true;
+                                return "This field is required";
+                              },
+                            },
                           })}
                         />
-                        {/* <h3 className="error-message" style={{ color: "red" }}>
+                        <h3 className="error-message" style={{ color: "red" }}>
                           {errors?.registeringAuthority && errors?.registeringAuthority?.message}
-                        </h3> */}
+                        </h3>
                       </div>
                     </div>
                     <div className="row mt-5">
