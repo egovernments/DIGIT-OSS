@@ -1644,13 +1644,14 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
                         <div className="col col-4">
                           <div className="form-group">
                             <label htmlFor="name">
-                              {t("BPA_DATE_INCORPORATION_TEXT")} <span className="text-danger font-weight-bold">*</span>
+                              {t("BPA_DATE_INCORPORATION_TEXT")} <span className="text-danger font-weight-bold"></span>
                             </label>
+                            
                             <input
                               type="date"
-                              date={moment(Date(incorporationDate)).format("YYYY-MM-DD")}
-                              value={moment(Date(incorporationDate)).format("YYYY-MM-DD")}
-                              placeholder={moment(Date(incorporationDate)).format("YYYY-MM-DD")}
+                              date={moment(incorporationDate,"DD/MM/YYYY").format("YYYY-MM-DD")}
+                            value={moment(incorporationDate,"DD/MM/YYYY").format("YYYY-MM-DD")}
+                              placeholder={moment(incorporationDate,"DD/MM/YYYY").format("YYYY-MM-DD")}
                               onChange={(e) => setIncorporation(e.target.value)}
                               className="form-control"
                               disabled={showDevTypeFields === "Company"}
