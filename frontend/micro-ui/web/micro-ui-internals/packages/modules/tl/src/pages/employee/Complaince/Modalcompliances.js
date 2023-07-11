@@ -10,6 +10,14 @@ import Checkbox from '@mui/material/Checkbox';
 import { useTranslation } from 'react-i18next';
 import { ComplicesRemarksContext } from "../../../../context/Complices-remarks-context";
 
+import { Dialog, stepIconClasses } from "@mui/material";
+import DialogActions from "@mui/material/DialogActions";
+import DialogContent from "@mui/material/DialogContent";
+import DialogContentText from "@mui/material/DialogContentText";
+import DialogTitle from "@mui/material/DialogTitle";
+import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+
 
 
 function Modalcompliances(props) {
@@ -25,6 +33,7 @@ function Modalcompliances(props) {
   const inputFieldLabel = props.labelValue;
   const dateTime = new Date();
   const [loader, setLoading] = useState(false);
+  const [open, setOpen] = useState(false);
 
   const  applicationimp = props.applicationdata;
   console.log("akash124256", applicationimp);
@@ -102,13 +111,14 @@ const businessService = applicationimp?.businessService
             //   setShowToastError({ label: "Surrender of License submitted successfully", error: false, success: true });
               compliceGetRemarkssValues(tcpApplicationNumber);
               props.onClose();
+             
             } catch (err) {
               console.log("Submit Error ====> ", err.message);
               setLoading(false);
             //   setShowToastError({ label: err.message, error: true, success: false });
               props.onClose();
             }
-            
+            setOpen(true);
             
           };
           useEffect(() => {
@@ -131,13 +141,17 @@ const businessService = applicationimp?.businessService
     Compliance(data);
     
   };
+  const handalfinal = () => {
+    setOpen(false);
+  }
 
 
 
     const [isOpened, setIsOpened] = useState(false);
   
   return (
-    
+    <div>
+    <React.Fragment>
     <Modal
       size="lg"
       className="modal-lg modal-center"
@@ -148,7 +162,7 @@ const businessService = applicationimp?.businessService
       onHide={props.onClose}
     >
        <form onSubmit={handleSubmit(submitForm)}>
-      <Modal.Header closeButton>
+      <Modal.Header closeButton style={{ textAlign: "center" ,backgroundColor: "#FFD954" , maxWidth:"100%", fontSize: "x-large",paddingLeft: "16%" }}>
         <Modal.Title id="example-modal-sizes-title-sm">
           Add Compliance
         </Modal.Title>
@@ -190,7 +204,33 @@ const businessService = applicationimp?.businessService
       </Modal.Footer>
       </form>
     </Modal>
-   
+   <Dialog open={open} onClose={Compliance} aria-labelledby="alert-dialog-title" aria-describedby="alert-dialog-description" style={{
+    textAlign: "center",
+    color: "#ffff",
+    backgroundColor: "#000000b0"}}>
+          <DialogTitle id="alert-dialog-title" style={{ fontSize: "xx-large", background: "#000000b0" , color: "#ffff"}}>Compliance Remarks Submission</DialogTitle>
+          <DialogContent style={{ background: "#000000b0"}}>
+            <DialogContentText id="alert-dialog-description" style={{textAlign: "center", color: "#ffff" , fontSize: "x-large"}}>
+              <p ><CheckCircleIcon style={{fontSize: "-webkit-xxx-large;"}}></CheckCircleIcon></p>
+              <p>
+                Thank You {" "}
+                {/* <span>
+                  <CheckCircleOutlineIcon style={{ color: "blue", variant: "filled" }} />
+                </span> */}
+              </p>
+              <p>
+                The  Compliance Remarks was submitted successfully !!<span style={{ padding: "5px", color: "blue" }}></span> 
+              </p>
+            </DialogContentText>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={handalfinal} autoFocus>
+              Ok
+            </Button>
+          </DialogActions>
+        </Dialog>
+        </React.Fragment>
+        </div>
   );
 }
 

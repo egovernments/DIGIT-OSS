@@ -275,7 +275,7 @@ const Addmoreinput = ({ applicationimp }) => {
 
                     <div className="col col-3">
 
-                    </div>
+                
                     <Modalcompliances
                         displaymodal={smShow}
                         onClose={() => setSmShow(false)}
@@ -283,8 +283,9 @@ const Addmoreinput = ({ applicationimp }) => {
                         passmodalData={handlemodaldData}
                     >
                     </Modalcompliances>
-
-                    <div>
+                    </div>
+                    </div>
+                    <div className="row">
                         <Col md={12} lg={12} mb={3} sx={{ marginY: 2 }}>
                             <button id="btnSearch" class="btn btn-primary btn-md center-block" style={{ marginTop: "0px", marginRight: "97px" }}
                                 onClick={() => {
@@ -384,7 +385,7 @@ const Addmoreinput = ({ applicationimp }) => {
 
 
 
-                </div>
+                {/* </div> */}
 
 
 

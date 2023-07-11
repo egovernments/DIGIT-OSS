@@ -309,10 +309,10 @@ console.log("log123Disrenu" ,id);
                           Sr.No
                         </th>
                         <th class="fw-normal pb-0 border-bottom-0 align-top">
-                          Filed Name
+                           Field Name
                         </th>
                         <th class="fw-normal pb-0 border-bottom-0 align-top">
-                          Filed value
+                           Field Value
                         </th>
                         <th class="fw-normal pb-0 border-bottom-0 align-top">
                           Status
@@ -385,10 +385,10 @@ console.log("log123Disrenu" ,id);
                                         Sr.No
                                       </th>
                                       <th class="fw-normal pb-0 border-bottom-0 align-top">
-                                        Filed Name
+                                         Field Name
                                       </th>
                                       <th class="fw-normal pb-0 border-bottom-0 align-top">
-                                        Filed value
+                                         Field Value
                                       </th>
                                       <th class="fw-normal pb-0 border-bottom-0 align-top">
                                         Status
@@ -412,7 +412,8 @@ console.log("log123Disrenu" ,id);
                                                 {i + 1}
                                               </td>
                                               <td>
-                                                <b>{el.name}</b>
+                                                {/* <b>{el.name}</b> */}
+                                                <Label style={{  fontSize:12}}>{t(el?.name)}</Label>
                                               </td>
                                               <td>
                                                 <b>{el.value}</b>
@@ -456,10 +457,10 @@ console.log("log123Disrenu" ,id);
                                         Sr.No
                                       </th>
                                       <th class="fw-normal pb-0 border-bottom-0 align-top">
-                                        Filed Name
+                                         Field Name
                                       </th>
                                       <th class="fw-normal pb-0 border-bottom-0 align-top">
-                                        Filed value
+                                         Field Value
                                       </th>
                                       <th class="fw-normal pb-0 border-bottom-0 align-top">
                                         Status
@@ -483,7 +484,8 @@ console.log("log123Disrenu" ,id);
                                                 {i + 1}
                                               </td>
                                               <td>
-                                                <b>{el.name}</b>
+                                                {/* <b>{el.name}</b> */}
+                                                <Label style={{  fontSize:12}}>{t(el?.name)}</Label>
                                               </td>
                                               <td>
                                                 <b>{el.value}</b>
@@ -532,10 +534,10 @@ console.log("log123Disrenu" ,id);
                           Sr.No
                         </th>
                         <th class="fw-normal pb-0 border-bottom-0 align-top">
-                          Filed Name
+                           Field Name
                         </th>
                         <th class="fw-normal pb-0 border-bottom-0 align-top">
-                          Filed value
+                           Field Value
                         </th>
                         <th class="fw-normal pb-0 border-bottom-0 align-top">
                           Status

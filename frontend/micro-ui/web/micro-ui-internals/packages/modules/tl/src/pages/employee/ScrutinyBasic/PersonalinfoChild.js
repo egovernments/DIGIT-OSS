@@ -1036,9 +1036,9 @@ const PersonalinfoChild = (props) => {
                         <div className="row">
                           {/* <button className="btn btn-sm col-md-6" onClick={()=>getDocShareholding(item?.uploadPdf)} > */}
 
-                          {
+                          {/* {
                             item?.uploadPdf && 
-                            <Fragment>
+                            <Fragment> */}
                           <div className="btn btn-sm col-md-4">
                             <IconButton
                               style={{
@@ -1077,8 +1077,8 @@ const PersonalinfoChild = (props) => {
                               <FileDownload color="primary" className="mx-1" />
                             </IconButton>
                           </div>
-                            </Fragment>
-                          }
+                            {/* </Fragment>
+                          } */}
 
                         </div>
                       </td>
@@ -1307,9 +1307,9 @@ const PersonalinfoChild = (props) => {
             ></Form.Control> */}
             {/* <div className="row"> */}
 
-            {
+            {/* {
               personalinfo?.devDetail?.aurthorizedUserInfoArray?.[0]?.uploadDigitalSignaturePdf &&
-              <Fragment>
+              <Fragment> */}
             <div className="btn btn-sm col-md-2">
               <IconButton
                 style={{
@@ -1361,8 +1361,8 @@ const PersonalinfoChild = (props) => {
                 }}
               ></ReportProblemIcon>
             </div>
-              </Fragment>
-            }
+              {/* </Fragment>
+            } */}
 
           </div>
 
@@ -1381,9 +1381,9 @@ const PersonalinfoChild = (props) => {
 
           <div className={classes.fieldContainer}>
          
-         {
+         {/* {
           personalinfo?.devDetail?.aurthorizedUserInfoArray?.[0]?.uploadBoardResolution && 
-          <Fragment>
+          <Fragment> */}
             <div className="btn btn-sm col-md-2">
               <IconButton
                 // onClick={() => getDocShareholding(personalinfo?.devDetail?.aurthorizedUserInfoArray?.[0]?.uploadBoardResolution)}
@@ -1436,8 +1436,8 @@ const PersonalinfoChild = (props) => {
                 }}
               ></ReportProblemIcon>
             </div>
-          </Fragment>
-         }
+          {/* </Fragment>
+         } */}
 
             {/* </div> */}
 

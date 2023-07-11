@@ -129,7 +129,7 @@ function FullScreenDialog(props) {
       style={{ position: "fixed", left: "50%", top: "50%", transform: "translate(-50% , -50%)" , height:700 ,marginTop: "50px"  }}
       onHide={props.onClose}
     >
-      <Modal.Header closeButton in={open14} style={{ textAlign: "center" ,backgroundColor: "#FFD954" ,marginLeft:"3%", maxWidth:"95%" }}>
+      <Modal.Header closeButton in={open14} style={{ textAlign: "center" ,backgroundColor: "#FFD954" , maxWidth:"100%", fontSize: "x-large",paddingLeft: "16%" }}>
      
         ONLINE LICENSE APPLICATION SCRUTINY SINGLE USER
       

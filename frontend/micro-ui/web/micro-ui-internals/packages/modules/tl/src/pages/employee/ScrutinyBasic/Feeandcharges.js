@@ -114,7 +114,7 @@ const feeandcharges = props.feeandchargesData
         {data?.map((item, index) => {
           return (
             <div>
-              <table key={index} className="table table-bordered" style={{ backgroundColor: "rgb(251 251 253))", width: "629px" }}>
+              <table key={index} className="table table-bordered" style={{ backgroundColor: "rgb(251 251 253))", width: "80%" }}>
                 <thead>
                 <tr>
                     <th>Purpose</th>
@@ -127,7 +127,7 @@ const feeandcharges = props.feeandchargesData
                   </tr> */}
                   <tr>
                     <th>Conversion Charges (In Rs.)</th>
-                    <td style={{ textAlign: "right" }}> {item?.conversionChargesCal?.toLocaleString(undefined, {maximumFractionDigits:2})}</td>
+                    <td style={{ textAlign: "right" }}> {item?.conversionChargesCal?.toLocaleString("en-IN")}</td>
                     <td style={{ textAlign: "right" }}> {item?.conversionFormula}</td>
                   </tr>
                  
@@ -139,7 +139,7 @@ const feeandcharges = props.feeandchargesData
                   </tr> */}
                   <tr>
                     <th>External Development Charges (In Rs.)</th>
-                    <td style={{ textAlign: "right" }}>{item?.externalDevelopmentChargesCal?.toLocaleString(undefined, {maximumFractionDigits:2})}</td>
+                    <td style={{ textAlign: "right" }}>{item?.externalDevelopmentChargesCal?.toLocaleString("en-IN" , {maximumFractionDigits:2})}</td>
                     <td style={{ textAlign: "right" }}>{item?.edcFormula}</td>
                   </tr>
                  
@@ -149,7 +149,7 @@ const feeandcharges = props.feeandchargesData
                   </tr> */}
                   <tr>
                     <th>License Fee Charges (In Rs.)</th>
-                    <td style={{ textAlign: "right" }}>{item?.licenseFeeChargesCal?.toLocaleString(undefined, {maximumFractionDigits:2})}</td>
+                    <td style={{ textAlign: "right" }}>{item?.licenseFeeChargesCal?.toLocaleString("en-IN", {maximumFractionDigits:2})}</td>
                     <td style={{ textAlign: "right" }}>{item?.licenceFormula}</td>
                   </tr>
                   
@@ -159,7 +159,7 @@ const feeandcharges = props.feeandchargesData
                   </tr> */}
                   <tr>
                     <th>Scrutiny Fee Charges (In Rs.)</th>
-                    <td style={{ textAlign: "right" }}>{item?.scrutinyFeeChargesCal?.toLocaleString(undefined, {maximumFractionDigits:2})}</td>
+                    <td style={{ textAlign: "right" }}>{item?.scrutinyFeeChargesCal?.toLocaleString("en-IN", {maximumFractionDigits:2})}</td>
                     <td style={{ textAlign: "right" }}>{item?.scrutinyFormula}</td>
                   </tr>
                   
@@ -169,7 +169,7 @@ const feeandcharges = props.feeandchargesData
                   </tr> */}
                   <tr>
                     <th>State Infrastructure Development Charges (In Rs.)</th>
-                    <td style={{ textAlign: "right" }}>{item?.stateInfrastructureDevelopmentChargesCal?.toLocaleString(undefined, {maximumFractionDigits:2})}</td>
+                    <td style={{ textAlign: "right" }}>{item?.stateInfrastructureDevelopmentChargesCal?.toLocaleString("en-IN", {maximumFractionDigits:2})}</td>
                     <td style={{ textAlign: "right" }}>{item?.stateInfraFormula}</td>
                   </tr>
                 </tbody>
@@ -511,7 +511,7 @@ const feeandcharges = props.feeandchargesData
                       
                           {`${t("NWL_APPLICANT_FEE_TOTAL_SCRUITNY_FEE")}`}
                           </h4>
-                              <input type="text" className="form-control" disabled  placeholder={item?.totalScruitnyFee?.toLocaleString()} />
+                              <input type="text" className="form-control" disabled  placeholder={item?.totalScruitnyFee?.toLocaleString("en-IN")} />
                             </Col>
                             
                           
@@ -521,7 +521,7 @@ const feeandcharges = props.feeandchargesData
                           
                             {`${t("NWL_APPLICANT_FEE_TOTAL_LICENCE_FEE")}`}
                             </h4>
-                              <input type="text" className="form-control" placeholder={item?.totalLicenceFee?.toLocaleString()} disabled />
+                              <input type="text" className="form-control" placeholder={item?.totalLicenceFee?.toLocaleString("en-IN")} disabled />
                             </Col>
                          
                             <Col className="col col-4" >
@@ -529,7 +529,7 @@ const feeandcharges = props.feeandchargesData
                   
                             {`${t("NWL_APPLICANT_FEE_TOTAL_FEE")}`}
                             </h4>
-                              <input type="text" className="form-control" placeholder={item?.totalFee?.toLocaleString()}  disabled />
+                              <input type="text" className="form-control" placeholder={item?.totalFee?.toLocaleString("en-IN")}  disabled />
                             </Col>
                           
                             

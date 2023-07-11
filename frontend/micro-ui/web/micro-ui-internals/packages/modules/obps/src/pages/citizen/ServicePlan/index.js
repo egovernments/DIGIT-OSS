@@ -700,6 +700,9 @@ const ServicePlanService = () => {
                           </IconButton>
                         </div>
                       )}
+                      
+
+                      
                     </td>
                   </tr>
                   {/* <tr>
@@ -1208,10 +1211,10 @@ const ServicePlanService = () => {
             </Card>
           </Card>
         </form>
-        <Dialog open={open} onClose={handleClose} aria-labelledby="alert-dialog-title" aria-describedby="alert-dialog-description">
+        <Dialog open={open} onClose={handleClose} aria-labelledby="alert-dialog-title" aria-describedby="alert-dialog-description" >
           <DialogTitle id="alert-dialog-title">Service Plan Submission</DialogTitle>
           <DialogContent>
-            <DialogContentText id="alert-dialog-description">
+            <DialogContentText id="alert-dialog-description" >
               <p>
                 Your Service Plan is submitted successfully{" "}
                 <span>
