@@ -4,7 +4,7 @@ import AddPost from "../Material/TextEditor";
 
 
 
-const Component = ({ dataMDMS , register , setValue , dataProfrmaFileds}) => {
+const Component = ({ dataMDMS , register , setValue , dataProfrmaFileds, watch, errors}) => {
  
   console.log("datatemplates", dataMDMS?.["common-masters"]?.PerformaNewLicence?.[0]?.templates);
   
@@ -75,11 +75,19 @@ useEffect(() => {
  setValue("data25", dataProfrmaFileds?.data?.data25)
  setValue("data26Remarks", dataProfrmaFileds?.data?.data26Remarks)
  setValue("data26", dataProfrmaFileds?.data?.data26)
+ setValue("data27Remarks", dataProfrmaFileds?.data?.data27Remarks)
+ setValue("data27", dataProfrmaFileds?.data?.data27)
+ setValue("data28Remarks", dataProfrmaFileds?.data?.data28Remarks)
+ setValue("data2", dataProfrmaFileds?.data?.data28)
+ setValue("data29Remarks", dataProfrmaFileds?.data?.data29Remarks)
+ setValue("data29", dataProfrmaFileds?.data?.data29)
+ setValue("data29Remarks", dataProfrmaFileds?.data?.data30Remarks)
+ setValue("data29", dataProfrmaFileds?.data?.data30)
 
   }
 }, [dataProfrmaFileds?.data]);
 
-const getDynamicFileds = (type , data) => {
+const getDynamicFileds = (type , data, validation ) => {
     
     
     switch (type) {
@@ -88,6 +96,8 @@ const getDynamicFileds = (type , data) => {
             <React.Fragment>
              <div className="textareaProforma" style={{
               display: "flex",
+              marginTop: "20px",
+              marginBottom: "10px"
               // width: "1250px",
               // marginTop: "15px",
              }}>
@@ -95,14 +105,21 @@ const getDynamicFileds = (type , data) => {
               {(data?.label && !data?.name?.includes("Remarks")) && <input type="hidden" value={data.label} {...register(data?.name+"Label")} />}
               {data?.options?.map((it, inx) => {
                 return (
-                  <div key={inx}>
+                  <div key={inx} 
+                  style={{
+                    margin: "0px 5px",
+                    display: "flex",
+                    alignItems:"baseline"
+                  }}>
                     <input
                       type="radio"
                       className="d-flex"
                       id={it?.value}
-                      
+                      style={{
+                        margin: "0px 5px"
+                      }}
                       value={it?.value}
-                      {...register(data?.name)}
+                      {...register(data?.name,validation)}
                     />
                     <label for={it?.value} >{it?.label}</label>
                     <br />
@@ -111,8 +128,18 @@ const getDynamicFileds = (type , data) => {
                 );
               })}
             </div>
+
+            <h3 className="error-message" style={{ color: "red" }}>
+                    {errors?.[data?.name] && errors?.[data?.name]?.message}
+                  </h3>
+
               {
-                data?.labels?.map((item , index) => getDynamicFileds(item?.type , item))
+                data?.labels?.map((item , index) => getDynamicFileds(item?.type , item, {
+                  required: {
+                    message: "This field is required",
+                    value: watch(data?.name) === 'yes' ? true : false
+                  }
+                }))
               }
             </React.Fragment>  );
        
@@ -126,14 +153,24 @@ const getDynamicFileds = (type , data) => {
                 name={data?.name}
                 className="registrationpage"
                 placeholder={data?.placeholder}
-                {...register(data?.name)}
+                {...register(data?.name,validation)}
               />
               {/* <AddPost></AddPost> */}
               {/* <Form.Control as="textarea" rows={1} type="text" className="form-control" placeholder="" {...register("landOwner")}/> */}
               <br></br>
             </div>
+
+            <h3 className="error-message" style={{ color: "red" }}>
+                    {errors?.[data?.name] && errors?.[data?.name]?.message}
+                  </h3>
+
               {
-                data?.labels?.map((item , index) => getDynamicFileds(item?.type , item))
+                data?.labels?.map((item , index) => getDynamicFileds(item?.type , item,{
+                  required: {
+                    message: "This field is required",
+                    value: item?.type === 'radio'
+                  }
+                }))
               }
            </React.Fragment>
           );
@@ -197,7 +234,12 @@ const getDynamicFileds = (type , data) => {
 if( dataMDMS?.["common-masters"]?.PerformaNewLicence?.[0]?.templates?.length){
     
 return ( 
-    dataMDMS?.["common-masters"]?.PerformaNewLicence?.[0]?.templates?.map((item, index) => getDynamicFileds(item?.type , item)
+    dataMDMS?.["common-masters"]?.PerformaNewLicence?.[0]?.templates?.map((item, index) => getDynamicFileds(item?.type , item, {
+      required: {
+        message: "This field is required",
+        value: true
+      }
+    })
     
     )
 

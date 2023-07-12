@@ -104,13 +104,16 @@ const HistoryList = (props) => {
         setDisapprovedList(tempArray);
       }
       // const ScrollToBottom = () =>{
-      //   window.scroll({
-      //     top:document.documentElement.scrollHeight,
+      //   console.log("regergergregegegreg",document.getElementById("historyList").scrollHeight)
+      //   document.getElementById("historyList").scroll({
+      //     top:document.getElementById("historyList").scrollHeight,
       //     behavior:'smooth',
       //   });
 
       // };
-      // ScrollToBottom();
+      // if(){
+      //   ScrollToBottom();
+      // }
     }, [remarkDataResp]
   )
 
@@ -370,7 +373,7 @@ const Resp = await axios.post(`/tl-services/new/license/pdf?applicationNumber=${
         {/* </Row> */}
     
 
-        <div class="histrorynotingremarks">
+        <div class="histrorynotingremarks" id="historyList">
           <Card style={{backgroundColor: "rgb(255, 217, 84)"}}>
           <p class="text-center"><h3><b>Noting</b></h3></p>
           </Card>
@@ -491,7 +494,7 @@ const Resp = await axios.post(`/tl-services/new/license/pdf?applicationNumber=${
                        </IconButton>
                        </p> */}
                         
-                        <b>Proforma # {index + 1}</b>
+                        <b>Noting # {index + 1}</b>
                            
                            {/* {dataThree.includes(el.applicationStatus) && (   */}
                            {el?.performaFieldDetail?.[0]?.isApproved == "Proforma"  &&     
@@ -580,7 +583,7 @@ const Resp = await axios.post(`/tl-services/new/license/pdf?applicationNumber=${
                          
                          
 
-                            <b>{item?.isApproved}# {index + 1}</b>
+                            {/* <b>{item?.isApproved}# {index + 1}</b> */}
 
 
                             <br></br>

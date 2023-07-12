@@ -14,6 +14,13 @@ import jsPDF from 'jspdf'
 import ScrutitnyForms from "../ScrutinyBasic/ScutinyBasic";
 import Spinner from "../../../components/Loader";
 
+import { Dialog, stepIconClasses } from "@mui/material";
+import DialogActions from "@mui/material/DialogActions";
+import DialogContent from "@mui/material/DialogContent";
+import DialogContentText from "@mui/material/DialogContentText";
+import DialogTitle from "@mui/material/DialogTitle";
+import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 
 
 const ScrutinyFormcontainer = (props) => {
@@ -43,16 +50,16 @@ const ScrutinyFormcontainer = (props) => {
   const [scrutinyDetails, setScrutinyDetails] = useState();
   const [additionalDocResponData, SetAdditionalDocResponData] = useState();
   const [status, setStatus] = useState();
-
+  const [open1, setOpen1] = useState(false);
   const [applicationDetails, setApplicationDetails] = useState();
   const [lastUpdate, SetLastUpdate] = useState();
   const [workflowDetails, setWorkflowDetails] = useState();
   const [applicationData, setApplicationData] = useState();
   const [tcpApplicationNumber, setTcpApplicationNumber] = useState();
   const [mDMSData, setMDMSData] = useState();
-  const [dataProfrma , setDataProfrma] = useState([]);
-  const [profrmaData , setProfrmaData] = useState([]);
-  const [profrmaDataID , setProfrmaDataID] = useState([]);
+  const [dataProfrma, setDataProfrma] = useState([]);
+  const [profrmaData, setProfrmaData] = useState([]);
+  const [profrmaDataID, setProfrmaDataID] = useState([]);
   const [mDmsUpdate, SetMDmsUpdate] = useState();
   const { setBusinessService } = useContext(ScrutinyRemarksContext)
 
@@ -64,8 +71,8 @@ const ScrutinyFormcontainer = (props) => {
   const userRoles = user?.info?.roles?.map((e) => e.code);
   const showRemarksSection = userRoles.includes("DTCP_HR")
 
-  console.log("rolename" , filterDataRole);
-  console.log("userRolesArray" , userRolesArray);
+  console.log("rolename", filterDataRole);
+  console.log("userRolesArray", userRolesArray);
   const roleCodeUseAPi = userRolesArray.map((object) => `${object.code}`)
 
   let query = userRolesArray.map((object) => `@.role=='${object.code}'`).join("|| ")
@@ -74,6 +81,7 @@ const ScrutinyFormcontainer = (props) => {
   console.log("showRemarksSection", showRemarksSection);
 
  
+
 
   const handleshow19 = async (e) => {
     setLoader(true);
@@ -111,7 +119,7 @@ const ScrutinyFormcontainer = (props) => {
     setLoader(false);
   };
   const handleChange = (e) => {
-    
+
     this.setState({ isRadioSelected: true });
   };
 
@@ -126,7 +134,7 @@ const ScrutinyFormcontainer = (props) => {
         "authToken": authToken
 
       }
-    
+
     }
     let requestFiled = {}
     let requestProfrma = {}
@@ -148,51 +156,51 @@ const ScrutinyFormcontainer = (props) => {
       console.log("devStatus", Resp?.Licenses[0]?.status);
 
       const additionalDoc = {
-      
-     
+
+
 
         "RequestInfo": {
-  
+
           "apiId": "Rainmaker",
-  
+
           "ver": "v1",
-  
+
           "ts": 0,
-  
+
           "action": "_search",
-  
+
           "did": "",
-  
+
           "key": "",
-  
+
           "msgId": "090909",
-  
+
           "requesterId": "",
-  
+
           "authToken": authToken,
-  
+
           "userInfo": userInfo
-  
-      },
-       
+
+        },
+
       }
-    
+
       const additionalDocRespon = await axios.post(`/tl-services/_additionalDocuments/_search?licenceNumber=${Resp?.Licenses[0]?.tcpApplicationNumber}&businessService=NewTL`, additionalDoc)
       SetAdditionalDocResponData(additionalDocRespon?.data);
       console.log("Datafee", additionalDocRespon);
-  
-    
 
-  //     dataProfrmaFiled = {
 
-  // "RequestInfo": {
-  //   "apiId": "Rainmaker",
-  //   "msgId": "1669293303096|en_IN",
-  //   "authToken": authToken
 
-  // },
-       
-  //     }
+      //     dataProfrmaFiled = {
+
+      // "RequestInfo": {
+      //   "apiId": "Rainmaker",
+      //   "msgId": "1669293303096|en_IN",
+      //   "authToken": authToken
+
+      // },
+
+      //     }
 
 
 
@@ -209,8 +217,8 @@ const ScrutinyFormcontainer = (props) => {
           msgId: "090909",
           requesterId: "",
           authToken: authToken,
-         
-  
+
+
         },
         MdmsCriteria: {
           tenantId: "hr",
@@ -221,8 +229,8 @@ const ScrutinyFormcontainer = (props) => {
               masterDetails: [
                 {
                   "name": "rolesaccess",
-                  "filter":`[?(${query})]`,
-                 },
+                  "filter": `[?(${query})]`,
+                },
                 {
                   "name": "rolesaccess",
                   "filter": `[?(@.applicationStatus =='${Resp?.Licenses[0]?.status}')]`
@@ -232,7 +240,7 @@ const ScrutinyFormcontainer = (props) => {
           ]
         }
       }
-     
+
       requestProfrma = {
 
         RequestInfo: {
@@ -246,7 +254,7 @@ const ScrutinyFormcontainer = (props) => {
           requesterId: "",
           authToken: authToken,
           correlationId: null,
-    
+
         },
         MdmsCriteria: {
           tenantId: "hr",
@@ -255,44 +263,44 @@ const ScrutinyFormcontainer = (props) => {
               moduleName: "common-masters",
               tenantId: "hr",
               masterDetails: [
-              //   {
-  
-              //     "name": "PerformaNewLicence",
-  
-              //     "filter":`[?(${query})]`,
-  
-              // },
-              // {
-              //   "name": "PerformaNewLicence",
-              //   "filter": `[?(@.applicationStatus =='${Resp?.Licenses[0]?.status}')]`
-              // }
-              {
-  
-                "name": "PerformaNewLicence",
+                //   {
 
-                "filter":`[?(${query} && @.applicationStatus =='${Resp?.Licenses[0]?.status}')]`
+                //     "name": "PerformaNewLicence",
 
-            },
+                //     "filter":`[?(${query})]`,
+
+                // },
+                // {
+                //   "name": "PerformaNewLicence",
+                //   "filter": `[?(@.applicationStatus =='${Resp?.Licenses[0]?.status}')]`
+                // }
+                {
+
+                  "name": "PerformaNewLicence",
+
+                  "filter": `[?((${query}) && @.applicationStatus =='${Resp?.Licenses[0]?.status}')]`
+
+                },
 
 
-              
-              // {
-              //   "name": "PerformaNewLicence",
-              //   "filter": `[?(@.applicationStatus =='PENDING_AT_PATWARI_HQ_PRELIM')]`
-              // }
-             
+
+                // {
+                //   "name": "PerformaNewLicence",
+                //   "filter": `[?(@.applicationStatus =='PENDING_AT_PATWARI_HQ_PRELIM')]`
+                // }
+
               ]
             }
           ]
-        } 
-      } 
+        }
+      }
     } catch (error) {
       console.log(error);
     }
-    
+
     console.log("TCPaccess123", requestFiled)
     // let requestProfrma = {status}
-     try {
+    try {
       const Resp = await axios.post(`/egov-mdms-service/v1/_search`, requestFiled).then((response) => {
         return response?.data;
       });
@@ -300,35 +308,35 @@ const ScrutinyFormcontainer = (props) => {
 
       console.log("FileddataName12", mDMSData);
 
-     
-    } 
+
+    }
     catch (error) {
       console.log(error);
-  
+
     }
-    
+
     console.log("TCPaccessrequestProfrma123", requestProfrma)
-     try {
+    try {
       const Resp = await axios.post(`/egov-mdms-service/v1/_search`, requestProfrma).then((response) => {
         return response?.data;
       });
       setDataProfrma(Resp?.MdmsRes);
-      console.log("FileddataNamemDMSDataProfrma", dataProfrma , Resp);
-  
+      console.log("FileddataNamemDMSDataProfrma", dataProfrma, Resp);
+
     } catch (error) {
       console.log(error);
-  
+
     }
 
-   
+
 
     // } catch (error) {
     //   console.log(error);
 
     // }
 
-   
-    
+
+
 
     // try {
     //   const Resp = await axios.post(`/egov-mdms-service/v1/_search`, requestFiled).then((response) => {
@@ -356,19 +364,19 @@ const ScrutinyFormcontainer = (props) => {
 
         "msgId": "1684320117934|en_IN"
 
-    },
-     
+      },
+
     }
-  
+
     const dataProfrmaFiledRespon = await axios.post(`/tl-services/_performaScrutiny/_search?applicationNumber=${id}&userId=${userInfo?.id}`, dataProfrmaFiled)
     setProfrmaData(dataProfrmaFiledRespon?.data?.PerformaScruitny?.[0]?.additionalDetails);
     setProfrmaDataID(dataProfrmaFiledRespon?.data?.PerformaScruitny?.[0]);
-      console.log("FileddataNamemDMSprofrmaData", dataProfrmaFiledRespon , profrmaDataID);
+    console.log("FileddataNamemDMSprofrmaData", dataProfrmaFiledRespon, profrmaDataID);
 
-        
+
     const additionalDoc = {
-      
-     
+
+
 
       "RequestInfo": {
 
@@ -392,10 +400,10 @@ const ScrutinyFormcontainer = (props) => {
 
         "userInfo": userInfo
 
-    },
-     
+      },
+
     }
-  
+
     const additionalDocRespon = await axios.post(`/tl-services/_additionalDocuments/_search?licenceNumber=${Resp?.Licenses[0]?.tcpApplicationNumber}&businessService=NewTL`, additionalDoc)
     SetAdditionalDocResponData(additionalDocRespon?.data);
     console.log("Datafee", additionalDocRespon);
@@ -557,25 +565,25 @@ const ScrutinyFormcontainer = (props) => {
 
       // if (showRemarksSection==="DTCP_HR")
       // {
-        let requestInfo = {
+      let requestInfo = {
 
-          RequestInfo: {
-            apiId: "Rainmaker",
-            ver: "v1",
-            ts: 0,
-            action: "_search",
-            did: "",
-            key: "",
-            msgId: "090909",
-            requesterId: "",
-            authToken: authToken,
-            userInfo: userInfo
-  
-          }
+        RequestInfo: {
+          apiId: "Rainmaker",
+          ver: "v1",
+          ts: 0,
+          action: "_search",
+          did: "",
+          key: "",
+          msgId: "090909",
+          requesterId: "",
+          authToken: authToken,
+          userInfo: userInfo
+
         }
-        console.log("TCPaccess", requestInfo)
-       
-    
+      }
+      console.log("TCPaccess", requestInfo)
+
+
       // return;
 
       try {
@@ -591,7 +599,7 @@ const ScrutinyFormcontainer = (props) => {
         console.log(error);
         setLoader(false);
       }
-    // }
+      // }
 
       const payload = {
 
@@ -634,6 +642,7 @@ const ScrutinyFormcontainer = (props) => {
 
     setTimeout(() => {
       closeModal()
+      // setOpen1(true);
       window.location.href = `/digit-ui/employee/tl/inbox`
     }, 3000);
   };
@@ -664,42 +673,55 @@ const ScrutinyFormcontainer = (props) => {
     getScrutinyData();
   }, [])
 
+  const handalfinal = () => {
+    setOpen1(false);
+  }
+
   console.log("meri update34", lastUpdate)
   return (
-    <Card className="formColorEmp">
+    <Card className="formColorEmp" style={{marginTop:"40px"}}>
       {loader && <Spinner></Spinner>}
-    <Card className="head-application">
-      <div className="row fw-normal">
-          <div className="col-sm-2">
-            <b><p className="head-font">Application Number:</p></b>
-            <b><p className="head-font">{id}</p></b>
-          </div>
-          <div className="col-sm-2">
-            <b><p className="head-font">Service Id: </p></b>
-            <b><p className="head-font">
-              {/* {applicationData?.businessService} ask to renuka */}
-              Licence
-            </p></b>
-          </div>
-          <div className="col-sm-2">
-            <b><p className="head-font">TCP Application Number:</p></b>
-            {/* {item.name.substring(0, 4)} */}
-            <b><p className="head-font">{applicationData?.tcpApplicationNumber.substring(7, 20)}</p></b>
-          </div>
-          <div className="col-sm-2">
-            <b><p className="head-font">TCP Case Number:</p></b>
-            <b><p className="head-font">{applicationData?.tcpCaseNumber.substring(0, 7)}</p></b>
-          </div>
-          <div className="col-sm-2">
-            <b><p className="head-font">TCP Diary Number: </p></b>
-            <b><p className="head-font">{applicationData?.tcpDairyNumber}</p></b>
+      <div style={{
+            position: "fixed",
+            top: "89px",
+            width: "100%",
+            left:"0",
+            paddingLeft: "62px",
+            zIndex: 9
+      }}>
+        <Card className="head-application1">
+          <div className="d-flex justify-content-between">
+            <div className="px-3">
+              <b><p className="head-font">Application Number:</p></b>
+              <b><p className="head-font">{id}</p></b>
+            </div>
+            <div className="px-3">
+              <b><p className="head-font">Service Id: </p></b>
+              <b><p className="head-font">
+                {/* {applicationData?.businessService} ask to renuka */}
+                Licence
+              </p></b>
+            </div>
+            <div className="px-3">
+              <b><p className="head-font">TCP Application Number:</p></b>
+              {/* {item.name.substring(0, 4)} */}
+              <b><p className="head-font">{applicationData?.tcpApplicationNumber.substring(7, 20)}</p></b>
+            </div>
+            <div className="px-3">
+              <b><p className="head-font">TCP Case Number:</p></b>
+              <b><p className="head-font">{applicationData?.tcpCaseNumber.substring(0, 7)}</p></b>
+            </div>
+            <div className="px-3">
+              <b><p className="head-font">TCP Diary Number: </p></b>
+              <b><p className="head-font">{applicationData?.tcpDairyNumber}</p></b>
 
+            </div>
+            <div className="px-3">
+              <Button style={{ textAlign: "right" }} value="Submit" id="Submit" onChange1={handleChange} name="Submit" onClick={handleshow19}>View PDF</Button>
+            </div>
           </div>
-          <div className="col-sm-2">
-            <Button style={{ textAlign: "right" }} value="Submit" id="Submit" onChange1={handleChange} name="Submit" onClick={handleshow19}>View PDF</Button>
-          </div>
-        </div>
-      </Card>
+        </Card>
+      </div>
       <Row >
         <div className="formlist">
           <ScrutitnyForms
@@ -805,7 +827,31 @@ const ScrutinyFormcontainer = (props) => {
     </DialogActions>
 
     </Dialog> */}
-
+           <Dialog open1={open1} onClose={submitAction} aria-labelledby="alert-dialog-title" aria-describedby="alert-dialog-description" style={{
+    textAlign: "center",
+    color: "#ffff",
+    backgroundColor: "#000000b0"}}>
+          <DialogTitle id="alert-dialog-title" style={{ fontSize: "xx-large", background: "#000000b0" , color: "#ffff"}}>Application Submission</DialogTitle>
+          <DialogContent style={{ background: "#000000b0"}}>
+            <DialogContentText id="alert-dialog-description" style={{textAlign: "center", color: "#ffff" , fontSize: "x-large"}}>
+              <p ><CheckCircleIcon style={{fontSize: "-webkit-xxx-large;"}}></CheckCircleIcon></p>
+              <p>
+                Thank You {" "}
+                {/* <span>
+                  <CheckCircleOutlineIcon style={{ color: "blue", variant: "filled" }} />
+                </span> */}
+              </p>
+              <p>
+                Application was been submitted successfully !!<span style={{ padding: "5px", color: "blue" }}></span> 
+              </p>
+            </DialogContentText>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={handalfinal} autoFocus>
+              Ok
+            </Button>
+          </DialogActions>
+        </Dialog>
 
         </Row>
       </Row>

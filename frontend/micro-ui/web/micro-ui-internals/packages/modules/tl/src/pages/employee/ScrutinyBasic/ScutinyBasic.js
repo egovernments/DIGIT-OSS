@@ -66,7 +66,7 @@ const ScrutitnyForms = ({ apiResponse, applicationNumber, refreshScrutinyData ,p
   
   const [purpose, setPurpose] = useState("");
   const jeLandInfoRef = useRef();
-  const { register, handleSubmit , watch , setValue} = useForm();
+  const { register, handleSubmit , watch , setValue, formState:{errors}} = useForm();
   
   const { id } = useParams();
   const [displayPersonal, setDisplayPersonalInfo] = useState([]);
@@ -1149,9 +1149,10 @@ console.log("userInFODATA123" , userInfo);
 
           <div  style={{ position: "relative", maxWidth: "100%", padding: 2 }}>
             
-
+    {dataMDMS?.["common-masters"]?.PerformaNewLicence?.[0]?.active === true &&
   
  <div>
+
             <div
             className="collapse-header"
             onClick={() => setOpen2(!open2) }
@@ -1184,11 +1185,13 @@ console.log("userInFODATA123" , userInfo);
           register = {register}
           setValue = {setValue}
           dataProfrmaFileds ={dataProfrmaFileds}
+          watch={watch}
+          errors={errors}
               // style={{}}
          />
            {/* <input as="textarea" rows={1} type="text" className="form-control" placeholder="" {...register("landOwnerA")}/> */}
           {/* <button type="submit" >save</button> */}
-          <div className="col-sm-2">
+          <div className="my-3">
             <Button style={{ textAlign: "right" }} value="Submit" id="Submit" type="submit">Save Performa</Button>
           </div>
             </form>
@@ -1196,7 +1199,7 @@ console.log("userInFODATA123" , userInfo);
           </Collapse>
           </div>
           
- 
+          }
 
 
       <div

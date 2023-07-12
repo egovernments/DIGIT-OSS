@@ -556,7 +556,10 @@ const ServicePlanService = () => {
                 <Col className="col-3">
                   <div>
                     <label>
-                      <h2>{`${t("SP_APPLICANT_NAME")}`}</h2>
+                      <h2>
+                      {`${t("SP_APPLICANT_NAME")}`} <span style={{ color: "red" }}>*</span>
+                      </h2>
+                      
                     </label>
                   </div>
                   <input
@@ -571,7 +574,7 @@ const ServicePlanService = () => {
                 <Col className="col-3">
                   <div>
                     <label>
-                      <h2>{`${t("SP_APPLICANT_DEVELOPMENT_PLAN")}`}</h2>
+                      <h2>{`${t("SP_APPLICANT_DEVELOPMENT_PLAN")}`} <span style={{ color: "red" }}>*</span></h2>
                     </label>
                   </div>
                   <input
@@ -586,7 +589,7 @@ const ServicePlanService = () => {
                 <Col className="col-3">
                   <div>
                     <label>
-                      <h2>{`${t("SP_APPLICANT_PURPOSE_OF_LICENCE")}`}</h2>
+                      <h2>{`${t("SP_APPLICANT_PURPOSE_OF_LICENCE")}`} <span style={{ color: "red" }}>*</span></h2>
                     </label>
                   </div>
                   <input
@@ -601,7 +604,7 @@ const ServicePlanService = () => {
                 <Col className="col-3">
                   <div>
                     <label>
-                      <h2>{`${t("SP_APPLICANT_TOTAL_AREA")}`}</h2>
+                      <h2>{`${t("SP_APPLICANT_TOTAL_AREA")}`} <span style={{ color: "red" }}>*</span></h2>
                     </label>
                   </div>
                   <input
@@ -653,7 +656,14 @@ const ServicePlanService = () => {
                       </div>
                     </td>
                     <td component="th" scope="row">
-                      <h2> {`${t("SP_APPLICANT_SELF_CERTIFIED_DRAWING_APPROVED_TEMPLATE")}`}</h2>
+                    <div>
+                <label htmlFor="Developer Details">
+                {`${t("SP_APPLICANT_SELF_CERTIFIED_DRAWING_APPROVED_TEMPLATE")}`}
+                  <span class="text-danger font-weight-bold mx-2">*</span>
+                </label>
+               
+              </div>
+                      {/* <h2>  </h2> */}
                       {drawingErr.selfCertifiedDrawingFromEmpaneledDoc ? (
                         <p style={{ color: "red" }}>Please upload self-certified drawings from empanelled/certified architects*</p>
                       ) : (
@@ -670,6 +680,7 @@ const ServicePlanService = () => {
                         id="file-input-1"
                         onChange={(e) => getDocumentData(e?.target?.files[0], "selfCertifiedDrawingFromEmpaneledDoc")}
                         style={{ display: "none" }}
+                        accept="application/pdf/jpeg/png"
                       />
 
                       {fileStoreId?.selfCertifiedDrawingFromEmpaneledDoc ? (
@@ -689,6 +700,9 @@ const ServicePlanService = () => {
                           </IconButton>
                         </div>
                       )}
+                      
+
+                      
                     </td>
                   </tr>
                   {/* <tr>
@@ -739,7 +753,14 @@ const ServicePlanService = () => {
                       </div>
                     </td>
                     <td component="th" scope="row">
-                      <h2> {`${t("SP_APPLICANT_SERVICE_PLAN_IN-PDF_FORMAT")}`}</h2>
+                    <div>
+                <label htmlFor="Developer Details">
+                {`${t("SP_APPLICANT_SERVICE_PLAN_IN-PDF_FORMAT")}`} 
+                  <span class="text-danger font-weight-bold mx-2">*</span>
+                </label>
+               
+              </div>
+                      {/* <h2> {`${t("SP_APPLICANT_SERVICE_PLAN_IN-PDF_FORMAT")}`} <p style={{ color: "red" }}>*</p></h2> */}
                       {drawingErr.shapeFileAsPerTemplate ? <p style={{ color: "red" }}>Please upload service plan pdf and gis format*</p> : " "}
                     </td>
                     <td component="th" scope="row">
@@ -750,6 +771,7 @@ const ServicePlanService = () => {
                         type="file"
                         className="form-control"
                         // {...register("shapeFileAsPerTemplate")}
+                        accept="application/pdf/jpeg/png"
                         id="file-input-3"
                         onChange={(e) => getDocumentData(e?.target?.files[0], "shapeFileAsPerTemplate")}
                         style={{ display: "none" }}
@@ -781,12 +803,20 @@ const ServicePlanService = () => {
                     </td>
                     <td component="th" scope="row">
                       {/* <h2>Service plan in AutoCAD (DXF) file.</h2> */}
-                      <h6>
-                        {`${t("SP_APPLICANT_SERVICE_pLAN_AUTOCAD")}`}
-                        <Tooltip title="Any amendment suggested by HSVP may be incorporated in the drawing accordingly">
+                      <div>
+                <label htmlFor="Developer Details">
+                {`${t("SP_APPLICANT_SERVICE_pLAN_AUTOCAD")}`} 
+                  <span class="text-danger font-weight-bold mx-2">*</span>
+                </label>
+                <Tooltip title="Any amendment suggested by HSVP may be incorporated in the drawing accordingly">
                           <InfoIcon style={{ cursor: "pointer" }} color="primary"></InfoIcon>
                         </Tooltip>
-                      </h6>
+               
+              </div>
+                      {/* <h6>
+                        {`${t("SP_APPLICANT_SERVICE_pLAN_AUTOCAD")}`} <p style={{ color: "red" }}>*</p>
+                     
+                      </h6> */}
                       {drawingErr.autoCadFile ? <p style={{ color: "red" }}>Please upload autocad file*</p> : " "}
                     </td>
                     <td component="th" scope="row">
@@ -798,6 +828,7 @@ const ServicePlanService = () => {
                         className="form-control"
                         id="file-input-4"
                         onChange={(e) => getDocumentData(e?.target?.files[0], "autoCadFile")}
+                        accept=".dxf"
                         style={{ display: "none" }}
                       />
                       {fileStoreId?.autoCadFile ? (
@@ -876,11 +907,17 @@ const ServicePlanService = () => {
                         </div>
                       </td>
                       <td component="th" scope="row">
-                        <h2>
+                      <div>
+                <label htmlFor="Developer Details">
+                {`${t("SP_APPLICANT_PREVIOUSLY_LAYOUT_PLAN")}`} 
+                  <span class="text-danger font-weight-bold mx-2">*</span>
+                </label>
+                </div>
+                        {/* <h2>
                           {" "}
-                          {`${t("SP_APPLICANT_PREVIOUSLY_LAYOUT_PLAN")}`}
-                          {/* Previously Uploaded layout plan (call) */}
-                        </h2>
+                          {`${t("SP_APPLICANT_PREVIOUSLY_LAYOUT_PLAN")}`} <p style={{ color: "red" }}>*</p>
+                        
+                        </h2> */}
                         {drawingErr.layoutPlan ? <p style={{ color: "red" }}>Please upload layout plan call*</p> : " "}
                       </td>
                       <td component="th" scope="row">
@@ -893,6 +930,7 @@ const ServicePlanService = () => {
                           id="file-input-6"
                           onChange={(e) => getDocumentData(e?.target?.files[0], "layoutPlan")}
                           style={{ display: "none" }}
+                          accept="application/pdf/jpeg/png"
                         />
 
                         {fileStoreId?.layoutPlan ? (
@@ -921,11 +959,17 @@ const ServicePlanService = () => {
                         </div>
                       </td>
                       <td component="th" scope="row">
-                        <h2>
+                      <div>
+                <label htmlFor="Developer Details">
+                {`${t("SP_APPLICANT_UPLOAD_REVISED_LAYOUT_PLAN")}`}
+                  <span class="text-danger font-weight-bold mx-2">*</span>
+                </label>
+                </div>
+                        {/* <h2>
                           {" "}
                           {`${t("SP_APPLICANT_UPLOAD_REVISED_LAYOUT_PLAN")}`}
-                          {/* Upload the Revised layout plan */}
-                        </h2>
+                     
+                        </h2> */}
                         {drawingErr.revisedLayout ? <p style={{ color: "red" }}>Please upload revised layout plan*</p> : " "}
                       </td>
                       <td component="th" scope="row">
@@ -939,6 +983,7 @@ const ServicePlanService = () => {
                           // {...register("environmentalClearance")}
                           onChange={(e) => getDocumentData(e?.target?.files[0], "revisedLayout")}
                           style={{ display: "none" }}
+                          accept="application/pdf/jpeg/png"
                         />
                         {fileStoreId?.revisedLayout ? (
                           <VisibilityIcon color="primary" onClick={() => viewDocument(fileStoreId?.revisedLayout)}>
@@ -966,7 +1011,13 @@ const ServicePlanService = () => {
                         </div>
                       </td>
                       <td component="th" scope="row">
-                        <h2>{`${t("SP_APPLICANT_UPLOAD_DEMARCATION_PLAN_AUTOAD")}`}</h2>
+                      <div>
+                <label htmlFor="Developer Details">
+                {`${t("SP_APPLICANT_UPLOAD_DEMARCATION_PLAN_AUTOAD")}`}
+                  <span class="text-danger font-weight-bold mx-2">*</span>
+                </label>
+                </div>
+                        {/* <h2>{`${t("SP_APPLICANT_UPLOAD_DEMARCATION_PLAN_AUTOAD")}`}</h2> */}
                         {drawingErr.demarcation ? <p style={{ color: "red" }}>Please upload demarcation plan*</p> : " "}
                       </td>
                       <td component="th" scope="row">
@@ -980,6 +1031,8 @@ const ServicePlanService = () => {
                           id="file-input-8"
                           onChange={(e) => getDocumentData(e?.target?.files[0], "demarcation")}
                           style={{ display: "none" }}
+                          accept="application/pdf/jpeg/png"
+
                         />
                         {fileStoreId?.demarcation ? (
                           <VisibilityIcon color="primary" onClick={() => viewDocument(fileStoreId?.demarcation)}>
@@ -1007,7 +1060,13 @@ const ServicePlanService = () => {
                         </div>
                       </td>
                       <td component="th" scope="row">
-                        <h2> {`${t("SP_APPLICANT_UPLOAD_DEMARCATION_PLAN_PDF")}`}</h2>
+                        {/* <h2> {`${t("SP_APPLICANT_UPLOAD_DEMARCATION_PLAN_PDF")}`}</h2> */}
+                        <div>
+                <label htmlFor="Developer Details">
+                {`${t("SP_APPLICANT_UPLOAD_DEMARCATION_PLAN_PDF")}`}
+                  <span class="text-danger font-weight-bold mx-2">*</span>
+                </label>
+                </div>
                         {drawingErr.demarcationgis ? <p style={{ color: "red" }}>Please upload demarcation plan in PDF and GIS format*</p> : " "}
                       </td>
                       <td component="th" scope="row">
@@ -1021,6 +1080,7 @@ const ServicePlanService = () => {
                           // {...register("autoCadFile")}
                           onChange={(e) => getDocumentData(e?.target?.files[0], "demarcationgis")}
                           style={{ display: "none" }}
+                          accept="application/pdf/jpeg/png"
                         />
                         {fileStoreId?.demarcationgis ? (
                           <VisibilityIcon color="primary" onClick={() => viewDocument(fileStoreId?.demarcationgis)}>
@@ -1048,7 +1108,13 @@ const ServicePlanService = () => {
                         </div>
                       </td>
                       <td component="th" scope="row">
-                        <h2>{`${t("SP_APPLICANT_UPLOAD_EXCEL_LAYOUT_STRUCTURE")}`}</h2>
+                        {/* <h2>{`${t("SP_APPLICANT_UPLOAD_EXCEL_LAYOUT_STRUCTURE")}`}</h2> */}
+                        <div>
+                <label htmlFor="Developer Details">
+                {`${t("SP_APPLICANT_UPLOAD_EXCEL_LAYOUT_STRUCTURE")}`}
+                  <span class="text-danger font-weight-bold mx-2">*</span>
+                </label>
+                </div>
                         {drawingErr.layoutExcel ? <p style={{ color: "red" }}>Please upload excel of detailed layout structure*</p> : " "}
                       </td>
                       <td component="th" scope="row">
@@ -1062,6 +1128,7 @@ const ServicePlanService = () => {
                           id="file-input-10"
                           onChange={(e) => getDocumentData(e?.target?.files[0], "layoutExcel")}
                           style={{ display: "none" }}
+                          accept="application/pdf/jpeg/png"
                         />
                         {fileStoreId?.layoutExcel ? (
                           <VisibilityIcon color="primary" onClick={() => viewDocument(fileStoreId?.layoutExcel)}>
@@ -1089,7 +1156,13 @@ const ServicePlanService = () => {
                         </div>
                       </td>
                       <td component="th" scope="row">
-                        <h2> {`${t("SP_APPLICANT_OTHER_RELEVANT_DOCUMENT")}`}</h2>
+                        {/* <h2> {`${t("SP_APPLICANT_OTHER_RELEVANT_DOCUMENT")}`}</h2> */}
+                        <div>
+                <label htmlFor="Developer Details">
+                {`${t("SP_APPLICANT_OTHER_RELEVANT_DOCUMENT")}`}
+                  <span class="text-danger font-weight-bold mx-2">*</span>
+                </label>
+                </div>
                         {drawingErr.anyOtherdoc ? <p style={{ color: "red" }}>Please upload anyother relevant document*</p> : " "}
                       </td>
                       <td component="th" scope="row">
@@ -1100,6 +1173,7 @@ const ServicePlanService = () => {
                           type="file"
                           className="form-control"
                           // {...register("certifieadCopyOfThePlan")}
+                          accept="application/pdf/jpeg/png"
                           id="file-input-11"
                           onChange={(e) => getDocumentData(e?.target?.files[0], "anyOtherdoc")}
                           style={{ display: "none" }}
@@ -1137,10 +1211,10 @@ const ServicePlanService = () => {
             </Card>
           </Card>
         </form>
-        <Dialog open={open} onClose={handleClose} aria-labelledby="alert-dialog-title" aria-describedby="alert-dialog-description">
+        <Dialog open={open} onClose={handleClose} aria-labelledby="alert-dialog-title" aria-describedby="alert-dialog-description" >
           <DialogTitle id="alert-dialog-title">Service Plan Submission</DialogTitle>
           <DialogContent>
-            <DialogContentText id="alert-dialog-description">
+            <DialogContentText id="alert-dialog-description" >
               <p>
                 Your Service Plan is submitted successfully{" "}
                 <span>

@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, Fragment } from "react";
 import "bootstrap/dist/css/bootstrap.css";
 import { useForm } from "react-hook-form";
 import { Button, Form, FormLabel } from "react-bootstrap";
 import { Card, Row, Col } from "react-bootstrap";
-import Table from "react-bootstrap/Table";
+// import Table from "react-bootstrap/Table";
 import { Modal, ModalHeader, ModalBody, ModalFooter } from "reactstrap";
 import axios from "axios";
 import { useLocation } from "react-router-dom";
@@ -21,11 +21,23 @@ import ModalChild from "../Remarks/ModalChild";
 import ReportProblemIcon from "@mui/icons-material/ReportProblem";
 import { useStyles } from "../css/personalInfoChild.style";
 import { add } from "lodash";
+import { useTranslation } from "react-i18next";
 
-const CapacityScrutiny = ({ t, config, onSelect, showTable, formData, formDataValue, data, addInfo,applicationStatus , capacityScrutinyInfo, iconColorState ,showDevTypeFields,getRemarkData,mDMSData }) => {
+import { styled } from "@mui/material/styles";
+import Paper from "@mui/material/Paper";
+import Table from "@mui/material/Table";
+import TableBody from "@mui/material/TableBody";
+import TableCell, { tableCellClasses } from "@mui/material/TableCell";
+import TableContainer from "@mui/material/TableContainer";
+import TableHead from "@mui/material/TableHead";
+import TablePagination from "@mui/material/TablePagination";
+import TableRow from "@mui/material/TableRow";
+
+const CapacityScrutiny = ({ config, onSelect, showTable,  formDataValue,  addInfo, data, applicationStatus, capacityScrutinyInfo, iconColorState,  mDMSData }) => {
   const { pathname: url } = useLocation();
   // const userInfo = Digit.UserService.getUser();
   let validation = {};
+  const { t } = useTranslation();
   let isOpenLinkFlow = window.location.href.includes("openlink");
 
   const [isDevType, setIsDevType] = useState(false);
@@ -35,7 +47,7 @@ const CapacityScrutiny = ({ t, config, onSelect, showTable, formData, formDataVa
   const [capacityDevelopColonyHdruAct, setModalCapacityDevelopColonyHdruAct] = useState(
     formDataValue?.DeveloperCapacity?.capacityDevelopColonyHdruAct || []
   );
- 
+
   const [capacityDevelopColonyLawAct, setCapacityDevelopColonyLawAct] = useState(formDataValue?.DeveloperCapacity?.capacityDevelopColonyLawAct || []);
   const [capacityDevelopAColony, setcapacityDevelopAColony] = useState([]);
 
@@ -89,50 +101,93 @@ const CapacityScrutiny = ({ t, config, onSelect, showTable, formData, formDataVa
   // const hideRemarks = userRoles.some((item)=>item === "CTP_HR" || item === "CTP_HQ" || item === "DTP_HR" || item === "DTP_HQ")
   // const hideRemarksPatwari = userRoles.some((item)=>item ==="Patwari_HQ")
 
-    // const applicationStatus = props.applicationStatus ;
+  // const applicationStatus = props.applicationStatus ;
   let user = Digit.UserService.getUser();
   const userInfo = Digit.UserService.getUser()?.info || {};
   const userRolesArray = userInfo?.roles.filter((user) => user.code !== "EMPLOYEE");
   const filterDataRole = userRolesArray?.[0]?.code;
   const userRoles = user?.info?.roles?.map((e) => e.code) || [];
-  
-  console.log("rolelogintime" , userRoles );
-  console.log("afterfilter12" , filterDataRole)
+
+  console.log("rolelogintime", userRoles);
+  console.log("afterfilter12", filterDataRole)
 
   // const mDMSData = props.mDMSData;
   const mDMSDataRole = mDMSData?.map((e) => e.role) || [];
   const hideRemarks = mDMSDataRole.includes(filterDataRole);
-  const applicationStatusMdms = mDMSData?.map((e) => e.applicationStatus) || [] ;
+  const applicationStatusMdms = mDMSData?.map((e) => e.applicationStatus) || [];
   const hideRemarksPatwari = applicationStatusMdms.some((item) => item === applicationStatus) || [];
-  const [fileddataName, setFiledDataName] = useState ();
+  const [fileddataName, setFiledDataName] = useState();
 
- useEffect(() =>{
-    if(mDMSData&&mDMSData?.length){
-      console.log("filedDataMdms" , mDMSData,mDMSData?.[0]?.field , mDMSData?.[0]?.field.map((item , index) => item.fields ));
-      setFiledDataName(mDMSData?.[0]?.field.map((item , index) => item.fields ))
-       
+  useEffect(() => {
+    if (mDMSData && mDMSData?.length) {
+      console.log("filedDataMdms", mDMSData, mDMSData?.[0]?.field, mDMSData?.[0]?.field.map((item, index) => item.fields));
+      setFiledDataName(mDMSData?.[0]?.field.map((item, index) => item.fields))
+
     }
-    
- },[mDMSData]
- )
- const showReportProblemIcon=(filedName)=>{
-   if (fileddataName&&fileddataName.length) {
+
+  }, [mDMSData]
+  )
+  const showReportProblemIcon = (filedName) => {
+    if (fileddataName && fileddataName.length) {
       let show = fileddataName.includes(filedName)
-      return show ;
+      return show;
     } else {
-      return false ;
+      return false;
     }
- }
- 
+  }
+
   // mDMSData?.map((e) => e.role)||[]
-  console.log("happyRole" , userRoles);
-  console.log("happyDate" , mDMSData);
-  console.log("happyROLE" , mDMSDataRole);
-  console.log("happyapplicationStatusMdms564654" , applicationStatusMdms);
-  console.log("happyDateHIDE45655" , hideRemarksPatwari,showReportProblemIcon("Purpose of colony"),hideRemarks);
+  console.log("happyRole", userRoles);
+  console.log("happyDate", mDMSData);
+  console.log("happyROLE", mDMSDataRole);
+  console.log("happyapplicationStatusMdms564654", applicationStatusMdms);
+  console.log("happyDateHIDE45655", hideRemarksPatwari, showReportProblemIcon("Purpose of colony"), hideRemarks);
+
+  const { setValue, getValues, watch } = useForm();
+  // -----Shareholding Pageination
+  const [rowsPerPageStack, setRowsPerPageStack] = React.useState(10);
+  const handleChangePageStack = (event, newPageStack) => {
+    setPageStack(newPageStack);
+  };
+  const [pageStack, setPageStack] = React.useState(0);
+  const handleChangeRowsPerPageStack = (event) => {
+    setRowsPerPageStack(+event.target.value);
+    setPageStack(0);
+  };
+  //-------------------//
+
+  const [rowsPerPageMca, setRowsPerPageMca] = React.useState(10);
+
+  const handleChangePageMca = (event, newPageMca) => {
+    setPageMca(newPageMca);
+  };
+  const [pageMca, setPageMca] = React.useState(0);
+  const handleChangeRowsPerPageMca = (event) => {
+    setRowsPerPageMca(+event.target.value);
+    setPageMca(0);
+  };
+  //--------------------//
 
 
+  const StyledTableCell = styled(TableCell)(({ theme }) => ({
+    [`&.${tableCellClasses.head}`]: {
+      backgroundColor: theme.palette.common.black,
+      color: theme.palette.common.white,
+    },
+    [`&.${tableCellClasses.body}`]: {
+      fontSize: 14,
+    },
+  }));
 
+  const StyledTableRow = styled(TableRow)(({ theme }) => ({
+    "&:nth-of-type(odd)": {
+      backgroundColor: theme.palette.action.hover,
+    },
+    // hide last border
+    "&:last-child td, &:last-child th": {
+      border: 0,
+    },
+  }));
 
 
   // console.log("AUTHNAME", authUserName);
@@ -381,11 +436,11 @@ const CapacityScrutiny = ({ t, config, onSelect, showTable, formData, formDataVa
   const [smShow, setSmShow] = useState(false);
   const [labelValue, setLabelValue] = useState("");
   const Colors = {
-    conditional:"#2874A6",
-    approved:"#09cb3d",
-    disapproved:"#ff0000",
-   
-    info:"#FFB602"
+    conditional: "#2874A6",
+    approved: "#09cb3d",
+    disapproved: "#ff0000",
+
+    info: "#FFB602"
   }
   const [selectedFieldData, setSelectedFieldData] = useState();
   const [fieldValue, setFieldValue] = useState("");
@@ -422,64 +477,64 @@ const CapacityScrutiny = ({ t, config, onSelect, showTable, formData, formDataVa
   { label: "Area of the project in acres ", key: "caution13" },
   { label: "(ii) Have you developed projects outside Haryana:-", key: "caution10" },]
 
-const iconStates = iconColorState
-console.log("RemarksColor", iconStates);
-const getColorofFieldIcon=()=>{
-  let tempFieldColorState = fieldIconColors;
-  fieldIdList.forEach((item)=>{
-    if (iconStates!==null && iconStates!==undefined) {
-      console.log("color method called");
-      const fieldPresent = iconStates.egScrutiny.filter(ele => (ele.fieldIdL===item.label));
-      console.log("filteration value", fieldPresent,fieldPresent[0]?.isApproved);
-      if(fieldPresent && fieldPresent.length){
-        console.log("filteration value1", fieldPresent,fieldPresent[0]?.isApproved);
-        tempFieldColorState = {...tempFieldColorState,[item.key]:fieldPresent[0].isApproved === "In Order" ?Colors.approved: fieldPresent[0].isApproved === "Not In Order" ? Colors.disapproved:fieldPresent[0].isApproved === "conditional" ? Colors.conditional:Colors.info}
-       
+  const iconStates = iconColorState
+  console.log("RemarksColor", iconStates);
+  const getColorofFieldIcon = () => {
+    let tempFieldColorState = fieldIconColors;
+    fieldIdList.forEach((item) => {
+      if (iconStates !== null && iconStates !== undefined) {
+        console.log("color method called");
+        const fieldPresent = iconStates.egScrutiny.filter(ele => (ele.fieldIdL === item.label));
+        console.log("filteration value", fieldPresent, fieldPresent[0]?.isApproved);
+        if (fieldPresent && fieldPresent.length) {
+          console.log("filteration value1", fieldPresent, fieldPresent[0]?.isApproved);
+          tempFieldColorState = { ...tempFieldColorState, [item.key]: fieldPresent[0].isApproved === "In Order" ? Colors.approved : fieldPresent[0].isApproved === "Not In Order" ? Colors.disapproved : fieldPresent[0].isApproved === "Order With Conditions" ? Colors.conditional : Colors.info }
+
+        }
       }
+    })
+
+    setFieldIconColors(tempFieldColorState);
+
+  };
+
+
+  useEffect(() => {
+    getColorofFieldIcon();
+    console.log("repeating1...",)
+  }, [iconStates])
+
+  useEffect(() => {
+    if (labelValue) {
+      const fieldPresent = iconStates.egScrutiny.filter(ele => (ele.fieldIdL === labelValue));
+      setSelectedFieldData(fieldPresent[0]);
+    } else {
+      setSelectedFieldData(null);
     }
-  })
-
-  setFieldIconColors(tempFieldColorState);
-
-};
-
-
-useEffect(()=>{
-  getColorofFieldIcon();
-  console.log("repeating1...",)
-},[iconStates])
-
-useEffect(()=>{
-  if(labelValue){
-    const fieldPresent = iconStates.egScrutiny.filter(ele => (ele.fieldIdL===labelValue));
-    setSelectedFieldData(fieldPresent[0]);
-  }else{
-    setSelectedFieldData(null);
-  }
-},[labelValue])
+  }, [labelValue])
 
 
 
-const currentRemarks = (data) => {
-  showTable({ data: data.data });
-};
+  const currentRemarks = (data) => {
+    showTable({ data: data.data });
+  };
 
-const handlemodaldData = (data) => {
-  // setmodaldData(data.data);
-  setSmShow(false);
-  console.log("here",openedModal,data);
-  if(openedModal && data){
-    setFieldIconColors({...fieldIconColors,[openedModal]:data.data.isApproved?Colors.approved:Colors.disapproved})
+  const handlemodaldData = (data) => {
+    // setmodaldData(data.data);
+    setSmShow(false);
+    console.log("here", openedModal, data);
+    if (openedModal && data) {
+      setFieldIconColors({ ...fieldIconColors, [openedModal]: data.data.isApproved ? Colors.approved : Colors.disapproved })
 
-    
-    // fieldPresent[0].isApproved === "approved" ?Colors.approved: fieldPresent[0].isApproved === "disapproved" ? Colors.disapproved:fieldPresent[0].isApproved === "conditional" ? Colors.conditional:Colors.info
-  }
+
+      // fieldPresent[0].isApproved === "approved" ?Colors.approved: fieldPresent[0].isApproved === "disapproved" ? Colors.disapproved:fieldPresent[0].isApproved === "conditional" ? Colors.conditional:Colors.info
+    }
     setOpennedModal("");
     setLabelValue("");
-};
+  };
 
-  console.log("happy akash" ,capacityScrutinyInfo);
-  console.log("happy akash2" , addInfo);
+  console.log("happy akash", capacityScrutinyInfo);
+  console.log("happy akash2", addInfo);
 
   return (
     <div>
@@ -492,7 +547,7 @@ const handlemodaldData = (data) => {
         fieldValue={fieldValue}
         remarksUpdate={currentRemarks}
         applicationStatus={applicationStatus}
-        // getRemarkData={props.getRemarkData}
+      // getRemarkData={props.getRemarkData}
       ></ModalChild>
 
       <div
@@ -520,17 +575,18 @@ const handlemodaldData = (data) => {
 
       <Collapse in={open}>
         <div id="example-collapse-text">
-          <FormStep config={config} onSelect={submitTechdevData} onSkip={onSkip} t={t}>
-          {/* kit  {developerType} */}
-          
+          <FormStep config={config} onSelect={submitTechdevData} onSkip={onSkip} t={t} style={{ padding : "3%"}}>
+            <div>
+            {/* kit  {developerType} */}
+
             {/* oti {addInfo?.showDevTypeFields} */}
 
-            {addInfo?.showDevTypeFields === "Individual" && (
+            {/* {addInfo?.showDevTypeFields === "Individual" && (
               <div className="card-body">
                 <div className="form-group row mb-12">
                   <label className="col-sm-3 col-form-label">Individual</label>
                   <div className="col-sm-12">
-                    {/* <textarea type="text" className="employee-card-input" id="details" placeholder="Enter Details" /> */}
+
                     <table className="table table-bordered" size="sm">
                       <thead>
                         <tr>
@@ -545,83 +601,83 @@ const handlemodaldData = (data) => {
                           <td> 1 </td>
                           <td>Net Worth in case of individual certified by CA/ Or Income tax return in case of an individual (for the last three years)</td>
                           <td>
-                            {/* <input type="file" name="upload" placeholder="" class="employee-card-input" /> */}
+                       
                             <div className="row">
-                                  {/* <button className="btn btn-sm col-md-6">
-                                    <VisibilityIcon color="info" className="icon" />
-                                  </button>
-                                  <button className="btn btn-sm col-md-6">
-                                    <FileDownloadIcon color="primary" />
-                                  </button> */}
-                                  
-                                 <div className="btn btn-sm col-md-6">
-                                   <IconButton onClick={()=>getDocShareholding(item?.agreementDoc)}>
+                           
+
+                              {
+                                item?.agreementDoc &&
+                                <Fragment>
+                                  <div className="btn btn-sm col-md-6">
+                                    <IconButton onClick={() => getDocShareholding(item?.agreementDoc)}>
                                       <VisibilityIcon color="info" className="icon" /></IconButton>
-                                      </div>
-                                 <div className="btn btn-sm col-md-6">
-                                  <IconButton onClick={()=>getDocShareholding(item?.agreementDoc)}>
+                                  </div>
+                                  <div className="btn btn-sm col-md-6">
+                                    <IconButton onClick={() => getDocShareholding(item?.agreementDoc)}>
                                       <FileDownloadIcon color="info" className="icon" /></IconButton>
-                                      </div>
-                                </div>
+                                  </div>
+                                </Fragment>
+                              }
+
+                            </div>
                           </td>
                           <td align="center" size="large">
-                             {JSON.stringify(hideRemarks)} 
-                  {/*  display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("X:Longitude") ? "block" : "none", */}
-                          <div>
-                            <ReportProblemIcon
-                  style={{
-                     display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("X:Longitude") ? "block" : "none",
-                    color: fieldIconColors.caution1
-                  }}
-                  onClick={() => {
-                    setOpennedModal("caution1")
-                    setLabelValue("Whether the Developer/ group company has earlier been granted permission to set up a colony under HDRU Act, 1975"),
-                      setSmShow(true),
-                      console.log("modal open"),
-                      setFieldValue(capacityScrutinyInfo !== null ? capacityScrutinyInfo?.caution1: null);
-                  }}
-                ></ReportProblemIcon>
-                </div>
+                            {JSON.stringify(hideRemarks)}
+
+                            <div>
+                              <ReportProblemIcon
+                                style={{
+                                  display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("X:Longitude") ? "block" : "none",
+                                  color: fieldIconColors.caution1
+                                }}
+                                onClick={() => {
+                                  setOpennedModal("caution1")
+                                  setLabelValue("Whether the Developer/ group company has earlier been granted permission to set up a colony under HDRU Act, 1975"),
+                                    setSmShow(true),
+                                    console.log("modal open"),
+                                    setFieldValue(capacityScrutinyInfo !== null ? capacityScrutinyInfo?.caution1 : null);
+                                }}
+                              ></ReportProblemIcon>
+                            </div>
                           </td>
                         </tr>
                         <tr>
                           <td> 2 </td>
                           <td>Bank statement for the last 3 years</td>
                           <td>
-                            {/* <input type="file" name="upload" placeholder="" class="employee-card-input" /> */}
+                    
                             <div className="row">
-                                  {/* <button className="btn btn-sm col-md-6">
-                                    <VisibilityIcon color="info" className="icon" />
-                                  </button>
-                                  <button className="btn btn-sm col-md-6">
-                                    <FileDownloadIcon color="primary" />
-                                  </button> */}
-                                  
-                                 <div className="btn btn-sm col-md-6">
-                                   <IconButton onClick={()=>getDocShareholding(item?.agreementDoc)}>
+                         
+                              {
+                                item?.agreementDoc &&
+                                <Fragment>
+                                  <div className="btn btn-sm col-md-6">
+                                    <IconButton onClick={() => getDocShareholding(item?.agreementDoc)}>
                                       <VisibilityIcon color="info" className="icon" /></IconButton>
-                                      </div>
-                                 <div className="btn btn-sm col-md-6">
-                                  <IconButton onClick={()=>getDocShareholding(item?.agreementDoc)}>
+                                  </div>
+                                  <div className="btn btn-sm col-md-6">
+                                    <IconButton onClick={() => getDocShareholding(item?.agreementDoc)}>
                                       <FileDownloadIcon color="info" className="icon" /></IconButton>
-                                      </div>
-                                </div>
+                                  </div>
+                                </Fragment>
+                              }
+                            </div>
                           </td>
                           <td align="center" size="large">
-                          <div>
-                            <ReportProblemIcon
-                  style={{
-                    color: fieldIconColors.agreementDoc
-                  }}
-                  onClick={() => {
-                    setOpennedModal("caution2")
-                    setLabelValue("Bank statement for the last 3 years"),
-                      setSmShow(true),
-                      console.log("modal open"),
-                      setFieldValue(capacityScrutinyInfo !== null ? capacityScrutinyInfo?.agreementDoc: null);
-                  }}
-                ></ReportProblemIcon>
-                </div>
+                            <div>
+                              <ReportProblemIcon
+                                style={{
+                                  color: fieldIconColors.agreementDoc
+                                }}
+                                onClick={() => {
+                                  setOpennedModal("caution2")
+                                  setLabelValue("Bank statement for the last 3 years"),
+                                    setSmShow(true),
+                                    console.log("modal open"),
+                                    setFieldValue(capacityScrutinyInfo !== null ? capacityScrutinyInfo?.agreementDoc : null);
+                                }}
+                              ></ReportProblemIcon>
+                            </div>
                           </td>
                         </tr>
                       </tbody>
@@ -629,12 +685,12 @@ const handlemodaldData = (data) => {
                   </div>
                 </div>
               </div>
-            )}
+            )} */}
 
 
 
 
-            {addInfo?.showDevTypeFields === "Company" && (
+            {/* {addInfo?.showDevTypeFields === "Company" && (
               <div className="card-body">
                 <div className="form-group row">
                   <div className="col-sm-12">
@@ -652,165 +708,161 @@ const handlemodaldData = (data) => {
                           <td> 1 </td>
                           <td>Balance sheet of last 3 years </td>
                           <td>
-                            {/* <input type="file" name="upload" placeholder="" class="employee-card-input" /> */}
+                          
                             <div className="row">
-                                  {/* <button className="btn btn-sm col-md-6">
-                                    <VisibilityIcon color="info" className="icon" />
-                                  </button>
-                                  <button className="btn btn-sm col-md-6">
-                                    <FileDownloadIcon color="primary" />
-                                  </button> */}
-                                  
-                                 <div className="btn btn-sm col-md-6">
-                                   <IconButton onClick={()=>getDocShareholding(capacityScrutinyInfo?.documents?.companyBalanceSheet)}>
+                           
+                              {
+                                capacityScrutinyInfo?.documents?.companyBalanceSheet &&
+                                <Fragment>
+                                  <div className="btn btn-sm col-md-6">
+                                    <IconButton onClick={() => getDocShareholding(capacityScrutinyInfo?.documents?.companyBalanceSheet)}>
                                       <VisibilityIcon color="info" className="icon" /></IconButton>
-                                      </div>
-                                    
-                                 <div className="btn btn-sm col-md-6">
-                                  <IconButton onClick={()=>getDocShareholding(capacityScrutinyInfo?.documents?.companyBalanceSheet)}>
+                                  </div>
+
+                                  <div className="btn btn-sm col-md-6">
+                                    <IconButton onClick={() => getDocShareholding(capacityScrutinyInfo?.documents?.companyBalanceSheet)}>
                                       <FileDownloadIcon color="info" className="icon" /></IconButton>
-                                      </div>
-                                </div>
+                                  </div>
+                                </Fragment>
+                              }
+                            </div>
                           </td>
                           <td align="center" size="large">
-                          <div>
-                            <ReportProblemIcon
-                  style={{
-                     display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("X:Longitude") ? "block" : "none",
-                    color: fieldIconColors.caution3
-                  }}
-                  onClick={() => {
-                    setOpennedModal("caution3")
-                    setLabelValue("Balance sheet of last 3 years"),
-                      setSmShow(true),
-                      console.log("modal open"),
-                      setFieldValue(capacityScrutinyInfo !== null ? capacityScrutinyInfo?.documents?.companyBalanceSheet: null);
-                  }}
-                ></ReportProblemIcon>
-                </div>
+                            <div>
+                              <ReportProblemIcon
+                                style={{
+                                  display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("X:Longitude") ? "block" : "none",
+                                  color: fieldIconColors.caution3
+                                }}
+                                onClick={() => {
+                                  setOpennedModal("caution3")
+                                  setLabelValue("Balance sheet of last 3 years"),
+                                    setSmShow(true),
+                                    console.log("modal open"),
+                                    setFieldValue(capacityScrutinyInfo !== null ? capacityScrutinyInfo?.documents?.companyBalanceSheet : null);
+                                }}
+                              ></ReportProblemIcon>
+                            </div>
                           </td>
                         </tr>
                         <tr>
                           <td> 2 </td>
                           <td>Ps-3(Representing Paid-UP capital)</td>
                           <td>
-                            {/* <input type="file" name="upload" placeholder="" class="employee-card-input" /> */}
+                           
                             <div className="row">
-                                  {/* <button className="btn btn-sm col-md-6">
-                                    <VisibilityIcon color="info" className="icon" />
-                                  </button>
-                                  <button className="btn btn-sm col-md-6">
-                                    <FileDownloadIcon color="primary" />
-                                  </button> */}
-                                  
-                                 <div className="btn btn-sm col-md-6">
-                                   <IconButton onClick={()=>getDocShareholding(capacityScrutinyInfo?.documents?.paidUpCapital)}>
+                              
+                              {
+                                capacityScrutinyInfo?.documents?.paidUpCapital &&
+                                <Fragment>
+                                  <div className="btn btn-sm col-md-6">
+                                    <IconButton onClick={() => getDocShareholding(capacityScrutinyInfo?.documents?.paidUpCapital)}>
                                       <VisibilityIcon color="info" className="icon" /></IconButton>
-                                      </div>
-                                 <div className="btn btn-sm col-md-6">
-                                  <IconButton onClick={()=>getDocShareholding(capacityScrutinyInfo?.documents?.paidUpCapital)}>
+                                  </div>
+                                  <div className="btn btn-sm col-md-6">
+                                    <IconButton onClick={() => getDocShareholding(capacityScrutinyInfo?.documents?.paidUpCapital)}>
                                       <FileDownloadIcon color="info" className="icon" /></IconButton>
-                                      </div>
-                                </div>
-                         </td>
+                                  </div>
+                                </Fragment>
+                              }
+                            </div>
+                          </td>
                           <td align="center" size="large">
-                          <div>
-                            <ReportProblemIcon
-                  style={{
-                     display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("X:Longitude") ? "block" : "none",
-                    color: fieldIconColors.caution4
-                  }}
-                  onClick={() => {
-                    setOpennedModal("caution4")
-                    setLabelValue("Ps-3(Representing Paid-UP capital)"),
-                      setSmShow(true),
-                      console.log("modal open"),
-                      setFieldValue(capacityScrutinyInfo !== null ? capacityScrutinyInfo?.documents?.paidUpCapital: null);
-                  }}
-                ></ReportProblemIcon>
-                </div>
+                            <div>
+                              <ReportProblemIcon
+                                style={{
+                                  display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("X:Longitude") ? "block" : "none",
+                                  color: fieldIconColors.caution4
+                                }}
+                                onClick={() => {
+                                  setOpennedModal("caution4")
+                                  setLabelValue("Ps-3(Representing Paid-UP capital)"),
+                                    setSmShow(true),
+                                    console.log("modal open"),
+                                    setFieldValue(capacityScrutinyInfo !== null ? capacityScrutinyInfo?.documents?.paidUpCapital : null);
+                                }}
+                              ></ReportProblemIcon>
+                            </div>
                           </td>
                         </tr>
                         <tr>
                           <td> 3 </td>
                           <td>Reserves and surpluses</td>
                           <td>
-                            {/* <input type="file" name="upload" placeholder="" class="employee-card-input" /> */}
+                          
                             <div className="row">
-                                  {/* <button className="btn btn-sm col-md-6">
-                                    <VisibilityIcon color="info" className="icon" />
-                                  </button>
-                                  <button className="btn btn-sm col-md-6">
-                                    <FileDownloadIcon color="primary" />
-                                  </button> */}
-                                  
-                                 <div className="btn btn-sm col-md-6">
-                                   <IconButton onClick={()=>getDocShareholding(capacityScrutinyInfo?.documents?.reservesAndSurplus)}>
+                           
+                              {
+                                capacityScrutinyInfo?.documents?.reservesAndSurplus &&
+                                <Fragment>
+                                  <div className="btn btn-sm col-md-6">
+                                    <IconButton onClick={() => getDocShareholding(capacityScrutinyInfo?.documents?.reservesAndSurplus)}>
                                       <VisibilityIcon color="info" className="icon" /></IconButton>
-                                      </div>
-                                 <div className="btn btn-sm col-md-6">
-                                  <IconButton onClick={()=>getDocShareholding(capacityScrutinyInfo?.documents?.reservesAndSurplus)}>
+                                  </div>
+                                  <div className="btn btn-sm col-md-6">
+                                    <IconButton onClick={() => getDocShareholding(capacityScrutinyInfo?.documents?.reservesAndSurplus)}>
                                       <FileDownloadIcon color="info" className="icon" /></IconButton>
-                                      </div>
-                                </div>
+                                  </div>
+                                </Fragment>
+                              }
+                            </div>
                           </td>
                           <td align="center" size="large">
-                          <div>
-                            <ReportProblemIcon
-                  style={{
-                     display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("X:Longitude") ? "block" : "none",
-                    color: fieldIconColors.caution5
-                  }}
-                  onClick={() => {
-                    setOpennedModal("caution5")
-                    setLabelValue("Reserves and surpluses"),
-                      setSmShow(true),
-                      console.log("modal open"),
-                      setFieldValue(capacityScrutinyInfo !== null ? capacityScrutinyInfo?.documents?.reservesAndSurplus: null);
-                  }}
-                ></ReportProblemIcon>
-                </div>
+                            <div>
+                              <ReportProblemIcon
+                                style={{
+                                  display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("X:Longitude") ? "block" : "none",
+                                  color: fieldIconColors.caution5
+                                }}
+                                onClick={() => {
+                                  setOpennedModal("caution5")
+                                  setLabelValue("Reserves and surpluses"),
+                                    setSmShow(true),
+                                    console.log("modal open"),
+                                    setFieldValue(capacityScrutinyInfo !== null ? capacityScrutinyInfo?.documents?.reservesAndSurplus : null);
+                                }}
+                              ></ReportProblemIcon>
+                            </div>
                           </td>
                         </tr>
                         <tr>
                           <td> 4 </td>
                           <td>Any other documents (in the case of the company)</td>
                           <td>
-                            {/* <input type="file" name="upload" placeholder="" class="employee-card-input" /> */}
+                          
                             <div className="row">
-                                  {/* <button className="btn btn-sm col-md-6">
-                                    <VisibilityIcon color="info" className="icon" />
-                                  </button>
-                                  <button className="btn btn-sm col-md-6">
-                                    <FileDownloadIcon color="primary" />
-                                  </button> */}
-                                  
-                                 <div className="btn btn-sm col-md-6">
-                                   <IconButton onClick={()=>getDocShareholding(capacityScrutinyInfo?.documents?.anyOtherDoc)}>
+                             
+                              {
+                                capacityScrutinyInfo?.documents?.anyOtherDoc &&
+                                <Fragment>
+                                  <div className="btn btn-sm col-md-6">
+                                    <IconButton onClick={() => getDocShareholding(capacityScrutinyInfo?.documents?.anyOtherDoc)}>
                                       <VisibilityIcon color="info" className="icon" /></IconButton>
-                                      </div>
-                                 <div className="btn btn-sm col-md-6">
-                                  <IconButton onClick={()=>getDocShareholding(capacityScrutinyInfo?.documents?.anyOtherDoc)}>
+                                  </div>
+                                  <div className="btn btn-sm col-md-6">
+                                    <IconButton onClick={() => getDocShareholding(capacityScrutinyInfo?.documents?.anyOtherDoc)}>
                                       <FileDownloadIcon color="info" className="icon" /></IconButton>
-                                      </div>
-                                </div>
-                         </td>
+                                  </div>
+                                </Fragment>
+                              }
+                            </div>
+                          </td>
                           <td align="center" size="large">
-                          <div>
-                            <ReportProblemIcon
-                  style={{
-                     display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("X:Longitude") ? "block" : "none",
-                    color: fieldIconColors.caution6
-                  }}
-                  onClick={() => {
-                    setOpennedModal("caution6")
-                    setLabelValue("Any other documents (in the case of the company)"),
-                      setSmShow(true),
-                      console.log("modal open"),
-                      setFieldValue(capacityScrutinyInfo !== null ? capacityScrutinyInfo?.documents?.anyOtherDoc: null);
-                  }}
-                ></ReportProblemIcon>
-                </div>
+                            <div>
+                              <ReportProblemIcon
+                                style={{
+                                  display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("X:Longitude") ? "block" : "none",
+                                  color: fieldIconColors.caution6
+                                }}
+                                onClick={() => {
+                                  setOpennedModal("caution6")
+                                  setLabelValue("Any other documents (in the case of the company)"),
+                                    setSmShow(true),
+                                    console.log("modal open"),
+                                    setFieldValue(capacityScrutinyInfo !== null ? capacityScrutinyInfo?.documents?.anyOtherDoc : null);
+                                }}
+                              ></ReportProblemIcon>
+                            </div>
                           </td>
                         </tr>
                       </tbody>
@@ -818,22 +870,509 @@ const handlemodaldData = (data) => {
                   </div>
                 </div>
               </div>
-            )}
-           
+            )} */}
+
+{(addInfo?.showDevTypeFields === "Company" ||
+               addInfo?.showDevTypeFields === "Society" ||
+               addInfo?.showDevTypeFields === "Trust" ||
+               addInfo?.showDevTypeFields === "Institution") && (
+                <div className="card-body">
+                  <div className="form-group row">
+                    {/* <label className="col-sm-3 col-form-label">Company</label> */}
+                    <div className="col-sm-12">
+                      <Paper sx={{ width: "100%", overflow: "hidden" }}>
+                        <TableContainer sx={{ maxHeight: 550 }}>
+                          <Table stickyHeader aria-label="sticky table">
+                            <TableHead>
+                              <TableRow>
+                                <StyledTableCell> {`${t("BPA_DEV_CAPACITY_SR_NO")}`}</StyledTableCell>
+                                <StyledTableCell> {`${t("BPA_DEV_CAPACITY_PARTICULARS_DOC")}`}</StyledTableCell>
+                                <StyledTableCell> {`${t("BPA_DEV_CAPACITY_ANNEXURE")}`}</StyledTableCell>
+                              </TableRow>
+                            </TableHead>
+                            <TableBody>
+                              <StyledTableRow sx={{ "&:last-child td, &:last-child th": { border: 0 } }}>
+                                <StyledTableCell component="th" scope="row">
+                                  1
+                                </StyledTableCell>
+                                <StyledTableCell>
+                                  {`${t("BPA_DEV_CAPACITY_BALANCE_SHEET_LAST_THREE_YEARS")}`} <span className="text-danger font-weight-bold">*</span>
+                                </StyledTableCell>
+                                <StyledTableCell>
+                                  <div className="row">
+                                    {/* {documents?.companyBalanceSheet ? (
+                                      <a
+                                        onClick={() => getDocShareholding(documents?.companyBalanceSheet)}
+                                        title="View Document"
+                                        className="btn btn-sm col-md-6"
+                                      >
+                                        <VisibilityIcon color="info" className="icon" />
+                                      </a>
+                                    ) : (
+                                      <p></p>
+                                    )}
+                                    <div className="btn btn-sm col-md-6">
+                                      <label for="uploadBalanceDoc" title="Upload Document">
+                                        {" "}
+                                        <FileUpload color="primary" />
+                                      </label>
+                                      <input
+                                        id="uploadBalanceDoc"
+                                        type="file"
+                                        accept="application/pdf"
+                                        style={{ display: "none" }}
+                                        onChange={(e) => getDocumentData(e?.target?.files[0], "companyBalanceSheet", "devTypeDocument")}
+                                      />
+                                    </div> */}
+                                    {/* {
+                                capacityScrutinyInfo?.documents?.companyBalanceSheet &&
+                                <Fragment> */}
+                                  <div className="btn btn-sm col-md-6">
+                                    <IconButton onClick={() => getDocShareholding(capacityScrutinyInfo?.documents?.companyBalanceSheet)}>
+                                      <VisibilityIcon color="info" className="icon" /></IconButton>
+                                  </div>
+
+                                  <div className="btn btn-sm col-md-6">
+                                    <IconButton onClick={() => getDocShareholding(capacityScrutinyInfo?.documents?.companyBalanceSheet)}>
+                                      <FileDownloadIcon color="info" className="icon" /></IconButton>
+                                  </div>
+                                {/* </Fragment>
+                              } */}
+                                  </div>
+                                </StyledTableCell>
+                              </StyledTableRow>
+                              <StyledTableRow>
+                                <StyledTableCell> 2 </StyledTableCell>
+                                <StyledTableCell>
+                                  {`${t("BPA_DEV_CAPACITY_REPRESENTING_PAIDUP_CAPITAL")}`} <span className="text-danger font-weight-bold">*</span>
+                                </StyledTableCell>
+
+                                <StyledTableCell align="center" size="large">
+                                  <div className="row">
+                                    {/* {Documents?.paidUpCapital ? (
+                                      <a
+                                        onClick={() => getDocShareholding(Documents?.paidUpCapital)}
+                                        title="View Document"
+                                        className="btn btn-sm col-md-6"
+                                      >
+                                        <VisibilityIcon color="info" className="icon" />
+                                      </a>
+                                    ) : (
+                                      <p></p>
+                                    )}
+                                    <div className="btn btn-sm col-md-6">
+                                      <label for="uploadPaidUpDoc" title="Upload Document">
+                                        {" "}
+                                        <FileUpload color="primary" />
+                                      </label>
+                                      <input
+                                        id="uploadPaidUpDoc"
+                                        type="file"
+                                        accept="application/pdf"
+                                        style={{ display: "none" }}
+                                        onChange={(e) => getDocumentData(e?.target?.files[0], "paidUpCapital", "devTypeDocument")}
+                                      />
+                                    </div> */}
+                                     {/* {
+                                capacityScrutinyInfo?.documents?.paidUpCapital &&
+                                <Fragment> */}
+                                  <div className="btn btn-sm col-md-6">
+                                    <IconButton onClick={() => getDocShareholding(capacityScrutinyInfo?.documents?.paidUpCapital)}>
+                                      <VisibilityIcon color="info" className="icon" /></IconButton>
+                                  </div>
+                                  <div className="btn btn-sm col-md-6">
+                                    <IconButton onClick={() => getDocShareholding(capacityScrutinyInfo?.documents?.paidUpCapital)}>
+                                      <FileDownloadIcon color="info" className="icon" /></IconButton>
+                                  </div>
+                                {/* </Fragment>
+                              } */}
+                                  </div>
+                                </StyledTableCell>
+                              </StyledTableRow>
+
+                              <StyledTableRow>
+                                <StyledTableCell> 3 </StyledTableCell>
+                                <StyledTableCell>
+                                  {`${t("BPA_DEV_CAPACITY_RSERVE_AND_SURPLUSES")}`} <span className="text-danger font-weight-bold">*</span>
+                                </StyledTableCell>
+                                <StyledTableCell align="center" size="large">
+                                  <div className="row">
+                                    {/* {Documents?.reservesAndSurplus ? (
+                                      <a
+                                        onClick={() => getDocShareholding(Documents?.reservesAndSurplus)}
+                                        title="View Document"
+                                        className="btn btn-sm col-md-6"
+                                      >
+                                        <VisibilityIcon color="info" className="icon" />
+                                      </a>
+                                    ) : (
+                                      <p></p>
+                                    )}
+                                    <div className="btn btn-sm col-md-6">
+                                      <label for="reservesAndSurplus" title="Upload Document">
+                                        <FileUpload color="primary" />
+                                      </label>
+                                      <input
+                                        id="reservesAndSurplus"
+                                        type="file"
+                                        accept="application/pdf"
+                                        style={{ display: "none" }}
+                                        onChange={(e) => getDocumentData(e?.target?.files[0], "reservesAndSurplus", "devTypeDocument")}
+                                      />
+                                    </div> */}
+                                    {/* {
+                                capacityScrutinyInfo?.documents?.reservesAndSurplus &&
+                                <Fragment> */}
+                                  <div className="btn btn-sm col-md-6">
+                                    <IconButton onClick={() => getDocShareholding(capacityScrutinyInfo?.documents?.reservesAndSurplus)}>
+                                      <VisibilityIcon color="info" className="icon" /></IconButton>
+                                  </div>
+                                  <div className="btn btn-sm col-md-6">
+                                    <IconButton onClick={() => getDocShareholding(capacityScrutinyInfo?.documents?.reservesAndSurplus)}>
+                                      <FileDownloadIcon color="info" className="icon" /></IconButton>
+                                  </div>
+                                {/* </Fragment>
+                              } */}
+                                  </div>
+                                </StyledTableCell>
+                              </StyledTableRow>
+                              <StyledTableRow>
+                                <StyledTableCell> 4 </StyledTableCell>
+                                <StyledTableCell>{`${t("BPA_DEV_CAPACITY_FULLY_CONVERTIBLE_DEBENTURE")}`}</StyledTableCell>
+                                <StyledTableCell align="center" size="large">
+                                  <div className="row">
+                                    {/* {Documents?.fullyConvertibleDebenture ? (
+                                      <a
+                                        onClick={() => getDocShareholding(Documents?.fullyConvertibleDebenture)}
+                                        title="View Document"
+                                        className="btn btn-sm col-md-6"
+                                      >
+                                        <VisibilityIcon color="info" className="icon" />
+                                      </a>
+                                    ) : (
+                                      <p></p>
+                                    )}
+                                    <div className="btn btn-sm col-md-6">
+                                      <label for="fullyConvertibleDebentureId" title="Upload Document">
+                                        {" "}
+                                        <FileUpload color="primary" />
+                                      </label>
+                                      <input
+                                        id="fullyConvertibleDebentureId"
+                                        type="file"
+                                        accept="application/pdf"
+                                        style={{ display: "none" }}
+                                        onChange={(e) => getDocumentData(e?.target?.files[0], "fullyConvertibleDebenture", "devTypeDocument")}
+                                      />
+                                    </div> */}
+                                    {/* {
+                                capacityScrutinyInfo?.documents?.anyOtherDoc &&
+                                <Fragment> */}
+                                  <div className="btn btn-sm col-md-6">
+                                    <IconButton onClick={() => getDocShareholding(capacityScrutinyInfo?.documents?.fullyConvertibleDebenture)}>
+                                      <VisibilityIcon color="info" className="icon" /></IconButton>
+                                  </div>
+                                  <div className="btn btn-sm col-md-6">
+                                    <IconButton onClick={() => getDocShareholding(capacityScrutinyInfo?.documents?.fullyConvertibleDebenture)}>
+                                      <FileDownloadIcon color="info" className="icon" /></IconButton>
+                                  </div>
+                                {/* </Fragment>
+                              } */}
+                                  </div>
+                                </StyledTableCell>
+                              </StyledTableRow>
+                              <StyledTableRow>
+                                <StyledTableCell> 5 </StyledTableCell>
+                                <StyledTableCell>{`${t("BPA_DEV_CAPACITY_ANY_OTHER_DOCUMENTS")}`}</StyledTableCell>
+                                <StyledTableCell align="center" size="large">
+                                  <div className="row">
+                                    {/* {Documents?.anyOtherDoc ? (
+                                      <a
+                                        onClick={() => getDocShareholding(Documents?.anyOtherDoc)}
+                                        title="View Document"
+                                        className="btn btn-sm col-md-6"
+                                      >
+                                        <VisibilityIcon color="info" className="icon" />
+                                      </a>
+                                    ) : (
+                                      <p></p>
+                                    )}
+                                    <div className="btn btn-sm col-md-6">
+                                      <label for="anyOtherDoc" title="Upload Document">
+                                        {" "}
+                                        <FileUpload color="primary" />
+                                      </label>
+                                      <input
+                                        id="anyOtherDoc"
+                                        type="file"
+                                        accept="application/pdf"
+                                        style={{ display: "none" }}
+                                        onChange={(e) => getDocumentData(e?.target?.files[0], "anyOtherDoc", "devTypeDocument")}
+                                      />
+                                    </div> */}
+                                       {/* {
+                                capacityScrutinyInfo?.documents?.anyOtherDoc &&
+                                <Fragment> */}
+                                  <div className="btn btn-sm col-md-6">
+                                    <IconButton onClick={() => getDocShareholding(capacityScrutinyInfo?.documents?.anyOtherDoc)}>
+                                      <VisibilityIcon color="info" className="icon" /></IconButton>
+                                  </div>
+                                  <div className="btn btn-sm col-md-6">
+                                    <IconButton onClick={() => getDocShareholding(capacityScrutinyInfo?.documents?.anyOtherDoc)}>
+                                      <FileDownloadIcon color="info" className="icon" /></IconButton>
+                                  </div>
+                                {/* </Fragment>
+                              } */}
+                                  </div>
+                                </StyledTableCell>
+                              </StyledTableRow>
+                            </TableBody>
+                          </Table>
+                        </TableContainer>
+                        {/* <TablePagination
+                            rowsPerPageOptions={[10, 25, 100]}
+                            component="div"
+                            count={capacityDevelopColonyHdruAct?.length}
+                            rowsPerPage={rowsPerPageStack}
+                            page={pageStack}
+                            onPageChange={handleChangePageStack}
+                            onRowsPerPageChange={handleChangeRowsPerPageStack}
+                          /> */}
+                      </Paper>
+                    </div>
+                  </div>
+                </div>
+              )}
+               {(addInfo?.showDevTypeFields=== "Limited Liability Partnership" ||
+                addInfo?.showDevTypeFields === "Firm" ||
+                addInfo?.showDevTypeFields === "Partnership Firm") && (
+                <div className="card-body">
+                  <div className="form-group row">
+                    <div className="col-sm-12">
+                      <Paper sx={{ width: "100%", overflow: "hidden" }}>
+                        <TableContainer sx={{ maxHeight: 440 }}>
+                          <Table stickyHeader aria-label="sticky table">
+                            <TableHead>
+                              <TableRow>
+                                 <StyledTableCell> {`${t("BPA_DEV_CAPACITY_SR_NO")}`}</StyledTableCell>
+                                <StyledTableCell> {`${t("BPA_DEV_CAPACITY_PARTICULARS_DOC")}`}</StyledTableCell>
+                                <StyledTableCell> {`${t("BPA_DEV_CAPACITY_ANNEXURE")}`}</StyledTableCell>
+                              </TableRow>
+                            </TableHead>
+                            <TableBody>
+                              <StyledTableRow sx={{ "&:last-child td, &:last-child th": { border: 0 } }}>
+                                <StyledTableCell component="th" scope="row">
+                                  1
+                                </StyledTableCell>
+                                <StyledTableCell>
+                                  {`${t("BPA_DEV_CAPACITY_NETWORTH_PARTNERS")}`} <span className="text-danger font-weight-bold">*</span>
+                                </StyledTableCell>
+                                <StyledTableCell>
+                                  <div className="row">
+
+                                  {/* {
+                                capacityScrutinyInfo?.documents?.companyBalanceSheet &&
+                                <Fragment>
+                                  <div className="btn btn-sm col-md-6">
+                                    <IconButton onClick={() => getDocShareholding(capacityScrutinyInfo?.documents?.companyBalanceSheet)}>
+                                      <VisibilityIcon color="info" className="icon" /></IconButton>
+                                  </div>
+
+                                  <div className="btn btn-sm col-md-6">
+                                    <IconButton onClick={() => getDocShareholding(capacityScrutinyInfo?.documents?.companyBalanceSheet)}>
+                                      <FileDownloadIcon color="info" className="icon" /></IconButton>
+                                  </div>
+                                </Fragment>
+                              } */}
+                                    
+                                    {/* {Documents?.networthPartners ? (
+                                      <a
+                                        onClick={() => getDocShareholding(Documents?.networthPartners)}
+                                        title="View Document"
+                                        className="btn btn-sm col-md-6"
+                                      >
+                                        <VisibilityIcon color="info" className="icon" />
+                                      </a>
+                                    ) : (
+                                      <p></p>
+                                    )}
+                                    <div className="btn btn-sm col-md-6">
+                                      <label for="netWorthOfPartnersId" title="Upload Document">
+                                        {" "}
+                                        <FileUpload color="primary" />
+                                      </label>
+                                      <input
+                                        id="netWorthOfPartnersId"
+                                        type="file"
+                                        accept="application/pdf"
+                                        style={{ display: "none" }}
+                                        onChange={(e) => getDocumentData(e?.target?.files[0], "networthPartners", "devTypeDocument")}
+                                      />
+                                    </div> */}
+                                    {/* {documents?.networthPartners  &&
+                                <Fragment> */}
+                                  <div className="btn btn-sm col-md-6">
+                                    <IconButton onClick={() => getDocShareholding(documents?.networthPartners)}>
+                                      <VisibilityIcon color="info" className="icon" /></IconButton>
+                                  </div>
+                                  <div className="btn btn-sm col-md-6">
+                                    <IconButton onClick={() => getDocShareholding(documents?.networthPartners)}>
+                                      <FileDownloadIcon color="info" className="icon" /></IconButton>
+                                  </div>
+                                {/* </Fragment>
+                              } */}
+                                  </div>
+                                </StyledTableCell>
+                              </StyledTableRow>
+                              <StyledTableRow sx={{ "&:last-child td, &:last-child th": { border: 0 } }}>
+                                <StyledTableCell component="th" scope="row">
+                                  2
+                                </StyledTableCell>
+                                <StyledTableCell>
+                                  {`${t("BPA_DEV_CAPACITY_NETWORTH_FIRM")}`} <span className="text-danger font-weight-bold">*</span>
+                                </StyledTableCell>
+                                <StyledTableCell>
+                                  <div className="row">
+                                    {/* {Documents?.networthFirm ? (
+                                      <a
+                                        onClick={() => getDocShareholding(Documents?.networthFirm)}
+                                        title="View Document"
+                                        className="btn btn-sm col-md-6"
+                                      >
+                                        <VisibilityIcon color="info" className="icon" />
+                                      </a>
+                                    ) : (
+                                      <p></p>
+                                    )}
+                                    <div className="btn btn-sm col-md-6">
+                                      <label for="netWorthOfFirmId" title="Upload Document">
+                                        {" "}
+                                        <FileUpload color="primary" />
+                                      </label>
+                                      <input
+                                        id="netWorthOfFirmId"
+                                        type="file"
+                                        accept="application/pdf"
+                                        style={{ display: "none" }}
+                                        onChange={(e) => getDocumentData(e?.target?.files[0], "networthFirm", "devTypeDocument")}
+                                      />
+                                    </div> */}
+                                    {/* {documents?.networthFirm &&
+                                <Fragment> */}
+                                  <div className="btn btn-sm col-md-6">
+                                    <IconButton onClick={() => getDocShareholding(documents?.networthFirm)}>
+                                      <VisibilityIcon color="info" className="icon" /></IconButton>
+                                  </div>
+                                  <div className="btn btn-sm col-md-6">
+                                    <IconButton onClick={() => getDocShareholding(documents?.networthFirm)}>
+                                      <FileDownloadIcon color="info" className="icon" /></IconButton>
+                                  </div>
+                                {/* </Fragment>
+                              } */}
+                                  </div>
+                                </StyledTableCell>
+                              </StyledTableRow>
+                              <StyledTableRow sx={{ "&:last-child td, &:last-child th": { border: 0 } }}>
+                                <StyledTableCell component="th" scope="row">
+                                  3
+                                </StyledTableCell>
+                                <StyledTableCell>
+                                  {`${t("BPA_DEV_CAPACITY_FULLY_CONVERTIBLE_DEBENTURE")}`} <span className="text-danger font-weight-bold">*</span>
+                                </StyledTableCell>
+                                <StyledTableCell>
+                                  <div className="row">
+                                    {/* {Documents?.fullyConvertibleDebenture ? (
+                                      <a
+                                        onClick={() => getDocShareholding(Documents?.fullyConvertibleDebenture)}
+                                        title="View Document"
+                                        className="btn btn-sm col-md-6"
+                                      >
+                                        <VisibilityIcon color="info" className="icon" />
+                                      </a>
+                                    ) : (
+                                      <p></p>
+                                    )}
+                                    <div className="btn btn-sm col-md-6">
+                                      <label for="fullyConvertibleDebentureId" title="Upload Document">
+                                        <FileUpload color="primary" />
+                                      </label>
+                                      <input
+                                        id="fullyConvertibleDebentureId"
+                                        type="file"
+                                        accept="application/pdf"
+                                        style={{ display: "none" }}
+                                        onChange={(e) => getDocumentData(e?.target?.files[0], "fullyConvertibleDebenture", "devTypeDocument")}
+                                      />
+                                    </div> */}
+                                    {/* {documents?.fullyConvertibleDebenture &&
+                                <Fragment> */}
+                                  <div className="btn btn-sm col-md-6">
+                                    <IconButton onClick={() => getDocShareholding(documents?.fullyConvertibleDebenture)}>
+                                      <VisibilityIcon color="info" className="icon" /></IconButton>
+                                  </div>
+                                  <div className="btn btn-sm col-md-6">
+                                    <IconButton onClick={() => getDocShareholding(documents?.fullyConvertibleDebenture)}>
+                                      <FileDownloadIcon color="info" className="icon" /></IconButton>
+                                  </div>
+                                {/* </Fragment>
+                              } */}
+                                  </div>
+                                </StyledTableCell>
+                              </StyledTableRow>
+                            </TableBody>
+                          </Table>
+                        </TableContainer>
+                        {/* <TablePagination
+                            rowsPerPageOptions={[10, 25, 100]}
+                            component="div"
+                            count={capacityDevelopColonyHdruAct?.length}
+                            rowsPerPage={rowsPerPageStack}
+                            page={pageStack}
+                            onPageChange={handleChangePageStack}
+                            onRowsPerPageChange={handleChangeRowsPerPageStack}
+                          /> */}
+                      </Paper>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+
+
 
             <div className="card-body">
-              <p>1. I/ We hereby submit the following information/ enclose the relevant documents:-</p>
+            {addInfo?.showDevTypeFields === "Individual" ||
+                addInfo?.showDevTypeFields === "Limited Liability Partnership" ||
+                addInfo?.showDevTypeFields === "Proprietorship Firm" ||
+                addInfo?.showDevTypeFields === "Hindu Undivided Family" ? (
+                  <p className="ml-1">
+                    (i) {`${t("BPA_DEV_CAPACITY_EARLIER_GRANTED_COLONY_UNDER_HRDU_ACT")}`}
+                    <span className="text-danger font-weight-bold">*</span>
+                  </p>
+                ) : (
+                  <p className="d-none"></p>
+                )}
+                {addInfo?.showDevTypeFields === "Company" ||
+                addInfo?.showDevTypeFields === "Partnership Firm" ? (
+                  <p className="ml-1">
+                    (i) {`${t("BPA_DEV_CAPACITY_EARLIER_GRANTED_COLONY_UNDER_HRDU_ACT")}`}
+                    <span className="text-danger font-weight-bold">*</span>
+                  </p>
+                ) : (
+                  <p className="d-none"></p>
+                )}
+              {/* <p>1. I/ We hereby submit the following information/ enclose the relevant documents:-</p>
               <p className="ml-3">
                 (i) Whether the Developer has earlier been granted permission to set up a colony under HDRU Act, 1975: *{" "}
-              </p>
+              </p> */}
               <div className="d-flex flex-row align-items-center ml-4">
-                <input type="radio" value="Yes" checked={capacityScrutinyInfo?.permissionGrantedHRDU === "Y"?true:false}  disabled />
+                <input type="radio" value="Yes" checked={capacityScrutinyInfo?.permissionGrantedHRDU === "Y" ? true : false} disabled />
                 <label className="m-0  mx-1" for="Yes">Yes</label>
-                <input type="radio" value="No"  checked={capacityScrutinyInfo?.permissionGrantedHRDU === "N"?true:false} disabled />
+                <input type="radio" value="No" checked={capacityScrutinyInfo?.permissionGrantedHRDU === "N" ? true : false} disabled />
                 <label className="m-0 mx-2" for="No">No</label>
                 <ReportProblemIcon
                   style={{
-                     display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("X:Longitude") ? "block" : "none",
+                    display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("X:Longitude") ? "block" : "none",
                     color: fieldIconColors.caution7
                   }}
                   onClick={() => {
@@ -841,1325 +1380,520 @@ const handlemodaldData = (data) => {
                     setLabelValue("Whether the Developer has earlier been granted permission to set up a colony under HDRU Act,1975:"),
                       setSmShow(true),
                       console.log("modal open"),
-                      setFieldValue(capacityScrutinyInfo !== null ? capacityScrutinyInfo?.permissionGrantedHRDU: null);
+                      setFieldValue(capacityScrutinyInfo !== null ? capacityScrutinyInfo?.permissionGrantedHRDU : null);
                   }}
                 ></ReportProblemIcon>
 
               </div>
-              <div>
-                {capacityScrutinyInfo?.permissionGrantedHRDU === "Y" && (
-                <div className="card-body">
-                  {/* <h5 className="card-h">Add/Remove Authorized Users</h5> */}
-                  <div className="table-bd">
-                    <Table className="table table-bordered">
-                      <thead>
-                        <tr>
-                       <th class="fw-normal">S. no</th>
-                                                    <th class="fw-normal"> Licence No. </th>
-                                                    <th class="fw-normal">Date of grant of license</th>
-                                                    <th class="fw-normal">Purpose of colony</th>
-                                                    <th class="fw-normal">Validity of Licence</th>
-                                                    {/* <th class="fw-normal">Technical Expert Engaged</th>
-                                                    <th class="fw-normal">Degrees of Engineer</th>
-                                                    <th class="fw-normal">Degrees of Architect</th>
-                                                    <th class="fw-normal">Degrees of Town Planner</th> */}
-                                                    <th class="fw-normal">Actions</th>
-                          {/* <th>Remove</th> */}
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {/* {capacityDevelopColonyHdruAct.length > 0
-                          ? capacityDevelopColonyHdruAct.map((elementInArray, input) => {
-                              return ( */}
-
-                        {
-                          capacityScrutinyInfo?.capacityDevelopColonyHdruAct?.map((item,index)=>(
-
-                            <tr>
-                            <td>{index+1}</td>
-                            <td>
-                              <input
-                                type="text"
-                                // value={item?.licenceNumber}
-                                placeholder={item?.licenceNumber}
-                                class="employee-card-input"
-                                disabled
-                              />
-                            </td>
-                            <td>
-                              <input
-                                type="text"
-                                // value={item?.nameOfDeveloper}
-                                placeholder={item?.grantLicence}
-                                class="employee-card-input"
-                                disabled
-                              />
-                            </td>
-                            <td>
-                              <input
-                                type="text"
-                                // value={item?.purposeOfColony}
-                                placeholder={item?.purposeOfColony}
-                                class="employee-card-input"
-                                disabled
-                              />
-                            </td>
-                            <td>
-                              <input
-                                type="text"
-                                // Validity of Licence
-                                placeholder={item?.validatingLicence}
-                                class="employee-card-input"
-                                disabled
-                              />
-                            </td>
-                            {/* <td>
-                              <input
-                                type="text"
-                               
-                                placeholder={item?.purposeOfColony}
-                                class="employee-card-input"
-                                disabled
-                              />
-                            </td> */}
-                            {/* <td>
-                              <div className="row">
-                              
-                                 <div className="btn btn-sm col-md-6">
-                                 <IconButton onClick={()=>getDocShareholding(item?.sectorAndDevelopmentPlan)}>
-                                      <VisibilityIcon color="info" className="icon" /></IconButton>
-                                 </div>
-                                 <div className="btn btn-sm col-md-6">
-                           
-                                 <IconButton onClick={()=>getDocShareholding(item?.sectorAndDevelopmentPlan)}>
-                                      <FileDownloadIcon color="info" className="icon" /></IconButton>
-                                      </div>
-                              </div>
-                            </td> */}
-                            {/* <td>
-                              <div className="row">
-                                
-                               
-                                 <div className="btn btn-sm col-md-6">
-                                <IconButton onClick={()=>getDocShareholding(item?.validatingLicence)}>
-                                      <VisibilityIcon color="info" className="icon" /></IconButton>
-                                      </div>
-                                 <div className="btn btn-sm col-md-6">
-                                
-                                 <IconButton onClick={()=>getDocShareholding(item?.validatingLicence)}>
-                                      <FileDownloadIcon color="info" className="icon" /></IconButton>
-                                      </div>
-                                 
-                              </div>
-                            </td> */}
-                            {/* <td>
-                              <div className="row">
-                                
-                               
-                                 <div className="btn btn-sm col-md-6">
-                                <IconButton onClick={()=>getDocShareholding(item?.validatingLicence)}>
-                                      <VisibilityIcon color="info" className="icon" /></IconButton>
-                                      </div>
-                                 <div className="btn btn-sm col-md-6">
-                               
-                                 <IconButton onClick={()=>getDocShareholding(item?.validatingLicence)}>
-                                      <FileDownloadIcon color="info" className="icon" /></IconButton>
-                                      </div>
-                                 
-                              </div>
-                            </td> */}
-                            {/* <td>
-                            <div className="btn btn-sm col-md-6">
-                            <ReportProblemIcon
-                  style={{
-                     display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("X:Longitude") ? "block" : "none",
-                    color: fieldIconColors.caution1
-                  }}
-                  onClick={() => {
-                    setOpennedModal("caution8")
-                    setLabelValue("Whether the Developer/ group company has earlier been granted permission to set up a colony under HDRU Act, 1975"),
-                      setSmShow(true),
-                      console.log("modal open"),
-                      setFieldValue(capacityScrutinyInfo !== null ? capacityScrutinyInfo?.caution1: null);
-                  }}
-                ></ReportProblemIcon>
-                </div>
-                            
-
-                            </td> */}
-                          </tr>
-
-                          ))
-                        }
-
-                       
-                      </tbody>
-                    </Table>
-                    <div>
-                      {/* <div>
-                        <Modal size="lg" isOpen={modal} toggle={() => setmodal(!modal)}>
-                          <ModalHeader toggle={() => setmodal(!modal)}></ModalHeader>
-
-                          <ModalBody>
-                            <div className="card2">
-                              <div className="popupcard">
-                                <form className="text1">
-                                  <Row>
-                                    <Col md={4} xxl lg="4">
-                                      <label htmlFor="name" className="text">
-                                        Licence No / year of licence
-                                      </label>
-                                      <input type="text" onChange={(e) => setModalLcNo(e.target.value)} placeholder="" class="employee-card-input" />
-                                    </Col>
-                                    <Col md={4} xxl lg="4">
-                                      <label htmlFor="name" className="text">
-                                        Name of developer *
-                                      </label>
-                                      <input
-                                        type="text"
-                                        onChange={(e) => setModalDevName(e.target.value)}
-                                        placeholder=""
-                                        class="employee-card-input"
-                                      />
-                                    </Col>
-                                    <Col md={4} xxl lg="4">
-                                      <label htmlFor="name" className="text">
-                                        Purpose of colony
-                                      </label>
-                                      <input
-                                        type="text"
-                                        onChange={(e) => setModalPurposeCol(e.target.value)}
-                                        placeholder=""
-                                        class="employee-card-input"
-                                      />
-                                    </Col>
-                                  </Row>
-                                  <Row>
-                                    <Col md={4} xxl lg="4">
-                                      <label htmlFor="name" className="text">
-                                        Sector and development plan
-                                      </label>
-                                      <input
-                                        type="file"
-                                        onChange={(e) => setModalDevPlan(e.target.value)}
-                                        placeholder=""
-                                        class="employee-card-input"
-                                      />
-                                    </Col>
-                                    <Col md={4} xxl lg="4">
-                                      <label htmlFor="name" className="text">
-                                        Validity of licence{" "}
-                                      </label>
-                                      <input
-                                        type="file"
-                                        onChange={(e) => setModalDevValidity(e.target.value)}
-                                        placeholder=""
-                                        class="employee-card-input"
-                                      />
-                                    </Col>
-                                  </Row>
-                                </form>
-                              </div>
-                              <div className="submit-btn">
-                                <div className="form-group col-md6 mt-6">
-                                  <button type="button" onClick={handleArrayValues} style={{ float: "right" }} className="btn btn-success">
-                                    Submit
-                                  </button>
-                                </div>
-                              </div>
-                            </div>
-                          </ModalBody>
-                          <ModalFooter toggle={() => setmodal(!modal)}></ModalFooter>
-                        </Modal>
-                      </div> */}
-                    </div>
-
-                    {/* <br></br> */}
-                    {/* <br></br> */}
-                  </div>
-                </div>
-                )} 
-              </div>
-
-<br></br>
-{capacityScrutinyInfo?.permissionGrantedHRDU === "N" && (
-<div>
-<div className="hl"></div>
-              <p className="ml-3">
-              (ii) Have you developed projects outside Haryana:-
-                
-              </p>
-              <div className="ml-3" >
-                  <input
-                    type="radio"
-                    value="Yes"
-                    
-                    className="mx-2 mt-1"
-      checked={capacityScrutinyInfo?.technicalCapacityOutsideHaryana === "Y" ?true:false}
-                   
-                    disabled
-                  />
-                  <label className="m-0  mx-1" for="Yes">Yes</label>
-
-                  <input
-                    type="radio"
-                    value="No"
-                    
-                    className="mx-2 mt-1"
-                    checked={capacityScrutinyInfo?.technicalCapacityOutsideHaryana === "N" ?true:false}
                   
-                    disabled
-                  />
-                  <label className="m-0 mx-2" for="No">No</label>
-                  <ReportProblemIcon
-                    style={{
-                       display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("X:Longitude") ? "block" : "none",
-                      color:fieldIconColors.caution10
-                    }}
-                    onClick={() => {
-                      setOpennedModal("caution10")
-                      setLabelValue("(ii) Have you developed projects outside Haryana:-"),
-                      setSmShow(true),
-                      console.log("modal open"),
-                      setFieldValue(capacityScrutinyInfo !== null ? capacityScrutinyInfo?.technicalCapacityOutsideHaryana: null);
-                    }}
-                  ></ReportProblemIcon>
-                </div>
-               
-                
-                <br></br>
-
-              
-
-                {capacityScrutinyInfo?.technicalCapacityOutsideHaryana  === "Y" && (
-               <div className="row "> 
-                  {/* <div className="form-group row"> */}
-                    <div className="col-sm-12">
-                      {/* <Col xs="12" md="12" sm="12">
-                        <Table className="table table-bordered" size="sm">
-                          <thead>
-                            <tr>
-                              <th class="fw-normal">S.No.</th>
-                              <th class="fw-normal">Professional </th>
-                              <th class="fw-normal"> Annexure</th>
-                            </tr>
-                          </thead>
-                          <tbody>
-                            <tr>
-                              <td> 1 &nbsp;&nbsp;</td>
-                              <td> Agreement between the entities to provide technical assistance</td>
-                              <td align="center" size="large">
-                                <div className="row">
-                                
-                                 <div className="btn btn-sm col-md-6">
-                                   <IconButton onClick={()=>getDocShareholding(item?.agreementDoc)}>
-                                      <VisibilityIcon color="info" className="icon" /></IconButton>
-                                      </div>
-                                 <div className="btn btn-sm col-md-6">
-                                  <IconButton onClick={()=>getDocShareholding(item?.agreementDoc)}>
-                                      <FileDownloadIcon color="info" className="icon" /></IconButton>
-                                      </div>
-                                </div>
-                              </td>
-                            </tr>
-                            <tr>
-                              <td> 2&nbsp;&nbsp; </td>
-                              <td>Board resolutions of authorized signatory of firm/company provided technical assistance</td>
-                              <td align="center" size="large">
-                                <div className="row">
-                               
-                                 <div className="btn btn-sm col-md-6">
-                                <IconButton onClick={()=>getDocShareholding(item?.boardDoc)}>
-                                      <VisibilityIcon color="info" className="icon" /></IconButton>
-                                      </div>
-                                 <div className="btn btn-sm col-md-6">
-                                  
-                                  <IconButton onClick={()=>getDocShareholding(item?.boardDoc)}>
-                                      <FileDownloadIcon color="info" className="icon" /></IconButton>
-                                      </div>
-                                </div>
-                              </td>
-                            </tr>
-                          </tbody>
-                        </Table>
-                      </Col> */}
-                      <Row>
-                                    <Col md={4} xxl lg="4">
-                                        <label htmlFor="project" className="text"> Name of Project </label>
-                                      
-                                         <div className={classes.fieldContainer}>
-                              <Form.Control 
-                               placeholder={capacityScrutinyInfo?.technicalCapacityOutsideHaryanaDetails?.project} 
-                               disabled></Form.Control>
-                               &nbsp;&nbsp;
-                               <ReportProblemIcon
-                  style={{
-                     display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("X:Longitude") ? "block" : "none",
-                    color: fieldIconColors.caution8
-                  }}
-                  onClick={() => {
-                    setOpennedModal("caution8")
-                    setLabelValue("Name of Project"),
-                      setSmShow(true),
-                      console.log("modal open"),
-                      setFieldValue(capacityScrutinyInfo !== null ? capacityScrutinyInfo?.technicalCapacityOutsideHaryanaDetails?.project: null);
-                  }}
-                ></ReportProblemIcon>
-            </div>
-
-                                    </Col>
-
-                                    <Col md={4} xxl lg="4">
-                                        <label htmlFor="authority" className="text">Name of Authority</label>
-                                           <div className={classes.fieldContainer}>
-                              <Form.Control 
-                               placeholder={capacityScrutinyInfo?.technicalCapacityOutsideHaryanaDetails?.authority} 
-                               disabled></Form.Control>
-                               &nbsp;&nbsp;
-                               <ReportProblemIcon
-                  style={{
-                     display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("X:Longitude") ? "block" : "none",
-                    color: fieldIconColors.caution9
-                  }}
-                  onClick={() => {
-                    setOpennedModal("caution9")
-                    setLabelValue("Name of Authority"),
-                      setSmShow(true),
-                      console.log("modal open"),
-                      setFieldValue(capacityScrutinyInfo !== null ? capacityScrutinyInfo?.technicalCapacityOutsideHaryanaDetails?.authority: null);
-                  }}
-                ></ReportProblemIcon>
-            </div>
-
-                                    </Col>
-
-                                    <Col md={4} xxl lg="4">
-                                        <label htmlFor="statusOfDevelopment" className="text"> Status of Development </label>
-                                        
-                                           <div className={classes.fieldContainer}>
-                              <Form.Control 
-                               placeholder={capacityScrutinyInfo?.technicalCapacityOutsideHaryanaDetails?.statusOfDevelopment} 
-                               disabled></Form.Control>
-                               &nbsp;&nbsp;
-                               <ReportProblemIcon
-                  style={{
-                     display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("X:Longitude") ? "block" : "none",
-                    color: fieldIconColors.caution11
-                  }}
-                  onClick={() => {
-                    setOpennedModal("caution11")
-                    setLabelValue("Status of Development"),
-                      setSmShow(true),
-                      console.log("modal open"),
-                      setFieldValue(capacityScrutinyInfo !== null ? capacityScrutinyInfo?.technicalCapacityOutsideHaryanaDetails?.statusOfDevelopment: null);
-                  }}
-                ></ReportProblemIcon>
-            </div>
-
-                                    </Col>
-                                </Row>
-                                <Row>
-                                {/* <Col md={4} xxl lg="4">
-                                        <label htmlFor="statusOfDevelopment" className="text"> Permission letter  </label>
-                                        
-                                           <div className={classes.fieldContainer}>
-                              <Form.Control
-                               placeholder={capacityScrutinyInfo?.technicalCapacityOutsideHaryanaDetails?.statusOfDevelopment} 
-                               disabled></Form.Control>
-                               &nbsp;&nbsp;
-                               <ReportProblemIcon
-                  style={{
-                     display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("X:Longitude") ? "block" : "none",
-                    color: fieldIconColors.caution12
-                  }}
-                  onClick={() => {
-                    setOpennedModal("caution12")
-                    setLabelValue("Permission letter"),
-                      setSmShow(true),
-                      console.log("modal open"),
-                      setFieldValue(capacityScrutinyInfo !== null ? capacityScrutinyInfo?.technicalCapacityOutsideHaryanaDetails?.statusOfDevelopment: null);
-                  }}
-                ></ReportProblemIcon>
-            </div>
-
-                                    </Col> */}
-                                    <Col md={4} xxl lg="4">
-                                        <label htmlFor="statusOfDevelopment" className="text">Area of the project in acres </label>
-                                        
-                                           <div className={classes.fieldContainer}>
-                              <Form.Control 
-                               placeholder={capacityScrutinyInfo?.technicalCapacityOutsideHaryanaDetails?.projectArea} 
-                               disabled></Form.Control>
-                               &nbsp;&nbsp;
-                               <ReportProblemIcon
-                  style={{
-                     display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("X:Longitude") ? "block" : "none",
-                    color: fieldIconColors.caution13
-                  }}
-                  onClick={() => {
-                    setOpennedModal("caution13")
-                    setLabelValue("Area of the project in acres "),
-                      setSmShow(true),
-                      console.log("modal open"),
-                      setFieldValue(capacityScrutinyInfo !== null ? capacityScrutinyInfo?.capacityScrutinyInfo?.technicalCapacityOutsideHaryanaDetails?.projectArea: null);
-                  }}
-                ></ReportProblemIcon>
-            </div>
-
-                                    </Col>
-                                    <Col md={4} xxl lg="4">
-                                        <label htmlFor="statusOfDevelopment" className="text">Location </label>
-                                        
-                                           <div className={classes.fieldContainer}>
-                              <Form.Control 
-                               placeholder={capacityScrutinyInfo?.technicalCapacityOutsideHaryanaDetails?.location} 
-                               disabled></Form.Control>
-                               &nbsp;&nbsp;
-                               <ReportProblemIcon
-                  style={{
-                     display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("X:Longitude") ? "block" : "none",
-                    color: fieldIconColors.caution14
-                  }}
-                  onClick={() => {
-                    setOpennedModal("caution14")
-                    setLabelValue("Location"),
-                      setSmShow(true),
-                      console.log("modal open"),
-                      setFieldValue(capacityScrutinyInfo !== null ? capacityScrutinyInfo?.technicalCapacityOutsideHaryanaDetails?.location: null);
-                  }}
-                ></ReportProblemIcon>
-            </div>
-
-                                    </Col>
-                                </Row>
-                                <Row>
-                                {/* <Col md={4} xxl lg="4">
-                                        <label htmlFor="statusOfDevelopment" className="text">Any other document/ Photo</label>
-                                        
-                                           <div className={classes.fieldContainer}>
-                              <Form.Control 
-                               placeholder={capacityScrutinyInfo?.technicalCapacityOutsideHaryanaDetails?.anyOtherDoc} 
-                               disabled></Form.Control>
-                               &nbsp;&nbsp;
-                               <ReportProblemIcon
-                  style={{
-                     display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("X:Longitude") ? "block" : "none",
-                    color: fieldIconColors.caution15
-                  }}
-                  onClick={() => {
-                    setOpennedModal("caution15")
-                    setLabelValue("Any other document/ Photo"),
-                      setSmShow(true),
-                      console.log("modal open"),
-                      setFieldValue(capacityScrutinyInfo !== null ? capacityScrutinyInfo?.technicalCapacityOutsideHaryanaDetails?.anyOtherDoc: null);
-                  }}
-                ></ReportProblemIcon>
-            </div>
-
-                                    </Col> */}
-                                </Row>
-                    </div>
-                  {/* </div> */}
-            </div>
-               )}  
-      
-              </div>
-               )} 
-
-
-<br></br>
-<div className="hl"></div>
-                        {/* <p >
-                            (iii) In case of technical capacity of company/firm developed projects outside Haryana:-
-                        </p> */}
-
-                        <div >
+                  </div>
+                  <div>
+       {/* CHANGE N */}
+                  {capacityScrutinyInfo?.permissionGrantedHRDU === "Y" && (
+                    <div className="card-body">
                     
-              {/* <div >
-                            <input
-                                type="radio"
-                                value="Y"
-                                checked={capacityScrutinyInfo?.technicalCapacityOutsideHaryana === "Y" ? true : false}
-                                id="technicalCapacityOutsideHaryana"
-                                className="mx-2 mt-1"
-                               
-                                name="technicalCapacityOutsideHaryana"
-                                disabled
-                            />
-                            <label for="Yes">Yes</label>
-
-                            <input
-                                type="radio"
-                                value="N"
-                                checked={capacityScrutinyInfo?.technicalCapacityOutsideHaryana=== "N" ? true : false}
-                                id="technicalCapacityOutsideHaryanaN"
-                                className="mx-2 mt-1"
-                                
-                                name="technicalCapacityOutsideHaryana"
-                                disabled
-                            />
-                            <label for="No">No</label>
-
-                            <ReportProblemIcon
-                  style={{
-                     display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("X:Longitude") ? "block" : "none",
-                    color: fieldIconColors.caution1
-                  }}
-                  onClick={() => {
-                    setOpennedModal("caution1")
-                    setLabelValue("Whether the Developer/ group company has earlier been granted permission to set up a colony under HDRU Act, 1975"),
-                      setSmShow(true),
-                      console.log("modal open"),
-                      setFieldValue(capacityScrutinyInfo !== null ? capacityScrutinyInfo?.caution1: null);
-                  }}
-                ></ReportProblemIcon>
-                            </div> */}
-                            {/* {capacityScrutinyInfo?.technicalCapacityOutsideHaryana === "Y" && ( */}
-                                {/* <Row>
-                                    <Col md={4} xxl lg="4">
-                                        <label htmlFor="project" className="text"> Project </label>
-                                      
-                                         <div className={classes.fieldContainer}>
-                              <Form.Control style={{ maxWidth: 200, marginRight: 5, height: 30 }}
-                               placeholder={capacityScrutinyInfo?.technicalCapacityOutsideHaryanaDetails?.project} 
-                               disabled></Form.Control>
-                               &nbsp;&nbsp;
-                               <ReportProblemIcon
-                  style={{
-                     display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("X:Longitude") ? "block" : "none",
-                    color: fieldIconColors.caution1
-                  }}
-                  onClick={() => {
-                    setOpennedModal("caution1")
-                    setLabelValue("Whether the Developer/ group company has earlier been granted permission to set up a colony under HDRU Act, 1975"),
-                      setSmShow(true),
-                      console.log("modal open"),
-                      setFieldValue(capacityScrutinyInfo !== null ? capacityScrutinyInfo?.caution1: null);
-                  }}
-                ></ReportProblemIcon>
-            </div>
-
-                                    </Col>
-
-                                    <Col md={4} xxl lg="4">
-                                        <label htmlFor="authority" className="text"> Authority </label>
-                                           <div className={classes.fieldContainer}>
-                              <Form.Control style={{ maxWidth: 200, marginRight: 5, height: 30 }}
-                               placeholder={capacityScrutinyInfo?.technicalCapacityOutsideHaryanaDetails?.authority} 
-                               disabled></Form.Control>
-                               &nbsp;&nbsp;
-                               <ReportProblemIcon
-                  style={{
-                     display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("X:Longitude") ? "block" : "none",
-                    color: fieldIconColors.caution1
-                  }}
-                  onClick={() => {
-                    setOpennedModal("caution1")
-                    setLabelValue("Whether the Developer/ group company has earlier been granted permission to set up a colony under HDRU Act, 1975"),
-                      setSmShow(true),
-                      console.log("modal open"),
-                      setFieldValue(capacityScrutinyInfo !== null ? capacityScrutinyInfo?.caution1: null);
-                  }}
-                ></ReportProblemIcon>
-            </div>
-
-                                    </Col>
-
-                                    <Col md={4} xxl lg="4">
-                                        <label htmlFor="statusOfDevelopment" className="text"> (iii) Status of Development </label>
-                                        
-                                           <div className={classes.fieldContainer}>
-                              <Form.Control style={{ maxWidth: 200, marginRight: 5, height: 30 }}
-                               placeholder={capacityScrutinyInfo?.technicalCapacityOutsideHaryanaDetails?.statusOfDevelopment} 
-                               disabled></Form.Control>
-                               &nbsp;&nbsp;
-                               <ReportProblemIcon
-                  style={{
-                     display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("X:Longitude") ? "block" : "none",
-                    color: fieldIconColors.caution1
-                  }}
-                  onClick={() => {
-                    setOpennedModal("caution1")
-                    setLabelValue("Whether the Developer/ group company has earlier been granted permission to set up a colony under HDRU Act, 1975"),
-                      setSmShow(true),
-                      console.log("modal open"),
-                      setFieldValue(capacityScrutinyInfo !== null ? capacityScrutinyInfo?.caution1: null);
-                  }}
-                ></ReportProblemIcon>
-            </div>
-
-                                    </Col>
-                                </Row> */}
-                           {/* )}  */}
-                        </div>
-
-
-
-<br></br>
-{/* <div className="hl"></div>
-                        <p>
-                            (iv). In case of technical capacity sought from another
-                            company/firm who has already obtained license(s) under act of
-                            1975 or outside Haryana:
-                        </p>
-                        <div >
-                          <div >
-                            <input
-                                type="radio"
-                                value="Y"
-                                id="alreadtObtainedLic"
-                                className="mx-2 mt-1"
-                                checked={capacityScrutinyInfo?.alreadtObtainedLic === "Y" ? true : false}
-                             
-                                name="alreadtObtainedLic"
-                                disabled
-                            />
-                            <label for="Yes">Yes</label>
-
-                            <input
-                                type="radio"
-                                value="N"
-                                id="alreadtObtainedLicN"
-                                className="mx-2 mt-1"
-                               
-                                checked={capacityScrutinyInfo?.alreadtObtainedLic === "N" ? true : false}
-                                name="alreadtObtainedLic"
-                                onClick={handleshow6}
-                                disabled
-                            />
-                            <label for="No">No</label>
-                            </div>
-                            <br></br>
-                            {capacityScrutinyInfo?.alreadtObtainedLic === "Y" && (
-                              <div>
-                                <div>
-                                <div className="row">
-                    <div className="col-sm-12">
                       <div className="table-bd">
-                        
+                        <Paper sx={{ width: "100%", overflow: "hidden" }}>
+                          <TableContainer sx={{ maxHeight: 440 }}>
+                            <Table stickyHeader aria-label="sticky table">
+                              <TableHead>
+                                <TableRow>
+                                  <StyledTableCell> {`${t("BPA_DEV_CAPACITY_SR_NO")}`}</StyledTableCell>
+                                  <StyledTableCell>{`${t("BPA_DEV_CAPACITY_LICENCE_NO")}`}</StyledTableCell>
+                                  <StyledTableCell>{`${t("BPA_DEV_CAPACITY_DATE_OF_GRANT")}`}</StyledTableCell>
+                                  <StyledTableCell>{`${t("BPA_DEV_CAPACITY_PURPOSE_COLONY")}`}</StyledTableCell>
+                                  <StyledTableCell>{`${t("BPA_DEV_CAPACITY_VALIDITY_LICENCE")}`}</StyledTableCell>
+                                  <StyledTableCell>{`${t("BPA_DEV_CAPACITY_ACTION")}`}</StyledTableCell>
+                                </TableRow>
+                              </TableHead>
+                              <TableBody>
+                                {capacityScrutinyInfo?.capacityDevelopColonyHdruAct?.length > 0 ? (
+                                 capacityScrutinyInfo?.capacityDevelopColonyHdruAct?.map((item, index) => {
+                                    return (
+                                      <StyledTableRow key={elementInArray.id} sx={{ "&:last-child td, &:last-child th": { border: 0 } }}>
+                                        <StyledTableCell component="th" scope="row">
+                                          {input + 1}
+                                        </StyledTableCell>
+                                        <StyledTableCell> <input
+                                    type="text"
                                   
-                                                    <div>
-                                                        <Table className="table table-bordered" >
-                                                            <thead>
-                                                                <tr>
-                                                                    <th>S.No.</th>
-                                                                    <th>Agreement*</th>
-                                                                    <th>Upload Document </th>
-                                                                    <th>Annexure </th>
-                                                                </tr>
-                                                            </thead>
-                                                            <tbody>
-                                                                <tr>
-                                                                    <td> 1 </td>
-
-                                                                    <td>
-                                                                        Agreement between the proposed developer and existing colonizer
-                                                                    </td>
-                                                                    <td align="center" size="large">
-                                                                      
-                                                                        <div className="row">
-                               
-                               <div className="btn btn-sm col-md-6">
-                              <IconButton onClick={()=>getDocShareholding(capacityScrutinyInfo?.obtainedLicense?.boardDoc)}>
-                                    <VisibilityIcon color="info" className="icon" /></IconButton>
-                                    </div>
-                               <div className="btn btn-sm col-md-6">
-                             
-                                <IconButton onClick={()=>getDocShareholding(item?.boardDoc)}>
-                                    <FileDownloadIcon color="info" className="icon" /></IconButton>
-                                    </div>
-                              </div>
-
-                                                                    </td>
-                                                                    <td>
-                                                                   
-                                                          <div className={classes.fieldContainer}>
-                             
-                               &nbsp;&nbsp;
-                               <ReportProblemIcon
-                  style={{
-                     display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("X:Longitude") ? "block" : "none",
-                    color: fieldIconColors.caution1
-                  }}
-                  onClick={() => {
-                    setOpennedModal("caution1")
-                    setLabelValue("Whether the Developer/ group company has earlier been granted permission to set up a colony under HDRU Act, 1975"),
-                      setSmShow(true),
-                      console.log("modal open"),
-                      setFieldValue(capacityScrutinyInfo !== null ? capacityScrutinyInfo?.caution1: null);
-                  }}
-                ></ReportProblemIcon>
-            </div>
-
-                                                                    </td>
-                                                                </tr>
-                                                                <tr>
-                                                                    <td> 2 </td>
-
-                                                                    <td>
-                                                                        Board resolution of authorised signatory of the existing colonizer
-                                                                    </td>
-                                                                    <td align="center" size="large">
-                                                                       
-                                                                        <div className="row">
-                               
-                               <div className="btn btn-sm col-md-6">
-                              <IconButton onClick={()=>getDocShareholding(item?.boardDoc)}>
-                                    <VisibilityIcon color="info" className="icon" /></IconButton>
-                                    </div>
-                               <div className="btn btn-sm col-md-6">
-                               
-                                <IconButton onClick={()=>getDocShareholding(item?.boardDoc)}>
-                                    <FileDownloadIcon color="info" className="icon" /></IconButton>
-                                    </div>
-                              </div>
-                                                                    </td>
-                                                                    <td>
-                                                                      
-                                                                        <div className={classes.fieldContainer}>
-                              
-                               &nbsp;&nbsp;
-                               <ReportProblemIcon
-                  style={{
-                     display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("X:Longitude") ? "block" : "none",
-                    color: fieldIconColors.caution1
-                  }}
-                  onClick={() => {
-                    setOpennedModal("caution1")
-                    setLabelValue("Whether the Developer/ group company has earlier been granted permission to set up a colony under HDRU Act, 1975"),
-                      setSmShow(true),
-                      console.log("modal open"),
-                      setFieldValue(capacityScrutinyInfo !== null ? capacityScrutinyInfo?.caution1: null);
-                  }}
-                ></ReportProblemIcon>
-            </div>
-                                                                    </td>
-                                                                </tr>
-                                                                <tr>
-                                                                    <td> 3 </td>
-                                                                    <td> Registered and Irrevocable Agreement</td>
-                                                                    <td align="center" size="large">
-                                                                      
-                                                                        <div className="row">
-                               
-                               <div className="btn btn-sm col-md-6">
-                              <IconButton onClick={()=>getDocShareholding(item?.boardDoc)}>
-                                    <VisibilityIcon color="info" className="icon" /></IconButton>
-                                    </div>
-                               <div className="btn btn-sm col-md-6">
-                              
-                                <IconButton onClick={()=>getDocShareholding(item?.boardDoc)}>
-                                    <FileDownloadIcon color="info" className="icon" /></IconButton>
-                                    </div>
-                              </div>
-                                                                    </td>
-                                                                    <td>
-                                                                       
-                                                                        <div className={classes.fieldContainer}>
-                             
-                               &nbsp;&nbsp;
-                               <ReportProblemIcon
-                  style={{
-                     display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("X:Longitude") ? "block" : "none",
-                    color: fieldIconColors.caution1
-                  }}
-                  onClick={() => {
-                    setOpennedModal("caution1")
-                    setLabelValue("Whether the Developer/ group company has earlier been granted permission to set up a colony under HDRU Act, 1975"),
-                      setSmShow(true),
-                      console.log("modal open"),
-                      setFieldValue(capacityScrutinyInfo !== null ? capacityScrutinyInfo?.caution1: null);
-                  }}
-                ></ReportProblemIcon>
-            </div>
-                                                                    </td>
-                                                                </tr>
-
-                                                                <tr>
-                                                                    <td> 4 </td>
-                                                                    <td>
-                                                                        Board resolutions of authorized signatory of
-                                                                        firm/company provided technical assistance
-                                                                    </td>
-                                                                    <td align="center" size="large">
-                                                                      
-                                                                        <div className="row">
-                               
-                               <div className="btn btn-sm col-md-6">
-                              <IconButton onClick={()=>getDocShareholding(item?.boardDoc)}>
-                                    <VisibilityIcon color="info" className="icon" /></IconButton>
-                                    </div>
-                               <div className="btn btn-sm col-md-6">
+                                    placeholder={item?.licenceNumber}
+                                    class="employee-card-input"
+                                    disabled
+                                  /></StyledTableCell>
+                                        <StyledTableCell>
+                                 
+                                  <input
+                                    type="text"
                                 
-                                <IconButton onClick={()=>getDocShareholding(item?.boardDoc)}>
-                                    <FileDownloadIcon color="info" className="icon" /></IconButton>
-                                    </div>
-                              </div>
-                                                                    </td>
-                                                                    <td>
-                                                                      
-                                                                           <div className={classes.fieldContainer}>
-                             
-                               &nbsp;&nbsp;
-                               <ReportProblemIcon
-                  style={{
-                     display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("X:Longitude") ? "block" : "none",
-                    color: fieldIconColors.caution1
-                  }}
-                  onClick={() => {
-                    setOpennedModal("caution1")
-                    setLabelValue("Whether the Developer/ group company has earlier been granted permission to set up a colony under HDRU Act, 1975"),
-                      setSmShow(true),
-                      console.log("modal open"),
-                      setFieldValue(capacityScrutinyInfo !== null ? capacityScrutinyInfo?.caution1: null);
-                  }}
-                ></ReportProblemIcon>
-            </div>
-                                                                    </td>
-                                                                </tr>
-                                                            </tbody>{" "}
-                                                        </Table>
-                                                    </div>
-                                          
-                                               
-                                            </div>
-                                        </div>
-                                    </div>
-                                    </div>
-<br></br>
-                                    <div className="row">
-                                        <div className="col col-4">
-                                            <div >
-                                                <label htmlFor="licNo">License No.</label>
-                                                
-                                                   <div className={classes.fieldContainer}>
-                              <Form.Control style={{ maxWidth: 200, marginRight: 5, height: 30 }}
-                               placeholder={capacityScrutinyInfo?.obtainedLicense?.[0]?.licNo} 
-                           
-                               disabled></Form.Control>
-                               &nbsp;&nbsp;
-                               <ReportProblemIcon
-                  style={{
-                     display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("X:Longitude") ? "block" : "none",
-                    color: fieldIconColors.caution1
-                  }}
-                  onClick={() => {
-                    setOpennedModal("caution1")
-                    setLabelValue("Whether the Developer/ group company has earlier been granted permission to set up a colony under HDRU Act, 1975"),
-                      setSmShow(true),
-                      console.log("modal open"),
-                      setFieldValue(capacityScrutinyInfo !== null ? capacityScrutinyInfo?.caution1: null);
-                  }}
-                ></ReportProblemIcon>
-            </div>
-                                            </div>
-                                        </div>
+                                    placeholder={item?.grantLicence}
+                                    class="employee-card-input"
+                                    disabled
+                                  />
+                                </StyledTableCell>
+                                        <StyledTableCell>
+                                          <input
+                                    type="text"
+                                 
+                                    placeholder={item?.purposeOfColony}
+                                    class="employee-card-input"
+                                    disabled
+                                  /></StyledTableCell>
+                                        <StyledTableCell>
+                                          <input
+                                    type="text"
+                                 
+                                    placeholder={item?.validatingLicence}
+                                    class="employee-card-input"
+                                    disabled
+                                  /></StyledTableCell>
+                                        <StyledTableCell>
+                                          {/* <a href="javascript:void(0)" title="Delete record" onClick={() => deleteTableRows(-1)}>
+                                            <DeleteIcon color="danger" className="icon" />
+                                          </a> */}
+                                        </StyledTableCell>
+                                      </StyledTableRow>
+                                    );
+                                  })
+                                ) : (
+                                  ""
+                                  // <div className="d-none">Click on Add More Button</div>
+                                )}
+                              </TableBody>
+                            </Table>
+                          </TableContainer>
+                          <TablePagination
+                            rowsPerPageOptions={[10, 25, 100]}
+                            component="div"
+                            count={capacityDevelopColonyHdruAct?.length}
+                            rowsPerPage={rowsPerPageStack}
+                            page={pageStack}
+                            onPageChange={handleChangePageStack}
+                            onRowsPerPageChange={handleChangeRowsPerPageStack}
+                          />
+                        </Paper>
+                        {/* <div>
+                          <button
+                            type="button"
+                            style={{
+                              float: "left",
+                              backgroundColor: "#0b3629",
+                              color: "white",
+                            }}
+                            className="btn mt-3"
+               
+                            onClick={handleShowCapacityDevelopColony}
+                          >
+                            Add More
+                          </button>
+                          <Modal show={showCapacityDevelopColony} onHide={handleCloseCapacityDevelopColony} animation={false}>
+                            <Modal.Header closeButton>
+                              <Modal.Title>Add Details</Modal.Title>
+                            </Modal.Header>
+                            <Modal.Body>
+                              <form className="text1">
+                                <Row>
+                                  <Col md={4} xxl lg="4">
+                                    <label htmlFor="name" className="text">
+                                      {`${t("BPA_LICENSE_DETAILS_TEXT")}`} <span className="text-danger font-weight-bold">*</span>
+                                    </label>
+                                    <input
+                                      type="text"
+                                      value={hrduModalData.licNo}
+                                      onChange={(e) => setHrduModalData({ ...hrduModalData, licNo: e.target.value.toUpperCase() })}
+                                      placeholder=""
+                                      class="form-control"
+                                      required="required"
+                                      maxLength={11}
+                                    />
+                                    {hrduModalData.licNo &&
+                                      hrduModalData.licNo.length > 0 &&
+                                      !hrduModalData.licNo.match(Digit.Utils.getPattern("LicNumber")) && (
+                                        <CardLabelError
+                                          style={{ width: "100%", marginTop: "5px", fontSize: "16px", marginBottom: "12px", color: "red" }}
+                                        >
+                                          {t("BPA_LICENSE_INVALID")}
+                                        </CardLabelError>
+                                      )}
+                                  </Col>
+                                  <Col md={4} xxl lg="4">
+                                    <label htmlFor="name" className="text">
+                                      {t("BPA_GRANT_LICENSE_DATE")} <span className="text-danger font-weight-bold">*</span>
+                                    </label>
+                                    <input
+                                      type="date"
+                                      value={hrduModalData.dateOfGrantingLic}
+                                      onChange={(e) => setHrduModalData({ ...hrduModalData, dateOfGrantingLic: e.target.value })}
+                                      placeholder=""
+                                      class="form-control"
+                                      isMandatory={false}
+                                      {...(validation = {
+                                        isRequired: true,
+                                        title: "Please enter Name",
+                                      })}
+                                      max={convertEpochToDate(new Date().setFullYear(new Date().getFullYear()))}
+                                    />
+                                  </Col>
+                                  <Col md={3} xxl lg="4">
+                                    <label htmlFor="name" className="text">
+                                      {`${t("BPA_DEVELOPER_CAPACITY_PURPOSE_COLONY")}`}
+                                      <span class="text-danger font-weight-bold mx-2">*</span>
+                                    </label>
 
-                                        <div className="col col-4">
-                                            <div >
-                                                <label htmlFor="licDate">Date</label>
-                                             
-                                                   <div className={classes.fieldContainer}>
-                              <Form.Control style={{ maxWidth: 200, marginRight: 5, height: 30 }}
-                               placeholder={capacityScrutinyInfo?.obtainedLicense?.[0]?.dateOfGrantingLic} 
-                               disabled></Form.Control>
-                               &nbsp;&nbsp;
-                               <ReportProblemIcon
-                  style={{
-                     display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("X:Longitude") ? "block" : "none",
-                    color: fieldIconColors.caution1
-                  }}
-                  onClick={() => {
-                    setOpennedModal("caution1")
-                    setLabelValue("Whether the Developer/ group company has earlier been granted permission to set up a colony under HDRU Act, 1975"),
-                      setSmShow(true),
-                      console.log("modal open"),
-                      setFieldValue(capacityScrutinyInfo !== null ? capacityScrutinyInfo?.caution1: null);
-                  }}
-                ></ReportProblemIcon>
-            </div>
-                                            </div>
-                                        </div>
-
-                                        <div className="col col-4">
-                                            <div >
-                                                <label htmlFor="licValidity">Validity</label>
-                                               
-                                                   <div className={classes.fieldContainer}>
-                              <Form.Control style={{ maxWidth: 200, marginRight: 5, height: 30 }}
-                               placeholder={capacityScrutinyInfo?.obtainedLicense?.[0]?.licValidity} 
-                               disabled></Form.Control>
-                               &nbsp;&nbsp;
-                               <ReportProblemIcon
-                  style={{
-                     display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("X:Longitude") ? "block" : "none",
-                    color: fieldIconColors.caution1
-                  }}
-                  onClick={() => {
-                    setOpennedModal("caution1")
-                    setLabelValue("Whether the Developer/ group company has earlier been granted permission to set up a colony under HDRU Act, 1975"),
-                      setSmShow(true),
-                      console.log("modal open"),
-                      setFieldValue(capacityScrutinyInfo !== null ? capacityScrutinyInfo?.caution1: null);
-                  }}
-                ></ReportProblemIcon>
-            </div>
-                                            </div>
-                                        </div>
-
-                                        <div className="col col-4">
-                                            <div c>
-                                                <label htmlFor="licValidity">Purpose</label>
-                                             
-                                                   <div className={classes.fieldContainer}>
-                              <Form.Control style={{ maxWidth: 200, marginRight: 5, height: 30 }}
-                               placeholder={capacityScrutinyInfo?.obtainedLicense?.[0]?.purpose} 
-                               disabled></Form.Control>
-                               &nbsp;&nbsp;
-                               <ReportProblemIcon
-                  style={{
-                     display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("X:Longitude") ? "block" : "none",
-                    color: fieldIconColors.caution1
-                  }}
-                  onClick={() => {
-                    setOpennedModal("caution1")
-                    setLabelValue("Whether the Developer/ group company has earlier been granted permission to set up a colony under HDRU Act, 1975"),
-                      setSmShow(true),
-                      console.log("modal open"),
-                      setFieldValue(capacityScrutinyInfo !== null ? capacityScrutinyInfo?.caution1: null);
-                  }}
-                ></ReportProblemIcon>
-            </div>
-
-                                            </div>
-                                        </div>
-                                    </div>
-</div>
-                            )}
-
+                                    <Select
+                                      value={purposeOfColony || ""}
+                                      onChange={(e) => setShowPurposeType(e.target.value)}
+                                      className="w-100 form-control"
+                                      variant="standard"
+                                    >
+                                      {purposeOptions?.data?.map((item, index) => (
+                                        <MenuItem value={item.value}>{item?.label}</MenuItem>
+                                      ))}
+                                    </Select>
+                                  </Col>
+                                </Row>
+                                <Row>
+                                  <Col md={4} xxl lg="4">
+                                    <label htmlFor="name" className="text">
+                                      {`${t("BPA_DEVELOPER_CAPACITY_LICENSE_VALIDITY")}`} <span className="text-danger font-weight-bold">*</span>
+                                    </label>
+                                    <input
+                                      type="date"
+                                      name="validatingLicence"
+                                      value={hrduModalData.licValidity}
+                                      disabled={!hrduModalData.dateOfGrantingLic}
+                                      onChange={(e) => setHrduModalData({ ...hrduModalData, licValidity: e.target.value })}
+                                      placeholder=""
+                                      class="form-control"
+                                      min={hrduModalData.dateOfGrantingLic}
+                                    />
+                                  </Col>
+                                </Row>
+                              </form>
+                            </Modal.Body>
+                            <Modal.Footer>
+                              <Button variant="secondary" onClick={handleCloseCapacityDevelopColony}>
+                                Close
+                              </Button>
+                              <Button
+                                disabled={
+                                  !(
+                                    hrduModalData.licNo &&
+                                    hrduModalData.licValidity &&
+                                    hrduModalData.dateOfGrantingLic &&
+                                    purposeOfColony &&
+                                    hrduModalData.licNo.match(Digit.Utils.getPattern("LicNumber"))
+                                  )
+                                }
+                                variant="primary"
+                                onClick={handleArrayValues}
+                              >
+                                Submit
+                              </Button>
+                            </Modal.Footer>
+                          </Modal>
                         </div> */}
 
-
-{/* <div className="hl"></div>
-              <p>(v) Whether any technical expert(s) engaged   &nbsp;&nbsp;&nbsp;
-                <div className="d-flex flex-row align-items-center ml-2">
-                  <input type="radio" value="Yes"  className="mx-2 mt-1" checked={capacityScrutinyInfo?.technicalExpert === "Y" ? true : false} disabled />
-                  <label className="m-0  mx-1" for="Yes">Yes</label>
-                  <input type="radio" value="No"  className="mx-2 mt-1" checked={capacityScrutinyInfo?.technicalExpert === "N" ? true : false} disabled />
-                  <label className="m-0 mx-2" for="No">No</label>
-                  <ReportProblemIcon
-                    style={{
-                       display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("X:Longitude") ? "block" : "none",
-                      color: fieldIconColors.caution3
-                    }}
-                    onClick={() => {
-                      setOpennedModal("caution3")
-                    setLabelValue("Whether any technical expert(s) engaged"),
-                    setSmShow(true),
-                    console.log("modal open"),
-                    setFieldValue(capacityScrutinyInfo !== null ? capacityScrutinyInfo?.caution3: null);
-                    }}
-                  ></ReportProblemIcon>
-                </div>
-              </p>
-              <br></br>
-              <div>
-           
-
-                {capacityScrutinyInfo?.technicalExpert === "Y" && (
-                <div>
-                  <div className="row">
-                    <div className="col-sm-12">
-                      <div className="table-bd">
-                        <Table className="table table-bordered">
-                          <thead>
-                            <tr>
-                              <th class="fw-normal">S.No</th>
-                              <th class="fw-normal">Professional </th>
-                              <th class="fw-normal">Qualification</th>
-                              <th class="fw-normal">Signature</th>
-                              <th class="fw-normal">Annexure</th>
-                            </tr>
-                          </thead>
-                          <tbody>
-                            <tr>
-                              <td>1</td>
-                              <td>
-                                <input
-                                  type="text"
-                                  
-                                  placeholder={capacityScrutinyInfo?.technicalExpertEngaged[0]?.engineerName}
-                                  class="employee-card-input"
-                                  disabled
-                                />
-                              </td>
-                              <td>
-                                <input
-                                  type="text"
-                                  
-                                  placeholder={capacityScrutinyInfo?.technicalExpertEngaged[0]?.engineerQualification}
-                                  class="employee-card-input"
-                                  disabled
-                                />
-                              </td>
-
-                              <td>
-                                <div className="row">
-                                
-                                
-                                 <div className="btn btn-sm col-md-6">
-                                  <IconButton onClick={()=>getDocShareholding(item?.engineerSign)}>
-                                      <VisibilityIcon color="info" className="icon" /></IconButton>
-                              
-                                    </div>
-                                 <div className="btn btn-sm col-md-6">
-                                  <IconButton onClick={()=>getDocShareholding(item?.engineerSign)}>
-                                      <FileDownloadIcon color="info" className="icon" /></IconButton>
-                                      </div>
-                                </div>
-                              </td>
-                              <td align="center" size="large">
-                              <ReportProblemIcon
-                    style={{
-                       display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("X:Longitude") ? "block" : "none",
-                      color: fieldIconColors.caution3
-                    }}
-                    onClick={() => {
-                      setOpennedModal("caution3")
-                    setLabelValue("Whether any technical expert(s) engaged"),
-                    setSmShow(true),
-                    console.log("modal open"),
-                    setFieldValue(capacityScrutinyInfo !== null ? capacityScrutinyInfo?.caution3: null);
-                    }}
-                  ></ReportProblemIcon>
-                              </td>
-                            </tr>
-
-                            <tr>
-                              <td>2</td>
-                              <td>
-                                <input
-                                  type="text"
-                                 
-                                  placeholder={capacityScrutinyInfo?.technicalExpertEngaged[0]?.architectName}
-                                  class="employee-card-input"
-                                  disabled
-                                />
-                              </td>
-                              <td>
-                                <input
-                                  type="text"
-                               
-                                  placeholder={capacityScrutinyInfo?.technicalExpertEngaged[0]?.architectQualification}
-                                  class="employee-card-input"
-                                  disabled
-                                />
-                              </td>
-
-                              <td>
-                                <div className="row">
-                                 
-                                   
-                                 <div className="btn btn-sm col-md-6">
-                                   <IconButton onClick={()=>getDocShareholding(item?.architectSign)}>
-                                      <VisibilityIcon color="info" className="icon" /></IconButton>
-                                      </div>
-                                 <div className="btn btn-sm col-md-6">
-                                
-                                  <IconButton onClick={()=>getDocShareholding(item?.architectSign)}>
-                                      <FileDownloadIcon color="info" className="icon" /></IconButton>
-                                      </div>
-                                </div>
-                              </td>
-                              <td align="center" size="large">
-                              <ReportProblemIcon
-                    style={{
-                       display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("X:Longitude") ? "block" : "none",
-                      color: fieldIconColors.caution3
-                    }}
-                    onClick={() => {
-                      setOpennedModal("caution3")
-                    setLabelValue("Whether any technical expert(s) engaged"),
-                    setSmShow(true),
-                    console.log("modal open"),
-                    setFieldValue(capacityScrutinyInfo !== null ? capacityScrutinyInfo?.caution3: null);
-                    }}
-                  ></ReportProblemIcon>
-                              </td>
-                            </tr>
-
-                            <tr>
-                              <td>3</td>
-                              <td>
-                                <input
-                                  type="text"
-                                 
-                                  placeholder={capacityScrutinyInfo?.technicalExpertEngaged[0]?.townPlannerName}
-                                  class="employee-card-input"
-                                  disabled
-                                />
-                              </td>
-                              <td>
-                                <input
-                                  type="text"
-                                 
-                                  placeholder={capacityScrutinyInfo?.technicalExpertEngaged[0]?.townPlannerQualification}
-                                  class="employee-card-input"
-                                  disabled
-                                />
-                              </td>
-                        
-                              <td>
-                                <div className="row">
-                                
-                                   
-                                 <div className="btn btn-sm col-md-6">
-                                      <IconButton onClick={()=>getDocShareholding(item?.townPlannerSign)}>
-                                      <VisibilityIcon color="info" className="icon" /></IconButton>
-                                      </div>
-                                 
-                                  
-                                 
-                                 
-                                 <div className="btn btn-sm col-md-6">
-                                  <IconButton onClick={()=>getDocShareholding(item?.townPlannerSign)}>
-                                      <FileDownloadIcon color="info" className="icon" /></IconButton>
-                                      </div>
-                                </div>
-                              </td>
-                              <td align="center" size="large">
-                              <ReportProblemIcon
-                    style={{
-                       display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("X:Longitude") ? "block" : "none",
-                      color: fieldIconColors.caution3
-                    }}
-                    onClick={() => {
-                      setOpennedModal("caution3")
-                    setLabelValue("Whether any technical expert(s) engaged"),
-                    setSmShow(true),
-                    console.log("modal open"),
-                    setFieldValue(capacityScrutinyInfo !== null ? capacityScrutinyInfo?.caution3: null);
-                    }}
-                  ></ReportProblemIcon>
-                              </td>
-                            </tr>
-                          </tbody>
-                        </Table>
+                    
                       </div>
                     </div>
+                  )}
+               
+
+                {capacityScrutinyInfo?.permissionGrantedHRDU=== "N" && (
+                  <div className="ml-1">
+                    {addInfo?.showDevTypeFields === "Individual" ||
+                    addInfo?.showDevTypeFields === "Proprietorship Firm" ? (
+                      <p className="ml-1">
+                        (ii) {`${t("BPA_DEVELOPER_DEVELOPED_PROJECT_OUTSIDE_HARYANA")}`} <span className="text-danger font-weight-bold">*</span>
+                      </p>
+                    ) : (
+                      <p className="ml-1">
+                        (ii) {`${t("BPA_DEVELOPER_COMPANY_FIRM_DEVELOPED_PROJECT_OUTSIDE_HARYANA")}`}{" "}
+                        <span className="text-danger font-weight-bold">*</span>
+                      </p>
+                    )}
+
+<div className="ml-3" >
+                    <input
+                      type="radio"
+                      value="Yes"
+
+                      className="mx-2 mt-1"
+                      checked={capacityScrutinyInfo?.technicalCapacityOutsideHaryana === "Y" ? true : false}
+
+                      disabled
+                    />
+                    <label className="m-0  mx-1" for="Yes">Yes</label>
+
+                    <input
+                      type="radio"
+                      value="No"
+
+                      className="mx-2 mt-1"
+                      checked={capacityScrutinyInfo?.technicalCapacityOutsideHaryana === "N" ? true : false}
+
+                      disabled
+                    />
+                    <label className="m-0 mx-2" for="No">No</label>
+                    <ReportProblemIcon
+                      style={{
+                        display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("X:Longitude") ? "block" : "none",
+                        color: fieldIconColors.caution10
+                      }}
+                      onClick={() => {
+                        setOpennedModal("caution10")
+                        setLabelValue("(ii) Have you developed projects outside Haryana:-"),
+                          setSmShow(true),
+                          console.log("modal open"),
+                          setFieldValue(capacityScrutinyInfo !== null ? capacityScrutinyInfo?.technicalCapacityOutsideHaryana : null);
+                      }}
+                    ></ReportProblemIcon>
                   </div>
-                </div>
-               )} 
-                {showhide1 === "No" && (
-                  <div className="row ">
-                    <div className="form-group row">
+
+                  <br></br>
+
+
+{/* CHANGE N */}
+                  {capacityScrutinyInfo?.technicalCapacityOutsideHaryana === "Y" && (
+                    <div className="row ">
+                    
                       <div className="col-sm-12">
-                        <div className="table-bd">
-                          <Table className="table table-bordered" size="sm">
-                            <thead>
-                              <tr>
-                                <th>S.No.</th>
-                                <th>Professional </th>
-                                <th> Annexure</th>
-                              </tr>
-                            </thead>
-                            <tbody>
-                              <tr>
-                                <td> 1 &nbsp;&nbsp;</td>
-                                <td>Agreement with existing colonizer/developer who has already developed a colony</td>
-                                <td align="center" size="large">
-                             
-                                 <div className="btn btn-sm col-md-6"></div>
-                                 <div className="btn btn-sm col-md-6">
-                                  <IconButton onClick={()=>getDocShareholding(item?.existingDeveloperAgreementDoc)}>
-                                      <FileDownloadIcon color="info" className="icon" /></IconButton>
-                                      </div>
-                                </td>
-                              </tr>
-                              <tr>
-                                <td> 2&nbsp;&nbsp; </td>
-                                <td>
-                                  <input
-                                    type="text"
-                                    onChange={(e) => setTechnicalCapacity(e.target.value)}
-                                    placeholder="Technical Capacity"
-                                    class="employee-card-input"
-                                  />
-                                </td>
-                                <td align="center" size="large">
-                             
-                                 <div className="btn btn-sm col-md-6"></div>
-                                    
-                                 <div className="btn btn-sm col-md-6">
-                                  <IconButton onClick={()=>getDocShareholding(item?.technicalCapacityDoc)}>
-                                      <FileDownloadIcon color="info" className="icon" /></IconButton>
-                                      </div>
-                                </td>
-                              </tr>
-                              <tr>
-                                <td> 3 &nbsp;&nbsp;</td>
-                              
-                                <td>
-                                  <input
-                                    type="text"
-                                    placeholder="Name of Engineer"
-                                    onChange={(e) => setengineerNameN(e.target.value)}
-                                    class="employee-card-input"
-                                  />
-                                </td>
-                                <td align="center" size="large">
-                                 
-                                 <div className="btn btn-sm col-md-6">
-                                  </div>
-                                 <div className="btn btn-sm col-md-6">
-                                  <IconButton onClick={()=>getDocShareholding(item?.engineerDocN)}>
-                                      <FileDownloadIcon color="info" className="icon" /></IconButton>
-                                      </div>
-                                </td>
-                              </tr>
-                              <tr>
-                                <td> 4&nbsp;&nbsp; </td>
-                                <td>
-                                  <input
-                                    type="text"
-                                    placeholder="Name of Architect"
-                                    onChange={(e) => setArchitectNameN(e.target.value)}
-                                    class="employee-card-input"
-                                  />
-                                </td>
-                                <td align="center" size="large">
-                              
-                                 <div className="btn btn-sm col-md-6">
-                                  </div>
-                                 <div className="btn btn-sm col-md-6">
-                                  <IconButton onClick={()=>getDocShareholding(item?.architectDocN)}>
-                                      <FileDownloadIcon color="info" className="icon" /></IconButton>
-                                      </div>
-                                </td>
-                              </tr>
-                              <tr>
-                                <td> 5&nbsp;&nbsp; </td>
-                                <td>Upload SPA/GPA/ Board Resolution to sign collaboration agreement on behalf of land owner(s)</td>
-                                <td align="center" size="large">
-                                  <div className="btn btn-sm col-md-6">
-                                  </div>
-                                 <div className="btn btn-sm col-md-6">
-                                  <IconButton onClick={()=>getDocShareholding(item?.architectNameN)}>
-                                      <FileDownloadIcon color="info" className="icon" /></IconButton>
-                                      </div>
-                                </td>
-                              </tr>
-                            </tbody>
-                          </Table>
-                        </div>
+                      
+                        <Row>
+                          <Col md={4} xxl lg="4">
+                            <label htmlFor="project" className="text"> Name of Project </label>
+
+                            <div className={classes.fieldContainer}>
+                              <Form.Control
+                                placeholder={capacityScrutinyInfo?.technicalCapacityOutsideHaryanaDetails?.project}
+                                disabled></Form.Control>
+                              &nbsp;&nbsp;
+                              <ReportProblemIcon
+                                style={{
+                                  display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("X:Longitude") ? "block" : "none",
+                                  color: fieldIconColors.caution8
+                                }}
+                                onClick={() => {
+                                  setOpennedModal("caution8")
+                                  setLabelValue("Name of Project"),
+                                    setSmShow(true),
+                                    console.log("modal open"),
+                                    setFieldValue(capacityScrutinyInfo !== null ? capacityScrutinyInfo?.technicalCapacityOutsideHaryanaDetails?.project : null);
+                                }}
+                              ></ReportProblemIcon>
+                            </div>
+
+                          </Col>
+
+                          <Col md={4} xxl lg="4">
+                            <label htmlFor="authority" className="text">Name of Authority</label>
+                            <div className={classes.fieldContainer}>
+                              <Form.Control
+                                placeholder={capacityScrutinyInfo?.technicalCapacityOutsideHaryanaDetails?.authority}
+                                disabled></Form.Control>
+                              &nbsp;&nbsp;
+                              <ReportProblemIcon
+                                style={{
+                                  display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("X:Longitude") ? "block" : "none",
+                                  color: fieldIconColors.caution9
+                                }}
+                                onClick={() => {
+                                  setOpennedModal("caution9")
+                                  setLabelValue("Name of Authority"),
+                                    setSmShow(true),
+                                    console.log("modal open"),
+                                    setFieldValue(capacityScrutinyInfo !== null ? capacityScrutinyInfo?.technicalCapacityOutsideHaryanaDetails?.authority : null);
+                                }}
+                              ></ReportProblemIcon>
+                            </div>
+
+                          </Col>
+
+                          <Col md={4} xxl lg="4">
+                            <label htmlFor="statusOfDevelopment" className="text"> Status of Development </label>
+
+                            <div className={classes.fieldContainer}>
+                              <Form.Control
+                                placeholder={capacityScrutinyInfo?.technicalCapacityOutsideHaryanaDetails?.statusOfDevelopment}
+                                disabled></Form.Control>
+                              &nbsp;&nbsp;
+                              <ReportProblemIcon
+                                style={{
+                                  display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("X:Longitude") ? "block" : "none",
+                                  color: fieldIconColors.caution11
+                                }}
+                                onClick={() => {
+                                  setOpennedModal("caution11")
+                                  setLabelValue("Status of Development"),
+                                    setSmShow(true),
+                                    console.log("modal open"),
+                                    setFieldValue(capacityScrutinyInfo !== null ? capacityScrutinyInfo?.technicalCapacityOutsideHaryanaDetails?.statusOfDevelopment : null);
+                                }}
+                              ></ReportProblemIcon>
+                            </div>
+
+                          </Col>
+                        </Row>
+                        <Row>
+                      
+                          <Col md={4} xxl lg="4">
+                            <label htmlFor="statusOfDevelopment" className="text">Area of the project in acres </label>
+
+                            <div className={classes.fieldContainer}>
+                              <Form.Control
+                                placeholder={capacityScrutinyInfo?.technicalCapacityOutsideHaryanaDetails?.projectArea}
+                                disabled></Form.Control>
+                              &nbsp;&nbsp;
+                              <ReportProblemIcon
+                                style={{
+                                  display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("X:Longitude") ? "block" : "none",
+                                  color: fieldIconColors.caution13
+                                }}
+                                onClick={() => {
+                                  setOpennedModal("caution13")
+                                  setLabelValue("Area of the project in acres "),
+                                    setSmShow(true),
+                                    console.log("modal open"),
+                                    setFieldValue(capacityScrutinyInfo !== null ? capacityScrutinyInfo?.capacityScrutinyInfo?.technicalCapacityOutsideHaryanaDetails?.projectArea : null);
+                                }}
+                              ></ReportProblemIcon>
+                            </div>
+
+                          </Col>
+                          <Col md={4} xxl lg="4">
+                            <label htmlFor="statusOfDevelopment" className="text">Location </label>
+
+                            <div className={classes.fieldContainer}>
+                              <Form.Control
+                                placeholder={capacityScrutinyInfo?.technicalCapacityOutsideHaryanaDetails?.location}
+                                disabled></Form.Control>
+                              &nbsp;&nbsp;
+                              <ReportProblemIcon
+                                style={{
+                                  display: hideRemarks && hideRemarksPatwari && showReportProblemIcon("X:Longitude") ? "block" : "none",
+                                  color: fieldIconColors.caution14
+                                }}
+                                onClick={() => {
+                                  setOpennedModal("caution14")
+                                  setLabelValue("Location"),
+                                    setSmShow(true),
+                                    console.log("modal open"),
+                                    setFieldValue(capacityScrutinyInfo !== null ? capacityScrutinyInfo?.technicalCapacityOutsideHaryanaDetails?.location : null);
+                                }}
+                              ></ReportProblemIcon>
+                            </div>
+
+                          </Col>
+                        </Row>
+                        <Row>
+                          
+                        </Row>
                       </div>
+                     
+                    </div>
+                  )}
+                  </div>
+                )}
+                    </div>
+
+
+              {/* <div>
+                {capacityScrutinyInfo?.permissionGrantedHRDU === "N" && (
+                  <div className="card-body">
+                  
+                    <div className="table-bd">
+                      <Table className="table table-bordered">
+                        <thead>
+                          <tr>
+                            <th class="fw-normal">S. no</th>
+                            <th class="fw-normal"> Licence No. </th>
+                            <th class="fw-normal">Date of grant of license</th>
+                            <th class="fw-normal">Purpose of colony</th>
+                            <th class="fw-normal">Validity of Licence</th>
+                         
+                            <th class="fw-normal">Actions</th>
+                     
+                          </tr>
+                        </thead>
+                        <tbody>
+                      
+
+                          {
+                            capacityScrutinyInfo?.capacityDevelopColonyHdruAct?.map((item, index) => (
+
+                              <tr>
+                                <td>{index + 1}</td>
+                                <td>
+                                  <input
+                                    type="text"
+                                  
+                                    placeholder={item?.licenceNumber}
+                                    class="employee-card-input"
+                                    disabled
+                                  />
+                                </td>
+                                <td>
+                                  <input
+                                    type="text"
+                                
+                                    placeholder={item?.grantLicence}
+                                    class="employee-card-input"
+                                    disabled
+                                  />
+                                </td>
+                                <td>
+                                  <input
+                                    type="text"
+                                 
+                                    placeholder={item?.purposeOfColony}
+                                    class="employee-card-input"
+                                    disabled
+                                  />
+                                </td>
+                                <td>
+                                  <input
+                                    type="text"
+                                 
+                                    placeholder={item?.validatingLicence}
+                                    class="employee-card-input"
+                                    disabled
+                                  />
+                                </td>
+                               
+                              </tr>
+
+                            ))
+                          }
+
+
+                        </tbody>
+                      </Table>
+                      <div>
+                     
+                      </div>
+
+                  
                     </div>
                   </div>
                 )}
               </div> */}
+
              
+          
+          
+
+              
+
+
+
+              <br></br>
+              
+
 
             </div>
+           
+            
           </FormStep>
         </div>
       </Collapse>

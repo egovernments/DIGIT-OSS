@@ -127,7 +127,7 @@ const DataGridDemo = (props) => {
 
                 }
                 {
-                    element?.isApproved === "Conditional" && (
+                    element?.isApproved === "Order With Conditions" && (
                         <td
                             style={{ backgroundColor: "#2874A6" }}
                         >
@@ -143,6 +143,8 @@ const DataGridDemo = (props) => {
                                         <BackspaceIcon></BackspaceIcon>
                                     </button>
                                 </Card> */}
+                                
+
                             {expanded?.[element?.role]?.[item?.name] && (
 
                                 <TextSnippetIcon
@@ -225,9 +227,9 @@ const DataGridDemo = (props) => {
 
             ></TableDialog>
 
-            <Form.Group className="justify-content-center" controlId="formBasicEmail" style={{ border: "2px solid #e9ecef", margin: 10, padding: 20, display: "grid" }}>
+            <Form.Group className="justify-content-center" controlId="formBasicEmail" style={{ border: "2px solid #e9ecef", margin: 10, padding: 20, display: "grid" , zIndex: "auto"}}>
 
-                <div style={{ overflow: "scroll", height: "680px" }}>
+                <div style={{ overflow: "scroll", height: "680px" }} >
                     {/* <Card style={{ textAlign: "center" ,backgroundColor: "#FFD954" ,maxHeight:680 }}>ONLINE LICENSE APPLICATION SCRUTINY PROFORMA</Card> */}
                     <table className="table table-bordered">
                         <thead>
@@ -237,7 +239,7 @@ const DataGridDemo = (props) => {
                                     Sr.NO
                                 </th>
                                 <th class="fw-normal py-0 border-top-0">
-                                    File Name
+                                    Field Name
                                 </th>
 
 

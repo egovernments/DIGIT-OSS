@@ -21156,10 +21156,32 @@ input[type=text]:disabled {
   margin: 2px;
   margin-top: 10px;
   border-radius: 2px;
+  overflow-x: auto;
+  overflow-y: hidden;
+}
+.head-application1 {
+  /* top: 84px;
+  left: 132px; */
+  padding: 5px;
+  font-size: 14px;
+  height: 60px;
+  line-height: var(--bg-opacity) -50 !important;
+  /* position: fixed; */
+  z-index: 9;
+  background-color: rgb(255, 217, 84);
+  margin-bottom: 2px;
+  /* max-width: 89%;
+  min-width: 89%; */
+  margin: 2px;
+  margin-top: 10px;
+  border-radius: 2px;
+  overflow-x: auto;
+  overflow-y: hidden;
 }
 .head-font {
   font-size: 15px;
   padding-left: 10px;
+  white-space: nowrap;
 }
 .formlist {
   padding: 10;
@@ -21272,7 +21294,7 @@ color: #fff !important;
   background-color: #f8f8f8;
   font-size: 16px;
   resize: none;
-  margin-left: 21px;
+  /* margin-left: 21px; */
 }
 
 .stateEmployee{
@@ -21349,4 +21371,7 @@ color: #fff !important;
   min-height: 400px;
   border: currentColor;
   padding: 5px;
+}
+.table-value{
+  min-width: 200px;
 }

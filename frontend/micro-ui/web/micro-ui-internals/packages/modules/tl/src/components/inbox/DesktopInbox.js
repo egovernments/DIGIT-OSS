@@ -321,7 +321,7 @@ const DesktopInbox = ({
           </div>
         </div>
       )}
-      <div style={{ overflow: "hidden" }}>
+      <div style={{ overflow: "auto", width:"100%" }}>
         <SearchApplication
           defaultSearchParams={props.defaultSearchParams}
           onSearch={props.onSearch}

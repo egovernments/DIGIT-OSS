@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { Fragment, useEffect, useState } from "react";
 import { Button, Form } from "react-bootstrap";
 import { Card, Row, Col } from "react-bootstrap";
 import ModalChild from "./Remarks/ModalChild";
@@ -208,7 +208,7 @@ const PersonalinfoChild = (props) => {
         console.log("filteration value", fieldPresent, fieldPresent[0]?.isApproved);
         if (fieldPresent && fieldPresent.length) {
           console.log("filteration value1", fieldPresent, fieldPresent[0]?.isApproved);
-          tempFieldColorState = { ...tempFieldColorState, [item.key]: fieldPresent[0].isApproved === "In Order" ? Colors.approved : fieldPresent[0].isApproved === "Not In Order" ? Colors.disapproved : fieldPresent[0].isApproved === "Conditional" ? Colors.Conditional : Colors.info }
+          tempFieldColorState = { ...tempFieldColorState, [item.key]: fieldPresent[0].isApproved === "In Order" ? Colors.approved : fieldPresent[0].isApproved === "Not In Order" ? Colors.disapproved : fieldPresent[0].isApproved === "Order With Conditions" ? Colors.Conditional : Colors.info }
 
         }
       }
@@ -915,6 +915,9 @@ const PersonalinfoChild = (props) => {
                       <td>
                         <div className="row">
 
+                          {
+                            item?.uploadPdf &&
+                            <Fragment>
                           <div className="btn btn-sm col-md-6">
                             <IconButton
                               style={{
@@ -952,6 +955,8 @@ const PersonalinfoChild = (props) => {
                               <FileDownload color="primary" className="mx-1" />
                             </IconButton>
                           </div>
+                            </Fragment>
+                          }
                         </div>
                       </td>
                     </tr>
@@ -1030,6 +1035,10 @@ const PersonalinfoChild = (props) => {
                       <td>
                         <div className="row">
                           {/* <button className="btn btn-sm col-md-6" onClick={()=>getDocShareholding(item?.uploadPdf)} > */}
+
+                          {/* {
+                            item?.uploadPdf && 
+                            <Fragment> */}
                           <div className="btn btn-sm col-md-4">
                             <IconButton
                               style={{
@@ -1068,6 +1077,8 @@ const PersonalinfoChild = (props) => {
                               <FileDownload color="primary" className="mx-1" />
                             </IconButton>
                           </div>
+                            {/* </Fragment>
+                          } */}
 
                         </div>
                       </td>
@@ -1296,6 +1307,9 @@ const PersonalinfoChild = (props) => {
             ></Form.Control> */}
             {/* <div className="row"> */}
 
+            {/* {
+              personalinfo?.devDetail?.aurthorizedUserInfoArray?.[0]?.uploadDigitalSignaturePdf &&
+              <Fragment> */}
             <div className="btn btn-sm col-md-2">
               <IconButton
                 style={{
@@ -1347,6 +1361,9 @@ const PersonalinfoChild = (props) => {
                 }}
               ></ReportProblemIcon>
             </div>
+              {/* </Fragment>
+            } */}
+
           </div>
 
 
@@ -1364,7 +1381,9 @@ const PersonalinfoChild = (props) => {
 
           <div className={classes.fieldContainer}>
          
-
+         {/* {
+          personalinfo?.devDetail?.aurthorizedUserInfoArray?.[0]?.uploadBoardResolution && 
+          <Fragment> */}
             <div className="btn btn-sm col-md-2">
               <IconButton
                 // onClick={() => getDocShareholding(personalinfo?.devDetail?.aurthorizedUserInfoArray?.[0]?.uploadBoardResolution)}
@@ -1417,6 +1436,9 @@ const PersonalinfoChild = (props) => {
                 }}
               ></ReportProblemIcon>
             </div>
+          {/* </Fragment>
+         } */}
+
             {/* </div> */}
 
           </div>

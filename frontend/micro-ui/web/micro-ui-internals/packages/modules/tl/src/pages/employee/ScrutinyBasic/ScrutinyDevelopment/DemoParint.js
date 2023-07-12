@@ -140,7 +140,19 @@ const handlemodalsubmit = async () => {
        } catch (error) {
          console.log(error);
        }
-       handleGetNotingRemarkssValues(id)
+      await handleGetNotingRemarkssValues(id)
+
+      const ScrollToBottom = () =>{
+        console.log("regergergregegegreg",document.getElementById("historyList").scrollHeight)
+        document.getElementById("historyList").scroll({
+          top:document.getElementById("historyList").scrollHeight,
+          behavior:'smooth',
+        });
+
+      };
+      // if(){
+        ScrollToBottom();
+      // }
        // handleGetFiledsStatesById(id);
        // handleGetRemarkssValues(id);
        // handleRoles(id)

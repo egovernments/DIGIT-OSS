@@ -32,6 +32,7 @@ import Visibility from "@mui/icons-material/Visibility";
 import DetailsOfAppliedland from "../AdditionalDocument/DetailsOfAppliedlandDoc";
 import LandSchedule from "../AdditionalDocument/LandSchedule";
 import ApplicantInfo from "../AdditionalDocument/ApplicantInfo";
+import CusToaster from "../../../components/Toaster";
 // import CommercialPlottedForm from "./Puropse/CommercialPlottedForm";
 
 const Developerinfo = (props) => {
@@ -40,7 +41,8 @@ const Developerinfo = (props) => {
 
   const { t } = useTranslation();
   const { pathname: url } = useLocation();
-
+  const [loader, setLoader] = useState(false);
+  const [showToastError, setShowToastError] = useState({ label: "", error: false, success: false });
   const dataIcons = props.dataForIcons;
   const landScheduleData = props.ApiResponseData;
   const Purpose = props.purpose;
@@ -491,7 +493,7 @@ const Developerinfo = (props) => {
         console.log("filteration value111", fieldPresent, fieldPresent[0]?.isApproved);
         if (fieldPresent && fieldPresent.length) {
           console.log("filteration value111", fieldPresent, fieldPresent[0]?.isApproved);
-          tempFieldColorState = { ...tempFieldColorState, [item.key]: fieldPresent[0].isApproved === "In Order" ? Colors.approved : fieldPresent[0].isApproved === "Not In Order" ? Colors.disapproved : fieldPresent[0].isApproved === "Conditional" ? Colors.Conditional : Colors.info }
+          tempFieldColorState = { ...tempFieldColorState, [item.key]: fieldPresent[0].isApproved === "In Order" ? Colors.approved : fieldPresent[0].isApproved === "Not In Order" ? Colors.disapproved : fieldPresent[0].isApproved === "Order With Conditions" ? Colors.Conditional : Colors.info }
 
         }
       }
@@ -4036,6 +4038,7 @@ const Developerinfo = (props) => {
                       setFieldValue(landScheduleData !== null ? landScheduleData?.documentsAsAnnexures : null);
                   }}
                 ></ReportProblemIcon> */}
+                
               </div>
             </h5>
             <div className="row mx-1">
@@ -4044,15 +4047,44 @@ const Developerinfo = (props) => {
                   {/* Land schedule */}
                   {`${t("NWL_APPLICANT_LAND_SCHEDULE")}`}
                 </h6>
-                <div className="d-flex flex-row align-items-center my-1 ">
-                  <IconButton onClick={() => getDocShareholding(landScheduleData?.landSchedule)}>
-                    <DownloadForOfflineIcon color="primary" className="mx-1" />
-                  </IconButton>
+ <div className="d-flex flex-row align-items-center my-1 ">
+             
 
-                  <IconButton onClick={() => getDocShareholding(landScheduleData?.landSchedule)}>
-                        <Visibility color="primary" className="mx-1" />
-                      </IconButton>
-                  <ReportProblemIcon
+<IconButton
+  style={{
+    color: " #1266af",
+    fontSize: " 12px",
+    fontWeight: "bold",
+    cursor: "pointer",
+    textDecorationLine: "underline",
+  }}
+  onClick={() => {
+    if (landScheduleData?.landSchedule) getDocShareholding(landScheduleData?.landSchedule, setLoader);
+    else setShowToastError({ label: "No Document here", error: true, success: false });
+  }}>
+
+ 
+
+  <DownloadForOfflineIcon color="info" className="icon" />
+  </IconButton>
+
+
+<IconButton
+  style={{
+    color: " #1266af",
+    fontSize: " 12px",
+    fontWeight: "bold",
+    cursor: "pointer",
+    textDecorationLine: "underline",
+  }}
+  onClick={() => {
+    if (landScheduleData?.landSchedule) getDocShareholding(landScheduleData?.landSchedule, setLoader);
+    else setShowToastError({ label: "No Document here", error: true, success: false });
+  }}>
+  
+  <Visibility color="primary" className="mx-1" />
+</IconButton>
+<ReportProblemIcon
                     style={{
                       display: hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_LAND_SCHEDULE") ? "block" : "none",
                       color: fieldIconColors.landSchedule
@@ -4066,7 +4098,18 @@ const Developerinfo = (props) => {
                         setFieldValue(landScheduleData !== null ? landScheduleData?.landSchedule : null);
                     }}
                   ></ReportProblemIcon>
-                </div>
+</div>
+                  {/* <IconButton onClick={() => getDocShareholding(landScheduleData?.landSchedule)}>
+                    <DownloadForOfflineIcon color="primary" className="mx-1" />
+                  </IconButton>
+
+                  <IconButton onClick={() => getDocShareholding(landScheduleData?.landSchedule)}>
+                        <Visibility color="primary" className="mx-1" />
+                      </IconButton>
+                      <div className="btn btn-sm col-md-4">
+                  
+                  </div> */}
+                
               </div>
               <div className="col col-3 p-1">
                 <h6>
@@ -4074,13 +4117,50 @@ const Developerinfo = (props) => {
                   {`${t("NWL_APPLICANT_COPY_OF_MUTATIION")}`}
                 </h6>
                 <div className="d-flex flex-row align-items-center my-1 ">
-                  <IconButton onClick={() => getDocShareholding(landScheduleData?.mutation)}>
+
+                <IconButton
+  style={{
+    color: " #1266af",
+    fontSize: " 12px",
+    fontWeight: "bold",
+    cursor: "pointer",
+    textDecorationLine: "underline",
+  }}
+  onClick={() => {
+    if (landScheduleData?.mutation) getDocShareholding(landScheduleData?.mutation, setLoader);
+    else setShowToastError({ label: "No Document here", error: true, success: false });
+  }}>
+
+ 
+
+  <DownloadForOfflineIcon color="info" className="icon" />
+  </IconButton>
+
+
+<IconButton
+  style={{
+    color: " #1266af",
+    fontSize: " 12px",
+    fontWeight: "bold",
+    cursor: "pointer",
+    textDecorationLine: "underline",
+  }}
+  onClick={() => {
+    if (landScheduleData?.mutation) getDocShareholding(landScheduleData?.mutation, setLoader);
+    else setShowToastError({ label: "No Document here", error: true, success: false });
+  }}>
+  
+  <Visibility color="primary" className="mx-1" />
+</IconButton>
+{/*  */}
+                  
+                  {/* <IconButton onClick={() => getDocShareholding(landScheduleData?.mutation)}>
                     <DownloadForOfflineIcon color="primary" className="mx-1" />
                   </IconButton>
 
                   <IconButton onClick={() => getDocShareholding(landScheduleData?.mutation)}>
                         <Visibility color="primary" className="mx-1" />
-                      </IconButton>
+                      </IconButton> */}
                   <ReportProblemIcon
                     style={{
                       display: hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_COPY_OF_MUTATIION") ? "block" : "none",
@@ -4103,13 +4183,48 @@ const Developerinfo = (props) => {
                   {`${t("NWL_APPLICANT_COPY_OF_JAMABANDI")}`}
                 </h6>
                 <div className="d-flex flex-row align-items-center my-1 ">
-                  <IconButton onClick={() => getDocShareholding(landScheduleData?.jambandhi)}>
+                <IconButton
+  style={{
+    color: " #1266af",
+    fontSize: " 12px",
+    fontWeight: "bold",
+    cursor: "pointer",
+    textDecorationLine: "underline",
+  }}
+  onClick={() => {
+    if (landScheduleData?.jambandhi) getDocShareholding(landScheduleData?.jambandhi, setLoader);
+    else setShowToastError({ label: "No Document here", error: true, success: false });
+  }}>
+
+ 
+
+  <DownloadForOfflineIcon color="info" className="icon" />
+  </IconButton>
+
+
+<IconButton
+  style={{
+    color: " #1266af",
+    fontSize: " 12px",
+    fontWeight: "bold",
+    cursor: "pointer",
+    textDecorationLine: "underline",
+  }}
+  onClick={() => {
+    if (landScheduleData?.jambandhi) getDocShareholding(landScheduleData?.jambandhi, setLoader);
+    else setShowToastError({ label: "No Document here", error: true, success: false });
+  }}>
+  
+  <Visibility color="primary" className="mx-1" />
+</IconButton>
+{/*  */}
+                  {/* <IconButton onClick={() => getDocShareholding(landScheduleData?.jambandhi)}>
                     <DownloadForOfflineIcon color="primary" className="mx-1" />
                   </IconButton>
 
                   <IconButton onClick={() => getDocShareholding(landScheduleData?.jambandhi)}>
                         <Visibility color="primary" className="mx-1" />
-                      </IconButton>
+                      </IconButton> */}
                   <ReportProblemIcon
                     style={{
                       display: hideRemarksPatwari && showReportProblemIcon("NWL_APPLICANT_COPY_OF_JAMABANDI") ? "block" : "none",
@@ -4133,13 +4248,51 @@ const Developerinfo = (props) => {
                   {`${t("NWL_APPLICANT_DETAILS_OF_LEASE_PATTA")}`}
                 </h6>
                 <div className="d-flex flex-row align-items-center my-1 ">
-                  <IconButton onClick={() => getDocShareholding(landScheduleData?.detailsOfLease)}>
+
+                <IconButton
+  style={{
+    color: " #1266af",
+    fontSize: " 12px",
+    fontWeight: "bold",
+    cursor: "pointer",
+    textDecorationLine: "underline",
+  }}
+  onClick={() => {
+    if (landScheduleData?.detailsOfLease) getDocShareholding(landScheduleData?.detailsOfLease, setLoader);
+    else setShowToastError({ label: "No Document here", error: true, success: false });
+  }}>
+
+ 
+
+  <DownloadForOfflineIcon color="info" className="icon" />
+  </IconButton>
+
+
+<IconButton
+  style={{
+    color: " #1266af",
+    fontSize: " 12px",
+    fontWeight: "bold",
+    cursor: "pointer",
+    textDecorationLine: "underline",
+  }}
+  onClick={() => {
+    if (landScheduleData?.detailsOfLease) getDocShareholding(landScheduleData?.detailsOfLease, setLoader);
+    else setShowToastError({ label: "No Document here", error: true, success: false });
+  }}>
+  
+  <Visibility color="primary" className="mx-1" />
+</IconButton>
+{/*  */}
+
+
+                  {/* <IconButton onClick={() => getDocShareholding(landScheduleData?.detailsOfLease)}>
                     <DownloadForOfflineIcon color="primary" className="mx-1" />
                   </IconButton>
 
                   <IconButton onClick={() => getDocShareholding(landScheduleData?.detailsOfLease)}>
                         <Visibility color="primary" className="mx-1" />
-                      </IconButton>
+                      </IconButton> */}
 
                   <ReportProblemIcon
                     style={{
@@ -4168,13 +4321,47 @@ const Developerinfo = (props) => {
                 </h6>
                 {/* &nbsp;&nbsp; */}
                 <div className="d-flex flex-row align-items-center my-1 ">
-                  <IconButton onClick={() => getDocShareholding(landScheduleData?.addSalesDeed)}>
+                <IconButton
+  style={{
+    color: " #1266af",
+    fontSize: " 12px",
+    fontWeight: "bold",
+    cursor: "pointer",
+    textDecorationLine: "underline",
+  }}
+  onClick={() => {
+    if (landScheduleData?.addSalesDeed) getDocShareholding(landScheduleData?.addSalesDeed, setLoader);
+    else setShowToastError({ label: "No Document here", error: true, success: false });
+  }}>
+
+ 
+
+  <DownloadForOfflineIcon color="info" className="icon" />
+  </IconButton>
+
+
+<IconButton
+  style={{
+    color: " #1266af",
+    fontSize: " 12px",
+    fontWeight: "bold",
+    cursor: "pointer",
+    textDecorationLine: "underline",
+  }}
+  onClick={() => {
+    if (landScheduleData?.addSalesDeed) getDocShareholding(landScheduleData?.addSalesDeed, setLoader);
+    else setShowToastError({ label: "No Document here", error: true, success: false });
+  }}>
+  
+  <Visibility color="primary" className="mx-1" />
+</IconButton>
+                  {/* <IconButton onClick={() => getDocShareholding(landScheduleData?.addSalesDeed)}>
                     <DownloadForOfflineIcon color="primary" className="mx-1" />
                   </IconButton>
 
                   <IconButton onClick={() => getDocShareholding(landScheduleData?.addSalesDeed)}>
                         <Visibility color="primary" className="mx-1" />
-                      </IconButton>
+                      </IconButton> */}
 
                   <ReportProblemIcon
                     style={{
@@ -4198,13 +4385,48 @@ const Developerinfo = (props) => {
                   {`${t("NWL_APPLICANT_COPY_OF_SPA_GPA_BOARD")}`}
                 </h6>
                 <div className="d-flex flex-row align-items-center my-1 ">
-                  <IconButton onClick={() => getDocShareholding(landScheduleData?.copyofSpaBoard)}>
+                <IconButton
+  style={{
+    color: " #1266af",
+    fontSize: " 12px",
+    fontWeight: "bold",
+    cursor: "pointer",
+    textDecorationLine: "underline",
+  }}
+  onClick={() => {
+    if (landScheduleData?.copyofSpaBoard) getDocShareholding(landScheduleData?.copyofSpaBoard, setLoader);
+    else setShowToastError({ label: "No Document here", error: true, success: false });
+  }}>
+
+ 
+
+  <DownloadForOfflineIcon color="info" className="icon" />
+  </IconButton>
+
+
+<IconButton
+  style={{
+    color: " #1266af",
+    fontSize: " 12px",
+    fontWeight: "bold",
+    cursor: "pointer",
+    textDecorationLine: "underline",
+  }}
+  onClick={() => {
+    if (landScheduleData?.copyofSpaBoard) getDocShareholding(landScheduleData?.copyofSpaBoard, setLoader);
+    else setShowToastError({ label: "No Document here", error: true, success: false });
+  }}>
+  
+  <Visibility color="primary" className="mx-1" />
+</IconButton>
+
+                  {/* <IconButton onClick={() => getDocShareholding(landScheduleData?.copyofSpaBoard)}>
                     <DownloadForOfflineIcon color="primary" className="mx-1" />
                   </IconButton>
 
                   <IconButton onClick={() => getDocShareholding(landScheduleData?.copyofSpaBoard)}>
                         <Visibility color="primary" className="mx-1" />
-                      </IconButton>
+                      </IconButton> */}
 
                   <ReportProblemIcon
                     style={{
@@ -4253,13 +4475,48 @@ const Developerinfo = (props) => {
                 </h6>
                 <div className="d-flex flex-row align-items-center my-1 ">
 
-                  <IconButton onClick={() => getDocShareholding(landScheduleData?.copyOfShajraPlan)}>
+                <IconButton
+  style={{
+    color: " #1266af",
+    fontSize: " 12px",
+    fontWeight: "bold",
+    cursor: "pointer",
+    textDecorationLine: "underline",
+  }}
+  onClick={() => {
+    if (landScheduleData?.copyOfShajraPlan) getDocShareholding(landScheduleData?.copyOfShajraPlan, setLoader);
+    else setShowToastError({ label: "No Document here", error: true, success: false });
+  }}>
+
+ 
+
+  <DownloadForOfflineIcon color="info" className="icon" />
+  </IconButton>
+
+
+<IconButton
+  style={{
+    color: " #1266af",
+    fontSize: " 12px",
+    fontWeight: "bold",
+    cursor: "pointer",
+    textDecorationLine: "underline",
+  }}
+  onClick={() => {
+    if (landScheduleData?.copyOfShajraPlan) getDocShareholding(landScheduleData?.copyOfShajraPlan, setLoader);
+    else setShowToastError({ label: "No Document here", error: true, success: false });
+  }}>
+  
+  <Visibility color="primary" className="mx-1" />
+</IconButton>
+
+                  {/* <IconButton onClick={() => getDocShareholding(landScheduleData?.copyOfShajraPlan)}>
                     <DownloadForOfflineIcon color="primary" className="mx-1" />
                   </IconButton>
 
                   <IconButton onClick={() => getDocShareholding(landScheduleData?.copyOfShajraPlan)}>
                         <Visibility color="primary" className="mx-1" />
-                      </IconButton>
+                      </IconButton> */}
 
                   <ReportProblemIcon
                     style={{
@@ -4284,9 +4541,21 @@ const Developerinfo = (props) => {
               <Button onClick={() => props.passUncheckedList({ data: uncheckedValue })}>Submit</Button>
             </div> */}
           </Form.Group>
+          {showToastError && (
+        <CusToaster
+          label={showToastError?.label}
+          success={showToastError?.success}
+          error={showToastError?.error}
+          onClose={() => {
+            setShowToastError({ label: "", success: false, error: false });
+          }}
+        />
+      )}
         {/* </div>
       </Collapse> */}
+      
     </Form>
+    
   );
 };
 

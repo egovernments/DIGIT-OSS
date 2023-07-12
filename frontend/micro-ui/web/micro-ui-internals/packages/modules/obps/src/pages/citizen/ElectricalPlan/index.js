@@ -509,6 +509,7 @@ const electricalPlanService = () => {
                       <h2>
                         {`${t("EP_APPLICANT_NAME")}`}
                         {/* Name */}
+                    <span style={{ color: "red" }}>*</span>
                       </h2>
                     </label>
                   </div>
@@ -527,6 +528,7 @@ const electricalPlanService = () => {
                       <h2>
                         {`${t("EP_APPLICANT_DEVELOPMENT_PLAN")}`}
                         {/* Development Plan */}
+                        <span style={{ color: "red" }}>*</span>
                       </h2>
                     </label>
                   </div>
@@ -544,6 +546,7 @@ const electricalPlanService = () => {
                     <label>
                       <h2>
                         {`${t("EP_APPLICANT_PURPOSE_OF_LICENCE")}`}
+                        <span style={{ color: "red" }}>*</span>
                         {/* Purpose Of Licence */}
                       </h2>
                     </label>
@@ -562,6 +565,7 @@ const electricalPlanService = () => {
                     <label>
                       <h2>
                         {`${t("EP_APPLICANT_TOTAL_AREA")}`}
+                        <span style={{ color: "red" }}>*</span>
                         {/* Total Area */}
                       </h2>
                     </label>
@@ -656,6 +660,7 @@ const electricalPlanService = () => {
                     <Form.Label>
                       <h2>
                         {`${t("EP_APPLICANT_ELECTRICAL_INFRASTRUCTURE_FOR_ELECTRICAL_NEED")}`}
+                       
                         {/* Electrical infrastructure sufficient to cater for the electrical need of the project area{" "} */}
                         <span style={{ color: "red" }}>*</span> &nbsp;&nbsp;
                       </h2>
@@ -725,6 +730,7 @@ const electricalPlanService = () => {
                   <div>
                     <Form.Label>
                       {`${t("EP_APPLICANT_CAPACITY_OF_PROPOSED_ELECTRICAL_SUBSTATION")}`}
+                      <span style={{ color: "red" }}>*</span>
                       {/* The capacity of the proposed electrical substation as per the requirement <span style={{ color: "red" }}>*</span> &nbsp;&nbsp; */}
                     </Form.Label>
                     {/* {booleanErr?.electricalCapacity ? <p style={{color: 'red'}}>Please select electrical capacity*</p> : " "} */}
@@ -790,6 +796,7 @@ const electricalPlanService = () => {
                   <div>
                     <Form.Label>
                       {`${t("EP_APPLICANT_LAND_SANCTION_APPROVAL")}`}
+                      <span style={{ color: "red" }}>*</span>
                       {/* Load sanction approval as per the requirement <span style={{ color: "red" }}>*</span> &nbsp;&nbsp; */}
                     </Form.Label>
                     {/* {booleanErr?.LoadSancation ? <p style={{color: 'red'}}>Please select load sanction*</p> : " "} */}
@@ -852,6 +859,7 @@ const electricalPlanService = () => {
                     <td component="th" scope="row">
                       <h2>
                         {`${t("EP_APPLICANT_SELF_CERTIFIED_DRAWING-TEMPLATE_AS_PER_TCP")}`}
+                        <span style={{ color: "red" }}>*</span>
                         {/* Self-certified drawings from empanelled/certified architects that conform to the standard approved template as per the TCP
                         layout plan / Site plan. */}
                       </h2>
@@ -871,6 +879,7 @@ const electricalPlanService = () => {
                         onChange={(e) => getDocumentData(e?.target?.files[0], "selfCenteredDrawings")}
                         id="file-input-1"
                         style={{ display: "none" }}
+                        accept="application/pdf/jpeg/png"
                       />
                       {fileStoreId?.selfCenteredDrawings ? (
                         <VisibilityIcon color="primary" onClick={() => viewDocument(fileStoreId?.selfCenteredDrawings)}>
@@ -945,6 +954,7 @@ const electricalPlanService = () => {
                       <h2>
                         {" "}
                         {`${t("EP_APPLICANT_ELECTRICAL_PLAN_PDF")}`}
+                        <span style={{ color: "red" }}>*</span>
                         {/* Electrical plan PDF (OCR Compatible) + GIS format. */}
                       </h2>
                       {drawingErr.pdfFormat ? <p style={{ color: "red" }}>Please upload electrical plan pdf and gis format*</p> : " "}
@@ -959,6 +969,7 @@ const electricalPlanService = () => {
                         onChange={(e) => getDocumentData(e?.target?.files[0], "pdfFormat")}
                         style={{ display: "none" }}
                         id="file-input-3"
+                        accept="application/pdf/jpeg/png"
                       />
                       {fileStoreId?.pdfFormat ? (
                         <VisibilityIcon color="primary" onClick={() => viewDocument(fileStoreId?.pdfFormat)}>
@@ -989,6 +1000,7 @@ const electricalPlanService = () => {
                       <h2>
                         {" "}
                         {`${t("EP_APPLICANT_AUTOCAD_FILE")}`}
+                        <span style={{ color: "red" }}>*</span>
                         {/* Electrical plan in AutoCAD (DXF) file. */}
                       </h2>
                       {drawingErr.autoCad ? <p style={{ color: "red" }}>Please upload electrical plan in autocad file*</p> : " "}
@@ -1003,7 +1015,22 @@ const electricalPlanService = () => {
                         onChange={(e) => getDocumentData(e?.target?.files[0], "autoCad")}
                         style={{ display: "none" }}
                         id="file-input-4"
+                        accept=".dxf"
                       />
+                      {/* <input
+                          type="file"
+                          style={{ display: "none" }}
+                          onChange={async (e) => {
+                            var fileName = e?.target?.files[0]?.name;
+                            var fileExtension = fileName?.split(".")?.pop();
+                            if (fileExtension?.toLowerCase() == "dxf") {
+                              getDocumentData(e?.target?.files[0], "layoutPlanDxf");
+                            } else {
+                              setShowToastError({ label: "Please select given file format", error: true, success: false });
+                            }
+                          }}
+                          accept=".dxf"
+                        /> */}
                       {fileStoreId?.autoCad ? (
                         <VisibilityIcon color="primary" onClick={() => viewDocument(fileStoreId?.autoCad)}>
                           {" "}
@@ -1033,6 +1060,7 @@ const electricalPlanService = () => {
                       <h2>
                         {" "}
                         {`${t("EP_APPLICANT_CERTIFIED_COPY_VERIFIED_THIRD_PARTY")}`}
+                        <span style={{ color: "red" }}>*</span>
                         {/* Certified copy of the Electrical plan verified by a third party. */}
                       </h2>
                       {drawingErr.verifiedPlan ? <p style={{ color: "red" }}>Please upload certified copy of the electrical plan*</p> : " "}
@@ -1047,6 +1075,7 @@ const electricalPlanService = () => {
                         onChange={(e) => getDocumentData(e?.target?.files[0], "verifiedPlan")}
                         style={{ display: "none" }}
                         id="file-input-5"
+                        accept="application/pdf/jpeg/png"
                       />
                       {fileStoreId?.verifiedPlan ? (
                         <VisibilityIcon color="primary" onClick={() => viewDocument(fileStoreId?.verifiedPlan)}>

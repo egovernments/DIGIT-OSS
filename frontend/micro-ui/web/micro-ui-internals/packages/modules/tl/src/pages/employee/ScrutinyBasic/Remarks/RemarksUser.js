@@ -129,7 +129,7 @@ function FullScreenDialog(props) {
       style={{ position: "fixed", left: "50%", top: "50%", transform: "translate(-50% , -50%)" , height:700 ,marginTop: "50px"  }}
       onHide={props.onClose}
     >
-      <Modal.Header closeButton in={open14} style={{ textAlign: "center" ,backgroundColor: "#FFD954" ,marginLeft:"3%", maxWidth:"95%" }}>
+      <Modal.Header closeButton in={open14} style={{ textAlign: "center" ,backgroundColor: "#FFD954" , maxWidth:"100%", fontSize: "x-large",paddingLeft: "16%" }}>
      
         ONLINE LICENSE APPLICATION SCRUTINY SINGLE USER
       
@@ -414,7 +414,7 @@ function FullScreenDialog(props) {
                               {i + 1}
                             </td>
                             <td>
-                              <b>{data.name}</b>
+                              <b>{t(data.name)}</b>
                             </td>
                             <td>
                               <b>{data.value}</b>
@@ -478,7 +478,8 @@ function FullScreenDialog(props) {
                               {i1 + 1}
                             </td>
                             <td>
-                              <b>{data1.name}</b>
+                              <b>{t(data1.name)}</b>
+                              
                             </td>
                             <td>
                               <b>{data1.value}</b>
@@ -543,7 +544,7 @@ function FullScreenDialog(props) {
                               {i2s + 1}
                             </td>
                             <td>
-                              <b>{data2.name}</b>
+                              <b>{t(data2.name)}</b>
                             </td>
                             <td>
                               <b>{data2.value}</b>

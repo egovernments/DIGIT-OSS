@@ -16,6 +16,14 @@ import { useTranslation } from "react-i18next";
 import { useLocation } from "react-router-dom";
 
 
+import { Dialog, stepIconClasses } from "@mui/material";
+import DialogActions from "@mui/material/DialogActions";
+import DialogContent from "@mui/material/DialogContent";
+import DialogContentText from "@mui/material/DialogContentText";
+import DialogTitle from "@mui/material/DialogTitle";
+import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+
 function ModalChild(props) {
   const {handleRoles, handleGetFiledsStatesById, handleGetRemarkssValues , handleGetNotingRemarkssValues, bussinessService} = useContext(ScrutinyRemarksContext,);
   const applicationStatus = props.applicationStatus ;
@@ -37,11 +45,13 @@ function ModalChild(props) {
   const designation = userRolesArray?.[0]?.name;
   const { t } = useTranslation();
   const { pathname: url } = useLocation();
+  const [open, setOpen] = useState(false);
   
 
   console.log("usern23233" , userRolesArray );
   console.log("usern23" , filterDataRole );
   console.log("usern23434" , designation );
+
 
 
   const handlemodalsubmit = async () => {
@@ -66,7 +76,7 @@ function ModalChild(props) {
           fieldValue: inputFieldValue,
           fieldIdL: props.labelmodal,
           isApproved: status,
-          isLOIPart: status === "Conditional" ?  true : null ,
+          isLOIPart: status === "Order With Conditions" ?  true : null ,
           userid: userInfo?.id || null,
           serviceId: "123",
           documentId: null,
@@ -91,6 +101,7 @@ function ModalChild(props) {
       handleGetFiledsStatesById(id);
       handleGetRemarkssValues(id);
       handleRoles(id)
+      setOpen(true);
       console.log("response from API", Resp);
       props?.remarksUpdate({ data: RemarksDeveloper.data });
     } else {
@@ -114,11 +125,15 @@ function ModalChild(props) {
   console.log("Isdata" , status )
   console.log("docModal123....." , props.labelmodal )
 
-
+  const handalfinal = () => {
+    setOpen(false);
+  }
   // let empCode = "EMPLOYEE";
   
 
   return (
+    <div>
+      <React.Fragment>
     <Modal
       size="lg"
       className="modal-lg modal-center"
@@ -192,14 +207,14 @@ function ModalChild(props) {
           inline
         ></Form.Check>
         <Form.Check
-          checked={status === "Conditional"}
+          checked={status === "Order With Conditions"}
           onChange={() => {
-            setStatus("Conditional");
+            setStatus("Order With Conditions");
           }}
           type="radio"
           id="default-radio"
           // label={<CheckCircleIcon color="success"></CheckCircleIcon>}
-          label="Conditional"
+          label="Order With Conditions"
           name="group0"
           inline
         ></Form.Check>
@@ -242,6 +257,33 @@ function ModalChild(props) {
         </div> */}
       </Modal.Body>
     </Modal>
+    <Dialog open={open} onClose={handlemodalsubmit} aria-labelledby="alert-dialog-title" aria-describedby="alert-dialog-description" style={{
+    textAlign: "center",
+    color: "#ffff",
+    backgroundColor: "#000000b0"}}>
+          <DialogTitle id="alert-dialog-title" style={{ fontSize: "xx-large", background: "#000000b0" , color: "#ffff"}}>Remarks Submission</DialogTitle>
+          <DialogContent style={{ background: "#000000b0"}}>
+            <DialogContentText id="alert-dialog-description" style={{textAlign: "center", color: "#ffff" , fontSize: "x-large"}}>
+              <p ><CheckCircleIcon style={{fontSize: "-webkit-xxx-large;"}}></CheckCircleIcon></p>
+              <p>
+                Thank You {" "}
+                {/* <span>
+                  <CheckCircleOutlineIcon style={{ color: "blue", variant: "filled" }} />
+                </span> */}
+              </p>
+              <p>
+                The Remarks was submitted successfully !!<span style={{ padding: "5px", color: "blue" }}></span> 
+              </p>
+            </DialogContentText>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={handalfinal} autoFocus>
+              Ok
+            </Button>
+          </DialogActions>
+        </Dialog>
+        </React.Fragment>
+        </div>
   );
 }
 
