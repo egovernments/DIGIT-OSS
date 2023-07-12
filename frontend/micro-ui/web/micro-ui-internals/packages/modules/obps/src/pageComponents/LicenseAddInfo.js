@@ -1644,7 +1644,7 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
                         <div className="col col-4">
                           <div className="form-group">
                             <label htmlFor="name">
-                              {t("BPA_DATE_INCORPORATION_TEXT")} <span className="text-danger font-weight-bold"></span>
+                              {t("BPA_DATE_INCORPORATION_TEXT")} <span className="text-danger font-weight-bold">*</span>
                             </label>
                             
                             <input
