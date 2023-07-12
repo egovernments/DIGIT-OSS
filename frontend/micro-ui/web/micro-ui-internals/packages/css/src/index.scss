@@ -81,10 +81,6 @@
 @import "./components/staticDynamicMessages.scss";
 @import "./components/toggleSwitch.scss";
 @import "./components/plusMinus.scss";
-@import "./components/horizontalNav.scss";
-@import "./components/inboxLinks.scss";
-@import "./components/inboxSearch.scss";
-@import "./components/inboxSearchComposer.scss";
 
 @import "./pages/employee/index.scss";
 @import "./pages/employee/cardfix.scss";
@@ -110,6 +106,7 @@
 @import "./pages/citizen/updatePropertyNumber.scss";
 @import "./pages/citizen/citizenDocument.scss";
 @import "./pages/employee/surveys.scss";
+@import "./components/inboxv2/index.scss";
 
 .display-none {
   display: none;
@@ -558,6 +555,11 @@ input[type="number"] {
 .full-employee-card-link {
   width: 100% !important;
   margin: 7px 0px;
+  a{
+    color: inherit;
+    text-decoration: inherit
+  }
+
 }
 .full-employee-card-height {
   height: unset !important;

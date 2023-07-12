@@ -42,6 +42,7 @@ frontend/micro-ui/web/public/index.html
 # Changelog
 
 ```bash
+1.5.31 Corrected the CSS for inbox composers and default core ui
 1.5.30 Updated the css for dynamic drodown filter dss
 1.5.29 layout issues fixed
 1.5.28 Horizontal Bar chart alignment fixes

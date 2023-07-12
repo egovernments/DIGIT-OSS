@@ -374,7 +374,7 @@
 @media (min-width: 640px) {
   .employee {
     .ground-container {
-      @apply block ml-md;
+      @apply block;
     }
     .breadcrumb {
       @apply mb-lg;
@@ -495,4 +495,30 @@
     margin-left: 16px;
     margin-right: 16px;
   }
+}
+
+.link {
+  a{
+    color: inherit;
+    text-decoration: inherit
+    }
+}
+
+.breadcrumb {
+  a{
+    color: inherit;
+    text-decoration: inherit
+    }
+}
+
+.sidebar-link.active{
+.custom-link{
+  text-decoration: none;
+  div{
+    span{
+    color: #f47738;
+    text-decoration: none;
+    }
+  }
+}
 }

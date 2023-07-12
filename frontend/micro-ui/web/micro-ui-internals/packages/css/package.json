@@ -1,6 +1,6 @@
 {
   "name": "@egovernments/digit-ui-css",
-  "version": "1.5.30",
+  "version": "1.5.31",
   "license": "MIT",
   "main": "dist/index.css",
   "author": "Jagankumar <jagan.kumar@egov.org.in>",
@@ -21,12 +21,12 @@
     "last 2 versions"
   ],
   "style": "./dist/index.css",
-    "dependencies": {
-      "node-sass": "^4.14.1",
-      "normalize.css": "^8.0.1",
-      "postcss-scss": "^3.0.1",
-      "tailwindcss": "^1.8.10"
-    },
+  "dependencies": {
+    "node-sass": "^4.14.1",
+    "normalize.css": "^8.0.1",
+    "postcss-scss": "^3.0.1",
+    "tailwindcss": "^1.8.10"
+  },
     "devDependencies": {
       "autoprefixer": "^10.0.0",
       "cssnano": "^4.1.10",

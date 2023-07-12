@@ -49,6 +49,8 @@
     .value {
       width: 50%;
       @apply text-heading-s;
+      white-space: break-spaces !important;
+      word-break: break-all;
     }
 
     .caption {
@@ -64,6 +66,66 @@
   }
 }
 
+.employee-data-table {
+  .row {
+    @apply flex pb-sm mb-sm;
+
+    span {
+      width: 70%;
+      display: contents;
+    }
+
+    h2 {
+      width: 30%;
+      @apply font-medium text-heading-s;
+    }
+
+    .value {
+      white-space: break-spaces !important;
+      word-break: break-all;
+      width: 60%;
+      @apply text-heading-s;
+      &.status-row-radio {
+        div {
+          margin-right: 1rem;
+          width: 50%;
+        }
+        .mg-sm {
+          width: 30%;
+        }
+      }
+    }
+
+    .caption {
+      width: 70%;
+      @apply text-heading-s text-text-secondary;
+    }
+  }
+
+  .last {
+    border: none;
+    padding: 0;
+    margin: 0;
+  }
+  &.status-radio-table {
+    margin-top: 1rem;
+    .row {  
+      span {
+        width: 24px;
+        display: block;
+        float: left;
+        border-radius: 50%;
+      }
+    }
+  }
+
+  &.view-header {
+   .row {
+    display: grid;
+    grid-template-columns: 1fr 68%;
+   }
+  }
+}
 
 
 .pt-citizen {.data-table {.row {

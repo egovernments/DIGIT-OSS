@@ -1,0 +1,44 @@
+.search-component-table {
+  width: 100%;
+  display: block;
+  overflow-x: auto;
+  overflow-y:hidden;
+  table {
+    th {
+      .tooltip {
+        min-width: 80px;
+      }
+    }
+    tr {
+      td {
+        span {
+          white-space: pre;
+          min-width: 80px;
+          .tooltip {
+            position: relative;
+            min-width: 80px;
+            display: inline-block;
+            margin-left: 16px;
+              .tooltiptext {
+                visibility: hidden;
+                background-color: #555;
+                color: #fff;
+                text-align: left;
+                border-radius: 6px;
+                padding: 5px;
+                position: absolute;
+                z-index: 1;
+                bottom: 125%;
+                left: 50%;
+                margin-left: -60px;
+                opacity: 0;
+                transition: opacity 0.3s;
+                width: 30rem;
+              }
+          }
+    
+        }
+      }
+    }
+  }
+}

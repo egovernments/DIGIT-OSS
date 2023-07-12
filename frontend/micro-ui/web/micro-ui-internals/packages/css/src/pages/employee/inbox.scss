@@ -28,6 +28,10 @@
     .link {
       @apply p-sm text-primary-main items-center;
       display: flex !important;
+      a{
+        color: inherit;
+        text-decoration: inherit
+      }
     }
 
     .inbox-total {
@@ -446,6 +450,7 @@
 .employeeTotalLink {
   color: theme(colors.text.secondary);
   font-size: 16px;
+  text-decoration: none;
 }
 
 @screen dt {

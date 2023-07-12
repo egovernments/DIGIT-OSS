@@ -23,7 +23,7 @@ const EmployeeApp = ({ path, url, userType }) => {
     <Switch>
       <React.Fragment>
         <div className="ground-container">
-          <p className="breadcrumb" style={{ marginLeft: mobileView ? "1vw" : "15px" }}>
+          <p className="breadcrumb" style={{ marginLeft: mobileView ? "1vw" : "0px" }}>
             <Link to= {`/${window?.contextPath}/employee`} style={{ cursor: "pointer", color: "#666" }}>
               {t("HR_COMMON_BUTTON_HOME")}
             </Link>{" "}
