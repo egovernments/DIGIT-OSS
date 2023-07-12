@@ -35,9 +35,9 @@ default_args = {
 }
 
 module_map = {
-    'TL' : (tl_queries, empty_tl_payload),
-    'PT' : (pt_queries, empty_pt_payload),
-    'COMMON' : (common_queries,empty_common_payload)
+   # 'TL' : (tl_queries, empty_tl_payload),
+    'PT' : (pt_queries, empty_pt_payload)
+  
 }
 
 
