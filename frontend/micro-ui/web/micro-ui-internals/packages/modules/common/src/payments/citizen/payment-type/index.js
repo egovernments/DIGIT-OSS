@@ -233,8 +233,8 @@ export const SelectPaymentType = (props) => {
               {/* <Button style={{ textAlign: "right" }}> Generate LOI</Button> */}
 
               {!showToast && bankValue && selected && <SubmitBar type="submit" label={t("PAYMENT_CS_BUTTON_LABEL")} submit={true} 
-              disabled={isSubmitted} // Disable the button if isSubmitted is true
-            onClick={onSubmit} // Call onSubmit on button click
+              disabled={isSubmitted} 
+            onClick={onSubmit} 
             />}
             </div>
             {/* )} */}
