@@ -393,6 +393,6 @@ load_common = PythonOperator(
     op_kwargs={ 'module' : 'COMMON'},
     dag=dag)
 
-extract_tl >> transform_tl >> load_tl
+#extract_tl >> transform_tl >> load_tl
 extract_pt >> transform_pt >> load_pt
-extract_common >> transform_common >> load_common
+ 
