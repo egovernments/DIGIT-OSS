@@ -1405,7 +1405,7 @@ const LandScheduleForm = (props) => {
                               <h2>
                                 {/* {`${t("NWL_APPLICANT_REVENUE_RASTA_Y_UNCONSOLIDATED_SHAJRA_PLAN")}`} */}
                                 Separated by
-                                <span style={{ color: "red" }}>*</span>&nbsp;
+                                &nbsp;
                               </h2>
                             </label>
                             <ReactMultiSelect
