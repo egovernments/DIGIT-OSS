@@ -87,7 +87,7 @@ function TableDialog(props) {
       style={{ position: "fixed", left: "50%", top: "50%", transform: "translate(-50% , -50%)" ,  width: "revert" }}
       onHide={props.onClose}
     >
-      <Modal.Header closeButton in={open14}>
+      <Modal.Header closeButton in={open14} style={{backgroundColor: "#FFD954" }}>
         <Modal.Title id="example-modal-sizes-title-sm">
       
 

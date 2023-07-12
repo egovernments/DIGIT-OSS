@@ -16,6 +16,12 @@ import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
 import TextSnippetIcon from '@mui/icons-material/TextSnippet';
 
+
+
+import VisibilityIcon from "@mui/icons-material/Visibility";
+
+
+
 // import Collapse from "react-bootstrap/Collapse";
 
 import {  Box,
@@ -27,6 +33,7 @@ import BasicTable from "./UserRemarks";
 import { convertDateToEpoch, convertEpochToDate, convertEpochToDateDMY } from "../../../../utils";
 import FullScreenDialog from "../Remarks/RemarksUser";
 import ScrollToTop from "@egovernments/digit-ui-react-components/src/atoms/ScrollToTop";
+import CusToaster from "../../../../components/Toaster";
 
 // import { Scrollbars } from 'react-custom-scrollbars';
 
@@ -58,7 +65,8 @@ const HistoryList = (props) => {
   const remarkDataResp = props.remarkData;
   const authToken = Digit.UserService.getUser()?.access_token || null;
   const applicationStatus = props.applicationStatus
-  
+  const [loader, setLoader] = useState(false);
+  const [showToastError, setShowToastError] = useState({ label: "", error: false, success: false });
 
   const onAction = async (data, index, value) => {
     console.log("DataDev123...", data, value);
@@ -302,6 +310,7 @@ const Resp = await axios.post(`/tl-services/new/license/pdf?applicationNumber=${
             
           </AddPost> */}
            <DemoParinted 
+            remarkDataResp={remarkDataResp}
          applicationStatus={applicationStatus}
          setState={(e) => {
            setDeveloperRemarks({ data: e });
@@ -442,6 +451,7 @@ const Resp = await axios.post(`/tl-services/new/license/pdf?applicationNumber=${
               <Form.Group>
               <FullScreenDialog
              
+             
              passmodalData={handlemodaldData}
              displaymodal={smShow}
            
@@ -506,10 +516,10 @@ const Resp = await axios.post(`/tl-services/new/license/pdf?applicationNumber=${
                         Sr.No
                       </th>
                       <th class="fw-normal pb-0 border-bottom-0 align-top">
-                        Filed Name
+                        Field Name
                       </th>
                       <th class="fw-normal pb-0 border-bottom-0 align-top">
-                        Filed value
+                        Field value
                       </th>
                       {/* <th class="fw-normal pb-0 border-bottom-0 align-top">
                         Status
@@ -589,6 +599,47 @@ const Resp = await axios.post(`/tl-services/new/license/pdf?applicationNumber=${
                             <br></br>
                          <i>{<div dangerouslySetInnerHTML={{__html: item.remarks}}/>}</i>
 
+                         <br></br>
+                         <div style={{textAlign:"right"}}>
+                         <div className="btn btn-sm col-md-2">
+              <IconButton
+                // onClick={() => getDocShareholding(personalinfo?.devDetail?.aurthorizedUserInfoArray?.[0]?.uploadBoardResolution)}
+                style={{
+                  color: " #1266af",
+                  fontSize: " 12px",
+                  fontWeight: "bold",
+                  cursor: "pointer",
+                  textDecorationLine: "underline",
+                }}
+                onClick={() => {
+                  if (item?.docId) getDocShareholding(item?.docId, setLoader);
+                  else setShowToastError({ label: "No Document here", error: true, success: false });
+                }}
+              >
+                <FileDownload color="primary" className="mx-1" />
+                </IconButton>
+                
+
+            </div>
+            <div className="btn btn-sm col-md-2">
+              <IconButton
+                style={{
+                  color: " #1266af",
+                  fontSize: " 12px",
+                  fontWeight: "bold",
+                  cursor: "pointer",
+                  textDecorationLine: "underline",
+                }}
+                onClick={() => {
+                  if (item?.docId) getDocShareholding(item?.docId, setLoader);
+                  else setShowToastError({ label: "No Document here", error: true, success: false });
+                }}
+              ><Visibility color="info" className="icon" />
+                
+              </IconButton>
+            </div>
+                          </div>
+
                     
                              
                           </div>
@@ -652,7 +703,16 @@ const Resp = await axios.post(`/tl-services/new/license/pdf?applicationNumber=${
       <Row>
        
       </Row>
-
+      {showToastError && (
+        <CusToaster
+          label={showToastError?.label}
+          success={showToastError?.success}
+          error={showToastError?.error}
+          onClose={() => {
+            setShowToastError({ label: "", success: false, error: false });
+          }}
+        />
+      )}
 
 
     </Container>

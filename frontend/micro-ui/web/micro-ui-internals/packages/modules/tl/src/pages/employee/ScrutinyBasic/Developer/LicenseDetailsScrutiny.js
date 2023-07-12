@@ -19,6 +19,7 @@ import Visibility from "@mui/icons-material/Visibility";
 import FileDownload from "@mui/icons-material/FileDownload";
 import { IconButton } from "@mui/material";
 import { getDocShareholding } from "../ScrutinyDevelopment/docview.helper";
+import { useTranslation } from "react-i18next";
 
 const LicenseDetailsScrutiny = (props) => {
   const [uncheckedValue, setUncheckedVlue] = useState([]);
@@ -27,6 +28,7 @@ const LicenseDetailsScrutiny = (props) => {
   const [smShow, setSmShow] = useState(false);
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
+  const { t } = useTranslation();
   const Colors = {
     conditional:"#2874A6",
     approved:"#09cb3d",
@@ -189,7 +191,9 @@ const LicenseDetailsScrutiny = (props) => {
             <div>
               <Card style={{ margin: 2 }}>
                 <div className="card-body">
-                  <h5 className={[classes.formLabel, "d-flex flex-row align-items-center"]}>Developer's type <div className="d-flex flex-row align-items-center ml-2">
+                  <h5 className={[classes.formLabel, "d-flex flex-row align-items-center"]}>
+                    {/* Developer's type */}
+                  {`${t("DEV_APPLICANT_DEVELOPERS_TYPE")}`} <div className="d-flex flex-row align-items-center ml-2">
                     {/* {JSON.stringify(addInfo)} */}
                     <Form.Control
                       className={classes.formControl}
@@ -254,13 +258,19 @@ const LicenseDetailsScrutiny = (props) => {
               {addInfo?.showDevTypeFields === "Individual"  &&
                 <div>
                   <Card style={{ margin: 5 }}>
-                    <h5>Developer Details</h5>
+                    <h5>
+                    {`${t("DEV_APPLICANT_DEVELOPERS_DETAILS")}`}
+                      {/* Developer Details */}
+                      </h5>
                     <Row>
                       <Col md={4} xxl lg="4">
                         <div>
                           <Form.Label>
                             {/* <b>individual Land owner</b> */}
-                            <h5 className={classes.formLabel}>Name &nbsp;</h5>
+                            <h5 className={classes.formLabel}>
+                            {`${t("DEV_APPLICANT_NAME")}`}
+                              {/* Name &nbsp; */}
+                              </h5>
                           </Form.Label>
                           <span style={{ color: "red" }}>*</span>
                         </div>
@@ -292,7 +302,9 @@ const LicenseDetailsScrutiny = (props) => {
                         <div>
                           <Form.Label>
                             {/* <b>individual Land owner</b> */}
-                            <h5 className={classes.formLabel}>Email &nbsp;</h5>
+                            <h5 className={classes.formLabel}>
+                            {`${t("DEV_APPLICANT_EMAIL")}`}
+                              Email &nbsp;</h5>
                           </Form.Label>
                           <span style={{ color: "red" }}>*</span>
                         </div>
@@ -321,7 +333,10 @@ const LicenseDetailsScrutiny = (props) => {
                         <div>
                           <Form.Label>
                             {/* <b>individual Land owner</b> */}
-                            <h5 className={classes.formLabel}>Mobile No. &nbsp;</h5>
+                            <h5 className={classes.formLabel}>
+                            {`${t("DEV_APPLICANT_MOBILE_NO")}`}
+                              {/* Mobile No. &nbsp; */}
+                              </h5>
                           </Form.Label>
                           <span style={{ color: "red" }}>*</span>
                         </div>
@@ -354,13 +369,19 @@ const LicenseDetailsScrutiny = (props) => {
               {addInfo?.showDevTypeFields === "Company"  &&
                 <div>
                   <Card style={{ margin: 5 }}>
-                    <h5>Developer Details</h5>
+                    <h5>
+                      {/* Developer Details */}
+                    {`${t("DEV_APPLICANT_DEVELOPERS_DETAILS")}`} 
+                    </h5>
                     <Row>
                       <Col md={4} xxl lg="4">
                         <div>
                           <Form.Label>
                             {/* <b>individual Land owner</b> */}
-                            <h5>CIN Number &nbsp;</h5>
+                            <h5>
+                            {`${t("DEV_APPLICANT_CIN_NUMBER")}`} 
+                              {/* CIN Number &nbsp; */}
+                              </h5>
                           </Form.Label>
                           <span style={{ color: "red" }}>*</span>
                         </div>
@@ -418,7 +439,10 @@ const LicenseDetailsScrutiny = (props) => {
                         <div>
                           <Form.Label>
                             {/* <b>individual Land owner</b> */}
-                            <h5 className={classes.formLabel}>Date of Incorporation &nbsp;</h5>
+                            <h5 className={classes.formLabel}>
+                            {`${t("DEV_APPLICANT_DATE_OF_INCORPORATION")}`} 
+                              {/* Date of Incorporation &nbsp; */}
+                              </h5>
                           </Form.Label>
                           <span style={{ color: "red" }}>*</span>
                         </div>
@@ -447,7 +471,10 @@ const LicenseDetailsScrutiny = (props) => {
                         <div>
                           <Form.Label>
                             {/* <b>individual Land owner</b> */}
-                            <h5 className={classes.formLabel}>Registered Address &nbsp;</h5>
+                            <h5 className={classes.formLabel}>
+                            {`${t("DEV_APPLICANT_REGISTERED_ADDRESS")}`} 
+                              {/* Registered Address &nbsp; */}
+                              </h5>
                           </Form.Label>
                           <span style={{ color: "red" }}>*</span>
                         </div>
@@ -476,7 +503,11 @@ const LicenseDetailsScrutiny = (props) => {
                         <div>
                           <Form.Label>
                             {/* <b>individual Land owner</b> */}
-                            <h5 className={classes.formLabel}>Email &nbsp;</h5>
+                            <h5 className={classes.formLabel}>
+                              Email 
+                              {`${t("DEV_APPLICANT_EMAIL")}`} 
+                              &nbsp;
+                              </h5>
                           </Form.Label>
                           <span style={{ color: "red" }}>*</span>
                         </div>

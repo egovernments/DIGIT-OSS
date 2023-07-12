@@ -474,9 +474,9 @@ const ScrutinyFormcontainer = (props) => {
 
   const [open, setOpen] = useState(false)
 
-  // const handleClickOpen = () => {
-  //     setOpen(true);
-  //   };
+  const handleClickOpen = () => {
+      setOpen(true);
+    };
 
 
 
@@ -501,10 +501,12 @@ const ScrutinyFormcontainer = (props) => {
         setIsEnableLoader(false);
         let errorValue = err?.response?.data?.Errors?.[0]?.code ? t(err?.response?.data?.Errors?.[0]?.code) : err?.response?.data?.Errors?.[0]?.message || err;
         closeModal();
+        
         setShowToast({ key: "error", error: { message: errorValue } });
         setTimeout(closeToast, 5000);
         return;
       }
+      
     }
 
 
@@ -540,6 +542,7 @@ const ScrutinyFormcontainer = (props) => {
           queryClient.refetchQueries("APPLICATION_SEARCH");
         },
       });
+     
     }
     if (data.Licenses[0].action === "APPROVED_WITH_LOI") {
       setLoader(true);
@@ -638,12 +641,12 @@ const ScrutinyFormcontainer = (props) => {
 
     }
 
-    closeModal();
+    closeModal(); 
 
     setTimeout(() => {
       closeModal()
-      // setOpen1(true);
-      window.location.href = `/digit-ui/employee/tl/inbox`
+      setOpen1(true);
+      // window.location.href = `/digit-ui/employee/tl/inbox`
     }, 3000);
   };
 
@@ -675,7 +678,8 @@ const ScrutinyFormcontainer = (props) => {
 
   const handalfinal = () => {
     setOpen1(false);
-  }
+    window.location.href = `/digit-ui/employee/tl/inbox`
+ }
 
   console.log("meri update34", lastUpdate)
   return (
@@ -827,11 +831,38 @@ const ScrutinyFormcontainer = (props) => {
     </DialogActions>
 
     </Dialog> */}
-           <Dialog open1={open1} onClose={submitAction} aria-labelledby="alert-dialog-title" aria-describedby="alert-dialog-description" style={{
+
+
+    {/* {Dialog Box} */}
+           {/* <Dialog open1={open1} onClose={submitAction} aria-labelledby="alert-dialog-title" aria-describedby="alert-dialog-description" style={{
     textAlign: "center",
     color: "#ffff",
     backgroundColor: "#000000b0"}}>
           <DialogTitle id="alert-dialog-title" style={{ fontSize: "xx-large", background: "#000000b0" , color: "#ffff"}}>Application Submission</DialogTitle>
+          <DialogContent style={{ background: "#000000b0"}}>
+            <DialogContentText id="alert-dialog-description" style={{textAlign: "center", color: "#ffff" , fontSize: "x-large"}}>
+              <p ><CheckCircleIcon style={{fontSize: "-webkit-xxx-large;"}}></CheckCircleIcon></p>
+              <p>
+                Thank You {" "}
+                
+              </p>
+              <p>
+                Application was been submitted successfully !!<span style={{ padding: "5px", color: "blue" }}></span> 
+              </p>
+            </DialogContentText>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={handalfinal} autoFocus>
+              Ok
+            </Button>
+          </DialogActions>
+        </Dialog> */}
+
+<Dialog open={open1} onClose={submitAction} aria-labelledby="alert-dialog-title" aria-describedby="alert-dialog-description" style={{
+    textAlign: "center",
+    color: "#ffff",
+    backgroundColor: "#000000b0"}}>
+          <DialogTitle id="alert-dialog-title" style={{ fontSize: "xx-large", background: "#000000b0" , color: "#ffff"}}>File sent successfully</DialogTitle>
           <DialogContent style={{ background: "#000000b0"}}>
             <DialogContentText id="alert-dialog-description" style={{textAlign: "center", color: "#ffff" , fontSize: "x-large"}}>
               <p ><CheckCircleIcon style={{fontSize: "-webkit-xxx-large;"}}></CheckCircleIcon></p>
@@ -842,7 +873,7 @@ const ScrutinyFormcontainer = (props) => {
                 </span> */}
               </p>
               <p>
-                Application was been submitted successfully !!<span style={{ padding: "5px", color: "blue" }}></span> 
+                The File sent successfully !!<span style={{ padding: "5px", color: "blue" }}></span> 
               </p>
             </DialogContentText>
           </DialogContent>

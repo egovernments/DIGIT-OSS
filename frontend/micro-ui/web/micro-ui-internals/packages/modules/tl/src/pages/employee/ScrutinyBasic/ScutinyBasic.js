@@ -52,6 +52,15 @@ import ApplicationPurpose from "../AdditionalDocument/ApplicationPurpose";
 import FullScreenDialog from "./Remarks/RemarksUser";
 import BasicTable from "./ScrutinyDevelopment/UserRemarks";
 import BaseTableGrid from "./ServicePlanScrutniy/BaseTableGrid";
+
+
+import { Dialog, stepIconClasses } from "@mui/material";
+import DialogActions from "@mui/material/DialogActions";
+import DialogContent from "@mui/material/DialogContent";
+import DialogContentText from "@mui/material/DialogContentText";
+import DialogTitle from "@mui/material/DialogTitle";
+import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 // import HelpPost from "../Material/TextArea";
 
 const ScrutitnyForms = ({ apiResponse, applicationNumber, refreshScrutinyData ,profrmaID, histeroyData,additionalDocResponData, applicationStatus ,mDMSData ,applicationimp ,dataProfrmaFileds, dataMDMS }) => {
@@ -116,6 +125,7 @@ const {remarksData,notingRemarksData,iconStates,rolesDate,handleRoles,handleGetF
   const [open16, setOpen16] = useState(false);
   const [open17, setOpen17] = useState(false);
   const [open18, setOpen18] = useState(false);
+  const [open19, setOpen19] = useState(false);
 
   const [smShow, setSmShow] = useState(false);
 // const [roleDataModal, setRoleDataModal] = useState([]);
@@ -442,7 +452,7 @@ function convertToObjectArray(obj) {
 
 const handleData = async (data) => {
   if (!userID) {
-   
+    setLoader(true);
  const payload = {
   "requestInfo": {
       "api_id": "1",
@@ -508,8 +518,8 @@ try {
   
   }
 
-
-
+  setLoader(true);
+ 
 
 } catch (error) {
   console.log(error);
@@ -520,10 +530,10 @@ try {
     return response?.data;
   });
 
-
+  setLoader(false);
   console.log("savehandle" , data);
   console.log("savehandle" , Resps);
-
+  
  
 } 
 catch (error) {
@@ -531,66 +541,12 @@ catch (error) {
 
 }
 handleGetNotingRemarkssValues(id)
-
-// handleGetFiledsStatesById(id);
-// handleGetRemarkssValues(id);
-// handleRoles(id)
+setOpen19(true);
 console.log("response from API3242526277", Resp);
-// props?.remarksUpdate({ data: RemarksDeveloper.data });
-} else { 
-  // const requestProfrmaUpdate = {
 
-  //     "RequestInfo": {
-    
-  //         "apiId": "Rainmaker",
-    
-  //         authToken: authToken,
-  //          userInfo: userInfo,
-    
-  //         "msgId": "1684320117934|en_IN"
-    
-  //     },
-    
-  //     PerformaScruitny: {
-    
-  //         applicationNumber: applicationNumber,
-    
-  //         applicationStatus: applicationStatus,
-    
-  //         userName: userInfo?.name,
-    
-  //         userId: userInfo?.id,
-    
-  //         designation: designation ,
-    
-  //         createdOn: dateTime.toUTCString(),
-    
-  //         additionalDetails: {
-    
-  //           data
-    
-  //         }
-    
-    
-    
-  //     }
-    
-  //   }
-  //   try {
-  //     const Resp = await axios.post(`/tl-services/_performaScrutiny/_update`, requestProfrmaUpdate).then((response) => {
-  //       return response?.data;
-  //     });
-    
-    
-  //     console.log("savehandle323" , data);
-  //     console.log("savehandle3434" , Resps);
-    
-     
-  //   } 
-  //   catch (error) {
-  //     console.log(error);
-    
-  //   }
+} else { 
+  setLoader(true);
+ 
    
  const payload = {
   "requestInfo": {
@@ -607,8 +563,6 @@ console.log("response from API3242526277", Resp);
   },
   egScrutiny: convertToObjectArray(data || {}) || []
       
-     
-  
 }
 
 
@@ -669,20 +623,29 @@ try {
     return response?.data;
   });
 
-
+  setLoader(false);
   console.log("savehandle" , data);
   console.log("savehandle" , Resps);
-
+ 
  
 } 
 catch (error) {
   console.log(error);
 
 }
-
+setLoader(false);
+setOpen19(true);
 }
+
 handleGetNotingRemarkssValues(id)
+
 };
+
+
+const handalfinal = () => {
+  setOpen(false);
+}
+
 ////////////////////(1)Account Section ///////////////
 
 const handleAccountClick = async () =>{
@@ -1863,6 +1826,31 @@ console.log("userInFODATA123" , userInfo);
       </Collapse> */}
 
 </div>
+<Dialog open19={open19} onClose={handleData} aria-labelledby="alert-dialog-title" aria-describedby="alert-dialog-description" style={{
+    textAlign: "center",
+    color: "#ffff",
+    backgroundColor: "#000000b0"}}>
+          <DialogTitle id="alert-dialog-title" style={{ fontSize: "xx-large", background: "#000000b0" , color: "#ffff"}}>Performa Remarks Submission</DialogTitle>
+          <DialogContent style={{ background: "#000000b0"}}>
+            <DialogContentText id="alert-dialog-description" style={{textAlign: "center", color: "#ffff" , fontSize: "x-large"}}>
+              <p ><CheckCircleIcon style={{fontSize: "-webkit-xxx-large;"}}></CheckCircleIcon></p>
+              <p>
+                Thank You {" "}
+                {/* <span>
+                  <CheckCircleOutlineIcon style={{ color: "blue", variant: "filled" }} />
+                </span> */}
+              </p>
+              <p>
+                The Performa Remarks was submitted successfully !!<span style={{ padding: "5px", color: "blue" }}></span> 
+              </p>
+            </DialogContentText>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={handalfinal} autoFocus>
+              Ok
+            </Button>
+          </DialogActions>
+        </Dialog>
 </div>
 
   );

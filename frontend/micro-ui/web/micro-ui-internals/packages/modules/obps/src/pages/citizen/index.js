@@ -56,7 +56,7 @@ import LowMedium from "./NewLicense/AllService/Module/BuildingPlanApproval/LowMe
 import AdditionalDocument from "./NewLicense/AllService/Module/AdditionalDocument/AdditionalDocument";
 import Payment from "./NewLicense/AllService/Module/Payment/Payment";
 import ExtensionClu from "./NewLicense/AllService/Module/ExtensionClu/ExtensionClu";
-import MapComponent from "./DGPSMap";
+// import MapComponent from "./DGPSMap";
 
 const App = ({ path }) => {
   const location = useLocation();
