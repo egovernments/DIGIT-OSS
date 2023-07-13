@@ -1770,23 +1770,23 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
                             <Table stickyHeader aria-label="sticky table">
                               <TableHead>
                                 <TableRow>
-                                  <StyledTableCell> {t("BPA_SHAREHOLDING_SR_NO")}
-                                    {/* Sr No. */}
+                                  <StyledTableCell> 
+                                    Sr No.
                                     </StyledTableCell>
-                                  <StyledTableCell>{t("BPA_SHAREHOLDING_NAME")}
-                                    {/* Name */}
+                                  <StyledTableCell>
+                                    Name
                                     </StyledTableCell>
-                                  <StyledTableCell>{t("BPA_SHAREHOLDING_DEGISNITION")}
-                                  {/* Designition */}
+                                  <StyledTableCell>
+                                  Designation
                                   </StyledTableCell>
-                                  <StyledTableCell>{t("BPA_SHAREHOLDING_PERCENTAGE_TEXT")}
-                                  {/* Percentage */}
+                                  <StyledTableCell>
+                                  Percentage
                                   </StyledTableCell>
-                                  <StyledTableCell>{t("BPA_SHAREHOLDING_VIEW_DOCUMENT")}
-                                  {/* View Document */}
+                                  <StyledTableCell>
+                                  View Document
                                   </StyledTableCell>
-                                  <StyledTableCell>{t("BPA_SHAREHOLDING_ACTION")}
-                                  {/* Action */}
+                                  <StyledTableCell>
+                                  Action
                                   </StyledTableCell>
                                 </TableRow>
                               </TableHead>

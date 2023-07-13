@@ -842,7 +842,7 @@ const AppliedDetailForm = (props) => {
                       <h6 style={{ display: "flex" }}>
                         {`${t("NWL_APPLICANT_DGPS_DOCUMENTS_LAYOUT_PLAN_DXF")}`}
                         {/* Layout Plan in dxf */}
-                        <span style={{ color: "red" }}>*</span>
+                        {/* <span style={{ color: "red" }}>*</span> */}
                       </h6>
                       <label>
                         <FileUpload style={{ cursor: "pointer" }} color="primary" />
