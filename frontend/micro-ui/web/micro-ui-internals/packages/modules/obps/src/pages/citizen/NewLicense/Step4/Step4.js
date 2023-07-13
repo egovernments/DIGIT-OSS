@@ -689,10 +689,10 @@ const AppliedDetailForm = (props) => {
           {getData?.caseNumber && (
             <div>
               <h6 className="mt-1" style={{ marginLeft: "21px" }}>
-                Case No: {getData?.caseNumber}
+                Case No: {getData?.caseNumber.slice(0, 7)}
               </h6>
               <h6 className="mt-1" style={{ marginLeft: "21px" }}>
-                Dairy No: {getData?.dairyNumber}
+                Diary No: {getData?.dairyNumber}
               </h6>
             </div>
           )}
@@ -842,7 +842,7 @@ const AppliedDetailForm = (props) => {
                       <h6 style={{ display: "flex" }}>
                         {`${t("NWL_APPLICANT_DGPS_DOCUMENTS_LAYOUT_PLAN_DXF")}`}
                         {/* Layout Plan in dxf */}
-                        <span style={{ color: "red" }}>*</span>
+                        {/* <span style={{ color: "red" }}>*</span> */}
                       </h6>
                       <label>
                         <FileUpload style={{ cursor: "pointer" }} color="primary" />

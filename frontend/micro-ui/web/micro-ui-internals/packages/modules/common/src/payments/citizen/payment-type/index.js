@@ -52,7 +52,7 @@ export const SelectPaymentType = (props) => {
   const [selected, setSelected] = React.useState("");
   const [getRemarks, setRemarks] = React.useState("");
   const changeSelectOptionHandler = (event) => setSelected(event.target.value);
-
+ const [isSubmitted, setIsSubmitted] = useState(false);
   const netBanking = [
     { name: "Choose...", value: "" },
     { name: "IDBI", value: "0300997" },
@@ -101,6 +101,7 @@ export const SelectPaymentType = (props) => {
   const billDetails = paymentdetails?.Bill ? paymentdetails?.Bill[0] : {};
 
   const onSubmit = async (d) => {
+    setIsSubmitted(true);
     const filterData = {
       Transaction: {
         tenantId: tenantId,
@@ -231,7 +232,10 @@ export const SelectPaymentType = (props) => {
             <div style={{ marginTop: "5px" }}>
               {/* <Button style={{ textAlign: "right" }}> Generate LOI</Button> */}
 
-              {!showToast && bankValue && selected && <SubmitBar type="submit" label={t("PAYMENT_CS_BUTTON_LABEL")} submit={true} />}
+              {!showToast && bankValue && selected && <SubmitBar type="submit" label={t("PAYMENT_CS_BUTTON_LABEL")} submit={true} 
+              disabled={isSubmitted} 
+            onClick={onSubmit} 
+            />}
             </div>
             {/* )} */}
           </div>
