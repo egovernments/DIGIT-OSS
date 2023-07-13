@@ -153,7 +153,7 @@ const getDocumentData = async (file, fieldName) => {
            } catch (error) {
              console.log(error);
            }
-           handleGetNotingRemarkssValues(id)
+          //  handleGetNotingRemarkssValues(id)
            // handleGetFiledsStatesById(id);
            // handleGetRemarkssValues(id);
            // handleRoles(id)
