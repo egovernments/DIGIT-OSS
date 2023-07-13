@@ -137,7 +137,7 @@ const getDynamicFileds = (type , data, validation ) => {
                 data?.labels?.map((item , index) => getDynamicFileds(item?.type , item, {
                   required: {
                     message: "This field is required",
-                    value: watch(data?.name) === 'yes' ? true : false
+                    value: watch(data?.name) === 'hello' ? true : false
                   }
                 }))
               }

@@ -117,7 +117,7 @@ const feeandcharges = props.feeandchargesData
               <table key={index} className="table table-bordered" style={{ backgroundColor: "rgb(251 251 253))", width: "80%" }}>
                 <thead>
                 <tr>
-                    <th>Purpose</th>
+                    <th>Purpose</th>                    
                     <td style={{ textAlign: "right" }}>{item?.purpose}</td>
                     <td style={{ textAlign: "right" }}>Formulae and Charges</td>
                   </tr>
@@ -245,8 +245,8 @@ const feeandcharges = props.feeandchargesData
             style={{ display: props.displayFeeandCharges, border: "2px solid #e9ecef", margin: 10, padding: 10 }}
             className="justify-content-center"
           >
-            <h1>New License</h1>
-            <Card style={{ width: "126%", marginLeft: "-2px", paddingRight: "10px", marginTop: "10px" }}>
+            {/* <h1>New License</h1> */}
+            {/* <Card style={{ width: "126%", marginLeft: "-2px", paddingRight: "10px", marginTop: "10px" }}> */}
               <Form.Group className="justify-content-center" controlId="formBasicEmail">
                 <Row className="ml-auto" style={{ marginBottom: 5 }}>
                   <Col col-12>
@@ -511,7 +511,7 @@ const feeandcharges = props.feeandchargesData
                       
                           {`${t("NWL_APPLICANT_FEE_TOTAL_SCRUITNY_FEE")}`}
                           </h4>
-                              <input type="text" className="form-control" disabled  placeholder={item?.totalScruitnyFee?.toLocaleString("en-IN")} />
+                              <input type="text" className="form-control" style={{ textAlign: "right" }} disabled  placeholder={item?.totalScruitnyFee?.toLocaleString("en-IN")} />
                             </Col>
                             
                           
@@ -519,9 +519,9 @@ const feeandcharges = props.feeandchargesData
                             <Col className="col col-4" >
                             <h4 >
                           
-                            {`${t("NWL_APPLICANT_FEE_TOTAL_LICENCE_FEE")}`}
+                            {`${t("NWL_APPLICANT_FEE_TOTAL_LICENCE_FEE")}`} 
                             </h4>
-                              <input type="text" className="form-control" placeholder={item?.totalLicenceFee?.toLocaleString("en-IN")} disabled />
+                              <input type="text" className="form-control" style={{ textAlign: "right" }} placeholder={item?.totalLicenceFee?.toLocaleString("en-IN")} disabled />
                             </Col>
                          
                             <Col className="col col-4" >
@@ -529,7 +529,7 @@ const feeandcharges = props.feeandchargesData
                   
                             {`${t("NWL_APPLICANT_FEE_TOTAL_FEE")}`}
                             </h4>
-                              <input type="text" className="form-control" placeholder={item?.totalFee?.toLocaleString("en-IN")}  disabled />
+                              <input type="text" className="form-control"  style={{ textAlign: "right" }} placeholder={item?.totalFee?.toLocaleString("en-IN")}  disabled />
                             </Col>
                           
                             
@@ -539,7 +539,7 @@ const feeandcharges = props.feeandchargesData
                         } 
 
               </Form.Group>
-            </Card>
+            {/* </Card> */}
 
             {/* <div style={{ position: "relative", marginBottom: 40 }}>
               <Button onClick={() => props.passUncheckedList({ data: uncheckedValue })}>Submit</Button>

@@ -7,7 +7,19 @@ import { Row, Col, Card, Container, Form, Button } from "react-bootstrap";
 import { useParams } from "react-router-dom";
 import axios from "axios";
 import { ScrutinyRemarksContext } from "../../../../../context/remarks-data-context";
-
+import FileUploadIcon from "@mui/icons-material/FileUpload";
+import FileDownload from "@mui/icons-material/FileDownload";
+import VisibilityIcon from "@mui/icons-material/Visibility";
+import { useForm } from "react-hook-form";
+import { IconButton } from "@mui/material";
+// new add
+import { Dialog, stepIconClasses } from "@mui/material";
+import DialogActions from "@mui/material/DialogActions";
+import DialogContent from "@mui/material/DialogContent";
+import DialogContentText from "@mui/material/DialogContentText";
+import DialogTitle from "@mui/material/DialogTitle";
+import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 
 
 
@@ -39,6 +51,64 @@ const {handleRoles, handleGetFiledsStatesById, handleGetRemarkssValues , handleG
     content: '',
     // categoryId: ''
 })
+
+// documents
+
+const {
+  register,
+  handleSubmit,
+  formState: { errors },
+  control,
+  setValue,
+  watch,
+} = useForm({
+  mode: "onChange",
+
+  shouldFocusError: true,
+});
+
+
+const [drawingErr, setDrawingErr] = useState({
+  anyOtherdoc: false,
+});
+
+const [open, setOpen] = useState(false);
+const [selectedFiles, setSelectedFiles] = useState([]);
+  const [showToast, setShowToast] = useState(null);
+  const [showToastError, setShowToastError] = useState({ label: "", error: false, success: false });
+  const [loader, setLoader] = useState(false);
+  const [fileStoreId, setFileStoreId] = useState({});
+  const [spaction, setSPAction] = useState("");
+  const [comment, setComment] = useState("");
+  const [anyOtherdoc, setAnyotherDoc] = useState("");
+
+const getDocumentData = async (file, fieldName) => {
+  if (selectedFiles.includes(file.name)) {
+    setShowToastError({ label: "Duplicate file Selected", error: true, success: false });
+    return;
+  }
+  const formData = new FormData();
+  formData.append("file", file);
+  formData.append("tenantId", "hr");
+  formData.append("module", "property-upload");
+  formData.append("tag", "tag-property");
+  setLoader(true);
+  try {
+    const Resp = await axios.post("/filestore/v1/files", formData, {});
+    setValue(fieldName, Resp?.data?.files?.[0]?.fileStoreId);
+    setFileStoreId({ ...fileStoreId, [fieldName]: Resp?.data?.files?.[0]?.fileStoreId });
+    setSelectedFiles([...selectedFiles, file.name]);
+    setLoader(false);
+    setShowToastError({ label: "File Uploaded Successfully", error: false, success: true });
+  } catch (error) {
+    setLoader(false);
+    return error.message;
+  }
+};
+
+// End
+
+
   const contentFieldChanaged = (data) => {
 
     setPost({ ...post, 'content': data })
@@ -65,7 +135,7 @@ const {handleRoles, handleGetFiledsStatesById, handleGetRemarkssValues , handleG
                isLOIPart: "",
                userid: userInfo?.id || null,
                serviceId: "123",
-               documentId: null,
+               documentId: fileStoreId,
                // ts: dateTime.toUTCString(),
                bussinessServiceName : "NewTL",
                designation : designation,
@@ -100,7 +170,7 @@ const {handleRoles, handleGetFiledsStatesById, handleGetRemarkssValues , handleG
 
 
 const handlemodalsubmit = async () => {
-  
+ 
   const postData = {
          requestInfo: {
            api_id: "1",
@@ -122,7 +192,7 @@ const handlemodalsubmit = async () => {
            isLOIPart: "",
            userid: userInfo?.id || null,
            serviceId: "123",
-           documentId: null,
+           documentId: fileStoreId,
            // ts: dateTime.toUTCString(),
            bussinessServiceName : "NewTL",
            designation : designation,
@@ -141,6 +211,7 @@ const handlemodalsubmit = async () => {
          console.log(error);
        }
       await handleGetNotingRemarkssValues(id)
+      setOpen(true);
 
       const ScrollToBottom = () =>{
         console.log("regergergregegegreg",document.getElementById("historyList").scrollHeight)
@@ -320,7 +391,46 @@ const handlemodalsubmit = async () => {
 
 
 //   const handlemodalsubmit = (data) => console.log(data);
-console.log("AkashNEWFile" , content , editor , config ,post.content);
+
+
+const viewDocument = async (documentId) => {
+  try {
+    const response = await axios.get(`/filestore/v1/files/url?tenantId=hr&fileStoreIds=${documentId}`, {});
+    const FILDATA = response.data?.fileStoreIds[0]?.url;
+    window.open(FILDATA);
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+const downloadDocument = async (documentId) => {
+  try {
+    const response = await axios.get(`/filestore/v1/files/url?tenantId=hr&fileStoreIds=${documentId}`, {});
+    const url = response.data?.fileStoreIds[0]?.url;
+    const res = await fetch(url);
+    if (!res.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    const blob = await res.blob();
+    const link = document.createElement("a");
+    link.style.display = "none";
+    document.body.appendChild(link);
+    link.href = URL.createObjectURL(blob);
+    link.download = `${documentId}.jpg`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+const handalfinal = () => {
+  setOpen(false);
+}
+
+console.log("AkashNEWFile" , content , editor , config ,post.content );
+console.log("AkashfileStoreId" , fileStoreId );
   return (
     <div className="App">
       {/* <h1>React Editors</h1>
@@ -333,6 +443,56 @@ console.log("AkashNEWFile" , content , editor , config ,post.content);
         onBlur={handleUpdate}
         onChange={(newContent) => {handlemodalsubmit}}
       /> */}
+         <div  id="historyList">
+          <Card style={{backgroundColor: "rgb(255, 217, 84)"}}>
+          <p class="text-center"><h3><b>Add Noting</b></h3></p>
+          </Card>
+          {/* <div 
+          
+        
+           style={{ backgroundColor: "#ddf2cf" , fontSize: 16 }}></div> */}
+
+<div>
+  
+            <div>
+                {/* <label htmlFor="Developer Details">
+                {`${t("SP_APPLICANT_OTHER_RELEVANT_DOCUMENT")}`}
+                  <span class="text-danger font-weight-bold mx-2">*</span>
+                </label> */}
+                </div>
+                <div style={{padding: "6px"}}>
+                {/* <label for="file-input-11">
+                          <FileUploadIcon color="primary" />
+                        </label> */}
+                        <input
+                          type="file"
+                          className="form-control"
+                          // {...register("certifieadCopyOfThePlan")}
+                          accept="application/pdf/jpeg/png"
+                          id="file-input-11"
+                          onChange={(e) => getDocumentData(e?.target?.files[0], "anyOtherdoc")}
+                          // style={{ display: "none" }}
+                        />
+                        {/* {fileStoreId?.anyOtherdoc ? (
+                          <VisibilityIcon color="primary" onClick={() => viewDocument(fileStoreId?.anyOtherdoc)}>
+                            {" "}
+                          </VisibilityIcon>
+                        ) : (
+                          ""
+                        )} */}
+                        {/* {applicationId && !fileStoreId?.anyOtherdoc && ( */}
+                          {/* <div className="btn btn-sm col-md-4">
+                            <IconButton onClick={() => downloadDocument(anyOtherdoc)}>
+                              <FileDownload color="primary" className="mx-1" />
+                            </IconButton>
+                            <IconButton onClick={() => viewDocument(anyOtherdoc)}>
+                              <VisibilityIcon color="info" className="icon" />
+                            </IconButton>
+                          </div> */}
+                        {/* )} */}
+                </div>
+          </div>
+
          <JoditEditor
                                 className="jodit-react-container"
                                ref={editor}
@@ -347,11 +507,41 @@ console.log("AkashNEWFile" , content , editor , config ,post.content);
       <Button style={{ textAlign: "right" }} onClick={startTimer}>
             Save Noting
           </Button> */}
+
+
+          
       <Button style={{ textAlign: "right" }} onClick={handlemodalsubmit}>
            Final Noting
           </Button>
       <div dangerouslySetInnerHTML={{ __html: content }} />
     </div>
+    <Dialog open={open} onClose={handlemodalsubmit} aria-labelledby="alert-dialog-title" aria-describedby="alert-dialog-description" style={{
+    textAlign: "center",
+    color: "#ffff",
+    backgroundColor: "#000000b0"}}>
+          <DialogTitle id="alert-dialog-title" style={{ fontSize: "xx-large", background: "#000000b0" , color: "#ffff"}}>Noting Remarks Submission</DialogTitle>
+          <DialogContent style={{ background: "#000000b0"}}>
+            <DialogContentText id="alert-dialog-description" style={{textAlign: "center", color: "#ffff" , fontSize: "x-large"}}>
+              <p ><CheckCircleIcon style={{fontSize: "-webkit-xxx-large;"}}></CheckCircleIcon></p>
+              <p>
+                Thank You {" "}
+                {/* <span>
+                  <CheckCircleOutlineIcon style={{ color: "blue", variant: "filled" }} />
+                </span> */}
+              </p>
+              <p>
+                The Noting Remarks was submitted successfully !!<span style={{ padding: "5px", color: "blue" }}></span> 
+              </p>
+            </DialogContentText>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={handalfinal} autoFocus>
+              Ok
+            </Button>
+          </DialogActions>
+        </Dialog>
+    </div>
+  
   );
 }
 

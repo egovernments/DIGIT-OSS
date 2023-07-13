@@ -231,6 +231,7 @@ const ServiceScrutiny = (props) => {
     //   window.location.href = `/digit-ui/employee/tl/servicePlanInbox`
     // }, 3000);
     closeModal();
+    
     // setShowToast({ key: "error", error: { message: errorValue } });
     // setTimeout(closeToast, 5000);
     setTimeout(() => {
