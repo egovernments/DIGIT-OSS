@@ -11,27 +11,29 @@ const VALIDATION_SCHEMA = (fields = []) => {
 
   const yupObj = Yup.object().shape({
     sectorAndDevelopmentWidth: Yup.string()
-      .matches(/^\d+(\.\d+)?$/, "Invalid value")
-      .test(
-        "range",
-        "Value must be between 1 and 999",
-        (value) => {
-          const numValue = parseFloat(value);
-          return numValue >= 1 && numValue <= 999;
-        }
-      )
-      .max(10, "Maximum length exceeded (10 characters)"),
+      .when("approachFromProposedSector", {
+        is: (value) => value === "Y",
+        then: Yup.string()
+          .matches(/^\d+(\.\d+)?$/, "Invalid value")
+          .test("range", "Value must be between 1 and 999", (value) => {
+            const numValue = parseFloat(value);
+            return numValue >= 1 && numValue <= 999;
+          })
+          .max(10, "Maximum length exceeded (10 characters)"),
+        otherwise: Yup.string().strip(),
+      }),
     internalAndSectoralWidth: Yup.string()
-      .matches(/^\d+(\.\d+)?$/, "Invalid value")
-      .test(
-        "range",
-        "Value must be between 1 and 999",
-        (value) => {
+    .when("approachFromInternalCirculation", {
+      is: (value) => value === "Y",
+      then: Yup.string()
+        .matches(/^\d+(\.\d+)?$/, "Invalid value")
+        .test("range", "Value must be between 1 and 999", (value) => {
           const numValue = parseFloat(value);
           return numValue >= 1 && numValue <= 999;
-        }
-      )
-      .max(10, "Maximum length exceeded (10 characters)"),
+        })
+        .max(10, "Maximum length exceeded (10 characters)"),
+      otherwise: Yup.string().strip(),
+    }),
     vacant: Yup.string().nullable().required("This field is required."),
     vacantRemark: Yup.string()
       .test({
@@ -105,26 +107,17 @@ const VALIDATION_SCHEMA = (fields = []) => {
       .nullable()
       .required("This field is required."),
     constructedRowWidth: Yup.string()
-      .test({
-        name: "conditional",
-        test: function (value) {
-          const newoptions = this.resolve(Yup.ref("siteApproachable"));
-          if (newoptions === "N") {
-            return !!value || this.createError({ message: "This field is required" });
-          }
-          return true;
-        },
-      })
-      .matches(/^\d+(\.\d+)?$/, "Invalid value")
-      .test(
-        "range",
-        "Value must be between 1 and 999",
-        (value) => {
+    .when("siteApproachable", {
+      is: (value) => value === "N",
+      then: Yup.string()
+        .matches(/^\d+(\.\d+)?$/, "Invalid value")
+        .test("range", "Value must be between 1 and 999", (value) => {
           const numValue = parseFloat(value);
           return numValue >= 1 && numValue <= 999;
-        }
-      )
-      .max(10, "Maximum length exceeded (10 characters)"),
+        })
+        .max(10, "Maximum length exceeded (10 characters)"),
+      otherwise: Yup.string().strip(),
+    }),
     remarks: Yup.string()
       .nullable()
       .max(MAX_REMARKS_LENGTH, ({ path }) => `Remarks must not exceed ${MAX_REMARKS_LENGTH} characters.`),

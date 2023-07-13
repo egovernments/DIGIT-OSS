@@ -342,7 +342,7 @@ const AppliedDetailForm = (props) => {
     }
   }, [stepData]);
 
-  const getDocumentData = async (file, fieldName) => {
+  const getDocumentData = async (file, fieldName, noValidation = false) => {
     if (selectedFiles.includes(file.name)) {
       setShowToastError({ label: "Duplicate file Selected", error: true, success: false });
       return;
@@ -356,7 +356,9 @@ const AppliedDetailForm = (props) => {
     try {
       const Resp = await axios.post("/filestore/v1/files", formData, {});
       setValue(fieldName, Resp?.data?.files?.[0]?.fileStoreId);
-      setSelectedFiles([...selectedFiles, file.name]);
+      if(noValidation){
+        setSelectedFiles([...selectedFiles, file.name]);
+      }
       setLoader(false);
       setShowToastError({ label: "File Uploaded Successfully", error: false, success: true });
     } catch (error) {
@@ -730,7 +732,7 @@ const AppliedDetailForm = (props) => {
                           //   setShowToastError({ label: "Please select .kml file", error: true, success: false });
                           // } else {
                             handleFileUpload(e);
-                            getDocumentData(e?.target?.files[0], "dgpsFileStoreId");
+                            getDocumentData(e?.target?.files[0], "dgpsFileStoreId",true);
                           // }
                         }}
                         accept=".kml"
