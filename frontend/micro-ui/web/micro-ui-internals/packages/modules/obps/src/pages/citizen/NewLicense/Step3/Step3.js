@@ -442,10 +442,10 @@ const LandScheduleForm = (props) => {
           {getData?.caseNumber && (
             <div>
               <h6 className="mt-1" style={{ marginLeft: "21px" }}>
-                Case No: {getData?.caseNumber}
+                Case No: {getData?.caseNumber.slice(0, 7)}
               </h6>
               <h6 className="mt-1" style={{ marginLeft: "21px" }}>
-                Dairy No: {getData?.dairyNumber}
+                Diary No: {getData?.dairyNumber}
               </h6>
             </div>
           )}
@@ -2761,7 +2761,7 @@ const LandScheduleForm = (props) => {
                     5.
                     {`${t("NWL_APPLICANT_5_ENCLOSE_THE_FOLLOWING_DOCUMENTS_AS_ANNEXURES")}`}
                     {/* Enclose the following documents as Annexures */}
-                    <span style={{ color: "#e47878", paddingLeft: "5px" }}>(Documents should be less than 25mb)</span>
+                    <span style={{ color: "#e47878", paddingLeft: "5px" }}>(Documents should be less than 100 MB)</span>
                   </h5>
                   <br></br>
                   <div className="row">

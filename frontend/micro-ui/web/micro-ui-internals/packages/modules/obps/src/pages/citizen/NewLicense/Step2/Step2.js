@@ -1233,10 +1233,10 @@ const ApllicantPuropseForm = (props) => {
           {getData?.caseNumber && (
             <div>
               <h6 className="mt-1" style={{ marginLeft: "21px" }}>
-                Case No: {getData?.caseNumber}
+                Case No: {getData?.caseNumber.slice(0, 7)}
               </h6>
               <h6 className="mt-1" style={{ marginLeft: "21px" }}>
-                Dairy No: {getData?.dairyNumber}
+                Diary No: {getData?.dairyNumber}
               </h6>
             </div>
           )}
