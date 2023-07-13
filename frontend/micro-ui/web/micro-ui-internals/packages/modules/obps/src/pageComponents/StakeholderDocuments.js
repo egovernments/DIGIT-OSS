@@ -474,6 +474,10 @@ function SelectDocument({ t, document: doc, setDocuments, documentsUploadList, e
     });
   }, [uploadedFile, file]);
 
+  // useEffect(()=>{
+  //   console.log("efregergergerg",documents,doc)
+  // },[documents,doc])
+
   useEffect(() => {
     (async () => {
       setError(null);
@@ -505,6 +509,12 @@ function SelectDocument({ t, document: doc, setDocuments, documentsUploadList, e
     })();
   }, [file]);
 
+
+  const getUploadedDocId = (type) => {
+    console.log("wefwefwefewfewfef",documents,type)
+    return documents.find((ele)=>ele.documentType === type)?.fileStoreId;
+  }
+
   return (
     <div>
       {loader && <Spinner />}
@@ -533,47 +543,47 @@ function SelectDocument({ t, document: doc, setDocuments, documentsUploadList, e
           {/* {JSON.stringify(documentsUploadList?.[0])} */}
           {
             <div className="col-md-4">
-              {doc?.code === "ARTICLES_OF_ASSOCIATION" && documentsUploadList?.length > 0 ? (
+              {doc?.code === "ARTICLES_OF_ASSOCIATION" && (getUploadedDocId("ARTICLES_OF_ASSOCIATION") ||documentsUploadList[0]?.articlesOfAssociation) ? (
                 <button
                   type="button"
                   title="View Document"
-                  onClick={() => getDocShareholding(documentsUploadList[0]?.articlesOfAssociation)}
+                  onClick={() => getDocShareholding(getUploadedDocId("ARTICLES_OF_ASSOCIATION") ||documentsUploadList[0]?.articlesOfAssociation)}
                   className="btn btn-sm btn-info"
                 >
-                  <VisibilityIcon fill="#fff" className="icon" /> View Uploaded Document
+                  <VisibilityIcon fill="#fff" className="icon" /> View Uploaded Document4
                 </button>
-              ) : doc?.code === "REGISTERED_IRREVOCABLE_PARTNERSHIP_DEED" && documentsUploadList?.length > 0 ? (
+              ) : doc?.code === "REGISTERED_IRREVOCABLE_PARTNERSHIP_DEED" && (getUploadedDocId("REGISTERED_IRREVOCABLE_PARTNERSHIP_DEED") || documentsUploadList[0]?.registeredIrrevocablePaternshipDeed) ? (
                 <button
                   type="button"
                   title="View Document"
-                  onClick={() => getDocShareholding(documentsUploadList[0]?.registeredIrrevocablePaternshipDeed)}
+                  onClick={() => getDocShareholding(getUploadedDocId("REGISTERED_IRREVOCABLE_PARTNERSHIP_DEED") || documentsUploadList[0]?.registeredIrrevocablePaternshipDeed)}
                   className="btn btn-sm btn-info"
                 >
-                  <VisibilityIcon fill="#fff" className="icon" /> View Uploaded Document
+                  <VisibilityIcon fill="#fff" className="icon" /> View Uploaded Document3
                 </button>
-              ) : doc?.code === "AFFIDAVIT_AND_PANCARD" && documentsUploadList?.length > 0 ? (
+              ) : doc?.code === "AFFIDAVIT_AND_PANCARD" && (getUploadedDocId("AFFIDAVIT_AND_PANCARD") || documentsUploadList[0]?.affidavitAndPancard) ? (
                 <button
                   type="button"
                   title="View Document"
-                  onClick={() => getDocShareholding(documentsUploadList[0]?.affidavitAndPancard)}
+                  onClick={() => getDocShareholding(getUploadedDocId("AFFIDAVIT_AND_PANCARD") || documentsUploadList[0]?.affidavitAndPancard)}
                   className="btn btn-sm btn-info"
                 >
-                  <VisibilityIcon fill="#fff" className="icon" /> View Uploaded Document
+                  <VisibilityIcon fill="#fff" className="icon" /> View Uploaded Document2
                 </button>
-              ) : doc?.code === "MEMORANDUM_OF_ARTICLES" && documentsUploadList?.length > 0 ? (
+              ) : doc?.code === "MEMORANDUM_OF_ARTICLES" && (getUploadedDocId("MEMORANDUM_OF_ARTICLES") || documentsUploadList[0]?.memorandumOfArticles) ? (
                 <button
                   type="button"
                   title="View Document"
-                  onClick={() => getDocShareholding(documentsUploadList[0]?.memorandumOfArticles)}
+                  onClick={() => getDocShareholding(getUploadedDocId("MEMORANDUM_OF_ARTICLES") || documentsUploadList[0]?.memorandumOfArticles)}
                   className="btn btn-sm btn-info"
                 >
-                  <VisibilityIcon fill="#fff" className="icon" /> View Uploaded Document
+                  <VisibilityIcon fill="#fff" className="icon" /> View Uploaded Document1
                 </button>
-              ) : doc?.code === "APPL.BPAREG_OTHERS" && documentsUploadList?.[0]?.anyOtherDoc ? (
+              ) : doc?.code === "APPL.BPAREG_OTHERS" && (getUploadedDocId("APPL.BPAREG_OTHERS") ||documentsUploadList?.[0]?.anyOtherDoc) ? (
                 <button
                   type="button"
                   title="View Document"
-                  onClick={() => getDocShareholding(documentsUploadList[0]?.anyOtherDoc)}
+                  onClick={() => getDocShareholding(getUploadedDocId("APPL.BPAREG_OTHERS") ||documentsUploadList[0]?.anyOtherDoc)}
                   className="btn btn-sm btn-info"
                 >
                   <VisibilityIcon fill="#fff" className="icon" /> View Uploaded Document
