@@ -6,15 +6,18 @@ import axios from "axios";
 import OutlinedInput from "@mui/material/OutlinedInput";
 import Spinner from "../../../components/Loader";
 import CusToaster from "../../../components/Toaster";
+import { useTranslation } from "react-i18next";
 
 const windowHeight = window !== undefined ? window.innerHeight : null;
 const Records = (props) => {
+  const { t } = useTranslation();
   const [LOINumber, setLOINumber] = useState("");
   const [loiPatternErr, setLoiPatternErr] = useState(false)
   const authToken = Digit.UserService.getUser()?.access_token || null;
   const userInfo = Digit.UserService.getUser()?.info || {};
   const [businessService, setBusinessService] = useState("");
   const [tableDate, setTableDate] = useState("");
+  const [applicationStatus, setApplicationStatus] = useState("");
   const [iDApplication, setIDApplication] = useState("");
   const [loader, setLoader] = useState(false);
   const [showToastError, setShowToastError] = useState({ label: "", error: false, success: false });
@@ -102,6 +105,7 @@ const Records = (props) => {
       setShowToastError({ label: "Successfully", error: false, success: true });
       setBusinessService(Resp?.data?.Licenses?.[0]?.businessService)
       setTableDate(Resp?.data?.Licenses?.[0])
+      setApplicationStatus(Resp?.data?.Licenses?.[0]?.status)
       setIDApplication(Resp?.data?.Licenses?.[0].applicationNumber)
       // setPurpose(Resp?.data?.Licenses?.[0]?.tradeLicenseDetail?.additionalDetail?.[0]?.ApplicantPurpose?.purpose)
       // setTotalArea(Resp?.data?.Licenses?.[0]?.tradeLicenseDetail?.additionalDetail?.[0]?.ApplicantPurpose?.totalArea)
@@ -285,9 +289,9 @@ const Records = (props) => {
                           {/* {new Date(tableDate?.applicationDate).toLocaleTimeString("en-US")} */}
                         </td>
                         <td>{tableDate?.tcpDairyNumber}</td>
-                        <td>{tableDate?.status}</td>
+                        <td> {t( `WF_${"NEWTL"?.toUpperCase()}_${applicationStatus}`)}</td>
                         <td>{new Date(tableDate?.tradeLicenseDetail?.auditDetails?.createdTime).toLocaleTimeString("en-US")}</td>
-                        <td>{tableDate?.status}</td>
+                        <td> {t( `WF_${"NEWTL"?.toUpperCase()}_${applicationStatus}`)}</td>
                         <td>{tableDate?.lastModifiedTime}</td>
                         {/* <td>{tableDate?.applicationNumber}</td> */}
                         <td></td>
@@ -302,6 +306,8 @@ const Records = (props) => {
 
                     </tbody>
                   </table>
+                  {/* {t(applicationStatus)} */}
+                 
                 </div>
               </Form>
             </Card.Body>

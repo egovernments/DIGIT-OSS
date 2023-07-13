@@ -503,7 +503,7 @@ const ScrutinyFormcontainer = (props) => {
         closeModal();
         
         setShowToast({ key: "error", error: { message: errorValue } });
-        setTimeout(closeToast, 5000);
+        setTimeout(closeToast, 3000);
         return;
       }
       
@@ -521,7 +521,7 @@ const ScrutinyFormcontainer = (props) => {
         onError: (error, variables) => {
           setIsEnableLoader(false);
           setShowToast({ key: "error", error });
-          setTimeout(closeToast, 5000);
+          setTimeout(closeToast, 3000);
         },
         onSuccess: (data, variables) => {
           setIsEnableLoader(false);
@@ -537,7 +537,7 @@ const ScrutinyFormcontainer = (props) => {
             history.push(`/digit-ui/employee/noc/response`, { data: data });
           }
           setShowToast({ key: "success", action: selectedAction });
-          setTimeout(closeToast, 5000);
+          setTimeout(closeToast, 3000);
           queryClient.clear();
           queryClient.refetchQueries("APPLICATION_SEARCH");
         },
@@ -647,7 +647,7 @@ const ScrutinyFormcontainer = (props) => {
       closeModal()
       setOpen1(true);
       // window.location.href = `/digit-ui/employee/tl/inbox`
-    }, 3000);
+    }, 2000);
   };
 
   useEffect(() => {
@@ -872,9 +872,9 @@ const ScrutinyFormcontainer = (props) => {
                   <CheckCircleOutlineIcon style={{ color: "blue", variant: "filled" }} />
                 </span> */}
               </p>
-              <p>
+              {/* <p>
                 The File sent successfully !!<span style={{ padding: "5px", color: "blue" }}></span> 
-              </p>
+              </p> */}
             </DialogContentText>
           </DialogContent>
           <DialogActions>
