@@ -39,6 +39,16 @@ const Response = (props) => {
   const [errorInfo, setErrorInfo, clearError] = Digit.Hooks.useSessionStorage("EMPLOYEE_HRMS_ERROR_DATA", false);
   const mutation = state.key === "UPDATE" ? Digit.Hooks.hrms.useHRMSUpdate(tenantId) : Digit.Hooks.hrms.useHRMSCreate(tenantId);
 
+  const employeeCreateSession = Digit.Hooks.useSessionStorage("NEW_EMPLOYEE_CREATE", {});
+  const [sessionFormData,setSessionFormData, clearSessionFormData] = employeeCreateSession;
+
+  // remove session form data if user navigates away from the estimate create screen
+  useEffect(()=>{
+    if (!window.location.href.includes("/hrms/create") && sessionFormData && Object.keys(sessionFormData) != 0) {
+    clearSessionFormData();
+    }
+},[location]);
+
   const onError = (error, variables) => {
     setErrorInfo(error?.response?.data?.Errors[0]?.code || 'ERROR');
     setMutationHappened(true);

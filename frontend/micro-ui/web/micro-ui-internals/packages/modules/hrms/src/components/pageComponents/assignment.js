@@ -3,12 +3,35 @@ import React, { useEffect, useState } from "react";
 import cleanup from "../Utils/cleanup";
 import { convertEpochToDate } from "../Utils/index";
 
+const makeDefaultValues = (sessionFormData) => {
+  return sessionFormData?.Assignments?.map((ele,index)=>{
+    return {
+      key: index,
+      fromDate: ele.fromDate ? convertEpochToDate(ele.fromDate): null,
+      toDate: ele.toDate ? convertEpochToDate(ele.toDate):null,
+      isCurrentAssignment: ele?.isCurrentAssignment,
+      designation: {
+        code: ele?.designation,
+        i18key: ele.designation ? "COMMON_MASTERS_DESIGNATION_" + ele.designation:null,
+      },
+      department: {
+        code: ele?.department,
+        i18key:ele.department ? "COMMON_MASTERS_DEPARTMENT_" + ele.department : null,
+      },
+    }
+  })
+}
+
 const Assignments = ({ t, config, onSelect, userType, formData }) => {
   const tenantId = Digit.ULBService.getCurrentTenantId();
   const { data: data = {}, isLoading } = Digit.Hooks.hrms.useHrmsMDMS(tenantId, "egov-hrms", "HRMSRolesandDesignation") || {};
   const [currentassignemtDate, setCurrentAssiginmentDate] = useState(null);
+
+  const employeeCreateSession = Digit.Hooks.useSessionStorage("NEW_EMPLOYEE_CREATE", {});
+  const [sessionFormData,setSessionFormData, clearSessionFormData] = employeeCreateSession;
+
   const [assignments, setassignments] = useState(
-    formData?.Assignments || [
+    sessionFormData?.Assignments ? makeDefaultValues(sessionFormData) :  [
       {
         key: 1,
         fromDate: undefined,
