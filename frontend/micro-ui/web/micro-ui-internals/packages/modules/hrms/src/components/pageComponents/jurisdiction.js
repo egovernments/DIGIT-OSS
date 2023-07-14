@@ -25,9 +25,9 @@ const Jurisdictions = ({ t, config, onSelect, userType, formData }) => {
 
   const employeeCreateSession = Digit.Hooks.useSessionStorage("NEW_EMPLOYEE_CREATE", {});
   const [sessionFormData,setSessionFormData, clearSessionFormData] = employeeCreateSession;
-
+  const isEdit = window.location.href.includes("hrms/edit")
   const [jurisdictions, setjurisdictions] = useState(
-    sessionFormData?.Jurisdictions?.length>0 ? makeDefaultValues(sessionFormData) : [
+    !isEdit && sessionFormData?.Jurisdictions?.length>0 ? makeDefaultValues(sessionFormData) : ( formData?.Jurisdictions ||  [
       {
         id: undefined,
         key: 1,
@@ -36,7 +36,7 @@ const Jurisdictions = ({ t, config, onSelect, userType, formData }) => {
         boundary: null,
         roles: [],
       },
-    ]
+    ])
   );
 
   useEffect(() => {

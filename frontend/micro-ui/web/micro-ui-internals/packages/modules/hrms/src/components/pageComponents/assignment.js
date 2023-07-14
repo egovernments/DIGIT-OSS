@@ -29,9 +29,10 @@ const Assignments = ({ t, config, onSelect, userType, formData }) => {
 
   const employeeCreateSession = Digit.Hooks.useSessionStorage("NEW_EMPLOYEE_CREATE", {});
   const [sessionFormData,setSessionFormData, clearSessionFormData] = employeeCreateSession;
-
+  const isEdit = window.location.href.includes("hrms/edit")
+  
   const [assignments, setassignments] = useState(
-    sessionFormData?.Assignments ? makeDefaultValues(sessionFormData) :  [
+    !isEdit && sessionFormData?.Assignments ? makeDefaultValues(sessionFormData) :  (formData?.Assignments || [
       {
         key: 1,
         fromDate: undefined,
@@ -40,7 +41,7 @@ const Assignments = ({ t, config, onSelect, userType, formData }) => {
         department: null,
         designation: null,
       },
-    ]
+    ])
   );
   const reviseIndexKeys = () => {
     setassignments((prev) => prev.map((unit, index) => ({ ...unit, key: index })));
