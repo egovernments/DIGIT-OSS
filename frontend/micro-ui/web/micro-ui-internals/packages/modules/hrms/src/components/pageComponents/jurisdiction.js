@@ -3,12 +3,31 @@ import React, { useEffect, useState } from "react";
 import cleanup from "../Utils/cleanup";
 // import MultiSelectDropdown from "./Multiselect";
 
+const makeDefaultValues = (sessionFormData) => {
+  return sessionFormData?.Jurisdictions?.map((ele,index)=>{
+    return {
+      key: index,
+      hierarchy: {
+        code: ele?.hierarchy,
+        name: ele?.hierarchy,
+      },
+      boundaryType: { label: ele?.boundaryType, i18text:ele.boundaryType ?`EGOV_LOCATION_BOUNDARYTYPE_${ele.boundaryType?.toUpperCase()}`:null },
+      boundary: { code: ele?.boundary },
+      roles: ele?.roles,
+    }
+  })
+}
+
 const Jurisdictions = ({ t, config, onSelect, userType, formData }) => {
   const tenantId = Digit.ULBService.getCurrentTenantId();
   const [inactiveJurisdictions, setInactiveJurisdictions] = useState([]);
   const { data: data = {}, isLoading } = Digit.Hooks.hrms.useHrmsMDMS(tenantId, "egov-hrms", "HRMSRolesandDesignation") || {};
+
+  const employeeCreateSession = Digit.Hooks.useSessionStorage("NEW_EMPLOYEE_CREATE", {});
+  const [sessionFormData,setSessionFormData, clearSessionFormData] = employeeCreateSession;
+  const isEdit = window.location.href.includes("hrms/edit")
   const [jurisdictions, setjurisdictions] = useState(
-    formData?.Jurisdictions || [
+    !isEdit && sessionFormData?.Jurisdictions?.length>0 ? makeDefaultValues(sessionFormData) : ( formData?.Jurisdictions ||  [
       {
         id: undefined,
         key: 1,
@@ -17,7 +36,7 @@ const Jurisdictions = ({ t, config, onSelect, userType, formData }) => {
         boundary: null,
         roles: [],
       },
-    ]
+    ])
   );
 
   useEffect(() => {
