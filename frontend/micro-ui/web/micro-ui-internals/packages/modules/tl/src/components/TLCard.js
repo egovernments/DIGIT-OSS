@@ -46,20 +46,20 @@ const TLCard = () => {
             label: t("ES_COMMON_INBOX"),
             link: `/digit-ui/employee/tl/inbox`,
         },
-        {
-            label: t("TL_NEW_APPLICATION"),
-            link: "/digit-ui/employee/tl/new-application",
-            role: "TL_CEMP"
-        },
-        {
-            label: t("TL_SEARCH_APPLICATIONS"),
-            link: `/digit-ui/employee/tl/search/application`
-        },
-        {
-            label: t("TL_SEARCH_LICENSE"),
-            link: `/digit-ui/employee/tl/search/license`,
-            role: "TL_CEMP"
-        }
+        // {
+        //     label: t("TL_NEW_APPLICATION"),
+        //     link: "/digit-ui/employee/tl/new-application",
+        //     role: "TL_CEMP"
+        // },
+        // {
+        //     label: t("TL_SEARCH_APPLICATIONS"),
+        //     link: `/digit-ui/employee/tl/search/application`
+        // },
+        // {
+        //     label: t("TL_SEARCH_LICENSE"),
+        //     link: `/digit-ui/employee/tl/search/license`,
+        //     role: "TL_CEMP"
+        // }
     ]
 
     links = links.filter(link => link.role ? checkForEmployee(link.role) : true);

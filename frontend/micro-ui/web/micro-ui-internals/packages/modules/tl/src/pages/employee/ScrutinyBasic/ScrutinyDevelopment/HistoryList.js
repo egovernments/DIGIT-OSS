@@ -1,5 +1,5 @@
 
-import React, { useContext, useEffect, useState } from "react";
+import React, { Fragment, useContext, useEffect, useState } from "react";
 
 import { Row, Col, Card, Container, Form, Button } from "react-bootstrap";
 import axios from "axios";
@@ -600,10 +600,13 @@ const Resp = await axios.post(`/tl-services/new/license/pdf?applicationNumber=${
                          <i>{<div dangerouslySetInnerHTML={{__html: item.remarks}}/>}</i>
 
                          <br></br>
+                         { item?.docId &&
+                            <Fragment>
                          <div style={{textAlign:"right"}}>
-                         <div className="btn btn-sm col-md-2">
+                         {/* <div className="btn btn-sm col-md-2">
+                          
               <IconButton
-                // onClick={() => getDocShareholding(personalinfo?.devDetail?.aurthorizedUserInfoArray?.[0]?.uploadBoardResolution)}
+               
                 style={{
                   color: " #1266af",
                   fontSize: " 12px",
@@ -620,7 +623,7 @@ const Resp = await axios.post(`/tl-services/new/license/pdf?applicationNumber=${
                 </IconButton>
                 
 
-            </div>
+            </div> */}
             <div className="btn btn-sm col-md-2">
               <IconButton
                 style={{
@@ -637,11 +640,13 @@ const Resp = await axios.post(`/tl-services/new/license/pdf?applicationNumber=${
               ><Visibility color="info" className="icon" />
                 
               </IconButton>
+              <h1>View Document</h1>
             </div>
                           </div>
 
                     
-                             
+                          </Fragment>
+                      }     
                           </div>
                         );
                       })
