@@ -154,6 +154,7 @@ pt_total_applications = {'path': 'property-application/_search',
                                  }
 
 def extract_pt_no_of_properties_paid(metrics, region_bucket):
+    logging.info
     metrics['noOfPropertiesPaidToday'] = region_bucket.get('noOfPropertiesPaidToday').get('value')  if region_bucket.get('noOfPropertiesPaidToday')  else 0
     return metrics
 
