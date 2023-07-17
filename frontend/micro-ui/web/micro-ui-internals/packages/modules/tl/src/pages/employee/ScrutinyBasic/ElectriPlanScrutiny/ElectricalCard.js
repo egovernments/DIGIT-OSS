@@ -183,33 +183,17 @@ const ElectricalScrutiny = (props) => {
   }, []);
 
   return (
-    <Card>
-      {/* <Card.Header class="fw-normal" style={{ top: 5, padding: 5 , fontSize: 14 ,height:90, lineHeight:2 }}>
-
-        <div className="row">
-          <div className="col-md-3">
-            <p>Application Number:</p>
-            <p class="fw-normal">{id}</p>
-          </div>
-          <div className="col-md-2">
-            <p>Service Id: </p>
-            <p class="fw-normal">{applicationData?.businessService}</p>
-          </div>
-          <div className="col-md-3">
-            <p>TCP Application Number:</p>
-            <p class="fw-normal">{applicationData?.tcpApplicationNumber}</p>
-          </div>
-          <div className="col-md-2">
-            <p>TCP Case Number:</p>
-            <p class="fw-normal">{applicationData?.tcpCaseNumber}</p>
-          </div>
-          <div className="col-md-2">
-            <p>TCP Dairy Number: </p>
-            <p class="fw-normal">{applicationData?.tcpDairyNumber}</p>
-          </div>
-        </div>
-  </Card.Header>{" "}*/}
-      <Card.Header className="head-application">
+    <Card className="formColorEmp" style={{ marginTop: "40px" }}>
+      <div style={{
+      position: "fixed",
+      top: "89px",
+      width: "100%",
+      left: "0",
+      paddingLeft: "62px",
+      zIndex: 9
+    }}>
+      
+      {/* <Card.Header className="head-application">
         <div className="row fw-normal">
           <div className="col-sm-2">
             <b>
@@ -226,7 +210,7 @@ const ElectricalScrutiny = (props) => {
             <b>
               <p className="head-font">
                 {applicationData?.businessService}
-                {/* Licence */}
+            
               </p>
             </b>
           </div>
@@ -234,7 +218,7 @@ const ElectricalScrutiny = (props) => {
             <b>
               <p className="head-font">TCP Application Number:</p>
             </b>
-            {/* {item.name.substring(0, 4)} */}
+           
             <b>
               <p className="head-font">{applicationData?.tcpApplicationNumber}</p>
             </b>
@@ -255,11 +239,48 @@ const ElectricalScrutiny = (props) => {
               <p className="head-font">{applicationData?.tcpDairyNumber}</p>
             </b>
           </div>
-          {/* <div className="col-sm-2">
-            <Button style={{ textAlign: "right" }} value="Submit" id="Submit" onChange1={handleChange} name="Submit" onClick={handleshow19}>Views PDF</Button>
-          </div> */}
+          
         </div>
-      </Card.Header>
+      </Card.Header> */}
+
+      <Card className="head-application1">
+          <div className="d-flex justify-content-between">
+            <div className="px-3">
+              <b><p className="head-font">Application Number:</p></b>
+              <b><p className="head-font">{id}</p></b>
+            </div>
+            <div className="px-3">
+              <b><p className="head-font">Service Id: </p></b>
+              <b><p className="head-font">
+                {/* {applicationData?.businessService} ask to renuka */}
+                {applicationData?.businessService}
+              </p></b>
+            </div>
+            <div className="px-3">
+              <b><p className="head-font">TCP Application Number:</p></b>
+              {/* {item.name.substring(0, 4)} */}
+              <b><p className="head-font">
+              {/* {applicationData?.tcpApplicationNumber.substring(7, 20)} */}
+                {applicationData?.tcpApplicationNumber}</p></b>
+            </div>
+            <div className="px-3">
+              <b><p className="head-font">TCP Case Number:</p></b>
+              <b><p className="head-font">
+              {/* {applicationData?.tcpCaseNumber.substring(0, 7)} */}
+                {applicationData?.tcpCaseNumber}</p></b>
+            </div>
+            <div className="px-3">
+              <b><p className="head-font">TCP Diary Number: </p></b>
+              <b><p className="head-font">{applicationData?.tcpDairyNumber}</p></b>
+
+            </div>
+            <div className="px-3">
+              <Button style={{ textAlign: "right" }} value="Submit" id="Submit" onChange1={handleChange} name="Submit" onClick={handleshow19}>View PDF</Button>
+            </div>
+          </div>
+        </Card>
+        </div>
+     
       <Row style={{ top: 10, padding: 10 }}>
         <ElecticalBase
           histeroyData={workflowDetailsTemp}
@@ -267,6 +288,11 @@ const ElectricalScrutiny = (props) => {
           applicationNumber={id}
           refreshScrutinyData={getScrutinyData}
           applicationStatus={status}
+          // mDMSData={mDMSData}
+          // dataMDMS={dataProfrma}
+          // dataProfrmaFileds={profrmaData}
+          // profrmaID={profrmaDataID}
+          applicationimp={applicationData}
         ></ElecticalBase>
       </Row>
       {/* {JSON.stringify(scrutinyDetails)} */}
