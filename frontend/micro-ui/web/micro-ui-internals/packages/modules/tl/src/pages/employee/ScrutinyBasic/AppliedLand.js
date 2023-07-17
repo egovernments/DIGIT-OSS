@@ -361,7 +361,7 @@ const AppliedLandinfo = (props) => {
         console.log("filteration value111", fieldPresent, fieldPresent[0]?.isApproved);
         if (fieldPresent && fieldPresent.length) {
           console.log("filteration value111", fieldPresent, fieldPresent[0]?.isApproved);
-          tempFieldColorState = { ...tempFieldColorState, [item.key]: fieldPresent[0].isApproved === "In Order" ? Colors.approved : fieldPresent[0].isApproved === "Not In Order" ? Colors.disapproved : fieldPresent[0].isApproved === "Order With Conditions" ? Colors.Conditional : Colors.info }
+          tempFieldColorState = { ...tempFieldColorState, [item.key]: fieldPresent[0].isApproved === "In Order" ? Colors.approved : fieldPresent[0].isApproved === "Not In Order" ? Colors.disapproved : fieldPresent[0].isApproved === "In Order With Conditions" ? Colors.Conditional : Colors.info }
 
         }
       }
@@ -497,6 +497,64 @@ const AppliedLandinfo = (props) => {
       </div>
     );
   };
+
+
+//   const openMapWindow = async () => {
+//     const key = globalConfigs?.getConfig("GMAPS_API_KEY");
+//     console.log("regerg",kmlFile)
+//     const url = await getDocShareholding(watch("dgpsFileStoreId"), setLoader,true)
+//     console.log("URL",url)
+//     if (kmlFile) {
+      
+//       // window.localStorage.setItem('kmlFile', kmlFile);
+//       // window.open('/map', '_blank');
+      
+//       // return;
+//       const mapHtml = `
+//       <!DOCTYPE html>
+// <html>
+// <head>
+//   <title>Display KML on Google Maps</title>
+//   <script src="https://maps.googleapis.com/maps/api/js?key=${key}"></script>
+// </head>
+// <body>
+//   <div id="map" style="height: 500px; width: 100%;"></div>
+//       <button id="renderBtn" onclick="initializeMap()" style="display:none;" >Render BTN</button>
+//   <script>
+//     function initializeMap() {
+//       var mapOptions = {
+//         zoom: 11,
+//         center: new google.maps.LatLng(50.45, 30.52)
+//       };
+
+//       var map = new google.maps.Map(document.getElementById('map'), mapOptions);
+//       var kmlUrl = '${url}';
+
+//       var kmlOptions = {
+//         preserveViewport: false,
+//         map: map
+//       };
+
+//       var kmlLayer = new google.maps.KmlLayer(kmlUrl, kmlOptions);
+
+//       console.log("logger123...",kmlLayer,kmlUrl)
+//     }
+
+//     google.maps.event.addDomListener(window, 'load', initializeMap);
+//     initializeMap();
+//   </script>
+// </body>
+// </html>
+
+//       `;
+
+//       const mapWindow = window.open("","blank")
+//       mapWindow.document.write(mapHtml);
+//       mapWindow.document.getElementById("renderBtn").click();
+//     }
+//   };
+
+
 
 
 

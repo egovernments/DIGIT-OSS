@@ -21311,7 +21311,7 @@ color: #fff !important;
     left:50%; */
 }
 .stateEmployeeLogin{
-  height:80px;
+  /* height:80px; */
     width:100px;
     margin:-25px auto 0 -25px;
     /* background:grey; */
@@ -21320,7 +21320,7 @@ color: #fff !important;
     /* position:absolute; */
     margin-top: 5px;
     margin-right: 10px;
-    margin-left: -15px;
+    margin-left: 15px;
     align-items: center;
     
     
