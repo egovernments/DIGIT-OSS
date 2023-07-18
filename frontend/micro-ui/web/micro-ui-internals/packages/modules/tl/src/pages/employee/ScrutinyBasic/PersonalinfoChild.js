@@ -208,7 +208,7 @@ const PersonalinfoChild = (props) => {
         console.log("filteration value", fieldPresent, fieldPresent[0]?.isApproved);
         if (fieldPresent && fieldPresent.length) {
           console.log("filteration value1", fieldPresent, fieldPresent[0]?.isApproved);
-          tempFieldColorState = { ...tempFieldColorState, [item.key]: fieldPresent[0].isApproved === "In Order" ? Colors.approved : fieldPresent[0].isApproved === "Not In Order" ? Colors.disapproved : fieldPresent[0].isApproved === "Order With Conditions" ? Colors.Conditional : Colors.info }
+          tempFieldColorState = { ...tempFieldColorState, [item.key]: fieldPresent[0].isApproved === "In Order" ? Colors.approved : fieldPresent[0].isApproved === "Not In Order" ? Colors.disapproved : fieldPresent[0].isApproved === "In Order With Conditions" ? Colors.Conditional : Colors.info }
 
         }
       }
@@ -309,13 +309,13 @@ const PersonalinfoChild = (props) => {
         remarksUpdate={currentRemarks}
         applicationStatus={applicationStatus}
       ></ModalChild>
-      <label className="card-title fw-bold" style={{ margin: 10 }} htmlFor="Developer Details">
+      <label className="card-title fw-bold"  style={{ margin: 10 }} htmlFor="Developer Details">
         {`${t("NWL_APPLICANT_DEVELOPER_INFORMATION")}`}
 
 
         {/* <span class="text-danger font-weight-bold mx-2">*</span> */}
       </label>
-      {/* <h5 className="card-title fw-bold" style={{ margin: 10 }}> &nbsp; Developer Information</h5> */}
+      {/* <h5  style={{ margin: 10 }}> &nbsp; Developer Information</h5> */}
       {/* "Limited Liability Partnership"  && "Hindu Undivided Family" && "Partnership Firm" &&  "Proprietorship Firm" && */}
       {/* {personalinfo?.devDetail?.addInfo?.showDevTypeFields === "Individual" && */}
 
@@ -768,9 +768,9 @@ const PersonalinfoChild = (props) => {
         <div>
 
           <div style={{ display: "flex" }}>
-            {/* <h5 className="card-title fw-bold" > &nbsp;&nbsp; 1. Director Information as per MCA &nbsp;&nbsp;</h5> */}
-            <label htmlFor="LLP NUMBER" className="card-title fw-bold">
-              {`${t("NWL_APPLICANT_1_DIRECTOR_INFOMATION_AS_PER_MCA")}`}
+            {/* <h5  > &nbsp;&nbsp; 1. Director Information as per MCA &nbsp;&nbsp;</h5> */}
+            <label  className="card-title fw-bold" htmlFor="LLP NUMBER" >
+            &nbsp; &nbsp;&nbsp;&nbsp; {`${t("NWL_APPLICANT_1_DIRECTOR_INFOMATION_AS_PER_MCA")}`}
               <span class="text-danger font-weight-bold mx-2">*</span>
             </label>
 
@@ -859,7 +859,7 @@ const PersonalinfoChild = (props) => {
             <h5 className="card-title fw-bold" > &nbsp; &nbsp;&nbsp; {`${t("NWL_APPLICANT_1_DIRECTOR_INFOMATION_AS_PER_DEVELOPER")}`}
               {/* Directors Information &nbsp;&nbsp; */}
             </h5>
-            {/* <label htmlFor="LLP NUMBER" className="card-title fw-bold">
+            {/* <label htmlFor="LLP NUMBER" >
                             {`${t("NWL_APPLICANT_1_DIRECTOR_INFOMATION_AS_PER_MCA")}`}
                             <span class="text-danger font-weight-bold mx-2">*</span>
                           </label> */}
@@ -974,7 +974,7 @@ const PersonalinfoChild = (props) => {
 
           <div div style={{ display: "flex" }}>
             <h5 className="card-title fw-bold">
-              {`${t("NWL_APPLICANT_SHAREHOLDING_PATTERNS")}`}
+            &nbsp; &nbsp;&nbsp;&nbsp; {`${t("NWL_APPLICANT_SHAREHOLDING_PATTERNS")}`}
               {/* &nbsp;&nbsp;&nbsp; Shareholding Patterns &nbsp;&nbsp; */}
             </h5>
 
@@ -1093,9 +1093,9 @@ const PersonalinfoChild = (props) => {
       }
 
 
-      <h5 className="card-title fw-bold" >
+      <h5  className="card-title fw-bold">
         {/* &nbsp; &nbsp;&nbsp; Authorized Person Information  &nbsp;&nbsp; */}
-        {`${t("NWL_APPLICANT_AUTHORIZED_PERSON_INFORMATION")}`}
+        &nbsp; &nbsp;&nbsp; {`${t("NWL_APPLICANT_AUTHORIZED_PERSON_INFORMATION")}`}
       </h5>
       {/* <ReportProblemIcon
               style={{
@@ -1119,7 +1119,7 @@ const PersonalinfoChild = (props) => {
             <h5 className={classes.formLabel} >Name &nbsp;</h5>
           </Form.Label>
           <span className={classes.required}>*</span> &nbsp;&nbsp; */}
-          <label htmlFor="NAME" className="card-title fw-bold">
+          <label htmlFor="NAME" >
             {`${t("NWL_APPLICANT_AUTHORIZED_NAME")}`}
             <span class="text-danger font-weight-bold mx-2">*</span>
           </label>
@@ -1158,7 +1158,7 @@ const PersonalinfoChild = (props) => {
             <span className={classes.required}>*</span> &nbsp;&nbsp; */}
             {/* <ReportProblemIcon style={{ color: warningOrred }} onClick={() => setSmShow(true)}></ReportProblemIcon> */}
 
-            <label htmlFor="NAME" className="card-title fw-bold">
+            <label htmlFor="NAME" >
               {`${t("NWL_APPLICANT_AUTHORIZED_MOBILE_NO")}`}
               <span class="text-danger font-weight-bold mx-2">*</span>
             </label>
@@ -1215,7 +1215,7 @@ const PersonalinfoChild = (props) => {
             
               <h5 className={classes.formLabel} >Emailid for Authorized signatory &nbsp;</h5>
             </Form.Label> */}
-            <label htmlFor="EMAIL" className="card-title fw-bold">
+            <label htmlFor="EMAIL" >
               {`${t("NWL_APPLICANT_EMAILID_FOR_AUTHORIZED_SINGNATORY")}`}
               <span class="text-danger font-weight-bold mx-2">*</span>
             </label>
@@ -1255,7 +1255,7 @@ const PersonalinfoChild = (props) => {
             </Form.Label>
             <span className={classes.required}>*</span> */}
 
-            <label htmlFor="PAN" className="card-title fw-bold">
+            <label htmlFor="PAN" >
               {`${t("NWL_APPLICANT_AUTHORIZED_PAN_NUMBER")}`}
               <span class="text-danger font-weight-bold mx-2">*</span>
             </label>
@@ -1292,7 +1292,7 @@ const PersonalinfoChild = (props) => {
               <h5 className={classes.formLabel} >Digital Signature &nbsp;</h5>
             </Form.Label> */}
 
-            <label htmlFor="PAN" className="card-title fw-bold">
+            <label htmlFor="PAN" >
               {`${t("NWL_APPLICANT_DIGITAL_SIGNATURE")}`}
               <span class="text-danger font-weight-bold mx-2">*</span>
             </label>
@@ -1373,7 +1373,7 @@ const PersonalinfoChild = (props) => {
           <div>
             
 
-            <label htmlFor="PAN" className="card-title fw-bold">
+            <label htmlFor="PAN" >
               {`${t("NWL_APPLICANT_BOARD_RESOLUTION")}`}
               <span class="text-danger font-weight-bold mx-2">*</span>
             </label>
@@ -1475,12 +1475,283 @@ const PersonalinfoChild = (props) => {
           </div>
         </Col> */}
       </Row>
+
+
+      <Row className={[classes.row, "ms-auto"]}>
+            <div className="col col-4">
+            <div>
+             <h2 style={{ display: "flex" }}>
+                {`${t("NWL_UPLOAD_BOARD_RESOLUTION")}`}
+                {/* Upload Board resolution  */}
+              </h2>
+          </div>
+          <div className={classes.fieldContainer}>
+         
+         {/* {
+          personalinfo?.devDetail?.aurthorizedUserInfoArray?.[0]?.uploadBoardResolution && 
+          <Fragment> */}
+            <div className="btn btn-sm col-md-2">
+              <IconButton
+             
+                style={{
+                  color: " #1266af",
+                  fontSize: " 12px",
+                  fontWeight: "bold",
+                  cursor: "pointer",
+                  textDecorationLine: "underline",
+                }}
+                onClick={() => {
+                  if (personalinfo?.uploadBoardResolution) getDocShareholding(personalinfo?.uploadBoardResolution, setLoader);
+                  else setShowToastError({ label: "No Document here", error: true, success: false });
+                }}
+              >
+                <Visibility color="info" className="icon" /></IconButton>
+
+            </div>
+            <div className="btn btn-sm col-md-5">
+              <IconButton
+                style={{
+                  color: " #1266af",
+                  fontSize: " 12px",
+                  fontWeight: "bold",
+                  cursor: "pointer",
+                  textDecorationLine: "underline",
+                }}
+                onClick={() => {
+                  if (personalinfo?.boardResolutionDoc) getDocShareholding(personalinfo?.boardResolutionDoc, setLoader);
+                  else setShowToastError({ label: "No Document here", error: true, success: false });
+                }}
+              >
+                <FileDownload color="primary" className="mx-1" />
+              </IconButton>
+            </div>
+            <div className="btn btn-sm col-md-5">
+              <ReportProblemIcon
+                style={{
+                  display: hideRemarksPatwari && showReportProblemIcon("NWL_UPLOAD_BOARD_RESOLUTION") ? "block" : "none",
+
+                  color: fieldIconColors.pin
+                }}
+                onClick={() => {
+                  setOpennedModal("uploadBoardResolution")
+                  setLabelValue("NWL_UPLOAD_BOARD_RESOLUTION"),
+                    setSmShow(true),
+                    setDocModal(true),
+                    console.log("modal open"),
+                    setFieldValue(personalinfo !== null ? personalinfo?.boardResolutionDoc : null);
+                }}
+              ></ReportProblemIcon>
+            </div>
+          {/* </Fragment>
+         } */}
+
+            {/* </div> */}
+
+          </div>
+
+             
+            </div>
+            <div className="col col-4">
+            <div>
+             <h2 style={{ display: "flex" }}>
+                {`${t("NWL_CONSENT_OF_ARCHITECT_ALONG")}`}
+                {/* Upload Board resolution  */}
+              </h2>
+          </div>
+          <div className={classes.fieldContainer}>
+         
+         {/* {
+          personalinfo?.devDetail?.aurthorizedUserInfoArray?.[0]?.uploadBoardResolution && 
+          <Fragment> */}
+            <div className="btn btn-sm col-md-2">
+              <IconButton
+             
+                style={{
+                  color: " #1266af",
+                  fontSize: " 12px",
+                  fontWeight: "bold",
+                  cursor: "pointer",
+                  textDecorationLine: "underline",
+                }}
+                onClick={() => {
+                  if (personalinfo?.architectDegreeCertificate) getDocShareholding(personalinfo?.architectDegreeCertificate, setLoader);
+                  else setShowToastError({ label: "No Document here", error: true, success: false });
+                }}
+              >
+                <Visibility color="info" className="icon" /></IconButton>
+
+            </div>
+            <div className="btn btn-sm col-md-5">
+              <IconButton
+                style={{
+                  color: " #1266af",
+                  fontSize: " 12px",
+                  fontWeight: "bold",
+                  cursor: "pointer",
+                  textDecorationLine: "underline",
+                }}
+                onClick={() => {
+                  if (personalinfo?.architectDegreeCertificate) getDocShareholding(personalinfo?.architectDegreeCertificate, setLoader);
+                  else setShowToastError({ label: "No Document here", error: true, success: false });
+                }}
+              >
+                <FileDownload color="primary" className="mx-1" />
+              </IconButton>
+            </div>
+            <div className="btn btn-sm col-md-5">
+              <ReportProblemIcon
+                style={{
+                  display: hideRemarksPatwari && showReportProblemIcon("NWL_CONSENT_OF_ARCHITECT_ALONG") ? "block" : "none",
+
+                  color: fieldIconColors.pin
+                }}
+                onClick={() => {
+                  setOpennedModal("uploadBoardResolution")
+                  setLabelValue("NWL_CONSENT_OF_ARCHITECT_ALONG"),
+                    setSmShow(true),
+                    setDocModal(true),
+                    console.log("modal open"),
+                    setFieldValue(personalinfo !== null ? personalinfo?.architectDegreeCertificate : null);
+                }}
+              ></ReportProblemIcon>
+            </div>
+          {/* </Fragment>
+         } */}
+
+            {/* </div> */}
+
+          </div>
+
+
+
+
+
+              {/* <h2 style={{ display: "flex" }}>
+                {`${t("NWL_CONSENT_OF_ARCHITECT_ALONG")}`}
+            
+              </h2>
+              <label>
+                <FileDownload style={{ cursor: "pointer" }} color="primary" />
+                <input
+                  type="file"
+                  style={{ display: "none" }}
+                  accept="application/pdf/jpeg/png"
+                  onChange={(e) => getDocumentData(e?.target?.files[0], "architectDegreeCertificate")}
+                />
+              </label>
+
+              {watch("architectDegreeCertificate") && (
+                <a onClick={() => getDocShareholding(watch("architectDegreeCertificate"), setLoader)} className="btn btn-sm ">
+                  <Visibility color="info" className="icon" />
+                </a>
+              )} */}
+            </div>
+            <div className="col col-4">
+
+            <div>
+             <h2 style={{ display: "flex" }}>
+             {`${t("NWL_CONSENT_OF_ENGINEER")}`}
+                {/* Upload Board resolution  */}
+              </h2>
+          </div>
+          <div className={classes.fieldContainer}>
+         
+         {/* {
+          personalinfo?.devDetail?.aurthorizedUserInfoArray?.[0]?.uploadBoardResolution && 
+          <Fragment> */}
+            <div className="btn btn-sm col-md-2">
+              <IconButton
+             
+                style={{
+                  color: " #1266af",
+                  fontSize: " 12px",
+                  fontWeight: "bold",
+                  cursor: "pointer",
+                  textDecorationLine: "underline",
+                }}
+                onClick={() => {
+                  if (personalinfo?.engineerDegreeCertificate) getDocShareholding(personalinfo?.engineerDegreeCertificate, setLoader);
+                  else setShowToastError({ label: "No Document here", error: true, success: false });
+                }}
+              >
+                <Visibility color="info" className="icon" /></IconButton>
+
+            </div>
+            <div className="btn btn-sm col-md-5">
+              <IconButton
+                style={{
+                  color: " #1266af",
+                  fontSize: " 12px",
+                  fontWeight: "bold",
+                  cursor: "pointer",
+                  textDecorationLine: "underline",
+                }}
+                onClick={() => {
+                  if (personalinfo?.engineerDegreeCertificate) getDocShareholding(personalinfo?.engineerDegreeCertificate, setLoader);
+                  else setShowToastError({ label: "No Document here", error: true, success: false });
+                }}
+              >
+                <FileDownload color="primary" className="mx-1" />
+              </IconButton>
+            </div>
+            <div className="btn btn-sm col-md-5">
+              <ReportProblemIcon
+                style={{
+                  display: hideRemarksPatwari && showReportProblemIcon("NWL_CONSENT_OF_ENGINEER") ? "block" : "none",
+
+                  color: fieldIconColors.pin
+                }}
+                onClick={() => {
+                  setOpennedModal("uploadBoardResolution")
+                  setLabelValue("NWL_CONSENT_OF_ENGINEER"),
+                    setSmShow(true),
+                    setDocModal(true),
+                    console.log("modal open"),
+                    setFieldValue(personalinfo !== null ? personalinfo?.engineerDegreeCertificate : null);
+                }}
+              ></ReportProblemIcon>
+            </div>
+          {/* </Fragment>
+         } */}
+
+            {/* </div> */}
+
+          </div>
+
+
+
+
+
+              {/* New */}
+              {/* <h2 style={{ display: "flex" }}>
+                {`${t("NWL_CONSENT_OF_ENGINEER")}`}
+               
+              </h2>
+              <label>
+                <FileDownload style={{ cursor: "pointer" }} color="primary" />
+                <input
+                  type="file"
+                  style={{ display: "none" }}
+                  accept="application/pdf/jpeg/png"
+                  onChange={(e) => getDocumentData(e?.target?.files[0], "engineerDegreeCertificate")}
+                />
+              </label>
+
+              {watch("engineerDegreeCertificate") && (
+                <a onClick={() => getDocShareholding(watch("engineerDegreeCertificate"), setLoader)} className="btn btn-sm ">
+                  <Visibility color="info" className="icon" />
+                </a>
+              )} */}
+            </div>
+          </Row>
+
+
       {/* <Row>
       <Col md={4} xxl lg="4">
           <div>
           
             
-            <label htmlFor="PAN" className="card-title fw-bold">
+            <label htmlFor="PAN" >
                             {`${t("NWL_APPLICANT_BOARD_RESOLUTION")}`}
                             <span class="text-danger font-weight-bold mx-2">*</span>
                           </label>

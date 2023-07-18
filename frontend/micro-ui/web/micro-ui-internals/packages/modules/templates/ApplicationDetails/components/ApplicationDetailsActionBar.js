@@ -6,7 +6,7 @@ import axios from "axios";
 import { Button } from "react-bootstrap";
 // import Button from '@mui/material/Button';
 
-function ApplicationDetailsActionBar({ workflowDetails, displayMenu, onActionSelect, ApplicationNumber, setDisplayMenu, businessService, forcedActionPrefix,ActionBarStyle={},MenuStyle={} }) {
+function ApplicationDetailsActionBar({ workflowDetails, displayMenu, onActionSelect, ApplicationNumber, setDisplayMenu, businessService, forcedActionPrefix,ActionBarStyle={},MenuStyle={} ,disabled=false }) {
 
   const { t } = useTranslation();
 
@@ -113,7 +113,7 @@ function ApplicationDetailsActionBar({ workflowDetails, displayMenu, onActionSel
           
          
       
-          <SubmitBar style={{marginLeft: 20}} label={t("WF_TAKE_ACTION")} onSubmit={() => setDisplayMenu(!displayMenu)} />
+          <SubmitBar style={{marginLeft: 20}} label={t("WF_TAKE_ACTION")} onSubmit={() => setDisplayMenu(!displayMenu)} disabled = {disabled} />
          
          
 

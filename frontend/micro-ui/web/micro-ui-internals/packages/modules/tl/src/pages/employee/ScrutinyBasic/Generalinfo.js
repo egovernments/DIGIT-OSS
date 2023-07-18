@@ -397,7 +397,7 @@ const Genarelinfo = (props) => {
         console.log("filteration value111", fieldPresent, fieldPresent[0]?.isApproved);
         if (fieldPresent && fieldPresent.length) {
           console.log("filteration value111", fieldPresent, fieldPresent[0]?.isApproved);
-          tempFieldColorState = { ...tempFieldColorState, [item.key]: fieldPresent[0].isApproved === "In Order" ? Colors.approved : fieldPresent[0].isApproved === "Not In Order" ? Colors.disapproved : fieldPresent[0].isApproved === "Order With Conditions" ? Colors.conditional : Colors.info }
+          tempFieldColorState = { ...tempFieldColorState, [item.key]: fieldPresent[0].isApproved === "In Order" ? Colors.approved : fieldPresent[0].isApproved === "Not In Order" ? Colors.disapproved : fieldPresent[0].isApproved === "In Order With Conditions" ? Colors.conditional : Colors.info }
 
         }
       }
@@ -507,7 +507,7 @@ const Genarelinfo = (props) => {
                     Purpose Of Licence  <span style={{ color: "red" }}>*</span>
                   </h5>
                 </Form.Label> */}
-            <label className="card-title fw-bold" style={{ margin: 10 }} htmlFor="Developer Details">
+            <label  style={{ margin: 10 }} htmlFor="Developer Details">
               {`${t("NWL_APPLICANT_PURPOSE_OF_LICENCE")}`}
               <span class="text-danger font-weight-bold mx-2">*</span>
             </label>
@@ -1671,9 +1671,10 @@ const Genarelinfo = (props) => {
           <div class="col-sm-6 text-left">
 
           </div>
-          <div class="col-sm-6 text-right">
-            {`${t("NWL_APPLICANT_TOTAL_AREA_LAND_SCHEDULE")}`}  : {applicantInfoPersonal?.totalArea}
+          <div class="col-sm-5 text-right">
+            {`${t("NWL_APPLICANT_TOTAL_AREA_LAND_SCHEDULE")}`} &nbsp; :&nbsp;  {applicantInfoPersonal?.totalArea}
           </div>
+          <div class="col-sm-1 text-right"></div>
         </div>
         {/* <div className="row" style={{ margin: 10 , textAlign:""}}>
             {`${t("NWL_APPLICANT_TOTAL_AREA_LAND_SCHEDULE")}`}  : {applicantInfoPersonal?.totalArea}
