@@ -356,12 +356,13 @@ const AppliedDetailForm = (props) => {
     try {
       const Resp = await axios.post("/filestore/v1/files", formData, {});
       setValue(fieldName, Resp?.data?.files?.[0]?.fileStoreId);
-      if(noValidation){
+      if (noValidation) {
         setSelectedFiles([...selectedFiles, file.name]);
       }
       setLoader(false);
       setShowToastError({ label: "File Uploaded Successfully", error: false, success: true });
     } catch (error) {
+      setShowToastError({ label: error?.response?.data?.Errors[0]?.message, error: true, success: false });
       setLoader(false);
       return error;
     }
@@ -607,7 +608,6 @@ const AppliedDetailForm = (props) => {
     );
   };
 
-
   const [kmlFile, setKmlFile] = useState(null);
 
   const handleFileUpload = (event) => {
@@ -619,19 +619,16 @@ const AppliedDetailForm = (props) => {
     // };
 
     // reader.readAsText(file);
-    setKmlFile(URL.createObjectURL(file))
+    setKmlFile(URL.createObjectURL(file));
   };
 
   const openMapWindow = async () => {
     const key = globalConfigs?.getConfig("GMAPS_API_KEY");
-    console.log("regerg",kmlFile)
-    const url = await getDocShareholding(watch("dgpsFileStoreId"), setLoader,true)
-    console.log("URL",url)
+    const url = await getDocShareholding(watch("dgpsFileStoreId"), setLoader, true);
     if (kmlFile) {
-      
       // window.localStorage.setItem('kmlFile', kmlFile);
       // window.open('/map', '_blank');
-      
+
       // return;
       const mapHtml = `
       <!DOCTYPE html>
@@ -671,12 +668,11 @@ const AppliedDetailForm = (props) => {
 
       `;
 
-      const mapWindow = window.open("","blank")
+      const mapWindow = window.open("", "blank");
       mapWindow.document.write(mapHtml);
       mapWindow.document.getElementById("renderBtn").click();
     }
   };
-
 
   return (
     <div>
@@ -727,12 +723,11 @@ const AppliedDetailForm = (props) => {
                         style={{ display: "none" }}
                         onChange={(e) => {
                           const checkType = e?.target?.files[0]?.type;
-                          console.log("ergergergreg",checkType)
                           // if (checkType != ".kml") {
                           //   setShowToastError({ label: "Please select .kml file", error: true, success: false });
                           // } else {
-                            handleFileUpload(e);
-                            getDocumentData(e?.target?.files[0], "dgpsFileStoreId",true);
+                          handleFileUpload(e);
+                          getDocumentData(e?.target?.files[0], "dgpsFileStoreId", true);
                           // }
                         }}
                         accept=".kml"
@@ -746,7 +741,7 @@ const AppliedDetailForm = (props) => {
                         type="button"
                         variant="primary"
                         onClick={() => {
-                          openMapWindow()
+                          openMapWindow();
                         }}
                       >
                         {`${t("VIEW_DGPS_POINT_ON_MAP")}`}
@@ -771,7 +766,6 @@ const AppliedDetailForm = (props) => {
                           onClick={() => {
                             if (!_.isEmpty(showError)) {
                               const status = Object.keys(showError).every((k) => showError[k]);
-                              console.log(status);
                               setShowToastError({ key: "error" });
                               setToastMessage("Please fill enter all DGPS Points");
                             } else
@@ -1088,7 +1082,7 @@ const AppliedDetailForm = (props) => {
                             type="number"
                             className="form-control"
                             {...register(`dgpsDetails.${index}.longitude`)}
-                          // onBlur={() => setShowError({ ...showError, [`dgpsPointLongitude${index}`]: true })}
+                            // onBlur={() => setShowError({ ...showError, [`dgpsPointLongitude${index}`]: true })}
                           />
                           {/* {showError?.[`dgpsPointLongitude${index}`] && !validateXvalue(watch("dgpsDetails")[index].longitude) ? (
                             <CardLabelError style={{ color: "red" }}>
@@ -1104,7 +1098,7 @@ const AppliedDetailForm = (props) => {
                               type="number"
                               className="form-control"
                               {...register(`dgpsDetails.${index}.latitude`)}
-                            // onBlur={() => setShowError({ ...showError, [`dgpsPointLatitude${index}`]: true })}
+                              // onBlur={() => setShowError({ ...showError, [`dgpsPointLatitude${index}`]: true })}
                             />
                             {index > 3 && (
                               <button type="button" style={{ marginLeft: "40px" }} className="btn btn-primary" onClick={() => remove(index)}>
@@ -1137,9 +1131,9 @@ const AppliedDetailForm = (props) => {
                 type="submit"
                 style={{ width: "190px" }}
                 class="btn btn-primary btn-md center-block mt-3"
-              // onClick={() => {
-              //   validateDgpsPoint();
-              // }}
+                // onClick={() => {
+                //   validateDgpsPoint();
+                // }}
               >
                 Submit
               </button>
