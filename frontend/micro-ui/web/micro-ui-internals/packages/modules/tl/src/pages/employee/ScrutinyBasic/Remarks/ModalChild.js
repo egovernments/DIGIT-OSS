@@ -76,7 +76,7 @@ function ModalChild(props) {
           fieldValue: inputFieldValue,
           fieldIdL: props.labelmodal,
           isApproved: status,
-          isLOIPart: status === "Order With Conditions" ?  true : null ,
+          isLOIPart: status === "In Order With Conditions" ?  true : null ,
           userid: userInfo?.id || null,
           serviceId: "123",
           documentId: null,
@@ -207,14 +207,14 @@ function ModalChild(props) {
           inline
         ></Form.Check>
         <Form.Check
-          checked={status === "Order With Conditions"}
+          checked={status === "In Order With Conditions"}
           onChange={() => {
-            setStatus("Order With Conditions");
+            setStatus("In Order With Conditions");
           }}
           type="radio"
           id="default-radio"
           // label={<CheckCircleIcon color="success"></CheckCircleIcon>}
-          label="Order With Conditions"
+          label="In Order With Conditions"
           name="group0"
           inline
         ></Form.Check>

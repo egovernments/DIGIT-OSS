@@ -98,7 +98,7 @@ const LicenseDetailsScrutiny = (props) => {
         console.log("filteration value", fieldPresent, fieldPresent[0]?.isApproved);
         if (fieldPresent && fieldPresent.length) {
           console.log("filteration value1", fieldPresent, fieldPresent[0]?.isApproved);
-          tempFieldColorState = {...tempFieldColorState,[item.key]:fieldPresent[0].isApproved === "approved" ?Colors.approved: fieldPresent[0].isApproved === "disapproved" ? Colors.disapproved:fieldPresent[0].isApproved === "Order With Conditions" ? Colors.conditional:Colors.info}
+          tempFieldColorState = {...tempFieldColorState,[item.key]:fieldPresent[0].isApproved === "approved" ?Colors.approved: fieldPresent[0].isApproved === "disapproved" ? Colors.disapproved:fieldPresent[0].isApproved === "In Order With Conditions" ? Colors.conditional:Colors.info}
         }
       }
     })

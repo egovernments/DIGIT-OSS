@@ -65,9 +65,11 @@ export const UserService = {
       window.localStorage.clear();
       window.sessionStorage.clear();
       if (userType === "citizen") {
-        window.location.replace("/digit-ui/citizen");
+        // window.location.replace("/digit-ui/citizen");
+        window.location.replace("http://182.79.97.53/");
       } else {
-        window.location.replace("/digit-ui/employee/user/language-selection");
+        // window.location.replace("/digit-ui/employee/user/language-selection");
+        window.location.replace("http://182.79.97.56:82/");
       }
     }
   },

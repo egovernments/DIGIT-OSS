@@ -39,6 +39,8 @@ const ScrutinyFormcontainer = (props) => {
   const { t } = useTranslation();
   const history = useHistory();
   const [loader, setLoader] = useState(false);
+  const [currentUserData, setCurrentUserData] = useState({});
+
   const [displayMenu, setDisplayMenu] = useState(false);
   const [selectedAction, setSelectedAction] = useState(null);
   const [showModal, setShowModal] = useState(false);
@@ -61,7 +63,7 @@ const ScrutinyFormcontainer = (props) => {
   const [profrmaData, setProfrmaData] = useState([]);
   const [profrmaDataID, setProfrmaDataID] = useState([]);
   const [mDmsUpdate, SetMDmsUpdate] = useState();
-  const { setBusinessService } = useContext(ScrutinyRemarksContext)
+  const { setBusinessService, notingRemarksData } = useContext(ScrutinyRemarksContext)
 
   const authToken = Digit.UserService.getUser()?.access_token || null;
   const userInfo = Digit.UserService.getUser()?.info || {};
@@ -70,8 +72,10 @@ const ScrutinyFormcontainer = (props) => {
   let user = Digit.UserService.getUser();
   const userRoles = user?.info?.roles?.map((e) => e.code);
   const showRemarksSection = userRoles.includes("DTCP_HR")
+  const userRolesArrays = userInfo?.roles.filter((user) => user.code !== "EMPLOYEE");
 
   console.log("rolename", filterDataRole);
+  console.log("userRolesArrays", userRolesArrays);
   console.log("userRolesArray", userRolesArray);
   const roleCodeUseAPi = userRolesArray.map((object) => `${object.code}`)
 
@@ -80,7 +84,7 @@ const ScrutinyFormcontainer = (props) => {
   console.log("roleCodeUseAPi", roleCodeUseAPi);
   console.log("showRemarksSection", showRemarksSection);
 
- 
+
 
 
   const handleshow19 = async (e) => {
@@ -475,8 +479,8 @@ const ScrutinyFormcontainer = (props) => {
   const [open, setOpen] = useState(false)
 
   const handleClickOpen = () => {
-      setOpen(true);
-    };
+    setOpen(true);
+  };
 
 
 
@@ -501,12 +505,12 @@ const ScrutinyFormcontainer = (props) => {
         setIsEnableLoader(false);
         let errorValue = err?.response?.data?.Errors?.[0]?.code ? t(err?.response?.data?.Errors?.[0]?.code) : err?.response?.data?.Errors?.[0]?.message || err;
         closeModal();
-        
+
         setShowToast({ key: "error", error: { message: errorValue } });
         setTimeout(closeToast, 3000);
         return;
       }
-      
+
     }
 
 
@@ -542,7 +546,7 @@ const ScrutinyFormcontainer = (props) => {
           queryClient.refetchQueries("APPLICATION_SEARCH");
         },
       });
-     
+
     }
     if (data.Licenses[0].action === "APPROVED_WITH_LOI") {
       setLoader(true);
@@ -641,7 +645,7 @@ const ScrutinyFormcontainer = (props) => {
 
     }
 
-    closeModal(); 
+    closeModal();
 
     setTimeout(() => {
       closeModal()
@@ -679,19 +683,44 @@ const ScrutinyFormcontainer = (props) => {
   const handalfinal = () => {
     setOpen1(false);
     window.location.href = `/digit-ui/employee/tl/inbox`
- }
+  }
+
+  useEffect(() => {
+    let takeActionData = notingRemarksData?.egScrutiny?.find((item) => item.role === userRolesArrays?.[0]?.code && item.applicationStatus === status)
+    setCurrentUserData(takeActionData);
+    console.log("notingRemarksData", notingRemarksData, takeActionData, userRolesArrays?.[0]?.code, notingRemarksData?.egScrutiny ,status);
+  }, [notingRemarksData ,status])
 
   console.log("meri update34", lastUpdate)
+
+
+  const getIsdisabledAction = () => {
+
+
+    if (currentUserData?.notingDetail?.length) {
+      if (!mDMSData?.["common-masters"]?.PerformaNewLicence?.[0]?.active || currentUserData?.performaFieldDetail?.length) {
+        return false
+      }
+    }
+
+    return true
+
+
+  }
+
+
+
+
   return (
-    <Card className="formColorEmp" style={{marginTop:"40px"}}>
+    <Card className="formColorEmp" style={{ marginTop: "40px" }}>
       {loader && <Spinner></Spinner>}
       <div style={{
-            position: "fixed",
-            top: "89px",
-            width: "100%",
-            left:"0",
-            paddingLeft: "62px",
-            zIndex: 9
+        position: "fixed",
+        top: "89px",
+        width: "100%",
+        left: "0",
+        paddingLeft: "62px",
+        zIndex: 9
       }}>
         <Card className="head-application1">
           <div className="d-flex justify-content-between">
@@ -787,6 +816,7 @@ const ScrutinyFormcontainer = (props) => {
             onActionSelect={onActionSelect}
             setDisplayMenu={setDisplayMenu}
             businessService={businessService}
+            disabled={getIsdisabledAction()}
             // forcedActionPrefix={forcedActionPrefix}
             ApplicationNumber={id}
             ActionBarStyle={{}}
@@ -833,8 +863,8 @@ const ScrutinyFormcontainer = (props) => {
     </Dialog> */}
 
 
-    {/* {Dialog Box} */}
-           {/* <Dialog open1={open1} onClose={submitAction} aria-labelledby="alert-dialog-title" aria-describedby="alert-dialog-description" style={{
+          {/* {Dialog Box} */}
+          {/* <Dialog open1={open1} onClose={submitAction} aria-labelledby="alert-dialog-title" aria-describedby="alert-dialog-description" style={{
     textAlign: "center",
     color: "#ffff",
     backgroundColor: "#000000b0"}}>
@@ -858,31 +888,32 @@ const ScrutinyFormcontainer = (props) => {
           </DialogActions>
         </Dialog> */}
 
-<Dialog open={open1} onClose={submitAction} aria-labelledby="alert-dialog-title" aria-describedby="alert-dialog-description" style={{
-    textAlign: "center",
-    color: "#ffff",
-    backgroundColor: "#000000b0"}}>
-          <DialogTitle id="alert-dialog-title" style={{ fontSize: "xx-large", background: "#000000b0" , color: "#ffff"}}>File sent successfully</DialogTitle>
-          <DialogContent style={{ background: "#000000b0"}}>
-            <DialogContentText id="alert-dialog-description" style={{textAlign: "center", color: "#ffff" , fontSize: "x-large"}}>
-              <p ><CheckCircleIcon style={{fontSize: "-webkit-xxx-large;"}}></CheckCircleIcon></p>
-              <p>
-                Thank You {" "}
-                {/* <span>
+          <Dialog open={open1} onClose={submitAction} aria-labelledby="alert-dialog-title" aria-describedby="alert-dialog-description" style={{
+            textAlign: "center",
+            color: "#ffff",
+            backgroundColor: "#000000b0"
+          }}>
+            <DialogTitle id="alert-dialog-title" style={{ fontSize: "xx-large", background: "#000000b0", color: "#ffff" }}>File sent successfully</DialogTitle>
+            <DialogContent style={{ background: "#000000b0" }}>
+              <DialogContentText id="alert-dialog-description" style={{ textAlign: "center", color: "#ffff", fontSize: "x-large" }}>
+                <p ><CheckCircleIcon style={{ fontSize: "-webkit-xxx-large;" }}></CheckCircleIcon></p>
+                <p>
+                  Thank You {" "}
+                  {/* <span>
                   <CheckCircleOutlineIcon style={{ color: "blue", variant: "filled" }} />
                 </span> */}
-              </p>
-              {/* <p>
+                </p>
+                {/* <p>
                 The File sent successfully !!<span style={{ padding: "5px", color: "blue" }}></span> 
               </p> */}
-            </DialogContentText>
-          </DialogContent>
-          <DialogActions>
-            <Button onClick={handalfinal} autoFocus>
-              Ok
-            </Button>
-          </DialogActions>
-        </Dialog>
+              </DialogContentText>
+            </DialogContent>
+            <DialogActions>
+              <Button onClick={handalfinal} autoFocus>
+                Ok
+              </Button>
+            </DialogActions>
+          </Dialog>
 
         </Row>
       </Row>

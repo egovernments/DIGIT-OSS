@@ -592,14 +592,14 @@ const ApllicantPuropseForm = (props) => {
   const { data: DistrictType } = Digit.Hooks.obps.useMDMS(stateId, "common-masters", ["District"]);
 
   useEffect(() => {
-    //     isActive
-    // :
-    // 1
-
-    const purpose = PurposeType?.["common-masters"]?.Purpose?.map(function (data) {
-      return { value: data?.purposeCode, label: data?.name };
+    // const purpose = PurposeType?.["common-masters"]?.Purpose?.map(function (data) {
+    //   return data;
+    // });
+    const filteredData = PurposeType?.["common-masters"]?.Purpose?.filter((item) => item.isActive == "1");
+    const test = filteredData?.map((item) => {
+      return { value: item?.purposeCode, label: item?.name };
     });
-    setPurposeOptions({ data: purpose, isLoading: false });
+    setPurposeOptions({ data: test, isLoading: false });
   }, [PurposeType]);
 
   useEffect(() => {
