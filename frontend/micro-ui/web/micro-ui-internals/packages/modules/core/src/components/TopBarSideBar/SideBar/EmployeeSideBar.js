@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from "react";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
+import { NotificationBell } from "./svgindex";
 
 const ToolTipWrapper = ({ child, label, t }) => (
   <span className="tooltip">
@@ -67,7 +68,7 @@ const EmployeeSideBar = () => {
       </Link>
       <a href={getRedirectionUrl()}>
         <div className="actions">
-          <ToolTipWrapper
+          <NotificationBell
             child={
               <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24">
                 <path d="M0 0h24v24H0z" fill="none" />
@@ -105,6 +106,33 @@ const EmployeeSideBar = () => {
           />
         </div>
       </a>
+
+
+      <a href={ke.includes("DASHBOARD") ? `/employee/integration/dss/${NATADMIN ? "NURT_DASHBOARD" : "TRACTKER"}` : "/digit-ui/employee/tl/Records"}>
+        <div className="actions">
+          <ToolTipWrapper
+            child={
+              ke.includes("DASHBOARD") ? (
+                <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M0 10H8V0H0V10ZM0 18H8V12H0V18ZM10 18H18V8H10V18ZM10 0V6H18V0H10Z" fill="white" />
+                </svg>
+              ) : (
+                <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24" title="National DSS Tractker">
+                  <path d="M0 0h24v24H0z" fill="none" />
+                  <path
+                    d="M20 6h-4V4c0-1.11-.89-2-2-2h-4c-1.11 0-2 .89-2 2v2H4c-1.11 0-1.99.89-1.99 2L2 19c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V8c0-1.11-.89-2-2-2zm-6 0h-4V4h4v2z"
+                    fill="white"
+                  />
+                </svg>
+              )
+            }
+            t={t}
+            label={ke}
+          />
+        </div>
+      </a>
+
+
       {/* <a href="/employee/integration/dss/home">
         <div className="actions">
           <ToolTipWrapper

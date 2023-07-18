@@ -133,7 +133,7 @@ function ModalChild(props) {
 
   return (
     <div>
-      <React.Fragment>
+      {/* <React.Fragment> */}
     <Modal
       size="lg"
       className="modal-lg modal-center"
@@ -257,7 +257,7 @@ function ModalChild(props) {
         </div> */}
       </Modal.Body>
     </Modal>
-    <Dialog open={open} onClose={handlemodalsubmit} aria-labelledby="alert-dialog-title" aria-describedby="alert-dialog-description" style={{
+    {/* <Dialog open={open} onClose={handlemodalsubmit} aria-labelledby="alert-dialog-title" aria-describedby="alert-dialog-description" style={{
     textAlign: "center",
     color: "#ffff",
     backgroundColor: "#000000b0"}}>
@@ -267,9 +267,7 @@ function ModalChild(props) {
               <p ><CheckCircleIcon style={{fontSize: "-webkit-xxx-large;"}}></CheckCircleIcon></p>
               <p>
                 Thank You {" "}
-                {/* <span>
-                  <CheckCircleOutlineIcon style={{ color: "blue", variant: "filled" }} />
-                </span> */}
+                
               </p>
               <p>
                 The Remarks was submitted successfully !!<span style={{ padding: "5px", color: "blue" }}></span> 
@@ -281,8 +279,8 @@ function ModalChild(props) {
               Ok
             </Button>
           </DialogActions>
-        </Dialog>
-        </React.Fragment>
+        </Dialog> */}
+        {/* </React.Fragment> */}
         </div>
   );
 }
