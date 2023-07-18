@@ -173,7 +173,7 @@ const LandScheduleForm = (props) => {
     setYypeOfLand({ data: landType, isLoading: false });
   }, [LandData]);
 
-  const [fieldArray, setFieldArray] = useState([])
+  const [fieldArray, setFieldArray] = useState([]);
 
   const {
     register,
@@ -209,9 +209,9 @@ const LandScheduleForm = (props) => {
     name: "surroundingsObj",
   });
 
-  useEffect(()=>{
-    setFieldArray(fields)
-  },[fields])
+  useEffect(() => {
+    setFieldArray(fields);
+  }, [fields]);
 
   const handleFunction = (val) => {
     for (let i = 0; i < val - 1; i++) {
@@ -320,6 +320,7 @@ const LandScheduleForm = (props) => {
       setLoader(false);
       setShowToastError({ label: "File Uploaded Successfully", error: false, success: true });
     } catch (error) {
+      setShowToastError({ label: error?.response?.data?.Errors[0]?.message, error: true, success: false });
       setLoader(false);
       return error.message;
     }
@@ -429,6 +430,10 @@ const LandScheduleForm = (props) => {
     console.log("errors", errors);
   }, [errors]);
 
+  useEffect(() => {
+    console.log("errors====", watch("encumburance"));
+  }, [watch("encumburance")]);
+
   return (
     <div>
       <ScrollToTop />
@@ -494,9 +499,9 @@ const LandScheduleForm = (props) => {
                                 // maxLength={20}
                                 // pattern="(/^[^\s][a-zA-Z0-9\s]+$"
                               />
-                              <h3 className="error-message" style={{ color: "red" }}>
+                              {/* <h3 className="error-message" style={{ color: "red" }}>
                                 {errors?.licenseNumber && errors?.licenseNumber?.message}
-                              </h3>
+                              </h3> */}
                             </div>
                             <div className="col col-lg-4 col-md-6 col-sm-6 mb-2">
                               <label>
@@ -606,8 +611,8 @@ const LandScheduleForm = (props) => {
                               </label>
                               <input type="text" {...register("specify")} className="form-control" pattern="[A-Za-z]+" />
                               <h3 className="error-message" style={{ color: "red" }}>
-                              {errors?.specify && errors?.specify?.message}
-                            </h3>
+                                {errors?.specify && errors?.specify?.message}
+                              </h3>
                             </div>
                             <div className="col col-lg-4 col-md-6 col-sm-6 mb-2">
                               <h2>
@@ -825,7 +830,7 @@ const LandScheduleForm = (props) => {
                       <input {...register("encumburance")} type="radio" value="none" id="encumburancen" />
                       &nbsp;&nbsp; None &nbsp;&nbsp;
                     </label>
-                    <div className="row ">
+                    <div className="row">
                       {watch("encumburance") === "rehan" && (
                         <div className="row ">
                           <div className="col col-4">
@@ -834,7 +839,7 @@ const LandScheduleForm = (props) => {
                                 {`${t("NWL_APPLICANT_REMARKS_SHAJRA_PLAN")}`}
                                 {/* Remark  */}
                                 <span style={{ color: "red" }}>*</span>
-                              </h2>{" "}
+                              </h2>
                             </label>
                             <input type="text" className="form-control" {...register("rehanRemark")} />
                             <h3 className="error-message" style={{ color: "red" }}>
@@ -944,7 +949,17 @@ const LandScheduleForm = (props) => {
                                 <span style={{ color: "red" }}>*</span>
                               </h2>{" "}
                             </label>
-                            <input type="text" className="form-control" {...register("loanRemark")} />
+                            <input
+                              type="text"
+                              className="form-control"
+                              {...register("loanRemark", {
+                                maxLength: {
+                                  value: 200,
+                                  message: "Maximum length exceeded (200 characters)",
+                                },
+                                required: watch("encumburance") === "loan" ? "This field is required" : false,
+                              })}
+                            />
                             <h3 className="error-message" style={{ color: "red" }}>
                               {errors?.loanRemark && errors?.loanRemark?.message}
                             </h3>
@@ -980,7 +995,17 @@ const LandScheduleForm = (props) => {
                                 <span style={{ color: "red" }}>*</span>
                               </h2>{" "}
                             </label>
-                            <input type="text" className="form-control" {...register("anyOtherRemark")} />
+                            <input
+                              type="text"
+                              className="form-control"
+                              {...register("anyOtherRemark", {
+                                maxLength: {
+                                  value: 200,
+                                  message: "Maximum length exceeded (200 characters)",
+                                },
+                                required: watch("encumburance") === "anyOther" ? "This field is required" : false,
+                              })}
+                            />
                             <h3 className="error-message" style={{ color: "red" }}>
                               {errors?.anyOtherRemark && errors?.anyOtherRemark?.message}
                             </h3>
@@ -1007,7 +1032,6 @@ const LandScheduleForm = (props) => {
                         </div>
                       )}
                     </div>
-
                     <h3 className="error-message" style={{ color: "red" }}>
                       {errors?.encumburance && errors?.encumburance?.message}
                     </h3>
@@ -1397,15 +1421,16 @@ const LandScheduleForm = (props) => {
                         <input {...register("whetherCompactBlock")} type="radio" value="N" id="whetherCompactBlockNo" />
                         &nbsp; No &nbsp;&nbsp;
                       </label>
-
+                      <h3 className="error-message" style={{ color: "red" }}>
+                        {errors?.whetherCompactBlock && errors?.whetherCompactBlock?.message}
+                      </h3>
                       {watch("whetherCompactBlock") === "Y" && (
                         <div className="row ">
                           <div className="col col">
                             <label>
                               <h2>
                                 {/* {`${t("NWL_APPLICANT_REVENUE_RASTA_Y_UNCONSOLIDATED_SHAJRA_PLAN")}`} */}
-                                Separated by
-                                &nbsp;
+                                Separated by &nbsp;
                               </h2>
                             </label>
                             <ReactMultiSelect
@@ -1447,7 +1472,6 @@ const LandScheduleForm = (props) => {
                                 placeholder=""
                                 {...register("pocket")}
                                 onChange={(e) => {
-                                  console.log(e?.target?.value);
                                   if (!e?.target?.value) {
                                     handleKeepOnlyOne();
                                   }
@@ -1932,12 +1956,12 @@ const LandScheduleForm = (props) => {
                                       <input
                                         type="file"
                                         style={{ display: "none" }}
-                                        onChange={(e) => getDocumentData(e?.target?.files[0], "giftDeedHibbanama")}
+                                        onChange={(e) => getDocumentData(e?.target?.files[0], "giftDeedHibbanamaLand")}
                                         accept="application/pdf/jpeg/png"
                                       />
                                     </label>
-                                    {watch("giftDeedHibbanama") && (
-                                      <a onClick={() => getDocShareholding(watch("giftDeedHibbanama"), setLoader)} className="btn btn-sm ">
+                                    {watch("giftDeedHibbanamaLand") && (
+                                      <a onClick={() => getDocShareholding(watch("giftDeedHibbanamaLand"), setLoader)} className="btn btn-sm ">
                                         <VisibilityIcon color="info" className="icon" />
                                       </a>
                                     )}
@@ -1963,7 +1987,7 @@ const LandScheduleForm = (props) => {
                             </label>
                           </div>
                           <div class="col-sm-3 text-right">
-                            <input  {...register("constructedRowWidth")} className="form-control" />
+                            <input {...register("constructedRowWidth")} className="form-control" />
                             <h3 className="error-message" style={{ color: "red" }}>
                               {errors?.constructedRowWidth && errors?.constructedRowWidth?.message}
                             </h3>
@@ -2178,7 +2202,7 @@ const LandScheduleForm = (props) => {
                               {`${t("NWL_APPLICANT_N_2_SITE_APPROACHABLE_A_ENTER_WIDTH_IN_METERS_SHAJRA_PLAN")}`}
                               {/* Enter Width in Meters */}
                             </label>
-                            <input  {...register("internalAndSectoralWidth")} className="form-control" />
+                            <input {...register("internalAndSectoralWidth")} className="form-control" />
                             <h3 className="error-message" style={{ color: "red" }}>
                               {errors?.internalAndSectoralWidth && errors?.internalAndSectoralWidth?.message}
                             </h3>

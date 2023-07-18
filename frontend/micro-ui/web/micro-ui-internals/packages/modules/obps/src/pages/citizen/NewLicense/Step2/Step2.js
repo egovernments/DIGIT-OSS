@@ -592,11 +592,14 @@ const ApllicantPuropseForm = (props) => {
   const { data: DistrictType } = Digit.Hooks.obps.useMDMS(stateId, "common-masters", ["District"]);
 
   useEffect(() => {
-    const purpose = PurposeType?.["common-masters"]?.Purpose?.map(function (data) {
-      return { value: data?.purposeCode, label: data?.name };
+    // const purpose = PurposeType?.["common-masters"]?.Purpose?.map(function (data) {
+    //   return data;
+    // });
+    const filteredData = PurposeType?.["common-masters"]?.Purpose?.filter((item) => item.isActive == "1");
+    const test = filteredData?.map((item) => {
+      return { value: item?.purposeCode, label: item?.name };
     });
-    setPurposeOptions({ data: purpose, isLoading: false });
-    console.log("logger12345",purpose);
+    setPurposeOptions({ data: test, isLoading: false });
   }, [PurposeType]);
 
   useEffect(() => {
@@ -850,10 +853,6 @@ const ApllicantPuropseForm = (props) => {
     }
   };
 
-  useEffect(() => {
-    console.log("modalData", modalData);
-  }, [modalData]);
-
   const ApplicantPurposeModalData = (modaldata) => {
     modaldata["potential"] = modaldata?.potential?.label;
     modaldata["sector"] = modaldata?.sector?.label;
@@ -1086,6 +1085,7 @@ const ApllicantPuropseForm = (props) => {
       setLoader(false);
       setShowToastError({ label: "File Uploaded Successfully", error: false, success: true });
     } catch (error) {
+      setShowToastError({ label: error?.response?.data?.Errors[0]?.message, error: true, success: false });
       setLoader(false);
       return error.message;
     }
@@ -1144,7 +1144,7 @@ const ApllicantPuropseForm = (props) => {
   }, [watch("consolidationType")]);
 
   useEffect(() => {
-    const val = watch("marla") * 0.0062 + watch("sarsai") * 0.00069 + watch("kanal") * 0.125;
+    const val = watch("marla") * 0.00625 + watch("sarsai") * 0.00069 + watch("kanal") * 0.125;
     setValue("consolidatedTotal", isNaN(val) ? "N/A" : val?.toFixed(5));
   }, [watch("sarsai"), watch("marla"), watch("kanal")]);
 
@@ -1206,8 +1206,6 @@ const ApllicantPuropseForm = (props) => {
     try {
       const Resp = await axios.post(`/tl-services/new/licenses/object/_getByApplicationNumber?applicationNumber=${appNumber}`, payload);
       const userData = Resp?.data?.LicenseDetails?.[0]?.ApplicantPurpose?.AppliedLandDetails;
-      console.log("data =====", userData);
-      console.log("modalData==========", modalData);
       // setArray(oldArray => [...oldArray,newValue] );
       setMigModalData(userData);
       // setModalData([...modalData, ...userData]);
@@ -1216,10 +1214,6 @@ const ApllicantPuropseForm = (props) => {
       return error;
     }
   };
-
-  useEffect(() => {
-    console.log("erorrs=====", errors);
-  }, [errors]);
 
   return (
     <div>
@@ -1723,7 +1717,7 @@ const ApllicantPuropseForm = (props) => {
                               value: 200,
                               message: "Maximum length exceeded (200 characters)",
                             },
-                            required: watch("collaboration") === "Y" ? "This field is required" : false
+                            required: watch("collaboration") === "Y" ? "This field is required" : false,
                           })}
                           placeholder=""
                           type="text"
@@ -1746,7 +1740,7 @@ const ApllicantPuropseForm = (props) => {
                           className="form-control"
                           placeholder=""
                           {...register("agreementValidFrom", {
-                            required: watch("collaboration") === "Y" ? "This field is required" : false
+                            required: watch("collaboration") === "Y" ? "This field is required" : false,
                           })}
                           max={convertEpochToDate(new Date().setFullYear(new Date().getFullYear()))}
                         />
@@ -1764,7 +1758,7 @@ const ApllicantPuropseForm = (props) => {
                         <label htmlFor="agreementIrrevocialbleyes">
                           <input
                             {...register("agreementIrrevocialble", {
-                              required: watch("collaboration") === "Y" ? "This field is required" : false
+                              required: watch("collaboration") === "Y" ? "This field is required" : false,
                             })}
                             type="radio"
                             value="Y"
@@ -1775,7 +1769,7 @@ const ApllicantPuropseForm = (props) => {
                         <label htmlFor="agreementIrrevocialbleno">
                           <input
                             {...register("agreementIrrevocialble", {
-                              required: watch("collaboration") === "Y" ? "This field is required" : false
+                              required: watch("collaboration") === "Y" ? "This field is required" : false,
                             })}
                             type="radio"
                             value="N"
@@ -1808,7 +1802,7 @@ const ApllicantPuropseForm = (props) => {
                               value: 200,
                               message: "Maximum length exceeded (200 characters)",
                             },
-                            required: watch("collaboration") === "Y" ? "This field is required" : false
+                            required: watch("collaboration") === "Y" ? "This field is required" : false,
                           })}
                         />
                         <h3 className="error-message" style={{ color: "red" }}>
@@ -1839,7 +1833,7 @@ const ApllicantPuropseForm = (props) => {
                               value: 200,
                               message: "Maximum length exceeded (200 characters)",
                             },
-                            required: watch("collaboration") === "Y" ? "This field is required" : false
+                            required: watch("collaboration") === "Y" ? "This field is required" : false,
                           })}
                         />
                         <h3 className="error-message" style={{ color: "red" }}>
@@ -1867,7 +1861,7 @@ const ApllicantPuropseForm = (props) => {
                               value: 200,
                               message: "Maximum length exceeded (200 characters)",
                             },
-                            required: watch("collaboration") === "Y" ? "This field is required" : false
+                            required: watch("collaboration") === "Y" ? "This field is required" : false,
                           })}
                         />
                         <h3 className="error-message" style={{ color: "red" }}>
@@ -2111,15 +2105,20 @@ const ApllicantPuropseForm = (props) => {
                         </b>
                         &nbsp;&nbsp;&nbsp;&nbsp;
                         <label htmlFor="nonConsolidationTypekacha">
-                          <input {...register("nonConsolidationType",{
-                              required: " Please Select Non Consolidation Type"
-                            })} type="radio" value="kachha" id="nonConsolidationTypekacha" />
+                          <input
+                            {...register("nonConsolidationType", {
+                              required: " Please Select Non Consolidation Type",
+                            })}
+                            type="radio"
+                            value="kachha"
+                            id="nonConsolidationTypekacha"
+                          />
                           &nbsp; Kachha &nbsp;&nbsp;
                         </label>
                         <label htmlFor="nonConsolidatedTypepucha">
                           <input
-                            {...register("nonConsolidationType",{
-                              required: " Please Select Non Consolidation Type"
+                            {...register("nonConsolidationType", {
+                              required: " Please Select Non Consolidation Type",
                             })}
                             type="radio"
                             value="pucka"
@@ -2136,9 +2135,8 @@ const ApllicantPuropseForm = (props) => {
                     </div>
 
                     <h3 className="error-message" style={{ color: "red" }}>
-                    {errors?.nonConsolidationType && errors?.nonConsolidationType?.message}
-                  </h3>
-
+                      {errors?.nonConsolidationType && errors?.nonConsolidationType?.message}
+                    </h3>
                   </div>
                 )}
 
@@ -2193,7 +2191,7 @@ const ApllicantPuropseForm = (props) => {
                               type="number"
                               className="form-control"
                               {...register("kanal", {
-                                required: watch("consolidationType") === "consolidated" ? "This field is required" : false
+                                required: watch("consolidationType") === "consolidated" ? "This field is required" : false,
                               })}
                               id="kanal"
                             />
@@ -2207,21 +2205,21 @@ const ApllicantPuropseForm = (props) => {
                               type="number"
                               className="form-control"
                               {...register("marla", {
-                                required: watch("consolidationType") === "consolidated" ? "This field is required" : false
+                                required: watch("consolidationType") === "consolidated" ? "This field is required" : false,
                               })}
                               id="marla"
                             />
                             <h3 className="error-message" style={{ color: "red" }}>
                               {errors?.marla && errors?.marla?.message}
                             </h3>
-                            <label htmlFor="summarla">Total: {(watch("marla") * 0.0062)?.toFixed(3)}</label>&nbsp;&nbsp;
+                            <label htmlFor="summarla">Total: {(watch("marla") * 0.00625)?.toFixed(3)}</label>&nbsp;&nbsp;
                           </td>
                           <td>
                             <input
                               type="number"
                               className="form-control"
                               {...register("sarsai", {
-                                required: watch("consolidationType") === "consolidated" ? "This field is required" : false
+                                required: watch("consolidationType") === "consolidated" ? "This field is required" : false,
                               })}
                               id="sarsai"
                             />
@@ -2231,22 +2229,26 @@ const ApllicantPuropseForm = (props) => {
                             <label htmlFor="sumsarsai">Total: {(watch("sarsai") * 0.00069)?.toFixed(3)}</label>&nbsp;&nbsp;
                           </td>
                           <td>
-                            <input type="number" className="form-control" {...register("consolidatedTotal",{
-                               maxLength: {
-                                value: 99,
-                                message: "Maximum length exceeded",
-                              },
-                              min: {
-                                value: getMinimumNorms(watch("purpose").label,watch("potential").label),
-                                message: "It should be "+getMinimumNorms(watch("purpose").label,watch("potential").label)+" acres minimum"
-                              },
-                              max: {
-                                value: getMaxNorms(watch("purpose").label,watch("potential").label),
-                                message: "It should be "+getMaxNorms(watch("purpose").label,watch("potential").label)+" acres maximum"
-                              },
-                            })} disabled />
+                            <input
+                              type="number"
+                              className="form-control"
+                              {...register("consolidatedTotal", {
+                                maxLength: {
+                                  value: 99,
+                                  message: "Maximum length exceeded",
+                                },
+                                // min: {
+                                //   value: getMinimumNorms(watch("purpose").label, watch("potential").label),
+                                //   message: "It should be " + getMinimumNorms(watch("purpose").label, watch("potential").label) + " acres minimum",
+                                // },
+                                max: {
+                                  value: getMaxNorms(watch("purpose").label, watch("potential").label),
+                                  message: "It should be " + getMaxNorms(watch("purpose").label, watch("potential").label) + " acres maximum",
+                                },
+                              })}
+                              disabled
+                            />
                             &nbsp;&nbsp;
-
                             <h3 className="error-message" style={{ color: "red" }}>
                               {errors?.consolidatedTotal && errors?.consolidatedTotal?.message}
                             </h3>
@@ -2299,7 +2301,7 @@ const ApllicantPuropseForm = (props) => {
                             id="bigha"
                             className="form-control"
                             {...register("bigha", {
-                              required: watch("consolidationType") === "non-consolidated" ? "This field is required" : false
+                              required: watch("consolidationType") === "non-consolidated" ? "This field is required" : false,
                             })}
                           />
                           <h3 className="error-message" style={{ color: "red" }}>
@@ -2318,7 +2320,7 @@ const ApllicantPuropseForm = (props) => {
                             className="form-control"
                             id="biswa"
                             {...register("biswa", {
-                              required: watch("consolidationType") === "non-consolidated" ? "This field is required" : false
+                              required: watch("consolidationType") === "non-consolidated" ? "This field is required" : false,
                             })}
                           />
                           <h3 className="error-message" style={{ color: "red" }}>
@@ -2337,7 +2339,7 @@ const ApllicantPuropseForm = (props) => {
                             className="form-control"
                             id="biswansi"
                             {...register("biswansi", {
-                              required: watch("consolidationType") === "non-consolidated" ? "This field is required" : false
+                              required: watch("consolidationType") === "non-consolidated" ? "This field is required" : false,
                             })}
                           />
                           <h3 className="error-message" style={{ color: "red" }}>
@@ -2351,24 +2353,29 @@ const ApllicantPuropseForm = (props) => {
                           &nbsp;&nbsp;
                         </td>
                         <td>
-                          <input disabled type="number" className="form-control" {...register("nonConsolidatedTotal",{
-                            maxLength: {
-                              value: 99,
-                              message: "Maximum length exceeded",
-                            },
-                            min: {
-                              value: getMinimumNorms(watch("purpose").label,watch("potential").label),
-                              message: "It should be "+getMinimumNorms(watch("purpose").label,watch("potential").label)+" acres minimum"
-                            },
-                            max: {
-                              value: getMaxNorms(watch("purpose").label,watch("potential").label),
-                              message: "It should be "+getMaxNorms(watch("purpose").label,watch("potential").label)+" acres maximum"
-                            },
-                          })} />
+                          <input
+                            disabled
+                            type="number"
+                            className="form-control"
+                            {...register("nonConsolidatedTotal", {
+                              maxLength: {
+                                value: 99,
+                                message: "Maximum length exceeded",
+                              },
+                              min: {
+                                value: getMinimumNorms(watch("purpose").label, watch("potential").label),
+                                message: "It should be " + getMinimumNorms(watch("purpose").label, watch("potential").label) + " acres minimum",
+                              },
+                              max: {
+                                value: getMaxNorms(watch("purpose").label, watch("potential").label),
+                                message: "It should be " + getMaxNorms(watch("purpose").label, watch("potential").label) + " acres maximum",
+                              },
+                            })}
+                          />
                           &nbsp;&nbsp;
                           <h3 className="error-message" style={{ color: "red" }}>
-                              {errors?.consolidatedTotal && errors?.consolidatedTotal?.message}
-                            </h3>
+                            {errors?.consolidatedTotal && errors?.consolidatedTotal?.message}
+                          </h3>
                         </td>
                       </tr>
                     </tbody>
