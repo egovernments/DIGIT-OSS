@@ -3,7 +3,7 @@ import React from "react";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 
-const MyApplications = ({ view }) => {
+const TLMyApplications = ({ view }) => {
   const { t } = useTranslation();
 
   const { mobileNumber, tenantId } = Digit.UserService.getUser()?.info || {};
@@ -47,4 +47,4 @@ const MyApplications = ({ view }) => {
     </React.Fragment>
   );
 };
-export default MyApplications;
+export default TLMyApplications;

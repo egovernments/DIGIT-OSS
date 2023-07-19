@@ -36,7 +36,7 @@
     "@egovernments/digit-ui-module-pgr": "1.7.0-beta.2",
     "@egovernments/digit-ui-module-pt": "1.7.0-beta.2",
     "@egovernments/digit-ui-module-receipts": "1.7.0-beta.2",
-    "@egovernments/digit-ui-module-tl": "1.7.0-beta.2",
+    "@egovernments/digit-ui-module-tl": "1.7.0-beta.4",
     "@egovernments/digit-ui-module-ws": "1.7.0-beta.2",
     "@egovernments/digit-ui-react-components": "1.7.0-beta.2",
     "babel-loader": "8.1.0",

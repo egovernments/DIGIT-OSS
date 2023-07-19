@@ -6,7 +6,7 @@ import { convertEpochToDateDMY } from  "../../utils";
 import SearchFields from "./SearchFields";
 import MobileSearchApplication from "./MobileSearchApplication";
 
-const SearchApplication = ({tenantId, t, onSubmit, data, count }) => {
+const SearchLicenseApplication = ({tenantId, t, onSubmit, data, count }) => {
   const initialValues = Digit.SessionStorage.get("SEARCH_APPLICATION_DETAIL")? {
     ...Digit.SessionStorage.get("SEARCH_APPLICATION_DETAIL"),
     offset: 0,
@@ -159,4 +159,4 @@ const SearchApplication = ({tenantId, t, onSubmit, data, count }) => {
         </React.Fragment>
 }
 
-export default SearchApplication
+export default SearchLicenseApplication

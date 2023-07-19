@@ -10,7 +10,7 @@ const fieldComponents = {
   mobileNumber: MobileNumber,
 };
 
-const SearchApplication = ({ onSearch, type, onClose, searchFields, searchParams, isInboxPage, defaultSearchParams, clearSearch: _clearSearch, setSearchFieldsBackToOriginalState, setSetSearchFieldsBackToOriginalState }) => {
+const SearchLicenseApplication = ({ onSearch, type, onClose, searchFields, searchParams, isInboxPage, defaultSearchParams, clearSearch: _clearSearch, setSearchFieldsBackToOriginalState, setSetSearchFieldsBackToOriginalState }) => {
   const { t } = useTranslation();
   const { register, handleSubmit, reset, watch, control, setError, clearErrors, formState, setValue } = useForm({
     defaultValues: searchParams,
@@ -209,4 +209,4 @@ const SearchApplication = ({ onSearch, type, onClose, searchFields, searchParams
   );
 };
 
-export default SearchApplication;
+export default SearchLicenseApplication;

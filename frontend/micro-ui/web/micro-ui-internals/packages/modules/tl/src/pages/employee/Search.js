@@ -22,7 +22,7 @@ const Search = ({ path }) => {
   const tenantId = Digit.ULBService.getCurrentTenantId();
   const [payload, setPayload] = useState({});
 
-  const Search = Digit.ComponentRegistryService.getComponent(variant === "license" ? "SearchLicense" : "SearchApplication");
+  const Search = Digit.ComponentRegistryService.getComponent(variant === "license" ? "SearchLicense" : "SearchLicenseApplication");
 
   function onSubmit(_data) {
     Digit.SessionStorage.set("SEARCH_APPLICATION_DETAIL", {
