@@ -397,6 +397,11 @@ const CustomTable = ({ data = {}, onSearch, setChartData, setChartDenomination, 
           )}
         </div>
       )}
+      {filterStack?.length > 2 && data?.showOptionalInfo && (
+        <span className={"dss-table-subheader"} style={{ position: "sticky", left: 0, color: "red" }}>
+          {t(data?.optionalInfo)}
+        </span>
+      )}
 
       {!tableColumns || !tableData ? (
         <NoData t={t} />
