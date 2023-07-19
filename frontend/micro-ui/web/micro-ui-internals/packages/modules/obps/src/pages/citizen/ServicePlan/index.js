@@ -115,6 +115,8 @@ const ServicePlanService = () => {
     return true;
   };
 
+
+  
   const checkValid = (data) => {
     let isvalid = false;
     if (getLoiPattern(data?.loiNumber)) {
@@ -270,41 +272,14 @@ const ServicePlanService = () => {
       console.log(error);
     }
   };
-
-  // const getDocumentData = async (file, fieldName) => {
-  //   console.log("documentData", fieldName);
-  //   if (selectedFiles.includes(file.name)) {
-  //     setShowToastError({ key: "error" });
-  //     return;
-  //   }
-  //   setDrawingErr({...drawingErr, [fieldName]: false})
-  //   const formData = new FormData();
-  //   formData.append("file", file);
-  //   formData.append("tenantId", "hr");
-  //   formData.append("module", "property-upload");
-  //   formData.append("tag", "tag-property");
-  //   setLoader(true);
-  //   try {
-  //     const Resp = await axios.post("/filestore/v1/files", formData, {});
-  //     console.log("documentData", Resp?.data?.files);
-  //     setValue(fieldName, Resp?.data?.files?.[0]?.fileStoreId);
-  //     setFileStoreId({ ...fileStoreId, [fieldName]: Resp?.data?.files?.[0]?.fileStoreId });
-
-  //     setSelectedFiles([...selectedFiles, file.name]);
-
-  //     setLoader(false);
-  //     setShowToast({ key: "success" });
-  //   } catch (error) {
-  //     setLoader(false);
-  //     return error.message;
-  //   }
-  // };
-
+console.log("drawingErr" , drawingErr);
   const getDocumentData = async (file, fieldName) => {
+    console.log("documentData", fieldName);
     if (selectedFiles.includes(file.name)) {
-      setShowToastError({ label: "Duplicate file Selected", error: true, success: false });
+      setShowToastError({ key: "error" });
       return;
     }
+    setDrawingErr({...drawingErr, [fieldName]: false})
     const formData = new FormData();
     formData.append("file", file);
     formData.append("tenantId", "hr");
@@ -313,16 +288,43 @@ const ServicePlanService = () => {
     setLoader(true);
     try {
       const Resp = await axios.post("/filestore/v1/files", formData, {});
+      console.log("documentData", Resp?.data?.files);
       setValue(fieldName, Resp?.data?.files?.[0]?.fileStoreId);
       setFileStoreId({ ...fileStoreId, [fieldName]: Resp?.data?.files?.[0]?.fileStoreId });
+
       setSelectedFiles([...selectedFiles, file.name]);
+
       setLoader(false);
-      setShowToastError({ label: "File Uploaded Successfully", error: false, success: true });
+      setShowToast({ key: "success" });
     } catch (error) {
       setLoader(false);
       return error.message;
     }
   };
+
+  // const getDocumentData = async (file, fieldName) => {
+  //   if (selectedFiles.includes(file.name)) {
+  //     setShowToastError({ label: "Duplicate file Selected", error: true, success: false });
+  //     return;
+  //   }
+  //   const formData = new FormData();
+  //   formData.append("file", file);
+  //   formData.append("tenantId", "hr");
+  //   formData.append("module", "property-upload");
+  //   formData.append("tag", "tag-property");
+  //   setLoader(true);
+  //   try {
+  //     const Resp = await axios.post("/filestore/v1/files", formData, {});
+  //     setValue(fieldName, Resp?.data?.files?.[0]?.fileStoreId);
+  //     setFileStoreId({ ...fileStoreId, [fieldName]: Resp?.data?.files?.[0]?.fileStoreId });
+  //     setSelectedFiles([...selectedFiles, file.name]);
+  //     setLoader(false);
+  //     setShowToastError({ label: "File Uploaded Successfully", error: false, success: true });
+  //   } catch (error) {
+  //     setLoader(false);
+  //     return error.message;
+  //   }
+  // };
 
   // const handleshow19 = async (e) => {
   //   const payload = {

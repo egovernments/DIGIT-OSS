@@ -385,10 +385,10 @@ function FullScreenDialog(props) {
                       Sr.No
                     </th>
                     <th class="fw-normal pb-0 border-bottom-0 align-top">
-                      Filed Name
+                    Field Name
                     </th>
                     <th class="fw-normal pb-0 border-bottom-0 align-top">
-                      Filed value
+                    Field value
                     </th>
                     <th class="fw-normal pb-0 border-bottom-0 align-top">
                       Status
@@ -451,10 +451,10 @@ function FullScreenDialog(props) {
                       Sr.No
                     </th>
                     <th class="fw-normal pb-0 border-bottom-0 align-top">
-                      Filed Name
+                    Field Name
                     </th>
                     <th class="fw-normal pb-0 border-bottom-0 align-top">
-                      Filed value
+                    Field value
                     </th>
                     <th class="fw-normal pb-0 border-bottom-0 align-top">
                       Status
@@ -517,10 +517,10 @@ function FullScreenDialog(props) {
                       Sr.No
                     </th>
                     <th class="fw-normal pb-0 border-bottom-0 align-top">
-                      Filed Name
+                    Field Name
                     </th>
                     <th class="fw-normal pb-0 border-bottom-0 align-top">
-                      Filed value
+                    Field value
                     </th>
                     <th class="fw-normal pb-0 border-bottom-0 align-top">
                       Status
