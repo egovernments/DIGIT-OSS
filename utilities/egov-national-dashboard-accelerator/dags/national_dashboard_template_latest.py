@@ -16,6 +16,7 @@ import urllib
 from queries.tl import *
 from queries.pt import *
 from queries.common import *
+from queries.mcollect import *
 from utils.utils import log
 from pytz import timezone
 from airflow.models import Variable
@@ -35,8 +36,9 @@ default_args = {
 }
 
 module_map = {
-   # 'TL' : (tl_queries, empty_tl_payload),
-    'PT' : (pt_queries, empty_pt_payload)
+    'TL' : (tl_queries, empty_tl_payload),
+    'PT' : (pt_queries, empty_pt_payload),
+    #'MCOLLECT' : (mcollect_queries,empty_mcollect_payload)
   
 }
 
@@ -66,10 +68,10 @@ def dump_kibana(**kwargs):
     logging.info(start)
     logging.info(end)
     logging.info("start the DAGS")
-    if module == 'COMMON':
-        actualstart = int(localtz.localize(datetime.strptime('01-01-1970', "%d-%m-%Y")).timestamp() * 1000)
-        end = start + (24 * 60 * 60 * 1000) - 1000
-        start = actualstart
+    # if module == 'COMMON':
+    #     actualstart = int(localtz.localize(datetime.strptime('01-01-1970', "%d-%m-%Y")).timestamp() * 1000)
+    #     end = start + (24 * 60 * 60 * 1000) - 1000
+    #     start = actualstart
 
     merged_document = {}
     live_ulbs = 0
@@ -81,54 +83,54 @@ def dump_kibana(**kwargs):
         response = hook.search(query.get('path'),json.loads(q))
         merged_document[query.get('name')] = response
         logging.info(json.dumps(response))
-        if module == 'COMMON' :
-            transform_response_common(merged_document,query.get('name'),query.get('module')) 
+        # if module == 'COMMON' :
+        #     transform_response_common(merged_document,query.get('name'),query.get('module')) 
 
 
-    if module == 'COMMON':
-        present = datetime.strptime(date,"%d-%m-%Y")  
-        logging.info(present.strftime("%Y-%m-%d %H:%M:%S"))      
-        citizen_count = get_citizen_count(present.strftime("%Y-%m-%d %H:%M:%S"))
-        total_ulbs = readulb()
-        common_metrics = {}
-        module_ulbs = []
-        for tenantid in ulbs:
-            if len(ulbs[tenantid]) >= 2:
-                live_ulbs +=1
-                for md in ulbs[tenantid]:
-                    if md in modules:
-                        modules[md].append(tenantid)
-                    else:
-                        modules[md] = [tenantid]
+    # if module == 'COMMON':
+    #     present = datetime.strptime(date,"%d-%m-%Y")  
+    #     logging.info(present.strftime("%Y-%m-%d %H:%M:%S"))      
+    #     citizen_count = get_citizen_count(present.strftime("%Y-%m-%d %H:%M:%S"))
+    #     total_ulbs = readulb()
+    #     common_metrics = {}
+    #     module_ulbs = []
+    #     for tenantid in ulbs:
+    #         if len(ulbs[tenantid]) >= 2:
+    #             live_ulbs +=1
+    #             for md in ulbs[tenantid]:
+    #                 if md in modules:
+    #                     modules[md].append(tenantid)
+    #                 else:
+    #                     modules[md] = [tenantid]
 
-        if live_ulbs >= total_ulbs/2:
-            isStateLive = "Live"
+    #     if live_ulbs >= total_ulbs/2:
+    #         isStateLive = "Live"
 
-        for md in modules:
-            module_ulbs.append({'name': md, 'value': len(modules[md])})
+    #     for md in modules:
+    #         module_ulbs.append({'name': md, 'value': len(modules[md])})
 
-        common_metrics['totalLiveUlbsCount'] = live_ulbs
-        common_metrics['status']  = isStateLive  
-        common_metrics['onboardedUlbsCount'] = 0
-        common_metrics['totalCitizensCount'] = citizen_count
-        common_metrics['slaAchievement'] = (totalApplicationWithinSLA/totalApplications) * 100
-        common_metrics['totalUlbCount'] = total_ulbs
-        common_metrics['liveUlbsCount'] = [{'groupBy': 'serviceModuleCode', 'buckets': module_ulbs}]
-        logging.info(json.dumps(common_metrics))
+    #     common_metrics['totalLiveUlbsCount'] = live_ulbs
+    #     common_metrics['status']  = isStateLive  
+    #     common_metrics['onboardedUlbsCount'] = 0
+    #     common_metrics['totalCitizensCount'] = citizen_count
+    #     common_metrics['slaAchievement'] = (totalApplicationWithinSLA/totalApplications) * 100
+    #     common_metrics['totalUlbCount'] = total_ulbs
+    #     common_metrics['liveUlbsCount'] = [{'groupBy': 'serviceModuleCode', 'buckets': module_ulbs}]
+    #     logging.info(json.dumps(common_metrics))
         
-        empty_lambda =  module_config[1]
-        common_list = []
-        common_payload = empty_lambda('N/A', 'pb.amritsar', 'N/A', date)
-        common_payload['metrics'] = common_metrics
-        common_list.append(common_payload)
-        kwargs['ti'].xcom_push(key='payload_{0}'.format(module), value=json.dumps(common_list))
-        return json.dumps(common_list)
-    else:
-        ward_list = transform_response_sample(merged_document, date, module)
-        kwargs['ti'].xcom_push(key='payload_{0}'.format(module), value=json.dumps(ward_list))
-        logging.info("ward list Data")
-        logging.info(ward_list)
-        return json.dumps(ward_list)
+    #     empty_lambda =  module_config[1]
+    #     common_list = []
+    #     common_payload = empty_lambda('N/A', 'pb.amritsar', 'N/A', date)
+    #     common_payload['metrics'] = common_metrics
+    #     common_list.append(common_payload)
+    #     kwargs['ti'].xcom_push(key='payload_{0}'.format(module), value=json.dumps(common_list))
+    #     return json.dumps(common_list)
+    # else:
+    ward_list = transform_response_sample(merged_document, date, module)
+    kwargs['ti'].xcom_push(key='payload_{0}'.format(module), value=json.dumps(ward_list))
+    logging.info("ward list Data")
+    logging.info(ward_list)
+    return json.dumps(ward_list)
 
 
 def readulb(**kwargs):
@@ -143,6 +145,7 @@ def readulb(**kwargs):
     total_ulbs = len(ulbs)
     return total_ulbs
 
+# change  below link to ukd 
 def get_citizen_count(startdate):
         logging.info('http://mseva.lgpunjab.gov.in/egov-searcher/unique-citizen-count?date={0}'.format(startdate))
         response = requests.get('http://mseva.lgpunjab.gov.in/egov-searcher/unique-citizen-count?date={0}'.format(startdate))
@@ -289,7 +292,7 @@ def call_ingest_api(connection, access_token, user_info, payload, module,startda
         'timestamp' : startdate,
         'module' : module,
         'severity' : 'Info',
-        'state' : 'Uttarakhand', 
+        'state' : 'Uttrakhand', 
         'message' : json.dumps(response)
     }
     es = Elasticsearch(host = "elasticsearch-data-v1.es-cluster", port = 9200)
@@ -372,27 +375,28 @@ load_pt = PythonOperator(
     op_kwargs={ 'module' : 'PT'},
     dag=dag)
 
-extract_common = PythonOperator(
-    task_id='elastic_search_extract_common',
-    python_callable=dump_kibana,
-    provide_context=True,
-    do_xcom_push=True,
-    op_kwargs={ 'module' : 'COMMON'},
-    dag=dag)
+# extract_mcollect = PythonOperator(
+#     task_id='elastic_search_extract_mcollect',
+#     python_callable=dump_kibana,
+#     provide_context=True,
+#     do_xcom_push=True,
+#     op_kwargs={ 'module' : 'MCOLLECT'},
+#     dag=dag)
 
-transform_common = PythonOperator(
-    task_id='nudb_transform_common',
-    python_callable=transform,
-    provide_context=True,
-    dag=dag)
+# transform_mcollect = PythonOperator(
+#     task_id='nudb_transform_mcollect',
+#     python_callable=transform,
+#     provide_context=True,
+#     dag=dag)
 
-load_common = PythonOperator(
-    task_id='nudb_ingest_load_common',
-    python_callable=load,
-    provide_context=True,
-    op_kwargs={ 'module' : 'COMMON'},
-    dag=dag)
+# load_mcollect = PythonOperator(
+#     task_id='nudb_ingest_load_mcollect',
+#     python_callable=load,
+#     provide_context=True,
+#     op_kwargs={ 'module' : 'MCOLLECT'},
+#     dag=dag)
 
-#extract_tl >> transform_tl >> load_tl
+extract_tl >> transform_tl >> load_tl
 extract_pt >> transform_pt >> load_pt
+#extract_mcollect>>transform_mcollect>>load_mcollect
  

@@ -77,7 +77,7 @@ def extract_tl_collection_adhoc_penalty(metrics, region_bucket):
     metrics['adhocPenalty'] = region_bucket.get('adhocPenalty').get('aggrFilter').get('amount').get(
         'value') if region_bucket.get('adhocPenalty').get('aggrFilter').get('amount').get('value') else 0
     return metrics
-#checked once
+#checked once, not in array
 tl_collection_adhoc_penalty = {
     'path': 'dss-collection_v2/_search',
     'name': 'tl_collection_adhoc_penalty',
@@ -181,7 +181,7 @@ def extract_tl_collection_adhoc_rebate(metrics, region_bucket):
         'value') if region_bucket.get('adhocRebate').get('aggrFilter').get('amount').get('value') else 0
     return metrics
 
-#checked once
+#checked once, not in array
 tl_collection_adhoc_rebate = {'path': 'dss-collection_v2/_search',
                               'name': 'tl_collection_adhoc_rebate',
                               'lambda': extract_tl_collection_adhoc_rebate,
@@ -288,7 +288,7 @@ def extract_tl_collection_tax(metrics, region_bucket):
         'value') if region_bucket.get('tlTax').get('aggrFilter').get('amount').get('value') else 0
     return metrics
 
-#checked once
+#checked once, not in array
 tl_collection_tax = {'path': 'dss-collection_v2/_search',
                      'name': 'tl_collection_tax',
                      'lambda': extract_tl_collection_tax,
@@ -399,7 +399,7 @@ def extract_tl_todays_trade_licenses(metrics, region_bucket):
         {'groupBy': 'status', 'buckets': grouped_by}]
     return metrics
 
-#checked once
+#checked once not in array
 tl_todays_trade_licenses = {'path': 'tlindex-v1-enriched/_search',
                             'name': 'tl_todays_trade_licenses',
                             'lambda': extract_tl_todays_trade_licenses,
@@ -480,7 +480,7 @@ def extract_tl_total_transactions(metrics, region_bucket):
         'value') if region_bucket.get('transactions') else 0
     return metrics
 
-#checked once
+#checked once, not in array
 tl_total_transactions = {'path': 'dss-collection_v2/_search',
                          'name': 'tl_total_transactions',
                          'lambda': extract_tl_total_transactions,
@@ -650,7 +650,7 @@ tl_applications_moved_today = {'path': 'tlindex-v1-enriched/_search',
 
 
 
-
+#does not exist in main array
 def extract_collections_by_trade_category(metrics, region_bucket):
     tradeType_agg = region_bucket.get('tradeType')
     tradeType_buckets = tradeType_agg.get('buckets')
@@ -667,7 +667,7 @@ def extract_collections_by_trade_category(metrics, region_bucket):
     return metrics
 
 
-#this below query is not fetching total collection 
+#this below query is not fetching total collection , not in array
 tl_collections_by_trade_category = {'path': 'dss-collection_v2/_search',
                          'name': 'tl_collections_by_trade_category',
                          'lambda': extract_collections_by_trade_category,
@@ -765,7 +765,7 @@ def extract_todays_license_by_sla(metrics, region_bucket):
         'doc_count') if region_bucket.get('todaysLicenseIssuedWithinSLA') else 0
   return metrics
 
-#checked once
+#checked once, not in array
 tl_license_issued_within_sla = {'path': 'tlindex-v1-enriched/_search',
                          'name': 'tl_license_issued_within_sla',
                          'lambda': extract_todays_license_by_sla,
@@ -874,7 +874,7 @@ def extract_tl_todays_collection_by_trade_type(metrics, region_bucket):
               #'todaysCollection').get('value')
     return metrics
 
-#checked once but is this same as last to last query, and if so then why this worked and that didnt
+#checked once
 tl_todays_collection_by_trade_type = {'path': 'dss-collection_v2/_search',
                                  'name': 'tl_todays_collection_by_trade_type',
                                  'lambda': extract_tl_todays_collection_by_trade_type,
@@ -982,7 +982,7 @@ def empty_tl_payload(region, ulb, ward, date):
         "ward": ward,
         "ulb": ulb,
         "region": region,
-        "state": "Uttarakhand",
+        "state": "Uttrakhand",
         "metrics": {
             "transactions": 0,
             "todaysApplications": 0,
