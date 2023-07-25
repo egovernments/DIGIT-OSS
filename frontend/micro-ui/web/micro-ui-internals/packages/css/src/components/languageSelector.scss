@@ -10,7 +10,7 @@
   height: 2.5rem;
 }
 .bannerCard .customBtn {
-  border-color: #505a5f;
+  border-color: theme(colors.text.secondary);
 }
 .bannerCard .customBtn:focus {
   outline: none;

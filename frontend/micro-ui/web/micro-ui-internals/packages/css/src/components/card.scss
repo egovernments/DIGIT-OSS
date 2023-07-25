@@ -53,7 +53,7 @@
 }
 
 .docsDescription {
-  color: #0b0c0c !important;
+  color: theme(colors.text.primary) !important;
 }
 
 .field-container {
@@ -126,10 +126,7 @@
     padding-left: 25px;
   }
 }
-.employeeCard.fsm {
-  margin-bottom: 16px !important;
-  margin-left: 0px !important;
-  margin-right: 16px !important; }
+
 .header-wrap {
   @apply flex mb-md;
 
@@ -155,7 +152,7 @@
 
 .submit-bar {
   @apply h-10 bg-primary-main text-center w-full outline-none;
-  box-shadow: inset 0px -2px 0px #0b0c0c;
+  box-shadow: inset 0px -2px 0px theme(colors.text.primary);
 
   &:focus {
     @apply outline-none;
@@ -366,9 +363,8 @@
 .employee-application-details {
   display: flex !important;
   justify-content: space-between !important;
-  max-height: 70px !important;
-  height: 70px !important;
-  margin-bottom: 15px !important;
+  max-height: 60px !important;
+  height: 60px !important;
 }
 .employee-main-application-details {
   padding: 10px !important;

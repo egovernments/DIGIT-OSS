@@ -75,13 +75,7 @@
     "webfontloader": "1.6.28"
   },
   "resolutions": {
-    "**/datatables.net": "1.11.5",
-    "**/datatables.net-dt":"1.12.1",
-    "**/datatables.net-bs":"1.12.1",
-    "**/datatables.net-responsive-dt":"2.3.0",
-    "**/datatables.net-responsive":"2.2.9",
-    "**/datatables.net-buttons-bs":"2.0.0",
-    "**/datatables.net-buttons": "2.2.2"
+    "**/datatables.net": "1.11.5"
   },
   "scripts": {
     "build-css": "node-sass-chokidar src/ -o src/",

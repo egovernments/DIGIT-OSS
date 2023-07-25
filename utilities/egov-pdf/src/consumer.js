@@ -1,7 +1,7 @@
 var config = require("./config");
 var kafka = require("kafka-node");
 const logger = require("./logger").logger;
-var {create_bulk_pdf, create_bulk_pdf_pt} = require("./api");
+var {create_bulk_pdf} = require("./api");
 
 const listenConsumer = async()=>{
 
@@ -36,19 +36,11 @@ const listenConsumer = async()=>{
     try {
       var data = JSON.parse(message.value);
       //console.log(JSON.stringify(data));
-      if (data?.bussinessService == 'PT') {
-        create_bulk_pdf_pt(data).then(() => {
-          logger.info("Record created for PT consumer request");
-        }).catch(error => {
+      create_bulk_pdf(data).then(() => {
+          logger.info("record created for consumer request");
+      }).catch(error => {
           logger.error(error.stack || error);
-        })
-      } else {
-        create_bulk_pdf(data).then(() => {
-            logger.info("record created for consumer request");
-        }).catch(error => {
-            logger.error(error.stack || error);
-        });
-      }
+      });
     } catch (error) {
       logger.error("error in create request by consumer " + error.message);
       logger.error(error.stack || error);

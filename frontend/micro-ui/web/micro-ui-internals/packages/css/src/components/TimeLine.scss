@@ -15,7 +15,7 @@
     }
 
     .secondary-color {
-      color: #0B0C0C;
+      color: theme(colors.text.primary);
       padding: 5px;
       font-size: small;
     }
@@ -26,7 +26,7 @@
     top: 12px;
     left: calc(50% + 8px);
     right: calc(-50% + 8px);
-    border-top: 4px solid #D6D5D4;
+    border-top: 4px solid theme(colors.border);
     z-index: -1;
   }
 
@@ -39,8 +39,8 @@
   }
 
   .active {
-    background-color: #F47738;
-    border-color: #F47738;
+    background-color: theme(colors.primary.main);
+    border-color: theme(colors.primary.main);
   }
 } 
 

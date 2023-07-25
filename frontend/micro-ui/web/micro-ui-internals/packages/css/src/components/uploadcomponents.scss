@@ -29,7 +29,7 @@
   div {
     display: block;
     position: relative;
-    background-color: #fafafa;
+    background-color: theme(colors.grey.light);
     width: calc((100% - 16px) / 3);
     margin-right: 8px;
 
@@ -44,7 +44,7 @@
   }
 
   .upload-img-container {
-    border: 1px dashed #d6d5d4;
+    border: 1px dashed theme(colors.border);
     margin: 0 !important;
 
     img {

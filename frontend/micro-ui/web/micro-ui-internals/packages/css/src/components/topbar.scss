@@ -39,7 +39,7 @@
     }
 
     .user-img-txt {
-      background: #f47738;
+      background: theme(colors.primary.main);
       padding: 10px 15px;
       border-radius: 50%;
       color: white;
@@ -131,10 +131,10 @@
   flex-direction: row;
   padding: 10px;
   column-gap: 10px;
-  color: #505a5f;
+  color: theme(colors.text.secondary);
 
   &:hover {
-    background: #eeeeee;
+    background: theme(colors.grey.mid);
   }
 }
 

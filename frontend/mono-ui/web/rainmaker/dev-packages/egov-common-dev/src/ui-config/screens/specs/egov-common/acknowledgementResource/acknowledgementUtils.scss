@@ -1,12 +1,10 @@
 
 @media only screen and (max-width: 768px) {
     #material-ui-applicationSuccessContainer {
-        display: flex !important;
+        display: grid !important;
+        text-align: -webkit-center;
         #custom-atoms-tail {
             text-align: center !important;
-        }
-        @media only screen and (max-width: 768px) {
-            text-align: center;
         }
     }
     // .footer-com-style{

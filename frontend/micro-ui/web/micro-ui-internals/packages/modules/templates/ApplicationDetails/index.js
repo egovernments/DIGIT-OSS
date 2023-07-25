@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useQueryClient } from "react-query";
+import { format } from "date-fns";
 
 import { Loader } from "@egovernments/digit-ui-react-components";
 
@@ -23,6 +24,8 @@ const ApplicationDetails = (props) => {
   const [showModal, setShowModal] = useState(false);
   const [isEnableLoader, setIsEnableLoader] = useState(false);
   const [isWarningPop, setWarningPopUp] = useState(false);
+  const [modify, setModify] = useState(false);
+  const [saveAttendanceState, setSaveAttendanceState] = useState({ displaySave : false, updatePayload: []})
 
   const {
     applicationDetails,
@@ -46,7 +49,10 @@ const ApplicationDetails = (props) => {
     showTimeLine = true,
     oldValue,
     isInfoLabel = false,
-    clearDataDetails
+    clearDataDetails,
+    noBoxShadow,
+    sectionHeadStyle,
+    showActionBar = true
   } = props;
   
   useEffect(() => {
@@ -64,19 +70,17 @@ const ApplicationDetails = (props) => {
       else if (action?.isWarningPopUp) {
         setWarningPopUp(true);
       } else if (action?.redirectionUrll) {
-        if (action?.redirectionUrll?.action === "ACTIVATE_CONNECTION") {
-          // window.location.assign(`${window.location.origin}digit-ui/employee/ws/${action?.redirectionUrll?.pathname}`, { data: action?.redirectionUrll?.state });
-
-          history.push(`${action?.redirectionUrll?.pathname}`, JSON.stringify({ data: action?.redirectionUrll?.state, url: `${location?.pathname}${location.search}` }));
-        }
-        else if (action?.redirectionUrll?.action === "RE-SUBMIT-APPLICATION"){
+        //here do the loi edit upon rejection
+        if (action?.redirectionUrll?.action === "EDIT_LOI_APPLICATION") {
           history.push(`${action?.redirectionUrll?.pathname}`, { data: action?.redirectionUrll?.state });
         }
-        else {
-          window.location.assign(`${window.location.origin}/digit-ui/employee/payment/collect/${action?.redirectionUrll?.pathname}`);
+        if (action?.redirectionUrll?.action === "EDIT_ESTIMATE_APPLICATION") {
+          history.push(`${action?.redirectionUrll?.pathname}`,{ data: action?.redirectionUrll?.state });
         }
+        
       } else if (!action?.redirectionUrl) {
-        setShowModal(true);
+        if(action?.action === 'EDIT') setModify(true)
+        else setShowModal(true);
       } else {
         history.push({
           pathname: action.redirectionUrl?.pathname,
@@ -99,33 +103,72 @@ const ApplicationDetails = (props) => {
     setWarningPopUp(false);
   };
 
+  const getResponseHeader = (action) => {
+
+    if(action?.includes("CHECK")){
+      return t("WORKS_LOI_RESPONSE_FORWARD_HEADER")
+    } else if (action?.includes("APPROVE")){
+     return  t("WORKS_LOI_RESPONSE_APPROVE_HEADER")
+    }else if(action?.includes("REJECT")){
+      return t("WORKS_LOI_RESPONSE_REJECT_HEADER")
+    }
+  }
+
+  const getResponseMessage = (action,updatedLOI) => {
+  
+    if (action?.includes("CHECK")) {
+      return t("WORKS_LOI_RESPONSE_MESSAGE_CHECK", { loiNumber: updatedLOI?.letterOfIndentNumber,name:"Nipun",designation:"SE" })
+    } else if (action?.includes("APPROVE")) {
+      return t("WORKS_LOI_RESPONSE_MESSAGE_APPROVE", { loiNumber: updatedLOI?.letterOfIndentNumber })
+    } else if (action?.includes("REJECT")) {
+      return t("WORKS_LOI_RESPONSE_MESSAGE_REJECT", { loiNumber: updatedLOI?.letterOfIndentNumber })
+    }
+  }
+
+  const getEstimateResponseHeader = (action) => {
+
+    if(action?.includes("CHECK")){
+      return t("WORKS_ESTIMATE_RESPONSE_FORWARD_HEADER")
+    } else if (action?.includes("TECHNICALSANCATION")){
+     return  t("WORKS_ESTIMATE_RESPONSE_FORWARD_HEADER")
+    }else if (action?.includes("ADMINSANCTION")){
+      return  t("WORKS_ESTIMATE_RESPONSE_APPROVE_HEADER")
+    }else if(action?.includes("REJECT")){
+      return t("WORKS_ESTIMATE_RESPONSE_REJECT_HEADER")
+    }
+  }
+
+  const getEstimateResponseMessage = (action,updatedEstimate) => {
+  
+    if (action?.includes("CHECK")) {
+      return t("WORKS_ESTIMATE_RESPONSE_MESSAGE_CHECK", { estimateNumber: updatedEstimate?.estimateNumber,Name:"Super",Designation:"SE",Department:"Health" })
+    } else if (action?.includes("TECHNICALSANCATION")) {
+      return t("WORKS_ESTIMATE_RESPONSE_MESSAGE_CHECK", { estimateNumber: updatedEstimate?.estimateNumber,Name:"Super",Designation:"SE",Department:"Health" })
+    } else if (action?.includes("ADMINSANCTION")) {
+      return t("WORKS_ESTIMATE_RESPONSE_MESSAGE_APPROVE", { estimateNumber: updatedEstimate?.estimateNumber })
+    } else if (action?.includes("REJECT")) {
+      return t("WORKS_ESTIMATE_RESPONSE_MESSAGE_REJECT", { estimateNumber: updatedEstimate?.estimateNumber })
+    }
+  }
+
+  const getAttendanceResponseHeaderAndMessage = (action) => {
+    let response = {}
+    if (action?.includes("VERIFY")) {
+      response.header = t("ATM_ATTENDANCE_VERIFIED")
+      response.message = t("ATM_ATTENDANCE_VERIFIED_SUCCESS")
+    } else if (action?.includes("REJECT")) {
+      response.header = t("ATM_ATTENDANCE_REJECTED")
+      response.message = t("ATM_ATTENDANCE_REJECTED_SUCCESS")
+    } else if (action?.includes("APPROVE")) {
+      response.header = t("ATM_ATTENDANCE_APPROVED")
+      response.message = t("ATM_ATTENDANCE_APPROVED_SUCCESS")
+    } 
+    return response
+  }
+
   const submitAction = async (data, nocData = false, isOBPS = {}) => {
+    const performedAction = data?.workflow?.action
     setIsEnableLoader(true);
-    if (typeof data?.customFunctionToExecute === "function") {
-      data?.customFunctionToExecute({ ...data });
-    }
-    if (nocData !== false && nocMutation) {
-      const nocPrmomises = nocData?.map((noc) => {
-        return nocMutation?.mutateAsync(noc);
-      });
-      try {
-        setIsEnableLoader(true);
-        const values = await Promise.all(nocPrmomises);
-        values &&
-          values.map((ob) => {
-            Digit.SessionStorage.del(ob?.Noc?.[0]?.nocType);
-          });
-      } catch (err) {
-        setIsEnableLoader(false);
-        let errorValue = err?.response?.data?.Errors?.[0]?.code
-          ? t(err?.response?.data?.Errors?.[0]?.code)
-          : err?.response?.data?.Errors?.[0]?.message || err;
-        closeModal();
-        setShowToast({ key: "error", error: { message: errorValue } });
-        setTimeout(closeToast, 5000);
-        return;
-      }
-    }
     if (mutate) {
       setIsEnableLoader(true);
       mutate(data, {
@@ -135,23 +178,83 @@ const ApplicationDetails = (props) => {
           setTimeout(closeToast, 5000);
         },
         onSuccess: (data, variables) => {
-          sessionStorage.removeItem("WS_SESSION_APPLICATION_DETAILS");
           setIsEnableLoader(false);
+          //just history.push to the response component from here and show relevant details
+          if(data?.letterOfIndents?.[0]){
+            const updatedLOI = data?.letterOfIndents?.[0]
+            const state = {
+              header:getResponseHeader(performedAction,updatedLOI),
+              id: updatedLOI?.letterOfIndentNumber,
+              info: t("WORKS_LOI_ID"),
+              message: getResponseMessage(performedAction,updatedLOI),
+              links: [
+                {
+                  name: t("WORKS_CREATE_NEW_LOI"),
+                  redirectUrl: `/${window.contextPath}/employee/works/create-loi`,
+                  code: "",
+                  svg: "CreateEstimateIcon",
+                  isVisible:false,
+                  type:"add"
+                },
+                {
+                  name: t("WORKS_GOTO_LOI_INBOX"),
+                  redirectUrl: `/${window.contextPath}/employee/works/LOIInbox`,
+                  code: "",
+                  svg: "CreateEstimateIcon",
+                  isVisible:true,
+                  type:"inbox"
+                },
+              ],
+              responseData:data,
+              requestData:variables
+            }
+            history.push(`/${window.contextPath}/employee/works/response`, state)
+          }
+          if(data?.estimates?.[0]){
+            const updatedEstimate = data?.estimates?.[0]
+            const state = {
+              header:getEstimateResponseHeader(performedAction,updatedEstimate),
+              id: updatedEstimate?.estimateNumber,
+              info: t("WORKS_ESTIMATE_ID"),
+              message: getEstimateResponseMessage(performedAction,updatedEstimate),
+              links: [
+                {
+                  name: t("WORKS_CREATE_ESTIMATE"),
+                  redirectUrl: `/${window.contextPath}/employee/works/create-estimate`,
+                  code: "",
+                  svg: "CreateEstimateIcon",
+                  isVisible:false,
+                  type:"add"
+                },
+                {
+                  name: t("WORKS_GOTO_ESTIMATE_INBOX"),
+                  redirectUrl: `/${window.contextPath}/employee/works/inbox`,
+                  code: "",
+                  svg: "RefreshIcon",
+                  isVisible:true,
+                  type:"inbox"
+                },
+              ],
+              responseData:data,
+              requestData:variables
+            }
+            history.push(`/${window.contextPath}/employee/works/response`, state)
+          }
           if (isOBPS?.bpa) {
             data.selectedAction = selectedAction;
-            history.replace(`/digit-ui/employee/obps/response`, { data: data });
+            history.replace(`/${window?.contextPath}/employee/obps/response`, { data: data });
           }
           if (isOBPS?.isStakeholder) {
             data.selectedAction = selectedAction;
-            history.push(`/digit-ui/employee/obps/stakeholder-response`, { data: data });
+            history.push(`/${window?.contextPath}/employee/obps/stakeholder-response`, { data: data });
           }
           if (isOBPS?.isNoc) {
-            history.push(`/digit-ui/employee/noc/response`, { data: data });
+            history.push(`/${window?.contextPath}/employee/noc/response`, { data: data });
           }
           if (data?.Amendments?.length > 0 ){
             //RAIN-6981 instead just show a toast here with appropriate message
           //show toast here and return 
-            //history.push("/digit-ui/employee/ws/response-bill-amend", { status: true, state: data?.Amendments?.[0] })
+            //history.push("/${window?.contextPath}/employee/ws/response-bill-amend", { status: true, state: data?.Amendments?.[0] })
             
             if(variables?.AmendmentUpdate?.workflow?.action.includes("SEND_BACK")){
               setShowToast({ key: "success", label: t("ES_MODIFYSWCONNECTION_SEND_BACK_UPDATE_SUCCESS")})
@@ -164,6 +267,17 @@ const ApplicationDetails = (props) => {
               setShowToast({ key: "success", label: t("ES_MODIFYWSCONNECTION_REJECT_UPDATE_SUCCESS") })
             }            
             return
+          }
+          if(data?.musterRolls?.[0]) {
+            const musterRoll = data?.musterRolls?.[0]
+            const response = getAttendanceResponseHeaderAndMessage(performedAction)
+            const state = {
+              header: response?.header,
+              message: response?.message,
+              info: t("ATM_REGISTER_ID_WEEK"),
+              id: `${musterRoll.registerId} | ${format(new Date(musterRoll.startDate), "dd/MM/yyyy")} - ${format(new Date(musterRoll.endDate), "dd/MM/yyyy")}`,
+            }
+            history.push(`/${window.contextPath}/employee/attendencemgmt/response`, state)
           }
           setShowToast({ key: "success", action: selectedAction });
           clearDataDetails && setTimeout(clearDataDetails, 3000);
@@ -199,6 +313,10 @@ const ApplicationDetails = (props) => {
             showTimeLine={showTimeLine}
             oldValue={oldValue}
             isInfoLabel={isInfoLabel}
+            noBoxShadow={noBoxShadow}
+            sectionHeadStyle={sectionHeadStyle}
+            modify={modify}
+            setSaveAttendanceState={setSaveAttendanceState}
           />
           {showModal ? (
             <ActionModal
@@ -215,6 +333,7 @@ const ApplicationDetails = (props) => {
               businessService={businessService}
               workflowDetails={workflowDetails}
               moduleCode={moduleCode}
+              saveAttendanceState={saveAttendanceState}
             />
           ) : null}
           {isWarningPop ? (
@@ -227,7 +346,7 @@ const ApplicationDetails = (props) => {
             />
           ) : null}
           <ApplicationDetailsToast t={t} showToast={showToast} closeToast={closeToast} businessService={businessService} />
-          <ApplicationDetailsActionBar
+          {showActionBar && <ApplicationDetailsActionBar
             workflowDetails={workflowDetails}
             displayMenu={displayMenu}
             onActionSelect={onActionSelect}
@@ -236,7 +355,8 @@ const ApplicationDetails = (props) => {
             forcedActionPrefix={forcedActionPrefix}
             ActionBarStyle={ActionBarStyle}
             MenuStyle={MenuStyle}
-          />
+            saveAttendanceState={saveAttendanceState}
+          />}
         </React.Fragment>
       ) : (
         <Loader />

@@ -24,7 +24,7 @@ export const configCompleteApplication = ({ t, vehicle, applicationCreatedTime =
               min: Digit.Utils.date.getDate(applicationCreatedTime),
               max: Digit.Utils.date.getDate(),
             },
-            component: (props, customProps) => <DatePicker disabled={true} onChange={props.onChange} date={props.value} {...customProps} />,
+            component: (props, customProps) => <DatePicker onChange={props.onChange} date={props.value} {...customProps} />,
           },
         },
         {

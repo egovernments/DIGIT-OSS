@@ -16,7 +16,7 @@ import lombok.NoArgsConstructor;
 public class VehicleRequest {
 
     @JsonProperty("RequestInfo")
-    private RequestInfo requestInfo = null;
+    private RequestInfo RequestInfo = null;
 
     @JsonProperty("vehicle")
     private Vehicle vehicle;

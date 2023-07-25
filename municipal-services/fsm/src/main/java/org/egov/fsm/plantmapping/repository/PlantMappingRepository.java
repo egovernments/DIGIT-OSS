@@ -44,7 +44,8 @@ public class PlantMappingRepository {
 		List<Object> preparedStmtList = new ArrayList<>();
 		String query = queryBuilder.getPlantMapSearchQuery(criteria, preparedStmtList);
 		List<PlantMapping> plantmaps = jdbcTemplate.query(query, preparedStmtList.toArray(), rowMapper);
-		return PlantMappingResponse.builder().plantMapping(plantmaps).build();
+		PlantMappingResponse plantMapResponse = PlantMappingResponse.builder().plantMapping(plantmaps).build();
+		return plantMapResponse;
 	}
 
 	public void update(PlantMappingRequest request) {

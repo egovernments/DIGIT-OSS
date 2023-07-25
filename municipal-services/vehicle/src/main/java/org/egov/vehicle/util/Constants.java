@@ -5,10 +5,6 @@ import org.springframework.stereotype.Component;
 @Component
 public class Constants {
 
-	private Constants() {
-
-	}
-
 	public static final String EMP_STATUS = "EMPLOYED";
 
 	public static final String EMP_TYPE = "CONTRACT";
@@ -38,15 +34,12 @@ public class Constants {
 	public static final String CITIZEN = "CITIZEN";
 
 	public static final String VEHICLE_SUCTION_TYPE = "SuctionType";
-
-	public static final String FSM_SMS_FSTPO_TRIP_DECLINED = "FSM_SMS_FSTPO_TRIP_DECLINED";
-
-	public static final String VEHICLE_DECLINE_REASON = "FSTPORejectionReason";
-
-	public static final String VEHICLE_OWNER_TYPE = "VehicleOwner";
-	public static final String WAITING_FOR_DISPOSAL = "WAITING_FOR_DISPOSAL";
-	public static final String ACTIVE = "ACTIVE";
-
 	
+	public static final String FSM_SMS_FSTPO_TRIP_DECLINED="FSM_SMS_FSTPO_TRIP_DECLINED";
+	
+	public static final String VEHICLE_DECLINE_REASON = "FSTPORejectionReason";
+	
+	public static final String VEHICLE_OWNER_TYPE = "VehicleOwner";
+
 	
 }

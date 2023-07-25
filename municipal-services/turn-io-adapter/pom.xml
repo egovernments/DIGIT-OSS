@@ -10,7 +10,7 @@
   </parent>
   <groupId>org.egov.io</groupId>
   <artifactId>turn-io-adapter</artifactId>
-  <version>1.0.1-SNAPSHOT</version>
+  <version>1.0.1_beta-SNAPSHOT</version>
   <name>Turn io adapter</name>
   <description>Turn io adapter</description>
   <url>http://maven.apache.org</url>

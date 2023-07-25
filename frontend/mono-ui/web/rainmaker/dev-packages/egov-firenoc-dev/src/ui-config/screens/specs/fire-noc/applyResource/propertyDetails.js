@@ -24,7 +24,21 @@ export const triggerUpdateByKey = (state, keyIndex, value, dispatch) => {
     dispatch(prepareFinalObject( `DynamicMdms.firenoc.buildings.${keyIndex}`, value ));
   }
 }
+export const updateUsageType = async ( state, dispatch ) => {  
+  const subUsageType = get( state, "screenConfiguration.preparedFinalObject.FireNOCs[0].fireNOCDetails.buildings[0].usageType", '')||'';
+  const usageType = subUsageType&&subUsageType.split('.')[0];
+  
+  let i = 0;
+  let formObj = {
+    buildingUsageType: usageType, buildingSubUsageType: subUsageType
+  }
+  triggerUpdateByKey(state, i, formObj, 'set');
+  
+  triggerUpdateByKey(state, `buildingSubUsageTypeTransformed.allDropdown[${i}]`, getObjectValues(get( state, `screenConfiguration.preparedFinalObject.DynamicMdms.firenoc.buildings.buildingsTransformed.${usageType}`, [])) , dispatch);
+  // triggerUpdateByKey(state, `buildingSubUsageTypeTransformed.allDropdown[${i}]`, getObjectValues(get( state, `screenConfiguration.preparedFinalObject.DynamicMdms.firenoc.buildings.buildingUsageTypeTransformed.${usageType}`, [])) , dispatch);
 
+  triggerUpdateByKey(state, `selectedValues[${i}]`, formObj , dispatch);
+}
 let previousUoms = [];
 
 const dynamic = (uom, path, buildingIndex) => {
@@ -132,63 +146,6 @@ const setMandatory = (dispatch, path, value) => {
   dispatch(handleField("apply", path, "props.required", value));
 };
 
-export const updateUsageType = async ( state, dispatch ) => {  
-  
-  let buildings = get( state, "screenConfiguration.preparedFinalObject.FireNOCs[0].fireNOCDetails.buildings", []);
-
-  for (let i = 0; i < buildings.length; i++) {
-      const subUsageType = get( buildings[i], "usageType", '')||'';
-      const usageType = subUsageType && subUsageType.split('.')[0];
-      let formObj = { buildingUsageType: usageType, buildingSubUsageType: subUsageType }
-      triggerUpdateByKey(state, i, formObj, 'set');
-      triggerUpdateByKey(state, `buildingSubUsageTypeTransformed.allDropdown[${i}]`, getObjectValues(get( state, `screenConfiguration.preparedFinalObject.DynamicMdms.firenoc.buildings.buildingsTransformed.${usageType}`, [])) , dispatch);    
-      triggerUpdateByKey(state, `selectedValues[${i}]`, formObj , dispatch);
-
-
-      const cardType = get(state, "screenConfiguration.preparedFinalObject.FireNOCs[0].fireNOCDetails.noOfBuildings", null);
-      let path = "";
-      if(cardType === "SINGLE") {
-        path = "components.div.children.formwizardSecondStep.children.propertyDetails.children.cardContent.children.propertyDetailsConatiner.children.buildingDataCard.children.singleBuildingContainer.children.singleBuilding.children.cardContent.children.singleBuildingCard.children";
-      } else {
-        path = `components.div.children.formwizardSecondStep.children.propertyDetails.children.cardContent.children.propertyDetailsConatiner.children.buildingDataCard.children.multipleBuildingContainer.children.multipleBuilding.props.items[${i}].item${i}.children.cardContent.children.multipleBuildingCard.children`
-      }
-    // Get the list of uom for selected building subtype
-    let uomsList = get(
-      state,
-      "screenConfiguration.preparedFinalObject.applyScreenMdmsData.firenoc.BuildingType",
-      []
-    ).filter(item => {
-      return item.code === subUsageType;
-    });
-    let uoms = get(uomsList, "[0].uom", []);
-    
-    // Remove previous dynamic uoms
-    previousUoms.forEach(uom => {
-      !checkUomIsDefault(uom) &&
-        dispatch(handleField("apply", `${path}.${uom}`, "visible", false));
-    });
-    
-    // Set required fields defaults
-    setMandatory(dispatch, `${path}.PLOT_SIZE`, false);
-    setMandatory(dispatch, `${path}.BUILTUP_AREA`, false);
-    setMandatory(dispatch, `${path}.HEIGHT_OF_BUILDING`, false);
-    
-    // Dynamically create UOM's based on building subtype selection
-    uoms.forEach(uom => {
-      if (checkUomIsDefault(uom)) {
-        setMandatory(dispatch, `${path}.${uom}`, true);
-      } else {
-        dispatch(
-          handleField("apply", path, uom, dynamic(uom, path, i))
-        );
-      }
-    });
-    
-    // Set previous uoms array
-    previousUoms = uoms;
-    }
-}
-
 const buildingUsageTypeChange = (reqObj) => {
   const {dispatch, state, value, index} = reqObj;
   dispatch(prepareFinalObject(`FireNOCs[0].fireNOCDetails.buildings[${index}].usageTypeMajor`, value ? value : "none"));
@@ -231,7 +188,7 @@ uoms.forEach(uom => {
     setMandatory(dispatch, `${path}.${uom}`, true);
   } else {
     dispatch(
-      handleField("apply", path, uom, dynamic(uom, path, index))
+      handleField("apply", path, uom, dynamic(uom, path, buildingIndex))
     );
   }
 });

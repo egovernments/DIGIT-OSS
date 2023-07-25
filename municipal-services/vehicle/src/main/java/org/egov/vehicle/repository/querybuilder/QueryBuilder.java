@@ -22,10 +22,9 @@ public class QueryBuilder {
 	@Autowired
 	VehicleConfiguration config;
 
-	private static final String PAGINATION_WRAPPER = "{} {orderby} {pagination}";
-	private static final String QUERY = " SELECT count(*) OVER() AS full_count, * FROM eg_vehicle ";
+	private final String paginationWrapper = "{} {orderby} {pagination}";
+	private static final String Query = " SELECT count(*) OVER() AS full_count, * FROM eg_vehicle ";
 	private static final String VEH_EXISTS_QUERY = " SELECT COUNT(*) FROM eg_vehicle WHERE tenantid=? AND registrationNumber=? AND STATUS= ?";
-
 	private static final String VEHICLE_NO_VENDOR_QUERY = " SELECT DISTINCT (vehicle.id) FROM EG_VEHICLE vehicle LEFT JOIN eg_vendor_vehicle vendor_vehicle ON vehicle.id=vendor_vehicle.vechile_id";
 
 	/**
@@ -39,7 +38,7 @@ public class QueryBuilder {
 
 		int limit = config.getDefaultLimit();
 		int offset = config.getDefaultOffset();
-		String finalQuery = PAGINATION_WRAPPER.replace("{}", query);
+		String finalQuery = paginationWrapper.replace("{}", query);
 
 		if (criteria.getLimit() != null && criteria.getLimit() <= config.getMaxSearchLimit())
 			limit = criteria.getLimit();
@@ -85,9 +84,6 @@ public class QueryBuilder {
 
 		else if (criteria.getSortBy() == VehicleSearchCriteria.SortBy.suctionType)
 			builder.append(" ORDER BY  suctionType");
-		
-		else if (criteria.getSortBy() == VehicleSearchCriteria.SortBy.registrationNumber)
-			builder.append(" ORDER BY  registrationNumber");
 
 		else if (criteria.getSortBy() == VehicleSearchCriteria.SortBy.createdTime)
 			builder.append(" ORDER BY createdTime ");
@@ -142,7 +138,7 @@ public class QueryBuilder {
 
 	public String getSearchQuery(@Valid VehicleSearchCriteria criteria, List<Object> preparedStmtList) {
 
-		StringBuilder builder = new StringBuilder(QUERY);
+		StringBuilder builder = new StringBuilder(Query);
 		if (criteria.getTenantId() != null) {
 			if (criteria.getTenantId().split("\\.").length == 1) {
 				addClauseIfRequired(preparedStmtList, builder);
@@ -208,6 +204,7 @@ public class QueryBuilder {
 			builder.append(" id IN (").append(createQuery(ids)).append(")");
 			addToPreparedStatement(preparedStmtList, ids);
 		}
+
 		// Added search criteria on status
 		List<String> status = criteria.getStatus();
 		if (!CollectionUtils.isEmpty(status)) {
@@ -229,7 +226,7 @@ public class QueryBuilder {
 
 	public String getVehicleLikeQuery(VehicleSearchCriteria criteria, List<Object> preparedStmtList) {
 
-		StringBuilder builder = new StringBuilder(QUERY);
+		StringBuilder builder = new StringBuilder(Query);
 
 		List<String> ids = criteria.getIds();
 		if (!CollectionUtils.isEmpty(ids)) {
@@ -273,7 +270,7 @@ public class QueryBuilder {
 		List<String> status = criteria.getStatus();
 		if (!CollectionUtils.isEmpty(status)) {
 			addClauseIfRequired(preparedStmtList, builder);
-			builder.append(" vehicle.status IN (").append(createQuery(status)).append(")");
+			builder.append(" vendor_vehicle.vendorvehiclestatus IN (").append(createQuery(status)).append(")");
 			addToPreparedStatement(preparedStmtList, status);
 		}
 

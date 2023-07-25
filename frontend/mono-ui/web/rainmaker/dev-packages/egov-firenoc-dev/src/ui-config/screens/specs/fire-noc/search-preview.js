@@ -18,9 +18,6 @@ import { documentsSummary } from "./summaryResource/documentsSummary";
 import { estimateSummary } from "./summaryResource/estimateSummary";
 import { nocSummary } from "./summaryResource/nocSummary";
 import { propertySummary } from "./summaryResource/propertySummary";
-import cloneDeep from "lodash/cloneDeep";
-import store from "ui-redux/store";
-
 
 const titlebar = getCommonContainer({
   header: getCommonHeader({
@@ -266,17 +263,9 @@ const prepareUoms = (state, dispatch) => {
           labelKey: `NOC_PROPERTY_DETAILS_${item.code}_LABEL`
         },
         {
-          jsonPath: `FireNOCs[0].fireNOCDetails.buildings[${index}].uomsMap.${item.code}`,
-          // callBack: checkValueForNA,
-          callBack: value => {
-            if (value == 0 || value == '0') {
-              return "0";
-            } else if (value) {
-              return value
-            } else {
-              return checkValueForNA
-            }
-          }
+          jsonPath: `FireNOCs[0].fireNOCDetails.buildings[0].uomsMap.${item.code
+            }`,
+          callBack: checkValueForNA,
         }
       );
 
@@ -284,15 +273,6 @@ const prepareUoms = (state, dispatch) => {
         handleField(
           "search-preview",
           "components.div.children.body.children.cardContent.children.propertySummary.children.cardContent.children.cardOne.props.scheama.children.cardContent.children.propertyContainer.children",
-          item.code,
-          labelElement
-        )
-      );
-
-      dispatch(
-        handleField(
-          "search-preview",
-          `components.div.children.body.children.cardContent.children.propertySummary.children.cardContent.children.cardOne.props.items[${index}].item${index}.children.cardContent.children.propertyContainer.children`,
           item.code,
           labelElement
         )
@@ -322,30 +302,10 @@ const setSearchResponse = async (
     { key: "applicationNumber", value: applicationNumber }
   ]);
   // const response = sampleSingleSearch();
-  
-  if (response &&
-    response.FireNOCs.length &&
-    response.FireNOCs[0].fireNOCDetails &&
-    response.FireNOCs[0].fireNOCDetails.buildings && !edited) {
-    response.FireNOCs[0].fireNOCDetails.buildings.reverse();
-  }
-
-  response.FireNOCs[0].fireNOCDetails.buildings.forEach(data => {
-    let filterData = data.uoms.filter(uom => uom.active == true);
-    data.uoms = filterData
-  });
-
-  if (!edited) {
-    dispatch(prepareFinalObject("fireNOCsDetailsTemp", cloneDeep(response.FireNOCs[0])));
-  }
-
-
   set(response, 'FireNOCs[0].fireNOCDetails.additionalDetail.assignee[0]', '');
   set(response, 'FireNOCs[0].fireNOCDetails.additionalDetail.comment', '');
   set(response, 'FireNOCs[0].fireNOCDetails.additionalDetail.wfDocuments', []);
   dispatch(prepareFinalObject("FireNOCs", get(response, "FireNOCs", [])));
-  const additionalDocuments = cloneDeep(get(response, "FireNOCs[0].fireNOCDetails.additionalDetail.documents", [])); 
-  dispatch(prepareFinalObject("FireNOCs[0].fireNOCDetails.additionalDetail.document", additionalDocuments));
 
   // Set Institution/Applicant info card visibility
   if (
@@ -353,34 +313,30 @@ const setSearchResponse = async (
       response,
       "FireNOCs[0].fireNOCDetails.applicantDetails.ownerShipType",
       ""
-    ).includes("INDIVIDUAL")
+    ).startsWith("INSTITUTION")
   ) {
-    set(
-      action,
-      "screenConfig.components.div.children.body.children.cardContent.children.applicantSummary.visible",
-      true
-    );
-    set(
-      action,
-      "screenConfig.components.div.children.body.children.cardContent.children.institutionSummary.visible",
-      false
+    dispatch(
+      handleField(
+        "search-preview",
+        "components.div.children.body.children.cardContent.children.applicantSummary",
+        "visible",
+        false
+      )
     );
   } else {
-    set(
-      action,
-      "screenConfig.components.div.children.body.children.cardContent.children.applicantSummary.visible",
-      false
-    );
-    set(
-      action,
-      "screenConfig.components.div.children.body.children.cardContent.children.institutionSummary.visible",
-      true
+    dispatch(
+      handleField(
+        "search-preview",
+        "components.div.children.body.children.cardContent.children.institutionSummary",
+        "visible",
+        false
+      )
     );
   }
 
-  await prepareDocumentsView(state, dispatch);
+  prepareDocumentsView(state, dispatch);
+  prepareUoms(state, dispatch);
   await loadPdfGenerationData(applicationNumber, tenantId);
-
   let status = get(
     state,
     "screenConfiguration.preparedFinalObject.FireNOCs[0].fireNOCDetails.status"
@@ -400,45 +356,7 @@ const setSearchResponse = async (
   if (status) {
     generateBill(dispatch, applicationNumber, tenantId, status);
   }
-  await prepareUoms(state, dispatch);
 };
-
-
-export const beforeSubmitHook = async () => {
-  let state = store.getState();
-  let fireNocDetails = get(state, "screenConfiguration.preparedFinalObject.FireNOCs", {});
-  let otherDocuments = get(state, "screenConfiguration.preparedFinalObject.FireNOCs[0].fireNOCDetails.additionalDetail.document", []);
-  let allDocuments = get(state, "screenConfiguration.preparedFinalObject.FireNOCs[0].fireNOCDetails.additionalDetail.documents", []);
-  let fireNOCsDetailsTemp =  get(state, "screenConfiguration.preparedFinalObject.fireNOCsDetailsTemp", {});
-  otherDocuments.forEach(data => {
-    allDocuments.map(allData => {
-      if(data.documentType && data.documentType.split('.').length == 2 && allData&& allData.title.includes(data.documentType.split('.')[1]) && allData.fileStoreId != data.fileStoreId) {
-        data.fileStoreId = allData.fileStoreId
-      }
-    })
-  })
-  fireNocDetails[0].fireNOCDetails.additionalDetail.documents = fireNocDetails[0].fireNOCDetails.additionalDetail.document;
-  
-  let oldBuildings = fireNOCsDetailsTemp.fireNOCDetails.buildings || [];
-  let newBuildings = fireNocDetails[0].fireNOCDetails.buildings || []
-  
-  newBuildings.map(newUom => {
-    oldBuildings.map(oldUom => {
-      if (newUom.id == oldUom.id) {
-        newUom.uoms.forEach(nwUM => {
-          oldUom.uoms.map(odUM => {
-            if (nwUM.code == odUM.code) nwUM.id = odUM.id
-          })
-        })
-      }
-    })
-  })
-
-  fireNocDetails[0].fireNOCDetails.buildings = newBuildings;
-  
-  return fireNocDetails;
-}
-
 
 const screenConfig = {
   uiFramework: "material-ui",
@@ -534,8 +452,7 @@ const screenConfig = {
           props: {
             dataPath: "FireNOCs",
             moduleName: "FIRENOC",
-            updateUrl: "/firenoc-services/v1/_update",
-            beforeSubmitHook: beforeSubmitHook
+            updateUrl: "/firenoc-services/v1/_update"
           }
         },
         body: getCommonCard({

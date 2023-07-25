@@ -12,7 +12,6 @@ import org.egov.swservice.web.models.SewerageConnectionRequest;
 import org.egov.swservice.web.models.SewerageConnectionResponse;
 import org.egov.swservice.service.SewerageService;
 import org.egov.swservice.util.ResponseInfoFactory;
-import org.egov.tracer.model.CustomException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -108,15 +107,13 @@ public class SewarageController {
 	@RequestMapping(value = "/_encryptOldData", method = RequestMethod.POST)
 	public ResponseEntity<SewerageConnectionResponse> encryptOldData(@Valid @RequestBody RequestInfoWrapper requestInfoWrapper,
 																  @Valid @ModelAttribute SearchCriteria criteria){
-		throw new CustomException("EG_SW_ENC_OLD_DATA_ERROR", "Privacy disabled: The encryption of old data is disabled");
-		/* Un-comment the below code to enable Privacy */
-		/*SewerageConnectionResponse sewerageConnectionResponse = new SewerageConnectionResponse();
+		SewerageConnectionResponse sewerageConnectionResponse = new SewerageConnectionResponse();
 		List<SewerageConnection> sewerageConnectionList = sewerageEncryptionService.updateOldData(criteria, requestInfoWrapper.getRequestInfo());
 
 		sewerageConnectionResponse.setSewerageConnections(sewerageConnectionList);
 		sewerageConnectionResponse.setResponseInfo(
 				responseInfoFactory.createResponseInfoFromRequestInfo(requestInfoWrapper.getRequestInfo(), true));
-		return new ResponseEntity<>(sewerageConnectionResponse, HttpStatus.OK);*/
+		return new ResponseEntity<>(sewerageConnectionResponse, HttpStatus.OK);
 	}
 
 }

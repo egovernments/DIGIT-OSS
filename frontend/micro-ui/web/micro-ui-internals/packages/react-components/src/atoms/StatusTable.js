@@ -1,5 +1,5 @@
 import React from "react";
-import { UnMaskComponent ,WrapUnMaskComponent} from "..";
+import { UnMaskComponent } from "..";
 
 export const LastRow = (props) => {
   return (
@@ -14,7 +14,7 @@ export const Row = (props) => {
   let value = props.text;
   let valueStyle = props.textStyle || {};
   let labelStyle = props.labelStyle || {};
-  if (Array.isArray(props.text) && !props?.privacy) {
+  if (Array.isArray(props.text)) {
     value = props.text.map((val, index) => {
       if (val?.className) {
         return (
@@ -25,10 +25,8 @@ export const Row = (props) => {
               privacy object set to the Mask Component
              */}
             {props?.privacy && (
-              <span style={{ display: "inline-flex", width: "fit-content" }}>
-                {/* <UnMaskComponent iseyevisible={val?.value?.includes("*")?true:false}></UnMaskComponent> */}
-                <WrapUnMaskComponent  value={val?.value} iseyevisible={val?.value?.includes("*")?true:false} privacy={props?.privacy?.[index]} />
-
+              <span style={{ display: "inline-flex", width: "fit-content", marginLeft: "10px" }}>
+                <UnMaskComponent privacy={props?.privacy}></UnMaskComponent>
               </span>
             )}
           </p>
@@ -43,9 +41,7 @@ export const Row = (props) => {
                 Feature :: Privacy
                 privacy object set to the Mask Component
               */}
-              {/* <UnMaskComponent iseyevisible={val?.includes("*")?true:false} privacy={props?.privacy}></UnMaskComponent> */}
-              <WrapUnMaskComponent   value={val} iseyevisible={val?.includes("*")?true:false} privacy={Array.isArray(props?.privacy) ? props?.privacy?.[index] : props?.privacy} />
-
+              <UnMaskComponent privacy={props?.privacy}></UnMaskComponent>
             </span>
           )}
         </p>
@@ -57,39 +53,18 @@ export const Row = (props) => {
   // margin-left: 10px;
   // }
 
-  if(Array?.isArray(props?.privacy) && Array.isArray(props?.text))
-  {
-    return(    
-        <div style={props.rowContainerStyle} className={`${props.last ? "row last" : "row"} ${props?.className || ""}`}>
-          <h2 style={labelStyle}>{props.label}</h2>
-          {props?.text?.map((ob,index) => (
-          <div className="value" style={index == 0 ? {...valueStyle, wordBreak: "break-word",marginLeft:"28.5%",width:"20%"} : {...valueStyle, wordBreak: "break-word",color:"grey",display:"inline",fontSize:"13px",paddingLeft:"10px"}}>
-            <WrapUnMaskComponent   value={ob?.value} iseyevisible={ob?.value && ob?.value?.toString()?.includes("*")?true:false} privacy={props?.privacy?.[index]} />
-            {props.caption && <div className="caption">{props.caption}</div>}
-          </div>))}
-          {props.actionButton ? (
-            <div style={props.actionButtonStyle} className="action-button">
-              {props.actionButton}
-            </div>
-          ) : null}
-        </div>
-     )  
-  }
-  else{
   return (
     <div style={props.rowContainerStyle} className={`${props.last ? "row last" : "row"} ${props?.className || ""}`}>
-      <h2 style={labelStyle}>
-        {props.label}
-        {props.labelChildren && props.labelChildren}
-      </h2>
-      <div className="value" style={{...valueStyle/*, wordBreak: "break-word"*/}}>
-        {/* {value}////
+      <h2 style={labelStyle}>{props.label}{props?.isMandotary && '*'}</h2>
+      <div className="value" style={valueStyle}>
+        {
+          props?.isValueLink ? (<p className="status-value-link" onClick={props?.navigateLinkHandler}>{value}</p>) : <p>{value}</p> 
+        }
         {props?.privacy && (
           <span style={{ display: "inline-flex", width: "fit-content", marginLeft: "10px" }}>
-            <UnMaskComponent iseyevisible={value?.includes("*")?true:false} privacy={Array.isArray(props?.privacy) ? props?.privacy?.[0] : props?.privacy}></UnMaskComponent>
+            <UnMaskComponent privacy={props?.privacy}></UnMaskComponent>
           </span>
-        )} */}
-        <WrapUnMaskComponent   value={value} iseyevisible={value && value?.toString()?.includes("*")?true:false} privacy={Array.isArray(props?.privacy)?props?.privacy?.[0]:props?.privacy} />
+        )}
         {props.caption && <div className="caption">{props.caption}</div>}
       </div>
       {props.actionButton ? (
@@ -99,7 +74,6 @@ export const Row = (props) => {
       ) : null}
     </div>
   );
-      }
 };
 
 export const MediaRow = (props) => {
@@ -126,7 +100,7 @@ export const StatusTable = (props) => {
     );
   } else {
     return (
-      <div className={employee ? "employee-data-table" : "data-table"} style={props.style}>
+      <div className={employee ? `employee-data-table ${props?.customClass ? props?.customClass : ""}` : "data-table"} style={props.style}>
         {props.children}
       </div>
     );

@@ -91,23 +91,6 @@
     }
   }
 }
-.fsm-registry-dropdown {
-  .select {
-    @apply flex;
-    input {
-      text-align: left;
-    }
-  }
-  .select-active {
-    text-align: left;
-  }
-  .options-card {
-    .profile-dropdown--item {
-      justify-content: left;
-    }
-  }
-  margin-bottom: 0;
-}
 
 .employee-select-wrap--elipses {
   width: 85% !important;

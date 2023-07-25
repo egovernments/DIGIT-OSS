@@ -1,7 +1,5 @@
 package org.egov.fsm.web.model;
 
-import java.math.BigDecimal;
-
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -158,21 +156,6 @@ public class FSM   {
 
   @JsonProperty("completedOn")
   private Long completedOn ;
-  
-  @JsonProperty("advanceAmount")
-  private BigDecimal advanceAmount=null;
-
-  @JsonProperty("applicationType")
-  private String applicationType ;
-  
-  @JsonProperty("oldApplicationNo")
-  private String oldApplicationNo ;
-  
-  @JsonProperty("paymentPreference")
-  private String paymentPreference ;
-  
- // @JsonProperty("receivedPayment")
- // private String receivedPayment;
 
   @JsonProperty("applicationType")
   private String applicationType ;

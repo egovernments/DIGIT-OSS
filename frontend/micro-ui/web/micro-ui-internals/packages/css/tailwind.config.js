@@ -7,6 +7,7 @@ module.exports = {
   theme: {
     screens: {
       dt: "780px",
+      sm: { max: "425px" },
     },
     colors: {
       primary: {
@@ -24,6 +25,7 @@ module.exports = {
         hover: "#003078",
       },
       border: "#D6D5D4",
+      inputBorder:"#464646",
       "input-border": "#464646",
       focus: "#F47738",
       error: "#D4351C",
@@ -95,6 +97,7 @@ module.exports = {
     },
     inset: {
       0: 0,
+      6: "6px",
       10: "10px",
     },
     extend: {},

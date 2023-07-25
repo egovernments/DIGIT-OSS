@@ -57,7 +57,7 @@ const envVariables = {
   EGOV_LOCATION_BOUNDARY_TYPE_CODE: process.env.EGOV_BOUNDARY || "Locality",
 
   //user service configurations
-  EGOV_USER_HOST: process.env.EGOV_USER_HOST || "http://localhost:8081",
+  EGOV_USER_HOST: process.env.EGOV_USER_HOST || "http://localhost:8088",
   //"https://dev.digit.org",
   EGOV_USER_CONTEXT_PATH: process.env.EGOV_USER_CONTEXT_PATH || "/user",
   EGOV_USER_CREATE_ENDPOINT:

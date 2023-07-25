@@ -140,9 +140,7 @@ public class PropertyConfiguration {
     
     @Value("${egov.notif.view.mutation}")
     private String viewMutationLink;
-
-    @Value("${egov.notif.citizen.feedback}")
-    private String citizenFeedbackLink;
+    
 
     @Value("${egov.usr.events.view.history.link}")
     private String userEventViewPropertyLink;
@@ -368,11 +366,5 @@ public class PropertyConfiguration {
     //encryptOldDataStatus topic
     @Value("${property.oldDataEncryptionStatus.topic}")
     private String encryptionStatusTopic;
-
-    @Value("${persister.update.property.oldData.topic}")
-    private String updatePropertyEncTopic;
-
-    @Value("${persister.update.property.audit.oldData.topic}")
-    private String updatePropertyAuditEncTopic;
 
 }

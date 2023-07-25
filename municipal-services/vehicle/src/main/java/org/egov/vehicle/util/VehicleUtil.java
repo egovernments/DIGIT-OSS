@@ -28,33 +28,34 @@ import com.jayway.jsonpath.spi.mapper.MappingProvider;
 public class VehicleUtil {
 	@Autowired
 	VehicleConfiguration config;
-
+	
 	@Autowired
 	ServiceRequestRepository serviceRequestRepository;
+	
+    public void defaultJsonPathConfig() {
+        Configuration.setDefaults(new Configuration.Defaults() {
 
-	public void defaultJsonPathConfig() {
-		Configuration.setDefaults(new Configuration.Defaults() {
+            private final JsonProvider jsonProvider = new JacksonJsonProvider();
+            private final MappingProvider mappingProvider = new JacksonMappingProvider();
 
-			private final JsonProvider jsonProvider = new JacksonJsonProvider();
-			private final MappingProvider mappingProvider = new JacksonMappingProvider();
+            @Override
+            public JsonProvider jsonProvider() {
+                return jsonProvider;
+            }
 
-			@Override
-			public JsonProvider jsonProvider() {
-				return jsonProvider;
-			}
+            @Override
+            public MappingProvider mappingProvider() {
+                return mappingProvider;
+            }
 
-			@Override
-			public MappingProvider mappingProvider() {
-				return mappingProvider;
-			}
-
-			@Override
-			public Set<Option> options() {
-				return EnumSet.noneOf(Option.class);
-			}
-		});
-	}
-
+            @Override
+            public Set<Option> options() {
+                return EnumSet.noneOf(Option.class);
+            }
+        });
+    }
+    
+    
 	/**
 	 * Method to return auditDetails for create/update flows
 	 *
@@ -68,24 +69,22 @@ public class VehicleUtil {
 			return AuditDetails.builder().createdBy(by).lastModifiedBy(by).createdTime(time).lastModifiedTime(time)
 					.build();
 		else {
-			return AuditDetails.builder().lastModifiedBy(by).lastModifiedTime(time)
-					.createdBy(existingAudit.getCreatedBy()).createdTime(existingAudit.getCreatedTime()).build();
+			return AuditDetails.builder().lastModifiedBy(by).lastModifiedTime(time).createdBy(existingAudit.getCreatedBy()).createdTime(existingAudit.getCreatedTime()).build();
 		}
-
+			
 	}
-
-	/**
+	
+    /**
 	 * makes mdms call with the given criteria and reutrn mdms data
-	 * 
 	 * @param requestInfo
 	 * @param tenantId
 	 * @return
 	 */
 	public Object mDMSCall(RequestInfo requestInfo, String tenantId) {
 		MdmsCriteriaReq mdmsCriteriaReq = getMDMSRequest(requestInfo, tenantId);
-		return serviceRequestRepository.fetchResult(getMdmsSearchUrl(), mdmsCriteriaReq);
+		Object result = serviceRequestRepository.fetchResult(getMdmsSearchUrl(), mdmsCriteriaReq);
+		return result;
 	}
-
 	/**
 	 * Returns the URL for MDMS search end point
 	 *
@@ -94,10 +93,8 @@ public class VehicleUtil {
 	public StringBuilder getMdmsSearchUrl() {
 		return new StringBuilder().append(config.getMdmsHost()).append(config.getMdmsEndPoint());
 	}
-
 	/**
 	 * prepares the mdms request object
-	 * 
 	 * @param requestInfo
 	 * @param tenantId
 	 * @return
@@ -110,25 +107,30 @@ public class VehicleUtil {
 
 		MdmsCriteria mdmsCriteria = MdmsCriteria.builder().moduleDetails(moduleDetails).tenantId(tenantId).build();
 
-		return MdmsCriteriaReq.builder().mdmsCriteria(mdmsCriteria).requestInfo(requestInfo).build();
+		MdmsCriteriaReq mdmsCriteriaReq = MdmsCriteriaReq.builder().mdmsCriteria(mdmsCriteria).requestInfo(requestInfo)
+				.build();
+		
+		return mdmsCriteriaReq;
 	}
-
 	public List<ModuleDetail> getVehicleModuleRequest() {
 
-		final String filterCode = "$.[?(@.active==true)].code";
-		final String activeFilter = "$.[?(@.active==true)]";
-		List<ModuleDetail> moduleDtls = new ArrayList<>();
-
+		// filter to only get code field from master data
+				final String filterCode = "$.[?(@.active==true)].code";
+				final String activeFilter = "$.[?(@.active==true)]";
+		// master details for FSM module
 		List<MasterDetail> masterDtls = new ArrayList<>();
+		List<ModuleDetail> moduleDtls = new ArrayList<>();
+			
+		masterDtls = new ArrayList<>();
 		masterDtls.add(MasterDetail.builder().name(Constants.VEHICLE_SUCTION_TYPE).filter(filterCode).build());
 		masterDtls.add(MasterDetail.builder().name(Constants.VEHICLE_MAKE_MODEL).filter(activeFilter).build());
 		masterDtls.add(MasterDetail.builder().name(Constants.VEHICLE_OWNER_TYPE).filter(activeFilter).build());
 		masterDtls.add(MasterDetail.builder().name(Constants.VEHICLE_DECLINE_REASON).filter(activeFilter).build());
-		moduleDtls.add(
-				ModuleDetail.builder().masterDetails(masterDtls).moduleName(Constants.VEHICLE_MODULE_CODE).build());
-
+		moduleDtls.add(ModuleDetail.builder().masterDetails(masterDtls)
+				.moduleName(Constants.VEHICLE_MODULE_CODE).build());
+		
 		return moduleDtls;
 
 	} 
 
-}
+ }

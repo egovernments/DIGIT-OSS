@@ -50,25 +50,18 @@ public class DriverRepository {
 	public DriverResponse getDriverData(DriverSearchCriteria driverSearchCriteria) {
 		List<Object> preparedStmtList = new ArrayList<>();
 		String query = driverQueryBuilder.getDriverSearchQuery(driverSearchCriteria, preparedStmtList);
-		log.info("DriverSearch Query" + query);
 		List<Driver> driverData = jdbcTemplate.query(query, preparedStmtList.toArray(), driverRowMapper);
-		return DriverResponse.builder().driver(driverData).totalCount(Integer.valueOf(driverRowMapper.getFullCount()))
-				.build();
-	}
+		DriverResponse response = DriverResponse.builder().driver(driverData)
+				.totalCount(Integer.valueOf(driverRowMapper.getFullCount())).build();
 
+		System.out.println("query is " + query);
+		return response;
+	}
 	public List<String> fetchDriverIdsWithNoVendor(@Valid DriverSearchCriteria criteria) {
 		List<Object> preparedStmtList = new ArrayList<>();
 		String query = driverQueryBuilder.getDriverIdsWithNoVendorQuery(criteria, preparedStmtList);
-		log.info("DriverQuery:: " + query);
-		return jdbcTemplate.query(query, preparedStmtList.toArray(), new SingleColumnRowMapper<>(String.class));
+		List<String> ids = jdbcTemplate.query(query,preparedStmtList.toArray(),	new SingleColumnRowMapper<>(String.class));
+		return ids;
 	}
 
-	public String getDriverSeqMobileNum(String seqDriverMobileNumber) {
-		List<Object> preparedStmtList = new ArrayList<>();
-
-		String query = driverQueryBuilder.getSeqDriverMobileNumber(seqDriverMobileNumber, preparedStmtList);
-
-		return jdbcTemplate.queryForObject(query, preparedStmtList.toArray(), String.class);
-
-	}
 }

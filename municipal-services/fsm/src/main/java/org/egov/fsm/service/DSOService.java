@@ -35,115 +35,109 @@ public class DSOService {
 
 	@Autowired
 	private FSMConfiguration config;
-
+	
 	@Autowired
 	private ObjectMapper mapper;
 
 	@Autowired
 	private ServiceRequestRepository serviceRequestRepository;
-
+	
 	@Autowired
 	VehicleService vehicleService;
-
-	public Vendor getVendor(VendorSearchCriteria vendorSearchCriteria, RequestInfo requestInfo) {
-
+	
+	public Vendor getVendor(VendorSearchCriteria vendorSearchCriteria,RequestInfo requestInfo) {
+		
 		StringBuilder uri = new StringBuilder(config.getVendorHost()).append(config.getVendorContextPath())
 				.append(config.getVendorSearchEndpoint()).append("?tenantId=")
 				.append(vendorSearchCriteria.getTenantId());
 
-		if (!CollectionUtils.isEmpty(vendorSearchCriteria.getIds())) {
-
-			uri.append("&ids=" + String.join(",", vendorSearchCriteria.getIds()));
+		if(!CollectionUtils.isEmpty(vendorSearchCriteria.getIds())) {
+			
+			uri.append("&ids="+String.join(",",vendorSearchCriteria.getIds())); 
+			
 		}
-
-		if (!CollectionUtils.isEmpty(vendorSearchCriteria.getOwnerIds())) {
-			uri.append("&ownerIds=" + String.join(",", vendorSearchCriteria.getOwnerIds()));
+		
+		if(!CollectionUtils.isEmpty(vendorSearchCriteria.getOwnerIds())) {
+			uri.append("&ownerIds="+String.join(",",vendorSearchCriteria.getOwnerIds()));
+			
 		}
-
-		if (!StringUtils.isEmpty(vendorSearchCriteria.getMobileNumber())) {
+		
+		if(!StringUtils.isEmpty(vendorSearchCriteria.getMobileNumber())) {
 			uri.append("&mobileNumber=").append(vendorSearchCriteria.getMobileNumber());
 		}
+		
 
-		if (!StringUtils.isEmpty(vendorSearchCriteria.getVehicleType())) {
+		if(!StringUtils.isEmpty(vendorSearchCriteria.getVehicleType())) {
 			uri.append("&vehicleType=").append(vendorSearchCriteria.getVehicleType());
 		}
-
-		if (!StringUtils.isEmpty(vendorSearchCriteria.getVehicleCapacity())) {
+		
+		if(!StringUtils.isEmpty(vendorSearchCriteria.getVehicleCapacity())) {
 			uri.append("&vehicleCapacity=").append(vendorSearchCriteria.getVehicleCapacity());
 		}
-
+		
 		RequestInfoWrapper requestInfoWrpr = new RequestInfoWrapper();
 		requestInfoWrpr.setRequestInfo(requestInfo);
 		try {
-
+			 
 			LinkedHashMap responseMap = (LinkedHashMap) serviceRequestRepository.fetchResult(uri, requestInfoWrpr);
 			VendorResponse vendorResponse = mapper.convertValue(responseMap, VendorResponse.class);
-			if (!CollectionUtils.isEmpty(vendorResponse.getVendor())) {
+			if(!CollectionUtils.isEmpty(vendorResponse.getVendor())) {
 				return vendorResponse.getVendor().get(0);
-			} else {
+			}else {
 				return null;
 			}
-
+			
 		} catch (IllegalArgumentException e) {
-			throw new CustomException("IllegalArgumentException",
-					"ObjectMapper not able to convertValue in validateDSO");
+			throw new CustomException("IllegalArgumentException", "ObjectMapper not able to convertValue in validateDSO");
 		}
-
+		
 	}
-
+	
 	public void validateDSO(FSMRequest fsmRequest) {
 		FSM fsm = fsmRequest.getFsm();
-
-		VendorSearchCriteria vendorSearchCriteria = VendorSearchCriteria.builder().ids(Arrays.asList(fsm.getDsoId()))
+		
+		VendorSearchCriteria vendorSearchCriteria=new VendorSearchCriteria();
+		vendorSearchCriteria = VendorSearchCriteria.builder().ids(Arrays.asList(fsm.getDsoId()))
 				.tenantId(fsm.getTenantId()).build();
-
-		Vendor vendor = this.getVendor(vendorSearchCriteria, fsmRequest.getRequestInfo());
-
-		if (vendor == null) {
-			throw new CustomException(FSMErrorConstants.INVALID_DSO, " DSO Does not belong to DSO!");
-		} else {
-			addVendorOwnerGUUID(fsmRequest, vendor);
-		}
-
-		if (!StringUtils.isEmpty(fsm.getVehicleId())) {
-			vehicleService.validateVehicle(fsmRequest);
-			Map<String, Vehicle> vehilceIdMap = vendor.getVehicles().stream()
-					.collect(Collectors.toMap(Vehicle::getId, Function.identity()));
-			if (!CollectionUtils.isEmpty(vehilceIdMap) && vehilceIdMap.get(fsm.getVehicleId()) == null) {
-				throw new CustomException(FSMErrorConstants.INVALID_DSO_VEHICLE, " Vehicle Does not belong to DSO!");
-			} else {
-				Vehicle vehicle = vehilceIdMap.get(fsm.getVehicleId());
-				checkVehicleCapacity(fsm, vehicle);
+				
+		Vendor vendor = this.getVendor(vendorSearchCriteria,fsmRequest.getRequestInfo());
+		
+		if(vendor == null) {
+			throw new CustomException(FSMErrorConstants.INVALID_DSO," DSO Does not belong to DSO!");
+		}else {
+			if( CollectionUtils.isEmpty(fsmRequest.getWorkflow().getAssignes())) {
+				List<String> assignes = new ArrayList<String>();
+				assignes.add(vendor.getOwner().getUuid());
+				fsmRequest.getWorkflow().setAssignes(assignes);
+			}else {
+				if(fsmRequest.getWorkflow().getAssignes().size() >1) {
+					throw new CustomException(FSMErrorConstants.INVALID_DSO," Cannot assign to multiple DSO's !");
+				}else {
+					if(!fsmRequest.getWorkflow().getAssignes().get(0).equalsIgnoreCase(vendor.getOwner().getUuid())) {
+						throw new CustomException(FSMErrorConstants.INVALID_DSO," Assignee Does not belong to DSO!");
+					}
+				}
 			}
+			
 		}
-	}
-
-	private void checkVehicleCapacity(FSM fsm, Vehicle vehicle) {
-
-		if (vehicle.getTankCapacity() != null
-				&& (vehicle.getTankCapacity() < Double.valueOf(fsm.getVehicleCapacity()))) {
-			throw new CustomException(FSMErrorConstants.INVALID_DSO_VEHICLE,
-					" Vehicle Capacity of the assigned vehicle is less than the tank capacity of FSM application !");
-		}
-	}
-
-	private void addVendorOwnerGUUID(FSMRequest fsmRequest, Vendor vendor) {
-		if (CollectionUtils.isEmpty(fsmRequest.getWorkflow().getAssignes())) {
-			List<String> assignes = new ArrayList<>();
-			assignes.add(vendor.getOwner().getUuid());
-			fsmRequest.getWorkflow().setAssignes(assignes);
-		} else {
-			if (fsmRequest.getWorkflow().getAssignes().size() > 1) {
-				throw new CustomException(FSMErrorConstants.INVALID_DSO, " Cannot assign to multiple DSO's !");
-			} else {
-				if (!fsmRequest.getWorkflow().getAssignes().get(0).equalsIgnoreCase(vendor.getOwner().getUuid())) {
-					throw new CustomException(FSMErrorConstants.INVALID_DSO, " Assignee Does not belong to DSO!");
+		
+		if(!StringUtils.isEmpty(fsm.getVehicleId())) {
+			vehicleService.validateVehicle(fsmRequest);
+			Map<String, Vehicle> vehilceIdMap = vendor.getVehicles().stream().collect(Collectors.toMap(Vehicle::getId,Function.identity()));
+			if(!CollectionUtils.isEmpty(vehilceIdMap) && vehilceIdMap.get(fsm.getVehicleId()) == null ) {
+				throw new CustomException(FSMErrorConstants.INVALID_DSO_VEHICLE," Vehicle Does not belong to DSO!");
+			}
+			else {
+				Vehicle vehicle = vehilceIdMap.get(fsm.getVehicleId());
+				if (vehicle.getTankCapacity()!=null &&
+						(vehicle.getTankCapacity() < Double.valueOf(fsm.getVehicleCapacity()))) {
+					throw new CustomException(FSMErrorConstants.INVALID_DSO_VEHICLE,
+							" Vehicle Capacity of the assigned vehicle is less than the tank capacity of FSM application !");
 				}
 	
 
 			}
 		}
-
+		
 	}
-
 }

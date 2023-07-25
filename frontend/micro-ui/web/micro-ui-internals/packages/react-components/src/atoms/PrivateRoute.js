@@ -2,18 +2,20 @@ import React from "react";
 import { Route, Redirect } from "react-router-dom";
 
 export const PrivateRoute = ({ component: Component, roles, ...rest }) => {
+
+  console.log(Component, roles, rest);
   return (
     <Route
       {...rest}
       render={(props) => {
         const user = Digit.UserService.getUser();
         const userType = Digit.UserService.getType();
-        function getLoginRedirectionLink (){
-          if(userType === "employee"){
-            return "/digit-ui/employee/user/language-selection"
+        function getLoginRedirectionLink() {
+          if (userType === "employee") {
+            return `/${window?.contextPath}/employee/user/language-selection`
           }
-          else{
-            return "/digit-ui/citizen/login"
+          else {
+            return `/${window?.contextPath}/citizen/login`
           }
         }
         if (!user || !user.access_token) {

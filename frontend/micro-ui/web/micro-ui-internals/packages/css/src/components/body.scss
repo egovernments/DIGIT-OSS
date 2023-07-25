@@ -47,10 +47,9 @@ body {
 
 .bread-crumb {
   font-size: 14px;
-  color: #505a5f;
+  color: theme(colors.text.secondary);
   display: flex;
   margin-bottom: 10px;
-  flex-wrap: wrap
 }
 .bread-crumb--item {
   margin-left: 5px;
@@ -64,7 +63,7 @@ body {
   }
 
   .last {
-    color: #0b0c0c;
+    color: theme(colors.text.primary);
   }
 }
 

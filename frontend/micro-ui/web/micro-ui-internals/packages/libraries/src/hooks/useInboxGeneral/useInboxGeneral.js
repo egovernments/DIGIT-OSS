@@ -1,37 +1,11 @@
 import { useTranslation } from "react-i18next";
 import { useQuery, useQueryClient } from "react-query";
-import { FSMService } from "../../services/elements/FSM";
-import { PTService } from "../../services/elements/PT";
 
 import { filterFunctions } from "./filterFn";
 import { getSearchFields } from "./searchFields";
-import { TLService } from "../../services/elements/TL";
 
 const inboxConfig = (tenantId, filters) => ({
-  PT: {
-    services: ["PT.CREATE"],
-    searchResponseKey: "Properties",
-    businessIdsParamForSearch: "acknowledgementIds",
-    businessIdAliasForSearch: "acknowldgementNumber",
-    fetchFilters: filterFunctions.PT,
-    _searchFn: () => PTService.search({ tenantId, filters }),
-  },
-  FSM: {
-    services: ["FSM"],
-    searchResponseKey: "fsm",
-    businessIdsParamForSearch: "applicationNos",
-    businessIdAliasForSearch: "applicationNo",
-    fetchFilters: filterFunctions.FSM,
-    _searchFn: () => FSMService.search(tenantId, filters),
-  },
-  TL: {
-    services: ["TL"],
-    searchResponseKey: "items",
-    businessIdsParamForSearch: "businessId",
-    businessIdAliasForSearch: "businessId",
-    fetchFilters: filterFunctions.TL,
-    _searchFn: () => TLService.search(tenantId, filters),
-  },
+  
 });
 
 const defaultCombineResponse = ({ totalCount, ...d }, wf) => {

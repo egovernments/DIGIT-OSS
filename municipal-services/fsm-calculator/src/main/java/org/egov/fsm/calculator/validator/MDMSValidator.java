@@ -20,6 +20,7 @@ import lombok.extern.slf4j.Slf4j;
 public class MDMSValidator {
 	private Map<String, Object> mdmsResMap ;
 	
+		// TODO Auto-generated method stub
 	public void validateMdmsData(Object mdmsData) {
 
 		this.mdmsResMap  = getAttributeValues(mdmsData);
@@ -60,7 +61,7 @@ public class MDMSValidator {
 	 * @param propertyType
 	 * @throws CustomException
 	 */
-	public void validatePropertyType(String propertyType ){
+	public void validatePropertyType(String propertyType ) throws CustomException{
 		
 		Map<String, String> errorMap = new HashMap<>();
 		
@@ -71,5 +72,7 @@ public class MDMSValidator {
 		if (!errorMap.isEmpty())
 			throw new CustomException(errorMap);
 	}
+	
+
 
 }

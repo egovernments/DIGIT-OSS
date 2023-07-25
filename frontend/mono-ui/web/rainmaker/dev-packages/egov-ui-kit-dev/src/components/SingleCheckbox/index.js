@@ -14,12 +14,6 @@ const defaultStyle = {
 const selectedLabelStyle = {
   color: "#00bcd1",
 };
-const checkBoxWidth = {
-  width: "20px",
-  display: "inline-block"
-}
-
-
 const SingleCheckboxUi = ({
   defaultValue,
   value,
@@ -32,25 +26,21 @@ const SingleCheckboxUi = ({
   containerClassName,
   id,
   disabled,
-  isSeperateLabel = "",
 }) => {
   const renderCheckbox = () => {
     return (
-      <div style={isSeperateLabel ? {display: "flex", justifyContent: "flex-start", alignItems: "center", marginTop: "-20px", marginLeft: "-3px"} : {}}>
-        <Checkbox
+      <Checkbox
         id={id}
         defaultValue={defaultValue}
-        label={isSeperateLabel ? "" : floatingLabelText}
+        label={floatingLabelText}
         onCheck={onCheck}
-        style={isSeperateLabel ? { ...defaultStyle, ...style, ...checkBoxWidth } : { ...defaultStyle, ...style }}
+        style={{ ...defaultStyle, ...style }}
         iconStyle={iconStyle}
         checked={typeof value === "boolean" ? value : value === "true" ? true : false}
         checkedIcon={checkedIcon}
         labelStyle={{ ...defaultLabelStyle, ...labelStyle, ...selectedLabelStyle }}
         disabled={disabled}
       />
-      {isSeperateLabel && <span style={{marginTop: "10px", marginLeft: "10px"}}>{isSeperateLabel}</span>}
-      </div>
     );
   };
 

@@ -25,8 +25,6 @@ public class PropertyQueryBuilder {
 	
 	private static String PROEPRTY_AUDIT_QUERY = "select property from eg_pt_property_audit where propertyid=?";
 
-	private static String PROPERTY_AUDIT_ENC_QUERY = "select * from eg_pt_property_audit where propertyid=?";
-
 	private static String PROEPRTY_ID_QUERY = "select propertyid from eg_pt_property where id in (select propertyid from eg_pt_owner where userid IN {replace} AND status='ACTIVE') ";
 
 	private static String REPLACE_STRING = "{replace}";
@@ -441,9 +439,5 @@ public class PropertyQueryBuilder {
 		preparedStatement.add(criteria.getTenantId());
 		return LATEST_EXECUTED_MIGRATION_QUERY;
 	}
-
-	public String getpropertyAuditEncQuery() {
-		return PROPERTY_AUDIT_ENC_QUERY;
-	}
-
+	
 }

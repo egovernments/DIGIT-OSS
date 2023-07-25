@@ -1,5 +1,6 @@
 package org.egov.vendor.web.model.hrms;
 
+
 import org.egov.vendor.web.model.AuditDetails;
 import org.springframework.validation.annotation.Validated;
 
@@ -15,7 +16,7 @@ import lombok.Setter;
 import lombok.ToString;
 
 @Validated
-@EqualsAndHashCode(exclude = { "auditDetails" })
+@EqualsAndHashCode(exclude = {"auditDetails"})
 @AllArgsConstructor
 @Getter
 @NoArgsConstructor
@@ -28,18 +29,18 @@ public class EmployeeDocument {
 
 	private String documentName;
 
-	private String documentId;
+	private  String documentId;
 
 	private EmployeeDocumentReferenceType referenceType;
 
 	private String referenceId;
-
+	
 	private String tenantId;
 
 	private AuditDetails auditDetails;
 
 	public enum EmployeeDocumentReferenceType {
-		HEADER("HEADER"), ASSIGNMENT("ASSIGNMENT"), JURISDICTION("JURISDICTION"), SERVICE("SERVICE"),
+		HEADER("HEADER"), ASSIGNMENT("ASSIGNMENT"), JURISDICTION("JURISDICTION"), SERVICE("SERVICE"), 
 		EDUCATION("EDUCATION"), TEST("TEST"), DEACTIVATION("DEACTIVATION");
 
 		private String value;
@@ -57,7 +58,7 @@ public class EmployeeDocument {
 		@JsonCreator
 		public static EmployeeDocumentReferenceType fromValue(String passedValue) {
 			for (EmployeeDocumentReferenceType obj : EmployeeDocumentReferenceType.values()) {
-				if (String.valueOf(obj.value).equalsIgnoreCase(passedValue)) {
+				if (String.valueOf(obj.value).equals(passedValue.toUpperCase())) {
 					return obj;
 				}
 			}

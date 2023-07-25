@@ -45,7 +45,7 @@ public class VehicleTripDetail {
 	  @JsonProperty("referenceNo")
 	  private String referenceNo = null;
 	  
-	   @SafeHtml
+	  @SafeHtml
 	  @JsonProperty("referenceStatus")
 	  private String referenceStatus = null;
 	  

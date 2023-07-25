@@ -7,8 +7,11 @@ import java.util.List;
 import java.util.Map;
 
 import org.egov.fsm.plantmapping.util.PlantMappingConstants;
+import org.egov.fsm.plantmapping.web.model.PlantMappingRequest;
 import org.egov.fsm.util.FSMConstants;
 import org.egov.fsm.util.FSMErrorConstants;
+import org.egov.fsm.web.model.FSMRequest;
+import org.egov.fsm.web.model.PitDetail;
 import org.egov.tracer.model.CustomException;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
@@ -22,15 +25,16 @@ import lombok.extern.slf4j.Slf4j;
 public class MDMSValidator {
 	private Map<String, Object> mdmsResMap;
 
-	public void validateMdmsData1(Object mdmsData) {
+	// TODO Auto-generated method stub
+	public void validateMdmsData(FSMRequest fsmRequest, Object mdmsData) {
 
 		this.mdmsResMap = getAttributeValues(mdmsData);
 		String[] masterArray = { FSMConstants.MDMS_PROPERTY_TYPE, FSMConstants.MDMS_APPLICATION_CHANNEL,
 				FSMConstants.MDMS_SANITATION_TYPE, FSMConstants.MDMS_VEHICLE_MAKE_MODEL, FSMConstants.MDMS_PIT_TYPE,
 				FSMConstants.MDMS_CONFIG, FSMConstants.MDMS_SLUM_NAME, FSMConstants.MDMS_APPLICATION_TYPE,
-				FSMConstants.MDMS_PAYMENT_PREFERENCE, FSMConstants.MDMS_RECEIVED_PAYMENT };
-
+				FSMConstants.MDMS_PAYMENT_PREFERENCE,FSMConstants.MDMS_RECEIVED_PAYMENT };
 		validateIfMasterPresent(masterArray, this.mdmsResMap);
+
 	}
 
 	private void validateIfMasterPresent(String[] masterNames, Map<String, Object> codes) {
@@ -47,17 +51,17 @@ public class MDMSValidator {
 	public Map<String, Object> getAttributeValues(Object mdmsData) {
 
 		List<String> modulepaths = Arrays.asList(FSMConstants.FSM_JSONPATH_CODE, FSMConstants.VEHICLE_JSONPATH_CODE);
-		final Map<String, Object> mdmsResMapResponse = new HashMap<>();
+		final Map<String, Object> mdmsResMap = new HashMap<>();
 		modulepaths.forEach(modulepath -> {
 			try {
-				mdmsResMapResponse.putAll(JsonPath.read(mdmsData, modulepath));
+				mdmsResMap.putAll(JsonPath.read(mdmsData, modulepath));
 			} catch (Exception e) {
 				log.error("Error while fetvhing MDMS data", e);
 				throw new CustomException(FSMErrorConstants.INVALID_TENANT_ID_MDMS_KEY,
 						FSMErrorConstants.INVALID_TENANT_ID_MDMS_MSG);
 			}
 		});
-		return mdmsResMapResponse;
+		return mdmsResMap;
 	}
 
 	/**
@@ -66,7 +70,7 @@ public class MDMSValidator {
 	 * @param propertyType
 	 * @throws CustomException
 	 */
-	public void validatePropertyType(String propertyType) {
+	public void validatePropertyType(String propertyType) throws CustomException {
 
 		Map<String, String> errorMap = new HashMap<>();
 
@@ -89,7 +93,7 @@ public class MDMSValidator {
 	 * @param propertyType
 	 * @throws CustomException
 	 */
-	public void validateApplicationChannel(String applicationChannel) {
+	public void validateApplicationChannel(String applicationChannel) throws CustomException {
 
 		Map<String, String> errorMap = new HashMap<>();
 
@@ -104,19 +108,30 @@ public class MDMSValidator {
 	/**
 	 * validate the existnance of provided SanitationType in MDMS
 	 * 
-	 * @param pitDetail
 	 * @param propertyType
 	 * @throws CustomException
 	 */
-	public void validateOnSiteSanitationType(String sanitationType) {
+	public void validateOnSiteSanitationType(String sanitationType, PitDetail pitDetail) throws CustomException {
 
 		Map<String, String> errorMap = new HashMap<>();
 		List<Map<String, String>> pitMap = (List<Map<String, String>>) this.mdmsResMap.get(FSMConstants.MDMS_PIT_TYPE);
 		List<Map<String, String>> pitItemMap = JsonPath.parse(pitMap)
 				.read("$.[?(@.active==true && @.code=='" + sanitationType + "')]");
-		if (pitItemMap.isEmpty()) {
+		if (pitItemMap != null && pitItemMap.size() > 0) {
+//			HashMap<String,String> pititem =((HashMap<String,String>)pitItemMap.get(0));
+//			if(pititem.get("dimension").equalsIgnoreCase("lbd")) {
+//				if( pitDetail.getHeight() == null || pitDetail.getWidth() == null || pitDetail.getLength() == null) {
+//					errorMap.put(FSMErrorConstants.INVALID_PIT_DIMENSIONS_LBD,"Pit Dimensions Length, Breadth and width are mdantory");
+//				}
+//			}else if(pititem.get("dimension").equalsIgnoreCase("dd")) {
+//				if(  pitDetail.getHeight() == null || pitDetail.getDiameter() == null) {
+//					errorMap.put(FSMErrorConstants.INVALID_PIT_DIMENSIONS_DD," Pit Dimensions depth and Diameter are mdantory");
+//				}
+//			}
+		} else {
 			errorMap.put(FSMErrorConstants.INVALID_PIT_TYPE, " On Site PitType is invalid");
 		}
+
 		if (!errorMap.isEmpty())
 			throw new CustomException(errorMap);
 	}
@@ -133,7 +148,7 @@ public class MDMSValidator {
 
 	}
 
-	public void validateMdmsData(Object mdmsData) {
+	public void validateMdmsData(PlantMappingRequest request, Object mdmsData) {
 
 		this.mdmsResMap = getAttributeValues(mdmsData);
 		String[] masterArray = { PlantMappingConstants.MDMS_FSTP_PLANT_INFO };
@@ -142,12 +157,13 @@ public class MDMSValidator {
 
 	}
 
-	public void validateFSTPPlantInfo(String plantCode, String tenantId) {
+	public void validateFSTPPlantInfo(String plantCode, String tenantId) throws CustomException {
 		Map<String, String> errorMap = new HashMap<>();
 		List<Map<String, String>> plantMap = (List<Map<String, String>>) this.mdmsResMap
 				.get(PlantMappingConstants.MDMS_FSTP_PLANT_INFO);
-		List<Map<String, String>> fstpmap = JsonPath.parse(plantMap).read("$.[?(@.PlantCode=='" + plantCode + "')]");
-		if (!fstpmap.isEmpty()) {
+		List<Map<String, String>> fstpmap = (List<Map<String, String>>) JsonPath.parse(plantMap)
+				.read("$.[?(@.PlantCode=='" + plantCode + "')]");
+		if (fstpmap != null && fstpmap.size() > 0) {
 			Map<String, String> planMapData = fstpmap.get(0);
 			if (!(planMapData.get("PlantCode").equals(plantCode)) || !(planMapData.get("ULBS").contains(tenantId))) {
 				errorMap.put(FSMErrorConstants.INVALID_FSTP_CODE, "Invalid FSTP code");
@@ -159,8 +175,19 @@ public class MDMSValidator {
 			throw new CustomException(errorMap);
 	}
 
+	public void validatePaymentPreference(String paymentPreference) throws CustomException {
 
-	public void validateReceivedPaymentType(String receivedPaymentType) {
+		Map<String, String> errorMap = new HashMap<>();
+
+		if (!((List<String>) this.mdmsResMap.get(FSMConstants.MDMS_PAYMENT_PREFERENCE)).contains(paymentPreference)) {
+			errorMap.put(FSMErrorConstants.INVALID_PAYMENT_PREFERENCE, " Payment preference is invalid");
+		}
+
+		if (!errorMap.isEmpty())
+			throw new CustomException(errorMap);
+	}
+
+	public void validateReceivedPaymentType(String receivedPaymentType) throws CustomException {
 
 		Map<String, String> errorMap = new HashMap<>();
 		log.info("validateReceivedPaymentType:: " + receivedPaymentType);
@@ -168,11 +195,11 @@ public class MDMSValidator {
 		List<String> receivedPaymentModel = (List<String>) this.mdmsResMap.get(FSMConstants.MDMS_RECEIVED_PAYMENT);
 		log.info("validateReceivedPaymentType receivedPaymentModel :: " + receivedPaymentModel);
 		@SuppressWarnings("unchecked")
-		List<Map<String, String>> receivedPaymentmap =  JsonPath.parse(receivedPaymentModel)
+		List<Map<String, String>> receivedPaymentmap = (List<Map<String, String>>) JsonPath.parse(receivedPaymentModel)
 				.read("$.[?(@.code=='" + receivedPaymentType + "')]");
-		if (!receivedPaymentmap.isEmpty()) {
-			Map<String, String> data = receivedPaymentmap.get(0);
-			if (!(data.get("code").equals(receivedPaymentType))) {
+		if (receivedPaymentmap != null && receivedPaymentmap.size() > 0) {
+			Map<String, String> Data = receivedPaymentmap.get(0);
+			if (!(Data.get("code").equals(receivedPaymentType))) {
 				errorMap.put(FSMErrorConstants.INVALID_RECEIVED_PAYMENT_TYPE, " Received payment type is invalid");
 			}
 		} else {

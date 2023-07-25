@@ -503,39 +503,12 @@ class ShowForm extends Component {
         if (input && input != "All") {
           searchParams.push({ name: variable, input });
         }
-
-        if (metaData && metaData.reportDetails && metaData.reportDetails.reportName === "ChannelsReport" && input && input == "All") {
-          searchParams.push({ name: variable, input });
-        }
       }
       showSpinner();
       setSearchParams(searchParams);
 
       clearReportHistory();
       let resulturl = getResultUrl(this.state.moduleName, this.state.reportName);
-      /* searchForm  */
-      if (metaData && metaData.reportDetails && metaData.reportDetails.reportName === "TLApplicationStatusReport") {
-        searchParams = searchParams.map((ele) =>
-          ele.name == "applicationStatus" ? { ...ele, input: ele.input && ele.input.map((ele) => ele.substr(0, ele.indexOf("-"))) } : { ...ele }
-        );
-      }
-
-      if (metaData && metaData.reportDetails && metaData.reportDetails.reportName === "ObpsApplicationStatusReport") {
-        searchParams = searchParams.map((ele) => {
-          return (ele.name == "status" || ele.name == "serviceType" || ele.name == "applicationType" || ele.name == "applicationChannel") ? { ...ele, input: ele.input && ele.input.map((ele) => ele.replaceAll(",", "_")) } : { ...ele } 
-        }
-        );
-      }
-
-      if (metaData && metaData.reportDetails && metaData.reportDetails.reportName === "ChannelsReport") {
-        const filterData = metaData.reportDetails.searchParams && metaData.reportDetails.searchParams.length > 0 && metaData.reportDetails.searchParams.filter(data => data.name == "ulb");
-        const ulbDefaultValues = filterData && filterData.length > 0 && filterData[0].defaultValue || {};
-        searchParams = searchParams.map((ele) => {
-          return (ele.name == "ulb" && ele.input[0] == "All") ? { ...ele, input: ele.input && Object.keys(ulbDefaultValues) } : { ...ele } 
-        }
-        );
-      }
-      
       resulturl &&
         commonApiPost(resulturl, {}, { tenantId: tenantId, reportName: this.state.reportName, searchParams }).then(
           function (response) {

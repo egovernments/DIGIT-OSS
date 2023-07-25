@@ -219,7 +219,7 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction,
         return setConfig(configCompleteApplication({ t, vehicle, applicationCreatedTime: applicationData?.auditDetails?.createdTime, action }));
       case "SUBMIT":
       case "FSM_SUBMIT":
-        return history.push("/digit-ui/employee/fsm/modify-application/" + applicationNumber);
+        return history.push(`/${window?.contextPath}/employee/fsm/modify-application/` + applicationNumber);
       case "DECLINE":
       case "DSO_REJECT":
         //declinereason
@@ -262,7 +262,7 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction,
       case "PAY":
       case "ADDITIONAL_PAY_REQUEST":
       case "FSM_PAY":
-        return history.push(`/digit-ui/employee/payment/collect/FSM.TRIP_CHARGES/${applicationNumber}`);
+        return history.push(`/${window?.contextPath}/employee/payment/collect/FSM.TRIP_CHARGES/${applicationNumber}`);
       default:
         break;
     }

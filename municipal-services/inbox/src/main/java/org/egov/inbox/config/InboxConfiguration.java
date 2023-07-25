@@ -85,6 +85,12 @@ public class InboxConfiguration {
 	@Value("${egov.mdms.search.endpoint}")
 	private String mdmsSearchEndPoint;
 
+	@Value("${egov.es.username}")
+	private String esUserName;
+
+	@Value("${egov.es.password}")
+	private String esPassword;
+
 	@Value("${services.esindexer.host}")
 	private String indexServiceHost;
 

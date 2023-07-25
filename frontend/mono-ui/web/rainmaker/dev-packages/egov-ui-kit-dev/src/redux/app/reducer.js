@@ -222,9 +222,6 @@ const appReducer = (state = initialState, action) => {
           errorMessage:action.payload
         },
       };
-      case actionTypes.FETCH_CITIZEN_CONSENT_FORM: {
-        return { ...state, citizenConsentForm: action.payload };
-      }
     default:
       return state;
   }

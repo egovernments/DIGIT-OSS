@@ -40,7 +40,7 @@ public class PlantMappingController {
 		
 		util.defaultJsonPathConfig();
 		PlantMapping plantMap = plantMappingService.create(request);
-		List<PlantMapping> plantList = new ArrayList<>();
+		List<PlantMapping> plantList = new ArrayList<PlantMapping>();
 		plantList.add(plantMap);
 		PlantMappingResponse response = PlantMappingResponse.builder().plantMapping(plantList)				
 				.responseInfo(responseInfoFactory.createResponseInfoFromRequestInfo(request.getRequestInfo(), true))
@@ -53,7 +53,7 @@ public class PlantMappingController {
 		
 		util.defaultJsonPathConfig();
 		PlantMapping plantMap = plantMappingService.update(request);
-		List<PlantMapping> plantList = new ArrayList<>();
+		List<PlantMapping> plantList = new ArrayList<PlantMapping>();
 		plantList.add(plantMap);
 		PlantMappingResponse response = PlantMappingResponse.builder().plantMapping(plantList)				
 				.responseInfo(responseInfoFactory.createResponseInfoFromRequestInfo(request.getRequestInfo(), true))
@@ -65,7 +65,7 @@ public class PlantMappingController {
 	public ResponseEntity<PlantMappingResponse> search(@Valid @RequestBody RequestInfoWrapper requestInfoWrapper,
 			@Valid @ModelAttribute PlantMappingSearchCriteria criteria) {
 		
-		PlantMappingResponse response= plantMappingService.search(criteria);
+		PlantMappingResponse response= plantMappingService.search(criteria, requestInfoWrapper.getRequestInfo());
 		
 		response.setResponseInfo(
 				responseInfoFactory.createResponseInfoFromRequestInfo(requestInfoWrapper.getRequestInfo(), true));

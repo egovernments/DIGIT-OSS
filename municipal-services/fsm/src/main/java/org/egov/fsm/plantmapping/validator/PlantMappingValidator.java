@@ -7,6 +7,7 @@ import java.util.List;
 import javax.validation.Valid;
 
 import org.apache.commons.lang3.StringUtils;
+import org.egov.common.contract.request.RequestInfo;
 import org.egov.fsm.plantmapping.config.PlantMappingConfiguration;
 import org.egov.fsm.plantmapping.service.PlantMappingService;
 import org.egov.fsm.plantmapping.util.PlantMappingConstants;
@@ -23,6 +24,8 @@ import org.egov.fsm.web.model.user.UserSearchRequest;
 import org.egov.tracer.model.CustomException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import com.google.common.base.Strings;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -57,19 +60,19 @@ public class PlantMappingValidator {
 		if (request.getPlantMapping().getPlantCode() == null || request.getPlantMapping().getPlantCode().isEmpty()) {
 			throw new CustomException(PlantMappingConstants.INVALID_PLANT_CODE, "");
 		}
-		mdmsValidator.validateMdmsData(mdmsData);
+		mdmsValidator.validateMdmsData(request, mdmsData);
 
 		PlantMapping plantMap = request.getPlantMapping();
 		plantMap.getEmployeeUuid();
 		if (!request.getRequestInfo().getUserInfo().getType().equalsIgnoreCase(FSMConstants.EMPLOYEE)) {
 			throw new CustomException(FSMErrorConstants.INVALID_APPLICANT_ERROR, "Applicant must be an Employee");
 		}
-		mdmsValidator.validateFSTPPlantInfo(plantMap.getPlantCode(), request.getPlantMapping().getTenantId());
+		mdmsValidator.validateFSTPPlantInfo(plantMap.getPlantCode(),request.getPlantMapping().getTenantId());
 
 		UserDetailResponse userDetailResponse = userExists(request);
 
-		ArrayList<String> code = new ArrayList<>();
-		if (!userDetailResponse.getUser().isEmpty()) {
+		ArrayList<String> code = new ArrayList<String>();
+		if (userDetailResponse.getUser().size() > 0) {
 			userDetailResponse.getUser().get(0).getRoles().forEach(role -> {
 				code.add("" + role.getCode());
 			});
@@ -83,6 +86,7 @@ public class PlantMappingValidator {
 
 		}
 
+	
 	}
 
 	public void validatePlantMappingExists(PlantMappingRequest request) {
@@ -90,9 +94,10 @@ public class PlantMappingValidator {
 		plantMappingSearchCriteria.setEmployeeUuid(Arrays.asList(request.getPlantMapping().getEmployeeUuid()));
 		plantMappingSearchCriteria.setPlantCode(request.getPlantMapping().getPlantCode());
 		plantMappingSearchCriteria.setTenantId(request.getPlantMapping().getTenantId());
-		PlantMappingResponse plantMapResponse = plantMappingService.search(plantMappingSearchCriteria);
+		PlantMappingResponse plantMapResponse = plantMappingService.search(plantMappingSearchCriteria,
+				request.getRequestInfo());
 		if (null != plantMapResponse && null != plantMapResponse.getPlantMapping()
-				&& !plantMapResponse.getPlantMapping().isEmpty()
+				&& plantMapResponse.getPlantMapping().size() > 0
 				&& StringUtils.isNotBlank(plantMapResponse.getPlantMapping().get(0).getId()))
 			throw new CustomException(FSMErrorConstants.FSTP_EMPLOYEE_MAP_EXISTS_ERROR,
 					"FSTP and employee mapping already exist.");
@@ -100,15 +105,16 @@ public class PlantMappingValidator {
 
 	private UserDetailResponse userExists(PlantMappingRequest request) {
 		UserSearchRequest userSearchRequest = new UserSearchRequest();
-		List<String> uuid = new ArrayList<>();
+		List<String> uuid = new ArrayList<String>();
 		uuid.add(request.getPlantMapping().getEmployeeUuid());
 		userSearchRequest.setUuid(uuid);
 
 		StringBuilder uri = new StringBuilder(config.getUserHost()).append(config.getUserSearchEndpoint());
-		return userService.userCall(userSearchRequest, uri);
+		UserDetailResponse userDetailResponse = userService.userCall(userSearchRequest, uri);
+		return userDetailResponse;
 	}
 
-	public void validateSearch(@Valid PlantMappingSearchCriteria criteria) {
+	public void validateSearch(@Valid PlantMappingSearchCriteria criteria, RequestInfo requestInfo) {
 		if (StringUtils.isEmpty(criteria.getTenantId())) {
 			throw new CustomException(PlantMappingConstants.INVALID_SEARCH, "TenantId is mandatory in search");
 		}

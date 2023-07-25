@@ -19,6 +19,7 @@ class App extends React.Component {
     }
   }
 
+
   render() {
     const { authenticated } = this.props;
     const childProps = {

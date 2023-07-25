@@ -3,20 +3,26 @@ import { Request, ServiceRequest } from "../../atoms/Utils/Request";
 import { Storage } from "../../atoms/Utils/Storage";
 
 export const UserService = {
-  authenticate: (details) => {
+  authenticate: async (details) => {
     const data = new URLSearchParams();
     Object.entries(details).forEach(([key, value]) => data.append(key, value));
     data.append("scope", "read");
     data.append("grant_type", "password");
-    return ServiceRequest({
+
+    let authResponse = await ServiceRequest({
       serviceName: "authenticate",
       url: Urls.Authenticate,
       data,
       headers: {
-        authorization: `Basic ${window?.globalConfigs?.getConfig("JWT_TOKEN")||"ZWdvdi11c2VyLWNsaWVudDo="}`,
+        authorization: `Basic ${window?.globalConfigs?.getConfig("JWT_TOKEN") || "ZWdvdi11c2VyLWNsaWVudDo="}`,
         "Content-Type": "application/x-www-form-urlencoded",
       },
     });
+    const invalidRoles = window?.globalConfigs?.getConfig("INVALIDROLES") || [];
+    if (invalidRoles && invalidRoles.length > 0 && authResponse && authResponse?.UserRequest?.roles?.some((role) => invalidRoles.includes(role.code))) {
+      throw new Error("ES_ERROR_USER_NOT_PERMITTED");
+    }
+    return authResponse;
   },
   logoutUser: () => {
     let user = UserService.getUser();
@@ -46,13 +52,13 @@ export const UserService = {
       await UserService.logoutUser();
     } catch (e) {
     }
-    finally{
+    finally {
       window.localStorage.clear();
       window.sessionStorage.clear();
       if (userType === "citizen") {
-        window.location.replace("/digit-ui/citizen");
+        window.location.replace(`/${window?.contextPath}/citizen`);
       } else {
-        window.location.replace("/digit-ui/employee/user/language-selection");
+        window.location.replace(`/${window?.contextPath}/employee/user/language-selection`);
       }
     }
   },
@@ -119,11 +125,13 @@ export const UserService = {
     });
   },
   userSearch: async (tenantId, data, filters) => {
-    return Request({
+
+    return ServiceRequest({
       url: Urls.UserSearch,
       params: { ...filters },
       method: "POST",
       auth: true,
+      useCache: true,
       userService: true,
       data: data.pageSize ? { tenantId, ...data } : { tenantId, ...data, pageSize: "100" },
     });

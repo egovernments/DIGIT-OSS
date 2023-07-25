@@ -31,17 +31,17 @@
   }
 }
 .fieldInspectionWrapper{
-  border: 1px solid #d6d5d4;
+  border: 1px solid theme(colors.border);
   padding: 16px;
   margin-top: 8px;
-  background: #fafafa;
+  background: theme(colors.grey.light);
 }
 
 .fieldInsepctionInsideWrapper {
-  border: 1px solid #d6d5d4;
+  border: 1px solid theme(colors.border);
   padding: 16px;
   margin-top: 8px;
-  background: #ffffff;
+  background: theme(colors.white);
   max-width: 70%;
   min-width: 280px;
 }

@@ -32,41 +32,41 @@ public class Driver {
 
 	@SafeHtml
 	@JsonProperty("id")
-	private String id;
+	private String id = null;
 
 	@JsonProperty("tenantId")
 	@SafeHtml
 	@Size(max = 64)
-	private String tenantId;
+	private String tenantId = null;
 
 	@JsonProperty("name")
 	@SafeHtml
 	@Size(max = 128)
-	private String name;
+	private String name = null;
 
 	@JsonProperty("owner")
 	@Valid
-	private User owner;
+	private User owner = null;
 
 	@JsonProperty("ownerId")
 	@SafeHtml
 	@Size(max = 64)
-	private String ownerId;
+	private String ownerId = null;
 
 	@JsonProperty("additionalDetails")
-	private Object additionalDetails;
+	private Object additionalDetails = null;
 
 	@SafeHtml
 	@JsonProperty("description")
-	private String description;
+	private String description = null;
 
 	@SafeHtml
 	@JsonProperty("licenseNumber")
-	private String licenseNumber;
+	private String licenseNumber = null;
 
 	@JsonProperty("vendor")
 	@Valid
-	private Vendor vendor;
+	private Vendor vendor = null;
 
 	/**
 	 * Inactive records will be consider as soft deleted
@@ -99,12 +99,12 @@ public class Driver {
 	}
 
 	@JsonProperty("status")
-	private StatusEnum status;
+	private StatusEnum status = null;
 
 	@JsonProperty("auditDetails")
-	private AuditDetails auditDetails;
+	private AuditDetails auditDetails = null;
 
 	@JsonProperty("vendorDriverStatus")
-	private StatusEnum vendorDriverStatus;
+	private StatusEnum vendorDriverStatus = null;
 
 }

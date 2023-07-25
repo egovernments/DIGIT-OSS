@@ -1,19 +1,21 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
-
-const Details = ({ label, name, onClick }) => {
+import CitizenInfoLabel from "../atoms/CitizenInfoLabel";
+import  ActionBar from "../atoms/ActionBar";
+import SubmitBar from "../atoms/SubmitBar";
+export const Details = ({ label, name, onClick}) => {
   return (
     <div className="detail" onClick={onClick}>
       <span className="label">
         <h2>{label}</h2>
       </span>
-      <span className="name" style={{overflowWrap:"break-word"}}>{name}</span>
+      <span className="name">{name}</span>
     </div>
   );
 };
 
-const DetailsCard = ({ data, serviceRequestIdKey, linkPrefix, handleSelect, selectedItems, keyForSelected, handleDetailCardClick, isTwoDynamicPrefix=false,getRedirectionLink ,handleClickEnabled =true}) => {
+const DetailsCard = ({ data, serviceRequestIdKey, linkPrefix, handleSelect, selectedItems, keyForSelected, handleDetailCardClick, isTwoDynamicPrefix = false, getRedirectionLink, handleClickEnabled = true, t, showActionBar = true, showCitizenInfoLabel = false,submitButtonLabel }) => {
   if (linkPrefix && serviceRequestIdKey) {
     return (
       <div>
@@ -62,6 +64,16 @@ const DetailsCard = ({ data, serviceRequestIdKey, linkPrefix, handleSelect, sele
             {Object.keys(object).filter(rowEle => !(typeof object[rowEle] == "object" && object[rowEle]?.hidden == true)).map((name, index) => {
               return <Details label={name} name={object[name]} key={index} onClick={() =>handleClickEnabled && handleDetailCardClick(object)} />;
             })}
+            {showCitizenInfoLabel ?<CitizenInfoLabel
+              style={{ margin: " 2rem 0px", padding: "10px", backgroundColor: "#FFE2B5", borderRadius: "0.25rem" }}
+              textStyle={{ color: "#CC7B2F" }}
+              info={t("ATM_INFO_LABEL")}
+              text={t(`ATM_INFO_TEXT`)}
+              fill={"#CC7B2F"}
+            />:null}
+            {showActionBar ? 
+              <SubmitBar onSubmit={() => handleDetailCardClick(object)} label={submitButtonLabel} />
+            :null}
           </div>
         );
       })}

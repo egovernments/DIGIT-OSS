@@ -7,6 +7,8 @@ import * as pt from "./pt";
 import * as privacy from "./privacy";
 import PDFUtil, { downloadReceipt ,downloadPDFFromLink,downloadBill ,getFileUrl} from "./pdf";
 import getFileTypeFromFileStoreURL from "./fileType";
+import preProcessMDMSConfig from "./preProcessMDMSConfig";
+import preProcessMDMSConfigInboxSearch from "./preProcessMDMSConfigInboxSearch";
 
 const GetParamFromUrl = (key, fallback, search) => {
   if (typeof window !== "undefined") {
@@ -81,6 +83,12 @@ const getPattern = (type) => {
       return /^[^\$\"'<>?\\\\~`!@$%^()+={}\[\]*.:;“”‘’]{1,50}$/i;
     case "OldLicenceNo":
       return /^[a-zA-Z0-9-/]{0,64}$/;
+    case "bankAccountNo":
+      return /^\d{9,18}$/;
+    case "IFSC":
+      return /^[A-Z]{4}0[A-Z0-9]{6}$/;
+    case "ApplicationNo":
+      return /^[a-zA-z0-9\s\\/\-]$/i;
   }
 };
 
@@ -94,7 +102,7 @@ const getStaticMapUrl = (latitude, longitude) => {
 };
 
 const detectDsoRoute = (pathname) => {
-  const employeePages = ["search", "inbox", "dso-dashboard", "dso-application-details", "user", "Audit"];
+  const employeePages = ["search", "inbox", "dso-dashboard", "dso-application-details", "user"];
 
   return employeePages.some((url) => pathname.split("/").includes(url));
 };
@@ -266,7 +274,10 @@ const swAccess = () => {
   return SW_ACCESS?.length > 0;
 };
 
-
+/* to get the MDMS config module name */
+const getConfigModuleName = () => {
+  return window?.globalConfigs?.getConfig("UICONFIG_MODULENAME") || "commonUiConfig";
+};
 export default {
   pdf: PDFUtil,
   downloadReceipt,
@@ -301,6 +312,8 @@ export default {
   tlAccess,
   wsAccess,
   swAccess,
-
+  getConfigModuleName,
+  preProcessMDMSConfig,
+  preProcessMDMSConfigInboxSearch,
   ...privacy
 };

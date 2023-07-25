@@ -2,10 +2,6 @@
 # Changelog
 All notable changes to this module will be documented in this file.
 
-## 1.2.2 - 2023-01-31
-
-- Changed 1.2.2-beta version to 1.2.2
-
 ## 1.2.2-beta - 2022-09-10
 
 - Added elastic search call for privacy audit report.

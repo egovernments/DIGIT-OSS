@@ -42,9 +42,9 @@ export default class ShowField extends Component {
     //
     if (typeof obj.defaultValue == "object") {
       if (obj.name == "applicationStatus" && obj.label === "reports.tl.applicationstatus") {
-        Object.keys(obj.defaultValue).map((key,i) => {
+        Object.keys(obj.defaultValue).map((key) => {
           dropDownData.push({
-            value: `${obj.defaultValue[key]}-${i}`,
+            value: obj.defaultValue[key],
             label: obj.isLocalisationRequired ? getTransformedLocale(key) : key,
           });
         });

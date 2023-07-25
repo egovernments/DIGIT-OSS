@@ -69,7 +69,7 @@
 				<category android:name="android.intent.category.DEFAULT" />
 				<category android:name="android.intent.category.BROWSABLE" />
 				<data android:scheme="https"
-					android:host="qa.digit.org"
+					android:host="staging.digit.org"
 					android:pathPattern=".*"
 					android:pathPrefix="/" /> <!-- if you want only a specific directory from your website to be opened in the app through external links -->
 			</intent-filter>

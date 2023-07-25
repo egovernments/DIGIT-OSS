@@ -4,7 +4,7 @@
 
     <groupId>org.egov</groupId>
     <artifactId>egov-notification-sms</artifactId>
-    <version>1.1.4-SNAPSHOT</version>
+    <version>1.1.4_beta-SNAPSHOT</version>
     <packaging>jar</packaging>
 
     <name>egov-notification-sms</name>

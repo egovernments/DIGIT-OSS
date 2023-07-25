@@ -67,19 +67,20 @@ public class VehicleSearchCriteria {
 	    }
 
 	    public enum SortBy {
-	    	TYPE,
-	    	MODEL,
-	    	SUCTIONTYPE,
-	    	POLLUTIONCERTIVALIDTILL,
-	    	INSURANCECERTVALIDTILL,
-	    	FITNESSVALIDTILL,
-	    	ROADTAXPAIDTILL,
-	    	TANKCAPICITY,
-	    	CREATEDTIME
+	        type,
+	        model,
+	        suctionType,
+	        pollutionCertiValidTill,
+	        InsuranceCertValidTill,
+	        fitnessValidTill,
+	        roadTaxPaidTill,
+	        tankCapicity,
+	        createdTime
 	    }
 	
 
 	public boolean isEmpty() {
+		// TODO Auto-generated method stub
 		return (this.tenantId == null && this.offset == null && this.limit == null && this.mobileNumber == null && this.tankCapicity ==null
 				&&  CollectionUtils.isEmpty(this.ownerId)  && CollectionUtils.isEmpty(this.type)
 				&& CollectionUtils.isEmpty(this.id) && CollectionUtils.isEmpty(this.registrationNumber)
@@ -87,6 +88,7 @@ public class VehicleSearchCriteria {
 	}
 
 	public boolean tenantIdOnly() {
+		// TODO Auto-generated method stub
 		return (this.tenantId != null && this.mobileNumber == null && this.tankCapicity ==null
 				&&  CollectionUtils.isEmpty(this.ownerId)  && CollectionUtils.isEmpty(this.type)
 				&& CollectionUtils.isEmpty(this.id) && CollectionUtils.isEmpty(this.registrationNumber)

@@ -226,14 +226,3 @@ export const searchByMobileNumber = async (mobileNumber, tenantId) => {
   );
   return userSearchResponse;
 };
-
-export const mapIDsToList = response => {
-  let result = [];
-
-  for (var i = 0; i < response.length; i++) {
-    result.push(response[i].fid);
-  }
-  console.log(result);
-  return result;
-}
-

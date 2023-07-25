@@ -29,97 +29,101 @@ import lombok.ToString;
 @Builder
 public class Vehicle {
 
-	@SafeHtml
-	@JsonProperty("id")
-	private String id;
+    @SafeHtml
+    @JsonProperty("id")
+    private String id = null;
 
-	@SafeHtml
-	@JsonProperty("tenantId")
-	private String tenantId;
+    @SafeHtml
+    @JsonProperty("tenantId")
+    private String tenantId = null;
 
-	@NonNull
-	@SafeHtml
-	@JsonProperty("registrationNumber")
-	private String registrationNumber;
+    @NonNull
+    @SafeHtml
+    @JsonProperty("registrationNumber")
+    private String registrationNumber  = null;
 
-	@NonNull
-	@SafeHtml
-	@JsonProperty("model")
-	private String model;
+    @NonNull
+    @SafeHtml
+    @JsonProperty("model")
+    private String model = null;
 
-	@NonNull
-	@SafeHtml
-	@JsonProperty("type")
-	private String type;
+    @NonNull
+    @SafeHtml
+    @JsonProperty("type")
+    private String type = null;
 
-	@JsonProperty("tankCapacity")
-	private Double tankCapacity;
 
-	@SafeHtml
-	@JsonProperty("suctionType")
-	private String suctionType;
+    @JsonProperty("tankCapacity")
+    private Double tankCapacity;
 
-	@JsonProperty("pollutionCertiValidTill")
-	private Long pollutionCertiValidTill;
+    @SafeHtml
+    @JsonProperty("suctionType")
+    private String suctionType = null;
 
-	@JsonProperty("InsuranceCertValidTill")
-	private Long InsuranceCertValidTill;
+    @JsonProperty("pollutionCertiValidTill")
+    private Long pollutionCertiValidTill;
 
-	@JsonProperty("fitnessValidTill")
-	private Long fitnessValidTill;
+    @JsonProperty("InsuranceCertValidTill")
+    private Long InsuranceCertValidTill;
 
-	@JsonProperty("roadTaxPaidTill")
-	private Long roadTaxPaidTill;
+    @JsonProperty("fitnessValidTill")
+    private Long fitnessValidTill;
 
-	@JsonProperty("gpsEnabled")
-	private boolean gpsEnabled;
+    @JsonProperty("roadTaxPaidTill")
+    private Long  roadTaxPaidTill;
 
-	@JsonProperty("additionalDetails")
-	private Object additionalDetails ;
+    @JsonProperty("gpsEnabled")
+    private boolean gpsEnabled;
 
-	@SafeHtml
-	@JsonProperty("source")
-	private String source;
+    @JsonProperty("additionalDetails")
+    private Object additionalDetails = null;
 
-	@SafeHtml
-	@JsonProperty("ownerId")
-	private String ownerId;
+    @SafeHtml
+    @JsonProperty("source")
+    private String source = null;
 
-	public enum StatusEnum {
-		ACTIVE("ACTIVE"),
+    @SafeHtml
+    @JsonProperty("ownerId")
+    private String ownerId = null;
 
-		INACTIVE("INACTIVE");
+    public enum StatusEnum {
+        ACTIVE("ACTIVE"),
 
-		private String value;
+        INACTIVE("INACTIVE");
 
-		StatusEnum(String value) {
-			this.value = value;
-		}
+        private String value;
 
-		@Override
-		@JsonValue
-		public String toString() {
-			return String.valueOf(value);
-		}
+        StatusEnum(String value) {
+            this.value = value;
+        }
 
-		@JsonCreator
-		public static StatusEnum fromValue(String text) {
-			for (StatusEnum b : StatusEnum.values()) {
-				if (String.valueOf(b.value).equals(text)) {
-					return b;
-				}
-			}
-			return null;
-		}
-	}
+    @Override
+    @JsonValue
+    public String toString() {
+        return String.valueOf(value);
+    }
 
-	@JsonProperty("status")
-	private StatusEnum status;
+    @JsonCreator
+    public static StatusEnum fromValue(String text) {
+        for (StatusEnum b : StatusEnum.values()) {
+            if (String.valueOf(b.value).equals(text)) {
+                return b;
+            }
+        }
+        return null;
+    }
+}
+    @JsonProperty("status")
+    private StatusEnum status = null;
 
-	@JsonProperty("owner")
-	private User owner;
+    @JsonProperty("owner")
+    private User owner = null;
 
-	@JsonProperty("auditDetails")
-	private AuditDetails auditDetails;
+    @JsonProperty("auditDetails")
+    private AuditDetails auditDetails = null;
+
+    
 
 }
+
+

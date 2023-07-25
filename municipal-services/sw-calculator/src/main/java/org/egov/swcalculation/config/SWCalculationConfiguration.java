@@ -197,7 +197,4 @@ public class SWCalculationConfiguration {
 	@Value("${egov.bill.details.sms.link}")
 	private String billDetailsLink;
 
-	@Value("${egov.shortener.url}")
-	private String shortenerURL;
-
 }

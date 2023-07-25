@@ -1,7 +1,6 @@
 package org.egov.vendor.repository.querybuilder;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.egov.vendor.config.VendorConfiguration;
 import org.egov.vendor.web.model.VendorSearchCriteria;
@@ -15,7 +14,7 @@ public class VendorQueryBuilder {
 	@Autowired
 	private VendorConfiguration config;
 
-	private static final String QUERY = "SELECT count(*) OVER() AS full_count, vendor.*,vendor_address.*,vendor_driver.*,vendor_vehicle.*, vendor.id as vendor_id,"
+	private static final String Query = "SELECT count(*) OVER() AS full_count, vendor.*,vendor_address.*,vendor_driver.*,vendor_vehicle.*, vendor.id as vendor_id,"
 			+ "  vendor.createdby as vendor_createdby,vendor.lastmodifiedby as vendor_lastmodifiedby,"
 			+ "  vendor.createdtime as vendor_createdtime," + "  vendor.lastmodifiedtime as vendor_lastmodifiedtime,"
 			+ "  vendor.additionaldetails as vendor_additionaldetails,"
@@ -25,13 +24,12 @@ public class VendorQueryBuilder {
 			+ "  LEFT OUTER JOIN eg_vendor_vehicle vendor_vehicle on "
 			+ "  vendor_vehicle.vendor_id=vendor_driver.vendor_id";
 
-	private static final String PAGINATION_WRAPPER = "SELECT * FROM "
-			+ "(SELECT *, DENSE_RANK() OVER (ORDER BY SORT_BY SORT_ORDER) offset_ FROM " + "({})"
+	private final String paginationWrapper = "SELECT * FROM "
+			+ "(SELECT *, DENSE_RANK() OVER (ORDER BY vendor_createdtime DESC) offset_ FROM " + "({})"
 			+ " result) result_offset " + " limit ? offset ?";
 
 	private static final String DRIVER_VEHICLE_QUERY = "SELECT %s FROM %s where %s = ? AND %s = ?";
 	private static final String VEHICLE_EXISTS = "SELECT vendor_id FROM eg_vendor_vehicle where vechile_id IN ";
-	private static final String DRIVER_EXISTS = "SELECT vendor_id FROM eg_vendor_driver where driver_id IN ";
 
 	private static final String DRIVER_EXISTS = "SELECT vendor_id FROM eg_vendor_driver where driver_id IN ";
 	private static final String DRIVER_ID = "driver_id";
@@ -49,7 +47,7 @@ public class VendorQueryBuilder {
 	}
 
 	public String getVehicleSearchQuery() {
-		return String.format(DRIVER_VEHICLE_QUERY, VEHICLE_ID, VENDOR_VEHICLE, VENDOR_ID, VENDOR_VEHICLE_STATUS);
+		return String.format(DRIVER_VEHICLE_QUERY, VEHICLE_ID, VENDOR_VEHICLE, VENDOR_ID,VENDOR_VEHICLE_STATUS);
 	}
 
 	public String vendorsForVehicles(VendorSearchCriteria vendorSearchCriteria, List<Object> preparedStmtList) {
@@ -93,7 +91,7 @@ public class VendorQueryBuilder {
 	}
 
 	public String getVendorSearchQuery(VendorSearchCriteria criteria, List<Object> preparedStmtList) {
-		StringBuilder builder = new StringBuilder(QUERY);
+		StringBuilder builder = new StringBuilder(Query);
 		if (criteria.getTenantId() != null) {
 			if (criteria.getTenantId().split("\\.").length == 1) {
 				addClauseIfRequired(preparedStmtList, builder);
@@ -105,13 +103,11 @@ public class VendorQueryBuilder {
 				preparedStmtList.add(criteria.getTenantId());
 			}
 
-			List<String> vendorName = criteria.getName();
-			if (!CollectionUtils.isEmpty(vendorName)) {
-				List<String> vendorNametoLowerCase = criteria.getName().stream().map(String::toLowerCase)
-						.collect(Collectors.toList());
+			List<String> vendor_name = criteria.getName();
+			if (!CollectionUtils.isEmpty(vendor_name)) {
 				addClauseIfRequired(preparedStmtList, builder);
-				builder.append(" LOWER(vendor.name) IN (").append(createQuery(vendorNametoLowerCase)).append(")");
-				addToPreparedStatement(preparedStmtList, vendorNametoLowerCase);
+				builder.append(" vendor.name IN (").append(createQuery(vendor_name)).append(")");
+				addToPreparedStatement(preparedStmtList, vendor_name);
 
 			}
 			List<String> ownerIds = criteria.getOwnerIds();
@@ -128,12 +124,14 @@ public class VendorQueryBuilder {
 				builder.append(" vendor.id IN (").append(createQuery(ids)).append(")");
 				addToPreparedStatement(preparedStmtList, ids);
 			}
-			List<String> status = criteria.getStatus();
+			
+			List<String> status=criteria.getStatus();
 			if (!CollectionUtils.isEmpty(status)) {
 				addClauseIfRequired(preparedStmtList, builder);
 				builder.append(" vendor.status IN (").append(createQuery(status)).append(")");
 				addToPreparedStatement(preparedStmtList, status);
 			}
+			
 		}
 		return addPaginationWrapper(builder.toString(), preparedStmtList, criteria);
 	}
@@ -141,20 +139,8 @@ public class VendorQueryBuilder {
 	private String addPaginationWrapper(String query, List<Object> preparedStmtList, VendorSearchCriteria criteria) {
 		int limit = config.getDefaultLimit();
 		int offset = config.getDefaultOffset();
-		String finalQuery = PAGINATION_WRAPPER.replace("{}", query);
-		
-		if (criteria.getSortBy() != null && criteria.getSortBy().toString() == "createdTime") {
-			finalQuery = finalQuery.replace("SORT_BY", "vendor_createdTime");
-		} else if (criteria.getSortBy() != null) {
-			finalQuery = finalQuery.replace("SORT_BY", criteria.getSortBy().toString());
-		} else {
-			finalQuery = finalQuery.replace("SORT_BY", "vendor_createdTime");
-		}
-		if (criteria.getSortOrder() != null) {
-			finalQuery = finalQuery.replace("SORT_ORDER", criteria.getSortOrder().toString());
-		} else {
-			finalQuery = finalQuery.replace("SORT_ORDER", " DESC ");
-		}
+		String finalQuery = paginationWrapper.replace("{}", query);
+
 		if (criteria.getLimit() != null && criteria.getLimit() <= config.getMaxSearchLimit())
 			limit = criteria.getLimit();
 
@@ -204,7 +190,7 @@ public class VendorQueryBuilder {
 
 	public String getVendorLikeQuery(VendorSearchCriteria criteria, List<Object> preparedStmtList) {
 
-		StringBuilder builder = new StringBuilder(QUERY);
+		StringBuilder builder = new StringBuilder(Query);
 
 		List<String> ids = criteria.getIds();
 		if (!CollectionUtils.isEmpty(ids)) {
@@ -236,15 +222,15 @@ public class VendorQueryBuilder {
 			preparedStmtList.add(criteria.getOffset());
 			preparedStmtList.add(criteria.getLimit());
 
-			addOrderByClause(builder);
+			addOrderByClause(builder, criteria);
 
 		} else {
-			addOrderByClause(builder);
+			addOrderByClause(builder, criteria);
 		}
 		return builder.toString();
 	}
 
-	private void addOrderByClause(StringBuilder builder) {
+	private void addOrderByClause(StringBuilder builder, VendorSearchCriteria criteria) {
 		builder.append(" ORDER BY vendor.id DESC ").toString();
 	}
 

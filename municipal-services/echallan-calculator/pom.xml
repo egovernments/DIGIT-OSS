@@ -9,7 +9,7 @@
   </parent>
   <groupId>org.egov</groupId>
   <artifactId>echallan-calculator</artifactId>
-  <version>1.0.2-SNAPSHOT</version>
+  <version>1.0.2_beta-SNAPSHOT</version>
   <name>echallan-calculator</name>
   <properties>
     <log4j2.version>2.17.1</log4j2.version>

@@ -9,7 +9,7 @@
   </parent>
   <groupId>org.egov.services</groupId>
   <artifactId>egov-data-uploader</artifactId>
-  <version>0.0.1-SNAPSHOT</version>
+  <version>0.0.1_beta-SNAPSHOT</version>
   <name>eGov Data Uploader Framework</name>
   <description>Common library providing bulk data upload operation on the Database</description>
   <distributionManagement>

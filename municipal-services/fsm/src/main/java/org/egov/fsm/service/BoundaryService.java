@@ -48,7 +48,7 @@ public class BoundaryService {
 	 * @param hierarchyTypeCode
 	 *            HierarchyTypeCode of the boundaries
 	 */
-	public void getAreaType(FSMRequest request, String hierarchyTypeCode) {
+	public void getAreaType(FSMRequest request, String hierarchyTypeCode) throws CustomException {
 		if (request.getFsm() == null) {
 			return;
 		}
@@ -85,15 +85,15 @@ public class BoundaryService {
 
 		List<Boundary> boundaryResponse = context.read("$..boundary[?(@.code==\"{}\")]".replace("{}",fsm.getAddress().getLocality().getCode()));
 
-		if (boundaryResponse.isEmpty() &&  CollectionUtils.isEmpty((boundaryResponse) )) {
+		if (boundaryResponse != null &&  CollectionUtils.isEmpty((boundaryResponse) )) {
 			log.debug("The boundary data was not found");
 			throw new CustomException(FSMErrorConstants.BOUNDARY_MDMS_DATA_ERROR, "The boundary data was not found");
 		}
 			
 
-		Boundary boundary = mapper.convertValue(boundaryResponse.stream().findFirst(), Boundary.class);
+		Boundary boundary = mapper.convertValue(boundaryResponse.get(0), Boundary.class);
 		
-		if (boundary.getName().isEmpty()) {
+		if (boundary.getName() == null) {
 			
 			throw new CustomException(FSMErrorConstants.INVALID_BOUNDARY_DATA,
 					"The boundary data for the code " + fsm.getAddress().getLocality().getCode() + " is not available");

@@ -1,11 +1,9 @@
 const path = require("path");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const { CleanWebpackPlugin } = require("clean-webpack-plugin");
-const TerserPlugin = require('terser-webpack-plugin');
 
 module.exports = {
   // mode: 'development',
-  mode: 'production',
   entry: "./src/index.js",
   devtool: "source-map",
   module: {
@@ -26,7 +24,6 @@ module.exports = {
     splitChunks: {
       chunks: 'all',
     },
-    minimizer: [new TerserPlugin({ /* additional options here */ })],
   },
   plugins: [
     new CleanWebpackPlugin(),

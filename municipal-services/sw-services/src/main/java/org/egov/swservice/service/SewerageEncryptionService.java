@@ -11,7 +11,6 @@ import org.egov.swservice.repository.ServiceRequestRepository;
 import org.egov.swservice.repository.SewerageDao;
 import org.egov.swservice.util.EncryptionDecryptionUtil;
 import org.egov.swservice.util.SWConstants;
-import org.egov.swservice.util.SewerageServicesUtil;
 import org.egov.swservice.web.models.*;
 import org.egov.tracer.model.CustomException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -56,9 +55,6 @@ public class SewerageEncryptionService {
 
     @Autowired
     private ServiceRequestRepository serviceRequestRepository;
-
-    @Autowired
-    private SewerageServicesUtil sewerageServicesUtil;
 
     /**
      * Initiates Sewerage applications/connections data encryption
@@ -149,9 +145,6 @@ public class SewerageEncryptionService {
                             .sewerageConnection(sewerageConnection)
                             .isOldDataEncryptionRequest(Boolean.TRUE)
                             .build();
-
-                    sewerageConnectionRequest.getSewerageConnection().setAuditDetails(sewerageServicesUtil.
-                            getAuditDetails(sewerageConnectionRequest.getRequestInfo().getUserInfo().getUuid(), false));
 
                     sewerageDao.updateOldSewerageConnections(sewerageConnectionRequest);
                     countPushed++;

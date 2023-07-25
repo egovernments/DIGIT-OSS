@@ -260,30 +260,26 @@ class SingleApplication extends React.Component {
             );
           })
         ) : (
-          <div>
-            {
-              searchResults && Array.isArray(searchResults) && searchResults.length == 0 && <div className="no-assessment-message-cont">
-                <Label
-                  labelKey={"No results Found!"}
-                  style={{ marginBottom: 10 }}
-                />
-                <Button
-                  style={{
-                    height: 36,
-                    lineHeight: "auto",
-                    minWidth: "inherit"
-                  }}
-                  className="assessment-button"
-                  variant="contained"
-                  color="primary"
-                  onClick={this.onButtonCLick}
-                >
-                  <Label labelKey={`${moduleName}_NEW_APPLICATION`} />
-                </Button>
-              </div>
-            }
-          </div>
-        )}
+            <div className="no-assessment-message-cont">
+              <Label
+                labelKey={"No results Found!"}
+                style={{ marginBottom: 10 }}
+              />
+              <Button
+                style={{
+                  height: 36,
+                  lineHeight: "auto",
+                  minWidth: "inherit"
+                }}
+                className="assessment-button"
+                variant="contained"
+                color="primary"
+                onClick={this.onButtonCLick}
+              >
+                <Label labelKey={`${moduleName}_NEW_APPLICATION`} />
+              </Button>
+            </div>
+          )}
       </div>
     );
   }
@@ -295,15 +291,11 @@ const mapStateToProps = state => {
     "searchResults",
     []
   );
-  let searchResults = "";
-  if (searchResultsRaw && searchResultsRaw.length) {
-    searchResults = orderBy(
-      searchResultsRaw,
-      ["auditDetails.lastModifiedTime"],
-      ["desc"]);
-    searchResults = searchResults ? searchResults : searchResultsRaw;
-  }
-  
+  let searchResults = orderBy(
+    searchResultsRaw,
+    ["auditDetails.lastModifiedTime"],
+    ["desc"]);
+  searchResults = searchResults ? searchResults : searchResultsRaw;
   const screenConfig = get(state.screenConfiguration, "screenConfig");
   return { screenConfig, searchResults };
 };

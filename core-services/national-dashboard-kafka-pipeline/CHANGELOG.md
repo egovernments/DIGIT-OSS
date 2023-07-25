@@ -1,10 +1,6 @@
 # Changelog
 All notable changes to this module will be documented in this file.
 
-## 1.0.1 - 2023-02-06
-
-- Transition from 1.0.1-beta version to 1.0.1 version
-
 ## 1.0.1-beta - 2022-09-20
 
 - Critical vulnerability fixes

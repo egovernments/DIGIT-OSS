@@ -30,16 +30,6 @@ const formConfig = {
       jsonPath: "otp.userType",
       value: "CITIZEN",
     },
-    citizenConsentForm: {
-      errorMessage: "Citizen Consent Form",
-      floatingLabelText: "Citizen Consent Form",
-      hintText: "Please check Citizen Consent Form",
-      id: "person-Citizen Consent Form",
-      jsonPath: "otp.CitizenConsentForm",
-      required: true,
-      requiredmessage: "Required",
-      type: "checkbox",
-    }
   },
   submit: {
     type: "submit",

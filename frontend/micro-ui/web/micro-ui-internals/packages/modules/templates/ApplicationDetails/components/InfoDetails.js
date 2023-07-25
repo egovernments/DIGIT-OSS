@@ -11,10 +11,9 @@ const EyeSvgINdex = ({ style }) => {
 }
 const InfoDetails = ({ t, userType = false, infoBannerLabel = "", infoClickLable = "", infoClickInfoLabel = "", infoClickInfoLabel1 = "" }) => {
   userType = userType || Digit.SessionStorage.get("userType");
-  const isMobile = window.Digit.Utils.browser.isMobile();
   return (
     <React.Fragment>
-      <div style={isMobile ? {} : { width: "80%" }}>
+      <div style={{ width: "80%" }}>
         <div className="info-banner-wrap" style={{ color: "#3498DB", margin: "0px" }}>
           <div>
             <InfoBannerIcon />

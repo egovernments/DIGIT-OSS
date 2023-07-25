@@ -32,10 +32,10 @@ public class BillingSlabUtil {
 	 */
 	@Autowired
 	private ServiceRequestRepository serviceRequestRepository;
-
+	
 	@Autowired
 	private CalculatorConfig config;
-
+	
 	public void defaultJsonPathConfig() {
 		Configuration.setDefaults(new Configuration.Defaults() {
 
@@ -58,7 +58,6 @@ public class BillingSlabUtil {
 			}
 		});
 	}
-
 	/**
 	 * Method to return auditDetails for create/update flows
 	 *
@@ -74,19 +73,18 @@ public class BillingSlabUtil {
 		else
 			return AuditDetails.builder().lastModifiedBy(by).lastModifiedTime(time).build();
 	}
-
+	
 	/**
 	 * makes mdms call with the given criteria and reutrn mdms data
-	 * 
 	 * @param requestInfo
 	 * @param tenantId
 	 * @return
 	 */
 	public Object mDMSCall(RequestInfo requestInfo, String tenantId) {
 		MdmsCriteriaReq mdmsCriteriaReq = getMDMSRequest(requestInfo, tenantId);
-		return serviceRequestRepository.fetchResult(getMdmsSearchUrl(), mdmsCriteriaReq);
+		Object result = serviceRequestRepository.fetchResult(getMdmsSearchUrl(), mdmsCriteriaReq);
+		return result;
 	}
-
 	/**
 	 * Returns the URL for MDMS search end point
 	 *
@@ -95,10 +93,8 @@ public class BillingSlabUtil {
 	public StringBuilder getMdmsSearchUrl() {
 		return new StringBuilder().append(config.getMdmsHost()).append(config.getMdmsSearchEndpoint());
 	}
-
 	/**
 	 * prepares the mdms request object
-	 * 
 	 * @param requestInfo
 	 * @param tenantId
 	 * @return
@@ -111,13 +107,14 @@ public class BillingSlabUtil {
 
 		MdmsCriteria mdmsCriteria = MdmsCriteria.builder().moduleDetails(moduleDetails).tenantId(tenantId).build();
 
-		return MdmsCriteriaReq.builder().mdmsCriteria(mdmsCriteria).requestInfo(requestInfo).build();
+		MdmsCriteriaReq mdmsCriteriaReq = MdmsCriteriaReq.builder().mdmsCriteria(mdmsCriteria).requestInfo(requestInfo)
+				.build();
+		return mdmsCriteriaReq;
 	}
-
 	public List<ModuleDetail> getFSMModuleRequest() {
 
 		// filter to only get code field from master data
-		final String filterCode = "$.[?(@.active==true)].code";
+				final String filterCode = "$.[?(@.active==true)].code";
 		// master details for FSM module
 		List<MasterDetail> fsmMasterDtls = new ArrayList<>();
 		fsmMasterDtls.add(MasterDetail.builder().name(CalculatorConstants.PROPERTY_TYPE).filter(filterCode).build());
@@ -129,3 +126,4 @@ public class BillingSlabUtil {
 
 	}
 }
+

@@ -17,6 +17,8 @@ import lombok.Setter;
 @Component
 public class VendorConfiguration {
 
+	
+
 	// Persister Config
 	@Value("${persister.save.vendor.topic}")
 	private String saveTopic;
@@ -27,18 +29,6 @@ public class VendorConfiguration {
 	@Value("${persister.save.driver.topic}")
 	private String saveDriverTopic;
 
-
-	@Value("${persister.update.driver.topic}")
-	private String updateDriverTopic;
-
-	@Value("${persister.save.vendordrivervehicle.topic}")
-	private String saveVendorVehicleDriverTopic;
-
-	@Value("${persister.update.vendor.topic}")
-	private String updateTopic;
-
-	@Value("${persister.save.driver.topic}")
-	private String saveDriverTopic;
 
 	@Value("${persister.update.driver.topic}")
 	private String updateDriverTopic;
@@ -57,9 +47,10 @@ public class VendorConfiguration {
 	@Value("${egov.user.host}")
 	private String userHost;
 
-	@Value("${egov.user.context.path}")
+	@Value("${egov.user.context.path}")    
 	private String userContextPath;
-
+	
+	
 	@Value("${egov.user.create.path}")
 	private String userCreateEndpoint;
 
@@ -68,17 +59,18 @@ public class VendorConfiguration {
 
 	@Value("${egov.user.update.path}")
 	private String userUpdateEndpoint;
-
+	
 	@Value("${egov.user.username.prefix}")
 	private String usernamePrefix;
-
+	
 	// Vehicle Configuration
 	@Value("${egov.vehicle.host}")
 	private String vehicleHost;
 
-	@Value("${egov.vehicle.context.path}")
+	@Value("${egov.vehicle.context.path}")    
 	private String vehicleContextPath;
-
+	
+	
 	@Value("${egov.vehicle.create.endpoint}")
 	private String vehicleCreateEndpoint;
 
@@ -87,11 +79,12 @@ public class VendorConfiguration {
 
 	@Value("${egov.vehicle.update.endpoint}")
 	private String vehicleUpdateEndpoint;
-
+	
+	
 	@Value("${egov.hrms.host}")
 	private String employeeHost;
 
-	@Value("${egov.hrms.context.path}")
+	@Value("${egov.hrms.context.path}")    
 	private String employeeContextPath;
 	@Value("${egov.hrms.create.path}")
 	private String employeeCreateEndpoint;
@@ -117,11 +110,15 @@ public class VendorConfiguration {
 	@Value("${egov.location.hierarchyTypeCode}")
 	private String hierarchyTypeCode;
 
+
+	
+	
 	@Value("${employee.allowed.search.params}")
 	private String allowedEmployeeSearchParameters;
-
+	
 	@Value("${citizen.allowed.search.params}")
 	private String allowedCitizenSearchParameters;
+	
 
 	@Value("${egov.vendorregistory.default.limit}")
 	private Integer defaultLimit;
@@ -144,12 +141,4 @@ public class VendorConfiguration {
 	@Value("${dso.driver.role.name}")
 	private String dsoDriverRoleName;
 
-	@Value("${citizen.role}")
-	private String citizenRole;
-
-	@Value("${citizen.role.name}")
-	private String citizenRoleName;
-
-	@Value("${vendor.driver.mobile.number}")
-	private String driverMobileNumberIncrement;
 }

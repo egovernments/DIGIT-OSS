@@ -3,7 +3,6 @@ package org.egov.waterconnection.web.controller;
 import java.util.List;
 import javax.validation.Valid;
 
-import org.egov.tracer.model.CustomException;
 import org.egov.waterconnection.service.WaterEncryptionService;
 import org.egov.waterconnection.web.models.RequestInfoWrapper;
 import org.egov.waterconnection.web.models.SearchCriteria;
@@ -101,12 +100,10 @@ public class WaterController {
 	@RequestMapping(value = "/_encryptOldData", method = RequestMethod.POST)
 	public ResponseEntity<WaterConnectionResponse> encryptOldData(@Valid @RequestBody RequestInfoWrapper requestInfoWrapper,
 			@Valid @ModelAttribute SearchCriteria criteria){
-		throw new CustomException("EG_WS_ENC_OLD_DATA_ERROR", "Privacy disabled: The encryption of old data is disabled");
-		/* Un-comment the below code to enable Privacy */
-/*		WaterConnectionResponse waterConnectionResponse = waterEncryptionService.updateOldData(criteria, requestInfoWrapper.getRequestInfo());
+		WaterConnectionResponse waterConnectionResponse = waterEncryptionService.updateOldData(criteria, requestInfoWrapper.getRequestInfo());
 		waterConnectionResponse.setResponseInfo(
 				responseInfoFactory.createResponseInfoFromRequestInfo(requestInfoWrapper.getRequestInfo(), true));
-		return new ResponseEntity<>(waterConnectionResponse, HttpStatus.OK);*/
+		return new ResponseEntity<>(waterConnectionResponse, HttpStatus.OK);
 	}
 
 }

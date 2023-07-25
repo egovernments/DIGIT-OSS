@@ -39,7 +39,7 @@
         top: unset;
         @apply relative text-text-primary !important;
         svg{
-            fill: #505A5F;
+            fill: theme(colors.text.secondary);
         }
         span{
             @apply text-text-primary !important;

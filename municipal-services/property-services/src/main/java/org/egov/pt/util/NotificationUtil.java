@@ -385,7 +385,7 @@ public class NotificationUtil {
      * @param url
      */
     public String getShortenedUrl(String url){
-
+    	
         HashMap<String,String> body = new HashMap<>();
         body.put("url",url);
         StringBuilder builder = new StringBuilder(config.getUrlShortnerHost());
@@ -398,7 +398,7 @@ public class NotificationUtil {
         }
         else return res;
     }
-
+    
     /**
     *
     * @param requestInfo
@@ -676,53 +676,6 @@ public class NotificationUtil {
                 .roles(Collections.singletonList(role)).id(0L).build();
 
         return userInfo;
-    }
-
-    public String getMsgForCitizenFeedbackNotification(Property property, String completeMsgs, String serviceType) {
-
-        String msgCode = null, redirectLink = null, creationreason=null;
-        String feedbackUrl = config.getUiAppHost()+config.getCitizenFeedbackLink();
-
-        switch (serviceType)
-        {
-            case CREATED_STRING: {
-                msgCode = PT_NOTIF_CF_CREATED;
-                redirectLink = CF_REDIRECT_REPLACE_CREATE;
-                if (property.getCreationReason().equals(CreationReason.CREATE))
-                    creationreason = "CREATE";
-                break;
-
-            }
-
-            case UPDATED_STRING: {
-                msgCode = PT_NOTIF_CF_UPDATED;
-                redirectLink = CF_REDIRECT_REPLACE_UPDATE;
-                if (property.getCreationReason().equals(CreationReason.UPDATE))
-                    creationreason = "UPDATE";
-                break;
-            }
-
-            case MUTATED_STRING: {
-                msgCode = PT_NOTIF_CF_MUTATED;
-                redirectLink = CF_REDIRECT_REPLACE_MUTATE;
-                if (property.getCreationReason().equals(CreationReason.MUTATION))
-                    creationreason = "MUTATION";
-                break;
-            }
-
-        }
-
-        feedbackUrl = feedbackUrl
-                .replace(PROPERTYID_REPLACE,property.getPropertyId())
-                .replace(ACKNOWLEDGEMENT_REPLACE,property.getAcknowldgementNumber())
-                .replace(TENANTID_REPLACE,property.getTenantId())
-                .replace(REDIRECTLINK_REPLACE,redirectLink)
-                .replace(CREATIONREASON_REPLACE,creationreason);
-
-        return getMessageTemplate(msgCode, completeMsgs)
-                .replace(NOTIFICATION_PROPERTYID, property.getPropertyId()).replace(NOTIFICATION_APPID,
-                        property.getAcknowldgementNumber()).replace(FEEDBACK_URL, getShortenedUrl(feedbackUrl));
-
     }
 
 }

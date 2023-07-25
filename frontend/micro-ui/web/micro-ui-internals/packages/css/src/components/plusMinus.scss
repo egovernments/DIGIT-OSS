@@ -5,9 +5,9 @@
   justify-content: center;
 }
 .PlusMinusbutton{
-  border: 1px solid #d6d5d4;
-  background-color: #eeeeee;
-  color: #505a5f;
+  border: 1px solid theme(colors.border);
+  background-color: theme(colors.grey.mid);
+  color: theme(colors.text.secondary);
   font-size: 27px;
   font-weight: 400;
   text-align: center;

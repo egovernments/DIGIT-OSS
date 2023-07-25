@@ -6,6 +6,8 @@ import Modal from "../hoc/Modal";
 import { DateRangePicker, createStaticRanges } from "react-date-range";
 import { format, addMonths, addHours, startOfToday, endOfToday, endOfYesterday, addMinutes, addSeconds, isEqual, subYears, startOfYesterday, startOfWeek, endOfWeek, startOfYear, endOfYear, startOfMonth, endOfMonth, startOfQuarter, endOfQuarter } from "date-fns";
 
+import { enGB } from 'date-fns/locale'
+import { addDays } from 'date-fns'
 function isEndDateFocused(focusNumber) {
   return focusNumber === 1;
 }
@@ -14,7 +16,7 @@ function isStartDateFocused(focusNumber) {
   return focusNumber === 0;
 }
 
-const DateRange = ({ values, onFilterChange, t, labelClass }) => {
+const DateRange = ({ values, onFilterChange, t,labelClass, filterLabel,...props }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [focusedRange, setFocusedRange] = useState([0, 0]);
   const [selectionRange, setSelectionRange] = useState({
@@ -41,7 +43,7 @@ const DateRange = ({ values, onFilterChange, t, labelClass }) => {
       const startDate = selectionRange?.startDate;
       const endDate =  selectionRange?.endDate;
       const duration = getDuration(selectionRange?.startDate, selectionRange?.endDate);
-      const title = `${format(selectionRange?.startDate, "MMM d, yy")} - ${format(selectionRange?.endDate, "MMM d, yy")}`;
+      const title = `${format(selectionRange?.startDate, "dd-MM-yy")} - ${format(selectionRange?.endDate, "dd-MM-yy")}`;
       onFilterChange({ range: { startDate, endDate, duration, title }, requestDate: { startDate, endDate, duration, title } });
     }
   }, [selectionRange, isModalOpen]);
@@ -65,8 +67,8 @@ const DateRange = ({ values, onFilterChange, t, labelClass }) => {
       {
         label: t("DSS_THIS_WEEK"),
         range: () => ({
-          startDate: startOfWeek(new Date()),
-          endDate: endOfWeek(new Date()),
+          startDate: startOfWeek(new Date(), { weekStartsOn: 1 }),
+          endDate: endOfWeek(new Date(), { weekStartsOn: 1 }),
         })
       },
       {
@@ -136,8 +138,8 @@ const DateRange = ({ values, onFilterChange, t, labelClass }) => {
 
   return (
     <>
-      <div className="filter-label">{t(`ES_DSS_DATE_RANGE`)}</div>
-      <div className="employee-select-wrap" ref={wrapperRef}>
+      <div className="filter-label">{t(`${filterLabel}`)}</div>
+      <div className="employee-select-wrap" style={props.inputStyle} ref={wrapperRef}>
         <div className="select">
           <input className="employee-select-wrap--elipses" type="text" value={values?.title ? `${values?.title}` : ""} readOnly />
           <Calender className="cursorPointer" onClick={() => setIsModalOpen((prevState) => !prevState)} />
@@ -155,6 +157,9 @@ const DateRange = ({ values, onFilterChange, t, labelClass }) => {
               showSelectionPreview={true}
               staticRanges={staticRanges}
               inputRanges={[]}
+              locale={enGB}
+              //endDateOffset={day => day.addDays(6, 'days')} 
+
             />
           </div>
         )}

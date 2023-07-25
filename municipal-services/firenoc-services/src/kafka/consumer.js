@@ -111,12 +111,12 @@ consumerGroup.on("message", function(message) {
         case "DOCUMENTVERIFY":
           smsRequest[
             "message"
-          ] = `Dear ${ownerName},Your application for ${firenocType} with application no. is ${applicationNumber} has been forwarded for document verifier.\n\nEGOVS`;
+          ] = `Dear ${ownerName},Your application for ${firenocType} with application no. is ${applicationNumber} has been forwarded for field inpsection.\n\nEGOVS`;
           break;
         case "FIELDINSPECTION":
           smsRequest[
             "message"
-          ] = `Dear ${ownerName},Your application for ${firenocType} with application no. is ${applicationNumber} has been forwarded for field inpsection.\n\nEGOVS`;
+          ] = `Dear ${ownerName},Your application for ${firenocType} with application no. is ${applicationNumber} has been forwarded for document verifier.\n\nEGOVS`;
           break;
         case "PENDINGAPPROVAL":
           smsRequest[
@@ -140,15 +140,9 @@ consumerGroup.on("message", function(message) {
             "message"
           ] = `Dear ${ownerName},Your application for ${firenocType} with application no. is ${applicationNumber} is approved.And your fire NoC has been generated.Your Fire NoC No. is ${fireNOCNumber}. It is valid till ${dateString}\n\nEGOVS`;
           break;
-        case "CITIZENACTIONREQUIRED-DV":
+        case "SENDBACKTOCITIZEN":
           smsRequest[
             "message"
-          ] = `Dear ${ownerName}, 
-          Your application for ${firenocType} Fire NOC Certificate with application no. ${applicationNumber} is send back to you for further actions.Please check the comments and Re-submit application through mSeva App or by ULB counter.\n\nEGOVS`;
-          break;
-        case "CITIZENACTIONREQUIRED":
-          smsRequest[
-             "message"
           ] = `Dear ${ownerName}, 
           Your application for ${firenocType} Fire NOC Certificate with application no. ${applicationNumber} is send back to you for further actions.Please check the comments and Re-submit application through mSeva App or by ULB counter.\n\nEGOVS`;
           break;

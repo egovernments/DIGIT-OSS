@@ -28,7 +28,7 @@ const convertDateToEpochNew = (dateString, dayStartOrEnd = "dayend") => {
   //example input format : "2018-10-02"
   try {
     const parts = dateString.match(/(\d{4})-(\d{1,2})-(\d{1,2})/);
-    const DateObj = new Date(Date.UTC(parts[1], parts[2] - 1, parts[3]));
+    const DateObj = new Date(Date.UTC(parts[1], parts[3] - 1, parts[2]));
 
     DateObj.setMinutes(DateObj.getMinutes() + DateObj.getTimezoneOffset());
     if (dayStartOrEnd === "dayend") {
@@ -58,8 +58,6 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction,
   const [file, setFile] = useState(null);
   const [uploadedFile, setUploadedFile] = useState(null);
   const [error, setError] = useState(null);
-  const isMobile = window.Digit.Utils.browser.isMobile();
-  const isEmployee = window.location.href.includes("/employee")
 
   useEffect(() => {
     setApprovers(approverData?.Employees?.map((employee) => ({ uuid: employee?.uuid, name: employee?.user?.name })));
@@ -98,7 +96,7 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction,
   function submit(data) {
     if(applicationData?.isBillAmend){
       const comments = data?.comments ? data.comments : null
-    
+     
       const additionalDetails = { ...applicationData?.billAmendmentDetails?.additionalDetails, comments } 
      const amendment = {
        ...applicationData?.billAmendmentDetails,
@@ -106,19 +104,8 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction,
           businessId:applicationData?.billAmendmentDetails?.amendmentId,
           action:action?.action,
           tenantId:tenantId,
-          businessService:applicationData?.applicationType?.includes("WATER")?"WS.AMENDMENT":"SW.AMENDMENT",
-          moduleName:applicationData?.applicationType?.includes("WATER")?"WS":"SW",
-          assignes: !selectedApprover?.uuid ? [] : [{ uuid: selectedApprover?.uuid }],
-          comment: data?.comments || "",
-          documents: uploadedFile
-            ? [
-              {
-                documentType: action?.action + " DOC",
-                fileName: file?.name,
-                fileStoreId: uploadedFile,
-              },
-            ]
-            : []
+          businessService:"BS.AMENDMENT",
+          moduleName:"BS"
         },
        additionalDetails,
        comment: data?.comments || "",
@@ -182,17 +169,12 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction,
           : []
       }
     };
-    if(data?.date && applicationData?.applicationType?.includes("DISCONNECT"))
-    {
-      const disconnectionExecutionDate = cloneDeep(data?.date);
-      applicationData.disconnectionExecutionDate = convertDateToEpochNew(disconnectionExecutionDate)
-    }
-    else if (data?.date) {
+    
+    if (data?.date) {
       const connectionExecutionDate = cloneDeep(data?.date);
       applicationData.connectionExecutionDate = convertDateToEpochNew(connectionExecutionDate)
     }
-    if ((applicationData?.processInstance?.businessService == "DisconnectWSConnection" || applicationData?.processInstance?.businessService == "DisconnectSWConnection") || window.location.href.includes("disconnection")){
-      
+    if (applicationData?.processInstance?.businessService == "DisconnectWSConnection" || applicationData?.processInstance?.businessService == "DisconnectSWConnection"){
       applicationData?.serviceType == "WATER" ?
       submitAction({ WaterConnection: applicationData, disconnectRequest: true }) :
       submitAction({ SewerageConnection: applicationData, disconnectRequest: true })
@@ -256,7 +238,6 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction,
       actionSaveLabel={t(config.label.submit)}
       actionSaveOnSubmit={() => { }}
       formId="modal-action"
-      style={isMobile && isEmployee ? {width:"100%",height:"auto"} : {}}
     >
       {PTALoading ? (
         <Loader />

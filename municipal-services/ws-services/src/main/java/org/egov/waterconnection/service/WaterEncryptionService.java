@@ -12,7 +12,6 @@ import org.egov.waterconnection.constants.WCConstants;
 import org.egov.waterconnection.repository.ServiceRequestRepository;
 import org.egov.waterconnection.repository.WaterDao;
 import org.egov.waterconnection.util.EncryptionDecryptionUtil;
-import org.egov.waterconnection.util.WaterServicesUtil;
 import org.egov.waterconnection.web.models.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -54,9 +53,6 @@ public class WaterEncryptionService {
 
     @Autowired
     private ServiceRequestRepository serviceRequestRepository;
-
-    @Autowired
-    private WaterServicesUtil waterServicesUtil;
 
     /**
      * Initiates Water applications/connections data encryption
@@ -148,8 +144,6 @@ public class WaterEncryptionService {
                             .isOldDataEncryptionRequest(Boolean.TRUE)
                             .build();
 
-                    waterConnectionRequest.getWaterConnection().setAuditDetails(waterServicesUtil
-                            .getAuditDetails(waterConnectionRequest.getRequestInfo().getUserInfo().getUuid(), false));
                     waterDao.updateOldWaterConnections(waterConnectionRequest);
                     countPushed++;
                     waterConnectionList.add(waterConnection);

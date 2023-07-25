@@ -3,7 +3,6 @@ package org.egov.noc.repository;
 import java.util.ArrayList;
 import java.util.List;
 
-import lombok.extern.slf4j.Slf4j;
 import org.egov.noc.config.NOCConfiguration;
 import org.egov.noc.producer.Producer;
 import org.egov.noc.repository.builder.NocQueryBuilder;
@@ -16,7 +15,6 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 @Repository
-@Slf4j
 public class NOCRepository {
 	
 	@Autowired
@@ -47,8 +45,7 @@ public class NOCRepository {
 	 * @param nocRequest
 	 * @param isStateUpdatable
 	 */
-	public void update(NocRequest nocRequest, boolean isStateUpdatable) {
-		log.info("Pushing NOC record with application status - "+nocRequest.getNoc().getApplicationStatus());
+	public void update(NocRequest nocRequest, boolean isStateUpdatable) {		
 		if (isStateUpdatable) {
 			producer.push(config.getUpdateTopic(), nocRequest);
 		} else {

@@ -42,7 +42,7 @@ const DatePicker = (props) => {
         <input
           className={`employee-card-input ${props.disabled ? "disabled" : ""}`}
           // className={`${props.disabled ? "disabled" : ""}`}
-          style={{ width: "calc(100%-62px)" }}
+          style={{ width: "calc(100%-62px)",paddingRight:"9px",...props.style }}
           // style={{ right: "6px", zIndex: "100", top: 6, position: "absolute", opacity: 0, width: "100%" }}
           value={props.date ? props.date : ""}
           type="date"
@@ -53,6 +53,7 @@ const DatePicker = (props) => {
           min={props.min}
           max={props.max}
           required={props.isRequired || false}
+          onBlur={props.onBlur}
         />
       </React.Fragment>
     </div>

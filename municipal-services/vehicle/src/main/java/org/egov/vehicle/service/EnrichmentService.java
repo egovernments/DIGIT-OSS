@@ -25,47 +25,47 @@ public class EnrichmentService {
 
 	@Autowired
 	VehicleUtil util;
-
+	
 	@Autowired
 	UserService userService;
-
-	public void enrichVehicleCreateRequest(VehicleRequest vehicleRequest) {
-		RequestInfo requestInfo = vehicleRequest.getRequestInfo();
-
-		AuditDetails auditDetails = util.getAuditDetails(requestInfo.getUserInfo().getUuid(), true, null);
+	
+    public void enrichVehicleCreateRequest(VehicleRequest vehicleRequest) {
+        RequestInfo requestInfo = vehicleRequest.getRequestInfo();
+        
+        AuditDetails auditDetails = util.getAuditDetails(requestInfo.getUserInfo().getUuid(), true,null);
 		vehicleRequest.getVehicle().setAuditDetails(auditDetails);
 		vehicleRequest.getVehicle().setStatus(Vehicle.StatusEnum.ACTIVE);
-
-		vehicleRequest.getVehicle().setId(UUID.randomUUID().toString());
-		if (vehicleRequest.getVehicle().getOwner().getId() == null) {
-			vehicleRequest.getVehicle().getOwner().setId(Long.parseLong(UUID.randomUUID().toString()));
-		}
-
-	}
-
-	public void enrichVehicleUpdateRequest(VehicleRequest vehicleRequest) {
-		RequestInfo requestInfo = vehicleRequest.getRequestInfo();
-
+		
+        vehicleRequest.getVehicle().setId(UUID.randomUUID().toString());
+        if( vehicleRequest.getVehicle().getOwner().getId() == null) {
+        		vehicleRequest.getVehicle().getOwner().setId(Long.parseLong(UUID.randomUUID().toString()));
+        }
+        
+    }
+    
+    public void enrichVehicleUpdateRequest(VehicleRequest vehicleRequest) {
+        RequestInfo requestInfo = vehicleRequest.getRequestInfo();
+        
 		AuditDetails auditDetails = util.getAuditDetails(requestInfo.getUserInfo().getUuid(), false,
 				vehicleRequest.getVehicle().getAuditDetails());
 		vehicleRequest.getVehicle().setAuditDetails(auditDetails);
-		if (vehicleRequest.getVehicle().getOwner().getId() == null) {
-			vehicleRequest.getVehicle().getOwner().setId(Long.parseLong(UUID.randomUUID().toString()));
-		}
-
-	}
-
-	public void enrichSearchData(List<Vehicle> vehicleList, RequestInfo requestInfo) {
-
+		if( vehicleRequest.getVehicle().getOwner().getId() == null) {
+        		vehicleRequest.getVehicle().getOwner().setId(Long.parseLong(UUID.randomUUID().toString()));
+        }
+        
+    }
+    
+	public void enrichSearchData(List<Vehicle> vehicleList,RequestInfo requestInfo) {
+		
 		List<String> accountIds = vehicleList.stream().map(Vehicle::getOwnerId).collect(Collectors.toList());
 		VehicleSearchCriteria searchcriteria = VehicleSearchCriteria.builder().ownerId(accountIds).build();
 		UserDetailResponse userDetailResponse = userService.getOwner(searchcriteria, requestInfo);
-		encrichOwner(userDetailResponse, vehicleList);
+		encrichOwner(userDetailResponse,vehicleList);
 	}
+
 
 	/**
 	 * enrich the applicant information in FSM
-	 * 
 	 * @param userDetailResponse
 	 * @param fsms
 	 */
@@ -75,7 +75,7 @@ public class EnrichmentService {
 		Map<String, User> userIdToApplicantMap = new HashMap<>();
 		users.forEach(user -> userIdToApplicantMap.put(user.getUuid(), user));
 		vehicles.forEach(vehicle -> {
-			vehicle.setOwner(userIdToApplicantMap.get(vehicle.getOwnerId()));
+			 vehicle.setOwner( userIdToApplicantMap.get(vehicle.getOwnerId()));
 		});
 	}
 

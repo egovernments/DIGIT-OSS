@@ -1,7 +1,6 @@
 package org.egov.vendor.validator;
 
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
 
 import org.egov.common.contract.request.RequestInfo;
@@ -13,8 +12,10 @@ import org.egov.vendor.service.VehicleService;
 import org.egov.vendor.util.VendorConstants;
 import org.egov.vendor.util.VendorErrorConstants;
 import org.egov.vendor.util.VendorUtil;
+import org.egov.vendor.web.model.Vendor;
 import org.egov.vendor.web.model.VendorRequest;
 import org.egov.vendor.web.model.VendorSearchCriteria;
+import org.egov.vendor.web.model.vehicle.Vehicle;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
@@ -43,9 +44,6 @@ public class VendorValidator {
 	@Autowired
 	private VehicleService vehicleService;
 
-	@Autowired
-	private UserService userService;
-
 	public void validateSearch(RequestInfo requestInfo, VendorSearchCriteria criteria) {
 
 		// Coz hear employee will be logged in to create vendor so..
@@ -54,13 +52,13 @@ public class VendorValidator {
 					"Search without any paramters is not allowed");
 		if (!requestInfo.getUserInfo().getType().equalsIgnoreCase(VendorConstants.EMPLOYEE) && !criteria.tenantIdOnly()
 				&& criteria.getTenantId() == null)
-			throw new CustomException(VendorErrorConstants.INVALID_SEARCH, VendorConstants.TENANT_ID_MANDATORY);
+			throw new CustomException(VendorErrorConstants.INVALID_SEARCH, "TenantId is mandatory in search");
 
 		if (requestInfo.getUserInfo().getType().equalsIgnoreCase(VendorConstants.EMPLOYEE) && !criteria.isEmpty()
 				&& !criteria.tenantIdOnly() && criteria.getTenantId() == null)
-			throw new CustomException(VendorErrorConstants.INVALID_SEARCH, VendorConstants.TENANT_ID_MANDATORY);
+			throw new CustomException(VendorErrorConstants.INVALID_SEARCH, "TenantId is mandatory in search");
 		if (criteria.getTenantId() == null)
-			throw new CustomException(VendorErrorConstants.INVALID_SEARCH, VendorConstants.TENANT_ID_MANDATORY);
+			throw new CustomException(VendorErrorConstants.INVALID_SEARCH, "TenantId is mandatory in search");
 
 		String allowedParamStr = null;
 
@@ -94,11 +92,6 @@ public class VendorValidator {
 		if (criteria.getTenantId() != null && !allowedParams.contains("tenantId")) {
 			throw new CustomException(VendorErrorConstants.INVALID_SEARCH, "Search on tenantid is not allowed");
 		}
-		searchOnIdVehicleRegId(criteria, allowedParams);
-
-	}
-
-	private void searchOnIdVehicleRegId(VendorSearchCriteria criteria, List<String> allowedParams) {
 		if (criteria.getIds() != null && !allowedParams.contains("ids"))
 			throw new CustomException(VendorErrorConstants.INVALID_SEARCH, "Search on ids is not allowed");
 
@@ -117,6 +110,8 @@ public class VendorValidator {
 	 */
 	public void validateCreateOrUpdateRequest(VendorRequest vendorRequest, Object mdmsData, boolean isCreate) {
 
+		// RequestInfo requestInfo = vendorRequest.getRequestInfo();
+		// Vendor vendor = vendorRequest.getVendor();
 		mdmsValidator.validateMdmsData(mdmsData);
 		mdmsValidator.validateAgencyType(vendorRequest);
 		mdmsValidator.validatePaymentPreference(vendorRequest);
@@ -126,19 +121,10 @@ public class VendorValidator {
 
 		if (isCreate) {
 			ownerService.manageOwner(vendorRequest);
-		} else {
-
-			if (vendorRequest.getVendor() != null && vendorRequest.getVendor().getOwner() != null) {
-				HashMap<String, String> errorMap = new HashMap<>();
-				userService.updateUserDetails(vendorRequest.getVendor().getOwner(), vendorRequest.getRequestInfo(),
-						errorMap);
-
-			} else {
-				log.debug("Vendor User Data Not found to Update user Details");
-			}
-
 		}
 
 		ownerService.manageDrivers(vendorRequest);
+
 	}
+
 }

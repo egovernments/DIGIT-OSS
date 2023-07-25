@@ -38,68 +38,71 @@ public class VehicleService {
 
 	@Autowired
 	private ObjectMapper mapper;
-
+	
 	@SuppressWarnings("deprecation")
 	public void manageVehicle(VendorRequest vendorRequest) {
-
+		
 		Vendor vendor = vendorRequest.getVendor();
 		RequestInfo requestInfo = vendorRequest.getRequestInfo();
-		List<Vehicle> reqVehicles = vendor.getVehicles();
-		List<Vehicle> newVehicles = new ArrayList<>();
-
-		if (!CollectionUtils.isEmpty(reqVehicles)) {
-
-			reqVehicles.forEach(reqVehicle -> {
-
-				if (!StringUtils.hasLength(reqVehicle.getId())
-						&& StringUtils.hasLength(reqVehicle.getRegistrationNumber())) {
-					vehicleSearchCriteriaNewVehicle(vendor, reqVehicle, requestInfo, newVehicles);
-
-				} else {
-
-					VehicleSearchCriteria vehicleSearchCriteria = VehicleSearchCriteria.builder()
-							.ids(Arrays.asList(reqVehicle.getId()))
-							.registrationNumber(Arrays.asList(reqVehicle.getRegistrationNumber()))
-							.tenantId(vendor.getTenantId()).build();
-
-					List<Vehicle> vehicles = getVehicles(vehicleSearchCriteria, requestInfo);
-
-					if (!vehicles.isEmpty()) {
-						Vehicle newVehicle = updateVehicle(reqVehicle, requestInfo);
-						newVehicle.setVendorVehicleStatus(reqVehicle.getVendorVehicleStatus());
-						newVehicles.add(newVehicle);
-					} else {
-						throw new CustomException(VendorConstants.UPDATE_ERROR,
-								"Vendor vehicle details not found in the System" + vendorRequest.getVendor());
-					}
+		List<Vehicle> reqVehicles= vendor.getVehicles();
+		List<Vehicle> newVehicles = new ArrayList<Vehicle>();
+		
+		if(!CollectionUtils.isEmpty(reqVehicles)) {
+		
+			reqVehicles.forEach(reqVehicle->{
+			
+			if(!StringUtils.hasLength(reqVehicle.getId()) && 
+					StringUtils.hasLength(reqVehicle.getRegistrationNumber())) {
+				
+				VehicleSearchCriteria vehicleSearchCriteria=new VehicleSearchCriteria();
+				vehicleSearchCriteria = VehicleSearchCriteria.builder()
+						.registrationNumber(Arrays.asList(reqVehicle.getRegistrationNumber()))
+						.tenantId(vendor.getTenantId())
+						.status(Arrays.asList("ACTIVE")).build();
+				
+				List<Vehicle> vehicles = getVehicles(vehicleSearchCriteria,requestInfo);
+				
+				if( vehicles.size() >0 ) {
+					vehicles.get(0).setVendorVehicleStatus(reqVehicle.getVendorVehicleStatus());
+					newVehicles.add(vehicles.get(0));
+					//TODO comparing search result and request vehicle and callig update is peding
+				}else {
+					Vehicle newVehicle=createVehicle(reqVehicle, requestInfo);
+					newVehicle.setVendorVehicleStatus(reqVehicle.getVendorVehicleStatus());
+					newVehicles.add(newVehicle);
 				}
-			});
-
+			}else {
+				
+				VehicleSearchCriteria vehicleSearchCriteria=new VehicleSearchCriteria();
+				vehicleSearchCriteria = VehicleSearchCriteria.builder()
+						.ids(Arrays.asList(reqVehicle.getId()))
+						.registrationNumber(Arrays.asList(reqVehicle.getRegistrationNumber()))
+						.tenantId(vendor.getTenantId()).build();
+				
+				List<Vehicle> vehicles = getVehicles(vehicleSearchCriteria,requestInfo);
+				
+				if( vehicles.size() >0 ) {
+					Vehicle newVehicle=updateVehicle(reqVehicle, requestInfo);
+					newVehicle.setVendorVehicleStatus(reqVehicle.getVendorVehicleStatus());
+					newVehicles.add(newVehicle);
+					//newVehicles.add(updateVehicle(reqVehicle, requestInfo));
+					
+				}else {
+					throw new CustomException(VendorConstants.UPDATE_ERROR,
+					 "Vendor vehicle details not found in the System" + vendorRequest.getVendor());
+				}
+			}
+		});
+		
 			vendorRequest.getVendor().getVehicles().clear();
 			vendorRequest.getVendor().getVehicles().addAll(newVehicles);
-		}
-
 	}
-
-	private List<Vehicle> vehicleSearchCriteriaNewVehicle(Vendor vendor, Vehicle reqVehicle, RequestInfo requestInfo,
-			List<Vehicle> newVehicles) {
-
-		List<Vehicle> vehicles = getVehicles(
-				VehicleSearchCriteria.builder().registrationNumber(Arrays.asList(reqVehicle.getRegistrationNumber()))
-						.tenantId(vendor.getTenantId()).status(Arrays.asList("ACTIVE")).build(),
-				requestInfo);
-
-		if (!vehicles.isEmpty()) {
-			vehicles.get(0).setVendorVehicleStatus(reqVehicle.getVendorVehicleStatus());
-			newVehicles.add(vehicles.get(0));
-		} else {
-			Vehicle newVehicle = createVehicle(reqVehicle, requestInfo);
-			newVehicle.setVendorVehicleStatus(reqVehicle.getVendorVehicleStatus());
-			newVehicles.add(newVehicle);
-		}
-		return newVehicles;
+		
+		
+		
 	}
-
+	
+	
 	/**
 	 * @param vehicleIds
 	 * @param registrationNumbers
@@ -109,86 +112,63 @@ public class VehicleService {
 	 * @param tenantId
 	 * @return
 	 */
-	public List<Vehicle> getVehicles(VehicleSearchCriteria vehicleSearchCriteria, RequestInfo requestInfo) {
-
+	public List<Vehicle> getVehicles(VehicleSearchCriteria vehicleSearchCriteria, RequestInfo requestInfo){
+		
 		StringBuilder uri = new StringBuilder();
 		uri.append(config.getVehicleHost()).append(config.getVehicleContextPath())
 				.append(config.getVehicleSearchEndpoint()).append("?tenantId=" + vehicleSearchCriteria.getTenantId());
-
-		if (!CollectionUtils.isEmpty(vehicleSearchCriteria.getIds())) {
-			uri.append("&ids=" + String.join(",", vehicleSearchCriteria.getIds()));
+		
+		if( !CollectionUtils.isEmpty(vehicleSearchCriteria.getIds())) {
+			uri.append("&ids="+String.join(",",vehicleSearchCriteria.getIds())); 
 		}
-		if (!CollectionUtils.isEmpty(vehicleSearchCriteria.getRegistrationNumber())) {
-			uri.append("&registrationNumber=" + String.join(",", vehicleSearchCriteria.getRegistrationNumber()));
+		if( !CollectionUtils.isEmpty(vehicleSearchCriteria.getRegistrationNumber())) {
+			uri.append("&registrationNumber="+String.join(",", vehicleSearchCriteria.getRegistrationNumber()));
 		}
-
-		if (StringUtils.hasLength(vehicleSearchCriteria.getVehicleType())) {
-			uri.append("&type=" + vehicleSearchCriteria.getVehicleType());
+		
+		if(StringUtils.hasLength(vehicleSearchCriteria.getVehicleType())) {
+			uri.append("&type="+vehicleSearchCriteria.getVehicleType());
 		}
-
-		if (StringUtils.hasLength(vehicleSearchCriteria.getVehicleCapacity())) {
-			uri.append("&tankCapacity=" + vehicleSearchCriteria.getVehicleCapacity());
+		
+		if(StringUtils.hasLength(vehicleSearchCriteria.getVehicleCapacity())) {
+			uri.append("&tankCapacity="+vehicleSearchCriteria.getVehicleCapacity());
 		}
-
-		if (!CollectionUtils.isEmpty(vehicleSearchCriteria.getStatus())) {
-			uri.append("&status=" + String.join(",", vehicleSearchCriteria.getStatus()));
+		
+		if( !CollectionUtils.isEmpty(vehicleSearchCriteria.getStatus())) {
+			uri.append("&status="+String.join(",",vehicleSearchCriteria.getStatus())); 
 		}
-
+		
 		RequestInfoWrapper reqwraper = RequestInfoWrapper.builder().requestInfo(requestInfo).build();
 		LinkedHashMap responseMap = (LinkedHashMap) serviceRequestRepository.fetchResult(uri, reqwraper);
 		VehicleResponse vehicleResponse = null;
 		try {
-			vehicleResponse = mapper.convertValue(responseMap, VehicleResponse.class);
+			 vehicleResponse = mapper.convertValue(responseMap, VehicleResponse.class);
 		} catch (IllegalArgumentException e) {
-			throw new CustomException(VendorConstants.ILLEGAL_ARGUMENT_EXCEPTION,
-					"ObjectMapper not able to convertValue in vehicle search response");
+			throw new CustomException("IllegalArgumentException", "ObjectMapper not able to convertValue in vehicle search response");
 		}
-
-		return vehicleResponse.getVehicle();
+		
+		return  vehicleResponse.getVehicle();
 	}
-
+	
 	private Vehicle createVehicle(Vehicle vehicle, RequestInfo requestInfo) {
 		StringBuilder uri = new StringBuilder();
-		uri.append(config.getVehicleHost()).append(config.getVehicleContextPath())
-				.append(config.getVehicleCreateEndpoint());
+		uri.append(config.getVehicleHost()).append(config.getVehicleContextPath()).append(config.getVehicleCreateEndpoint());
 		VehicleRequest vehicleRequest = VehicleRequest.builder().RequestInfo(requestInfo).vehicle(vehicle).build();
 		try {
-
+			
 			LinkedHashMap responseMap = (LinkedHashMap) serviceRequestRepository.fetchResult(uri, vehicleRequest);
 			VehicleResponse vehicleResponse = mapper.convertValue(responseMap, VehicleResponse.class);
-			if (vehicleResponse.getVehicle() != null && !vehicleResponse.getVehicle().isEmpty()) {
+			if(vehicleResponse.getVehicle() != null && vehicleResponse.getVehicle().size() >0) {
 				return vehicleResponse.getVehicle().get(0);
-			} else {
+			}else {
 				throw new CustomException(VendorConstants.COULD_NOT_CREATE_VEHICLE, "Could not create vehicle");
 			}
-
+			
 		} catch (IllegalArgumentException e) {
-			throw new CustomException(VendorConstants.ILLEGAL_ARGUMENT_EXCEPTION,
-					"ObjectMapper not able to convertValue in userCall");
+			throw new CustomException("IllegalArgumentException", "ObjectMapper not able to convertValue in userCall");
 		}
-
-	}
-
-	private Vehicle updateVehicle(Vehicle vehicle, RequestInfo requestInfo) {
-		StringBuilder uri = new StringBuilder();
-		uri.append(config.getVehicleHost()).append(config.getVehicleContextPath())
-				.append(config.getVehicleUpdateEndpoint());
-		VehicleRequest vehicleRequest = VehicleRequest.builder().RequestInfo(requestInfo).vehicle(vehicle).build();
-		try {
-
-			LinkedHashMap responseMap = (LinkedHashMap) serviceRequestRepository.fetchResult(uri, vehicleRequest);
-			VehicleResponse vehicleResponse = mapper.convertValue(responseMap, VehicleResponse.class);
-			if (vehicleResponse.getVehicle() != null && !vehicleResponse.getVehicle().isEmpty()) {
-				return vehicleResponse.getVehicle().get(0);
-			} else {
-				throw new CustomException(VendorConstants.UPDATE_VEHICLE_ERROR, "Could not Update vehicle");
-			}
-
-		} catch (IllegalArgumentException e) {
-			throw new CustomException(VendorConstants.ILLEGAL_ARGUMENT_EXCEPTION,
-					"ObjectMapper not able to convertValue in userCall");
-		}
-
+		
+		
+		
 	}
 	
 	private Vehicle updateVehicle(Vehicle vehicle, RequestInfo requestInfo) {

@@ -11,21 +11,22 @@ import org.egov.pt.config.PropertyConfiguration;
 import org.egov.pt.models.EncryptionCount;
 import org.egov.pt.models.Property;
 import org.egov.pt.models.PropertyCriteria;
-import org.egov.pt.models.PropertyAudit;
+import org.egov.pt.models.collection.BillResponse;
 import org.egov.pt.producer.PropertyProducer;
 import org.egov.pt.repository.PropertyRepository;
 import org.egov.pt.repository.ServiceRequestRepository;
-import org.egov.pt.util.*;
+import org.egov.pt.util.EncryptionDecryptionUtil;
+import org.egov.pt.util.ErrorConstants;
+import org.egov.pt.util.PTConstants;
 import org.egov.pt.web.contracts.PropertyRequest;
-import org.egov.pt.web.contracts.PropertyResponse;
 import org.egov.tracer.model.CustomException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
+import org.springframework.util.StringUtils;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 /* Encrypts Property Address data(street, doorNo, landmark) for existing records */
 @Slf4j
@@ -46,9 +47,6 @@ public class PropertyEncryptionService {
 
     @Autowired
     EncryptionDecryptionUtil encryptionDecryptionUtil;
-
-    @Autowired
-    private PropertyUtil propertyUtil;
 
     @Value("${encryption.batch.value}")
     private Integer batchSize;
@@ -84,8 +82,7 @@ public class PropertyEncryptionService {
         if (CollectionUtils.isEmpty(criteria.getTenantIds())) {
             //mdms call for tenantIds in case tenantIds array is not sent in criteria
             tenantIds = getAllTenantsFromMdms(requestInfo);
-        } else
-            tenantIds = criteria.getTenantIds();
+        }
         List<Property> finalPropertyList = new LinkedList<>();
         for (String tenantId : tenantIds) {
             criteria.setTenantIds(Collections.singleton(tenantId));
@@ -134,34 +131,27 @@ public class PropertyEncryptionService {
             List<Property> encryptedPropertyList = new LinkedList<>();
             try {
                 propertyList = propertyService.searchPropertyPlainSearch(criteria, requestInfo);
+
                 countPushed = 0;
 
-                PropertyResponse propertyResponse = new PropertyResponse();
                 for (Property property : propertyList) {
                     /* encrypt here */
                     property = encryptionDecryptionUtil.encryptObject(property, PTConstants.PROPERTY_MODEL, Property.class);
-                    //search properties in audit table and encrypt them
-                    encryptPropertyAuditData(requestInfo, property.getPropertyId());
 
                     PropertyRequest request = PropertyRequest.builder()
                             .requestInfo(requestInfo)
                             .property(property)
                             .build();
 
-                    property.setAuditDetails(propertyUtil.getAuditDetails(requestInfo.getUserInfo().getUuid(), false));
-                    property.setOldDataEncryptionRequest(Boolean.TRUE);
-                    /* Fix me up
-                     *  Duplicate proprtyids getting persisted in eg_pt_id_enc_audit table
-                     * */
-                    producer.push(config.getUpdatePropertyEncTopic(), request);
+                    request.getProperty().setOldDataEncryptionRequest(Boolean.TRUE);
+
+                    producer.push(config.getUpdatePropertyTopic(), request);
                     countPushed++;
                     encryptedPropertyList.add(property);
-                    map.put("message", "Encryption successfull till batchOffset : " + criteria.getOffset() + ". Records encrypted in current batch : " + countPushed
-                            + ". Properties encrypted: " + (propertyList.stream().map(Property::getPropertyId)).collect(Collectors.toList()));
+                    map.put("message", "Encryption successfull till batchOffset : " + criteria.getOffset() + ". Records encrypted in current batch : " + countPushed);
                 }
             } catch (Exception e) {
-                map.put("message", "Encryption failed at batchOffset  :  " + startBatch + "  with message : " + e.getMessage() + ". Records encrypted in current batch : " + countPushed
-                        + ". Properties encrypted: " + (propertyList.stream().map(Property::getPropertyId)).collect(Collectors.toList()));
+                map.put("message", "Encryption failed at batchOffset  :  " + startBatch + "  with message : " + e.getMessage() + ". Records encrypted in current batch : " + countPushed);
                 log.error("Encryption failed at batch count of : " + startBatch);
                 log.error("Encryption failed at batch count : " + startBatch + "=>" + e.getMessage());
 
@@ -212,7 +202,9 @@ public class PropertyEncryptionService {
     }
 
     /**
+     *
      * @param requestInfo RequestInfo Object
+     *
      * @return MdmsCriteria
      */
     private Set<String> getAllTenantsFromMdms(RequestInfo requestInfo) {
@@ -242,24 +234,6 @@ public class PropertyEncryptionService {
             return state;
         } catch (Exception e) {
             throw new CustomException(ErrorConstants.INVALID_TENANT_ID_MDMS_KEY, ErrorConstants.INVALID_TENANT_ID_MDMS_MSG);
-        }
-    }
-
-
-    /**
-     * @param requestInfo RequestInfo Object
-     * @param propertyId
-     */
-    private void encryptPropertyAuditData(RequestInfo requestInfo, String propertyId) {
-        List<PropertyAudit> propertiesInAudit;
-        PropertyCriteria criteria = new PropertyCriteria();
-        criteria.setPropertyIds(Collections.singleton(propertyId));
-        propertiesInAudit = repository.getPropertyAuditForEnc(criteria);
-
-        for (PropertyAudit propertyAudit : propertiesInAudit) {
-            propertyAudit.setAuditcreatedTime(System.currentTimeMillis());
-            propertyAudit.setProperty(encryptionDecryptionUtil.encryptObject(propertyAudit.getProperty(), PTConstants.PROPERTY_MODEL, Property.class));
-            producer.push(config.getUpdatePropertyAuditEncTopic(), propertyAudit);
         }
     }
 

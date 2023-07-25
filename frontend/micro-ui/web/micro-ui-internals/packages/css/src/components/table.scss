@@ -34,7 +34,7 @@
   color: rgb(80, 90, 95);
 
   svg {
-    fill: #505a5f;
+    fill: theme(colors.text.secondary);
     @apply ml-md;
   }
 }
@@ -61,7 +61,7 @@
   }
 
   tr:nth-child(odd) {
-    background-color: #eeeeee;
+    background-color: theme(colors.grey.mid);
   }
   tr:nth-child(even) {
     background-color: #fff;
@@ -88,7 +88,7 @@
     td:first-child {
       position: sticky;
       background: #fff;
-      color: #f47738;
+      color: theme(colors.primary.main);
       left: 0;
       border-right: 1px solid #b1b4b6;
     }

@@ -106,13 +106,8 @@ public class PropertyService {
 			request.getProperty().setStatus(Status.ACTIVE);
 		}
 
-		/* Fix this.
-		 * For FUZZY-search, This code to be un-commented when privacy is enabled
-		 
 		//Push PLAIN data to fuzzy search index
 		producer.push(config.getSavePropertyFuzzyTopic(), request);
-		*
-		*/
 		//Push data after encryption
 		producer.pushAfterEncrytpion(config.getSavePropertyTopic(), request);
 		request.getProperty().setWorkflow(null);
@@ -158,13 +153,7 @@ public class PropertyService {
 		fuzzyPropertyRequest.setProperty(encryptionDecryptionUtil.decryptObject(request.getProperty(), PTConstants.PROPERTY_DECRYPT_MODEL,
 				Property.class, request.getRequestInfo()));
 
-		/* Fix this.
-		 * For FUZZY-search, This code to be un-commented when privacy is enabled
-		 
-		//Push PLAIN data to fuzzy search index
 		producer.push(config.getSavePropertyFuzzyTopic(), fuzzyPropertyRequest);
-		*
-		*/
 
 		/* decrypt here */
 		return encryptionDecryptionUtil.decryptObject(request.getProperty(), PTConstants.PROPERTY_MODEL, Property.class, request.getRequestInfo());
@@ -328,7 +317,7 @@ public class PropertyService {
 					&& !propertyFromSearch.getStatus().equals(Status.INWORKFLOW)) {
 
 				propertyFromSearch.setStatus(Status.INACTIVE);
-				producer.pushAfterEncrytpion(config.getUpdatePropertyTopic(), oldPropertyRequest);
+				producer.push(config.getUpdatePropertyTopic(), oldPropertyRequest);
 
 				util.saveOldUuidToRequest(request, propertyFromSearch.getId());
 				/* save new record */
@@ -428,7 +417,7 @@ public class PropertyService {
 		/* Decrypt here */
 		 if(criteria.getIsSearchInternal())
 			return encryptionDecryptionUtil.decryptObject(properties, PTConstants.PROPERTY_DECRYPT_MODEL, Property.class, requestInfo);
-		else if(!criteria.getIsRequestForOldDataEncryption())
+		else if(!criteria.getIsRequestForOldDataEncryption() && !criteria.isAudit())
 			return encryptionDecryptionUtil.decryptObject(properties, PTConstants.PROPERTY_MODEL, Property.class, requestInfo);
 
 		return properties;
@@ -478,10 +467,7 @@ public class PropertyService {
 			if (criteria.getPropertyIds() != null)
 				propertyCriteria.setPropertyIds(criteria.getPropertyIds());
 
-		} else if(criteria.getIsRequestForOldDataEncryption()){
-			propertyCriteria.setTenantIds(criteria.getTenantIds());
-		}
-		else {
+		} else {
 			List<String> uuids = repository.fetchIds(criteria, true);
 			if (uuids.isEmpty())
 				return Collections.emptyList();

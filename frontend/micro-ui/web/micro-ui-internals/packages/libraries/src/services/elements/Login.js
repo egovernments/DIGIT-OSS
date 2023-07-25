@@ -21,7 +21,7 @@ export const LoginService = {
       method: "post",
       params,
       headers: {
-        authorization: `Basic ${window?.globalConfigs?.getConfig("JWT_TOKEN")||"ZWdvdi11c2VyLWNsaWVudDo="}`,
+        authorization: `Basic ${window?.globalConfigs?.getConfig("JWT_TOKEN") || "ZWdvdi11c2VyLWNsaWVudDo="}`,
         "Content-Type": "application/x-www-form-urlencoded",
       },
     };

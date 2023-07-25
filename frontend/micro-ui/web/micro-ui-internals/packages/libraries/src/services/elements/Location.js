@@ -19,4 +19,12 @@ export const LocationService = {
     });
     return response;
   },
+  getWards: (tenantId) => {
+    return ServiceRequest({
+      serviceName: "getWards",
+      url: Urls.location.wards,
+      params: { tenantId: tenantId },
+      useCache: true,
+    });
+  }
 };

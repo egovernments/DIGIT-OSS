@@ -48,36 +48,6 @@
 
   .label {
     margin-left: 56px;
-    @apply text-form-field text-text-primary relative top-10;
-  }
-}
-
-.fsm-citizen-rating-wrapper {
-  .card-label:last-of-type {
-    margin-top: 24px;
-  }
-
-  .card-label {
-    margin-bottom: 24px;
-  }
-}
-
-.fsm-citizen-rating-wrapper {
-  .card-label:last-of-type {
-    margin-top: 24px;
-  }
-
-  .card-label {
-    margin-bottom: 24px;
-  }
-}
-
-.fsm-citizen-rating-wrapper {
-  .card-label:last-of-type {
-    margin-top: 24px;
-  }
-
-  .card-label {
-    margin-bottom: 24px;
+    @apply text-form-field text-text-primary;
   }
 }

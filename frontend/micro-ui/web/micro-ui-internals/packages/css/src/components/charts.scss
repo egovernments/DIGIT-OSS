@@ -20,7 +20,7 @@
 .signature-img{
   top: 8px;
   right: 8px;
-  fill: #505A5F;
+  fill: theme(colors.text.secondary);
   @apply absolute;
 }
 
@@ -107,7 +107,7 @@
 
 .showMore {
   @apply text-right cursor-pointer;
-  color: #F47738;
+  color: theme(colors.primary.main);
 }
 
 @media (max-width: 420px) { 
@@ -164,7 +164,7 @@
                 .signature-img{
                   top: 8px;
                   right: 8px;
-                  fill: #505A5F;
+                  fill: theme(colors.text.secondary);
                   @apply absolute;
                 }
               }

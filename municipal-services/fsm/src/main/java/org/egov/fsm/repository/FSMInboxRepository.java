@@ -75,4 +75,12 @@ public class FSMInboxRepository {
 			}
 			return builder.toString();
 		}
+
+		private void addClauseIfRequired(List<Object> values, StringBuilder queryString) {
+			if (values.isEmpty())
+				queryString.append(" WHERE ");
+			else {
+				queryString.append(" AND");
+			}
+		}
 }

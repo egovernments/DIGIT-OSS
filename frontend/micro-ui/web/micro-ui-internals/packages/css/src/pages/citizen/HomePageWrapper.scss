@@ -60,7 +60,7 @@
 @media (min-width: 780px) {
   .SideBarStatic {
     width: 219px;
-    background: #ffffff;
+    background: theme(colors.white);
   }
 }
 
@@ -84,7 +84,7 @@
   margin-top: -25px;
   img {
     height: 33vw;
-    background: linear-gradient(#000000,#000000);
+    filter: grayscale(100%);
     @apply w-full object-cover;
   }
   h1 {
@@ -97,7 +97,7 @@
     border: none;
     top: 76px;
     svg {
-      fill: #ffffff;
+      fill: theme(colors.white);
     }
     @apply absolute text-white text-heading-s ml-md;
   }

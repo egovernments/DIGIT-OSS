@@ -1,3 +1,3 @@
 #!/bin/bash
 
-./scripts/run.sh ws pt
+./scripts/run.sh core utilities

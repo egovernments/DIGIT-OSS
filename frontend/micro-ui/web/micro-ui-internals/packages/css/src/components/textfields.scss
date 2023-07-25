@@ -17,7 +17,7 @@
   width: fit-content !important;
   display: flex;
   align-items: center;
-  background: #eeeeee;
+  background: theme(colors.grey.mid);
   border-right: 0;
   padding-right: 5px;
 }
@@ -90,7 +90,7 @@
   width: fit-content !important;
   display: flex;
   align-items: center;
-  background: #eeeeee;
+  background: theme(colors.grey.mid);
   border-right: 0;
   padding-right: 5px;
 }

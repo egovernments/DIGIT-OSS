@@ -9,7 +9,7 @@
 	</parent>
 	<groupId>org.egov</groupId>
 	<artifactId>inbox</artifactId>
-	<version>1.2.2-SNAPSHOT</version>
+	<version>1.2.2_beta-SNAPSHOT</version>
 	<name>inbox-services</name>
 	<description>inbox services</description>
 

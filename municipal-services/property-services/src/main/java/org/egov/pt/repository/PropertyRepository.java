@@ -17,13 +17,11 @@ import org.egov.pt.models.PropertyCriteria;
 import org.egov.pt.models.user.User;
 import org.egov.pt.models.user.UserDetailResponse;
 import org.egov.pt.models.user.UserSearchRequest;
-import org.egov.pt.models.PropertyAudit;
 import org.egov.pt.repository.builder.PropertyQueryBuilder;
 import org.egov.pt.repository.rowmapper.EncryptionCountRowMapper;
 import org.egov.pt.repository.rowmapper.OpenPropertyRowMapper;
 import org.egov.pt.repository.rowmapper.PropertyAuditRowMapper;
 import org.egov.pt.repository.rowmapper.PropertyRowMapper;
-import org.egov.pt.repository.rowmapper.PropertyAuditEncRowMapper;
 import org.egov.pt.service.UserService;
 import org.egov.pt.util.PropertyUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -62,9 +60,6 @@ public class PropertyRepository {
 
 	@Autowired
 	private EncryptionCountRowMapper encryptionCountRowMapper;
-
-	@Autowired
-	private PropertyAuditEncRowMapper propertyAuditEncRowMapper;
     
 	public List<String> getPropertyIds(Set<String> ownerIds, String tenantId) {
 
@@ -290,10 +285,4 @@ public class PropertyRepository {
 		return encryptionCount;
 	}
 
-
-	public List<PropertyAudit> getPropertyAuditForEnc(PropertyCriteria criteria) {
-
-		String query = queryBuilder.getpropertyAuditEncQuery();
-		return jdbcTemplate.query(query, criteria.getPropertyIds().toArray(), propertyAuditEncRowMapper);
-	}
 }

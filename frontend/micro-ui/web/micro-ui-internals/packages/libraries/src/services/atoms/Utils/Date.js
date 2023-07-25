@@ -30,3 +30,10 @@ export const ConvertEpochToTimeInHours = (dateEpoch) => {
   min = (min > 9 ? "" : "0") + min;
   return `${hour}:${min} ${period}`;
 };
+
+export const getDayfromTimeStamp = (timestamp) => {
+  var a = new Date(timestamp);
+  var days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+  var dayOfWeek = days[a.getDay()]
+  return dayOfWeek
+}

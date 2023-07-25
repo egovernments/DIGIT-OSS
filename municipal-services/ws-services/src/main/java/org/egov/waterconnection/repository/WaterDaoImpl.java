@@ -60,9 +60,6 @@ public class WaterDaoImpl implements WaterDao {
 	@Value("${egov.waterservice.oldDataEncryptionStatus.topic}")
 	private String encryptionStatusTopic;
 
-	@Value("${egov.waterservice.update.oldData.topic}")
-	private String updateOldDataEncTopic;
-
 	@Override
 	public void saveWaterConnection(WaterConnectionRequest waterConnectionRequest) {
 		waterConnectionProducer.push(createWaterConnection, waterConnectionRequest);
@@ -219,7 +216,7 @@ public class WaterDaoImpl implements WaterDao {
 	/* Method to push the encrypted data to the 'update' topic  */
 	@Override
 	public void updateOldWaterConnections(WaterConnectionRequest waterConnectionRequest) {
-		waterConnectionProducer.push(updateOldDataEncTopic, waterConnectionRequest);
+		waterConnectionProducer.push(updateWaterConnection, waterConnectionRequest);
 	}
 
 	/* Method to find the total count of applications present in dB */

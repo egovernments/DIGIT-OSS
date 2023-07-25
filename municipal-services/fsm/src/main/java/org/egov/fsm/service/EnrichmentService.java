@@ -10,6 +10,7 @@ import java.util.stream.Collectors;
 
 import org.egov.common.contract.request.RequestInfo;
 import org.egov.fsm.config.FSMConfiguration;
+import org.egov.fsm.repository.FSMRepository;
 import org.egov.fsm.repository.IdGenRepository;
 import org.egov.fsm.util.ComparisionUtility;
 import org.egov.fsm.util.FSMAuditUtil;
@@ -43,66 +44,53 @@ public class EnrichmentService {
 	@Autowired
 	private IdGenRepository idGenRepository;
 	@Autowired
-	private BoundaryService boundaryService;
+	private BoundaryService boundaryService ;
+	
+	@Autowired
+	private FSMRepository repository ;
 
 	@Autowired
 	private UserService userService;
-
+	
 	@Autowired
 	private FSMUtil fsmUtil;
-
+	
 	@Autowired
 	private ComparisionUtility comparisionUtility;
-
 	/**
 	 * enrich the create FSM request with the required data
-	 * 
 	 * @param fsmRequest
 	 * @param mdmsData
 	 */
-	public void enrichFSMCreateRequest(FSMRequest fsmRequest) {
+	public void enrichFSMCreateRequest(FSMRequest fsmRequest, Object mdmsData) {
+		//TODO add requied logic
 		RequestInfo requestInfo = fsmRequest.getRequestInfo();
-
-		if (fsmRequest.getRequestInfo().getUserInfo().getType().equalsIgnoreCase(FSMConstants.CITIZEN)) {
+		
+		if( fsmRequest.getRequestInfo().getUserInfo().getType().equalsIgnoreCase(FSMConstants.CITIZEN)) {
 			User citzen = new User();
 			BeanUtils.copyProperties(fsmRequest.getRequestInfo().getUserInfo(), citzen);
-			if (fsmRequest.getFsm().getCitizen() != null && fsmRequest.getFsm().getCitizen().getGender() != null) {
-				UserDetailResponse userDetailResponse = userService
-						.updateApplicantsGender(fsmRequest.getFsm().getCitizen(), fsmRequest.getRequestInfo());
+			if(fsmRequest.getFsm().getCitizen() != null && fsmRequest.getFsm().getCitizen().getGender() != null) {
+				UserDetailResponse userDetailResponse = userService.updateApplicantsGender(fsmRequest.getFsm().getCitizen(), fsmRequest.getRequestInfo());
 				citzen = userDetailResponse.getUser().get(0);
 			}
 			fsmRequest.getFsm().setCitizen(citzen);
-		} else {
+		}else {
 			userService.manageApplicant(fsmRequest);
 		}
-		setApplicationDetails(fsmRequest, requestInfo);
-
-		if (fsmRequest.getWorkflow() == null) {
-			String action = (fsmRequest.getRequestInfo().getUserInfo().getType()
-					.equalsIgnoreCase(FSMConstants.EMPLOYEE))
-					|| (fsmRequest.getRequestInfo().getUserInfo().getType().equalsIgnoreCase(FSMConstants.SYSTEM))
-							? FSMConstants.WF_ACTION_APPLY
-							: FSMConstants.WF_ACTION_CREATE;
-			fsmRequest.setWorkflow(Workflow.builder().action(action).build());
-		}
-
-		setIdgenIds(fsmRequest);
-
-	}
-
-	private void setApplicationDetails(FSMRequest fsmRequest, RequestInfo requestInfo) {
+		
 		boundaryService.getAreaType(fsmRequest, config.getHierarchyTypeCode());
 		fsmRequest.getFsm().setStatus(FSM.StatusEnum.ACTIVE);
 		fsmRequest.getFsm().setApplicationStatus(FSMConstants.DRAFT);
 		AuditDetails auditDetails = fsmUtil.getAuditDetails(requestInfo.getUserInfo().getUuid(), true);
 		fsmRequest.getFsm().setAuditDetails(auditDetails);
 		fsmRequest.getFsm().setId(UUID.randomUUID().toString());
-
+		
 		fsmRequest.getFsm().setAccountId(fsmRequest.getFsm().getCitizen().getUuid());
-
-		if (fsmRequest.getFsm().getApplicationType() == null || fsmRequest.getFsm().getApplicationType().isEmpty()) {
+		
+		if( fsmRequest.getFsm().getApplicationType() == null || fsmRequest.getFsm().getApplicationType().isEmpty()) {
 			fsmRequest.getFsm().setApplicationType(FSMConstants.ADHOC_SERVICE);
 		}
+		
 		if (fsmRequest.getFsm().getAddress() != null) {
 			if (StringUtils.isEmpty(fsmRequest.getFsm().getAddress().getId()))
 				fsmRequest.getFsm().getAddress().setId(UUID.randomUUID().toString());
@@ -111,21 +99,28 @@ public class EnrichmentService {
 			if (fsmRequest.getFsm().getAddress().getGeoLocation() != null
 					&& StringUtils.isEmpty(fsmRequest.getFsm().getAddress().getGeoLocation().getId()))
 				fsmRequest.getFsm().getAddress().getGeoLocation().setId(UUID.randomUUID().toString());
-		} else {
-			throw new CustomException(FSMErrorConstants.INVALID_ADDRES, " Address is mandatory");
+		}else {
+			throw new CustomException(FSMErrorConstants.INVALID_ADDRES," Address is mandatory");
 		}
-
-		if (fsmRequest.getFsm().getPitDetail() != null) {
+		
+		if(fsmRequest.getFsm().getPitDetail() != null) {
 			if (StringUtils.isEmpty(fsmRequest.getFsm().getPitDetail().getId()))
 				fsmRequest.getFsm().getPitDetail().setId(UUID.randomUUID().toString());
 			fsmRequest.getFsm().getPitDetail().setTenantId(fsmRequest.getFsm().getTenantId());
 			fsmRequest.getFsm().getPitDetail().setAuditDetails(auditDetails);
 		}
+		
+		if(fsmRequest.getWorkflow() == null) {
+		String action =  (fsmRequest.getRequestInfo().getUserInfo().getType().equalsIgnoreCase(FSMConstants.EMPLOYEE))||(fsmRequest.getRequestInfo().getUserInfo().getType().equalsIgnoreCase(FSMConstants.SYSTEM)) ? FSMConstants.WF_ACTION_APPLY : FSMConstants.WF_ACTION_CREATE; 
+			fsmRequest.setWorkflow( Workflow.builder().action(action).build());
+		}
+		
+		setIdgenIds(fsmRequest);
+		
 	}
-
+	
 	/**
-	 * generate the applicationNo using the idGen serivce and populate
-	 * 
+	 *  generate the applicationNo using the idGen serivce and populate
 	 * @param request
 	 */
 	private void setIdgenIds(FSMRequest request) {
@@ -134,7 +129,7 @@ public class EnrichmentService {
 		FSM fsm = request.getFsm();
 
 		List<String> applicationNumbers = getIdList(requestInfo, tenantId, config.getApplicationNoIdgenName(),
-				config.getApplicationNoIdgenFormat());
+				config.getApplicationNoIdgenFormat(), 1);
 		ListIterator<String> itr = applicationNumbers.listIterator();
 
 		Map<String, String> errorMap = new HashMap<>();
@@ -144,10 +139,9 @@ public class EnrichmentService {
 
 		fsm.setApplicationNo(itr.next());
 	}
-
+	
 	/**
 	 * Generate the id
-	 * 
 	 * @param requestInfo
 	 * @param tenantId
 	 * @param idKey
@@ -155,22 +149,23 @@ public class EnrichmentService {
 	 * @param count
 	 * @return
 	 */
-	private List<String> getIdList(RequestInfo requestInfo, String tenantId, String idKey, String idformat) {
-		List<IdResponse> idResponses = idGenRepository.getId(requestInfo, tenantId, idKey, idformat).getIdResponses();
+	private List<String> getIdList(RequestInfo requestInfo, String tenantId, String idKey, String idformat, int count) {
+		List<IdResponse> idResponses = idGenRepository.getId(requestInfo, tenantId, idKey, idformat, count)
+				.getIdResponses();
 
 		if (CollectionUtils.isEmpty(idResponses))
 			throw new CustomException(FSMErrorConstants.IDGEN_ERROR, "No ids returned from idgen Service");
 
 		return idResponses.stream().map(IdResponse::getId).collect(Collectors.toList());
 	}
-
+	
 	/**
-	 * enrich the update request with the requied ata
-	 * 
+	 *  enrich the update request with the requied ata
 	 * @param fsmRequest
 	 * @param mdmsData
 	 */
-	public void enrichFSMUpdateRequest(FSMRequest fsmRequest, FSM oldFsm) {
+	public void enrichFSMUpdateRequest(FSMRequest fsmRequest, Object mdmsData, FSM oldFsm) {
+		//TODO add requied logic
 		RequestInfo requestInfo = fsmRequest.getRequestInfo();
 		AuditDetails auditDetails = fsmUtil.getAuditDetails(requestInfo.getUserInfo().getUuid(), false);
 		auditDetails.setCreatedBy(oldFsm.getAuditDetails().getCreatedBy());
@@ -184,27 +179,36 @@ public class EnrichmentService {
 			if (fsmRequest.getFsm().getAddress().getGeoLocation() != null
 					&& StringUtils.isEmpty(fsmRequest.getFsm().getAddress().getGeoLocation().getId()))
 				fsmRequest.getFsm().getAddress().getGeoLocation().setId(UUID.randomUUID().toString());
-		} else {
-			throw new CustomException(FSMErrorConstants.INVALID_ADDRES, " Address is mandatory");
+		}else {
+			throw new CustomException(FSMErrorConstants.INVALID_ADDRES," Address is mandatory");
 		}
-
-		if (fsmRequest.getFsm().getPitDetail() != null) {
+		
+		if(fsmRequest.getFsm().getPitDetail() != null) {
 			if (StringUtils.isEmpty(fsmRequest.getFsm().getPitDetail().getId())) {
-				fsmRequest.getFsm().getPitDetail().setId(UUID.randomUUID().toString());
-				fsmRequest.getFsm().getPitDetail().setTenantId(fsmRequest.getFsm().getTenantId());
-			}
+					fsmRequest.getFsm().getPitDetail().setId(UUID.randomUUID().toString());
+					fsmRequest.getFsm().getPitDetail().setTenantId(fsmRequest.getFsm().getTenantId());
+			}			
 			fsmRequest.getFsm().getPitDetail().setAuditDetails(auditDetails);
 		}
 
 	}
 
 	/**
+	 * enrich the request with post workflow call based on the workflow response
+	 * @param fsmRequest
+	 */
+	public void postStatusEnrichment(FSMRequest fsmRequest) {
+		// TODO Auto-generated method stub
+		
+	}
+	
+	/**
 	 * 
 	 * @param fsms
 	 * @param requestInfo
 	 */
 	public void enrichFSMSearch(List<FSM> fsms, RequestInfo requestInfo, String tenantId) {
-
+		 
 		enrichBoundarys(fsms, requestInfo);
 		List<String> accountIds = fsms.stream().map(FSM::getAccountId).collect(Collectors.toList());
 		FSMSearchCriteria fsmsearch = new FSMSearchCriteria();
@@ -213,10 +217,9 @@ public class EnrichmentService {
 		UserDetailResponse userDetailResponse = userService.getUser(fsmsearch, requestInfo);
 		encrichApplicant(userDetailResponse, fsms);
 	}
-
+	
 	/**
 	 * enrich the bounday in the FSM Object
-	 * 
 	 * @param fsms
 	 * @param requestInfo
 	 */
@@ -229,12 +232,12 @@ public class EnrichmentService {
 				log.info("Bound data not found for FSM" + fsm.getApplicationNo());
 			}
 		});
-
+		
+			
 	}
 
 	/**
 	 * enrich the applicant information in FSM
-	 * 
 	 * @param userDetailResponse
 	 * @param fsms
 	 */
@@ -244,11 +247,11 @@ public class EnrichmentService {
 		Map<String, User> userIdToApplicantMap = new HashMap<>();
 		users.forEach(user -> userIdToApplicantMap.put(user.getUuid(), user));
 		fsms.forEach(fsm -> {
-			fsm.setCitizen(userIdToApplicantMap.get(fsm.getAccountId()));
+			 fsm.setCitizen( userIdToApplicantMap.get(fsm.getAccountId()));
 		});
 	}
-
-	public List<FSMAudit> enrichFSMAudit(FSMAuditUtil sourceObject, List<FSMAuditUtil> targetObjects) {
+	
+	public List<FSMAudit> enrichFSMAudit(FSMAuditUtil  sourceObject, List<FSMAuditUtil> targetObjects) {
 		return comparisionUtility.compareData(sourceObject, targetObjects);
 	}
 }

@@ -85,7 +85,7 @@ public class WorkflowIntegrator {
 			JSONObject obj = new JSONObject();
 			obj.put(BUSINESSIDKEY, trip.getApplicationNo());
 			obj.put(TENANTIDKEY, wfTenantId);
-			obj.put(BUSINESSSERVICEKEY, VehicleTripConstants.FSM_VEHICLE_TRIP_BUSINESSSERVICE);
+			obj.put(BUSINESSSERVICEKEY, VehicleTripConstants.FSM_VEHICLE_TRIP_BusinessService);
 			obj.put(MODULENAMEKEY, MODULENAMEVALUE);
 			obj.put(ACTIONKEY, request.getWorkflow().getAction());
 			obj.put(COMMENTKEY, request.getWorkflow().getComments());

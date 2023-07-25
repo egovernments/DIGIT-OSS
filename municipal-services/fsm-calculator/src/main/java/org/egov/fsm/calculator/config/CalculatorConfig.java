@@ -9,63 +9,58 @@ import lombok.Data;
 @Data
 public class CalculatorConfig {
 
-	@Value("${egov.billingservice.host}")
-	private String billingHost;
 
-	@Value("${egov.taxhead.search.endpoint}")
-	private String taxHeadSearchEndpoint;
+    @Value("${egov.billingservice.host}")
+    private String billingHost;
 
-	@Value("${egov.taxperiod.search.endpoint}")
-	private String taxPeriodSearchEndpoint;
+    @Value("${egov.taxhead.search.endpoint}")
+    private String taxHeadSearchEndpoint;
 
-	@Value("${egov.demand.create.endpoint}")
-	private String demandCreateEndpoint;
+    @Value("${egov.taxperiod.search.endpoint}")
+    private String taxPeriodSearchEndpoint;
 
-	@Value("${egov.demand.update.endpoint}")
-	private String demandUpdateEndpoint;
+    @Value("${egov.demand.create.endpoint}")
+    private String demandCreateEndpoint;
 
-	@Value("${egov.demand.search.endpoint}")
-	private String demandSearchEndpoint;
+    @Value("${egov.demand.update.endpoint}")
+    private String demandUpdateEndpoint;
 
-	@Value("${egov.bill.gen.endpoint}")
-	private String billGenerateEndpoint;
+    @Value("${egov.demand.search.endpoint}")
+    private String demandSearchEndpoint;
 
-	@Value("${egov.fsm.appl.fee.taxhead}")
-	private String applicationFeeTaxHead;
+    @Value("${egov.bill.gen.endpoint}")
+    private String billGenerateEndpoint;
 
-	@Value("${egov.fsm.appl.fee.businesssrv}")
-	private String applicationFeeBusinessService;
+    @Value("${egov.fsm.appl.fee.taxhead}")
+    private String applicationFeeTaxHead;
 
-	// tradelicense Registry
-	@Value("${egov.fsm.host}")
-	private String fsmHost;
+  
+    @Value("${egov.fsm.appl.fee.businesssrv}")
+    private String applicationFeeBusinessService;
 
-	@Value("${egov.fsm.context.path}")
-	private String fsmContextPath;
+    //tradelicense Registry
+    @Value("${egov.fsm.host}")
+    private String fsmHost;
 
-	@Value("${egov.fsm.create.endpoint}")
-	private String fsmCreateEndpoint;
+    @Value("${egov.fsm.context.path}")
+    private String fsmContextPath;
 
-	@Value("${egov.fsm.update.endpoint}")
-	private String fsmUpdateEndpoint;
+    @Value("${egov.fsm.create.endpoint}")
+    private String fsmCreateEndpoint;
 
-	@Value("${egov.fsm.search.endpoint}")
-	private String fsmSearchEndpoint;
+    @Value("${egov.fsm.update.endpoint}")
+    private String fsmUpdateEndpoint;
 
-	@Value("${advance.payment.type}")
-	private String advancePaymentType;
+    @Value("${egov.fsm.search.endpoint}")
+    private String fsmSearchEndpoint;
+   
+    //MDMS
+    @Value("${egov.mdms.host}")
+    private String mdmsHost;
 
-	@Value("${cancellation.fee.type}")
-	private String cancellationFeeType;
+    @Value("${egov.mdms.search.endpoint}")
+    private String mdmsSearchEndpoint;
 
-	// MDMS
-	@Value("${egov.mdms.host}")
-	private String mdmsHost;
 
-	@Value("${egov.mdms.search.endpoint}")
-	private String mdmsSearchEndpoint;
-
-	@Value("${egov.bill.fetch.endpoint}")
-	private String fetchBillEndpoint;
 
 }

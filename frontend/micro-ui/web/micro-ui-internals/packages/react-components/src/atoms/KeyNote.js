@@ -1,15 +1,21 @@
 import React from "react";
 import PropTypes from "prop-types";
-import { WrapUnMaskComponent } from "..";
+import { UnMaskComponent } from "..";
 const KeyNote = ({ keyValue, note, caption, noteStyle, children, privacy }) => {
   return (
     <div className="key-note-pair">
       <h3>{keyValue}</h3>
       <div style={{display : "inline-flex"}}>
-      {privacy && <p style={noteStyle}>
-        <WrapUnMaskComponent value={note} iseyevisible={note?.includes("*")?true:false} privacy={privacy}></WrapUnMaskComponent>
-        </p>}
-      {!privacy && <p style={noteStyle}>{note}</p>}
+      <p style={noteStyle}>{note}</p>
+      { privacy && (
+            <span style={{ display: "inline-flex", width: "fit-content", marginLeft: "10px", marginTop: "5px" }}>
+              {/*  
+                Feature :: Privacy
+                privacy object set to the Mask Component
+              */}
+              <UnMaskComponent privacy={privacy}></UnMaskComponent>
+            </span>
+           )}
       </div>
       <p className="caption">{caption}</p>
       {children}

@@ -11,11 +11,11 @@ import java.util.Map;
 import org.egov.tracer.model.CustomException;
 import org.egov.vendor.web.model.AuditDetails;
 import org.egov.vendor.web.model.Vendor;
-import org.egov.vendor.web.model.Vendor.StatusEnum;
 import org.egov.vendor.web.model.location.Address;
 import org.egov.vendor.web.model.location.Boundary;
 import org.postgresql.util.PGobject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.ResultSetExtractor;
 import org.springframework.stereotype.Component;
 
@@ -40,9 +40,8 @@ public class VendorRowMapper implements ResultSetExtractor<List<Vendor>> {
 
 	@SuppressWarnings("rawtypes")
 	@Override
-	public List<Vendor> extractData(ResultSet rs) throws SQLException {
-		Map<String, Vendor> vendorMap = new LinkedHashMap<>();
-		this.setFullCount(0);
+	public List<Vendor> extractData(ResultSet rs) throws SQLException, DataAccessException {
+		Map<String, Vendor> vendorMap = new LinkedHashMap<String, Vendor>();
 
 		this.setFullCount(0);
 
@@ -53,7 +52,7 @@ public class VendorRowMapper implements ResultSetExtractor<List<Vendor>> {
 			currentvendor = vendorMap.get(id);
 			String tenantId = rs.getString("tenantid");
 			Object additionalDetail = getAdditionalDetail("additionaldetails", rs);
-			String ownerId = rs.getString("owner_id");
+			String owner_id = rs.getString("owner_id");
 			String description = rs.getString("description");
 			String source = rs.getString("source");
 			String status = rs.getString("status");
@@ -61,13 +60,15 @@ public class VendorRowMapper implements ResultSetExtractor<List<Vendor>> {
 			String paymentpreference = rs.getString("paymentpreference");
 			this.setFullCount(rs.getInt("full_count"));
 			if (currentvendor == null) {
-				if (status == null) {
-					status = "ACTIVE";
+				Long lastModifiedTime = rs.getLong("lastmodifiedtime");
+
+				if (rs.wasNull()) {
+					lastModifiedTime = null;
 				}
+
 				currentvendor = Vendor.builder().id(id).name(name).tenantId(tenantId).agencyType(agencytype)
 						.paymentPreference(paymentpreference).additionalDetails(additionalDetail)
-						.description(description).source(source).status(StatusEnum.valueOf(status)).ownerId(ownerId)
-						.build();
+						.description(description).source(source).ownerId(owner_id).build();
 
 				vendorMap.put(id, currentvendor);
 			}
@@ -79,18 +80,24 @@ public class VendorRowMapper implements ResultSetExtractor<List<Vendor>> {
 
 	@SuppressWarnings("unused")
 	private void addChildrenToProperty(ResultSet rs, Vendor vendor) throws SQLException {
+		String tenantId = vendor.getTenantId();
+
 		AuditDetails auditdetails = AuditDetails.builder().createdBy(rs.getString("createdBy"))
 				.createdTime(rs.getLong("createdTime")).lastModifiedBy(rs.getString("lastModifiedBy"))
 				.lastModifiedTime(rs.getLong("lastModifiedTime")).build();
 
 		Boundary locality = Boundary.builder().code(rs.getString("locality")).build();
 
-		Address address = Address.builder().id(rs.getString("vendor_address_id")).tenantId(rs.getString("tenantid"))
+		Address address = Address.builder().id(rs.getString("id")).tenantId(rs.getString("tenantid"))
 				.doorNo(rs.getString("doorno")).plotNo(rs.getString("plotno")).landmark(rs.getString("landmark"))
 				.city(rs.getString("city")).district(rs.getString("district")).region(rs.getString("region"))
 				.state(rs.getString("state")).country(rs.getString("country")).pincode(rs.getString("pincode"))
 				.additionalDetails(rs.getString("additionaldetails")).buildingName(rs.getString("buildingname"))
 				.street(rs.getString("street")).locality(locality).build();
+
+		// Vehicle vehicle =
+		// Vehicle.builder().registrationNumber(rs.getString("vechile_id")).build();
+
 		vendor.setAddress(address);
 		vendor.setAuditDetails(auditdetails);
 

@@ -846,7 +846,7 @@ class ShowField extends Component {
             <Label className="report-header-row-label" labelStyle={{ wordWrap: "unset", wordBreak: "unset", fontWeight: "bold" }} label={"RT_SNO"} />
           </th>
           {metaData && metaData.reportDetails && metaData.reportDetails.selectiveDownload && (
-            <th key={"testKey"} >
+            <th key={"testKey"}>
               <input type="checkbox" onChange={checkAllRows} />
             </th>
           )}
@@ -854,7 +854,7 @@ class ShowField extends Component {
             reportResult.reportHeader.map((item, i) => {
               if (item.showColumn) {
                 return (
-                  <th key={i} className="report-header-cell" data-orderable={item && item.label && item.label.includes("date") ? "false" : "true"}>
+                  <th key={i} className="report-header-cell">
                     <Label
                       className="report-header-row-label"
                       labelStyle={{ wordWrap: "unset", wordBreak: "unset", fontWeight: "bold" }}
@@ -864,7 +864,7 @@ class ShowField extends Component {
                 );
               } else {
                 return (
-                  <th style={{ display: "none" }} key={i} data-orderable={item && item.label && item.label.includes("date") ? "false" : "true"}>
+                  <th style={{ display: "none" }} key={i}>
                     <Label
                       className="report-header-row-label"
                       labelStyle={{ wordWrap: "unset", wordBreak: "unset", fontWeight: "bold" }}
@@ -1029,7 +1029,7 @@ class ShowField extends Component {
     return (
       <tbody>
         {reportResult.hasOwnProperty("reportData") &&
-          reportResultArray.map((dataItem, dataIndex) => {
+          reportResult.reportData.map((dataItem, dataIndex) => {
             //array of array
             let reportHeaderObj = reportResult.reportHeader;
             return (
@@ -1040,7 +1040,7 @@ class ShowField extends Component {
               >
                 <td>{dataIndex + 1}</td>
                 {metaData && metaData.reportDetails && metaData.reportDetails.selectiveDownload && (
-                  <td >
+                  <td>
                     <input
                       type="checkbox"
                       checked={this.state.ck[dataIndex] ? true : false}
@@ -1166,8 +1166,7 @@ class ShowField extends Component {
         metaData.reportDetails &&
         (metaData.reportDetails.reportName == "TLApplicationStatusReport" ||
           metaData.reportDetails.reportName == "TLRegistryReport" ||
-          metaData.reportDetails.reportName == "TLRenewalPendingReport" ||
-          metaData.reportDetails.reportName == "ObpsApplicationStatusReport" )
+          metaData.reportDetails.reportName == "TLRenewalPendingReport")
       ) {
         isFooterexist = false;
       }

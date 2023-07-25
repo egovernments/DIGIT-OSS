@@ -1,8 +1,5 @@
 All notable changes to this module will be documented in this file.
 
-## 1.1.4 - 2023-02-06
-- Transition from 1.1.4-beta version to 1.1.4 version
-
 ## 1.1.4-beta - 2022-09-20
 
 - Upgraded spring-boot-starter-parent to 2.2.13 and spring beans to 5.2.20.RELEASE

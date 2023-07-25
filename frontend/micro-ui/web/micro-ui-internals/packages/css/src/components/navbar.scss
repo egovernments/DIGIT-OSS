@@ -36,7 +36,7 @@
   flex-direction: column;
   align-items: center;
   padding-top: 30px;
-  background-color: #ffffff;
+  background-color: theme(colors.white);
 
   img {
     width: 89px;
@@ -53,12 +53,12 @@
         letter-spacing: 0.6px;
         font-weight: 700;
         font-size: 18px;
-        color: #0b0c0c;
+        color: theme(colors.text.primary);
       }
     }
   }
   .profile-divider {
-    border-top: 1px solid #d6d5d4;
+    border-top: 1px solid theme(colors.border);
     margin-left: 20px;
     margin-right: 20px;
     width: 90%;
@@ -111,12 +111,12 @@
     padding-right: 16px;
     padding-left: 16px;
     &.active {
-      border-left: 5px solid #f47738;
+      border-left: 5px solid theme(colors.primary.main);
       .menu-label {
-        color: #f47738;
+        color: theme(colors.primary.main);
       }
       .icon {
-        fill: #f47738;
+        fill: theme(colors.primary.main);
       }
     }
 
@@ -220,13 +220,13 @@
       padding-right: 16px;
       padding-left: 16px;
       &.active {
-        border-left: 5px solid #f47738;
+        border-left: 5px solid theme(colors.primary.main);
         padding-left: 11px;
         .menu-label {
-          color: #f47738;
+          color: theme(colors.primary.main);
         }
         .icon {
-          fill: #f47738;
+          fill: theme(colors.primary.main);
         }
       }
 

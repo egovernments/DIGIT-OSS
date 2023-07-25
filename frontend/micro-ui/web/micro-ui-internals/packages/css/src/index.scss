@@ -81,6 +81,10 @@
 @import "./components/staticDynamicMessages.scss";
 @import "./components/toggleSwitch.scss";
 @import "./components/plusMinus.scss";
+@import "./components/horizontalNav.scss";
+@import "./components/inboxLinks.scss";
+@import "./components/inboxSearch.scss";
+@import "./components/inboxSearchComposer.scss";
 
 @import "./pages/employee/index.scss";
 @import "./pages/employee/cardfix.scss";
@@ -179,12 +183,12 @@
   margin-bottom: 16px;
 
   a {
-    color: #1d70b8;
+    color: theme(colors.link.normal);
   }
 }
 
 .clear-search-label {
-  color: #f47738;
+  color: theme(colors.primary.main);
   cursor: pointer;
 }
 
@@ -197,7 +201,7 @@
   @apply flex justify-between items-center;
 
   .download-button {
-    color: #f47738;
+    color: theme(colors.primary.main);
     margin-left: 8px;
   }
 }
@@ -206,15 +210,13 @@
   @apply flex mb-sm;
 
   .download-button {
-    color: #f47738;
+    color: theme(colors.primary.main);
     margin-left: 8px;
-    white-space: nowrap;
-
   }
 }
 
 .check-page-link-button {
-  color: #f47738 !important;
+  color: theme(colors.primary.main) !important;
 }
 
 .pt-application-download-btn {
@@ -237,10 +239,10 @@
   gap: 10px;
 
   svg {
-    fill: #f47738;
+    fill: theme(colors.primary.main);
   }
 
-  color: #f47738;
+  color: theme(colors.primary.main);
 
   cursor: pointer;
   font-weight: 500;
@@ -248,7 +250,7 @@
 }
 
 .primaryColor {
-  color: #0b0c0c !important;
+  color: theme(colors.text.primary) !important;
 }
 
 @media (hover: hover) {
@@ -282,7 +284,7 @@
   width: 194px;
   height: 2.5rem;
   &__wrapper {
-    border: 2px solid #0b0c0c;
+    border: 2px solid theme(colors.text.primary);
     padding-left: 16px;
   }
   &__inputGroup__input {
@@ -386,7 +388,7 @@ input[type="number"] {
 
 .cheque-date {
   @apply flex items-center mb-lg;
-  border: 2px solid #0b0c0c;
+  border: 2px solid theme(colors.text.primary);
   border-radius: 2px;
 
   input {
@@ -411,7 +413,7 @@ input[type="number"] {
 
 .ifsc-field {
   @apply flex items-center mb-lg;
-  border: 2px solid #0b0c0c;
+  border: 2px solid theme(colors.text.primary);
   border-radius: 2px;
 
   input {
@@ -535,7 +537,7 @@ input[type="number"] {
       padding: 8px 24px;
       color: white;
       cursor: pointer;
-      background-color: #f47738;
+      background-color: theme(colors.primary.main);
     }
   }
 }
@@ -603,7 +605,6 @@ input[type="number"] {
 @media (min-width: 780px) {
   .citizen-obps-wrapper,
   .selection-card-wrapper,
-  .fsm-citizen-wrapper,
   .pgr-citizen-wrapper,
   .pt-citizen,
   .bill-citizen,
@@ -700,7 +701,7 @@ input[type="number"] {
 .modal-body-ws {
   padding: 1rem;
   font-weight: 700;
-  color: #0b0c0c;
+  color: theme(colors.text.primary);
   font-size: 24px;
   margin-bottom: 1rem;
 }
@@ -729,11 +730,4 @@ input[type="number"] {
   max-height: 120px;
   margin-top: 90px;
 }
-.fsm-inline-style {
-  background: #fafafa;
-  border: 1px solid #d6d5d4;
-  border-radius: 4px;
-  padding: 16px;
-  margin-bottom: 40px;
-  width: 90%;
-}
+

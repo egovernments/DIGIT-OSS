@@ -96,8 +96,10 @@ public class Vehicle {
 
     public enum StatusEnum {
         ACTIVE("ACTIVE"),
+
         INACTIVE("INACTIVE"),
     	DISABLED("DISABLED");
+
         private String value;
 
         StatusEnum(String value) {

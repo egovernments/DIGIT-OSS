@@ -1,7 +1,7 @@
 import { Loader, Modal, FormComposer } from "@egovernments/digit-ui-react-components";
 import React, { useState, useEffect } from "react";
 
-import { configPTRejectApplication, configPTVerifyApplication, configPTApproverApplication, configPTAssessProperty } from "../config";
+import {  configPTApproverApplication, configPTAssessProperty } from "../config";
 import * as predefinedConfig from "../config";
 
 const Heading = (props) => {

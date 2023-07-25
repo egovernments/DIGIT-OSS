@@ -1,29 +1,12 @@
 import { useTranslation } from "react-i18next";
 import { useQuery, useQueryClient } from "react-query";
-import { FSMService } from "../../services/elements/FSM";
-import { PTService } from "../../services/elements/PT";
 
 import { filterFunctions } from "./newFilterFn";
 import { getSearchFields } from "./searchFields";
 import { InboxGeneral } from "../../services/elements/InboxService";
 
 const inboxConfig = (tenantId, filters) => ({
-  PT: {
-    services: ["PT.CREATE"],
-    searchResponseKey: "Properties",
-    businessIdsParamForSearch: "acknowledgementIds",
-    businessIdAliasForSearch: "acknowldgementNumber",
-    fetchFilters: filterFunctions.PT,
-    _searchFn: () => PTService.search({ tenantId, filters }),
-  },
-  FSM: {
-    services: ["FSM"],
-    searchResponseKey: "fsm",
-    businessIdsParamForSearch: "applicationNos",
-    businessIdAliasForSearch: "applicationNo",
-    fetchFilters: filterFunctions.FSM,
-    _searchFn: () => FSMService.search(tenantId, filters),
-  },
+
 });
 
 const callMiddlewares = async (data, middlewares) => {
