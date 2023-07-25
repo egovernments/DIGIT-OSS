@@ -99,9 +99,9 @@ const Search = ({ path }) => {
       tenantId={tenantId}
       onSubmit={onSubmit}
       data={!isLoading && isSuccess && !isWorkflowLoading && isWorkflowSuccess ? (searchReult?.length > 0
-         ? searchReult.map((obj) => ({
+         ? searchReult?.map((obj) => ({
         ...obj,
-        CurrentOwners: assigneeResults?.length > 0 ? assigneeResults.filter((elem) => elem.businessId === obj.applicationNumber).map((item) => ({
+        CurrentOwners: assigneeResults?.length > 0 ? assigneeResults.filter((elem) => elem.businessId === obj.applicationNumber)?.map((item) => ({
           currentOwner: item.assignes !== null && item.assignes[0].name !== null ?  item.assignes[0].name : "NA"
         }))
         : {

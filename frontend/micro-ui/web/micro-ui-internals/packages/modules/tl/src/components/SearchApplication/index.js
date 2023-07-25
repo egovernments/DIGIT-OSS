@@ -102,7 +102,7 @@ const SearchLicenseApplication = ({tenantId, t, onSubmit, data, count }) => {
         },
         {
           Header: t("TL_LOCALIZATION_TRADE_OWNER_NAME"),
-          accessor: (row) => GetCell(row.tradeLicenseDetail.owners.map( o => o.name ). join(",") || ""),
+          accessor: (row) => GetCell(row.tradeLicenseDetail.owners?.map( o => o.name ). join(",") || ""),
           disableSortBy: true,
         },
         {
@@ -126,7 +126,7 @@ const SearchLicenseApplication = ({tenantId, t, onSubmit, data, count }) => {
                 {
                 t(data.display)
                     .split("\\n")
-                    .map((text, index) => (
+                    ?.map((text, index) => (
                     <p key={index} style={{ textAlign: "center" }}>
                         {text}
                     </p>

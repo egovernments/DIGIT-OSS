@@ -239,7 +239,7 @@ const TLApplicationDetails = () => {
                 textStyle={{wordBreak:"break-word"}}
               />
               <CardSectionHeader>{t("TL_OWNERSHIP_DETAILS_HEADER")}</CardSectionHeader>
-              {application?.tradeLicenseDetail.owners.map((ele, index) => {
+              {application?.tradeLicenseDetail?.owners?.map((ele, index) => {
                 return application?.tradeLicenseDetail?.subOwnerShipCategory.includes("INSTITUTIONAL") ? (
                   <div key={index} style={multiBoxStyle}>
                     <CardSectionHeader style={multiHeaderStyle}>{`${t("TL_PAYMENT_PAID_BY_PLACEHOLDER")} - ` + (index + 1)}</CardSectionHeader>

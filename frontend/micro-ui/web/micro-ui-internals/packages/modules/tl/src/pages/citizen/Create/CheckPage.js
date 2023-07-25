@@ -19,7 +19,7 @@ import TLDocument from "../../../pageComponents/TLDocumets";
 import Timeline from "../../../components/TLTimeline";
 const getPath = (path, params) => {
   params &&
-    Object.keys(params).map((key) => {
+    Object.keys(params)?.map((key) => {
       path = path.replace(`:${key}`, params[key]);
     });
   return path;
@@ -130,7 +130,7 @@ const WrapCheckPage = ({ onSubmit, value }) => {
           <Row className="border-none" label={t("TL_OPERATIONAL_AREA")} text={TradeDetails?.OperationalSqFtArea || t("CS_NA")} />
           <Row className="border-none" label={t("TL_NO_OF_EMPLOYEES")} text={TradeDetails?.NumberOfEmployees || t("CS_NA")} />
           <Row className="border-none" label={t("TL_NEW_TRADE_DETAILS_TRADE_COMM_DATE_LABEL")} text={t(getdate(TradeDetails?.CommencementDate))} />
-          {TradeDetails?.units.map((unit, index) => (
+          {TradeDetails?.units?.map((unit, index) => (
             <div key={index}>
               <CardSubHeader>
                 {t("TL_UNIT_HEADER")}-{index + 1}
@@ -143,7 +143,7 @@ const WrapCheckPage = ({ onSubmit, value }) => {
             </div>
           ))}
           {TradeDetails?.accessories && TradeDetails?.isAccessories?.i18nKey?.includes("YES") &&
-            TradeDetails?.accessories.map((acc, index) => (
+            TradeDetails?.accessories?.map((acc, index) => (
               <div key={index}>
                 <CardSubHeader>
                   {t("TL_ACCESSORY_LABEL")}-{index + 1}
@@ -215,7 +215,7 @@ const WrapCheckPage = ({ onSubmit, value }) => {
             onClick={() => routeTo(`${routeLink}/owner-details`)}
           />
           {owners.owners &&
-            owners.owners.map((owner, index) => (
+            owners?.owners?.map((owner, index) => (
               <div key={index}>
                 <CardSubHeader>
                   {t("TL_PAYMENT_PAID_BY_PLACEHOLDER")}-{index + 1}

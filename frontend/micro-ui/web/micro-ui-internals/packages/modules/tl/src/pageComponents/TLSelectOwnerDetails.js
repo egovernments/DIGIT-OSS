@@ -103,7 +103,7 @@ const TLSelectOwnerDetails = ({ t, config, onSelect, userType, formData }) => {
         return state.filter((e, i) => i !== action?.payload?.index);
       case "SET_PRIMARY_OWNER":
         if (action?.payload?.index >= 0) {
-          return state.map((ownerData, i) => {
+          return state?.map((ownerData, i) => {
             if (i === action?.payload?.index) {
               return { ...ownerData, isprimaryowner: true };
             } else {
@@ -114,7 +114,7 @@ const TLSelectOwnerDetails = ({ t, config, onSelect, userType, formData }) => {
           return state;
         }
       case "EDIT_CURRENT_OWNER_PROPERTY":
-        return state.map((data, __index) => {
+        return state?.map((data, __index) => {
           if (__index === action.payload.index) {
             return { ...data, [action.payload.key]: action.payload.value };
           } else {
@@ -148,7 +148,7 @@ const TLSelectOwnerDetails = ({ t, config, onSelect, userType, formData }) => {
 
   let TLmenu = [];
   Menu &&
-    Menu.map((genders) => {
+    Menu?.map((genders) => {
       TLmenu.push({ i18nKey: `TL_GENDER_${genders.code}`, code: `${genders.code}` });
     });
 
@@ -202,7 +202,7 @@ const TLSelectOwnerDetails = ({ t, config, onSelect, userType, formData }) => {
       <React.Fragment>
         {window.location.href.includes("/citizen") ? <Timeline currentStep={2} /> : null}
         <FormStep config={config} onSelect={goNext} onSkip={onSkip} t={t} isDisabled={false} forcedError={t(error)}>
-          {formState.map((field, index) => {
+          {formState?.map((field, index) => {
             return (
               <div key={`${field}-${index}`}>
                 <div>
@@ -353,7 +353,7 @@ const TLSelectOwnerDetails = ({ t, config, onSelect, userType, formData }) => {
     <React.Fragment>
       {window.location.href.includes("/citizen") ? <Timeline currentStep={2} /> : null}
       <FormStep config={config} onSelect={goNext} onSkip={onSkip} t={t} isDisabled={false} forcedError={t(error)}>
-        {formState.map((field, index) => {
+        {formState?.map((field, index) => {
           return (
             <div key={`${field}-${index}`}>
               <div

@@ -1,7 +1,7 @@
 import { pdfDocumentName, pdfDownloadLink, stringReplaceAll,getTransaltedLocality } from "./index";
 
 const capitalize = (text) => text.substr(0, 1).toUpperCase() + text.substr(1);
-const ulbCamel = (ulb) => ulb.toLowerCase().split(" ").map(capitalize).join(" ");
+const ulbCamel = (ulb) => ulb.toLowerCase()?.split(" ")?.map(capitalize).join(" ");
 
 const getOwnerDetails = (application, t) => {
   application.owners = application?.tradeLicenseDetail?.owners?.filter((owner) => owner.active == true) || [];
@@ -21,7 +21,7 @@ const getOwnerDetails = (application, t) => {
     };
   } else { //if (application?.subOwnerShipCategory?.includes("INDIVIDUAL"))
     let values = [];
-    application?.tradeLicenseDetail.owners.map((owner) => {
+    application?.tradeLicenseDetail?.owners?.map((owner) => {
       let indOwner = [
         { title: t("TL_OWNER_S_NAME_LABEL"), value: owner?.name || t("CS_NA") },
         { title: t("TL_OWNER_S_MOBILE_NUM_LABEL"), value: owner?.mobileNumber || t("CS_NA") },

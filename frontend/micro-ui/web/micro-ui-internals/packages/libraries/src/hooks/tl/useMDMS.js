@@ -28,7 +28,7 @@ const useMDMS = {
         ),
       {
         select: (data) =>
-          data.TradeLicense.ApplicationType.map((type) => ({
+          data.TradeLicense.ApplicationType?.map((type) => ({
             code: type.code.split(".")[1],
             i18nKey: `TL_APPLICATIONTYPE.${type.code.split(".")[1]}`,
           })),

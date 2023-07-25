@@ -44,7 +44,7 @@ const SearchLicenseApplication = ({ onSearch, type, onClose, searchFields, searc
   }
 
   useEffect(() => {
-    searchFields.forEach(({ pattern, name, maxLength, minLength, errorMessages, ...el }) => {
+    searchFields?.forEach(({ pattern, name, maxLength, minLength, errorMessages, ...el }) => {
       const value = form[name];
       const error = formState.errors[name];
       if (pattern) {
@@ -76,7 +76,7 @@ const SearchLicenseApplication = ({ onSearch, type, onClose, searchFields, searc
     setSearchFieldsInCaseOfFilterTrigger({mobileNumber, applicationNumber})
     data.delete = [];
 
-    searchFields.forEach((field) => {
+    searchFields?.forEach((field) => {
       if (!data[field.name]) data.delete.push(field.name);
     });
 
@@ -93,7 +93,7 @@ const SearchLicenseApplication = ({ onSearch, type, onClose, searchFields, searc
     if (isInboxPage) {
       const _newParams = { ...searchParams };
       _newParams.delete = [];
-      searchFields.forEach((e) => {
+      searchFields?.forEach((e) => {
         _newParams.delete.push(e?.name);
       });
       setSearchFieldsInCaseOfFilterTrigger({applicationNumber: "", mobileNumber: ""});

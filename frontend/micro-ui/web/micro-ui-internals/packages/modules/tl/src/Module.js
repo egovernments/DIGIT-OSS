@@ -165,7 +165,7 @@ const componentsToRegister = {
 };
 
 export const initTLComponents = () => {
-  Object.entries(componentsToRegister).forEach(([key, value]) => {
+  Object.entries(componentsToRegister)?.forEach(([key, value]) => {
     Digit.ComponentRegistryService.setComponent(key, value);
   });
 };

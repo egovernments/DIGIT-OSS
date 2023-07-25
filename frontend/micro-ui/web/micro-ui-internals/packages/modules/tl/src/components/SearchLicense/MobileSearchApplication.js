@@ -119,7 +119,7 @@ const MobileSearchApplication = ({ Controller, register, control, t, reset, prev
         <Card style={{ marginTop: 20 }}>
           {t(data?.display)
             .split("\\n")
-            .map((text, index) => (
+            ?.map((text, index) => (
               <p key={index} style={{ textAlign: "center" }}>
                 {text}
               </p>

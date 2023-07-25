@@ -52,7 +52,7 @@ const TLTradeUnitsEmployeeInitial = ({ config, onSelect, userType, formData, set
     };
 
     useEffect(() => {
-        const data = units.map((e) => {
+        const data = units?.map((e) => {
             return e;
         });
         onSelect(config?.key, data);
@@ -103,7 +103,7 @@ const TLTradeUnitsEmployeeInitial = ({ config, onSelect, userType, formData, set
 
     return (
         <React.Fragment>
-            {units.map((unit, index) => (
+            {units?.map((unit, index) => (
                 <TradeUnitForm key={unit.key} index={index} unit={unit} {...commonProps} />
             ))}
             <LinkButton label={t("TL_ADD_TRADE_UNIT")} onClick={addNewUnits} style={{ color: "#F47738", width: "fit-content" }} />
@@ -156,7 +156,7 @@ const TradeUnitForm = (_props) => {
             setTradeTypeMdmsData(filteredTradeDetails);
             let tradeType = cloneDeep(filteredTradeDetails);
             let tradeCatogoryList = [];
-            tradeType.map(data => {
+            tradeType?.map(data => {
                 data.code = data?.tradeType?.split('.')[0];
                 data.i18nKey = t(`TRADELICENSE_TRADETYPE_${data?.tradeType?.split('.')[0]}`);
                 tradeCatogoryList.push(data);
@@ -173,18 +173,18 @@ const TradeUnitForm = (_props) => {
     useEffect(() => {
         const keys = Object.keys(formValue);
         const part = {};
-        keys.forEach((key) => (part[key] = unit[key]));
+        keys?.forEach((key) => (part[key] = unit[key]));
 
         let _ownerType = isIndividualTypeOwner ? {} : { ownerType: { code: "NONE" } };
 
         if (!_.isEqual(formValue, part)) {
-            Object.keys(formValue).map(data => {
+            Object.keys(formValue)?.map(data => {
                 if (data != "key" && formValue[data] != undefined && formValue[data] != "" && formValue[data] != null && !isErrors) {
                   setIsErrors(true); 
                 }
               });
             
-            setUnits((prev) => prev.map((o) => (o.key && o.key === unit.key ? { ...o, ...formValue, ..._ownerType } : { ...o })));
+            setUnits((prev) => prev?.map((o) => (o.key && o.key === unit.key ? { ...o, ...formValue, ..._ownerType } : { ...o })));
             trigger();
         }
     }, [formValue]);
@@ -205,7 +205,7 @@ const TradeUnitForm = (_props) => {
             let tradeType = cloneDeep(tradeTypeMdmsData);
             let filteredTradeType = tradeType.filter(data => data?.tradeType?.split('.')[0] === unit?.tradeCategory?.code)
             let tradeTypeOptions = [];
-            filteredTradeType.map(data => {
+            filteredTradeType?.map(data => {
                 data.code = data?.tradeType?.split('.')[1];
                 data.i18nKey = t(`TRADELICENSE_TRADETYPE_${data?.tradeType?.split('.')[1]}`);
                 tradeTypeOptions.push(data);
@@ -220,7 +220,7 @@ const TradeUnitForm = (_props) => {
             let tradeType = cloneDeep(tradeTypeMdmsData);
             let filteredTradeSubType = tradeType.filter(data => data?.tradeType?.split('.')[1] === unit?.tradeType?.code)
             let tradeSubTypeOptions = [];
-            filteredTradeSubType.map(data => {
+            filteredTradeSubType?.map(data => {
                 let code = stringReplaceAll(data?.tradeType, "-", "_");
                 data.code = data?.tradeType;
                 data.i18nKey = t(`TRADELICENSE_TRADETYPE_${stringReplaceAll(code, ".", "_")}`);
@@ -283,7 +283,7 @@ function checkRangeForUomValue(e, fromUom, toUom){
                                             let tradeType = cloneDeep(tradeTypeMdmsData);
                                             let filteredTradeType = tradeType.filter(data => data?.tradeType?.split('.')[0] === selectedOption)
                                             let tradeTypeOptions = [];
-                                            filteredTradeType.map(data => {
+                                            filteredTradeType?.map(data => {
                                                 data.code = data?.tradeType?.split('.')[1];
                                                 data.i18nKey = t(`TRADELICENSE_TRADETYPE_${data?.tradeType?.split('.')[1]}`);
                                                 tradeTypeOptions.push(data);
@@ -330,7 +330,7 @@ function checkRangeForUomValue(e, fromUom, toUom){
                                             let tradeType = cloneDeep(tradeTypeMdmsData);
                                             let filteredTradeSubType = tradeType.filter(data => data?.tradeType?.split('.')[1] === selectedOption)
                                             let tradeSubTypeOptions = [];
-                                            filteredTradeSubType.map(data => {
+                                            filteredTradeSubType?.map(data => {
                                                 let code = stringReplaceAll(data?.tradeType, "-", "_");
                                                 data.code = data?.tradeType;
                                                 data.i18nKey = t(`TRADELICENSE_TRADETYPE_${stringReplaceAll(code, ".", "_")}`);

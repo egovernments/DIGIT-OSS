@@ -86,7 +86,7 @@ const DesktopInbox = ({ tableConfig, filterComponent,columns, isLoading, setSear
       <Card style={{ marginTop: 20 }}>
         {t("CS_MYAPPLICATIONS_NO_APPLICATION")
           .split("\\n")
-          .map((text, index) => (
+          ?.map((text, index) => (
             <p key={index} style={{ textAlign: "center" }}>
               {text}
             </p>

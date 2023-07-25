@@ -203,7 +203,7 @@ const ReNewApplication = (props) => {
     }
 
     if (data?.owners?.length > 0) {
-      data?.owners.forEach((data) => {
+      data?.owners?.forEach((data) => {
         data.gender = data?.gender?.code;
         data.relationship = data?.relationship?.code;
         data.ownerType = data?.ownerType?.code;
@@ -222,7 +222,7 @@ const ReNewApplication = (props) => {
     }
 
     if (data?.tradeUnits?.length > 0) {
-      data?.tradeUnits.forEach((data) => {
+      data?.tradeUnits?.forEach((data) => {
           (data.tradeType = data?.tradeSubType?.code || null),
           (data.uom = data?.tradeSubType?.uom || null),
           (data.uomValue = Number(data?.uomValue) || null);
@@ -446,7 +446,7 @@ const ReNewApplication = (props) => {
         heading={""}
         isDisabled={!canSubmit}
         label={t("ES_COMMON_APPLICATION_SUBMIT")}
-        config={configs.map((config) => {
+        config={configs?.map((config) => {
           return {
             ...config,
             body: config.body.filter((a) => {
