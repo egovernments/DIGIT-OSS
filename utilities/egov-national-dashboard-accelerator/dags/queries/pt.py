@@ -20,7 +20,7 @@ pt_closed_applications = {'path': 'property-services/_search',
           "must_not": [
             {{
               "term": {{
-                "Data.tenantId.keyword": "pb.testing"
+                "Data.tenantId.keyword": "uk.testing"
               }}
             }}
           ],
@@ -98,7 +98,7 @@ pt_total_applications = {'path': 'property-application/_search',
           "must_not": [
             {{
               "term": {{
-                "Data.tenantId.keyword": "pb.testing"
+                "Data.tenantId.keyword": "uk.testing"
               }}
             }}
           ],
@@ -170,7 +170,7 @@ pt_no_of_properties_paid = {'path': 'dss-collection_v2/_search',
                     "must_not": [
                       {{
                         "term": {{
-                          "dataObject.tenantId.keyword": "pb.testing"
+                          "dataObject.tenantId.keyword": "uk.testing"
                         }}
                       }},
                       {{
@@ -274,7 +274,7 @@ pt_collection_transactions_by_usage = {'path': 'dss-collection_v2/_search',
           "must_not": [
             {{
               "term": {{
-                "dataObject.tenantId.keyword": "pb.testing"
+                "dataObject.tenantId.keyword": "uk.testing"
               }}
             }},
             {{
@@ -414,7 +414,7 @@ pt_collection_taxes = {'path': 'dss-collection_v2/_search',
           "must_not": [
             {{
               "term": {{
-                "dataObject.tenantId.keyword": "pb.testing"
+                "dataObject.tenantId.keyword": "uk.testing"
               }}
             }},
             {{
@@ -618,7 +618,7 @@ pt_collection_cess = {'path': 'dss-collection_v2/_search',
           "must_not": [
             {{
               "term": {{
-                "dataObject.tenantId.keyword": "pb.testing"
+                "dataObject.tenantId.keyword": "uk.testing"
               }}
             }},
             {{
@@ -785,7 +785,7 @@ pt_assessed_properties = {'path':'property-services/_search',
           "must_not": [
             {{
               "term": {{
-                "Data.tenantId.keyword": "pb.testing"
+                "Data.tenantId.keyword": "uk.testing"
               }}
             }}
           ],
@@ -874,7 +874,7 @@ pt_properties_registered_by_year = {'path': 'property-assessments/_search',
       "must_not": [
         {{
           "term": {{
-            "Data.tenantId.keyword": "pb.testing"
+            "Data.tenantId.keyword": "uk.testing"
           }}
         }}
       ],
@@ -956,7 +956,7 @@ pt_properties_assessments = {'path': 'property-assessments/_search',
       "must_not": [
         {{
           "term": {{
-            "Data.tenantId.keyword": "pb.testing"
+            "Data.tenantId.keyword": "uk.testing"
           }}
         }}
       ],
