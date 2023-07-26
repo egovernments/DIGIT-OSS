@@ -399,7 +399,7 @@ def extract_tl_todays_trade_licenses(metrics, region_bucket):
         {'groupBy': 'status', 'buckets': grouped_by}]
     return metrics
 
-#checked once 
+#checked once not in array
 tl_todays_trade_licenses = {'path': 'tlindex-v1-enriched/_search',
                             'name': 'tl_todays_trade_licenses',
                             'lambda': extract_tl_todays_trade_licenses,
