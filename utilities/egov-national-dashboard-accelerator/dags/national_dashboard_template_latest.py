@@ -292,7 +292,7 @@ def call_ingest_api(connection, access_token, user_info, payload, module,startda
         'timestamp' : startdate,
         'module' : module,
         'severity' : 'Info',
-        'state' : 'Uttrakhand', 
+        'state' : 'Uttarakhand', 
         'message' : json.dumps(response)
     }
     es = Elasticsearch(host = "elasticsearch-data-v1.es-cluster", port = 9200)

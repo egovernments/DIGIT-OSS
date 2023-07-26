@@ -399,7 +399,7 @@ def extract_tl_todays_trade_licenses(metrics, region_bucket):
         {'groupBy': 'status', 'buckets': grouped_by}]
     return metrics
 
-#checked once not in array
+#checked once 
 tl_todays_trade_licenses = {'path': 'tlindex-v1-enriched/_search',
                             'name': 'tl_todays_trade_licenses',
                             'lambda': extract_tl_todays_trade_licenses,
@@ -982,7 +982,7 @@ def empty_tl_payload(region, ulb, ward, date):
         "ward": ward,
         "ulb": ulb,
         "region": region,
-        "state": "Uttrakhand",
+        "state": "Uttarakhand",
         "metrics": {
             "transactions": 0,
             "todaysApplications": 0,

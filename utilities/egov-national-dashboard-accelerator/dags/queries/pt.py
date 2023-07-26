@@ -1026,7 +1026,7 @@ def empty_pt_payload(region, ulb, ward, date):
             "ward": ward,
             "ulb": ulb,
             "region": region,
-            "state": "Uttrakhand",
+            "state": "Uttarakhand",
             "metrics": {
                 "assessments": 0,
                 "todaysTotalApplications": 0,
