@@ -32,12 +32,12 @@ default_args = {
     'depends_on_past': False,
     'retries': 3,
     'retry_delay': timedelta(seconds=10),
-    'start_date': datetime(2023, 4, 1)
+    'start_date': datetime(2022, 4, 1)
 
 }
 
 module_map = {
-    #'TL' : (tl_queries, empty_tl_payload),
+    'TL' : (tl_queries, empty_tl_payload),
     'PT' : (pt_queries, empty_pt_payload),
     #'MCOLLECT' : (mcollect_queries,empty_mcollect_payload)
   
@@ -335,26 +335,26 @@ def transform(**kwargs):
     return 'Post Transformed Data'
 
 
-# extract_tl = PythonOperator(
-#     task_id='elastic_search_extract_tl',
-#     python_callable=dump_kibana,
-#     provide_context=True,
-#     do_xcom_push=True,
-#     op_kwargs={ 'module' : 'TL'},
-#     dag=dag)
+extract_tl = PythonOperator(
+    task_id='elastic_search_extract_tl',
+    python_callable=dump_kibana,
+    provide_context=True,
+    do_xcom_push=True,
+    op_kwargs={ 'module' : 'TL'},
+    dag=dag)
 
-# transform_tl = PythonOperator(
-#     task_id='nudb_transform_tl',
-#     python_callable=transform,
-#     provide_context=True,
-#     dag=dag)
+transform_tl = PythonOperator(
+    task_id='nudb_transform_tl',
+    python_callable=transform,
+    provide_context=True,
+    dag=dag)
 
-# load_tl = PythonOperator(
-#     task_id='nudb_ingest_load_tl',
-#     python_callable=load,
-#     provide_context=True,
-#     op_kwargs={ 'module' : 'TL'},
-#     dag=dag)
+load_tl = PythonOperator(
+    task_id='nudb_ingest_load_tl',
+    python_callable=load,
+    provide_context=True,
+    op_kwargs={ 'module' : 'TL'},
+    dag=dag)
 
 extract_pt = PythonOperator(
     task_id='elastic_search_extract_pt',
@@ -398,7 +398,7 @@ load_pt = PythonOperator(
 #     op_kwargs={ 'module' : 'MCOLLECT'},
 #     dag=dag)
 
-#extract_tl >> transform_tl >> load_tl
+extract_tl >> transform_tl >> load_tl
 extract_pt >> transform_pt >> load_pt
 #extract_mcollect>>transform_mcollect>>load_mcollect
  
