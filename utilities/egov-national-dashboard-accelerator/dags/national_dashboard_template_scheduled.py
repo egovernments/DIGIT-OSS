@@ -32,7 +32,7 @@ default_args = {
     'depends_on_past': False,
     'retries': 3,
     'retry_delay': timedelta(seconds=10),
-    'start_date': datetime(2023, 4, 1)
+    'start_date': datetime(2017, 1, 24)
 
 }
 
@@ -61,9 +61,9 @@ def dump_kibana(**kwargs):
     module = kwargs['module']
     module_config = module_map.get(module)
     queries = module_config[0]
-    today = (date.today() - timedelta(days=1)).strftime("%d-%m-%Y")
+    date = kwargs['dag_run'].conf.get('date')
     localtz = timezone('Asia/Kolkata')
-    dt_aware = localtz.localize(datetime.strptime(today, "%d-%m-%Y"))
+    dt_aware = localtz.localize(datetime.strptime(date, "%d-%m-%Y"))
     start = int(dt_aware.timestamp() * 1000)
     end = start + (24 * 60 * 60 * 1000) - 1000
     logging.info(start)
@@ -319,9 +319,8 @@ def load(**kwargs):
     logging.info(payload)
     payload_obj = json.loads(payload)
     logging.info("payload length {0} {1}".format(len(payload_obj),module))
-    today = (date.today() - timedelta(days=1)).strftime("%d-%m-%Y")
     localtz = timezone('Asia/Kolkata')
-    dt_aware = localtz.localize(datetime.strptime(today, "%d-%m-%Y"))
+    dt_aware = localtz.localize(datetime.strptime(kwargs['dag_run'].conf.get('date'), "%d-%m-%Y"))
     startdate = int(dt_aware.timestamp() * 1000)
     logging.info(startdate)
     if access_token and refresh_token:
