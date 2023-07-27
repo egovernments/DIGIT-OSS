@@ -32,7 +32,7 @@ default_args = {
     'depends_on_past': False,
     'retries': 3,
     'retry_delay': timedelta(seconds=10),
-    'start_date': datetime(2022, 4, 1)
+    'start_date': datetime(2022, 4, 1, 16, 0, 0)
 
 }
 
@@ -61,7 +61,7 @@ def dump_kibana(**kwargs):
     module = kwargs['module']
     module_config = module_map.get(module)
     queries = module_config[0]
-    today = (date.today() - timedelta(days=1)).strftime("%d-%m-%Y")
+    today = (date.today() - timedelta(days=20)).strftime("%d-%m-%Y")
     localtz = timezone('Asia/Kolkata')
     dt_aware = localtz.localize(datetime.strptime(today, "%d-%m-%Y"))
     start = int(dt_aware.timestamp() * 1000)
@@ -127,7 +127,7 @@ def dump_kibana(**kwargs):
     #     kwargs['ti'].xcom_push(key='payload_{0}'.format(module), value=json.dumps(common_list))
     #     return json.dumps(common_list)
     # else:
-    ward_list = transform_response_sample(merged_document, date, module)
+    ward_list = transform_response_sample(merged_document, today, module)
     kwargs['ti'].xcom_push(key='payload_{0}'.format(module), value=json.dumps(ward_list))
     logging.info("ward list Data")
     logging.info(ward_list)
@@ -319,7 +319,7 @@ def load(**kwargs):
     logging.info(payload)
     payload_obj = json.loads(payload)
     logging.info("payload length {0} {1}".format(len(payload_obj),module))
-    today = (date.today() - timedelta(days=1)).strftime("%d-%m-%Y")
+    today = (date.today() - timedelta(days=20)).strftime("%d-%m-%Y")
     localtz = timezone('Asia/Kolkata')
     dt_aware = localtz.localize(datetime.strptime(today, "%d-%m-%Y"))
     startdate = int(dt_aware.timestamp() * 1000)

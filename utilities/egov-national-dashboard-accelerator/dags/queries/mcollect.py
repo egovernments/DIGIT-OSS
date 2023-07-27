@@ -18,7 +18,7 @@ mcollect_total_by_categories = {
         {{
           "terms": {{
             "dataObject.tenantId.keyword": [
-              "pb.testing",
+              "uk.testing",
               "pb"
             ]
           }}
@@ -145,7 +145,7 @@ mcollect_todays_collection = {
         {{
           "terms": {{
             "dataObject.tenantId.keyword": [
-              "pb.testing",
+              "uk.testing",
               "pb"
             ]
           }}
@@ -304,7 +304,7 @@ mcollect_receipts = {
         {{
           "terms": {{
             "dataObject.tenantId.keyword": [
-              "pb.testing",
+              "uk.testing",
               "pb"
             ]
           }}
@@ -458,7 +458,7 @@ mcollect_challans = {
         {{
           "terms": {{
             "dataObject.tenantId.keyword": [
-              "pb.testing",
+              "uk.testing",
               "pb"
             ]
           }}
@@ -571,7 +571,7 @@ def empty_mcollect_payload(region, ulb, ward, date):
         "ward": ward,
         "ulb": ulb,
         "region": region,
-        "state": "Punjab",
+        "state": "Uttarakhand",
         "metrics":  {
             "numberOfCategories": 0,
             "todaysCollection": [
