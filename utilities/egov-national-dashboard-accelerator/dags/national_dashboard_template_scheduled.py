@@ -15,14 +15,8 @@ import logging
 import json
 import uuid
 from queries.tl import *
-from queries.pgr import *
-from queries.ws import *
-from queries.ws_digit import *
 from queries.pt import *
-from queries.firenoc import *
 from queries.mcollect import *
-from queries.obps import *
-from queries.common import *
 from utils.utils import log
 from pytz import timezone
 from airflow.models import Variable
@@ -32,7 +26,7 @@ default_args = {
     'depends_on_past': False,
     'retries': 3,
     'retry_delay': timedelta(seconds=10),
-    'start_date': datetime(2022, 4, 1)
+    'start_date': datetime(2022, 4, 1,12,45,00)
 
 }
 
