@@ -26,7 +26,7 @@ default_args = {
     'depends_on_past': False,
     'retries': 3,
     'retry_delay': timedelta(seconds=10),
-    'start_date': datetime(2022, 4, 1,12,45,00)
+    'start_date': datetime(2022, 4, 1)
 
 }
 
