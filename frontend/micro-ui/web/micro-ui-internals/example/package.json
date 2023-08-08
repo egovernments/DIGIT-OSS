@@ -15,7 +15,7 @@
     "@egovernments/digit-ui-module-fsm": "^1.7.0-beta.6",
     "@egovernments/digit-ui-module-mcollect": "^1.7.0-beta.2",
     "@egovernments/digit-ui-module-noc": "^1.7.0-beta.2",
-    "@egovernments/digit-ui-module-obps": "^1.7.0-beta.4",
+    "@egovernments/digit-ui-module-obps": "^1.7.0-beta.5",
     "@egovernments/digit-ui-module-pgr": "^1.7.0-beta.2",
     "@egovernments/digit-ui-module-pt": "^1.7.0-beta.2",
     "@egovernments/digit-ui-module-receipts": "^1.7.0-beta.2",
