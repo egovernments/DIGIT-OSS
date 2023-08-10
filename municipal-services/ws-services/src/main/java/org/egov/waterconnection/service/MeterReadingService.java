@@ -1,27 +1,25 @@
 package org.egov.waterconnection.service;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.extern.slf4j.Slf4j;
+import org.egov.waterconnection.constants.WCConstants;
+import org.egov.waterconnection.repository.ServiceRequestRepository;
+import org.egov.waterconnection.util.WaterServicesUtil;
+import org.egov.waterconnection.web.models.MeterConnectionRequest;
+import org.egov.waterconnection.web.models.MeterReading;
+import org.egov.waterconnection.web.models.MeterReading.MeterStatusEnum;
+import org.egov.waterconnection.web.models.MeterReadingResponse;
+import org.egov.waterconnection.web.models.WaterConnectionRequest;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
+
 import java.math.BigDecimal;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
-
-import org.egov.waterconnection.constants.WCConstants;
-import org.egov.waterconnection.web.models.MeterConnectionRequest;
-import org.egov.waterconnection.web.models.MeterReading;
-import org.egov.waterconnection.web.models.MeterReading.MeterStatusEnum;
-import org.egov.waterconnection.web.models.MeterReadingResponse;
-import org.egov.waterconnection.web.models.WaterConnectionRequest;
-import org.egov.waterconnection.repository.ServiceRequestRepository;
-import org.egov.waterconnection.util.WaterServicesUtil;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
-
-import com.fasterxml.jackson.databind.ObjectMapper;
-
-import lombok.extern.slf4j.Slf4j;
 
 @Service
 @Slf4j
@@ -57,6 +55,7 @@ public class MeterReadingService {
 							.generateDemand(Boolean.FALSE).lastReading(initialMeterReading.doubleValue())
 							.lastReadingDate(request.getWaterConnection().getConnectionExecutionDate().longValue())
 							.build()).requestInfo(request.getRequestInfo()).build();
+					log.info("METER READING CREATE ---->  \n"+req.toString());
 					Object response = serviceRequestRepository.fetchResult(waterServiceUtil.getMeterReadingCreateURL(),
 							req);
 					MeterReadingResponse readingResponse = mapper.convertValue(response, MeterReadingResponse.class);

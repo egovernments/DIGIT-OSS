@@ -1,13 +1,15 @@
 package org.egov.waterconnection.service;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.jayway.jsonpath.DocumentContext;
-import com.jayway.jsonpath.JsonPath;
-import lombok.extern.slf4j.Slf4j;
+import static org.egov.waterconnection.constants.WCConstants.CHANNEL_NAME_EMAIL;
+import static org.egov.waterconnection.constants.WCConstants.CHANNEL_NAME_EVENT;
+import static org.egov.waterconnection.constants.WCConstants.CHANNEL_NAME_SMS;
+import static org.egov.waterconnection.constants.WCConstants.TENANTID_MDC_STRING;
+import static org.egov.waterconnection.constants.WCConstants.WATER_SERVICE_BUSINESS_ID;
+
 import org.egov.common.contract.request.RequestInfo;
 import org.egov.common.contract.request.Role;
 import org.egov.common.contract.request.User;
+import org.egov.common.utils.MultiStateInstanceUtil;
 import org.egov.tracer.model.CustomException;
 import org.egov.waterconnection.config.WSConfiguration;
 import org.egov.waterconnection.constants.WCConstants;
@@ -22,6 +24,7 @@ import org.egov.waterconnection.web.models.collection.PaymentRequest;
 import org.egov.waterconnection.web.models.users.UserDetailResponse;
 import org.egov.waterconnection.web.models.workflow.ProcessInstance;
 import org.egov.waterconnection.workflow.WorkflowIntegrator;
+import org.slf4j.MDC;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
@@ -34,6 +37,13 @@ import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.jayway.jsonpath.DocumentContext;
+import com.jayway.jsonpath.JsonPath;
+
+import lombok.extern.slf4j.Slf4j;
 import java.util.stream.Stream;
 
 import static org.egov.waterconnection.constants.WCConstants.*;
@@ -75,19 +85,27 @@ public class PaymentUpdateService {
 
 	@Autowired
 	private WaterServicesUtil waterServiceUtil;
+
+	@Autowired
+	private MultiStateInstanceUtil centralInstanceUtil;
+
 	/**
 	 * After payment change the application status
 	 *
-	 * @param record
-	 *            payment request
+	 * @param record payment request
 	 */
 	public void process(HashMap<String, Object> record) {
 		try {
 			PaymentRequest paymentRequest = mapper.convertValue(record, PaymentRequest.class);
+			String tenantId = paymentRequest.getPayment().getTenantId();
+
+			// Adding in MDC so that tracer can add it in header
+			MDC.put(TENANTID_MDC_STRING, tenantId);
+
 			boolean isServiceMatched = false;
 			for (PaymentDetail paymentDetail : paymentRequest.getPayment().getPaymentDetails()) {
-				if (WCConstants.WATER_SERVICE_BUSINESS_ID.equals(paymentDetail.getBusinessService()) ||
-            paymentDetail.getBusinessService().equalsIgnoreCase(config.getReceiptBusinessservice())) {
+				if (WCConstants.WATER_SERVICE_BUSINESS_ID.equals(paymentDetail.getBusinessService())
+						|| paymentDetail.getBusinessService().equalsIgnoreCase(config.getReceiptBusinessservice())) {
 					isServiceMatched = true;
 				}
 			}
@@ -104,6 +122,7 @@ public class PaymentUpdateService {
 							.connectionNumber(Stream.of(paymentDetail.getBill().getConsumerCode().toString()).collect(Collectors.toSet()))
 							.applicationStatus(Collections.singleton(PENDING_FOR_PAYMENT_STATUS_CODE)).build();
 				}
+
 				if (paymentDetail.getBusinessService().equalsIgnoreCase(config.getReceiptBusinessservice())) {
 					criteria = SearchCriteria.builder()
 							.tenantId(paymentRequest.getPayment().getTenantId())
@@ -122,10 +141,10 @@ public class PaymentUpdateService {
 						throw new CustomException("INVALID_RECEIPT",
 								"More than one application found on consumerCode " + criteria.getApplicationNumber());
 					}
-					waterConnections.forEach(waterConnection -> waterConnection.getProcessInstance().setAction((WCConstants.ACTION_PAY)));
+					waterConnections.forEach(waterConnection -> waterConnection.getProcessInstance()
+							.setAction((WCConstants.ACTION_PAY)));
 					WaterConnectionRequest waterConnectionRequest = WaterConnectionRequest.builder()
-							.waterConnection(connection).requestInfo(paymentRequest.getRequestInfo())
-							.build();
+							.waterConnection(connection).requestInfo(paymentRequest.getRequestInfo()).build();
 					try {
 						log.info("WaterConnection Request " + mapper.writeValueAsString(waterConnectionRequest));
 					} catch (Exception ex) {
@@ -171,8 +190,7 @@ public class PaymentUpdateService {
 			log.error("error occured while parsing user info", e);
 		}
 		if (CollectionUtils.isEmpty(users)) {
-			throw new CustomException("INVALID_SEARCH_ON_USER",
-					"No user found on given criteria!!!");
+			throw new CustomException("INVALID_SEARCH_ON_USER", "No user found on given criteria!!!");
 		}
 		return mapper.convertValue(users.get(0), User.class);
 	}
@@ -195,8 +213,8 @@ public class PaymentUpdateService {
 				return;
 			for (PaymentDetail paymentDetail : paymentRequest.getPayment().getPaymentDetails()) {
 				log.info("Consuming Business Service : {}", paymentDetail.getBusinessService());
-				if (WCConstants.WATER_SERVICE_BUSINESS_ID.equals(paymentDetail.getBusinessService()) ||
-						config.getReceiptBusinessservice().equals(paymentDetail.getBusinessService())) {
+				if (WCConstants.WATER_SERVICE_BUSINESS_ID.equals(paymentDetail.getBusinessService())
+						|| config.getReceiptBusinessservice().equals(paymentDetail.getBusinessService())) {
 					SearchCriteria criteria = new SearchCriteria();
 					if (WCConstants.WATER_SERVICE_BUSINESS_ID.equals(paymentDetail.getBusinessService())) {
 						criteria = SearchCriteria.builder()
@@ -211,15 +229,16 @@ public class PaymentUpdateService {
 					List<WaterConnection> waterConnections = waterService.search(criteria,
 							paymentRequest.getRequestInfo());
 					if (CollectionUtils.isEmpty(waterConnections)) {
-						throw new CustomException("INVALID_RECEIPT",
-								"No waterConnection found for the consumerCode " + paymentDetail.getBill().getConsumerCode());
+						throw new CustomException("INVALID_RECEIPT", "No waterConnection found for the consumerCode "
+								+ paymentDetail.getBill().getConsumerCode());
 					}
-					Collections.sort(waterConnections, Comparator.comparing(wc -> wc.getAuditDetails().getLastModifiedTime()));
+					Collections.sort(waterConnections,
+							Comparator.comparing(wc -> wc.getAuditDetails().getLastModifiedTime()));
 					long count = waterConnections.stream().count();
-					Optional<WaterConnection> connections = Optional.of(waterConnections.stream().skip(count - 1).findFirst().get());
+					Optional<WaterConnection> connections = Optional
+							.of(waterConnections.stream().skip(count - 1).findFirst().get());
 					WaterConnectionRequest waterConnectionRequest = WaterConnectionRequest.builder()
-							.waterConnection(connections.get()).requestInfo(paymentRequest.getRequestInfo())
-							.build();
+							.waterConnection(connections.get()).requestInfo(paymentRequest.getRequestInfo()).build();
 					sendPaymentNotification(waterConnectionRequest, paymentDetail);
 				}
 			}
@@ -241,23 +260,37 @@ public class PaymentUpdateService {
 
 		waterConnectionRequest.getRequestInfo().setUserInfo(userInfoCopy);
 		List<String> configuredChannelNames =  notificationUtil.fetchChannelList(waterConnectionRequest.getRequestInfo(), waterConnectionRequest.getWaterConnection().getTenantId(), WATER_SERVICE_BUSINESS_ID, waterConnectionRequest.getWaterConnection().getProcessInstance().getAction());
+		String tenantId = centralInstanceUtil.getStateLevelTenant(property.getTenantId());
 
-		if(configuredChannelNames.contains(CHANNEL_NAME_EVENT)) {
+		if (configuredChannelNames.contains(CHANNEL_NAME_EVENT)) {
 			if (config.getIsUserEventsNotificationEnabled() != null && config.getIsUserEventsNotificationEnabled()) {
 				EventRequest eventRequest = getEventRequest(waterConnectionRequest, property, paymentDetail);
 				if (eventRequest != null) {
-					notificationUtil.sendEventNotification(eventRequest);
+					notificationUtil.sendEventNotification(eventRequest, tenantId);
 				}
 			}
 		}
-		if(configuredChannelNames.contains(CHANNEL_NAME_SMS)) {
+
+		if (configuredChannelNames.contains(CHANNEL_NAME_SMS)) {
 			if (config.getIsSMSEnabled() != null && config.getIsSMSEnabled()) {
 				List<SMSRequest> smsRequests = getSmsRequest(waterConnectionRequest, property, paymentDetail);
 				if (!CollectionUtils.isEmpty(smsRequests)) {
-					notificationUtil.sendSMS(smsRequests);
+					notificationUtil.sendSMS(smsRequests, tenantId);
+				}
+
+			}
+		}
+
+
+		if(configuredChannelNames.contains(CHANNEL_NAME_EMAIL)) {
+			if (config.getIsEmailNotificationEnabled() != null && config.getIsEmailNotificationEnabled()) {
+				List<EmailRequest> emailRequests = getEmailRequest(waterConnectionRequest, property, paymentDetail);
+				if (!CollectionUtils.isEmpty(emailRequests)) {
+					notificationUtil.sendEmail(emailRequests, tenantId);
 				}
 			}
 		}
+
 
 		if(configuredChannelNames.contains(CHANNEL_NAME_EMAIL)) {
 			if (config.getIsEmailNotificationEnabled() != null && config.getIsEmailNotificationEnabled()) {
@@ -268,6 +301,7 @@ public class PaymentUpdateService {
 			}
 		}
 	}
+
 	/**
 	 *
 	 * @param request
@@ -556,15 +590,15 @@ public class PaymentUpdateService {
 				message = message.replace("{Billing Period}", billingPeriod);
 			}
 
-			if (message.contains("{receipt download link}")){
+			if (message.contains("{receipt download link}")) {
 				String link = config.getNotificationUrl() + config.getMyPaymentsLink();
 				link = link.replace("$consumerCode", paymentDetail.getBill().getConsumerCode());
 				link = link.replace("$tenantId", paymentDetail.getTenantId());
-				link = link.replace("$businessService",paymentDetail.getBusinessService());
-				link = link.replace("$receiptNumber",paymentDetail.getReceiptNumber());
+				link = link.replace("$businessService", paymentDetail.getBusinessService());
+				link = link.replace("$receiptNumber", paymentDetail.getReceiptNumber());
 				link = link.replace("$mobile", mobAndMesg.getKey());
 				link = waterServiceUtil.getShortnerURL(link);
-				message = message.replace("{receipt download link}",link);
+				message = message.replace("{receipt download link}", link);
 			}
 
 			messageToReturn.put(mobAndMesg.getKey(), message);

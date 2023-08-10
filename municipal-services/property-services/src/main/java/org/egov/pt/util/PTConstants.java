@@ -11,6 +11,8 @@ public class PTConstants {
 
     public static final String PT_TYPE_VACANT = "VACANT";
     
+    public static String SCHEMA_REPLACE_STRING = "{schema}";
+
     public static final String PT_TYPE_SHAREDPROPERTY = "SHAREDPROPERTY";
     
     public static final String PT_TYPE_BUILTUP = "BUILTUP";
@@ -402,6 +404,8 @@ public class PTConstants {
     public static final String VIEW_PROPERTY_STRING = "You can view your property on the link given below - {PTURL} Thank you";
 
     public static final String PAY_ONLINE_STRING = "Click on the URL to view the details and pay online {PAYMENT_LINK}";
+
+    public static final String TENANTID_MDC_STRING = "TENANTID";
 
     public static final String PT_ONLINE_STRING = "You can pay your Property Tax online here - {PAYMENT_LINK}";
 

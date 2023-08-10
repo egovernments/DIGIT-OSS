@@ -1,7 +1,13 @@
 package org.egov.tl.util;
 
-import com.jayway.jsonpath.JsonPath;
-import lombok.extern.slf4j.Slf4j;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+
 import org.apache.commons.lang3.StringUtils;
 import org.egov.common.contract.request.RequestInfo;
 import org.egov.mdms.model.MasterDetail;
@@ -19,10 +25,11 @@ import org.egov.tracer.model.CustomException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.*;
+import com.jayway.jsonpath.JsonPath;
+
+import lombok.extern.slf4j.Slf4j;
 
 import static org.egov.tl.util.TLConstants.*;
-import static org.egov.tl.util.TLConstants.COMMON_MASTERS_MODULE;
 
 @Component
 @Slf4j
@@ -364,6 +371,7 @@ public class TradeUtil {
 		
 		return tenantIdToReminderPeriod;
 		
+
 	}
 
     public Object getBillingSlabs(RequestInfo requestInfo, String tenantId) {
@@ -405,5 +413,7 @@ public class TradeUtil {
         String state = (String) jsonOutput.get(0).get("name");
         return state;
     }
+
+}
 
 }

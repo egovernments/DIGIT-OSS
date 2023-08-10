@@ -1,25 +1,20 @@
 package org.egov.tl.repository.builder;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import lombok.extern.slf4j.Slf4j;
+import java.util.Arrays;
+import java.util.Calendar;
+import java.util.List;
+
 import org.egov.tl.config.TLConfiguration;
 import org.egov.tl.util.TLConstants;
 import org.egov.tl.web.models.*;
 import org.egov.tracer.model.CustomException;
 import org.postgresql.util.PGobject;
+import org.egov.tl.web.models.TradeLicenseSearchCriteria;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
-import java.io.IOException;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.*;
-
-@Slf4j
 @Component
 public class TLQueryBuilder {
 
@@ -56,25 +51,25 @@ public class TLQueryBuilder {
             "tlownerdoc.userid as docuserid,tlownerdoc.tradeLicenseDetailId as doctradelicensedetailid,tlownerdoc.id as ownerdocid,"+
             "tlownerdoc.documenttype as ownerdocType,tlownerdoc.filestoreid as ownerfileStoreId,tlownerdoc.documentuid as ownerdocuid,tlownerdoc.active as ownerdocactive," +
             " tlinsti.id as instiid,tlinsti.name as authorisedpersonname,tlinsti.type as institutiontype,tlinsti.tenantid as institenantId,tlinsti.active as instiactive, "+
-            " tlinsti.instituionname as instiinstituionname, tlinsti.contactno as insticontactno, tlinsti.organisationregistrationno as instiorganisationregistrationno, tlinsti.address as instiaddress FROM eg_tl_tradelicense tl"
+            " tlinsti.instituionname as instiinstituionname, tlinsti.contactno as insticontactno, tlinsti.organisationregistrationno as instiorganisationregistrationno, tlinsti.address as instiaddress FROM {schema}.eg_tl_tradelicense tl"
             +INNER_JOIN_STRING
-            +"eg_tl_tradelicensedetail tld ON tld.tradelicenseid = tl.id"
+            +"{schema}.eg_tl_tradelicensedetail tld ON tld.tradelicenseid = tl.id"
             +INNER_JOIN_STRING
-            +"eg_tl_address tladdress ON tladdress.tradelicensedetailid = tld.id"
+            +"{schema}.eg_tl_address tladdress ON tladdress.tradelicensedetailid = tld.id"
             +INNER_JOIN_STRING
-            +"eg_tl_owner tlowner ON tlowner.tradelicensedetailid = tld.id"
+            +"{schema}.eg_tl_owner tlowner ON tlowner.tradelicensedetailid = tld.id"
             +INNER_JOIN_STRING
-            +"eg_tl_tradeunit tlunit ON tlunit.tradelicensedetailid = tld.id"
+            +"{schema}.eg_tl_tradeunit tlunit ON tlunit.tradelicensedetailid = tld.id"
             +LEFT_OUTER_JOIN_STRING
-            +"eg_tl_accessory tlacc ON tlacc.tradelicensedetailid = tld.id"
+            +"{schema}.eg_tl_accessory tlacc ON tlacc.tradelicensedetailid = tld.id"
             +LEFT_OUTER_JOIN_STRING
-            +"eg_tl_document_owner tlownerdoc ON tlownerdoc.userid = tlowner.id"
+            +"{schema}.eg_tl_document_owner tlownerdoc ON tlownerdoc.userid = tlowner.id"
             +LEFT_OUTER_JOIN_STRING
-            +"eg_tl_applicationdocument tlapldoc ON tlapldoc.tradelicensedetailid = tld.id"
+            +"{schema}.eg_tl_applicationdocument tlapldoc ON tlapldoc.tradelicensedetailid = tld.id"
             +LEFT_OUTER_JOIN_STRING
-            +"eg_tl_verificationdocument tlverdoc ON tlverdoc.tradelicensedetailid = tld.id"
+            +"{schema}.eg_tl_verificationdocument tlverdoc ON tlverdoc.tradelicensedetailid = tld.id"
             +LEFT_OUTER_JOIN_STRING
-            +"eg_tl_institution tlinsti ON tlinsti.tradelicensedetailid = tld.id ";
+            +"{schema}.eg_tl_institution tlinsti ON tlinsti.tradelicensedetailid = tld.id ";
 
 
       private final String paginationWrapper = "SELECT * FROM " +
@@ -260,24 +255,24 @@ public class TLQueryBuilder {
         addClauseIfRequired(preparedStmtList, builder);
         
         /* SELECT NewTL applications which do not have any renewal applications yet */
-        builder.append(" (tl.licensenumber NOT IN (SELECT licensenumber from eg_tl_tradelicense WHERE UPPER(applicationtype) = ? AND licensenumber IS NOT NULL)  OR (");    
+        builder.append(" (tl.licensenumber NOT IN (SELECT licensenumber from {schema}.eg_tl_tradelicense WHERE UPPER(applicationtype) = ? AND licensenumber IS NOT NULL)  OR (");
         
         /*SELECT applications which have application type as renewal, and having the latest financial year among all the renewal application
          * for that particular license number*/
-        builder.append(" tl.applicationtype = ? and ? > tl.financialyear AND tl.financialyear = (select max(financialyear) from eg_tl_tradelicense where licensenumber=tl.licensenumber)    )))");
+        builder.append(" tl.applicationtype = ? and ? > tl.financialyear AND tl.financialyear = (select max(financialyear) from {schema}.eg_tl_tradelicense where licensenumber=tl.licensenumber)    )))");
         
         /* SELECT applications which are manually expired after their real expiry date, and which is having the latest financial year from among all the applications for that particular license number*/
-        builder.append(" OR ( tl.status = ? AND tl.financialyear = (select max(financialyear) from eg_tl_tradelicense where licensenumber=tl.licensenumber)  )))  ");
+        builder.append(" OR ( tl.status = ? AND tl.financialyear = (select max(financialyear) from {schema}.eg_tl_tradelicense where licensenumber=tl.licensenumber)  )))  ");
         
         /* SELECT those applications for which there exist a rejected application for the current financial year, and financial year of this application should be just before that of the rejected application*/
-        builder.append("OR  ( tl.financialyear= (select max(financialyear) from eg_tl_tradelicense where licensenumber=tl.licensenumber and licensenumber in ( select licensenumber from eg_tl_tradelicense where status=? and financialyear=? ) and status<>?  ) ");
+        builder.append("OR  ( tl.financialyear= (select max(financialyear) from {schema}.eg_tl_tradelicense where licensenumber=tl.licensenumber and licensenumber in ( select licensenumber from {schema}.eg_tl_tradelicense where status=? and financialyear=? ) and status<>?  ) ");
         
         /*set status (approved) and validTo(before current timestamp) conditions*/
         builder.append(" AND (tl.status IN (?,?) ) AND tl.validTo <= ? ) ) ");
         
         preparedStmtList.add(TLConstants.APPLICATION_TYPE_RENEWAL); 
         preparedStmtList.add(TLConstants.APPLICATION_TYPE_RENEWAL);
-        preparedStmtList.add(Integer.toString(Calendar.getInstance().get(Calendar.YEAR)));        
+        preparedStmtList.add(Integer.toString(Calendar.getInstance().get(Calendar.YEAR)));
         preparedStmtList.add(TLConstants.STATUS_MANUALLYEXPIRED);
         preparedStmtList.add(TLConstants.STATUS_REJECTED);
         preparedStmtList.add(criteria.getFinancialYear());
@@ -366,62 +361,61 @@ public class TLQueryBuilder {
         return addPaginationWrapper(builder.toString(), preparedStmtList, criteria);
 
     }
-    
+
     public String getApplicationsCountQuery(TradeLicenseSearchCriteria criteria, List<Object> preparedStmtList, String applicationType) {
-    	
+
     	StringBuilder query = new StringBuilder("");
-    	
+
     	if(criteria.getAccountId()!=null) {
-    		query.append("select count(*) from eg_tl_tradelicense where tenantid = (select tl.tenantid from eg_tl_tradelicense tl INNER JOIN eg_tl_tradelicensedetail tld ON tld.tradelicenseid = tl.id INNER JOIN eg_tl_owner tlowner on tlowner.tradelicensedetailid = tld.id where tl.accountid=? ");
+    		query.append("select count(*) from {schema}.eg_tl_tradelicense where tenantid = (select tl.tenantid from {schema}.eg_tl_tradelicense tl INNER JOIN {schema}.eg_tl_tradelicensedetail tld ON tld.tradelicenseid = tl.id INNER JOIN {schema}.eg_tl_owner tlowner on tlowner.tradelicensedetailid = tld.id where tl.accountid=? ");
     		preparedStmtList.add(criteria.getAccountId());
-    		
+
     		List<String> ownerIds = criteria.getOwnerIds();
-    		
+
             if(!CollectionUtils.isEmpty(ownerIds)) {
-            	
+
                 query.append(" OR (tlowner.id IN (").append(createQuery(ownerIds)).append(")");
                 addToPreparedStatement(preparedStmtList,ownerIds);
-                
+
                 query.append(" AND tlowner.active = ? )");
                 preparedStmtList.add(true);
-            }   
-    		
+            }
+
     		query.append("and tl.businessservice= ? limit 1) and createdtime> ? AND applicationtype= ? ");
-    		
+
     		preparedStmtList.add(TLConstants.TRADE_LICENSE_MODULE_CODE);
-    		
-    		 
+
+
     	}
-    	
+
     	else if(criteria.getTenantId()!=null) {
-    		query.append("select count(*) from eg_tl_tradelicense where tenantid = ? and createdtime > ? AND applicationtype= ? ");
+    		query.append("select count(*) from {schema}.eg_tl_tradelicense where tenantid = ? and createdtime > ? AND applicationtype= ? ");
     		preparedStmtList.add(criteria.getTenantId());
     	}
-    	
+
     	// In order to get data of last 12 months, the months variables is pre-configured in application properties
     	int months = Integer.valueOf(config.getNumberOfMonths()) ;
-    	
+
     	Calendar calendar = Calendar.getInstance();
-    	
+
     	// To subtract 12 months from current time, we are adding -12 to the calendar instance, as subtract function is not in-built
     	calendar.add(Calendar.MONTH, -1*months);
-    	
+
     	// Converting the timestamp to milliseconds and adding it to prepared statement list
     	preparedStmtList.add(calendar.getTimeInMillis());
-    	
+
     	preparedStmtList.add(applicationType);
-    	
+
     	addClauseIfRequired(preparedStmtList, query);
         query.append(" businessservice = ? ");
         preparedStmtList.add(TLConstants.TRADE_LICENSE_MODULE_CODE);
-    	
-    	
+
+
     	return query.toString();
-    	
-    	
+
+
     }
 
-
-
+    public final String TRADELICENSEIDQUERY = "SELECT id from {schema}.eg_tl_tradelicense ORDER BY createdtime offset  ? limit ? ";
 
 }

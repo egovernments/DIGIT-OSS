@@ -48,10 +48,6 @@
       <scope>runtime</scope>
     </dependency>
     <dependency>
-      <groupId>org.springframework.boot</groupId>
-      <artifactId>spring-boot-starter-web</artifactId>
-    </dependency>
-    <dependency>
       <groupId>org.springframework.kafka</groupId>
       <artifactId>spring-kafka</artifactId>
     </dependency>
@@ -95,6 +91,11 @@
     </dependency>
   </dependencies>
   <repositories>
+    <repository>
+      <id>repo.digit.org</id>
+      <name>eGov DIGIT Releases Repository</name>
+      <url>https://nexus-repo.digit.org/nexus/content/repositories/snapshots/</url>
+    </repository>
     <repository>
       <id>repo.egovernments.org</id>
       <name>eGov ERP Releases Repository</name>

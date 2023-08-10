@@ -1,13 +1,26 @@
 package org.egov.pt.util;
 
 
-import com.jayway.jsonpath.Filter;
-import com.jayway.jsonpath.JsonPath;
-import lombok.extern.slf4j.Slf4j;
+import static com.jayway.jsonpath.Criteria.where;
+import static com.jayway.jsonpath.Filter.filter;
+import static org.egov.pt.util.PTConstants.*;
+import static org.egov.pt.util.PTConstants.FEEDBACK_URL;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
+
 import org.apache.commons.lang3.StringUtils;
 import org.egov.common.contract.request.RequestInfo;
 import org.egov.common.contract.request.Role;
 import org.egov.common.contract.request.User;
+import org.egov.common.utils.MultiStateInstanceUtil;
 import org.egov.mdms.model.MasterDetail;
 import org.egov.mdms.model.MdmsCriteria;
 import org.egov.mdms.model.MdmsCriteriaReq;
@@ -16,7 +29,12 @@ import org.egov.pt.config.PropertyConfiguration;
 import org.egov.pt.models.OwnerInfo;
 import org.egov.pt.models.Property;
 import org.egov.pt.models.enums.CreationReason;
-import org.egov.pt.models.event.*;
+import org.egov.pt.models.event.Action;
+import org.egov.pt.models.event.ActionItem;
+import org.egov.pt.models.event.Event;
+import org.egov.pt.models.event.EventRequest;
+import org.egov.pt.models.event.Recepient;
+import org.egov.pt.models.event.Source;
 import org.egov.pt.models.user.UserDetailResponse;
 import org.egov.pt.models.user.UserSearchRequest;
 import org.egov.pt.producer.PropertyProducer;
@@ -33,12 +51,10 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.*;
-import java.util.stream.Collectors;
+import com.jayway.jsonpath.Filter;
+import com.jayway.jsonpath.JsonPath;
 
-import static com.jayway.jsonpath.Criteria.where;
-import static com.jayway.jsonpath.Filter.filter;
-import static org.egov.pt.util.PTConstants.*;
+import lombok.extern.slf4j.Slf4j;
 
 
 @Slf4j
@@ -46,15 +62,22 @@ import static org.egov.pt.util.PTConstants.*;
 public class NotificationUtil {
 
 
-
+	@Autowired
     private ServiceRequestRepository serviceRequestRepository;
 
+	@Autowired
     private PropertyConfiguration config;
 
+	@Autowired
+    private MultiStateInstanceUtil centralInstanceUtil;
+
+	@Autowired
     private PropertyProducer producer;
 
+	@Autowired
     private RestTemplate restTemplate;
 
+	@Autowired
     private UserService userService;
 
 
@@ -63,20 +86,6 @@ public class NotificationUtil {
 
     @Value("${egov.mdms.search.endpoint}")
     private String mdmsUrl;
-
-    @Autowired
-    public NotificationUtil(ServiceRequestRepository serviceRequestRepository, PropertyConfiguration config,
-                            PropertyProducer producer, RestTemplate restTemplate,UserService userService) {
-        this.serviceRequestRepository = serviceRequestRepository;
-        this.config = config;
-        this.producer = producer;
-        this.restTemplate = restTemplate;
-        this.userService = userService;
-    }
-
-
-
-
 
     /**
      * Extracts message for the specific code
@@ -185,14 +194,13 @@ public class NotificationUtil {
      * @param smsRequestList
      *            The list of SMSRequest to be sent
      */
-    public void sendSMS(List<SMSRequest> smsRequestList) {
+    public void sendSMS(List<SMSRequest> smsRequestList, String tenantId) {
     	
         if (config.getIsSMSNotificationEnabled()) {
             if (CollectionUtils.isEmpty(smsRequestList))
                 log.info("Messages from localization couldn't be fetched!");
             for (SMSRequest smsRequest : smsRequestList) {
-                producer.push(config.getSmsNotifTopic(), smsRequest);
-                log.info("Sending SMS notification: ");
+                producer.push(tenantId, config.getSmsNotifTopic(), smsRequest);
                 log.info("MobileNumber: " + smsRequest.getMobileNumber() + " Messages: " + smsRequest.getMessage());
             }
         }
@@ -240,9 +248,9 @@ public class NotificationUtil {
      *
      * @param request
      */
-    public void sendEventNotification(EventRequest request) {
-        log.info("EVENT notification sent!");
-        producer.push(config.getSaveUserEventsTopic(), request);
+    public void sendEventNotification(EventRequest request, String tenantId) {
+
+        producer.push(tenantId, config.getSaveUserEventsTopic(), request);
     }
 
 
@@ -256,25 +264,24 @@ public class NotificationUtil {
      * @return List of EmailRequest
      */
 
-    public List<EmailRequest> createEmailRequest(RequestInfo requestInfo,String message, Map<String, String> mobileNumberToEmailId) {
+	public List<EmailRequest> createEmailRequest(RequestInfo requestInfo, String message,
+			Map<String, String> mobileNumberToEmailId) {
 
-        List<EmailRequest> emailRequest = new LinkedList<>();
-        for (Map.Entry<String, String> entryset : mobileNumberToEmailId.entrySet()) {
-            String customizedMsg = message;
-            if(message.contains(NOTIFICATION_EMAIL))
-                customizedMsg = customizedMsg.replace(NOTIFICATION_EMAIL, entryset.getValue());
+		List<EmailRequest> emailRequest = new LinkedList<>();
+		for (Map.Entry<String, String> entryset : mobileNumberToEmailId.entrySet()) {
+			String customizedMsg = "";
+			if (message.contains(NOTIFICATION_EMAIL))
+				customizedMsg = message.replace(NOTIFICATION_EMAIL, entryset.getValue());
 
-            if(StringUtils.isEmpty(entryset.getValue()))
-                log.info("Email ID is empty, no notification will be sent ");
-
-            String subject = "";
-            String body = customizedMsg;
-            Email emailobj = Email.builder().emailTo(Collections.singleton(entryset.getValue())).isHTML(false).body(body).subject(subject).build();
-            EmailRequest email = new EmailRequest(requestInfo,emailobj);
-            emailRequest.add(email);
-        }
-        return emailRequest;
-    }
+			String subject = "";
+			String body = customizedMsg;
+			Email emailobj = Email.builder().emailTo(Collections.singleton(entryset.getValue())).isHTML(false)
+					.body(body).subject(subject).build();
+			EmailRequest email = new EmailRequest(requestInfo, emailobj);
+			emailRequest.add(email);
+		}
+		return emailRequest;
+	}
 
     /**
      * Creates email request for the each owners from SMS requests
@@ -287,7 +294,8 @@ public class NotificationUtil {
      */
 
     public List<EmailRequest> createEmailRequestFromSMSRequests(RequestInfo requestInfo,List<SMSRequest> smsRequests,String tenantId) {
-        Set<String> mobileNumbers = smsRequests.stream().map(SMSRequest :: getMobileNumber).collect(Collectors.toSet());
+
+      Set<String> mobileNumbers = smsRequests.stream().map(SMSRequest :: getMobileNumber).collect(Collectors.toSet());
         Map<String, String> mobileNumberToEmailId = fetchUserEmailIds(mobileNumbers, requestInfo, tenantId);
         if (CollectionUtils.isEmpty(mobileNumberToEmailId.keySet())) {
             log.error("Email Ids Not found for Mobilenumbers");
@@ -298,6 +306,9 @@ public class NotificationUtil {
         for (Map.Entry<String, String> entryset : mobileNumberToEmailId.entrySet()) {
             String message = mobileNumberToMsg.get(entryset.getKey());
             String customizedMsg = message;
+
+            if(StringUtils.isEmpty(message))
+                log.info("Email ID is empty, no notification will be sent ");
 
             if(message.contains(NOTIFICATION_EMAIL))
                 customizedMsg = customizedMsg.replace(NOTIFICATION_EMAIL, entryset.getValue());
@@ -324,14 +335,14 @@ public class NotificationUtil {
      * @param emailRequestList
      *            The list of EmailRequest to be sent
      */
-    public void sendEmail(List < EmailRequest > emailRequestList) {
+    public void sendEmail(List<EmailRequest> emailRequestList, String tenantId) {
 
         if (config.getIsEmailNotificationEnabled()) {
             if (CollectionUtils.isEmpty(emailRequestList))
                 log.info("Messages from localization couldn't be fetched!");
             for (EmailRequest emailRequest: emailRequestList) {
                 if (!StringUtils.isEmpty(emailRequest.getEmail().getBody())) {
-                    producer.push(config.getEmailNotifTopic(), emailRequest);
+                    producer.push(tenantId, config.getEmailNotifTopic(), emailRequest);
                     log.info("Sending EMAIL notification! ");
                     log.info("Email Id: " + emailRequest.getEmail().toString());
                 } else {
@@ -351,53 +362,55 @@ public class NotificationUtil {
      * @return
      */
 
-    public Map<String, String> fetchUserEmailIds(Set<String> mobileNumbers, RequestInfo requestInfo, String tenantId) {
-        Map<String, String> mapOfPhnoAndEmailIds = new HashMap<>();
-        StringBuilder uri = new StringBuilder();
-        uri.append(config.getUserHost()).append(config.getUserSearchEndpoint());
-        Map<String, Object> userSearchRequest = new HashMap<>();
-        userSearchRequest.put("RequestInfo", requestInfo);
-        userSearchRequest.put("tenantId", tenantId);
-        userSearchRequest.put("userType", "CITIZEN");
-        for(String mobileNo: mobileNumbers) {
-            userSearchRequest.put("userName", mobileNo);
-            try {
-                Object user = serviceRequestRepository.fetchResult(uri, userSearchRequest).get();
-                if(null != user) {
-                    if(JsonPath.read(user, "$.user[0].emailId")!=null) {
-                        String email = JsonPath.read(user, "$.user[0].emailId");
-                    mapOfPhnoAndEmailIds.put(mobileNo, email);
-                    }
-                }else {
-                    log.error("Service returned null while fetching user for username - "+mobileNo);
-                }
-            }catch(Exception e) {
-                log.error("Exception while fetching user for username - "+mobileNo);
-                log.error("Exception trace: ",e);
-                continue;
-            }
-        }
-        return mapOfPhnoAndEmailIds;
+	public Map<String, String> fetchUserEmailIds(Set<String> mobileNumbers, RequestInfo requestInfo, String tenantId) {
+
+		Map<String, String> mapOfPhnoAndEmailIds = new HashMap<>();
+		StringBuilder uri = new StringBuilder();
+		uri.append(config.getUserHost()).append(config.getUserSearchEndpoint());
+		Map<String, Object> userSearchRequest = new HashMap<>();
+		userSearchRequest.put("RequestInfo", requestInfo);
+		userSearchRequest.put("tenantId", tenantId);
+		userSearchRequest.put("userType", "CITIZEN");
+		for (String mobileNo : mobileNumbers) {
+			userSearchRequest.put("userName", mobileNo);
+			try {
+				Object user = serviceRequestRepository.fetchResult(uri, userSearchRequest).get();
+				if (null != user) {
+					if (JsonPath.read(user, "$.user[0].emailId") != null) {
+						String email = JsonPath.read(user, "$.user[0].emailId");
+						mapOfPhnoAndEmailIds.put(mobileNo, email);
+					}
+				} else {
+					log.error("Service returned null while fetching user for username - " + mobileNo);
+				}
+			} catch (Exception e) {
+				log.error("Exception while fetching user for username - " + mobileNo);
+				log.error("Exception trace: ", e);
+				continue;
+			}
+		}
+		  return mapOfPhnoAndEmailIds;
     }
     /**
      * Method to shortent the url
      * returns the same url if shortening fails 
      * @param url
      */
-    public String getShortenedUrl(String url){
+	public String getShortenedUrl(String url) {
 
-        HashMap<String,String> body = new HashMap<>();
-        body.put("url",url);
-        StringBuilder builder = new StringBuilder(config.getUrlShortnerHost());
-        builder.append(config.getUrlShortnerEndpoint());
-        String res = restTemplate.postForObject(builder.toString(), body, String.class);
+		HashMap<String, String> body = new HashMap<>();
+		body.put("url", url);
+		StringBuilder builder = new StringBuilder(config.getUrlShortnerHost());
+		builder.append(config.getUrlShortnerEndpoint());
+		String res = restTemplate.postForObject(builder.toString(), body, String.class);
 
-        if(StringUtils.isEmpty(res)){
-            log.error("URL_SHORTENING_ERROR","Unable to shorten url: "+url); ;
-            return url;
-        }
-        else return res;
-    }
+		if (StringUtils.isEmpty(res)) {
+			log.error("URL_SHORTENING_ERROR", "Unable to shorten url: " + url);
+			;
+			return url;
+		} else
+			return res;
+	}
 
     /**
     *
@@ -450,7 +463,7 @@ public class NotificationUtil {
                            .replace("$propertyId" , property.getPropertyId())
                            .replace("$applicationNumber" , property.getAcknowldgementNumber());
 
-                   actionLink = config.getUiAppHost() + actionLink;
+                   actionLink = config.getUiAppHostMap().get(tenantId) + actionLink;
                    ActionItem item = ActionItem.builder().actionUrl(actionLink).code(VIEW_APPLICATION_CODE).build();
                    items.add(item);
                }
@@ -461,7 +474,7 @@ public class NotificationUtil {
                            .replace("$tenantId", property.getTenantId())
                            .replace("$businessService" , PT_BUSINESSSERVICE);
 
-                   actionLink = config.getUiAppHost() + actionLink;
+                   actionLink = config.getUiAppHostMap().get(tenantId) + actionLink;
                    ActionItem item = ActionItem.builder().actionUrl(actionLink).code(config.getPayCode()).build();
                    items.add(item);
                }
@@ -470,7 +483,7 @@ public class NotificationUtil {
                            .replace(NOTIFICATION_PROPERTYID, property.getPropertyId())
                            .replace(NOTIFICATION_TENANTID, property.getTenantId());
 
-                   actionLink = config.getUiAppHost() + actionLink;
+                   actionLink = config.getUiAppHostMap().get(tenantId) + actionLink;
                    ActionItem item = ActionItem.builder().actionUrl(actionLink).code(VIEW_PROPERTY_CODE).build();
                    items.add(item);
                }
@@ -480,7 +493,7 @@ public class NotificationUtil {
                            .replace(NOTIFICATION_PROPERTYID, property.getPropertyId())
                            .replace(NOTIFICATION_TENANTID, property.getTenantId());
 
-                   actionLink = config.getUiAppHost() + actionLink;
+                   actionLink = config.getUiAppHostMap().get(tenantId) + actionLink;
                    ActionItem item = ActionItem.builder().actionUrl(actionLink).code(VIEW_PROPERTY_CODE).build();
                    items.add(item);
                }
@@ -569,7 +582,8 @@ public class NotificationUtil {
         uri.append(mdmsHost).append(mdmsUrl);
         if(StringUtils.isEmpty(tenantId))
             return masterData;
-        MdmsCriteriaReq mdmsCriteriaReq = getMdmsRequestForChannelList(requestInfo, tenantId.split("\\.")[0]);
+
+        MdmsCriteriaReq mdmsCriteriaReq = getMdmsRequestForChannelList(requestInfo, centralInstanceUtil.getStateLevelTenant(tenantId));
 
         Filter masterDataFilter = filter(
                 where(MODULE).is(moduleName).and(ACTION).is(action)
@@ -586,14 +600,15 @@ public class NotificationUtil {
     }
 
     private MdmsCriteriaReq getMdmsRequestForChannelList(RequestInfo requestInfo, String tenantId){
+
         MasterDetail masterDetail = new MasterDetail();
-        masterDetail.setName(CHANNEL_LIST);
+        masterDetail.setName(PTConstants.CHANNEL_LIST);
         List<MasterDetail> masterDetailList = new ArrayList<>();
         masterDetailList.add(masterDetail);
 
         ModuleDetail moduleDetail = new ModuleDetail();
         moduleDetail.setMasterDetails(masterDetailList);
-        moduleDetail.setModuleName(CHANNEL);
+        moduleDetail.setModuleName(PTConstants.CHANNEL);
         List<ModuleDetail> moduleDetailList = new ArrayList<>();
         moduleDetailList.add(moduleDetail);
 
@@ -608,6 +623,11 @@ public class NotificationUtil {
         return mdmsCriteriaReq;
     }
 
+	public String getHost(String tenantId) {
+		String stateLevelTenantId = centralInstanceUtil.getStateLevelTenant(tenantId);
+		return config.getUiAppHostMap().get(stateLevelTenantId);
+	}
+
     /**
      * Prepares and return url for mutation view screen
      *
@@ -617,9 +637,9 @@ public class NotificationUtil {
     public String getMutationUrl(Property property) {
 
         return getShortenedUrl(
-                config.getUiAppHost().concat(config.getViewMutationLink()
+                config.getUiAppHostMap().get(property.getTenantId()).concat(config.getViewMutationLink()
                         .replace(NOTIFICATION_APPID, property.getAcknowldgementNumber())
-                        .replace(NOTIFICATION_TENANTID, property.getTenantId())));
+                        .replace(NOTIFICATION_TENANTID, centralInstanceUtil.getStateLevelTenant(property.getTenantId()))));
     }
 
     /**
@@ -630,9 +650,9 @@ public class NotificationUtil {
      */
     public String getPayUrl(Property property) {
         return getShortenedUrl(
-                config.getUiAppHost().concat(config.getPayLink().replace(EVENT_PAY_BUSINESSSERVICE,MUTATION_BUSINESSSERVICE)
+                config.getUiAppHostMap().get(property.getTenantId()).concat(config.getPayLink().replace(EVENT_PAY_BUSINESSSERVICE,MUTATION_BUSINESSSERVICE)
                         .replace(EVENT_PAY_PROPERTYID, property.getAcknowldgementNumber())
-                        .replace(EVENT_PAY_TENANTID, property.getTenantId())));
+                        .replace(EVENT_PAY_TENANTID, centralInstanceUtil.getStateLevelTenant(property.getTenantId()))));
     }
 
     /**
@@ -678,10 +698,18 @@ public class NotificationUtil {
         return userInfo;
     }
 
+    /**
+     * Method to prepare msg for citizen feedback notification
+     *
+     * @param property
+     * @param completeMsgs
+     * @param serviceType
+     * @return
+     */
     public String getMsgForCitizenFeedbackNotification(Property property, String completeMsgs, String serviceType) {
 
         String msgCode = null, redirectLink = null, creationreason=null;
-        String feedbackUrl = config.getUiAppHost()+config.getCitizenFeedbackLink();
+        String feedbackUrl = config.getUiAppHostMap().get(property.getTenantId()).concat(config.getCitizenFeedbackLink());
 
         switch (serviceType)
         {
@@ -700,7 +728,7 @@ public class NotificationUtil {
                 if (property.getCreationReason().equals(CreationReason.UPDATE))
                     creationreason = "UPDATE";
                 break;
-            }
+              }
 
             case MUTATED_STRING: {
                 msgCode = PT_NOTIF_CF_MUTATED;
@@ -724,5 +752,4 @@ public class NotificationUtil {
                         property.getAcknowldgementNumber()).replace(FEEDBACK_URL, getShortenedUrl(feedbackUrl));
 
     }
-
 }

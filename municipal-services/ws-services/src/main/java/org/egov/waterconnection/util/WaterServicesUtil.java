@@ -10,6 +10,7 @@ import org.egov.mdms.model.MdmsCriteriaReq;
 import org.egov.mdms.model.ModuleDetail;
 import org.egov.tracer.model.CustomException;
 import org.egov.waterconnection.config.WSConfiguration;
+
 import org.egov.waterconnection.constants.WCConstants;
 import org.egov.waterconnection.repository.ServiceRequestRepository;
 import org.egov.waterconnection.web.models.*;
@@ -115,6 +116,10 @@ public class WaterServicesUtil {
 					.convertValue(waterConnectionRequest.getWaterConnection().getAdditionalDetails(), HashMap.class);
 			propertyCriteria.setTenantId(waterConnectionRequest.getWaterConnection().getTenantId());
 			propertyCriteria.setLocality(addDetail.get(localityCode).toString());
+		}
+		if (waterConnectionRequest.getRequestInfo().getUserInfo() != null
+				&& "CITIZEN".equalsIgnoreCase(waterConnectionRequest.getRequestInfo().getUserInfo().getType())) {
+			propertyCriteria.setTenantId(waterConnectionRequest.getWaterConnection().getTenantId());
 		}
 		Object result = serviceRequestRepository.fetchResult(
 				getPropertyURL(propertyCriteria),
@@ -305,7 +310,7 @@ public class WaterServicesUtil {
 	public String getShortnerURL(String actualURL) {
 		JSONObject obj = new JSONObject();
 		obj.put(URL, actualURL);
-		String url = config.getNotificationUrl() + config.getShortenerURL();
+		String url = config.getUrlShortnerHost() + config.getShortenerURL();
 		
 		Object response = serviceRequestRepository.getShorteningURL(new StringBuilder(url), obj);
 		return response.toString();
@@ -313,6 +318,20 @@ public class WaterServicesUtil {
 	
 	public boolean isModifyConnectionRequest(WaterConnectionRequest waterConnectionRequest) {
 		return !StringUtils.isEmpty(waterConnectionRequest.getWaterConnection().getConnectionNo());
+	}
+
+	public boolean isModifyConnectionRequestForNotification(WaterConnectionRequest waterConnectionRequest) {
+		if(waterConnectionRequest.getWaterConnection().getApplicationType().equalsIgnoreCase(WCConstants.MODIFY_WATER_CONNECTION))
+			return !StringUtils.isEmpty(waterConnectionRequest.getWaterConnection().getConnectionNo());
+
+		return false;
+	}
+
+	public boolean isDisconnectConnectionRequest(WaterConnectionRequest waterConnectionRequest) {
+		if(waterConnectionRequest.getWaterConnection().getApplicationType().equalsIgnoreCase(WCConstants.DISCONNECT_WATER_CONNECTION))
+			return !StringUtils.isEmpty(waterConnectionRequest.getWaterConnection().getConnectionNo());
+
+		return false;
 	}
 
 	public boolean isModifyConnectionRequestForNotification(WaterConnectionRequest waterConnectionRequest) {

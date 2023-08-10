@@ -23,14 +23,13 @@ public class ReceiptConsumer {
 	@Autowired
     private PropertyConfiguration config;
 
-    @KafkaListener(topics = {"${kafka.topics.receipt.create}","${kafka.topics.notification.pg.save.txns}"})
+    @KafkaListener(topicPattern = "${kafka.topics.receipt.create.pattern}")
     public void listenPayments(final HashMap<String, Object> record,  @Header(KafkaHeaders.RECEIVED_TOPIC) String topic) {
 
-        if(topic.equalsIgnoreCase(config.getReceiptTopic())){
+        if(topic.matches(config.getReceiptTopicPattern())){
             paymentUpdateService.process(record);
-            paymentNotificationService.process(record, topic);
+            paymentNotificationService.process(record, config.getReceiptTopic());
         }
-        else paymentNotificationService.process(record, topic);
 
     }
 }

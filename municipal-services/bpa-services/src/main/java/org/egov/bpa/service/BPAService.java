@@ -1,21 +1,17 @@
 package org.egov.bpa.service;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.math.BigDecimal;
-import java.net.URL;
-import java.net.URLConnection;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-
+import com.itextpdf.io.font.constants.StandardFonts;
+import com.itextpdf.kernel.font.PdfFontFactory;
+import com.itextpdf.kernel.geom.Rectangle;
+import com.itextpdf.kernel.pdf.PdfDocument;
+import com.itextpdf.kernel.pdf.PdfReader;
+import com.itextpdf.kernel.pdf.PdfWriter;
+import com.itextpdf.layout.Document;
+import com.itextpdf.layout.element.Paragraph;
+import com.itextpdf.layout.properties.TextAlignment;
+import com.itextpdf.layout.properties.VerticalAlignment;
+import lombok.extern.slf4j.Slf4j;
+import net.logstash.logback.encoder.org.apache.commons.lang.StringUtils;
 import org.egov.bpa.config.BPAConfiguration;
 import org.egov.bpa.repository.BPARepository;
 import org.egov.bpa.util.BPAConstants;
@@ -37,24 +33,20 @@ import org.egov.bpa.workflow.WorkflowIntegrator;
 import org.egov.bpa.workflow.WorkflowService;
 import org.egov.common.contract.request.RequestInfo;
 import org.egov.common.contract.request.Role;
+import org.egov.common.utils.MultiStateInstanceUtil;
 import org.egov.tracer.model.CustomException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
-import com.itextpdf.io.font.constants.StandardFonts;
-import com.itextpdf.kernel.font.PdfFontFactory;
-import com.itextpdf.kernel.geom.Rectangle;
-import com.itextpdf.kernel.pdf.PdfDocument;
-import com.itextpdf.kernel.pdf.PdfReader;
-import com.itextpdf.kernel.pdf.PdfWriter;
-import com.itextpdf.layout.Document;
-import com.itextpdf.layout.element.Paragraph;
-import com.itextpdf.layout.properties.TextAlignment;
-import com.itextpdf.layout.properties.VerticalAlignment;
-
-import lombok.extern.slf4j.Slf4j;
-import net.logstash.logback.encoder.org.apache.commons.lang.StringUtils;
+import java.io.IOException;
+import java.io.InputStream;
+import java.math.BigDecimal;
+import java.net.URL;
+import java.net.URLConnection;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 @Service
 @Slf4j
@@ -105,7 +97,9 @@ public class BPAService {
 	
 	@Autowired
 	private BPAConfiguration config;
-	
+
+	@Autowired
+	private MultiStateInstanceUtil centralInstanceUtil;
 	/**
 	 * does all the validations required to create BPA Record in the system
 	 * @param bpaRequest
@@ -113,9 +107,9 @@ public class BPAService {
 	 */
 	public BPA create(BPARequest bpaRequest) {
 		RequestInfo requestInfo = bpaRequest.getRequestInfo();
-		String tenantId = bpaRequest.getBPA().getTenantId().split("\\.")[0];
+		String tenantId =  centralInstanceUtil.getStateLevelTenant(bpaRequest.getBPA().getTenantId());
 		Object mdmsData = util.mDMSCall(requestInfo, tenantId);
-		if (bpaRequest.getBPA().getTenantId().split("\\.").length == 1) {
+		if (centralInstanceUtil.isTenantIdStateLevel(bpaRequest.getBPA().getTenantId())) {
 			throw new CustomException(BPAErrorConstants.INVALID_TENANT, " Application cannot be create at StateLevel");
 		}
 		
@@ -143,7 +137,6 @@ public class BPAService {
 	 * applies the required vlaidation for OC on Create
 	 * @param applicationType
 	 * @param values
-	 * @param criteria
 	 * @param requestInfo
 	 * @param bpaRequest
 	 */
@@ -241,7 +234,6 @@ public class BPAService {
 	 * @param requestInfo
 	 * @param landcriteria
 	 * @param edcrNos
-	 * @param bpas
 	 */
 	private List<BPA> getBPACreatedForByMe(BPASearchCriteria criteria, RequestInfo requestInfo,LandSearchCriteria landcriteria,List<String> edcrNos ) {
 		List<BPA> bpas = null;
@@ -376,7 +368,7 @@ public class BPAService {
 	@SuppressWarnings("unchecked")
 	public BPA update(BPARequest bpaRequest) {
 		RequestInfo requestInfo = bpaRequest.getRequestInfo();
-		String tenantId = bpaRequest.getBPA().getTenantId().split("\\.")[0];
+		String tenantId =  centralInstanceUtil.getStateLevelTenant(bpaRequest.getBPA().getTenantId());
 		Object mdmsData = util.mDMSCall(requestInfo, tenantId);
 		BPA bpa = bpaRequest.getBPA();
 
@@ -456,7 +448,7 @@ public class BPAService {
                  * enrichmentService.skipPayment(bpaRequest); enrichmentService.postStatusEnrichment(bpaRequest); }
                  */
 
-		
+
 		repository.update(bpaRequest, workflowService.isStateUpdatable(bpa.getStatus(), businessService));
 		return bpaRequest.getBPA();
 
@@ -623,7 +615,6 @@ public class BPAService {
              * download the edcr report and create in tempfile
              * @param bpaRequest
              * @param fileName
-             * @param document
              * return PdfDocument
              */
             private PdfDocument createTempReport(BPARequest bpaRequest, String fileName) {

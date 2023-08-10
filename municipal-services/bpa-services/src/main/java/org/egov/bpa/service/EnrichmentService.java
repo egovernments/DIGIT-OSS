@@ -1,19 +1,10 @@
 package org.egov.bpa.service;
 
-import java.math.BigDecimal;
-import java.util.Calendar;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.LinkedHashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.ListIterator;
-import java.util.Map;
-import java.util.Set;
-import java.util.UUID;
-import java.util.stream.Collectors;
-
+import com.jayway.jsonpath.Configuration;
+import com.jayway.jsonpath.DocumentContext;
+import com.jayway.jsonpath.JsonPath;
+import lombok.extern.slf4j.Slf4j;
+import net.logstash.logback.encoder.org.apache.commons.lang.StringUtils;
 import org.egov.bpa.config.BPAConfiguration;
 import org.egov.bpa.repository.IdGenRepository;
 import org.egov.bpa.repository.ServiceRequestRepository;
@@ -32,6 +23,7 @@ import org.egov.bpa.web.model.workflow.BusinessService;
 import org.egov.bpa.workflow.WorkflowIntegrator;
 import org.egov.bpa.workflow.WorkflowService;
 import org.egov.common.contract.request.RequestInfo;
+import org.egov.common.utils.MultiStateInstanceUtil;
 import org.egov.tracer.model.CustomException;
 import org.egov.tracer.model.ServiceCallException;
 import org.json.JSONObject;
@@ -40,14 +32,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
-import com.jayway.jsonpath.Configuration;
-import com.jayway.jsonpath.DocumentContext;
-import com.jayway.jsonpath.JsonPath;
-import com.jayway.jsonpath.TypeRef;
-
-
-import lombok.extern.slf4j.Slf4j;
-import net.logstash.logback.encoder.org.apache.commons.lang.StringUtils;
+import java.math.BigDecimal;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -79,15 +66,22 @@ public class EnrichmentService {
 
 	@Autowired
 	private UserService userService;
-	
+
 	@Autowired
 	private MDMSValidator mdmsValidator;
 	@Autowired
 	private ServiceRequestRepository serviceRequestRepository;
 
+	@Autowired
+	private MDMSValidator mdmsValidator;
+	@Autowired
+	private ServiceRequestRepository serviceRequestRepository;
+
+	@Autowired
+	private MultiStateInstanceUtil centralInstanceUtil;
 	/**
 	 * encrich create BPA Reqeust by adding audidetails and uuids
-	 * 
+	 *
 	 * @param bpaRequest
 	 * @param mdmsData
 	 * @param values
@@ -168,7 +162,7 @@ public class EnrichmentService {
 
 	/**
 	 * enchrich the updateRequest
-	 * 
+	 *
 	 * @param bpaRequest
 	 * @param businessService
 	 */
@@ -201,13 +195,13 @@ public class EnrichmentService {
 	/**
 	 * postStatus encrichment to update the status of the workflow to the
 	 * application and generating permit and oc number when applicable
-	 * 
+	 *
 	 * @param bpaRequest
 	 */
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public void postStatusEnrichment(BPARequest bpaRequest) {
 		BPA bpa = bpaRequest.getBPA();
-		String tenantId = bpaRequest.getBPA().getTenantId().split("\\.")[0];
+		String tenantId =  centralInstanceUtil.getStateLevelTenant(bpaRequest.getBPA().getTenantId());
 		Object mdmsData = util.mDMSCall(bpaRequest.getRequestInfo(), tenantId);
 
 		BusinessService businessService = workflowService.getBusinessService(bpa, bpaRequest.getRequestInfo(),
@@ -226,14 +220,14 @@ public class EnrichmentService {
 				Map<String, List<String>> masterData = mdmsValidator.getAttributeValues(mdmsData);
 				StringBuilder uri = new StringBuilder(config.getEdcrHost());
 				uri.append(config.getGetPlanEndPoint());
-				uri.append("?").append("tenantId=").append(bpa.getTenantId().split("\\.")[0]);
+				uri.append("?").append("tenantId=").append(centralInstanceUtil.getStateLevelTenant(bpa.getTenantId()));
 				uri.append("&").append("edcrNumber=").append(bpa.getEdcrNumber());
 				org.egov.bpa.web.model.edcr.RequestInfo edcrRequestInfo = new org.egov.bpa.web.model.edcr.RequestInfo();
-				
+
 				BeanUtils.copyProperties(bpaRequest.getRequestInfo(), edcrRequestInfo);
-				
+
 				LinkedHashMap responseMap = null;
-				
+
 				try {
 					responseMap = (LinkedHashMap) serviceRequestRepository.fetchResult(uri,
 							new RequestInfoWrapper(edcrRequestInfo));
@@ -244,20 +238,20 @@ public class EnrichmentService {
 				if (CollectionUtils.isEmpty(responseMap))
 					throw new CustomException(BPAErrorConstants.EDCR_ERROR, "The response from EDCR service is empty or null");
 				String jsonString = new JSONObject(responseMap).toString();
-			
-				DocumentContext context = JsonPath.using(Configuration.defaultConfiguration()).parse(jsonString);
-			
-			Integer	plotArea = context.read("edcrDetail[0].planDetail.planInformation.plotArea");
-			Double	buildingHeight = context.read("edcrDetail[0].planDetail.blocks[0].building.buildingHeight");
 
-			
+				DocumentContext context = JsonPath.using(Configuration.defaultConfiguration()).parse(jsonString);
+
+				Integer	plotArea = context.read("edcrDetail[0].planDetail.planInformation.plotArea");
+				Double	buildingHeight = context.read("edcrDetail[0].planDetail.blocks[0].building.buildingHeight");
+
+
 				List jsonOutput = JsonPath.read(masterData, BPAConstants.RISKTYPE_COMPUTATION);
 				String filterExp = "$.[?((@.fromPlotArea < " + plotArea + " && @.toPlotArea >= " + plotArea
 						+ ") || ( @.fromBuildingHeight < " + buildingHeight + "  &&  @.toBuildingHeight >= "
 						+ buildingHeight + "  ))].riskType";
 
 				List<String> riskTypes = JsonPath.read(jsonOutput, filterExp);
-				                                                                                     
+
 				if (!CollectionUtils.isEmpty(riskTypes)) {
 					String	expectedRiskType  = riskTypes.get(0);
 					bpa.setRiskType(expectedRiskType);
@@ -265,10 +259,10 @@ public class EnrichmentService {
 				{
 					throw new CustomException(BPAErrorConstants.INVALID_RISK_TYPE, "The Risk Type is not valid " );
 				}
-				
-				
-				
-				
+
+
+
+
 			}
 		}
 
@@ -281,7 +275,7 @@ public class EnrichmentService {
 	/**
 	 * generate the permit and oc number on approval status of the BPA and BPAOC
 	 * respectively
-	 * 
+	 *
 	 * @param bpaRequest
 	 * @param state
 	 */
@@ -290,10 +284,10 @@ public class EnrichmentService {
 		if ((bpa.getBusinessService().equalsIgnoreCase(BPAConstants.BPA_OC_MODULE_CODE)
 				&& bpa.getStatus().equalsIgnoreCase(BPAConstants.APPROVED_STATE))
 				|| (!bpa.getBusinessService().equalsIgnoreCase(BPAConstants.BPA_OC_MODULE_CODE)
-						&& ((!bpa.getRiskType().toString().equalsIgnoreCase(BPAConstants.LOW_RISKTYPE)
-								&& state.equalsIgnoreCase(BPAConstants.APPROVED_STATE))
-								|| (state.equalsIgnoreCase(BPAConstants.DOCVERIFICATION_STATE) && bpa.getRiskType()
-										.toString().equalsIgnoreCase(BPAConstants.LOW_RISKTYPE))))) {
+				&& ((!bpa.getRiskType().toString().equalsIgnoreCase(BPAConstants.LOW_RISKTYPE)
+				&& state.equalsIgnoreCase(BPAConstants.APPROVED_STATE))
+				|| (state.equalsIgnoreCase(BPAConstants.DOCVERIFICATION_STATE) && bpa.getRiskType()
+				.toString().equalsIgnoreCase(BPAConstants.LOW_RISKTYPE))))) {
 			int vailidityInMonths = config.getValidityInMonths();
 			Calendar calendar = Calendar.getInstance();
 			bpa.setApprovalDate(Calendar.getInstance().getTimeInMillis());
@@ -345,7 +339,7 @@ public class EnrichmentService {
 
 	/**
 	 * handles the skippayment of the BPA when demand is zero
-	 * 
+	 *
 	 * @param bpaRequest
 	 */
 	public void skipPayment(BPARequest bpaRequest) {
@@ -361,7 +355,7 @@ public class EnrichmentService {
 	/**
 	 * In case of SENDBACKTOCITIZEN enrich the assignee with the owners and creator
 	 * of BPA
-	 * 
+	 *
 	 * @param bpa BPA to be enriched
 	 */
 	public void enrichAssignes(BPA bpa) {
@@ -375,9 +369,9 @@ public class EnrichmentService {
 
 			// Adding owners to assignes list
 			bpa.getLandInfo().getOwners().forEach(ownerInfo -> {
-			        if(ownerInfo.getUuid() != null && ownerInfo.getActive()) {
-							mobilenumberToUUIDs.put(ownerInfo.getMobileNumber(),ownerInfo.getUuid());
-					}
+				if(ownerInfo.getUuid() != null && ownerInfo.getActive()) {
+					mobilenumberToUUIDs.put(ownerInfo.getMobileNumber(),ownerInfo.getUuid());
+				}
 			});
 
 			Set<String> registeredUUIDS = userService.getUUidFromUserName(bpa,mobilenumberToUUIDs);
@@ -387,7 +381,7 @@ public class EnrichmentService {
 
 		} else if (wf != null && (wf.getAction().equalsIgnoreCase(BPAConstants.ACTION_SEND_TO_ARCHITECT)
 				|| (bpa.getStatus().equalsIgnoreCase(BPAConstants.STATUS_CITIZEN_APPROVAL_INPROCESS)
-						&& wf.getAction().equalsIgnoreCase(BPAConstants.ACTION_APPROVE)))) {
+				&& wf.getAction().equalsIgnoreCase(BPAConstants.ACTION_APPROVE)))) {
 			// Adding creator of BPA(Licensee)
 			if (bpa.getAccountId() != null)
 				assignes.add(bpa.getAccountId());

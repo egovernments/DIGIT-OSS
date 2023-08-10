@@ -11,7 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 public class CommonQueryBuilder {
 
 
-    private static final String QUERY_MASTER = "SELECT * FROM eg_birth_death_hospitals bdtl";
+    private static final String QUERY_MASTER = "SELECT * FROM {schema}.eg_birth_death_hospitals bdtl";
 
     private static void addClauseIfRequired(List<Object> values, StringBuilder queryString) {
         if (values.isEmpty())

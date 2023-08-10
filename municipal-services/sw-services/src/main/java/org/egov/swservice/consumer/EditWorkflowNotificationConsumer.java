@@ -11,6 +11,8 @@ import org.egov.swservice.web.models.OwnerInfo;
 import org.egov.swservice.web.models.SearchCriteria;
 import org.egov.swservice.web.models.SewerageConnection;
 import org.egov.swservice.web.models.SewerageConnectionRequest;
+import org.slf4j.MDC;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.support.KafkaHeaders;
@@ -21,6 +23,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
+import static org.egov.swservice.util.SWConstants.TENANTID_MDC_STRING;
 import static org.egov.swservice.util.SWConstants.*;
 
 @Slf4j
@@ -48,11 +51,16 @@ public class EditWorkflowNotificationConsumer {
 	 * @param record - Received record from Kafka
 	 * @param topic - Received Topic Name
 	 */
-	@KafkaListener(topics = { "${sw.editnotification.topic}" })
+	@KafkaListener(topicPattern = "${sw.kafka.edit.notification.topic.pattern}")
 	public void listen(final HashMap<String, Object> record, @Header(KafkaHeaders.RECEIVED_TOPIC) String topic) {
 		try {
 			SewerageConnectionRequest sewerageConnectionRequest = mapper.convertValue(record,
 					SewerageConnectionRequest.class);
+			String tenantId = sewerageConnectionRequest.getSewerageConnection().getTenantId();
+
+			// Adding in MDC so that tracer can add it in header
+			MDC.put(TENANTID_MDC_STRING, tenantId);
+
 			SewerageConnection sewerageConnection = sewerageConnectionRequest.getSewerageConnection();
 			SearchCriteria criteria = SearchCriteria.builder().applicationNumber(Collections.singleton(sewerageConnection.getApplicationNo()))
 					.tenantId(sewerageConnection.getTenantId()).isInternalCall(Boolean.TRUE).build();

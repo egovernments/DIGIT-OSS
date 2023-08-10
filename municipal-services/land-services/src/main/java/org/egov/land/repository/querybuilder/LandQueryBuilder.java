@@ -25,13 +25,13 @@ public class LandQueryBuilder {
 			+ "landInfoowner.id as landInfoowner_id,landInfoowner.uuid as landInfoowner_uuid,landInfoowner.status as ownerstatus,landInfo.landuniqueregno as land_regno,"
 			+ "landInstitution.type as land_inst_type, landInstitution.id as land_inst_id, "
 			+ "landInfounit.id as landInfo_un_id, landInfodoc.id as landInfo_doc_id,landInfodoc.documenttype as landInfo_doc_documenttype,landInfodoc.filestoreid as landInfo_doc_filestore"
-			+ " FROM eg_land_landInfo landInfo" + INNER_JOIN_STRING
-			+ "eg_land_Address landInfoaddress ON landInfoaddress.landInfoId = landInfo.id" + LEFT_OUTER_JOIN_STRING
-			+ "eg_land_institution landInstitution ON landInstitution.landInfoId = landInfo.id" + INNER_JOIN_STRING
-			+ "eg_land_ownerInfo landInfoowner ON landInfoowner.landInfoId = landInfo.id AND landInfoowner.status = true " + LEFT_OUTER_JOIN_STRING
-			+ "eg_land_unit landInfounit ON landInfounit.landInfoId = landInfo.id" + LEFT_OUTER_JOIN_STRING
-			+ "eg_land_document landInfodoc ON landInfodoc.landInfoId = landInfo.id" + LEFT_OUTER_JOIN_STRING
-			+ "eg_land_GeoLocation landInfogeolocation ON landInfogeolocation.addressid = landInfoaddress.id";;
+			+ " FROM {schema}.eg_land_landInfo landInfo" + INNER_JOIN_STRING
+			+ "{schema}.eg_land_Address landInfoaddress ON landInfoaddress.landInfoId = landInfo.id" + LEFT_OUTER_JOIN_STRING
+			+ "{schema}.eg_land_institution landInstitution ON landInstitution.landInfoId = landInfo.id" + INNER_JOIN_STRING
+			+ "{schema}.eg_land_ownerInfo landInfoowner ON landInfoowner.landInfoId = landInfo.id AND landInfoowner.status = true " + LEFT_OUTER_JOIN_STRING
+			+ "{schema}.eg_land_unit landInfounit ON landInfounit.landInfoId = landInfo.id" + LEFT_OUTER_JOIN_STRING
+			+ "{schema}.eg_land_document landInfodoc ON landInfodoc.landInfoId = landInfo.id" + LEFT_OUTER_JOIN_STRING
+			+ "{schema}.eg_land_GeoLocation landInfogeolocation ON landInfogeolocation.addressid = landInfoaddress.id";;
 
 	private final String paginationWrapper = "SELECT * FROM "
 			+ "(SELECT *, DENSE_RANK() OVER (ORDER BY landInfo_lastModifiedTime DESC) offset_ FROM " + "({})"
@@ -112,8 +112,8 @@ public class LandQueryBuilder {
 
 		if(criteria.getLimit() == null && criteria.getOffset() == null) {
         	limit = config.getMaxSearchLimit();
-        } 
-		
+        }
+
 		if (criteria.getLimit() != null && criteria.getLimit() <= config.getMaxSearchLimit())
 			limit = criteria.getLimit();
 

@@ -15,6 +15,7 @@ import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 import java.util.List;
+import java.util.Map;
 import java.util.TimeZone;
 
 @Component
@@ -167,8 +168,8 @@ public class PGRConfiguration {
     @Value("${egov.url.shortner.endpoint}")
     private String urlShortnerEndpoint;
 
-    @Value("${egov.ui.app.host}")
-    private String uiAppHost;
+    @Value("#{${egov.ui.app.host.map}}")
+    private Map<String, String> uiAppHostMap;
 
     @Value("${egov.pgr.events.rate.link}")
     private String rateLink;
@@ -200,20 +201,26 @@ public class PGRConfiguration {
     @Value("${persister.save.transition.wf.topic}")
     private String workflowSaveTopic;
 
-    @Value("${pgr.statelevel.tenantid}")
-    private String tenantId;
-
     @Value("${persister.save.transition.wf.migration.topic}")
     private String batchWorkflowSaveTopic;
 
     @Value("${pgr.business.level.sla}")
     private Long businessLevelSla;
-    
+
     @Value("${egov.dynamicdata.period}")
     private String numberOfDays;
-    
+
     @Value("${egov.complaints.category}")
     private String complaintTypes;
+
+
+    // central-instance configs
+
+    @Value("${state.level.tenantid.length}")
+    private Integer stateLevelTenantIdLength;
+
+    @Value("${is.environment.central.instance}")
+    private Boolean isEnvironmentCentralInstance;
 
 
 }

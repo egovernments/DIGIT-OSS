@@ -1,12 +1,8 @@
 package org.egov.noc.service;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.LinkedHashMap;
-import java.util.List;
-
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.egov.common.contract.request.RequestInfo;
+import org.egov.common.utils.MultiStateInstanceUtil;
 import org.egov.noc.config.NOCConfiguration;
 import org.egov.noc.repository.ServiceRequestRepository;
 import org.egov.noc.web.model.NocSearchCriteria;
@@ -17,7 +13,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.LinkedHashMap;
+import java.util.List;
 
 @Service
 public class UserService {
@@ -30,6 +30,9 @@ public class UserService {
 
 	@Autowired
 	private ObjectMapper mapper;
+
+	@Autowired
+	private MultiStateInstanceUtil centralInstanceUtil;
 
 	/**
 	 * Call search in user service based on ownerids from criteria
@@ -59,7 +62,7 @@ public class UserService {
 	private UserSearchRequest getUserSearchRequest(NocSearchCriteria criteria, RequestInfo requestInfo) {
 		UserSearchRequest userSearchRequest = new UserSearchRequest();
 		userSearchRequest.setRequestInfo(requestInfo);
-		userSearchRequest.setTenantId(criteria.getTenantId().split("\\.")[0]);
+		userSearchRequest.setTenantId(centralInstanceUtil.getStateLevelTenant(criteria.getTenantId()));
 		userSearchRequest.setActive(true);
 		/* userSearchRequest.setUserType("CITIZEN"); */
 		if (!CollectionUtils.isEmpty(criteria.getOwnerIds()))

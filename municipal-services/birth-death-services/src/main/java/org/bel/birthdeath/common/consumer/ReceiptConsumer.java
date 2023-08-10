@@ -100,7 +100,7 @@ public class ReceiptConsumer {
 
 	public DeathCertificate updateDeathPAID(RequestInfo requestInfo, PaymentDetail paymentDetail) {
 		try {
-			DeathCertificate deathCertificate = repositoryDeath.getDeathCertReqByConsumerCode(paymentDetail.getBill().getConsumerCode(),requestInfo);
+			DeathCertificate deathCertificate = repositoryDeath.getDeathCertReqByConsumerCode(paymentDetail.getBill().getConsumerCode(), requestInfo, paymentDetail.getTenantId());
 			if(deathCertificate.getApplicationStatus().equals(org.bel.birthdeath.death.certmodel.DeathCertificate.StatusEnum.ACTIVE)) {
 				String uuid = requestInfo.getUserInfo().getUuid();
 			    AuditDetails auditDetails = commUtils.getAuditDetails(uuid, false);
@@ -109,7 +109,7 @@ public class ReceiptConsumer {
 				deathCertificate.setApplicationStatus(org.bel.birthdeath.death.certmodel.DeathCertificate.StatusEnum.PAID);
 				deathCertificate.setDeathCertificateNo(paymentDetail.getBill().getConsumerCode());
 				DeathCertRequest request = DeathCertRequest.builder().requestInfo(requestInfo).deathCertificate(deathCertificate).build();
-				bndProducer.push(config.getUpdateDeathTopic(), request);
+				bndProducer.push(request.getDeathCertificate().getTenantId(), config.getUpdateDeathTopic(), request);
 			}
 			return deathCertificate;
 		}
@@ -136,8 +136,8 @@ public class ReceiptConsumer {
 				}
 				deathCertificate.setApplicationStatus(org.bel.birthdeath.death.certmodel.DeathCertificate.StatusEnum.PAID_PDF_GENERATED);
 				DeathCertRequest requestNew = DeathCertRequest.builder().requestInfo(requestInfo).deathCertificate(deathCertificate).build();
-				bndProducer.push(config.getUpdateDeathTopic(), requestNew);
-				repositoryDeath.updateCounter(deathCertificate.getDeathDtlId());
+				bndProducer.push(requestNew.getDeathCertificate().getTenantId(), config.getUpdateDeathTopic(), requestNew);
+				repositoryDeath.updateCounter(deathCertificate.getDeathDtlId(), deathCertificate.getTenantId());
 			}
 			return deathCertificate;
 		}
@@ -149,7 +149,7 @@ public class ReceiptConsumer {
 	public BirthCertificate updateBirthPAID(RequestInfo requestInfo, PaymentDetail paymentDetail) {
 		try {
 			
-			BirthCertificate birthCertificate = repository.getBirthCertReqByConsumerCode(paymentDetail.getBill().getConsumerCode(),requestInfo);
+			BirthCertificate birthCertificate = repository.getBirthCertReqByConsumerCode(paymentDetail.getBill().getConsumerCode(),requestInfo,paymentDetail.getTenantId());
 			if(birthCertificate.getApplicationStatus().equals(StatusEnum.ACTIVE)) {
 				String uuid = requestInfo.getUserInfo().getUuid();
 				AuditDetails auditDetails = commUtils.getAuditDetails(uuid, false);
@@ -158,7 +158,7 @@ public class ReceiptConsumer {
 				birthCertificate.setApplicationStatus(StatusEnum.PAID);
 				birthCertificate.setBirthCertificateNo(paymentDetail.getBill().getConsumerCode());
 				BirthCertRequest request = BirthCertRequest.builder().requestInfo(requestInfo).birthCertificate(birthCertificate).build();
-				bndProducer.push(config.getUpdateBirthTopic(), request);
+				bndProducer.push(request.getBirthCertificate().getTenantId(), config.getUpdateBirthTopic(), request);
 			}
 			return birthCertificate;
 		}
@@ -185,8 +185,8 @@ public class ReceiptConsumer {
 				}
 				birthCertificate.setApplicationStatus(StatusEnum.PAID_PDF_GENERATED);
 				BirthCertRequest requestNew = BirthCertRequest.builder().requestInfo(requestInfo).birthCertificate(birthCertificate).build();
-				bndProducer.push(config.getUpdateBirthTopic(), requestNew);
-				repository.updateCounter(birthCertificate.getBirthDtlId());
+				bndProducer.push(requestNew.getBirthCertificate().getTenantId(), config.getUpdateBirthTopic(), requestNew);
+				repository.updateCounter(birthCertificate.getBirthDtlId(), birthCertificate.getTenantId());
 			}
 			return birthCertificate;
 		}

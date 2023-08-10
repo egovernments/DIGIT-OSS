@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Component;
 
+import static org.egov.bpa.util.BPAConstants.TENANTID_MDC_STRING;
+
 @Component
 public class ReceiptConsumer {
 
@@ -17,7 +19,7 @@ public class ReceiptConsumer {
 		this.paymentUpdateService = paymentUpdateService;
 	}
 
-	@KafkaListener(topics = { "${kafka.topics.receipt.create}" })
+	@KafkaListener(topicPattern = "${kafka.topics.receipt.create.pattern}" )
 	public void listenPayments(final HashMap<String, Object> record) {
 		paymentUpdateService.process(record);
 	}
