@@ -11,7 +11,7 @@
 	</parent>
 	<groupId>org.egov</groupId>
 	<artifactId>property-services</artifactId>
-	<version>1.2.1-beta-SNAPSHOT</version>
+	<version>1.2.2-SNAPSHOT</version>
 	<name>egov-pt-registry</name>
 	<properties>
 		<log4j2.version>2.17.1</log4j2.version>

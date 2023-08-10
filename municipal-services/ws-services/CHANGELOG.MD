@@ -1,6 +1,10 @@
 # Change log
 All notable changes to this module will be documented in this file.
 
+## 1.7.5 - 2023-08-10
+
+- Central Instance Library Integration
+
 ## 1.7.4 - 2023-01-31
 
 - Improved encryptOldData api with resume functionality

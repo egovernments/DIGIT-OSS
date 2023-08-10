@@ -1,6 +1,6 @@
 {
   "name": "egov-firenoc-calculator",
-  "version": "1.2.1",
+  "version": "1.2.3",
   "private": true,
   "description": "Starter project for an ES6 RESTful Express API",
   "main": "dist",

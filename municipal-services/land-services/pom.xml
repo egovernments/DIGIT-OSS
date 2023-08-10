@@ -9,7 +9,7 @@
 	</parent>
 	<groupId>org.egov</groupId>
 	<artifactId>land-services</artifactId>
-	<version>1.0.4-SNAPSHOT</version>
+	<version>1.0.5-SNAPSHOT</version>
 	<name>land-services</name>
 	<properties>
 		<log4j2.version>2.17.1</log4j2.version>
