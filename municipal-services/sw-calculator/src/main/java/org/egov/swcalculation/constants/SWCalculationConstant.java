@@ -376,5 +376,7 @@ public class SWCalculationConstant {
 	public static final String PENDING_FOR_DISCONNECTION_EXECUTION = "PENDING_FOR_DISCONNECTION_EXECUTION";
 
 	public static final String DISCONNECTION_EXECUTED = "DISCONNECTION_EXECUTED";
+	
+	public static final String TENANTID_MDC_STRING = "TENANTID";
 
 }

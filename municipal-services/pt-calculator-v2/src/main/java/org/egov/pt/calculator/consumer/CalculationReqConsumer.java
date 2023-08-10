@@ -1,23 +1,26 @@
 package org.egov.pt.calculator.consumer;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import lombok.extern.slf4j.Slf4j;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+
 import org.egov.pt.calculator.service.DemandService;
+import org.egov.pt.calculator.util.CalculatorConstants;
 import org.egov.pt.calculator.util.CalculatorUtils;
 import org.egov.pt.calculator.util.Configurations;
 import org.egov.pt.calculator.web.models.CalculationReq;
 import org.egov.pt.calculator.web.models.property.Property;
 import org.egov.pt.calculator.web.models.property.PropertyRequest;
+import org.slf4j.MDC;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.support.KafkaHeaders;
 import org.springframework.messaging.handler.annotation.Header;
-import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import lombok.extern.slf4j.Slf4j;
 
 
 //@Service
@@ -42,6 +45,9 @@ public class CalculationReqConsumer {
             PropertyRequest propertyRequest = mapper.convertValue(record, PropertyRequest.class);
             List<Property> propertiesForDemandGen = new LinkedList<>();
             List<Property> propertiesNotForDemandGen = new LinkedList<>();
+            
+            // Adding in MDC so that tracer can add it in header
+            MDC.put(CalculatorConstants.TENANTID_MDC_STRING, propertyRequest.getProperties().get(0).getTenantId());
 
             propertyRequest.getProperties().forEach(property -> {
                 if(!config.getSourcesToBeIgnored().contains(property.getPropertyDetails().get(0).getSource()))

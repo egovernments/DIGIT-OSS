@@ -6,6 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.egov.echallan.config.ChallanConfiguration;
 import org.egov.echallan.model.ChallanRequest;
 import org.egov.echallan.service.NotificationService;
+import org.egov.echallan.util.ChallanConstants;
 import org.slf4j.MDC;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.annotation.KafkaListener;
@@ -43,7 +44,7 @@ public class ChallanConsumer {
         String tenantId = challanRequest.getChallan().getTenantId();
 
         // Adding in MDC so that tracer can add it in header
-        MDC.put(TENANTID_MDC_STRING, tenantId);
+        MDC.put(ChallanConstants.TENANTID_MDC_STRING, tenantId);
 
         if(topic.contains(config.getSaveChallanTopic()))
         	notificationService.sendChallanNotification(challanRequest,true);

@@ -1,6 +1,14 @@
 package org.egov.pt.consumer;
 
 
+import static org.egov.pt.util.PTConstants.ASMT_MODULENAME;
+import static org.egov.pt.util.PTConstants.KEY_PDF_DOCUMENTTYPE;
+import static org.egov.pt.util.PTConstants.KEY_PDF_ENTITY_ID;
+import static org.egov.pt.util.PTConstants.KEY_PDF_FILESTOREID;
+import static org.egov.pt.util.PTConstants.KEY_PDF_JOBS;
+import static org.egov.pt.util.PTConstants.KEY_PDF_MODULE_NAME;
+import static org.egov.pt.util.PTConstants.KEY_PDF_TENANT_ID;
+
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -17,6 +25,7 @@ import org.egov.pt.models.PropertyCriteria;
 import org.egov.pt.models.enums.Status;
 import org.egov.pt.producer.PropertyProducer;
 import org.egov.pt.repository.PropertyRepository;
+import org.egov.pt.util.PTConstants;
 import org.egov.pt.web.contracts.PropertyRequest;
 import org.egov.tracer.model.CustomException;
 import org.slf4j.MDC;
@@ -28,8 +37,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
 import lombok.extern.slf4j.Slf4j;
-
-import static org.egov.pt.util.PTConstants.*;
 
 @Component
 @Slf4j
@@ -62,7 +69,7 @@ public class FileStoreConsumer {
             String documentType = (String) job.get(KEY_PDF_DOCUMENTTYPE);
 
             // Adding in MDC so that tracer can add it in header
-            MDC.put(TENANTID_MDC_STRING, tenantId);
+            MDC.put(PTConstants.TENANTID_MDC_STRING, tenantId);
 
             if(StringUtils.isEmpty(documentType))
                 throw new CustomException("INVALID_DOCUMENTTYPE","Document Type cannot be null or empty string");

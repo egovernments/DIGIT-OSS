@@ -28,6 +28,7 @@ import org.bel.birthdeath.utils.BirthDeathConstants;
 import org.bel.birthdeath.utils.CommonUtils;
 import org.egov.common.contract.request.RequestInfo;
 import org.egov.tracer.model.CustomException;
+import org.slf4j.MDC;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.kafka.annotation.KafkaListener;
@@ -64,8 +65,10 @@ public class ReceiptConsumer {
 	@Autowired
 	private DeathRepository repositoryDeath;
 
-	@KafkaListener(topics = {"${kafka.topics.receipt.create}"})
+	@KafkaListener(topicPattern = "${kafka.topics.receipt.create.pattern}" )
     public void listen(final HashMap<String, Object> record, @Header(KafkaHeaders.RECEIVED_TOPIC) String topic) {
+		
+		
         try {
         process(record);
         } catch (final Exception e) {
@@ -78,6 +81,10 @@ public class ReceiptConsumer {
 		try {
 			log.info("Process for object"+ record);
 			PaymentRequest paymentRequest = mapper.convertValue(record, PaymentRequest.class);
+			
+			// Adding in MDC so that tracer can add it in header
+			MDC.put(BirthDeathConstants.TENANTID_MDC_STRING, paymentRequest.getPayment().getTenantId());
+			
 			RequestInfo requestInfo = paymentRequest.getRequestInfo();
 			if( paymentRequest.getPayment().getTotalAmountPaid().compareTo(paymentRequest.getPayment().getTotalDue())!=0) 
 				return;

@@ -390,6 +390,8 @@ public class BPAConstants {
 	public static final String DOWNLOAD_PERMIT_LINK_PLACEHOLDER = "{DOWNLOAD_PERMIT_LINK}";
 
 	public static final String PAYMENT_LINK_PLACEHOLDER = "{PAYMENT_LINK}";
+	
+	public static final String TENANTID_MDC_STRING = "TENANTID";
 
 	public static final String TENANTID_MDC_STRING = "TENANTID";
 

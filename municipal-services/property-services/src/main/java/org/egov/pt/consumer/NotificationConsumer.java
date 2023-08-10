@@ -51,7 +51,7 @@ public class NotificationConsumer {
 				String tenantId = request.getAssessment().getTenantId();
 
 				// Adding in MDC so that tracer can add it in header
-				MDC.put(TENANTID_MDC_STRING, tenantId);
+				MDC.put(PTConstants.TENANTID_MDC_STRING, tenantId);
 
 				assessmentNotificationService.process(topic, request);
 

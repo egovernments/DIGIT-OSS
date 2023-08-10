@@ -347,5 +347,7 @@ public class WSCalculationConstant {
 	public static final String MODIFY_WATER_CONNECTION = "MODIFY_WATER_CONNECTION";
 
 	public static final String DISCONNECT_WATER_CONNECTION = "DISCONNECT_WATER_CONNECTION";
+	
+	public static final String TENANTID_MDC_STRING = "TENANTID";
 
 }

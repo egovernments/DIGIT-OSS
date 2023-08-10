@@ -4,6 +4,7 @@ package org.egov.pgr.consumer;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.egov.pgr.service.NotificationService;
+import org.egov.pgr.util.PGRConstants;
 import org.egov.pgr.web.models.ServiceRequest;
 import org.slf4j.MDC;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,7 +44,7 @@ public class NotificationConsumer {
             String tenantId = request.getService().getTenantId();
 
             // Adding in MDC so that tracer can add it in header
-            MDC.put(TENANTID_MDC_STRING, tenantId);
+            MDC.put(PGRConstants.TENANTID_MDC_STRING, tenantId);
 
             notificationService.process(request, topic);
         } catch (Exception ex) {

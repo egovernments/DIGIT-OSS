@@ -5,6 +5,8 @@ import java.util.*;
 import org.egov.swcalculation.validator.SWCalculationWorkflowValidator;
 import org.egov.swcalculation.web.models.CalculationCriteria;
 import org.egov.swcalculation.web.models.CalculationReq;
+import org.slf4j.MDC;
+import org.egov.swcalculation.constants.SWCalculationConstant;
 import org.egov.swcalculation.producer.SWCalculationProducer;
 import org.egov.swcalculation.service.BulkDemandAndBillGenService;
 import org.egov.swcalculation.service.MasterDataService;
@@ -43,6 +45,8 @@ public class DemandGenerationConsumer {
 	@Value("${kafka.topics.bulk.bill.generation.audit}")
 	private String bulkBillGenAuditTopic;
 	
+	@Value("${state.level.tenant.id}")
+	private String stateLevelTenantID;
 	/**
 	 * Listen the topic for processing the batch records.
 	 * 
@@ -52,6 +56,10 @@ public class DemandGenerationConsumer {
 	public void processMessage(Map<String, Object> consumerRecord, @Header(KafkaHeaders.RECEIVED_TOPIC) String topic) {
 		try{
 			CalculationReq calculationReq = mapper.convertValue(consumerRecord, CalculationReq.class);
+			
+			// Adding in MDC so that tracer can add it in header
+			MDC.put(SWCalculationConstant.TENANTID_MDC_STRING, stateLevelTenantID);
+			
 			log.info(" Bulk bill Consumerbatch records log for batch :  "
 					+ calculationReq.getMigrationCount().getOffset() + " Count is : "
 					+ calculationReq.getMigrationCount().getLimit());
