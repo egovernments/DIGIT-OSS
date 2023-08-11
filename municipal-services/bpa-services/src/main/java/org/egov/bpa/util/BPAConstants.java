@@ -393,7 +393,6 @@ public class BPAConstants {
 	
 	public static final String TENANTID_MDC_STRING = "TENANTID";
 
-	public static final String TENANTID_MDC_STRING = "TENANTID";
 
 
 }

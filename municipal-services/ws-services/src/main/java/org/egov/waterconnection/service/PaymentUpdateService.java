@@ -291,15 +291,6 @@ public class PaymentUpdateService {
 			}
 		}
 
-
-		if(configuredChannelNames.contains(CHANNEL_NAME_EMAIL)) {
-			if (config.getIsEmailNotificationEnabled() != null && config.getIsEmailNotificationEnabled()) {
-				List<EmailRequest> emailRequests = getEmailRequest(waterConnectionRequest, property, paymentDetail);
-				if (!CollectionUtils.isEmpty(emailRequests)) {
-					notificationUtil.sendEmail(emailRequests);
-				}
-			}
-		}
 	}
 
 	/**

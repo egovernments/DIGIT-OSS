@@ -537,29 +537,4 @@ public class NotificationService {
 
 	}
 
-
-
-	/**
-	 * Method to send notifications for citizen feedback
-	 *
-	 * @param property
-	 * @param localizationMsgs
-	 * @param serviceType
-	 * @return
-	 */
-	private void sendNotificationForCitizenFeedback(Property property, String localizationMsgs, String serviceType) {
-
-		String citizenFeedackMessage = notifUtil.getMsgForCitizenFeedbackNotification(property, localizationMsgs, serviceType);
-		Map<String, String> mobileNumberToOwner = new HashMap<>();
-
-		property.getOwners().forEach(owner -> {
-			if (owner.getMobileNumber() != null)
-				mobileNumberToOwner.put(owner.getMobileNumber(), owner.getName());
-		});
-
-		List<SMSRequest> smsRequests = notifUtil.createSMSRequest(citizenFeedackMessage, mobileNumberToOwner);
-		notifUtil.sendSMS(smsRequests);
-
-	}
-
 }

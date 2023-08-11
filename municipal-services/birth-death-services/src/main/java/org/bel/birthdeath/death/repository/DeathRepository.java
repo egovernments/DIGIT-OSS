@@ -200,7 +200,7 @@ public class DeathRepository {
 	}
 
 	public void save(DeathCertRequest deathCertRequest) {
-		bndProducer.push(config.getSaveDeathTopic(), deathCertRequest);
+		bndProducer.push(deathCertRequest.getDeathCertificate().getTenantId(), config.getSaveDeathTopic(), deathCertRequest);
 	}
 
 	public EgovPdfResp saveDeathCertPdf(DeathPdfApplicationRequest pdfApplicationRequest) {
@@ -351,7 +351,7 @@ public class DeathRepository {
 	}
 
 	public void update(DeathCertRequest certRequest) {
-		bndProducer.push(config.getUpdateDeathTopic(), certRequest);
+		bndProducer.push(certRequest.getDeathCertificate().getTenantId(), config.getUpdateDeathTopic(), certRequest);
 	}
 	
 	public String getShortenedUrl(String url){

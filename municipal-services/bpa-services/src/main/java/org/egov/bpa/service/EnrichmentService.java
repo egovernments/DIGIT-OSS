@@ -73,11 +73,6 @@ public class EnrichmentService {
 	private ServiceRequestRepository serviceRequestRepository;
 
 	@Autowired
-	private MDMSValidator mdmsValidator;
-	@Autowired
-	private ServiceRequestRepository serviceRequestRepository;
-
-	@Autowired
 	private MultiStateInstanceUtil centralInstanceUtil;
 	/**
 	 * encrich create BPA Reqeust by adding audidetails and uuids

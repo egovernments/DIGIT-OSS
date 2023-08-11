@@ -71,7 +71,7 @@ public class NotificationConsumer {
 						notifService.sendNotificationForUpdate(request);
 					}
 				}
-			}
+
 
         } catch (final Exception e) {
 

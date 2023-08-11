@@ -334,20 +334,6 @@ public class WaterServicesUtil {
 		return false;
 	}
 
-	public boolean isModifyConnectionRequestForNotification(WaterConnectionRequest waterConnectionRequest) {
-		if(waterConnectionRequest.getWaterConnection().getApplicationType().equalsIgnoreCase(WCConstants.MODIFY_WATER_CONNECTION))
-			return !StringUtils.isEmpty(waterConnectionRequest.getWaterConnection().getConnectionNo());
-
-		return false;
-	}
-
-	public boolean isDisconnectConnectionRequest(WaterConnectionRequest waterConnectionRequest) {
-		if(waterConnectionRequest.getWaterConnection().getApplicationType().equalsIgnoreCase(WCConstants.DISCONNECT_WATER_CONNECTION))
-			return !StringUtils.isEmpty(waterConnectionRequest.getWaterConnection().getConnectionNo());
-
-		return false;
-	}
-
 	public StringBuilder getcollectionURL() {
 		StringBuilder builder = new StringBuilder();
 		return builder.append(config.getCollectionHost()).append(config.getPaymentSearch());

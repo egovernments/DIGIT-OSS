@@ -109,15 +109,6 @@ public class NotificationUtil {
 		message = message.replace("{User}",challan.getCitizen().getName());
 		message = message.replace("{challanno}", challan.getChallanNo());
 
-		PaymentResponse paymentResponse = getPaymentObject(challanRequest);
-        return message;
-    }
-
-	private String getPaymentMsg(RequestInfo requestInfo,Challan challan, String message) {
-		ChallanRequest challanRequest = new ChallanRequest(requestInfo,challan);
-		message = message.replace("{User}",challan.getCitizen().getName());
-		message = message.replace("{challanno}", challan.getChallanNo());
-
         PaymentResponse paymentResponse = getPaymentObject(challanRequest);
 
 		message = message.replace("{Payment_Amount}",paymentResponse.getPayments().get(0).getTotalAmountPaid().toString());

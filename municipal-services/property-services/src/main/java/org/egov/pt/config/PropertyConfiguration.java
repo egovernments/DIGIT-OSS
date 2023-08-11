@@ -52,9 +52,6 @@ public class PropertyConfiguration {
     @Value("${persister.save.property.topic}")
     private String savePropertyTopic;
 
-    @Value("${persister.save.property.fuzzy.topic}")
-    private String savePropertyFuzzyTopic;
-
     @Value("${persister.update.property.topic}")
     private String updatePropertyTopic;
 

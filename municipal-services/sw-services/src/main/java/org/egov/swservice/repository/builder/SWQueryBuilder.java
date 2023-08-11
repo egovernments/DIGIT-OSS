@@ -74,8 +74,6 @@ public class SWQueryBuilder {
 
 	private static final String TOTAL_APPLICATIONS_COUNT_QUERY = "select count(*) from {schema}.eg_sw_connection where tenantid = ?;";
 
-	private static final String TOTAL_APPLICATIONS_COUNT_QUERY = "select count(*) from {schema}.eg_sw_connection where tenantid = ?;";
-
 	private final String paginationWrapper = "SELECT * FROM " +
             "(SELECT *, DENSE_RANK() OVER (ORDER BY sc_appCreatedDate DESC) offset_ FROM " +
             "({})" +

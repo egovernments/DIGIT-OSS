@@ -415,5 +415,3 @@ public class TradeUtil {
     }
 
 }
-
-}
