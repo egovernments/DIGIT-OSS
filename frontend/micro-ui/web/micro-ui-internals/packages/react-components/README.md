@@ -88,6 +88,9 @@ Syntax for the FormComposersV2
 # Changelog
 
 ```bash
+1.5.27 integrated with the svg library
+1.5.26 fixed shipping truck icon fill issue
+1.5.25 added new icon and fixed other issues
 1.5.24 added and updated the Readme file
 1.5.23 base version
 ```
