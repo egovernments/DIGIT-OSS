@@ -28,7 +28,7 @@ const enabledModules = [
   // "FSM"
   "Mukta",
   "Sample",
-  "Workbench"
+  // "Workbench"
 
 ];
 
