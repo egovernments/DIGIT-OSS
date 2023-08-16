@@ -12,6 +12,7 @@ import useCustomMDMS from "./useCustomMDMS";
 import useDocumentSearch from "./useDocumentSearch";
 import useDynamicData from "./useDynamicData";
 import useLocation from "./useLocation";
+import useCustomAPIMutationHook from "./useCustomAPIMutationHook";
 
 import useInboxGeneral from "./useInboxGeneral/useInboxGeneral";
 import useNewInboxGeneral from "./useInboxGeneral/useNewInbox";
@@ -197,6 +198,7 @@ const Hooks = {
   useGenderMDMS,
   useRouteSubscription,
   useCustomAPIHook,
+  useCustomAPIMutationHook,
   useWorkflowDetailsV2,
   useUpdateCustom,
   useCustomMDMS,

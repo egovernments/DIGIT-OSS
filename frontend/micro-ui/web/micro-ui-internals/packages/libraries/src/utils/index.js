@@ -107,6 +107,23 @@ const detectDsoRoute = (pathname) => {
   return employeePages.some((url) => pathname.split("/").includes(url));
 };
 
+
+/* to check the employee (loggedin user ) has given role  */
+const didEmployeeHasRole = (role = "") => {
+  const tenantId = Digit.ULBService.getCurrentTenantId();
+  const userInfo = Digit.UserService.getUser();
+  const rolearray = userInfo?.info?.roles.filter((item) => {
+    if (item.code === role && item.tenantId === tenantId) return true;
+  });
+  return rolearray?.length > 0;
+};
+
+
+/* to check the employee (loggedin user ) has given roles  */
+const didEmployeeHasAtleastOneRole = (roles = []) => {
+  return roles.some((role) => didEmployeeHasRole(role));
+};
+
 const routeSubscription = (pathname) => {
   let classname = "citizen";
   const isEmployeeUrl = detectDsoRoute(pathname);
@@ -117,14 +134,6 @@ const routeSubscription = (pathname) => {
   }
 };
 
-const didEmployeeHasRole = (role) => {
-  const tenantId = Digit.ULBService.getCurrentTenantId();
-  const userInfo = Digit.UserService.getUser();
-  const rolearray = userInfo?.info?.roles.filter((item) => {
-    if (item.code == role && item.tenantId === tenantId) return true;
-  });
-  return rolearray?.length;
-};
 
 const pgrAccess = () => {
   const userInfo = Digit.UserService.getUser();
@@ -317,6 +326,7 @@ export default {
   mCollectAccess,
   receiptsAccess,
   didEmployeeHasRole,
+  didEmployeeHasAtleastOneRole,
   hrmsAccess,
   getPattern,
   hrmsRoles,
