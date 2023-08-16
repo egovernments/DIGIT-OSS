@@ -278,7 +278,19 @@ const swAccess = () => {
 const getConfigModuleName = () => {
   return window?.globalConfigs?.getConfig("UICONFIG_MODULENAME") || "commonUiConfig";
 };
+
+
+/*  
+Digit.Utils.createFunction()
+get function from a string */
+const createFunction = (functionAsString) => {
+  return Function("return " + functionAsString)();
+};
+
+
+
 export default {
+  createFunction,
   pdf: PDFUtil,
   downloadReceipt,
   downloadBill,
