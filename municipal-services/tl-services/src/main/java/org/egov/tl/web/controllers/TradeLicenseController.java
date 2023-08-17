@@ -1,26 +1,19 @@
 package org.egov.tl.web.controllers;
 
 
-import org.egov.tl.service.PaymentUpdateService;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.egov.tl.service.TradeLicenseService;
-import org.egov.tl.service.notification.PaymentNotificationService;
 import org.egov.tl.util.ResponseInfoFactory;
 import org.egov.tl.web.models.*;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import io.swagger.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.IOException;
-import java.util.*;
-
-import javax.validation.constraints.*;
-import javax.validation.Valid;
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
+import java.util.List;
 
 @RestController
     @RequestMapping("/v1")
@@ -100,6 +93,14 @@ import javax.servlet.http.HttpServletRequest;
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
+    @PostMapping({"/tl-services/external/_create", "/_create"})
+    public ResponseEntity<TradeLicenseResponse> externalAccessCreate(@Valid @RequestBody TradeLicenseRequest tradeLicenseRequest,
+                                                                     @PathVariable(required = false) String servicename){
+        List<TradeLicense> licenses = tradeLicenseService.create(tradeLicenseRequest, servicename);
+        TradeLicenseResponse response = TradeLicenseResponse.builder().licenses(licenses).responseInfo(
+                        responseInfoFactory.createResponseInfoFromRequestInfo(tradeLicenseRequest.getRequestInfo(), true))
+                .build();
+        return new ResponseEntity<>(response, HttpStatus.OK);
 
-
+    }
 }

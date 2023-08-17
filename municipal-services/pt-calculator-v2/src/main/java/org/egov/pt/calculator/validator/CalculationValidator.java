@@ -193,7 +193,8 @@ public class CalculationValidator {
 					CalculatorConstants.PT_ADDITIONALNDETAILS_NULL_MSG);
 			throw new CustomException(error);
 		}		
-// 		if (additionalDetails.containsKey(CalculatorConstants.MARKET_VALUE)) {	
+//
+// 		if (additionalDetails.containsKey(CalculatorConstants.MARKET_VALUE)) {
 // 			if (additionalDetails.get(CalculatorConstants.MARKET_VALUE) != null) {	
 // 				boolean numeric = true;	
 // 				String marketValue = additionalDetails.get(CalculatorConstants.MARKET_VALUE).toString();	
@@ -295,14 +296,6 @@ public class CalculationValidator {
 		if (additionalDetails.containsKey(CalculatorConstants.DATE_OF_ISSUING))
 			if(additionalDetails.get(CalculatorConstants.DATE_OF_ISSUING) == null)
 		error.put(CalculatorConstants.PT_DATE_OF_ISSUING_NULL, CalculatorConstants.PT_DATE_OF_ISSUING_MSG);
-		
-		
-		
-		
-		
-		
-		
-		
 		
 		
 		if (!CollectionUtils.isEmpty(error))

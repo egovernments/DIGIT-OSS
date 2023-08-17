@@ -58,6 +58,7 @@ public class UserService{
      */
 
     public void createUser(TradeLicenseRequest request,boolean isBPARoleAddRequired){
+
         List<TradeLicense> licenses = request.getLicenses();
         RequestInfo requestInfo = request.getRequestInfo();
         Role role = getCitizenRole(licenses.get(0).getTenantId());
