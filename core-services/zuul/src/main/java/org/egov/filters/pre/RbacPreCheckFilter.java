@@ -10,9 +10,10 @@ import java.util.HashSet;
 
 import static org.egov.constants.RequestContextConstants.RBAC_BOOLEAN_FLAG_NAME;
 import static org.egov.constants.RequestContextConstants.SKIP_RBAC;
+import static org.egov.filters.pre.SsoAuthFilter.SSO_ENDPOINT;
 
 /**
- *  3rd pre filter to get executed.
+ *  3rd pre-filter to get executed.
  *  If the URI is part of open or mixed endpoint list then RBAC check is marked as false
  */
 public class RbacPreCheckFilter extends ZuulFilter {
@@ -46,7 +47,8 @@ public class RbacPreCheckFilter extends ZuulFilter {
     @Override
     public Object run() {
         if ((openEndpointsWhitelist.contains(getRequestURI())
-            || anonymousEndpointsWhitelist.contains(getRequestURI()))) {
+            || anonymousEndpointsWhitelist.contains(getRequestURI()))
+            || SSO_ENDPOINT.contains(getRequestURI())) {
             setShouldDoRbac(false);
             logger.info(SKIP_RBAC, getRequestURI());
             return null;

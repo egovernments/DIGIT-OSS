@@ -20,13 +20,15 @@ import java.util.HashMap;
 import java.util.HashSet;
 
 import static org.egov.constants.RequestContextConstants.*;
+import static org.egov.filters.pre.SsoAuthFilter.SSO_ENDPOINT;
 
 /**
- *  2nd pre filter to get executed.
+ *  2nd pre-filter to get executed.
  *  Identifies if the URI is part of open or mixed endpoint list.
- *  If its not present in the open list then the auth token is retrieved from the request body.
- *  For a restricted endpoint if auth token is not present then an error response is returned.
+ *  If it's not present in the open list, then the auth token is retrieved from the request body.
+ *  For a restricted endpoint if auth token is not present, then an error response is returned.
  */
+
 public class AuthPreCheckFilter extends ZuulFilter {
     private static final String AUTH_TOKEN_RETRIEVE_FAILURE_MESSAGE = "Retrieving of auth token failed";
     private static final String OPEN_ENDPOINT_MESSAGE = "Routing to an open endpoint: {}";
@@ -40,13 +42,14 @@ public class AuthPreCheckFilter extends ZuulFilter {
     private static final String UNAUTHORIZED_USER_MESSAGE = "You are not authorized to access this resource";
     private static final String PROCEED_ROUTING_MESSAGE = "Routing to an endpoint: {} - auth provided";
     private static final String NO_REQUEST_INFO_FIELD_MESSAGE = "No request-info field in request body for: {}";
-    private static final String AUTH_TOKEN_REQUEST_BODY_FIELD_NAME = "authToken";
-    private static final String FAILED_TO_SERIALIZE_REQUEST_BODY_MESSAGE = "Failed to serialize requestBody";
+    static final String AUTH_TOKEN_REQUEST_BODY_FIELD_NAME = "authToken";
+    static final String FAILED_TO_SERIALIZE_REQUEST_BODY_MESSAGE = "Failed to serialize requestBody";
     private HashSet<String> openEndpointsWhitelist;
     private HashSet<String> mixedModeEndpointsWhitelist;
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
     private final ObjectMapper objectMapper;
     private UserUtils userUtils;
+    private final String SSO_ENDPOINT_MESSAGE = "not found";
 
 
     public AuthPreCheckFilter(HashSet<String> openEndpointsWhitelist,
@@ -76,7 +79,9 @@ public class AuthPreCheckFilter extends ZuulFilter {
     @Override
     public Object run() {
         String authToken;
-        if (openEndpointsWhitelist.contains(getRequestURI())) {
+
+        if (openEndpointsWhitelist.contains(getRequestURI())
+            || SSO_ENDPOINT.contains(getRequestURI())) {
             setShouldDoAuth(false);
             logger.info(OPEN_ENDPOINT_MESSAGE, getRequestURI());
             return null;
@@ -117,9 +122,9 @@ public class AuthPreCheckFilter extends ZuulFilter {
 
         if (Utils.isRequestBodyCompatible(req)) {
             // if body is json try and extract the token from body
-            // call this method even if we found authtoken in header
+            // call this method even if we found auth-token in header
             // this is just to make sure the authToken doesn't get leaked
-            // if it was both in header as well as body
+            // if it was both in header and body
             authTokenFromBody = getAuthTokenFromRequestBody();
         }
 
@@ -138,7 +143,7 @@ public class AuthPreCheckFilter extends ZuulFilter {
         CustomRequestWrapper requestWrapper = new CustomRequestWrapper(getRequest());
         HashMap<String, Object> requestBody = getRequestBody(requestWrapper);
         final RequestBodyInspector requestBodyInspector = new RequestBodyInspector(requestBody);
-        @SuppressWarnings("unchecked")
+
         HashMap<String, Object> requestInfo = requestBodyInspector.getRequestInfo();
         if (requestInfo == null) {
             logger.info(NO_REQUEST_INFO_FIELD_MESSAGE, getRequestURI());
@@ -155,17 +160,22 @@ public class AuthPreCheckFilter extends ZuulFilter {
     }
 
     private void sanitizeAndSetRequest(RequestBodyInspector requestBodyInspector, CustomRequestWrapper requestWrapper) {
+        //call to get request info from request body inspector.
         HashMap<String, Object> requestInfo = requestBodyInspector.getRequestInfo();
+
+        //
         RequestContext ctx = RequestContext.getCurrentContext();
         requestInfo.remove(USER_INFO_FIELD_NAME);
         requestInfo.remove(AUTH_TOKEN_REQUEST_BODY_FIELD_NAME);
         requestBodyInspector.updateRequestInfo(requestInfo);
+
         try {
             String requestSanitizedBody = objectMapper.writeValueAsString(requestBodyInspector.getRequestBody());
             ctx.set(CURRENT_REQUEST_SANITIZED_BODY, requestBodyInspector.getRequestBody());
             ctx.set(CURRENT_REQUEST_SANITIZED_BODY_STR, requestSanitizedBody);
             requestWrapper.setPayload(requestSanitizedBody);
-        } catch (JsonProcessingException e) {
+        }
+        catch (JsonProcessingException e) {
             logger.error(FAILED_TO_SERIALIZE_REQUEST_BODY_MESSAGE, e);
             ExceptionUtils.RaiseException(e);
         }
@@ -198,7 +208,6 @@ public class AuthPreCheckFilter extends ZuulFilter {
     private void setAnonymousUser(){
         User systemUser = userUtils.fetchSystemUser();
         RequestContext ctx = RequestContext.getCurrentContext();
-        ctx.set(USER_INFO_KEY, systemUser);;
+        ctx.set(USER_INFO_KEY, systemUser);
     }
-
 }

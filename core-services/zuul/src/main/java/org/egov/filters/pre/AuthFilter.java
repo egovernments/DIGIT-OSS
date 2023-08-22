@@ -57,13 +57,16 @@ public class AuthFilter extends ZuulFilter {
     public Object run() {
         RequestContext ctx = RequestContext.getCurrentContext();
         String authToken = (String) ctx.get(AUTH_TOKEN_KEY);
+
         try {
             User user = getUser(authToken, ctx);
             ctx.set(USER_INFO_KEY, user);
-        } catch (HttpClientErrorException ex) {
+        }
+        catch (HttpClientErrorException ex) {
             logger.error(RETRIEVING_USER_FAILED_MESSAGE, ex);
             ExceptionUtils.RaiseException(ex);
-        } catch (ResourceAccessException ex) {
+        }
+        catch (ResourceAccessException ex) {
             logger.error(RETRIEVING_USER_FAILED_MESSAGE, ex);
             ExceptionUtils.raiseCustomException(HttpStatus.INTERNAL_SERVER_ERROR, "User authentication service is down");
         }
