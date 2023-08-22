@@ -165,6 +165,7 @@ public class SsoAuthFilter extends ZuulFilter {
             assert response != null;
             if(!CollectionUtils.isEmpty(response.getUser()))
                 user = response.getUser().get(0);
+            ResponseInfo responseInfo = response.getResponseInfo();
         }
         catch(Exception e) {
             logger.error("Exception while fetching system user: ",e);}

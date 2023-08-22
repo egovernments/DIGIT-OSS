@@ -66,8 +66,8 @@ public class UserUtils {
             log.error("Exception while fetching system user: ",e);
         }
 
-        if(user == null)
-            throw new CustomException("NO_SYSTEUSER_FOUND", "No System User FOund");
+        /*if(user == null)
+            throw new CustomException("NO_SYSTEUSER_FOUND", "No System User FOund");*/
 
         return user;
 
