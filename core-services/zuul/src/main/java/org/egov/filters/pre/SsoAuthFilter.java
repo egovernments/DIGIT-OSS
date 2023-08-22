@@ -53,6 +53,8 @@ public class SsoAuthFilter extends ZuulFilter {
 
     public static final String SSO_ENDPOINT = "/tl-services/external/_create";
 
+    public static final String THIRD_PARTY_URL = "https://eservicesuk-staging.prodios.com/api/token/verify/";
+
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     public SsoAuthFilter(UserUtils userUtils, RestTemplate restTemplate, User user){
@@ -115,7 +117,7 @@ public class SsoAuthFilter extends ZuulFilter {
 
     private SsoUserEntity verifyToken(String token, RequestContext context){
 
-        String uri = "https://eservicesuk-staging.prodios.com/api/token/verify/" + token;
+        String uri = THIRD_PARTY_URL + token;
         ResponseEntity<String> jwtResponse = restTemplate.exchange(uri,
                 HttpMethod.GET, null, String.class);
 
@@ -155,8 +157,6 @@ public class SsoAuthFilter extends ZuulFilter {
         CreateUserRequest request = getCreateUserRequest(ssoUserEntity);
 
         //handle responseInfo later.
-
-        //return userUtils.fetchUserUtil(createUserUri, request);
 
         StringBuilder uri = new StringBuilder(createUserUri);
         User user = null;
