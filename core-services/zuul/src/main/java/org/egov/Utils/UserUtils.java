@@ -50,22 +50,6 @@ public class UserUtils {
 
         return fetchUserUtil(userSearchURI, userSearchRequest);
 
-
-        /*StringBuilder uri = new StringBuilder(userSearchURI);
-        User user = null;
-        try {
-           UserDetailResponse response = restTemplate.postForObject(uri.toString(), userSearchRequest, UserDetailResponse.class);
-            assert response != null;
-            if(!CollectionUtils.isEmpty(response.getUser()))
-               user = response.getUser().get(0);
-        } catch(Exception e) {
-            log.error("Exception while fetching system user: ",e);
-        }
-
-        *//*if(user == null)
-            throw new CustomException("NO_SYSTEUSER_FOUND", "No System User FOund");*//*
-
-        return user;*/
     }
 
 
@@ -82,8 +66,8 @@ public class UserUtils {
             log.error("Exception while fetching system user: ",e);
         }
 
-        /*if(user == null)
-            throw new CustomException("NO_SYSTEUSER_FOUND", "No System User FOund");*/
+        if(user == null)
+            throw new CustomException("NO_SYSTEUSER_FOUND", "No System User FOund");
 
         return user;
 
