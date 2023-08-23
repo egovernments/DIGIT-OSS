@@ -259,8 +259,3 @@ public class SsoAuthFilter extends ZuulFilter {
     }
 
 }
-
-
-
-//I must clean this method entirely, and then commit the changes to this branch itself.
-//Small work, but huge task.

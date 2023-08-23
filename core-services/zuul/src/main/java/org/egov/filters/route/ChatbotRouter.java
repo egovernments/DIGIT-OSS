@@ -38,6 +38,7 @@ public class ChatbotRouter extends ZuulFilter {
 
     @Value("${egov.user.isolation.service.host}")
     private String isolationUserServiceHost;
+
     @Value("${egov.user.isolation.service.search.path}")
     private String userSearchPath;
 
