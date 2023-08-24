@@ -45,15 +45,17 @@ public class SsoAuthFilter extends ZuulFilter {
     @Value("${egov.auth-service-host}${egov.user.create.path}")
     private String createUserUri;
 
+    @Value("${egov.sso.thirdparty.url}")
+    public String THIRD_PARTY_URL;
+
+    @Value("${egov.sso.endpoint}")
+    public static final String SSO_ENDPOINT = "/tl-services/external/_create";
+
     private final User user;
 
     private final ObjectMapper objectMapper;
 
     private final RestTemplate restTemplate;
-
-    public static final String SSO_ENDPOINT = "/tl-services/external/_create";
-
-    public static final String THIRD_PARTY_URL = "https://eservicesuk-staging.prodios.com/api/token/verify/";
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
@@ -76,7 +78,7 @@ public class SsoAuthFilter extends ZuulFilter {
 
         //step 2.1 Get user info from responsePojo, and then phoneNumber
         UserInfo userInfo = responsePojo.getUser();
-        String phoneNumber = userInfo.getPhoneNumber();
+        String phoneNumber = userInfo.getMobileNumber();
 
         //Get user from the nagarsewa database
         //If the user doesn't exist, create one and then return
@@ -182,7 +184,7 @@ public class SsoAuthFilter extends ZuulFilter {
         userRequest.setUuid(ssoUserEntity.getUser().getId());
         userRequest.setType(ssoUserEntity.getUser().getType());
         userRequest.setName(ssoUserEntity.getUser().getFirstName() + " " + ssoUserEntity.getUser().getLastName());
-        userRequest.setMobileNumber(ssoUserEntity.getUser().getPhoneNumber());
+        userRequest.setMobileNumber(ssoUserEntity.getUser().getMobileNumber());
         userRequest.setEmailId(ssoUserEntity.getUser().getEmail());
 
         request.setUser(userRequest);
