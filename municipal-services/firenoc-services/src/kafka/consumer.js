@@ -5,7 +5,7 @@ import get from "lodash/get";
 import set from "lodash/set";
 import { searchApiResponse } from "../api/search";
 import { updateApiResponse } from "../api/update";
-import { getUpdatedTopic } from "../utils/index";
+import { getUpdatedTopic, getStateSpecificTopicName } from "../utils/index";
 import userService from "../services/userService";
 // import { httpRequest } from "../api";
 
@@ -52,7 +52,7 @@ const run = async () => {
             isCentralInstance = (isCentralInstance.toLowerCase() == "true");
 
           if(isCentralInstance)
-            topic = getUpdatedTopic(tenantId, topic);
+            topic = getStateSpecificTopicName(tenantId, topic);
 
           payloads.push({
             topic: topic,
@@ -169,7 +169,7 @@ const run = async () => {
               isCentralInstance = (isCentralInstance.toLowerCase() == "true");
 
             if(isCentralInstance)
-              topic = getUpdatedTopic(tenantId, topic);
+              topic = getStateSpecificTopicName(tenantId, topic);
 
             payloads.push({
               topic: topic,

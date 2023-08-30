@@ -2,9 +2,6 @@ const { Pool } = require("pg");
 import envVariables from "./envVariables";
 
 // Use connection pool to limit max active DB connections
-var ssl = envVariables.DB_SSL;
-if(typeof ssl =="string")
-  ssl = (ssl.toLowerCase() == "true");
 
 const pool = new Pool({
   user: envVariables.DB_USER,

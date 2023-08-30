@@ -228,18 +228,20 @@ let finalQuery = null;
 var isCentralInstance  = envVariables.IS_ENVIRONMENT_CENTRAL_INSTANCE;
 if(typeof isCentralInstance =="string")
   isCentralInstance = (isCentralInstance.toLowerCase() == "true");
+console.log(" IsCentralInstance :" + isCentralInstance);
 if (tenantId.includes(".") && isCentralInstance) {
-  if (stateSchemaIndexPositionInTenantId >= tenantId.length()) {
+  if (stateSchemaIndexPositionInTenantId >= tenantId.length) {
     throw new InvalidTenantIdException(
         "The tenantId length is smaller than the defined schema index in tenantId for central instance");
   }
-  let schemaName = tenantId.split("\\.")[stateSchemaIndexPositionInTenantId];
-  finalQuery = query.replaceAll("(?i)" + Pattern.quote(SCHEMA_REPLACE_STRING), schemaName);
+  let schemaName = tenantId.split(".")[stateSchemaIndexPositionInTenantId];
+  console.log(" schemaName :" + schemaName);
+  finalQuery = 	query.replace(/{schema}/g, schemaName);
 } else {
-  finalQuery = query.replaceAll("(?i)" + Pattern.quote(SCHEMA_REPLACE_STRING.concat(".")), "");
+  finalQuery = query.replace(/{schema}./g, "");
 }
 return finalQuery;
-};
+}
 
 /**
 * Method to determine if the given tenantId belong to tenant or state level in
@@ -253,7 +255,7 @@ export const isTenantIdStateLevel = (tenantId) => {
   if(typeof isCentralInstance =="string")
     isCentralInstance = (isCentralInstance.toLowerCase() == "true");
   if (isCentralInstance) {
-    let tenantLevel = tenantId.split("\\.").length;
+    let tenantLevel = tenantId.split(".").length;
   return tenantLevel <= stateLevelTenantIdLength;
 } else {
   /*
@@ -264,7 +266,7 @@ export const isTenantIdStateLevel = (tenantId) => {
    */
   return !tenantId.contains(".");
 }
-};
+}
 
 /**
 * For central instance if the tenantId size is lesser than state level
@@ -279,7 +281,7 @@ export const isTenantIdStateLevel = (tenantId) => {
 */
 export const getStateLevelTenant =(tenantId) => {
 
-const tenantArray = tenantId.split("\\.");
+const tenantArray = tenantId.split(".");
 let stateTenant = tenantArray[0];
 var isCentralInstance  = envVariables.IS_ENVIRONMENT_CENTRAL_INSTANCE;
 if(typeof isCentralInstance =="string")
@@ -306,12 +308,16 @@ export  const getStateSpecificTopicName = (tenantId,  topic) => {
 
 let updatedTopic = topic;
 var isCentralInstance  = envVariables.IS_ENVIRONMENT_CENTRAL_INSTANCE;
-if(typeof isCentralInstance =="string")
+if(typeof isCentralInstance == "string")
   isCentralInstance = (isCentralInstance.toLowerCase() == "true");
 if (isCentralInstance) {
-  const tenants = tenantId.split("\\.");
+  const tenants = tenantId.split(".");
   if (tenants.length > 1)
-    updatedTopic = tenants[stateSchemaIndexPositionInTenantId].concat("-").concat(topic);
+    updatedTopic = tenants[stateSchemaIndexPositionInTenantId] + ("-") + (topic);
+
 }
+
+console.log("isCentralInstance - "+isCentralInstance);
+console.log("The Kafka topic for the tenantId : " + tenantId + " is : " + updatedTopic);
 return updatedTopic;
 };

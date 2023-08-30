@@ -111,7 +111,7 @@ export const updateApiResponse = async (request, isExternalCall, next = {}) => {
   isCentralInstance = (isCentralInstance.toLowerCase() == "true");
 
   if(isCentralInstance)
-    topic = getUpdatedTopic(tenantId, topic);
+    topic = getStateSpecificTopicName(tenantId, topic);
     
   payloads.push({
     topic: topic,
@@ -138,7 +138,7 @@ export const updateApiResponse = async (request, isExternalCall, next = {}) => {
       isCentralInstance = (isCentralInstance.toLowerCase() == "true");
 
     if(isCentralInstance)
-      topic = getUpdatedTopic(tenantId, topic);
+      topic = getStateSpecificTopicName(tenantId, topic);
 
     payloads.push({
       topic: topic,

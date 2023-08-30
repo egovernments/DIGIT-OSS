@@ -85,7 +85,7 @@ export const createApiResponse = async (request, res, next) => {
   isCentralInstance = (isCentralInstance.toLowerCase() == "true");
 
   if(isCentralInstance)
-    topic = getUpdatedTopic(tenantId, topic);
+    topic = getStateSpecificTopicName(tenantId, topic);
 
   payloads.push({
     topic: topic,
