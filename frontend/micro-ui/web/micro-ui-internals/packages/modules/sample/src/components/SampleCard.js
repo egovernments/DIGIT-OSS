@@ -26,6 +26,11 @@ const SampleCard = () => {
         label: t("Search"),
         link: `/${window?.contextPath}/employee/sample/search`,
       },
+      {
+        label: t("Advanced Form"),
+        link: `/${window?.contextPath}/employee/sample/advanced`,
+      },
+      
     ],
   };
 

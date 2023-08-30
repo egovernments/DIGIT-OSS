@@ -19,7 +19,7 @@
     "@egovernments/digit-ui-svg-components": "0.0.1",
     "@egovernments/digit-ui-libraries": "1.5.7", 
     "@egovernments/digit-ui-module-sample": "0.0.1",
-    "@egovernments/digit-ui-module-workbench":"0.0.1",
+    "@egovernments/digit-ui-module-workbench":"0.0.3",
     "@egovernments/digit-ui-customisation-mukta": "0.0.1",
     "http-proxy-middleware": "^1.0.5",
     "react": "17.0.2",
