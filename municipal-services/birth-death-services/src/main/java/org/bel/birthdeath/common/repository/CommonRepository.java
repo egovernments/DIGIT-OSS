@@ -9,7 +9,9 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 import java.util.UUID;
-
+import java.time.Instant;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import org.bel.birthdeath.birth.model.EgBirthDtl;
 import org.bel.birthdeath.birth.model.EgBirthFatherInfo;
 import org.bel.birthdeath.birth.model.EgBirthMotherInfo;
@@ -21,10 +23,12 @@ import org.bel.birthdeath.common.contract.BirthResponse;
 import org.bel.birthdeath.common.contract.DeathResponse;
 import org.bel.birthdeath.common.contract.EncryptionDecryptionUtil;
 import org.bel.birthdeath.common.model.AuditDetails;
+import org.bel.birthdeath.common.model.BirthCertificateVC;
 import org.bel.birthdeath.common.model.EgHospitalDtl;
 import org.bel.birthdeath.common.repository.builder.CommonQueryBuilder;
 import org.bel.birthdeath.common.repository.rowmapper.CommonRowMapper;
 import org.bel.birthdeath.common.services.CommonService;
+import org.bel.birthdeath.config.BirthDeathConfiguration;
 import org.bel.birthdeath.death.model.EgDeathDtl;
 import org.bel.birthdeath.death.model.EgDeathFatherInfo;
 import org.bel.birthdeath.death.model.EgDeathMotherInfo;
@@ -75,6 +79,12 @@ public class CommonRepository {
 	
 	@Autowired
 	EncryptionDecryptionUtil encryptionDecryptionUtil;
+
+	@Autowired
+	ServiceRequestRepository serviceRequestRepository;
+
+	@Autowired
+	BirthDeathConfiguration config;
 
 	@Autowired
 	@Lazy
@@ -188,7 +198,8 @@ public class CommonRepository {
 	private static final String DEATHPRESENTADDRUPDATEQRY="UPDATE public.eg_death_presentaddr SET buildingno = :buildingno, houseno = :houseno, streetname = :streetname, "
 			+ "locality = :locality, tehsil = :tehsil, district = :district, city = :city, state = :state, pinno = :pinno, country = :country, "
 			+ "lastmodifiedby = :lastmodifiedby, lastmodifiedtime = :lastmodifiedtime WHERE deathdtlid = :deathdtlid;";
-	
+
+	private static final String BIRTHVCSCHEMANAME="BirthCertificate1";
 	
 	public List<EgHospitalDtl> getHospitalDtls(String tenantId) {
 		List<Object> preparedStmtList = new ArrayList<>();
@@ -283,6 +294,14 @@ public class CommonRepository {
 					namedParameterJdbcTemplate.update(BIRTHPERMADDRSAVEQRY, getParametersForPermAddr(birthDtl, auditDetails, true));
 					namedParameterJdbcTemplate.update(BIRTHPRESENTADDRSAVEQRY, getParametersForPresentAddr(birthDtl, auditDetails, true));
 					finalCount++;
+					// Create a VC using S-RC
+					if (config.getEnableCreationOfVC()) {
+						BirthCertificateVC egovVCReq = transformationForBirthVCService(birthDtl);
+						StringBuilder url = new StringBuilder().append(config.getEgovVCHost()).append(config.getEgovVCEndPoint()).append(BIRTHVCSCHEMANAME);
+						Object result = serviceRequestRepository.fetchResult(url,egovVCReq);
+						System.out.print(result);
+					}
+
 				}
 				catch (Exception e) {
 					birthDtl.setRejectReason(BirthDeathConstants.DATA_ERROR);
@@ -333,6 +352,28 @@ public class CommonRepository {
 			}
 		}
 	}
+
+	private BirthCertificateVC transformationForBirthVCService (EgBirthDtl birthDtl) {
+		BirthCertificateVC reqToSend = new BirthCertificateVC();
+		String DOB = convertToISO8601((long) Integer.parseInt(birthDtl.getDateofbirthepoch()));
+		reqToSend = BirthCertificateVC.builder().name(birthDtl.getFirstname()).date_of_birth(DOB).name_of_father(birthDtl.getBirthFatherInfo().getFirstname())
+				.name_of_mother(birthDtl.getBirthMotherInfo().getFirstname()).hospital(birthDtl.getHospitalname()).gender(birthDtl.getGenderStr()).present_address(birthDtl.getBirthPresentaddr().getState()).contact(birthDtl.getRegistrationno()).place_of_birth(birthDtl.getPlaceofbirth())
+				.build();
+		return reqToSend;
+	}
+
+	public static String convertToISO8601(long unixTimestamp) {
+		// Convert Unix timestamp to Instant
+		Instant instant = Instant.ofEpochSecond(unixTimestamp);
+
+		// Convert Instant to the ISO 8601 format with UTC timezone
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss'Z'")
+				.withZone(ZoneId.of("UTC"));
+		String iso8601DateTime = formatter.format(instant);
+
+		return iso8601DateTime;
+	}
+
 	
 	private void modifyHospIdDeath(Map<String, List<EgDeathDtl>> uniqueHospList , String tenantid) {
 		Map<String,String> dbHospNameIdMap = new HashMap<String, String>();

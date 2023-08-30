@@ -121,4 +121,13 @@ public class BirthDeathConfiguration {
     @Value("${egov.pdf.deathcert.createEndPoint}")
     private String	egovPdfDeathEndPoint;
 
+    @Value("${egov.src.vc.host}")
+    private String	egovVCHost;
+
+    @Value("${egov.src.vc.endpoint}")
+    private String	egovVCEndPoint;
+
+    @Value("${egov.src.vc.enableVC}")
+    private Boolean enableCreationOfVC;
+
 }
