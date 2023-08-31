@@ -16,16 +16,16 @@ import javax.validation.Valid;
 import java.util.List;
 
 @RestController
-    @RequestMapping("/v1")
-    public class TradeLicenseController {
+@RequestMapping("/v1")
+public class TradeLicenseController {
 
-        private final ObjectMapper objectMapper;
+    private final ObjectMapper objectMapper;
 
-        private final HttpServletRequest request;
+    private final HttpServletRequest request;
 
-        private final TradeLicenseService tradeLicenseService;
+    private final TradeLicenseService tradeLicenseService;
 
-        private final ResponseInfoFactory responseInfoFactory;
+    private final ResponseInfoFactory responseInfoFactory;
 
     @Autowired
     public TradeLicenseController(ObjectMapper objectMapper, HttpServletRequest request,
@@ -42,7 +42,7 @@ import java.util.List;
                                                        @PathVariable(required = false) String servicename) {
         List<TradeLicense> licenses = tradeLicenseService.create(tradeLicenseRequest, servicename);
         TradeLicenseResponse response = TradeLicenseResponse.builder().licenses(licenses).responseInfo(
-                responseInfoFactory.createResponseInfoFromRequestInfo(tradeLicenseRequest.getRequestInfo(), true))
+                        responseInfoFactory.createResponseInfoFromRequestInfo(tradeLicenseRequest.getRequestInfo(), true))
                 .build();
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
@@ -55,7 +55,7 @@ import java.util.List;
         List<TradeLicense> licenses = tradeLicenseService.search(criteria, requestInfoWrapper.getRequestInfo(), servicename, headers);
 
         TradeLicenseResponse response = TradeLicenseResponse.builder().licenses(licenses).responseInfo(
-                responseInfoFactory.createResponseInfoFromRequestInfo(requestInfoWrapper.getRequestInfo(), true))
+                        responseInfoFactory.createResponseInfoFromRequestInfo(requestInfoWrapper.getRequestInfo(), true))
                 .build();
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
@@ -66,7 +66,7 @@ import java.util.List;
         List<TradeLicense> licenses = tradeLicenseService.update(tradeLicenseRequest, servicename);
 
         TradeLicenseResponse response = TradeLicenseResponse.builder().licenses(licenses).responseInfo(
-                responseInfoFactory.createResponseInfoFromRequestInfo(tradeLicenseRequest.getRequestInfo(), true))
+                        responseInfoFactory.createResponseInfoFromRequestInfo(tradeLicenseRequest.getRequestInfo(), true))
                 .build();
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
@@ -88,14 +88,14 @@ import java.util.List;
         List<TradeLicense> licenses = tradeLicenseService.plainSearch(criteria, requestInfoWrapper.getRequestInfo());
 
         TradeLicenseResponse response = TradeLicenseResponse.builder().licenses(licenses).responseInfo(
-                responseInfoFactory.createResponseInfoFromRequestInfo(requestInfoWrapper.getRequestInfo(), true))
+                        responseInfoFactory.createResponseInfoFromRequestInfo(requestInfoWrapper.getRequestInfo(), true))
                 .build();
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    @PostMapping({"/tl-services/external/_create", "/_create"})
+    @PostMapping({"/external/_create", "/_create"})
     public ResponseEntity<TradeLicenseResponse> externalAccessCreate(@Valid @RequestBody TradeLicenseRequest tradeLicenseRequest,
-                                                                     @PathVariable(required = false) String servicename){
+                                                                     @PathVariable(required = false) String servicename) {
         List<TradeLicense> licenses = tradeLicenseService.create(tradeLicenseRequest, servicename);
         TradeLicenseResponse response = TradeLicenseResponse.builder().licenses(licenses).responseInfo(
                         responseInfoFactory.createResponseInfoFromRequestInfo(tradeLicenseRequest.getRequestInfo(), true))
