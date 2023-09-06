@@ -24,10 +24,12 @@
     "publish:css": "cd packages/css && yarn publish --access public",
     "dev:libraries": "cd packages/libraries && yarn start",
     "dev:components": "cd packages/react-components && yarn start",
+    "dev:pgr": "cd packages/modules/pgr && yarn start",
     "dev:example": "cd example && yarn start",
     "build": "run-p build:**",
     "build:libraries": "cd packages/libraries && yarn build",
     "build:components": "cd packages/react-components && yarn build",
+    "build:pgr": "cd packages/modules/pgr && yarn build",
     "build:sample": "cd packages/modules/sample && yarn build",
     "deploy:jenkins": "./scripts/jenkins.sh",
     "clean": "rm -rf node_modules"
