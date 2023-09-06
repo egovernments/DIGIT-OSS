@@ -37,8 +37,6 @@
     "build:dss": "cd packages/modules/dss && yarn build",
     "build:core": "cd packages/modules/core && yarn build",
     "build:hrms": "cd packages/modules/hrms && yarn build",
-    "build:common": "cd packages/modules/common && yarn build",
-    "build:utilities": "cd packages/modules/utilities && yarn build",
     "build:engagement": "cd packages/modules/engagement && yarn build",
     "deploy:jenkins": "./scripts/jenkins.sh",
     "clean": "rm -rf node_modules"
