@@ -5,7 +5,10 @@ import { initHRMSComponents } from "@egovernments/digit-ui-module-hrms";
 import { UICustomizations } from "./Customisations/UICustomizations";
 import { initDSSComponents } from "@egovernments/digit-ui-module-dss";
 import { initEngagementComponents } from "@egovernments/digit-ui-module-engagement";
-
+import {
+  initPGRComponents,
+  PGRReducers,
+} from "@egovernments/digit-ui-module-pgr";
 window.contextPath = window?.globalConfigs?.getConfig("CONTEXT_PATH");
 
 const enabledModules = ["DSS", "NDSS",  "Utilities",
@@ -16,7 +19,7 @@ const enabledModules = ["DSS", "NDSS",  "Utilities",
 
 
 const moduleReducers = (initData) => ({
-  initData,
+  pgr: PGRReducers(initData),
 });
 
 
@@ -29,7 +32,7 @@ const initDigitUI = () => {
   initHRMSComponents();
   initDSSComponents();
   initEngagementComponents();
-
+  initPGRComponents()
 };
 
 initLibraries().then(() => {
