@@ -21,10 +21,13 @@ import org.egov.pt.models.PropertyCriteria;
 import org.egov.pt.models.Unit;
 import org.egov.pt.models.enums.CreationReason;
 import org.egov.pt.models.enums.Status;
+import org.egov.pt.models.hrms.Employee;
+import org.egov.pt.models.hrms.HRMSResponse;
 import org.egov.pt.models.workflow.BusinessService;
 import org.egov.pt.models.workflow.ProcessInstance;
 import org.egov.pt.models.workflow.State;
 import org.egov.pt.service.DiffService;
+import org.egov.pt.service.HrmsService;
 import org.egov.pt.service.PropertyService;
 import org.egov.pt.service.WorkflowService;
 import org.egov.pt.util.EncryptionDecryptionUtil;
@@ -33,6 +36,7 @@ import org.egov.pt.util.PropertyUtil;
 import org.egov.pt.web.contracts.PropertyRequest;
 import org.egov.tracer.model.CustomException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.ObjectUtils;
@@ -67,6 +71,12 @@ public class PropertyValidator {
     
     @Autowired
     private WorkflowService workflowService;
+    
+    @Value("${egov.jurisdiction.enable}")
+    private Boolean isJurisdictionEnabled;
+
+    @Autowired
+    private HrmsService hrmsService;
 
 	@Autowired
 	EncryptionDecryptionUtil encryptionDecryptionUtil;
@@ -232,6 +242,11 @@ public class PropertyValidator {
 		Property property = request.getProperty();
 		validateIds(request, errorMap);
 		validateMobileNumber(request, errorMap);
+		
+		if(isJurisdictionEnabled) {
+    		validateJurisdictionMatchWithAssesor(request, errorMap);
+    		validateJurisdictionMatchwithAssignedTo(request,errorMap);
+    	}
 
 
 		CreationReason reason = property.getCreationReason();
@@ -254,6 +269,83 @@ public class PropertyValidator {
 
 		if (!errorMap.isEmpty())
 			throw new CustomException(errorMap);
+	}
+	
+	// to validate if the assignees is in the same jurisdiction as the property
+	private void validateJurisdictionMatchwithAssignedTo(PropertyRequest request, Map<String, String> errorMap) {
+
+		List<OwnerInfo> assignes = request.getProperty().getWorkflow().getAssignes();
+		HRMSResponse employeeResponse = hrmsService.searchHRMS(request.getRequestInfo(),
+				request.getProperty().getTenantId(), request.getRequestInfo().getUserInfo().getRoles(),
+				request.getProperty().getAddress().getLocality().getCode());
+		List<OwnerInfo> filteredAssignes = new ArrayList<OwnerInfo>();
+
+		if (employeeResponse != null) {
+			List<Employee> employees = employeeResponse.getEmployees();
+			filteredAssignes = assignes.stream().filter(assigne -> employees.stream().anyMatch(
+					employee -> employee.getUser() != null && employee.getUser().getUuid().equals(assigne.getUuid())))
+					.collect(Collectors.toList());
+
+			if (filteredAssignes.isEmpty()) {
+				if (!employees.isEmpty()) {
+					Employee firstEmployee = employees.get(0);
+					org.egov.pt.models.user.User user = firstEmployee.getUser();
+
+					// Set the uuid and name of correct employee to the assigne object
+					if (assignes.isEmpty()) {
+						OwnerInfo newOwner = new OwnerInfo();
+						newOwner.setUuid(user.getUuid());
+						newOwner.setName(user.getName());
+						assignes.add(newOwner);
+					} else {
+						assignes.forEach(assigne -> {
+							assigne.setUuid(user.getUuid());
+							assigne.setName(user.getName());
+						});
+					}
+					log.info(
+							"The assignee has been changed to one mapped in the system as the one selected wasn't correct.");
+					request.getProperty().getWorkflow().setAssignes(assignes);
+				} else {
+					errorMap.put("EG_PT_UPDATE AUTHORIZATION FAILURE",
+							"Not Authorized to update property with propertyId as the assignees are not present in the jurisdiction of the property "
+									+ request.getProperty().getPropertyId());
+				}
+			}
+		}
+
+		if (!errorMap.isEmpty())
+			throw new CustomException(errorMap);
+
+	}
+
+	// To validate the assessor is in the same jurisdiction as the property
+	private void validateJurisdictionMatchWithAssesor(PropertyRequest request, Map<String, String> errorMap) {
+
+		HRMSResponse employeeResponse = hrmsService.searchHRMS(request.getRequestInfo(),
+				request.getProperty().getTenantId(), request.getRequestInfo().getUserInfo().getRoles(),
+				request.getProperty().getAddress().getLocality().getCode());
+		if (employeeResponse == null) {
+
+			errorMap.put("EG_PT_UPDATE AUTHORIZATION FAILURE",
+					"Not Authorized to update property with propertyId due to no employee in this Jurisdiction "
+							+ request.getProperty().getPropertyId());
+		}
+
+		String userUUID = request.getRequestInfo().getUserInfo().getUuid();
+		List<String> employeeUuids = new ArrayList<String>();
+		if (employeeResponse != null) {
+			employeeUuids = employeeResponse.getEmployees().stream().map(Employee::getUuid)
+					.collect(Collectors.toList());
+		}
+		if (!employeeUuids.contains(userUUID)) {
+			errorMap.put("EG_PT_UPDATE AUTHORIZATION FAILURE",
+					"Not Authorized to update property with propertyId due to employee record not found in this Jurisdiction "
+							+ request.getProperty().getPropertyId());
+		}
+		if (!errorMap.isEmpty())
+			throw new CustomException(errorMap);
+
 	}
 
     /**
