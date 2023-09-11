@@ -140,9 +140,9 @@ public class BirthService {
 		return repository.getBirthCertReqByConsumerCode(criteria.getConsumerCode(),requestInfo, criteria.getTenantId());
 	}
 	
-	public List<BirthCertAppln> searchApplications(RequestInfoWrapper requestInfoWrapper) {
+	public List<BirthCertAppln> searchApplications(RequestInfoWrapper requestInfoWrapper, SearchCriteria searchCriteria) {
 		List<BirthCertAppln> certApplns = null;
-		certApplns = repository.searchApplications(requestInfoWrapper.getRequestInfo().getUserInfo().getUuid(), requestInfoWrapper.getRequestInfo().getUserInfo().getTenantId());
+		certApplns = repository.searchApplications(requestInfoWrapper.getRequestInfo().getUserInfo().getUuid(), searchCriteria.getTenantId());
 		for (BirthCertAppln certAppln : certApplns) {
 			if (certAppln.getStatus().equalsIgnoreCase(StatusEnum.PAID.toString())) {
 				try {

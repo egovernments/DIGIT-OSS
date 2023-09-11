@@ -352,10 +352,9 @@ public class BirthRepository {
 		StringBuilder builder = new StringBuilder(config.getUrlShortnerHost());
 		builder.append(config.getUrlShortnerEndpoint());
 
-		Object result =  serviceRequestRepository.fetchResult(builder, body);
 		String res = null;
 		try {
-			res =   mapper.convertValue(result, String.class);
+			res = restTemplate.postForObject(builder.toString(), body, String.class);
 		} catch (IllegalArgumentException e) {
 			throw new CustomException("PARSING ERROR", "Failed to parse response of URL Shortening");
 		}

@@ -140,9 +140,9 @@ public class DeathService {
 		return repository.getDeathCertReqByConsumerCode(criteria.getConsumerCode(),requestInfo, criteria.getTenantId());
 	}
 	
-	public List<DeathCertAppln> searchApplications(RequestInfoWrapper requestInfoWrapper) {
+	public List<DeathCertAppln> searchApplications(RequestInfoWrapper requestInfoWrapper, SearchCriteria searchCriteria) {
 		List<DeathCertAppln> certApplns=null;
-		certApplns = repository.searchApplications(requestInfoWrapper.getRequestInfo().getUserInfo().getUuid(), requestInfoWrapper.getRequestInfo().getUserInfo().getTenantId());
+		certApplns = repository.searchApplications(requestInfoWrapper.getRequestInfo().getUserInfo().getUuid(), searchCriteria.getTenantId());
 		for (DeathCertAppln certAppln : certApplns) {
 			if (certAppln.getStatus().equalsIgnoreCase(StatusEnum.PAID.toString())) {
 				try {
