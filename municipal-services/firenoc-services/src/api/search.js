@@ -132,8 +132,8 @@ export const searchApiResponse = async (request, next = {}) => {
     let firenocIdQuery = `SELECT FN.uuid as FID FROM {schema}.eg_fn_firenoc FN JOIN {schema}.eg_fn_firenocdetail FD ON (FN.uuid = FD.firenocuuid) JOIN {schema}.eg_fn_owner FO ON (FD.uuid = FO.firenocdetailsuuid) where `;
 
     if (queryObj.tenantId) {
-      if (queryObj.tenantId == envVariables.EGOV_DEFAULT_STATE_ID) {
-        firenocIdQuery = `${firenocIdQuery} FN.tenantid LIKE '${queryObj.tenantId}%' AND`;
+      if (queryObj.tenantId.split('.').length <= stateLevelTenantIdLength) {
+        firenocIdQuery = `${firenocIdQuery} FN.tenantid LIKE '${queryObj.tenantId}%' AND`;  //is state level tenantId
       } else {
         firenocIdQuery = `${firenocIdQuery} FN.tenantid = '${queryObj.tenantId}' AND`;
       }
