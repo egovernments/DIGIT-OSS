@@ -15,6 +15,8 @@ public class PTConstants {
     
     public static final String PT_TYPE_BUILTUP = "BUILTUP";
     
+    public static final String PT_ASSESSOR_TYPE_EMPLOYEE = "EMPLOYEE";
+    
     public static final String JSONPATH_CODES = "$.MdmsRes.PropertyTax";
 
     public static final String MDMS_PT_MOD_NAME = "PropertyTax";
