@@ -47,8 +47,7 @@ module.exports = {
     birth_certificate:
             process.env.BIRTH_CERTIFICATE || "birth-certificate",
     death_certificate:
-        process.env.DEATH_CERTIFICATE || "death-certificate"
-        
+        process.env.DEATH_CERTIFICATE || "death-certificate"        
   },
   app: {
     port: parseInt(process.env.APP_PORT) || 8080,
@@ -65,8 +64,8 @@ module.exports = {
     payments: process.env.EGOV_PAYMENTS_HOST || HOST,
     bill: process.env.EGOV_SEARCHER_HOST || HOST,
     workflow: process.env.EGOV_WORKFLOW_HOST || HOST,
-    challan: process.env.EGOV_ECHALLAN_HOST || 'http://echallan-services.egov:8080/',
-    mcollectBilling: process.env.EGOV_BILLING_HOST || 'http://billing-service.egov:8080/',
+    challan: process.env.EGOV_ECHALLAN_HOST || 'http://echallan-services.digit:8080/',
+    mcollectBilling: process.env.EGOV_BILLING_HOST || 'http://billing-service.digit:8080/',
     wns: process.env.EGOV_WNS_HOST || HOST
   },
   paths: {
