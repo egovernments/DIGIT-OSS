@@ -48,6 +48,7 @@
 
 package org.egov.infra.filestore.service.impl;
 
+import org.egov.infra.config.core.ApplicationThreadLocals;
 import org.egov.infra.exception.ApplicationRuntimeException;
 import org.egov.infra.filestore.entity.FileStoreMapper;
 import org.egov.infra.filestore.service.FileStoreService;
@@ -108,6 +109,7 @@ public class LocalDiskFileStoreService implements FileStoreService {
             Path newFilePath = this.createNewFilePath(fileMapper, moduleName);
             Files.copy(file.toPath(), newFilePath);
             fileMapper.setContentType(mimeType);
+            fileMapper.setTenantId(ApplicationThreadLocals.getFilestoreTenantID());
             if (deleteFile && file.delete())
                 LOG.info("File store source file deleted");
             return fileMapper;
@@ -133,6 +135,7 @@ public class LocalDiskFileStoreService implements FileStoreService {
             Path newFilePath = this.createNewFilePath(fileMapper, moduleName);
             Files.copy(fileStream, newFilePath);
             fileMapper.setContentType(mimeType);
+            fileMapper.setTenantId(ApplicationThreadLocals.getFilestoreTenantID());
             if (closeStream)
                 fileStream.close();
             return fileMapper;

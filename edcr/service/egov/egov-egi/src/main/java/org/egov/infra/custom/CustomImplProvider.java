@@ -218,7 +218,7 @@ public class CustomImplProvider {
             }
 
             // get ULB grade wise bean
-            if (ApplicationThreadLocals.getGrade().isEmpty()) {
+            if (ApplicationThreadLocals.getGrade() == null || ApplicationThreadLocals.getGrade().isEmpty()) {
                 throw new RuntimeException("ULB grade not defined. Please update and try again");
             } else {
                 gradeBean = getBeanByName(beanName + "_" + ApplicationThreadLocals.getGrade());

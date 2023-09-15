@@ -34,7 +34,7 @@
 	<parent>
 		<artifactId>egov-erp</artifactId>
 		<groupId>org.egov.edcr</groupId>
-		<version>2.1.1-SNAPSHOT</version>
+		<version>2.1.2-SNAPSHOT</version>
 	</parent>
 	<modelVersion>4.0.0</modelVersion>
 
@@ -46,19 +46,19 @@
 		<dependency>
 			<groupId>org.egov.edcr</groupId>
 			<artifactId>egov-egi</artifactId>
-			<version>2.1.1-SNAPSHOT</version>
+			<version>2.1.2-SNAPSHOT</version>
 		</dependency>
 		<dependency>
 			<groupId>org.egov.edcr</groupId>
 			<artifactId>egov-commons</artifactId>
-			<version>2.1.1-SNAPSHOT</version>
+			<version>2.1.2-SNAPSHOT</version>
 		</dependency>
 
 
 		<dependency>
 			<groupId>org.egov.edcr</groupId>
 			<artifactId>egov-edcr</artifactId>
-			<version>2.1.1-SNAPSHOT</version>
+			<version>2.1.2-SNAPSHOT</version>
 		</dependency>
 
 		<!-- VIEWS RELATED END -->

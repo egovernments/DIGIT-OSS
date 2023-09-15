@@ -138,7 +138,7 @@ public class RestEdcrApplicationController {
 
     @Autowired
     private EdcrValidator edcrValidator;
-
+    
     @PostMapping(value = "/scrutinizeplan", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public ResponseEntity<?> scrutinizePlan(@RequestBody MultipartFile planFile,
@@ -230,6 +230,7 @@ public class RestEdcrApplicationController {
                 enrichUser.setUuid(userInfoReq.getUuid());
                 enrichUser.setMobile(userInfoReq.getMobile());
                 enrichUser.setTenantId(userInfoReq.getTenantId());
+                enrichUser.setName(userInfoReq.getName());
                 edcr.getRequestInfo().setUserInfo(enrichUser);
             }
             ErrorDetail edcRes = edcrValidator.validate(edcr);
