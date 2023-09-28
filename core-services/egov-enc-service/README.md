@@ -8,6 +8,7 @@ Encryption Service is used to secure the data. It provides functionality to encr
 
 ### Service Dependencies
 
+If using TenantService as MDMSTenantService (default)
 - egov-mdms-service
 
 
