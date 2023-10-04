@@ -66,6 +66,14 @@ config:
       - work-dir: "business-services/egov-hrms/src/main/resources/db"
         image-name: "egov-hrms-db"
 
+  - name: "builds/digit-dev/business-services/health-hrms"
+    build:
+      - work-dir: "business-services/health-hrms"
+        image-name: "health-hrms"
+        dockerfile: "build/maven/Dockerfile"
+      - work-dir: "business-services/health-hrms/src/main/resources/db"
+        image-name: "health-hrms-db"
+
   - name: "builds/digit-dev/business-services/finance-collections-voucher-consumer"
     build:
       - work-dir: "business-services/finance-collections-voucher-consumer"
