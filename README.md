@@ -1,4 +1,6 @@
 # DIGIT 
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fegovernments%2FDIGIT-OSS.svg?type=shield)](https://app.fossa.com/projects/git%2Bgithub.com%2Fegovernments%2FDIGIT-OSS?ref=badge_shield)
+
 
 DIGIT is a set of Open APIs, services, and reference implementations, setup as a public good, to allow government entities, businesses, startups, and civil society to use a unique digital Infrastructure and build solutions for service delivery and governance. It provides a set of open standards, specifications and documentation to create a level playing field and enable ecosystem players to innovate on the stack. As a public good, the platform is provided without profit or restriction to all members of society.
 
@@ -13,5 +15,8 @@ DIGIT focuses on inclusion and is designed on the principle of enhancing both pl
 * ### [Issue Reporting](https://github.com/egovernments/DIGIT/issues)
 
 ### DIGIT Code is open sources under the MIT License and under [Contributor License Agreement](https://forms.gle/nnNZjB7P1YPuEHb69)
+
+
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fegovernments%2FDIGIT-OSS.svg?type=large)](https://app.fossa.com/projects/git%2Bgithub.com%2Fegovernments%2FDIGIT-OSS?ref=badge_large)
 
 ### DIGIT is Developed and Maintained by eGovernments Foundation (A non-profit and non-governmental organisation)
