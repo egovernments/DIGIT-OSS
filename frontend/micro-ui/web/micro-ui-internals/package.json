@@ -16,7 +16,7 @@
     "node": ">=14"
   },
   "scripts": {
-    "start": "SKIP_PREFLIGHT_CHECK=true run-s build start:dev",
+    "start": "run-s build start:dev",
     "sprint": "SKIP_PREFLIGHT_CHECK=true run-s start:script",
     "start:dev": "run-p dev:**",
     "start:script": "./scripts/create.sh",
@@ -28,6 +28,7 @@
     "dev:core": "cd packages/modules/core && yarn start",
     "dev:dss": "cd packages/modules/dss && yarn start",
     "dev:hrms": "cd packages/modules/hrms && yarn start",
+    "dev:pgr": "cd packages/modules/pgr && yarn start",
     "dev:common": "cd packages/modules/common && yarn start",
     "dev:utilities": "cd packages/modules/utilities && yarn build",
     "dev:engagement": "cd packages/modules/engagement && yarn start",
@@ -37,6 +38,7 @@
     "build:dss": "cd packages/modules/dss && yarn build",
     "build:core": "cd packages/modules/core && yarn build",
     "build:hrms": "cd packages/modules/hrms && yarn build",
+    "build:pgr": "cd packages/modules/pgr && yarn build",
     "build:common": "cd packages/modules/common && yarn build",
     "build:utilities": "cd packages/modules/utilities && yarn build",
     "build:engagement": "cd packages/modules/engagement && yarn build",

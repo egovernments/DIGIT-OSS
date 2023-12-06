@@ -66,7 +66,7 @@ const SubMenu = ({ item }) => {
                 data-tip="React-tooltip"
                 data-for={`jk-side-${getModuleName}`}
                 className="custom-link"
-                href={getOrigin + "/employee/" + item.navigationURL}
+                href={getOrigin + "/" + item.navigationURL}
               >
                 <span> {trimModuleName} </span>
 
@@ -145,7 +145,7 @@ const SubMenu = ({ item }) => {
                   <a
                     key={index}
                     className={`dropdown-link ${pathname === item.link ? "active" : ""}`}
-                    href={getOrigin + "/employee/" + item.navigationURL}
+                    href={getOrigin + "/" + item.navigationURL}
                   >
                     <div className="actions" data-tip="React-tooltip" data-for={`jk-side-${index}`}>
                       <span> {trimModuleName} </span>

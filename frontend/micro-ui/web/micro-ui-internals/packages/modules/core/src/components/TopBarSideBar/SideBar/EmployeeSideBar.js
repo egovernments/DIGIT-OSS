@@ -3,9 +3,7 @@ import SubMenu from "./SubMenu";
 import { Loader, SearchIcon } from "@egovernments/digit-ui-react-components";
 import { useTranslation } from "react-i18next";
 
-const checkMatch=(path="",searchCriteria="")=>(path.toLowerCase().includes(searchCriteria.toLowerCase()))
-
-
+const checkMatch = (path = "", searchCriteria = "") => path.toLowerCase().includes(searchCriteria.toLowerCase());
 
 const EmployeeSideBar = () => {
   const sidebarRef = useRef(null);
@@ -52,7 +50,8 @@ const EmployeeSideBar = () => {
           configEmployeeSideBar[index].push(item);
         }
       } else if (
-       checkMatch(t(`ACTION_TEST_${index?.toUpperCase()?.replace(/[ -]/g, "_")}`),search) || checkMatch(t(Digit.Utils.locale.getTransformedLocale(`ACTION_TEST_${item?.displayName}`)),search)
+        checkMatch(t(`ACTION_TEST_${index?.toUpperCase()?.replace(/[ -]/g, "_")}`), search) ||
+        checkMatch(t(Digit.Utils.locale.getTransformedLocale(`ACTION_TEST_${item?.displayName}`)), search)
       ) {
         index = item.path.split(".")[0];
         if (!configEmployeeSideBar[index]) {
@@ -69,7 +68,7 @@ const EmployeeSideBar = () => {
     for (let i = 0; i < keys.length; i++) {
       if (configEmployeeSideBar[keys[i]][0].path.indexOf(".") === -1) {
         if (configEmployeeSideBar[keys[i]][0].displayName === "Home") {
-          const homeURL = `/${window?.contextPath}/employee`;
+          const homeURL = `/${window?.contextPath}`;
           res.unshift({
             moduleName: keys[i].toUpperCase(),
             icon: configEmployeeSideBar[keys[i]][0],

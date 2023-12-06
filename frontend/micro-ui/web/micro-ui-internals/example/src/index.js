@@ -6,25 +6,37 @@ import { paymentConfigs, PaymentLinks, PaymentModule } from "@egovernments/digit
 import { DigitUI } from "@egovernments/digit-ui-module-core";
 import { initDSSComponents } from "@egovernments/digit-ui-module-dss";
 import { initEngagementComponents } from "@egovernments/digit-ui-module-engagement";
-import { initHRMSComponents } from "@egovernments/digit-ui-module-hrms";
-import { initUtilitiesComponents } from  "@egovernments/digit-ui-module-utilities";
+import { HRMSModule, initHRMSComponents } from "@egovernments/digit-ui-module-hrms";
+import { initUtilitiesComponents } from "@egovernments/digit-ui-module-utilities";
+import { PGRReducers, initPGRComponents } from "@egovernments/digit-ui-module-pgr";
+// import { BRModule, initBRComponents, BRLinks } from "@egovernments/digit-ui-module-br";
 
-import "@egovernments/digit-ui-css/example/index.css";
+// import "@egovernments/digit-ui-css/example/index.css";
 
 import { pgrCustomizations } from "./pgr";
 import { UICustomizations } from "./UICustomizations";
 
 var Digit = window.Digit || {};
 
-const enabledModules = ["Payment", "QuickPayLinks", "DSS", "HRMS", "Engagement", "NDSS",
-  "Utilities",
-//added to check fsm
-"FSM"
+const enabledModules = [
+  // "Payment",
+  // "QuickPayLinks",
+  "DSS",
+  "HRMS",
+  "PGR",
+  // "Engagement",
+  // "NDSS",
+  // "Utilities",
+  // //added to check fsm
+  // "FSM",
+  // "BR",
 ];
 
 const initTokens = (stateCode) => {
   const userType = window.sessionStorage.getItem("userType") || process.env.REACT_APP_USER_TYPE || "CITIZEN";
   const token = window.localStorage.getItem("token") || process.env[`REACT_APP_${userType}_TOKEN`];
+
+  // console.debug(userType);
 
   const citizenInfo = window.localStorage.getItem("Citizen.user-info");
 
@@ -32,6 +44,9 @@ const initTokens = (stateCode) => {
 
   const employeeInfo = window.localStorage.getItem("Employee.user-info");
   const employeeTenantId = window.localStorage.getItem("Employee.tenant-id");
+
+  // console.debug("employeeInfo", employeeInfo);
+  // console.debug("employeeTenantId", employeeTenantId);
 
   const userTypeInfo = userType === "CITIZEN" || userType === "QACT" ? "citizen" : "employee";
   window.Digit.SessionStorage.set("user_type", userTypeInfo);
@@ -55,22 +70,26 @@ const initDigitUI = () => {
     PaymentModule,
     ...paymentConfigs,
     PaymentLinks,
+    HRMSModule,
   });
 
+  // initBRComponents();
   initDSSComponents();
   initHRMSComponents();
-  initEngagementComponents();
-  initUtilitiesComponents();
+  initPGRComponents();
+  // initEngagementComponents();
+  // initUtilitiesComponents();
 
-  const moduleReducers = (initData) => initData;
+  const moduleReducers = (initData) => ({
+    pgr: PGRReducers(initData),
+  });
 
   window.Digit.Customizations = {
     PGR: pgrCustomizations,
-    commonUiConfig: UICustomizations
-
+    commonUiConfig: UICustomizations,
   };
 
-  const stateCode = window?.globalConfigs?.getConfig("STATE_LEVEL_TENANT_ID") || "pb";
+  const stateCode = "pg";
   initTokens(stateCode);
 
   ReactDOM.render(<DigitUI stateCode={stateCode} enabledModules={enabledModules} moduleReducers={moduleReducers} />, document.getElementById("root"));

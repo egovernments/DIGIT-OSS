@@ -12,7 +12,7 @@
   },
   "scripts": {
     "start": "gulp build",
-    "build:prod": "NODE_ENV=production gulp build",
+    "build:prod": "SET NODE_ENV=production gulp build",
     "prepublish": "yarn build:prod",
     "deploy": "gulp && cp -R svg example && cp -R img example && gh-pages -d example"
   },
