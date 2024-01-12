@@ -631,6 +631,67 @@ config:
       - work-dir: "tutorials/backend-developer-guide/btr-services/src/main/resources/db"
         image-name: "btr-services-db"
 
+  - name: "builds/digit-dev/municipal-services/pqm"
+    build:
+      - work-dir: "municipal-services/pqm"
+        image-name: "pqm-service"
+        dockerfile: "build/maven/Dockerfile"
+      - work-dir: "municipal-services/pqm/src/main/resources/db"
+        image-name: "pqm-service-db"
+
+  - name: "builds/digit-dev/municipal-services/pqm-scheduler"
+    build:
+      - work-dir: "municipal-services/pqm-scheduler"
+        image-name: "pqm-scheduler"
+        dockerfile: "municipal-services/pqm-scheduler/Dockerfile"
+
+  - name: "builds/digit-dev/municipal-services/pqm-anomaly-finder"
+    build:
+      - work-dir: "municipal-services/pqm-anomaly-finder"
+        image-name: "pqm-anomaly-finder"
+        dockerfile: "build/maven/Dockerfile"
+      - work-dir: "municipal-services/pqm-anomaly-finder/src/main/resources/db"
+        image-name: "pqm-anomaly-finder-db"
+
+  - name: "builds/digit-dev/municipal-services/impel-fsm"
+    build:
+      - work-dir: "municipal-services/impel-fsm"
+        image-name: "impel-fsm"
+        dockerfile: "build/maven/Dockerfile"
+      - work-dir: "municipal-services/impel-fsm/src/main/resources/db"
+        image-name: "impel-fsm-db"
+
+
+  - name: "builds/digit-dev/municipal-services/impel-vehicle"
+    build:
+      - work-dir: "municipal-services/impel-vehicle"
+        image-name: "impel-vehicle"
+        dockerfile: "build/maven/Dockerfile"
+      - work-dir: "municipal-services/impel-vehicle/src/main/resources/db"
+        image-name: "impel-vehicle-db"
+
+  - name: "builds/digit-dev/municipal-services/impel-vendor"
+    build:
+      - work-dir: "municipal-services/impel-vendor"
+        image-name: "impel-vendor"
+        dockerfile: "build/maven/Dockerfile"
+      - work-dir: "municipal-services/impel-vendor/src/main/resources/db"
+        image-name: "impel-vendor-db"
+
+  - name: "builds/digit-dev/municipal-services/impel-fsm-calculator"
+    build:
+      - work-dir: "municipal-services/impel-fsm-calculator"
+        image-name: "impel-fsm-calculator"
+        dockerfile: "build/maven/Dockerfile"
+      - work-dir: "municipal-services/impel-fsm-calculator/src/main/resources/db"
+        image-name: "impel-fsm-calculator-db"
+
+  - name: "builds/digit-dev/municipal-services/impel-inbox"
+    build:
+      - work-dir: "municipal-services/impel-inbox"
+        image-name: "impel-inbox"
+        dockerfile: "build/maven/Dockerfile"
+
  # Utilities
  
   - name: "builds/digit-dev/utilities/egov-weekly-impact-notifier"
