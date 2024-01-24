@@ -22,7 +22,7 @@ const getResponse = (data, vendorDetils) => {
 const DriverDetails = async (tenantId, filters = {}) => {
   const { ids } = filters;
   const driverDetails = await FSMService.driverSearch(tenantId, filters);
-  const vendorDetails = await FSMService.vendorSearch(tenantId, { driverIds: ids, status: "ACTIVE" });
+  const vendorDetails = await FSMService.vendorSearch(tenantId, { driverIds: ids });
 
   const data = driverDetails.driver.map((data) => ({
     driverData: data,

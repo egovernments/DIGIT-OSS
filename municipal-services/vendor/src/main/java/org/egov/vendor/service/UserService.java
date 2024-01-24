@@ -262,6 +262,7 @@ public class UserService {
 
 		if (owner.getRoles() != null) {
 			owner.getRoles().add(getRolObj(config.getDsoRole(), config.getDsoRoleName()));
+			owner.getRoles().add(getRolObj(config.getCitizenRole(), config.getCitizenRoleName()));
 		} else {
 			List<Role> roles = new ArrayList<>();
 			roles.add(getRolObj(config.getDsoRole(), config.getDsoRoleName()));
