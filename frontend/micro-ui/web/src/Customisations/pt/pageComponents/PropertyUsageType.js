@@ -14,7 +14,7 @@ const PropertyUsageType = ({ t, config, onSelect, userType, formData, formState,
   );
   
   const tenantId = Digit.ULBService.getCurrentTenantId();
-  const stateId = tenantId.split(".")[0];
+  const stateId = Digit.ULBService.getStateId();
   const { data: Menu = { }, isLoading: menuLoading } = Digit.Hooks.pt.usePropertyMDMS(stateId, "PropertyTax", "UsageCategory") || { };
   let usagecat = [];
   usagecat = Menu?.PropertyTax?.UsageCategory || [];

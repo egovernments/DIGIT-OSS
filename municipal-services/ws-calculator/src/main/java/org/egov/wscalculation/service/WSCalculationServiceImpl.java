@@ -266,7 +266,7 @@ public class WSCalculationServiceImpl implements WSCalculationService {
 				.taxHeadEstimates(estimates).billingSlabIds(billingSlabIds).connectionNo(criteria.getConnectionNo()).applicationNO(criteria.getApplicationNo())
 				.build();
 	}
-	
+
 	/**
 	 * 
 	 * @param request would be calculations request

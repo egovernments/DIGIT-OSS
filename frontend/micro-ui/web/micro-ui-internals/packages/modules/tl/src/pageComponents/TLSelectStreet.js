@@ -81,7 +81,7 @@ const TLSelectStreet = ({ t, config, onSelect, userType, formData, formState, se
   useEffect(() => {
     const keys = Object.keys(formValue);
     const part = {};
-    keys.forEach((key) => (part[key] = formData[config.key]?.[key]));
+    keys?.forEach((key) => (part[key] = formData[config.key]?.[key]));
 
     if (!_.isEqual(formValue, part)) {
       onSelect(config.key, { ...formData[config.key], ...formValue });

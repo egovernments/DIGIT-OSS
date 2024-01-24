@@ -14,7 +14,7 @@ const MyApplication = () => {
   const history = useHistory();
   const [finalData, setFinalData] = useState([]);
   const [labelMessage, setLableMessage] = useState(false);
-  const tenantId = Digit.ULBService.getCurrentTenantId();
+  const tenantId = Digit.ULBService.getCitizenCurrentTenant();
   // const userInfo = Digit.UserService.getUser();
   // const requestor = userInfo?.info?.mobileNumber;
 

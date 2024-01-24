@@ -50,13 +50,15 @@ public class BillingSlabService {
 
 	public BillingSlabRes createBillingSlab(BillingSlabReq billingSlabReq) {
 		enrichBillingSlabForCreate(billingSlabReq);
-		producer.push(configurations.getBillingSlabSavePersisterTopic(), billingSlabReq);
+		String tenantId = billingSlabReq.getBillingSlab().get(0).getTenantId();
+		producer.push(tenantId,configurations.getBillingSlabSavePersisterTopic(), billingSlabReq);
 		return billingSlabUtils.getBillingSlabResponse(billingSlabReq);
 	}
 	
 	public BillingSlabRes updateBillingSlab(BillingSlabReq billingSlabReq) {
 		enrichBillingSlabForUpdate(billingSlabReq);
-		producer.push(configurations.getBillingSlabUpdatePersisterTopic(), billingSlabReq);
+		String tenantId = billingSlabReq.getBillingSlab().get(0).getTenantId();
+		producer.push(tenantId,configurations.getBillingSlabUpdatePersisterTopic(), billingSlabReq);
 		return billingSlabUtils.getBillingSlabResponse(billingSlabReq);
 	}
 	

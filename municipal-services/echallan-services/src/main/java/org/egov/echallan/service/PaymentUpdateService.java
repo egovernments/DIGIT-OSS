@@ -22,6 +22,9 @@ import org.springframework.util.CollectionUtils;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import lombok.extern.slf4j.Slf4j;
+import org.slf4j.MDC;
+
+import static org.egov.echallan.util.ChallanConstants.TENANTID_MDC_STRING;
  
 
 @Service
@@ -51,6 +54,11 @@ public class PaymentUpdateService {
 			log.info("Process for object"+ record);
 			PaymentRequest paymentRequest = mapper.convertValue(record, PaymentRequest.class);
 			RequestInfo requestInfo = paymentRequest.getRequestInfo();
+			String tenantId = paymentRequest.getPayment().getTenantId();
+
+			// Adding in MDC so that tracer can add it in header
+			MDC.put(TENANTID_MDC_STRING, tenantId);
+
 			//Update the challan only when the payment is fully done.
 			if( paymentRequest.getPayment().getTotalAmountPaid().compareTo(paymentRequest.getPayment().getTotalDue())!=0) 
 				return;
@@ -71,7 +79,7 @@ public class PaymentUpdateService {
 					}
 					challans.get(0).setAuditDetails(auditDetails);
 					ChallanRequest request = ChallanRequest.builder().requestInfo(requestInfo).challan(challans.get(0)).build();
-					producer.push(config.getUpdateChallanTopic(), request);
+					producer.push(request.getChallan().getTenantId(),config.getUpdateChallanTopic(), request);
 				}
 			}
 		} catch (Exception e) {

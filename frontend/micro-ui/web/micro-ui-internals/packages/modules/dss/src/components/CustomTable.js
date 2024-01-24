@@ -85,24 +85,26 @@ const CustomTable = ({ data = {}, onSearch, setChartData, setChartDenomination, 
         }
         let prevData = lyData?.plots?.[currentIndex]?.value;
         let insight = null;
-        if (row?.name === "CapacityUtilization" && chartKey !== "fsmVehicleLogReportByVehicleNo") {
-          const { range } = value;
-          const { startDate, endDate } = range;
-          const numberOfDays = differenceInCalendarDays(endDate, startDate) + 1;
-          const ulbs = dssTenants
-            .filter((tenant) => tenant?.city?.ddrName === rows?.headerName || tenant?.code === rows?.headerName)
-            .map((tenant) => tenant?.code);
-          const totalCapacity = fstpMdmsData
-            ?.filter((plant) => ulbs.find((ulb) => plant?.ULBS?.includes(ulb)))
-            .reduce((acc, plant) => acc + Number(plant?.PlantOperationalCapacityKLD), 0);
-          cellValue = calculateFSTPCapacityUtilization(cellValue, totalCapacity, numberOfDays);
-          prevData = calculateFSTPCapacityUtilization(prevData, totalCapacity, numberOfDays);
-        }
-        if (row?.name === "CapacityUtilization" && chartKey === "fsmVehicleLogReportByVehicleNo") {
-          const tankCapcity = rows?.plots.find((plot) => plot?.name === "TankCapacity");
-          cellValue = calculateFSTPCapacityUtilization(cellValue, tankCapcity?.value);
-          prevData = calculateFSTPCapacityUtilization(prevData, tankCapcity?.value);
-        }
+        //Commented since it was causing mismatch data for the Capacity FSM: SM-1282
+        // if (row?.name === "CapacityUtilization" && chartKey !== "fsmVehicleLogReportByVehicleNo") {
+        //   const { range } = value;
+        //   const { startDate, endDate } = range;
+        //   const numberOfDays = differenceInCalendarDays(endDate, startDate) + 1;
+        //   const ulbs = dssTenants
+        //     .filter((tenant) => tenant?.city?.ddrName === rows?.headerName || tenant?.code === rows?.headerName)
+        //     .map((tenant) => tenant?.code);
+        //   const totalCapacity = fstpMdmsData
+        //     ?.filter((plant) => ulbs.find((ulb) => plant?.ULBS?.includes(ulb)))
+        //     .reduce((acc, plant) => acc + Number(plant?.PlantOperationalCapacityKLD), 0);
+        //   cellValue = calculateFSTPCapacityUtilization(cellValue, totalCapacity, numberOfDays);
+        //   prevData = calculateFSTPCapacityUtilization(prevData, totalCapacity, numberOfDays);
+        // }
+        // if (row?.name === "CapacityUtilization" && chartKey === "fsmVehicleLogReportByVehicleNo") {
+        //   const tankCapcity = rows?.plots.find((plot) => plot?.name === "TankCapacity");
+        //   cellValue = calculateFSTPCapacityUtilization(cellValue, tankCapcity?.value);
+        //   prevData = calculateFSTPCapacityUtilization(prevData, tankCapcity?.value);
+
+        // }
         if (
           (row?.symbol === "number" || row?.symbol === "percentage" || row?.symbol === "amount") &&
           row?.name !== "CitizenAverageRating" &&
@@ -125,6 +127,7 @@ const CustomTable = ({ data = {}, onSearch, setChartData, setChartDenomination, 
       }, {});
     });
   }, [response, lastYearResponse]);
+
 
   useEffect(() => {
     if (tableData) {
@@ -393,6 +396,11 @@ const CustomTable = ({ data = {}, onSearch, setChartData, setChartDenomination, 
             ) : null
           )}
         </div>
+      )}
+      {filterStack?.length > 2 && data?.showOptionalInfo && (
+        <span className={"dss-table-subheader"} style={{ position: "sticky", left: 0, color: "red" }}>
+          {t(data?.optionalInfo)}
+        </span>
       )}
 
       {!tableColumns || !tableData ? (

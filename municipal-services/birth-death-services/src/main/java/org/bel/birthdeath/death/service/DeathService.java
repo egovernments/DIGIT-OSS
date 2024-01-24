@@ -122,7 +122,7 @@ public class DeathService {
 			deathCertificate.setEmbeddedUrl(applicationRequest.getDeathCertificate().get(0).getEmbeddedUrl());
 			deathCertificate.setDateofissue(applicationRequest.getDeathCertificate().get(0).getDateofissue());
 			deathCertificate.setFilestoreid(pdfResp.getFilestoreIds().get(0));
-			repository.updateCounter(deathCertificate.getDeathDtlId());
+			repository.updateCounter(deathCertificate.getDeathDtlId(), deathCertificate.getTenantId());
 			deathCertificate.setApplicationStatus(StatusEnum.FREE_DOWNLOAD);
 			
 		}
@@ -137,17 +137,17 @@ public class DeathService {
 	}
 
 	public DeathCertificate getDeathCertReqByConsumerCode(SearchCriteria criteria, RequestInfo requestInfo) {
-		return repository.getDeathCertReqByConsumerCode(criteria.getConsumerCode(),requestInfo);
+		return repository.getDeathCertReqByConsumerCode(criteria.getConsumerCode(),requestInfo, criteria.getTenantId());
 	}
 	
-	public List<DeathCertAppln> searchApplications(RequestInfoWrapper requestInfoWrapper) {
+	public List<DeathCertAppln> searchApplications(RequestInfoWrapper requestInfoWrapper, SearchCriteria searchCriteria) {
 		List<DeathCertAppln> certApplns=null;
-		certApplns = repository.searchApplications(requestInfoWrapper.getRequestInfo().getUserInfo().getUuid());
+		certApplns = repository.searchApplications(requestInfoWrapper.getRequestInfo().getUserInfo().getUuid(), searchCriteria.getTenantId());
 		for (DeathCertAppln certAppln : certApplns) {
 			if (certAppln.getStatus().equalsIgnoreCase(StatusEnum.PAID.toString())) {
 				try {
 					DeathCertificate cert = repository.getDeathCertReqByConsumerCode(certAppln.getApplicationNumber(),
-							requestInfoWrapper.getRequestInfo());
+							requestInfoWrapper.getRequestInfo(), certAppln.getTenantId());
 					String uuid = requestInfoWrapper.getRequestInfo().getUserInfo().getUuid();
 				    AuditDetails auditDetails = commUtils.getAuditDetails(uuid, false);
 					cert.getAuditDetails().setLastModifiedBy(auditDetails.getLastModifiedBy());

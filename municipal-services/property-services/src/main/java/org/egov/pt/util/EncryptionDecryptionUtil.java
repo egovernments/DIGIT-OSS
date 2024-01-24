@@ -79,11 +79,10 @@ public class EncryptionDecryptionUtil {
             Map<String, String> keyPurposeMap = getKeyToDecrypt(objectToDecrypt);
             String purpose = keyPurposeMap.get("PropertyEncDisabledSearch");
 
-            if(key.equalsIgnoreCase(PTConstants.PROPERTY_MODEL))
+            if(key.equalsIgnoreCase("Property"))
                 key = keyPurposeMap.get("key");
 
             P decryptedObject = (P) encryptionService.decryptJson(requestInfo, objectToDecrypt, key, purpose, classType);
-
             if (decryptedObject == null) {
                 throw new CustomException("DECRYPTION_NULL_ERROR", "Null object found on performing decryption");
             }

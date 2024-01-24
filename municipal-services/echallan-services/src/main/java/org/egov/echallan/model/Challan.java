@@ -145,5 +145,6 @@ public class Challan {
   private StatusEnum applicationStatus = null;
 
   @JsonProperty("receiptNumber")
-    private String receiptNumber = null;
+  private String receiptNumber = null;
+
 }

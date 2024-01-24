@@ -61,6 +61,7 @@ import org.egov.common.entity.edcr.PlanInformation;
 import org.egov.infra.filestore.entity.FileStoreMapper;
 import org.egov.infra.persistence.entity.AbstractAuditable;
 import org.hibernate.validator.constraints.Length;
+import org.hibernate.validator.constraints.SafeHtml;
 
 @Entity
 @Table(name = "EDCR_APPLICATION_DETAIL")
@@ -114,6 +115,9 @@ public class EdcrApplicationDetail extends AbstractAuditable {
 
     @Length(min = 1, max = 128)
     private String comparisonDcrNumber;
+    
+    @SafeHtml
+    private String tenantId;
 
     @Override
     public Long getId() {
@@ -219,6 +223,14 @@ public class EdcrApplicationDetail extends AbstractAuditable {
 
     public void setComparisonDcrNumber(String comparisonDcrNumber) {
         this.comparisonDcrNumber = comparisonDcrNumber;
+    }
+
+    public String getTenantId() {
+        return tenantId;
+    }
+
+    public void setTenantId(String tenantId) {
+        this.tenantId = tenantId;
     }
 
 }

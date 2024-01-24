@@ -6,6 +6,7 @@ import digit.repository.ServiceRequestRepository;
 import digit.validators.ServiceDefinitionRequestValidator;
 import digit.validators.ServiceRequestValidator;
 import digit.web.models.*;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
@@ -13,6 +14,8 @@ import org.springframework.util.CollectionUtils;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+
+import static digit.constants.Constants.*;
 
 @Service
 public class ServiceRequestService {
@@ -47,6 +50,20 @@ public class ServiceRequestService {
 
         // Restore attribute values to the type in which it was sent in service request
         enrichmentService.setAttributeValuesBackToNativeState(serviceRequest, attributeCodeVsValueMap);
+
+        ServiceEnhanced serviceEnhanced = ServiceEnhanced.builder().id(service.getId()).tenantId(service.getTenantId())
+                .serviceDefId(service.getServiceDefId()).accountId(service.getAccountId())
+                .additionalDetails(service.getAdditionalDetails()).auditDetails(service.getAuditDetails())
+                .clientId(service.getClientId()).referenceId(service.getReferenceId()).attributes(service.getAttributes())
+                .code(service.getCode()).module(service.getModule())
+                .consumerCode((String) attributeCodeVsValueMap.get(CONSUMER_CODE)).rating((Integer) attributeCodeVsValueMap.get(RATING))
+                .channel((String) attributeCodeVsValueMap.get(CHANNEL)).comments((String) attributeCodeVsValueMap.get(COMMENTS)).build();
+
+        ServiceRequestEnhanced serviceRequestEnhanced = ServiceRequestEnhanced.builder()
+                .service(serviceEnhanced).requestInfo(serviceRequest.getRequestInfo()).build();
+
+        // Producer statement to emit service definition to kafka for indexing
+        producer.push(config.getServiceCreateIndexerTopic(), serviceRequestEnhanced);
 
         return service;
     }

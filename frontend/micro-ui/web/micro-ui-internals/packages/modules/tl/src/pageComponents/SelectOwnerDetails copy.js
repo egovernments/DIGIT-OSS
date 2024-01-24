@@ -34,7 +34,7 @@ const SelectOwnerDetails = ({ t, config, onSelect, userType, formData }) => {
     i18nKey: "COMMON_RELATION_HUSBAND"
   }]
   useEffect(() => {
-    fields.map((ob) => {
+    fields?.map((ob) => {
       if(isInstitutional){
         if(ob.institutionName && ob.mobilenumber){
           setCanmovenext(false);
@@ -68,7 +68,7 @@ const SelectOwnerDetails = ({ t, config, onSelect, userType, formData }) => {
   
   let TLmenu = [];
     Menu &&
-      Menu.map((genders) => {
+      Menu?.map((genders) => {
         TLmenu.push({i18nKey: `TL_GENDER_${genders.code}`, code: `${genders.code}`})
     });
 
@@ -124,7 +124,7 @@ const SelectOwnerDetails = ({ t, config, onSelect, userType, formData }) => {
   }
   function setPrimaryOwner(i, e) {
     let units = [...fields];
-    units.map((units) => {
+    units?.map((units) => {
       units.isprimaryowner = false;
     });
     units[i].isprimaryowner = ismultiple ? e.target.checked : true;
@@ -234,7 +234,7 @@ const SelectOwnerDetails = ({ t, config, onSelect, userType, formData }) => {
   if(isInstitutional === true && ismultiple === false){
     return (
       <FormStep config={config} onSelect={goNext} onSkip={onSkip} t={t} isDisabled={canmovenext} forcedError={t(error)}>
-        {fields.map((field, index) => {
+        {fields?.map((field, index) => {
           return (
             <div key={`${field}-${index}`}>
               <div>
@@ -374,7 +374,7 @@ const SelectOwnerDetails = ({ t, config, onSelect, userType, formData }) => {
 
   return (
     <FormStep config={config} onSelect={goNext} onSkip={onSkip} t={t} isDisabled={canmovenext} forcedError={t(error)}>
-      {fields.map((field, index) => {
+      {fields?.map((field, index) => {
         return (
           <div key={`${field}-${index}`}>
             <div style={ismultiple ? {border:"solid",borderRadius:"5px",padding:"10px",paddingTop:"20px",marginTop:"10px",borderColor:"#f3f3f3",background:"#FAFAFA"}:{}}>

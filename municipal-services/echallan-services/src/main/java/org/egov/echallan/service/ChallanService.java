@@ -143,6 +143,7 @@ public class ChallanService {
 		return count;
 	}
 	 public List<Challan> searchChallans(ChallanRequest request){
+		 	validator.validateSearchRequest(request.getChallan().getTenantId());
 	        SearchCriteria criteria = new SearchCriteria();
 	        List<String> ids = new LinkedList<>();
 	        ids.add(request.getChallan().getId());

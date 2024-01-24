@@ -101,7 +101,7 @@ const NavItemHeader = props => {
                     item={{
                       ...item,
                       nested: true,
-                      to: resolveLinkPath(item.to, props.item.to),
+                      to: resolveLinkPath(item?.to, props?.item?.to),
                       elementStyle:{marginLeft:"19px"}
                     }}
                   />

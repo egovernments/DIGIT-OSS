@@ -6,6 +6,8 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.kafka.common.protocol.types.Field;
 import org.egov.echallan.model.Challan;
 import org.egov.echallan.repository.ChallanRepository;
+import org.egov.echallan.util.ChallanConstants;
+import org.slf4j.MDC;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.support.KafkaHeaders;
@@ -28,7 +30,7 @@ public class FileStoreConsumer {
     @Autowired
     private ChallanRepository challanRepository;
 
-    @KafkaListener(topics = { "${kafka.topics.filestore}" })
+    @KafkaListener(topicPattern = "${kafka.topic.pdf.filestore.pattern}")
     public void listen(final HashMap<String, Object> record, @Header(KafkaHeaders.RECEIVED_TOPIC) String topic) {
     	try {
         List<Map<String,Object>> jobMaps = (List<Map<String,Object>>)record.get(KEY_PDF_JOBS);
@@ -43,6 +45,10 @@ public class FileStoreConsumer {
             	log.info("Updating filestorid for: "+challans);
             }
         });
+        String tenantId = challans.get(0).getTenantId();
+
+        // Adding in MDC so that tracer can add it in header
+        MDC.put(ChallanConstants.TENANTID_MDC_STRING, tenantId);
 
 
         challanRepository.updateFileStoreId(challans);

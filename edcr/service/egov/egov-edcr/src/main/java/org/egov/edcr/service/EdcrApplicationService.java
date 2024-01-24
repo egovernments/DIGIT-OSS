@@ -27,6 +27,7 @@ import org.egov.edcr.entity.SearchBuildingPlanScrutinyForm;
 import org.egov.edcr.repository.EdcrApplicationDetailRepository;
 import org.egov.edcr.repository.EdcrApplicationRepository;
 import org.egov.edcr.service.es.EdcrIndexService;
+import org.egov.infra.config.core.ApplicationThreadLocals;
 import org.egov.infra.config.persistence.datasource.routing.annotation.ReadOnly;
 import org.egov.infra.filestore.entity.FileStoreMapper;
 import org.egov.infra.filestore.service.FileStoreService;
@@ -118,8 +119,10 @@ public class EdcrApplicationService {
 
     private Plan callDcrProcess(EdcrApplication edcrApplication, String applicationType) {
         Plan planDetail = new Plan();
+        planDetail.setTenantId(ApplicationThreadLocals.getFullTenantID());
         planDetail = planService.process(edcrApplication, applicationType);
         updateFile(planDetail, edcrApplication);
+        edcrApplication.getEdcrApplicationDetails().get(0).setTenantId(ApplicationThreadLocals.getFullTenantID());
         edcrApplicationDetailService.saveAll(edcrApplication.getEdcrApplicationDetails());
 
         return planDetail;

@@ -9,7 +9,7 @@ const SearchTrade = () => {
   const { path } = useRouteMatch();
 
   const params = useMemo(() =>
-    config.map(
+    config?.map(
       (step) => {
         const texts = {};
         for (const key in step.texts) {

@@ -1,6 +1,10 @@
 # Changelog
 All notable changes to this module will be documented in this file.
 
+## 1.0.6 - 2023-08-10
+
+- Central Instance Library Integration
+
 ## 1.0.5 - 2023-02-01
 
 - Transition from 1.0.5-beta version to 1.0.5 version

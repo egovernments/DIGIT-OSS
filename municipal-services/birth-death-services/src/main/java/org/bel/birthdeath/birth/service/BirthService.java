@@ -122,7 +122,7 @@ public class BirthService {
 			birthCertificate.setEmbeddedUrl(applicationRequest.getBirthCertificate().get(0).getEmbeddedUrl());
 			birthCertificate.setDateofissue(applicationRequest.getBirthCertificate().get(0).getDateofissue());
 			birthCertificate.setFilestoreid(pdfResp.getFilestoreIds().get(0));
-			repository.updateCounter(birthCertificate.getBirthDtlId());
+			repository.updateCounter(birthCertificate.getBirthDtlId(), birthCertificate.getTenantId());
 			birthCertificate.setApplicationStatus(StatusEnum.FREE_DOWNLOAD);
 			
 		}
@@ -137,17 +137,17 @@ public class BirthService {
 	}
 
 	public BirthCertificate getBirthCertReqByConsumerCode(SearchCriteria criteria, RequestInfo requestInfo) {
-		return repository.getBirthCertReqByConsumerCode(criteria.getConsumerCode(),requestInfo);
+		return repository.getBirthCertReqByConsumerCode(criteria.getConsumerCode(),requestInfo, criteria.getTenantId());
 	}
 	
-	public List<BirthCertAppln> searchApplications(RequestInfoWrapper requestInfoWrapper) {
+	public List<BirthCertAppln> searchApplications(RequestInfoWrapper requestInfoWrapper, SearchCriteria searchCriteria) {
 		List<BirthCertAppln> certApplns = null;
-		certApplns = repository.searchApplications(requestInfoWrapper.getRequestInfo().getUserInfo().getUuid());
+		certApplns = repository.searchApplications(requestInfoWrapper.getRequestInfo().getUserInfo().getUuid(), searchCriteria.getTenantId());
 		for (BirthCertAppln certAppln : certApplns) {
 			if (certAppln.getStatus().equalsIgnoreCase(StatusEnum.PAID.toString())) {
 				try {
 					BirthCertificate cert = repository.getBirthCertReqByConsumerCode(certAppln.getApplicationNumber(),
-							requestInfoWrapper.getRequestInfo());
+							requestInfoWrapper.getRequestInfo(), certAppln.getTenantId());
 					String uuid = requestInfoWrapper.getRequestInfo().getUserInfo().getUuid();
 				    AuditDetails auditDetails = commUtils.getAuditDetails(uuid, false);
 					cert.getAuditDetails().setLastModifiedBy(auditDetails.getLastModifiedBy());

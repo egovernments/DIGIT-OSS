@@ -48,7 +48,6 @@ const StakeholderRegistration = () => {
   };
   const handleSkip = () => {};
 
-  // const state = tenantId.split(".")[0];
   let config = [];
   newConfig = newConfig?.StakeholderConfig ? newConfig?.StakeholderConfig : newConfigBPAREG;
   newConfig.forEach((obj) => {

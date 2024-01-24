@@ -24,7 +24,7 @@ public class BirthDtlAllQueryBuilder {
 	private static String QUERY_MASTER_FULL_ALL = "SELECT bdtl.id birthdtlid,bfat.id bfatid,bmot.id bmotid,bpmad.id bpmadid,bpsad.id bpsadid," +
 			"bdtl.tenantid tenantid, registrationno, dateofbirth, counter, gender , " + 
 			"CASE WHEN gender = '1' THEN 'Male' WHEN gender = '2' THEN 'Female' WHEN gender = '3' THEN 'Others'  END AS genderstr ," +
-			"(select bh.hospitalname from eg_birth_death_hospitals bh where bh.id=hospitalid)  AS hospitalname, placeofbirth, dateofreport, remarks," + 
+			"(select bh.hospitalname from {schema}.eg_birth_death_hospitals bh where bh.id=hospitalid)  AS hospitalname, placeofbirth, dateofreport, remarks," +
 			"hospitalid , informantsname , informantsaddress , islegacyrecord, " +
 			"bfat.firstname bfatfn ,bmot.firstname bmotfn , bdtl.firstname bdtlfn ," + 
 			"bfat.middlename bfatmn ,bmot.middlename bmotmn , bdtl.middlename bdtlmn ," + 
@@ -40,15 +40,15 @@ public class BirthDtlAllQueryBuilder {
 			"bpmad.district pmdistrict,bpmad.city pmcity ,bpmad.state pmstate,bpmad.pinno pmpinno,bpmad.country pmcountry," + 
 			"bpsad.houseno pshouseno,bpsad.buildingno psbuildingno,bpsad.streetname psstreetname,bpsad.locality pslocality,bpsad.tehsil pstehsil," + 
 			"bpsad.district psdistrict,bpsad.city pscity ,bpsad.state psstate,bpsad.pinno pspinno,bpsad.country pscountry " + 
-			"FROM public.eg_birth_dtls bdtl " + 
-			"left join eg_birth_father_info bfat on bfat.birthdtlid = bdtl.id   " + 
-			"left join eg_birth_mother_info bmot on bmot.birthdtlid = bdtl.id  " + 
-			"left join eg_birth_permaddr bpmad on bpmad.birthdtlid = bdtl.id   " + 
-			"left join eg_birth_presentaddr bpsad on bpsad.birthdtlid = bdtl.id";
-	
+			"FROM {schema}.eg_birth_dtls bdtl " +
+			"left join {schema}.eg_birth_father_info bfat on bfat.birthdtlid = bdtl.id   " +
+			"left join {schema}.eg_birth_mother_info bmot on bmot.birthdtlid = bdtl.id  " +
+			"left join {schema}.eg_birth_permaddr bpmad on bpmad.birthdtlid = bdtl.id   " +
+			"left join {schema}.eg_birth_presentaddr bpsad on bpsad.birthdtlid = bdtl.id";
+
     private static String QUERY_MASTER_ALL = "SELECT bdtl.id birthdtlid, bdtl.tenantid tenantid, registrationno, dateofbirth, counter, gender , "
     		+ "CASE WHEN gender = '1' THEN 'Male' WHEN gender = '2' THEN 'Female' WHEN gender = '3' THEN 'Others'  END AS genderstr ,"
-    		+ " (select bh.hospitalname from eg_birth_death_hospitals bh where bh.id=hospitalid)  AS hospitalname, placeofbirth, dateofreport, remarks, "
+    		+ " (select bh.hospitalname from {schema}.eg_birth_death_hospitals bh where bh.id=hospitalid)  AS hospitalname, placeofbirth, dateofreport, remarks, "
     		+ "bfat.firstname bfatfn ,bmot.firstname bmotfn , bdtl.firstname bdtlfn ,"
     		+ "bfat.middlename bfatmn ,bmot.middlename bmotmn , bdtl.middlename bdtlmn ,"
     		+ "bfat.lastname bfatln ,bmot.lastname bmotln , bdtl.lastname bdtlln ,"
@@ -57,26 +57,26 @@ public class BirthDtlAllQueryBuilder {
     		+ "bpsad.houseno pshouseno,bpsad.buildingno psbuildingno,bpsad.streetname psstreetname,bpsad.locality pslocality,bpsad.tehsil pstehsil,"
     		+ "bpsad.district psdistrict,bpsad.city pscity ,bpsad.state psstate,bpsad.pinno pspinno,bpsad.country pscountry, "
     		+ "bfat.aadharno bfataadharno ,bmot.aadharno bmotaadharno "+
-    		"FROM public.eg_birth_dtls bdtl " + 
-    		"left join eg_birth_father_info bfat on bfat.birthdtlid = bdtl.id " + 
-    		"left join eg_birth_mother_info bmot on bmot.birthdtlid = bdtl.id " +
-    		"left join eg_birth_permaddr bpmad on bpmad.birthdtlid = bdtl.id " + 
-    		"left join eg_birth_presentaddr bpsad on bpsad.birthdtlid = bdtl.id ";
-    
+    		"FROM {schema}.eg_birth_dtls bdtl " +
+    		"left join {schema}.eg_birth_father_info bfat on bfat.birthdtlid = bdtl.id " +
+    		"left join {schema}.eg_birth_mother_info bmot on bmot.birthdtlid = bdtl.id " +
+    		"left join {schema}.eg_birth_permaddr bpmad on bpmad.birthdtlid = bdtl.id " +
+    		"left join {schema}.eg_birth_presentaddr bpsad on bpsad.birthdtlid = bdtl.id ";
+
     private static final String QUERY_MASTER = "SELECT bdtl.id birthdtlid, tenantid, registrationno, dateofbirth, counter, gender ,hospitalname, "+
     		"CASE WHEN gender = '1' THEN 'Male' WHEN gender = '2' THEN 'Female' WHEN gender = '3' THEN 'Others'  END AS genderstr ," +
-    		" (select bh.hospitalname from eg_birth_death_hospitals bh where bh.id=hospitalid)  AS hospitalname ,"+
+    		" (select bh.hospitalname from {schema}.eg_birth_death_hospitals bh where bh.id=hospitalid)  AS hospitalname ,"+
     		"bfat.firstname bfatfn ,bmot.firstname bmotfn , bdtl.firstname bdtlfn ,"+
     		"bfat.middlename bfatmn ,bmot.middlename bmotmn , bdtl.middlename bdtlmn ,"+
     		"bfat.lastname bfatln ,bmot.lastname bmotln , bdtl.lastname bdtlln "+
-    		"FROM public.eg_birth_dtls bdtl " + 
-    		"left join eg_birth_father_info bfat on bfat.birthdtlid = bdtl.id " + 
-    		"left join eg_birth_mother_info bmot on bmot.birthdtlid = bdtl.id " ;
+    		"FROM {schema}.eg_birth_dtls bdtl " +
+    		"left join {schema}.eg_birth_father_info bfat on bfat.birthdtlid = bdtl.id " +
+    		"left join {schema}.eg_birth_mother_info bmot on bmot.birthdtlid = bdtl.id " ;
     
     private static String APPLSQUERY ="select breq.birthCertificateNo, breq.createdtime, breq.status, bdtl.registrationno, bdtl.tenantid, "
     		+ "concat(COALESCE(bdtl.firstname,'') , ' ', COALESCE(bdtl.middlename,'') ,' ', COALESCE(bdtl.lastname,'')) as name, "
     		+ "CASE WHEN breq.lastmodifiedtime/1000 < (extract(epoch from NOW())-?*24*60*60) THEN 'EXPIRED' ELSE breq.filestoreid END as filestoreid "
-    		+ "from eg_birth_cert_request breq left join eg_birth_dtls bdtl on bdtl.id=breq.birthDtlId where  "
+    		+ "from {schema}.eg_birth_cert_request breq left join {schema}.eg_birth_dtls bdtl on bdtl.id=breq.birthDtlId where  "
     		+ "breq.createdby=? order by breq.createdtime DESC ";
     
     private static final String PAGINATIONWRAPPER = "SELECT * FROM " +
@@ -95,7 +95,7 @@ public class BirthDtlAllQueryBuilder {
 
 
 	public String getBirthCertReq(String consumerCode, RequestInfo requestInfo, List<Object> preparedStmtList) {
-		StringBuilder builder = new StringBuilder("select req.*,(select tenantid from eg_birth_dtls dtl where req.birthdtlid=dtl.id) from eg_birth_cert_request req");
+		StringBuilder builder = new StringBuilder("select req.*,(select tenantid from {schema}.eg_birth_dtls dtl where req.birthdtlid=dtl.id) from {schema}.eg_birth_cert_request req");
 		if (consumerCode != null && !consumerCode.isEmpty()) {
 			addClauseIfRequired(preparedStmtList, builder);
 			builder.append(" birthcertificateno=? ");

@@ -10,6 +10,7 @@ import com.jayway.jsonpath.JsonPath;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.egov.common.contract.request.RequestInfo;
+import org.egov.common.utils.MultiStateInstanceUtil;
 import org.egov.echallan.config.ChallanConfiguration;
 import org.egov.echallan.model.Amount;
 import org.egov.echallan.model.Challan;
@@ -33,6 +34,9 @@ public class ChallanValidator {
 
 	@Autowired
 	private ServiceRequestRepository serviceRequestRepository;
+
+	@Autowired
+	private MultiStateInstanceUtil centralInstanceUtil;
 
 	
 	public void validateFields(ChallanRequest request, Object mdmsData) {
@@ -106,7 +110,7 @@ public class ChallanValidator {
 	}
 
 	public List<String> getLocalityCodes(String tenantId, RequestInfo requestInfo){
-		StringBuilder builder = new StringBuilder(config.getBoundaryHost());
+		StringBuilder builder = new StringBuilder(config.getLocationHost());
 		builder.append(config.getFetchBoundaryEndpoint());
 		builder.append("?tenantId=");
 		builder.append(tenantId);
@@ -158,5 +162,12 @@ public class ChallanValidator {
 		if(!CollectionUtils.isEmpty(errorMap.keySet())) {
 			throw new CustomException(errorMap);
 		}
+	}
+
+	public void validateSearchRequest(String tenantId){
+		if(centralInstanceUtil.getIsEnvironmentCentralInstance() && tenantId == null)
+			throw new CustomException("ECHALLAN_INVALID_SEARCH"," TenantId is mandatory for search ");
+		else if(centralInstanceUtil.getIsEnvironmentCentralInstance() && tenantId.split("\\.").length < centralInstanceUtil.getStateLevelTenantIdLength())
+			throw new CustomException("ECHALLAN_INVALID_SEARCH"," TenantId should be mandatorily " + centralInstanceUtil.getStateLevelTenantIdLength() + " levels for search");
 	}
 }

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { CardLabel, LabelFieldPair, Dropdown, UploadFile, Toast, Loader } from "@egovernments/digit-ui-react-components";
 
-const SelectDocuments = ({ t, config, onSelect, userType, formData, setError: setFormError, clearErrors: clearFormErrors, formState }) => {
+const TLSelectDocuments = ({ t, config, onSelect, userType, formData, setError: setFormError, clearErrors: clearFormErrors, formState }) => {
   const tenantId = Digit.ULBService.getCurrentTenantId();
   const stateId = Digit.ULBService.getStateId();
   const [documents, setDocuments] = useState(formData?.documents?.documents || []);
@@ -190,7 +190,7 @@ function SelectDocument({
       }, formData);
       if (value) {
         if (onArray) {
-          const valueArr = value?.map((e) => formArrayAttrPath.reduce((acc, f) => acc?.[f], e) || e);
+          const valueArr = value?.map((e) => formArrayAttrPath?.reduce((acc, f) => acc?.[f], e) || e);
           hideInput = valueArr?.some((e) => filterValue.includes(e));
         } else {
           hideInput = filterValue?.includes(value);
@@ -211,7 +211,7 @@ function SelectDocument({
       if (value) {
         if (!onArray) dropDownData = dropdownData.filter((e) => e.parentValue.includes(value));
         else {
-          const valueMap = value.map((e) => attrForFormArray?.reduce((acc, key) => acc[key], e) || e);
+          const valueMap = value?.map((e) => attrForFormArray?.reduce((acc, key) => acc[key], e) || e);
           dropDownData = dropdownData.filter((e) => e.parentValue.some((val) => valueMap.includes(val)));
         }
       }
@@ -253,4 +253,4 @@ function SelectDocument({
   );
 }
 
-export default SelectDocuments;
+export default TLSelectDocuments;

@@ -195,11 +195,27 @@ public class QueryBuilder {
 			addToPreparedStatement(preparedStmtList, type);
 		}
 
+		/*
+		 * Enable part search by registrationNumber of vehicle
+		 */
+
 		List<String> registrationNumber = criteria.getRegistrationNumber();
-		if (!CollectionUtils.isEmpty(registrationNumber)) {
+		if (!CollectionUtils.isEmpty(registrationNumber) && (registrationNumber.stream()
+				.filter(checkregnumber -> checkregnumber.length() > 0).findFirst().orElse(null) != null)) {
+			boolean flag = false;
 			addClauseIfRequired(preparedStmtList, builder);
-			builder.append(" registrationNumber IN (").append(createQuery(registrationNumber)).append(")");
-			addToPreparedStatement(preparedStmtList, registrationNumber);
+			builder.append(" ( ");
+			for (String registrationno : registrationNumber) {
+				if (flag)
+					builder.append(" OR ");
+				builder.append(" UPPER(registrationNumber) like ?");
+				preparedStmtList.add(
+						'%' + net.logstash.logback.encoder.org.apache.commons.lang.StringUtils.upperCase(registrationno)
+								+ '%');
+				builder.append(" ESCAPE '_' ");
+				flag = true;
+			}
+			builder.append(" ) ");
 		}
 
 		List<String> ids = criteria.getIds();

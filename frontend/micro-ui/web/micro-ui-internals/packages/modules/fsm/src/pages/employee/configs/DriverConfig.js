@@ -30,10 +30,10 @@ const DriverConfig = (t, disabled = false) => {
           key: "license",
           populators: {
             name: "license",
-            maxlength: 13,
+            maxlength: 15,
             validation: {
               required: true,
-              pattern: /^[0-9]{13}/,
+              pattern: /^[0-9A-Za-z]{15}/,
               title: t("ES_FSM_DRIVER_FORMAT_TIP"),
             },
             error: t("FSM_REGISTRY_INVALID_DRIVER_LICENSE"),

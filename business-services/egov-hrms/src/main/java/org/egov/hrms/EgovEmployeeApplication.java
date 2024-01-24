@@ -44,8 +44,15 @@ import java.util.TimeZone;
 
 import javax.annotation.PostConstruct;
 
+import lombok.extern.slf4j.Slf4j;
 import org.egov.common.utils.MultiStateInstanceUtil;
+import org.egov.hrms.config.PropertiesManager;
+import org.egov.hrms.repository.RestCallRepository;
+import org.egov.hrms.service.DefaultUserService;
+import org.egov.hrms.service.IndividualService;
+import org.egov.hrms.service.UserService;
 import org.egov.tracer.config.TracerConfiguration;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -55,10 +62,12 @@ import org.springframework.context.annotation.Import;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.context.annotation.Primary;
 
 @SpringBootApplication
-@ComponentScan(basePackages = { "org.egov.hrms", "org.egov.hrms.web.controllers" , "org.egov.hrms.config"})
+@ComponentScan(basePackages = { "org.egov.hrms", "org.egov.hrms.web.controller" , "org.egov.hrms.config"})
 @Import({TracerConfiguration.class, MultiStateInstanceUtil.class})
+@Slf4j
 public class EgovEmployeeApplication {
 
     @Value("${app.timezone}")
@@ -75,6 +84,34 @@ public class EgovEmployeeApplication {
         objectMapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
         objectMapper.setTimeZone(TimeZone.getTimeZone(timeZone));
         return objectMapper;
+    }
+
+    @Bean
+    @Primary
+    public UserService getUserService(@Value("${egov.hrms.user.service.qualifier}") String userServiceQualifier,
+                                      @Autowired PropertiesManager propertiesManager,
+                                      @Autowired RestCallRepository restCallRepository,
+                                      @Autowired ObjectMapper objectMapper,
+                                      @Autowired MultiStateInstanceUtil multiStateInstanceUtil,
+                                      @Value("${egov.user.create.endpoint}") String userCreateEndpoint,
+                                      @Value("${egov.user.update.endpoint}") String userUpdateEndpoint,
+                                      @Value("${egov.user.search.endpoint}") String userSearchEndpoint) {
+        if (userServiceQualifier.equalsIgnoreCase("individualService")) {
+            log.info("using individual module as user service");
+            return new IndividualService(propertiesManager, restCallRepository);
+        }
+        else {
+            log.info("using egov-user module as user service");
+            DefaultUserService userService = new DefaultUserService();
+            userService.setPropertiesManager(propertiesManager);
+            userService.setRestCallRepository(restCallRepository);
+            userService.setObjectMapper(objectMapper);
+            userService.setCentralInstanceUtil(multiStateInstanceUtil);
+            userService.setUserCreateEndpoint(userCreateEndpoint);
+            userService.setUserUpdateEndpoint(userUpdateEndpoint);
+            userService.setUserSearchEndpoint(userSearchEndpoint);
+            return userService;
+        }
     }
 
     public static void main(String[] args) {

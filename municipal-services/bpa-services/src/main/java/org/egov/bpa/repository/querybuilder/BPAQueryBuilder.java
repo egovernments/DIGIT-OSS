@@ -1,14 +1,15 @@
 package org.egov.bpa.repository.querybuilder;
 
-import java.util.Arrays;
-import java.util.Calendar;
-import java.util.List;
-
 import org.egov.bpa.config.BPAConfiguration;
 import org.egov.bpa.web.model.BPASearchCriteria;
+import org.egov.common.utils.MultiStateInstanceUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
+
+import java.util.Arrays;
+import java.util.Calendar;
+import java.util.List;
 
 @Component
 public class BPAQueryBuilder {
@@ -16,14 +17,17 @@ public class BPAQueryBuilder {
     @Autowired
     private BPAConfiguration config;
 
+    @Autowired
+    private MultiStateInstanceUtil centralInstanceUtil;
+
     private static final String LEFT_OUTER_JOIN_STRING = " LEFT OUTER JOIN ";
 
     private static final String QUERY = "SELECT bpa.*,bpadoc.*,bpa.id as bpa_id,bpa.tenantid as bpa_tenantId,bpa.lastModifiedTime as "
             + "bpa_lastModifiedTime,bpa.createdBy as bpa_createdBy,bpa.lastModifiedBy as bpa_lastModifiedBy,bpa.createdTime as "
             + "bpa_createdTime,bpa.additionalDetails,bpa.landId as bpa_landId, bpadoc.id as bpa_doc_id, bpadoc.additionalDetails as doc_details, bpadoc.documenttype as bpa_doc_documenttype,bpadoc.filestoreid as bpa_doc_filestore"
-            + " FROM eg_bpa_buildingplan bpa"
+            + " FROM {schema}.eg_bpa_buildingplan bpa"
             + LEFT_OUTER_JOIN_STRING
-            + "eg_bpa_document bpadoc ON bpadoc.buildingplanid = bpa.id";;
+            + "{schema}.eg_bpa_document bpadoc ON bpadoc.buildingplanid = bpa.id";;
 
     private final String paginationWrapper = "SELECT * FROM "
             + "(SELECT *, DENSE_RANK() OVER (ORDER BY bpa_lastModifiedTime DESC) offset_ FROM " + "({})"
@@ -43,7 +47,7 @@ public class BPAQueryBuilder {
         StringBuilder builder = new StringBuilder(QUERY);
 
         if (criteria.getTenantId() != null) {
-            if (criteria.getTenantId().split("\\.").length == 1) {
+            if (centralInstanceUtil.isTenantIdStateLevel(criteria.getTenantId())) {
 
                 addClauseIfRequired(preparedStmtList, builder);
                 builder.append(" bpa.tenantid like ?");
@@ -199,8 +203,8 @@ public class BPAQueryBuilder {
 
         if(criteria.getLimit() == null && criteria.getOffset() == null) {
         	limit = config.getMaxSearchLimit();
-        } 
-        
+        }
+
         if (criteria.getLimit() != null && criteria.getLimit() <= config.getMaxSearchLimit())
             limit = criteria.getLimit();
 
@@ -266,13 +270,13 @@ public class BPAQueryBuilder {
     private String addCountWrapper(String query) {
         return countWrapper.replace("{INTERNAL_QUERY}", query);
     }
-    
+
     public String getBPASearchQueryForPlainSearch(BPASearchCriteria criteria, List<Object> preparedStmtList, List<String> edcrNos, boolean isCount) {
 
         StringBuilder builder = new StringBuilder(QUERY);
 
         if (criteria.getTenantId() != null) {
-            if (criteria.getTenantId().split("\\.").length == 1) {
+            if (centralInstanceUtil.isTenantIdStateLevel(criteria.getTenantId())) {
 
                 addClauseIfRequired(preparedStmtList, builder);
                 builder.append(" bpa.tenantid like ?");
@@ -287,7 +291,7 @@ public class BPAQueryBuilder {
 
         if(isCount)
             return addCountWrapper(builder.toString());
-        
+
         return addPaginationWrapper(builder.toString(), preparedStmtList, criteria);
 
     }

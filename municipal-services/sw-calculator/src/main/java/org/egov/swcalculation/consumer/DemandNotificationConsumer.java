@@ -3,7 +3,9 @@ package org.egov.swcalculation.consumer;
 import java.util.HashMap;
 
 import org.egov.swcalculation.config.SWCalculationConfiguration;
+import org.egov.swcalculation.constants.SWCalculationConstant;
 import org.egov.swcalculation.web.models.DemandNotificationObj;
+import org.slf4j.MDC;
 import org.egov.swcalculation.service.SewerageDemandNotificationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.annotation.KafkaListener;
@@ -37,6 +39,10 @@ public class DemandNotificationConsumer {
 		try {
 			DemandNotificationObj demandNotificationObj = mapper.convertValue(record, DemandNotificationObj.class);
 			String tenantId= demandNotificationObj.getTenantId();
+			
+			// Adding in MDC so that tracer can add it in header
+			MDC.put(SWCalculationConstant.TENANTID_MDC_STRING, tenantId);
+			
 			if (sWCalculationConfiguration.getIsLocalizationStateLevel())
 				tenantId = tenantId.split("\\.")[0];
 			demandNotificationObj.setTenantId(tenantId);

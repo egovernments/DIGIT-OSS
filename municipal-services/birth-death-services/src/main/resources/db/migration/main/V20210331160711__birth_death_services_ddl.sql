@@ -1,4 +1,4 @@
-CREATE TABLE public.eg_birth_dtls_audit
+CREATE TABLE eg_birth_dtls_audit
 (
      operation char(1)  NOT NULL,
 	 stamp timestamp NOT NULL, 
@@ -41,7 +41,7 @@ CREATE TRIGGER eg_birth_dtls_audit
 BEFORE UPDATE OR DELETE ON eg_birth_dtls
     FOR EACH ROW EXECUTE PROCEDURE process_eg_birth_dtls_audit();
 
-CREATE TABLE public.eg_birth_father_info_audit
+CREATE TABLE eg_birth_father_info_audit
 (
      operation char(1)  NOT NULL,
 	 stamp timestamp NOT NULL, 
@@ -80,7 +80,7 @@ CREATE TRIGGER eg_birth_father_info_audit
 BEFORE UPDATE OR DELETE ON eg_birth_father_info
     FOR EACH ROW EXECUTE PROCEDURE process_eg_birth_father_info_audit();
 
-CREATE TABLE public.eg_birth_mother_info_audit
+CREATE TABLE eg_birth_mother_info_audit
 (
      operation char(1)  NOT NULL,
 	 stamp timestamp NOT NULL, 
@@ -119,7 +119,7 @@ CREATE TRIGGER eg_birth_mother_info_audit
 BEFORE UPDATE OR DELETE ON eg_birth_mother_info
     FOR EACH ROW EXECUTE PROCEDURE process_eg_birth_mother_info_audit();
 
-CREATE TABLE public.eg_birth_permaddr_audit
+CREATE TABLE eg_birth_permaddr_audit
 (
      operation char(1)  NOT NULL,
 	 stamp timestamp NOT NULL, 
@@ -159,7 +159,7 @@ BEFORE UPDATE OR DELETE ON eg_birth_permaddr
     FOR EACH ROW EXECUTE PROCEDURE process_eg_birth_permaddr_audit();
 	
 	
-CREATE TABLE public.eg_birth_presentaddr_audit
+CREATE TABLE eg_birth_presentaddr_audit
 (
      operation char(1)  NOT NULL,
 	 stamp timestamp NOT NULL, 

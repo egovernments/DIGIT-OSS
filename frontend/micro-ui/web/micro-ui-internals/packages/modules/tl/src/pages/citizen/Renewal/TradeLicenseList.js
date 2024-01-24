@@ -27,7 +27,7 @@ const TradeLicenseList = ({ application }) => {
     let Licenses = res.Licenses;
     let FY = getvalidfromdate("", mdmsFinancialYear).finYearRange;
     Licenses &&
-      Licenses.map((ob) => {
+      Licenses?.map((ob) => {
         if (ob.financialYear === FY) {
           isrenewalspresent = true;
         }
@@ -71,7 +71,7 @@ const TradeLicenseList = ({ application }) => {
       const isAllowedToNextYear = numOfApplications?.filter(data => (data.financialYear == finalFinancialYear && data?.status !== "REJECTED"));
     let FY = getvalidfromdate("", mdmsFinancialYear).finYearRange;
     numOfApplications &&
-    numOfApplications.map((ob) => {
+    numOfApplications?.map((ob) => {
         if (ob.financialYear === FY) {
           isrenewalspresent = true;
         }
@@ -101,7 +101,7 @@ const TradeLicenseList = ({ application }) => {
       <KeyNote keyValue={t("TL_LICENSE_NUMBERL_LABEL")} note={application.licenseNumber} />
       <KeyNote
         keyValue={t("TL_LOCALIZATION_OWNER_NAME")}
-        note={owners.map((owners, index) => (
+        note={owners?.map((owners, index) => (
           <div key="index">{index == owners.length - 1 ? owners?.name + "," : owners.name}</div>
         ))}
       />

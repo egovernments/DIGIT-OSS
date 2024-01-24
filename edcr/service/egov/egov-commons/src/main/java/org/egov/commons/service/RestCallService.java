@@ -24,6 +24,7 @@ public class RestCallService {
             LOG.info("Request: " + mapper.writeValueAsString(request));
             RestTemplate restTemplate = new RestTemplate();
             response = restTemplate.postForObject(uri.toString(), request, Map.class);
+            LOG.info("Response: " + mapper.writeValueAsString(response));
         } catch (HttpClientErrorException | JsonProcessingException e) {
             LOG.error("Error occurred while calling API", e);
         }

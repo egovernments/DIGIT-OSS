@@ -113,8 +113,7 @@ public class EnrichmentService {
 	/**
 	 * enrich the vendor update request with the required data
 	 * 
-	 * @param fsmRequest
-	 * @param mdmsData
+	 * @param vendorRequest
 	 */
 	public void enrichUpdate(VendorRequest vendorRequest) {
 		RequestInfo requestInfo = vendorRequest.getRequestInfo();
@@ -197,10 +196,6 @@ public class EnrichmentService {
 			if (!CollectionUtils.isEmpty(vendor.getDrivers())) {
 
 				vendor.getDrivers().forEach(driver -> {
-					driverSearchCriteria.setOwnerIds(Arrays.asList(driver.getOwnerId()));
-					UserDetailResponse userDetailResponse = userService.getUsers(VendorSearchCriteria.builder()
-							.tenantId(tenantId).ids(Arrays.asList(driver.getOwnerId())).build(), requestInfo);
-					driver.setOwner(userDetailResponse.getUser().get(0));
 					driver.setVendorDriverStatus(org.egov.vendor.driver.web.model.Driver.StatusEnum.ACTIVE);
 					
 				});

@@ -133,13 +133,13 @@ const OwnerForm = (_props) => {
     if (!(_.isEqual(formValue, part))) {
       setPart({...formValue});
 
-      Object.keys(formValue).map((data) => {
+      Object.keys(formValue)?.map((data) => {
         if (data != "key" && formValue[data] != undefined && formValue[data] != "" && formValue[data] != null && !isErrors) {
           setIsErrors(true);
         }
       });
       setOwners((prev) =>
-        prev.map((o) => {
+        prev?.map((o) => {
           return o.key && o.key === owner.key ? { ...o, ...formValue } : { ...o };
         })
       );
@@ -697,7 +697,7 @@ const TLOwnerDetailsEmployee = ({ config, onSelect, userType, formData, setError
     if (formData?.ownershipCategory?.code == "INDIVIDUAL.MULTIPLEOWNERS" && owners.length > 1) clearErrors("mulipleOwnerError");
     if (formData?.ownershipCategory?.code == "INDIVIDUAL.MULTIPLEOWNERS" && owners.length == 1)
       setError("mulipleOwnerError", { type: "owner_missing", message: `TL_ERROR_MULTIPLE_OWNER` });
-    const data = owners.map((e) => {
+    const data = owners?.map((e) => {
       return e;
     });
     onSelect(config?.key, data);
@@ -721,13 +721,13 @@ const TLOwnerDetailsEmployee = ({ config, onSelect, userType, formData, setError
   useEffect(() => {
     if (formData?.tradeUnits?.length > 0 && !isRenewal ) {
       let flag = true;
-      owners.map((data) => {
-        Object.keys(data).map((dta) => {
+      owners?.map((data) => {
+        Object.keys(data)?.map((dta) => {
           if (dta != "key" && data[dta]) flag = false;
         });
       });
-      formData?.tradeUnits.map((data) => {
-        Object.keys(data).map((dta) => {
+      formData?.tradeUnits?.map((data) => {
+        Object.keys(data)?.map((dta) => {
           if (dta != "key" && data[dta] != undefined && data[data] != "" && data[data] != null) {
           } else {
             if (flag) setOwners([createOwnerDetails()]);
@@ -766,7 +766,7 @@ const TLOwnerDetailsEmployee = ({ config, onSelect, userType, formData, setError
 
   return (
     <React.Fragment>
-      {owners.map((owner, index) => (
+      {owners?.map((owner, index) => (
         <OwnerForm key={owner.key} index={index} owner={owner} {...commonProps} />
       ))}
       {formData?.ownershipCategory?.code === "INDIVIDUAL.MULTIPLEOWNERS" ? (

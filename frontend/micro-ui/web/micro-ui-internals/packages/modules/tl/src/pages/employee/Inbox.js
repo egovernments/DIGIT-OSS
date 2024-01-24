@@ -52,7 +52,7 @@ const Inbox = ({ parentRoute, businessService = "TL", initialStates = {}, filter
     // let _new = { ...searchParams, ...filterParam };
     // if (keys_to_delete) keys_to_delete.forEach((key) => delete _new[key]);
     // delete filterParam.delete;
-    if (keys_to_delete) keys_to_delete.forEach((key) => delete _new[key]);
+    if (keys_to_delete) keys_to_delete?.forEach((key) => delete _new[key]);
     delete _new?.delete;
     delete filterParam?.delete;
     setSetSearchFieldsBackToOriginalState(true);

@@ -3,7 +3,7 @@ import { useTranslation } from "react-i18next";
 import { Card, Loader } from "@egovernments/digit-ui-react-components";
 import InboxLinks from "./ApplicationLinks";
 import ApplicationTable from "./ApplicationTable";
-import SearchApplication from "./search";
+import SearchLicenseApplication from "./search";
 import { Link } from "react-router-dom";
 import { convertEpochToDateDMY } from "../../utils";
 // import { getActionButton } from "../../utils";
@@ -86,7 +86,7 @@ const DesktopInbox = ({ tableConfig, filterComponent,columns, isLoading, setSear
       <Card style={{ marginTop: 20 }}>
         {t("CS_MYAPPLICATIONS_NO_APPLICATION")
           .split("\\n")
-          .map((text, index) => (
+          ?.map((text, index) => (
             <p key={index} style={{ textAlign: "center" }}>
               {text}
             </p>
@@ -173,7 +173,7 @@ const DesktopInbox = ({ tableConfig, filterComponent,columns, isLoading, setSear
         </div>
       )}
       <div style={{ flex: 1 }}>
-        <SearchApplication
+        <SearchLicenseApplication
           defaultSearchParams={props.defaultSearchParams}
           onSearch={props.onSearch}
           type="desktop"
