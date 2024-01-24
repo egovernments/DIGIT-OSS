@@ -1,9 +1,6 @@
 # Changelog
 All notable changes to this module will be documented in this file.
 
-## 2.1.2 - 2023-09-14
-Central Instance Library Integration
-
 ## 2.1.1
 
 - Data push for edcr
