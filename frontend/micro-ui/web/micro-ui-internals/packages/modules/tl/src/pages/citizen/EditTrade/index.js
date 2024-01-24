@@ -8,7 +8,7 @@ import { getCommencementDataFormat, stringReplaceAll } from "../../../utils/inde
 
 const getPath = (path, params) => {
   params &&
-    Object.keys(params).map((key) => {
+    Object.keys(params)?.map((key) => {
       path = path.replace(`:${key}`, params[key]);
     });
   return path;
@@ -18,7 +18,7 @@ const getTradeEditDetails = (data,t,wfdata) => {
   const gettradeaccessories = (tradeacceserioies,t) => {
     let acc = [];
     tradeacceserioies &&
-      tradeacceserioies.map((ob) => {
+      tradeacceserioies?.map((ob) => {
         acc.push({
           accessory: { code: `${ob.accessoryCategory}`, i18nKey: t(`TRADELICENSE_ACCESSORIESCATEGORY_${ob.accessoryCategory.replaceAll("-", "_")}`) },
           accessorycount: ob.count,
@@ -33,7 +33,7 @@ const getTradeEditDetails = (data,t,wfdata) => {
   const gettradeunits = (tradeunits) => {
     let units = [];
     tradeunits &&
-      tradeunits.map((ob) => {
+      tradeunits?.map((ob) => {
         units.push({
           tradecategory: { i18nKey: `TRADELICENSE_TRADETYPE_${ob.tradeType.split(".")[0]}`, code: `${ob.tradeType.split(".")[0]}` },
           tradesubtype: { i18nKey: `TL_${ob.tradeType}`, code: `${ob.tradeType}` },
@@ -49,7 +49,7 @@ const getTradeEditDetails = (data,t,wfdata) => {
   const gettradedocuments = (docs) => {
     let documents = [];
     docs &&
-      docs.map((ob) => {
+      docs?.map((ob) => {
         if (ob.documentType.includes("OWNERPHOTO")) {
           documents["OwnerPhotoProof"] = ob;
         } else if (ob.documentType.includes("OWNERIDPROOF")) {
@@ -64,7 +64,7 @@ const getTradeEditDetails = (data,t,wfdata) => {
   const gettradeowners = (owner) => {
     let ownerarray = [];
     owner &&
-      owner.map((ob) => {
+      owner?.map((ob) => {
         ownerarray.push({
           gender: {
             code: ob.gender,
@@ -89,7 +89,7 @@ const getTradeEditDetails = (data,t,wfdata) => {
   const getInsitutionaltradeowners = (owner,institution) => {
     let ownerarray = [];
     owner &&
-      owner.map((ob) => {
+      owner?.map((ob) => {
         ownerarray.push({
           name: institution.name,
           mobilenumber: ob.mobileNumber,
@@ -325,7 +325,7 @@ const EditTrade = ({ parentRoute }) => {
   const TLAcknowledgement = Digit?.ComponentRegistryService?.getComponent('TLAcknowledgement');
   return (
     <Switch>
-      {config.map((routeObj, index) => {
+      {config?.map((routeObj, index) => {
         const { component, texts, inputs, key, isSkipEnabled } = routeObj;
         const Component = typeof component === "string" ? Digit.ComponentRegistryService.getComponent(component) : component;
         return (

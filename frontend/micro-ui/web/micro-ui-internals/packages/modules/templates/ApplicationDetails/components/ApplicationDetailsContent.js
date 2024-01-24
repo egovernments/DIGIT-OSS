@@ -67,7 +67,7 @@ function ApplicationDetailsContent({
   const getTimelineCaptions = (checkpoint,index=0) => {
     if (checkpoint.state === "OPEN" || (checkpoint.status === "INITIATED" && !window.location.href.includes("/obps/"))) {
       const caption = {
-        date: convertEpochToDateDMY(applicationData?.auditDetails?.createdTime),
+        date: checkpoint?.auditDetails?.created,
         source: applicationData?.channel || "",
       };
       return <TLCaption data={caption} />;
@@ -97,7 +97,7 @@ function ApplicationDetailsContent({
       return <TLCaption data={caption} OpenImage={OpenImage} privacy={privacy} />;
     } else {
       const caption = {
-        date: convertEpochToDateDMY(applicationData?.auditDetails?.lastModifiedTime),
+        date: checkpoint?.auditDetails?.lastModified,
         // name: checkpoint?.assigner?.name,
         name: checkpoint?.assignes?.[0]?.name,
         // mobileNumber: checkpoint?.assigner?.mobileNumber,

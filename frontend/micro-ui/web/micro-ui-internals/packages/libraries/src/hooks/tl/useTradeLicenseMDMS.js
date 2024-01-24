@@ -18,7 +18,7 @@ const useTradeLicenseMDMS = (tenantId, moduleCode, type, filter, config = {}) =>
     return useQuery("TL_TRADE_OWNERSHIP_CATEGORY", () => MdmsService.GetTradeOwnerShipCategory(tenantId, moduleCode, type), {
       select: data => {
         const {"common-masters":{OwnerShipCategory: categoryData} ={}} = data
-        const filteredSubtypesData = categoryData.filter( e => e.code.includes(filter.keyToSearchOwnershipSubtype)).map( e => ({...e, i18nKey: `COMMON_MASTERS_OWNERSHIPCATEGORY_${e.code.replaceAll(".", "_")}`}))
+        const filteredSubtypesData = categoryData.filter( e => e.code.includes(filter.keyToSearchOwnershipSubtype))?.map( e => ({...e, i18nKey: `COMMON_MASTERS_OWNERSHIPCATEGORY_${e.code.replaceAll(".", "_")}`}))
         return filteredSubtypesData
       },
       ...config
@@ -81,7 +81,7 @@ const useTradeLicenseMDMS = (tenantId, moduleCode, type, filter, config = {}) =>
         }) : null
 
         if (OwnerShipCategory) {
-          Object.keys(OwnerShipCategory).forEach((category) => {
+          Object.keys(OwnerShipCategory)?.forEach((category) => {
             // const categoryCode = OwnerShipCategory[category].code;
             ownerShipdropDown.push(formDropdown(OwnerShipCategory[category]));
           });

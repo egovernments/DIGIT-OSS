@@ -3,7 +3,9 @@ package org.egov.noc.consumer;
 import java.util.HashMap;
 
 import org.egov.noc.service.notification.NOCNotificationService;
+import org.egov.noc.util.NOCConstants;
 import org.egov.noc.web.model.NocRequest;
+import org.slf4j.MDC;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.support.KafkaHeaders;
@@ -32,6 +34,10 @@ public class NOCConsumer {
 			log.error("Error while listening to value: " + record + " on topic: " + topic + ": " + e);
 		}
 		log.debug("BPA Received: " + nocRequest.getNoc().getApplicationNo());
+		
+		// Adding in MDC so that tracer can add it in header
+		MDC.put(NOCConstants.TENANTID_MDC_STRING, nocRequest.getNoc().getTenantId());
+
 		notificationService.process(nocRequest);
 	}
 }

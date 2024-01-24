@@ -32,7 +32,7 @@ const ApplicationDetails = () => {
   useEffect(() => {
     if (License?.tradeLicenseDetail?.applicationDocuments?.length) {
       const fileStoresIds = License?.tradeLicenseDetail?.applicationDocuments?.map((document) => document?.fileStoreId);
-      Digit.UploadServices.Filefetch(fileStoresIds, tenantId.split(".")[0]).then((res) => setDocuments(res?.data));
+      Digit.UploadServices.Filefetch(fileStoresIds, stateCode).then((res) => setDocuments(res?.data));
     }
   }, [License]);
 

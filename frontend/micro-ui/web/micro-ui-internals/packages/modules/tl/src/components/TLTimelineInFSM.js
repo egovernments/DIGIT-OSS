@@ -29,7 +29,7 @@ const Timeline = ({ currentStep = 1, flow = "" }) => {
   getAction(flow);
   return (
     <div className="timeline-container" style={isMobile ? {} : { maxWidth: "960px", marginRight: "auto" }} >
-      {actions.map((action, index, arr) => (
+      {actions?.map((action, index, arr) => (
         <div className="timeline-checkpoint" key={index}>
           <div className="timeline-content">
             <span className={`circle ${index <= currentStep - 1 && 'active'}`}>{index < currentStep - 1 ? <TickMark /> : index + 1}</span>

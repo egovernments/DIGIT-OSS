@@ -56,6 +56,7 @@ const CustomAreaChart = ({ xDataKey = "name", yDataKey = getValue, data, setChar
   };
   const { t } = useTranslation();
   const { id } = data;
+  const { variant } = data;
   const tenantId = Digit.ULBService.getCurrentTenantId();
   const { value } = useContext(FilterContext);
   const [totalCapacity, setTotalCapacity] = useState(0);
@@ -163,7 +164,11 @@ const CustomAreaChart = ({ xDataKey = "name", yDataKey = getValue, data, setChar
   const yAxistickFormatter = (value) => {
     if (typeof value === "string") {
       return value.replace("-", ", ");
-    } else if (typeof value === "number") return Digit.Utils.dss.formatter(value, "number", value?.denomination, true, t);
+    } else if (typeof value === "number") {
+      return variant === "fsmAreaPercentage"
+        ? Digit.Utils.dss.formatter(value, "percentage", value?.denomination, true, t)
+        : Digit.Utils.dss.formatter(value, "number", value?.denomination, true, t);
+    }
     return value;
   };
 
@@ -245,7 +250,13 @@ const CustomAreaChart = ({ xDataKey = "name", yDataKey = getValue, data, setChar
     return <Loader />;
   }
   return (
-    <div style={{ display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center", height: "100%" }}>
+    <div
+      style={
+        variant === "fsmAreaPercentage"
+          ? { display: "flex", flexDirection: "column", height: "100%" }
+          : { display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center", height: "100%" }
+      }
+    >
       {id === "fsmCapacityUtilization" && (
         <p>
           {t("DSS_FSM_TOTAL_SLUDGE_TREATED")} - {totalWaste} {t("DSS_KL")}

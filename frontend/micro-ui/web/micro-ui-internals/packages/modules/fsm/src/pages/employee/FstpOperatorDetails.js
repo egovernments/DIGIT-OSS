@@ -1,12 +1,11 @@
 import React, { Fragment, useState, useEffect, useRef } from "react";
 import { useParams, useHistory, useLocation } from "react-router-dom";
 import TimePicker from "react-time-picker";
-import { Dropdown, Header, InfoIcon, MultiUploadWrapper, TextArea } from "@egovernments/digit-ui-react-components";
+import { Header, MultiUploadWrapper, TextArea, InfoIcon } from "@egovernments/digit-ui-react-components";
 import {
   Card,
   CardLabel,
   CardLabelError,
-  DetailsCard,
   TextInput,
   ActionBar,
   SubmitBar,
@@ -14,12 +13,10 @@ import {
   Toast,
   StatusTable,
   Row,
-  LabelFieldPair,
   Menu,
 } from "@egovernments/digit-ui-react-components";
 import { useTranslation } from "react-i18next";
 import { useQueryClient } from "react-query";
-import CustomTimePicker from "../../components/CustomTimePicker";
 import ActionModal from "./ApplicationDetails/Modal/index";
 
 const config = {
@@ -49,7 +46,7 @@ const FstpOperatorDetails = () => {
   const [showToast, setShowToast] = useState(null);
   const [wasteCollected, setWasteCollected] = useState(null);
   const [errors, setErrors] = useState({});
-  const [tripStartTime, setTripStartTime] = useState(null);
+  // const [tripStartTime, setTripStartTime] = useState(null);
   const [tripTime, setTripTime] = useState(() => {
     const today = new Date();
     const hour = (today.getHours() < 10 ? "0" : "") + today.getHours();
@@ -64,8 +61,8 @@ const FstpOperatorDetails = () => {
   const [filterVehicle, setFilterVehicle] = useState();
   const [currentTrip, setCurrentTrip] = useState();
   const wasteRecievedRef = useRef();
-  const tripStartTimeRef = useRef();
-  const tripTimeRef = useRef();
+  // const tripStartTimeRef = useRef();
+  // const tripTimeRef = useRef();
   const [fileStoreId, setFileStoreId] = useState();
   const [file, setFile] = useState(null);
   const [uploadedFile, setUploadedFile] = useState(Array);
@@ -89,7 +86,9 @@ const FstpOperatorDetails = () => {
   };
 
   const { isLoading: totalload, isSuccess: totalsuccess, data: totalvehicle } = Digit.Hooks.fsm.useVehicleSearch({ tenantId, totalconfig });
+
   const { isLoading, isSuccess, data: vehicle } = Digit.Hooks.fsm.useVehicleSearch({ tenantId, filters, config });
+
   const { isLoading: isSearchLoading, isIdle, data: { data: { table: tripDetails } = {} } = {} } = Digit.Hooks.fsm.useSearchAll(
     tenantId,
     searchParams,
@@ -139,7 +138,6 @@ const FstpOperatorDetails = () => {
         history.location.pathname.includes("new") ? handleCreate() : handleSubmit();
       default:
         setSelectedAction();
-        console.debug("default case");
         break;
     }
   }, [selectedAction]);
@@ -155,42 +153,61 @@ const FstpOperatorDetails = () => {
 
   const handleSubmit = () => {
     const wasteCombined = tripDetails.reduce((acc, trip) => acc + trip.volume, 0);
-    if (applicationNos && (!wasteCollected || wasteCollected > wasteCombined || wasteCollected > vehicle.vehicle.tankCapacity)) {
-      setErrors({ wasteRecieved: "ES_FSTP_INVALID_WASTE_AMOUNT" });
-      wasteRecievedRef.current.scrollIntoView({ behavior: "smooth", block: "center" });
-      return;
+    if (applicationNos) {
+      if (!wasteCollected) {
+        setErrors({ wasteRecieved: "ES_FSTP_INVALID_WASTE" });
+        wasteRecievedRef.current.scrollIntoView({
+          behavior: "smooth",
+          block: "center",
+        });
+        return;
+      }
+      if (wasteCollected > wasteCombined || wasteCollected > vehicle.vehicle.tankCapacity) {
+        setErrors({ wasteRecieved: "ES_FSTP_INVALID_WASTE_AMOUNT" });
+        wasteRecievedRef.current.scrollIntoView({
+          behavior: "smooth",
+          block: "center",
+        });
+        return;
+      }
     }
-    if (tripStartTime === null) {
-      setErrors({ tripStartTime: "ES_FSTP_INVALID_START_TIME" });
-      tripStartTimeRef.current.scrollIntoView({ behavior: "smooth", block: "center" });
-      return;
-    }
+    // if (tripStartTime === null) {
+    //   setErrors({ tripStartTime: "ES_FSTP_INVALID_START_TIME" });
+    //   tripStartTimeRef.current.scrollIntoView({ behavior: "smooth", block: "center" });
+    //   return;
+    // }
 
-    if (tripTime === null) {
-      setErrors({ tripTime: "ES_FSTP_INVALID_TRIP_TIME" });
-      tripTimeRef.current.scrollIntoView({ behavior: "smooth", block: "center" });
-      return;
-    }
+    // if (tripTime === null) {
+    //   setErrors({ tripTime: "ES_FSTP_INVALID_TRIP_TIME" });
+    //   tripTimeRef.current.scrollIntoView({ behavior: "smooth", block: "center" });
+    //   return;
+    // }
 
-    if (tripStartTime === tripTime || tripStartTime > tripTime) {
-      setErrors({ tripTime: "ES_FSTP_INVALID_TRIP_TIME" });
-      tripTimeRef.current.scrollIntoView({ behavior: "smooth", block: "center" });
-      return;
-    }
+    // if (tripStartTime === tripTime || tripStartTime > tripTime) {
+    //   setErrors({ tripTime: "ES_FSTP_INVALID_TRIP_TIME" });
+    //   tripTimeRef.current.scrollIntoView({ behavior: "smooth", block: "center" });
+    //   return;
+    // }
 
     setErrors({});
 
     const d = new Date();
     const timeStamp = Date.parse(new Date(d.toString().split(":")[0].slice(0, -2) + tripTime)) / 1000;
-    const tripStartTimestamp = Date.parse(new Date(d.toString().split(":")[0].slice(0, -2) + tripStartTime)) / 1000;
+    // const tripStartTimestamp =
+    //   Date.parse(
+    //     new Date(d.toString().split(":")[0].slice(0, -2) + tripStartTime)
+    //   ) / 1000;
     const tripDetail = { tripNo: currentTrip };
-    vehicle.tripStartTime = tripStartTimestamp;
-    vehicle.fstpEntryTime = tripStartTimestamp;
+    // vehicle.tripStartTime = tripStartTimestamp;
+    // vehicle.fstpEntryTime = tripStartTimestamp;
     vehicle.tripEndTime = timeStamp;
     vehicle.fstpExitTime = timeStamp;
     vehicle.volumeCarried = wasteCollected;
     vehicle.tripDetails[0].additionalDetails = tripDetail;
-    vehicle.additionalDetails = { fileStoreId: uploadedFile, comments: comments };
+    vehicle.additionalDetails = {
+      fileStoreId: uploadedFile,
+      comments: comments,
+    };
 
     const details = {
       vehicleTrip: [vehicle],
@@ -228,42 +245,54 @@ const FstpOperatorDetails = () => {
       }, 2000);
       return;
     }
-    if (tripStartTime === null) {
-      setErrors({ tripStartTime: "ES_FSTP_INVALID_START_TIME" });
-      tripStartTimeRef.current.scrollIntoView({ behavior: "smooth", block: "center" });
-      return;
-    }
+    // if (tripStartTime === null) {
+    //   setErrors({ tripStartTime: "ES_FSTP_INVALID_START_TIME" });
+    //   tripStartTimeRef.current.scrollIntoView({
+    //     behavior: "smooth",
+    //     block: "center",
+    //   });
+    //   return;
+    // }
 
     if (!wasteCollected || wasteCollected?.trim()?.length === 0) {
-      setShowToast({ key: "error", action: `ES_FSTP_INVALID_WASTE_AMOUNT` });
+      setShowToast({ key: "error", action: `ES_FSTP_INVALID_WASTE` });
       setTimeout(() => {
         closeToast();
       }, 2000);
       return;
     }
 
-    if (tripTime === null) {
-      setErrors({ tripTime: "ES_FSTP_INVALID_TRIP_TIME" });
-      tripTimeRef.current.scrollIntoView({ behavior: "smooth", block: "center" });
-      return;
-    }
+    // if (tripTime === null) {
+    //   setErrors({ tripTime: "ES_FSTP_INVALID_TRIP_TIME" });
+    //   tripTimeRef.current.scrollIntoView({
+    //     behavior: "smooth",
+    //     block: "center",
+    //   });
+    //   return;
+    // }
 
-    if (tripStartTime === tripTime || tripStartTime > tripTime) {
-      setErrors({ tripTime: "ES_FSTP_INVALID_TRIP_TIME" });
-      tripTimeRef.current.scrollIntoView({ behavior: "smooth", block: "center" });
-      return;
-    }
+    // if (tripStartTime === tripTime || tripStartTime > tripTime) {
+    //   setErrors({ tripTime: "ES_FSTP_INVALID_TRIP_TIME" });
+    //   tripTimeRef.current.scrollIntoView({
+    //     behavior: "smooth",
+    //     block: "center",
+    //   });
+    //   return;
+    // }
 
     setErrors({});
 
     let temp = {};
     const d = new Date();
     const timeStamp = Date.parse(new Date(d.toString().split(":")[0].slice(0, -2) + tripTime)) / 1000;
-    const tripStartTimestamp = Date.parse(new Date(d.toString().split(":")[0].slice(0, -2) + tripStartTime)) / 1000;
+    // const tripStartTimestamp =
+    //   Date.parse(
+    //     new Date(d.toString().split(":")[0].slice(0, -2) + tripStartTime)
+    //   ) / 1000;
     const tripDetail = { tripNo: 1 };
     temp.tenantId = tenantId;
     temp.status = "ACTIVE";
-    temp.tripStartTime = tripStartTimestamp;
+    // temp.tripStartTime = tripStartTimestamp;
     temp.tripEndTime = timeStamp;
     temp.volumeCarried = wasteCollected;
     temp.additionalDetails = {
@@ -341,9 +370,10 @@ const FstpOperatorDetails = () => {
 
   const handleChange = (event) => {
     const { name, value } = event.target;
-    if (name === "tripTime") {
-      setTripTime(value);
-    } else if (name === "wasteRecieved") {
+    // if (name === "tripTime") {
+    // setTripTime(value);
+    // } else
+    if (name === "wasteRecieved") {
       setWasteCollected(value);
     }
   };
@@ -363,7 +393,14 @@ const FstpOperatorDetails = () => {
           <InfoIcon />
           <span
             className="tooltiptext"
-            style={{ width: "150px", left: "230%", fontSize: "14px", height: "fit-content", top: "20px", display: "flex" }}
+            style={{
+              width: "150px",
+              left: "230%",
+              fontSize: "14px",
+              height: "fit-content",
+              top: "20px",
+              display: "flex",
+            }}
           >
             {t("ES_FSM_VEHICLE_FORMAT_TIP")}
           </span>
@@ -426,7 +463,7 @@ const FstpOperatorDetails = () => {
     <div>
       <Header styles={{ marginLeft: "16px" }}>{t("ES_INBOX_VEHICLE_LOG")}</Header>
       <Card>
-        <StatusTable styles={{ marginLeft: "16ox" }}>
+        <StatusTable>
           {vehicleData?.map((row, index) => (
             <Row
               rowContainerStyle={
@@ -445,22 +482,30 @@ const FstpOperatorDetails = () => {
               labelChildren={history.location.pathname.includes("new-vehicle-entry") ? row.labelChildren : ""}
             />
           ))}
-          <div ref={tripStartTimeRef}>
+          {/* <div ref={tripStartTimeRef}>
             <CardLabelError>{t(errors.tripStartTime)}</CardLabelError>
-          </div>
+          </div> */}
           <form>
-            <Row
+            {/* <Row
               key={t("ES_VEHICLE_IN_TIME")}
               label={`${t("ES_VEHICLE_IN_TIME")} * `}
               labelStyle={{ minWidth: "fit-content", fontWeight: "normal" }}
               textStyle={isMobile ? { width: "100%" } : {}}
-              rowContainerStyle={isMobile ? { display: "block" } : { justifyContent: "space-between" }}
+              rowContainerStyle={
+                isMobile
+                  ? { display: "block" }
+                  : { justifyContent: "space-between" }
+              }
               text={
                 <div>
-                  <CustomTimePicker name="tripStartTime" onChange={(val) => handleTimeChange(val, setTripStartTime)} value={tripStartTime} />
+                  <CustomTimePicker
+                    name="tripStartTime"
+                    onChange={(val) => handleTimeChange(val, setTripStartTime)}
+                    value={tripStartTime}
+                  />
                 </div>
               }
-            />
+            /> */}
             <div ref={wasteRecievedRef}>
               <CardLabelError>{t(errors.wasteRecieved)}</CardLabelError>
             </div>
@@ -476,21 +521,29 @@ const FstpOperatorDetails = () => {
               }
               rowContainerStyle={isMobile ? { display: "block" } : { justifyContent: "space-between" }}
             />
-            <div ref={tripTimeRef}>
+            {/* <div ref={tripTimeRef}>
               <CardLabelError>{t(errors.tripTime)}</CardLabelError>
-            </div>
-            <Row
+            </div> */}
+            {/* <Row
               key={t("ES_VEHICLE_OUT_TIME")}
               label={`${t("ES_VEHICLE_OUT_TIME")} * `}
               labelStyle={{ minWidth: "fit-content", fontWeight: "normal" }}
               textStyle={isMobile ? { width: "100%" } : {}}
-              rowContainerStyle={isMobile ? { display: "block" } : { justifyContent: "space-between" }}
+              rowContainerStyle={
+                isMobile
+                  ? { display: "block" }
+                  : { justifyContent: "space-between" }
+              }
               text={
                 <div>
-                  <CustomTimePicker name="tripTime" onChange={(val) => handleTimeChange(val, setTripTime)} value={tripTime} />
+                  <CustomTimePicker
+                    name="tripTime"
+                    onChange={(val) => handleTimeChange(val, setTripTime)}
+                    value={tripTime}
+                  />
                 </div>
               }
-            />
+            /> */}
             {/* {!isSearchLoading && !isIdle && tripDetails && currentTrip ?
               <Row
                 key={t("ES_VEHICLE_TRIP_NO")}
@@ -510,7 +563,18 @@ const FstpOperatorDetails = () => {
                 }
               >
               </Row> : null} */}
-            <div className={!isMobile && "row"} style={isMobile ? {} : { diplay: "flex", justifyContent: "space-between", alignItems: "center" }}>
+            <div
+              className={!isMobile && "row"}
+              style={
+                isMobile
+                  ? {}
+                  : {
+                      diplay: "flex",
+                      justifyContent: "space-between",
+                      alignItems: "center",
+                    }
+              }
+            >
               <CardLabel style={{ fontWeight: "normal" }}> {t("ES_FSM_ADDITIONAL_DETAILS")} </CardLabel>
               <TextArea
                 className="form-field"
@@ -521,7 +585,7 @@ const FstpOperatorDetails = () => {
                     setComments(e.target.value);
                   }
                 }}
-                style={isMobile ? { width: "100%" } : { width: "100%", marginLeft: "35%" }}
+                style={isMobile ? { width: "100%" } : { width: "75%", marginLeft: "30%" }}
               />
             </div>
 

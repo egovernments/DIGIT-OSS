@@ -17,7 +17,7 @@ public interface WaterService {
 	Integer countAllWaterApplications(SearchCriteria criteria, RequestInfo requestInfo);
 
 	List<WaterConnection> updateWaterConnection(WaterConnectionRequest waterConnectionRequest);
-	
+
 	WaterConnectionResponse plainSearch(SearchCriteria criteria, RequestInfo requestInfo);
 
 }

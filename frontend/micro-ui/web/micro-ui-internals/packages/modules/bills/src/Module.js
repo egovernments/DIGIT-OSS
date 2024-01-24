@@ -22,7 +22,7 @@ import GroupBills from "./components/GroupBill";
 
 export const BillsModule = ({ stateCode, userType, tenants }) => {
   const tenantId =  Digit.SessionStorage.get("CITIZEN.COMMON.HOME.CITY")?.code || Digit.ULBService.getCurrentTenantId();
-  const moduleCode = ["abg",tenantId];
+  const moduleCode = ["abg","ws", "pt", "common", tenantId, "bill-amend"];
 
   const language = Digit.StoreData.getCurrentLanguage();
   const { isLoading, data: store } = Digit.Services.useStore({ stateCode, moduleCode, language });

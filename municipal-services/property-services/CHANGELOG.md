@@ -1,6 +1,10 @@
 
 All notable changes to this module will be documented in this file.
 
+## 1.2.2 - 2023-08-10
+
+- Central Instance Library Integration
+
 ## 1.2.1-beta - 2023-04-11
 
 - Added citizen feedback notifications for create, update and mutate flows

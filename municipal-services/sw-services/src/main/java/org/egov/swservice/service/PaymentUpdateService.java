@@ -22,6 +22,7 @@ import org.egov.swservice.web.models.users.UserDetailResponse;
 import org.egov.swservice.web.models.workflow.ProcessInstance;
 import org.egov.swservice.workflow.WorkflowIntegrator;
 import org.egov.tracer.model.CustomException;
+import org.slf4j.MDC;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
@@ -35,6 +36,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import static org.egov.swservice.util.SWConstants.TENANTID_MDC_STRING;
 import static org.egov.swservice.util.SWConstants.*;
 
 @Slf4j
@@ -83,6 +85,10 @@ public class PaymentUpdateService {
 	public void process(HashMap<String, Object> record) {
 		try {
 			PaymentRequest paymentRequest = mapper.convertValue(record, PaymentRequest.class);
+			String tenantId = paymentRequest.getPayment().getTenantId();
+
+			// Adding in MDC so that tracer can add it in header
+			MDC.put(TENANTID_MDC_STRING, tenantId);
 			boolean isServiceMatched = false;
 			for (PaymentDetail paymentDetail : paymentRequest.getPayment().getPaymentDetails()) {
 				if (paymentDetail.getBusinessService().equalsIgnoreCase(config.getReceiptBusinessservice()) ||
@@ -109,32 +115,32 @@ public class PaymentUpdateService {
 							.applicationNumber(Stream.of(paymentDetail.getBill().getConsumerCode().toString()).collect(Collectors.toSet())).build();
 				}
 				criteria.setIsInternalCall(Boolean.TRUE);
-					List<SewerageConnection> sewerageConnections = sewerageService.search(criteria,
-							paymentRequest.getRequestInfo());
-					if (CollectionUtils.isEmpty(sewerageConnections)) {
-						throw new CustomException("INVALID_RECEIPT",
-								"No sewerageConnection found for the consumerCode " + criteria.getApplicationNumber());
-					}
-					Optional<SewerageConnection> connections = sewerageConnections.stream().findFirst();
-					SewerageConnection connection = connections.get();
-					if (sewerageConnections.size() > 1) {
-						throw new CustomException("INVALID_RECEIPT",
-								"More than one application found on consumerCode " + criteria.getApplicationNumber());
-					}
-					sewerageConnections
-							.forEach(sewerageConnection -> sewerageConnection.getProcessInstance().setAction(SWConstants.ACTION_PAY));
-					SewerageConnectionRequest sewerageConnectionRequest = SewerageConnectionRequest.builder()
-							.sewerageConnection(connection).requestInfo(paymentRequest.getRequestInfo())
-							.build();
+				List<SewerageConnection> sewerageConnections = sewerageService.search(criteria,
+						paymentRequest.getRequestInfo());
+				if (CollectionUtils.isEmpty(sewerageConnections)) {
+					throw new CustomException("INVALID_RECEIPT",
+							"No sewerageConnection found for the consumerCode " + criteria.getApplicationNumber());
+				}
+				Optional<SewerageConnection> connections = sewerageConnections.stream().findFirst();
+				SewerageConnection connection = connections.get();
+				if (sewerageConnections.size() > 1) {
+					throw new CustomException("INVALID_RECEIPT",
+							"More than one application found on consumerCode " + criteria.getApplicationNumber());
+				}
+				sewerageConnections
+						.forEach(sewerageConnection -> sewerageConnection.getProcessInstance().setAction(SWConstants.ACTION_PAY));
+				SewerageConnectionRequest sewerageConnectionRequest = SewerageConnectionRequest.builder()
+						.sewerageConnection(connection).requestInfo(paymentRequest.getRequestInfo())
+						.build();
 
-					Property property = validateProperty.getOrValidateProperty(sewerageConnectionRequest);
-					// Enrich tenantId in userInfo for workflow call
-					RequestInfo requestInfo = sewerageConnectionRequest.getRequestInfo();
-					Role role = Role.builder().code("SYSTEM_PAYMENT").tenantId(property.getTenantId()).build();
-					requestInfo.getUserInfo().getRoles().add(role);
-					wfIntegrator.callWorkFlow(sewerageConnectionRequest, property);
-					enrichmentService.enrichFileStoreIds(sewerageConnectionRequest);
-					repo.updateSewerageConnection(sewerageConnectionRequest, false);
+				Property property = validateProperty.getOrValidateProperty(sewerageConnectionRequest);
+				// Enrich tenantId in userInfo for workflow call
+				RequestInfo requestInfo = sewerageConnectionRequest.getRequestInfo();
+				Role role = Role.builder().code("SYSTEM_PAYMENT").tenantId(property.getTenantId()).build();
+				requestInfo.getUserInfo().getRoles().add(role);
+				wfIntegrator.callWorkFlow(sewerageConnectionRequest, property);
+				enrichmentService.enrichFileStoreIds(sewerageConnectionRequest);
+				repo.updateSewerageConnection(sewerageConnectionRequest, false);
 			}
 			sendNotificationForPayment(paymentRequest);
 		} catch (Exception ex) {
@@ -238,7 +244,7 @@ public class PaymentUpdateService {
 			if (config.getIsUserEventsNotificationEnabled() != null && config.getIsUserEventsNotificationEnabled()) {
 				EventRequest eventRequest = getEventRequest(sewerageConnectionRequest, property, paymentDetail);
 				if (eventRequest != null) {
-					notificationUtil.sendEventNotification(eventRequest);
+					notificationUtil.sendEventNotification(eventRequest, property.getTenantId());
 				}
 			}
 		}
@@ -246,7 +252,7 @@ public class PaymentUpdateService {
 			if (config.getIsSMSEnabled() != null && config.getIsSMSEnabled()) {
 				List<SMSRequest> smsRequests = getSmsRequest(sewerageConnectionRequest, property, paymentDetail);
 				if (!CollectionUtils.isEmpty(smsRequests)) {
-					notificationUtil.sendSMS(smsRequests);
+					notificationUtil.sendSMS(smsRequests, property.getTenantId());
 				}
 			}
 		}
@@ -255,7 +261,7 @@ public class PaymentUpdateService {
 			if (config.getIsEmailNotificationEnabled() != null && config.getIsEmailNotificationEnabled()) {
 				List<EmailRequest> emailRequests = getEmailRequest(sewerageConnectionRequest, property, paymentDetail);
 				if (!CollectionUtils.isEmpty(emailRequests)) {
-					notificationUtil.sendEmail(emailRequests);
+					notificationUtil.sendEmail(emailRequests, property.getTenantId());
 				}
 			}
 		}
@@ -437,10 +443,9 @@ public class PaymentUpdateService {
 	 */
 	private List<EmailRequest> getEmailRequest(SewerageConnectionRequest sewerageConnectionRequest,
 											   Property property, PaymentDetail paymentDetail) {
-
 		if(paymentDetail.getTotalAmountPaid().intValue() == 0)
 			return null;
-		
+
 		String localizationMessage = notificationUtil.getLocalizationMessages(property.getTenantId(),
 				sewerageConnectionRequest.getRequestInfo());
 

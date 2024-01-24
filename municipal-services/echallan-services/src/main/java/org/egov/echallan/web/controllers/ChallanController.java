@@ -54,10 +54,10 @@ public class ChallanController {
 	                                                       @Valid @ModelAttribute SearchCriteria criteria) {
 		 String tenantId = criteria.getTenantId();
 	     List<Challan> challans = challanService.search(criteria, requestInfoWrapper.getRequestInfo());
-	    	 
-	     
+
+
 	     Map<String,Integer> dynamicData = challanService.getDynamicData(tenantId);
-	    	 
+
 	     int countOfServices = dynamicData.get(ChallanConstants.TOTAL_SERVICES);
 	     int totalAmountCollected = dynamicData.get(ChallanConstants.TOTAL_COLLECTION);
 	     int validity = challanService.getChallanValidity();
@@ -90,7 +90,7 @@ public class ChallanController {
 
 	@PostMapping("/_test")
 	public ResponseEntity test( @RequestBody ChallanRequest challanRequest){
-		producer.push("update-challan",challanRequest);
+		producer.push(challanRequest.getChallan().getTenantId(), "update-challan",challanRequest);
 		return new ResponseEntity(HttpStatus.OK);
 	}
 }

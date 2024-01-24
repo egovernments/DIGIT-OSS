@@ -210,8 +210,8 @@ public class BPAConfiguration {
 	private Boolean isExternalWorkFlowEnabled;
 
 	// USER EVENTS
-	@Value("${egov.ui.app.host}")
-	private String uiAppHost;
+	@Value("#{${egov.ui.app.host.map}}")
+	private Map<String, String>  uiAppHostMap;
 
 	@Value("${egov.usr.events.create.topic}")
 	private String saveUserEventsTopic;

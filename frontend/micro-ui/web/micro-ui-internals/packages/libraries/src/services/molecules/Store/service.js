@@ -107,7 +107,7 @@ export const StoreService = {
   },
   defaultData: async (stateCode, moduleCode, language) => {
     let moduleCodes = [];
-    if(typeof moduleCode !== "string") moduleCode.forEach(code => { moduleCodes.push(`rainmaker-${code.toLowerCase()}`) });
+    if(typeof moduleCode !== "string") moduleCode?.forEach(code => { moduleCodes.push(`rainmaker-${code.toLowerCase()}`) });
     const LocalePromise = LocalizationService.getLocale({
       modules: typeof moduleCode == "string" ? [`rainmaker-${moduleCode.toLowerCase()}`] : moduleCodes,
       locale: language,

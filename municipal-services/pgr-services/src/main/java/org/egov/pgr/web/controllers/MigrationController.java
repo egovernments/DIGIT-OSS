@@ -4,6 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.egov.pgr.service.MigrationService;
 import org.egov.pgr.web.models.pgrV1.ServiceResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -15,6 +16,10 @@ import javax.validation.Valid;
 import java.io.IOException;
 import java.util.Map;
 
+@ConditionalOnProperty(
+        value="migration.enabled",
+        havingValue = "true",
+        matchIfMissing = false)
 @RestController
 @RequestMapping("/migration")
 @Slf4j

@@ -22,7 +22,7 @@ const App = () => {
   const TradeLicense = Digit?.ComponentRegistryService?.getComponent('TradeLicense');
   const TLList = Digit?.ComponentRegistryService?.getComponent('TLList');
   const SearchTradeComponent = Digit?.ComponentRegistryService?.getComponent('TLSearchTradeComponent');
-  const MyApplications = Digit?.ComponentRegistryService?.getComponent('MyApplications');
+  const TLMyApplications = Digit?.ComponentRegistryService?.getComponent('TLMyApplications');
 
   const getBackPageNumber = () => {
     let goBacktoFromProperty = -1;
@@ -43,8 +43,8 @@ const App = () => {
           <PrivateRoute path={`${path}/tradelicence/new-application`} component={CreateTradeLicence} />
           <PrivateRoute path={`${path}/tradelicence/edit-application/:id/:tenantId`} component={EditTrade} />
           <PrivateRoute path={`${path}/tradelicence/renew-trade/:id/:tenantId`} component={RenewTrade} />
-          <PrivateRoute path={`${path}/tradelicence/my-application`} component={MyApplications} />
-          <PrivateRoute path={`${path}/tradelicence/my-bills`} component={() => <MyApplications view="bills" />} />
+          <PrivateRoute path={`${path}/tradelicence/my-application`} component={TLMyApplications} />
+          <PrivateRoute path={`${path}/tradelicence/my-bills`} component={() => <TLMyApplications view="bills" />} />
           <PrivateRoute path={`${path}/tradelicence/tl-info`} component={TradeLicense} />
           <PrivateRoute path={`${path}/tradelicence/application/:id/:tenantId`} component={ApplicationDetails} />
           <PrivateRoute path={`${path}/tradelicence/renewal-list`} component={TLList} />

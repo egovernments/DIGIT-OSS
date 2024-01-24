@@ -28,6 +28,7 @@ const BannerPicker = (props) => {
       applicationNumber={props.data?.Properties[0].acknowldgementNumber}
       info={props.isSuccess ? props.t("PT_APPLICATION_NO") : ""}
       successful={props.isSuccess}
+      style={{width: "100%"}}
     />
   );
 };

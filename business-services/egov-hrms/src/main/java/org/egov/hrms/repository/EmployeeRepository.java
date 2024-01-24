@@ -58,6 +58,10 @@ public class EmployeeRepository {
 					criteria.setUuids(empUuids);
 			}
 		}
+		if (criteria.getIncludeUnassigned() != null && criteria.getIncludeUnassigned()) {
+			List<String> empUuids = fetchUnassignedEmployees(criteria, requestInfo);
+			criteria.setUuids(empUuids);
+		}
 		String query = queryBuilder.getEmployeeSearchQuery(criteria, preparedStmtList);
 		try {
 			employees = jdbcTemplate.query(query, preparedStmtList.toArray(),rowMapper);
@@ -66,6 +70,19 @@ public class EmployeeRepository {
 			log.error("query; "+query);
 		}
 		return employees;
+	}
+
+	private List<String> fetchUnassignedEmployees(EmployeeSearchCriteria criteria, RequestInfo requestInfo) {
+		List<String> employeesIds = new ArrayList<>();
+		List <Object> preparedStmtList = new ArrayList<>();
+		String query = queryBuilder.getUnassignedEmployeesSearchQuery(criteria, preparedStmtList);
+		try {
+			employeesIds = jdbcTemplate.queryForList(query, preparedStmtList.toArray(),String.class);
+		}catch(Exception e) {
+			log.error("Exception while making the db call: ",e);
+			log.error("query; "+query);
+		}
+		return employeesIds;
 	}
 
 	private List<String> fetchEmployeesforAssignment(EmployeeSearchCriteria criteria, RequestInfo requestInfo) {

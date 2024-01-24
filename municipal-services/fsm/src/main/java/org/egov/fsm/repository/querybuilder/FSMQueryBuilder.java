@@ -53,11 +53,26 @@ public class FSMQueryBuilder {
 			}
 		}
 
+		/*
+		 * Enable part search by application number of fsm application
+		 */
 		List<String> applicationNumber = criteria.getApplicationNos();
-		if (!CollectionUtils.isEmpty(applicationNumber)) {
+		if (!CollectionUtils.isEmpty(applicationNumber) && (applicationNumber.stream()
+				.filter(checkappnumber -> checkappnumber.length() > 0).findFirst().orElse(null) != null)) {
+			boolean flag = false;
 			addClauseIfRequired(preparedStmtList, builder);
-			builder.append(" fsm.applicationNo IN (").append(createQuery(applicationNumber)).append(")");
-			addToPreparedStatement(preparedStmtList, applicationNumber);
+			builder.append(" ( ");
+			for (String applicationno : applicationNumber) {
+
+				if (flag)
+					builder.append(" OR ");
+				builder.append(" UPPER(fsm.applicationNo) like ?");
+				preparedStmtList.add('%' + org.apache.commons.lang3.StringUtils.upperCase(applicationno) + '%');
+				builder.append(" ESCAPE '_' ");
+				flag = true;
+
+			}
+			builder.append(" ) ");
 		}
 
 		List<String> applicationStatus = criteria.getApplicationStatus();

@@ -33,10 +33,13 @@ import org.bel.birthdeath.death.model.EgDeathDtl;
 import org.bel.birthdeath.utils.BirthDeathConstants;
 import org.bel.birthdeath.utils.CommonUtils;
 import org.egov.common.contract.request.RequestInfo;
+import org.egov.common.exception.InvalidTenantIdException;
+import org.egov.common.utils.MultiStateInstanceUtil;
 import org.egov.tracer.model.CustomException;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
@@ -101,11 +104,27 @@ public class BirthRepository {
 	
 	@Value("${egov.bnd.freedownload.tenants}")
     private String freeDownloadTenants;
+
+	@Autowired
+	private MultiStateInstanceUtil centralInstanceUtil;
+
+	@Autowired
+	private ServiceRequestRepository serviceRequestRepository;
+
+	@Autowired
+	@Qualifier("objectMapperBnd")
+	private ObjectMapper mapper;
 	
 	public List<EgBirthDtl> getBirthDtls(SearchCriteria criteria) {
 		List<Object> preparedStmtList = new ArrayList<>();
         String query = allqueryBuilder.getBirtDtls(criteria, preparedStmtList);
-        return  jdbcTemplate.query(query, preparedStmtList.toArray(), rowMapper);
+		try {
+			query = centralInstanceUtil.replaceSchemaPlaceholder(query, criteria.getTenantId());
+		} catch (InvalidTenantIdException e) {
+			throw new CustomException("BIRTHCERT_SEARCH_TENANTID_ERROR",
+					"TenantId length is not sufficient to replace query schema in a multi state instance");
+		}
+			return  jdbcTemplate.query(query, preparedStmtList.toArray(), rowMapper);
 	}
 
 	public List<BirthCertificate> getBirthCertificateForPlainSearch(SearchCriteria criteria) {
@@ -122,12 +141,18 @@ public class BirthRepository {
 		if (criteria.getOffset() != null)
 			offset = criteria.getOffset();
 
-		String query = "SELECT * FROM eg_birth_cert_request OFFSET " + offset + " LIMIT " + limit;
+		String query = "SELECT * FROM {schema}.eg_birth_cert_request OFFSET " + offset + " LIMIT " + limit;
+		try {
+			query = centralInstanceUtil.replaceSchemaPlaceholder(query, criteria.getTenantId());
+		} catch (InvalidTenantIdException e) {
+			throw new CustomException("BIRTHCERT_PLAINSEARCH_TENANTID_ERROR",
+					"TenantId length is not sufficient to replace query schema in a multi state instance");
+		}
 		List<Map<String, Object>> list =  jdbcTemplate.queryForList(query);
 		log.info("Size of list: " + list.size());
 		for(Map<String, Object> map: list) {
 			BirthCertificate birthCertificate = new BirthCertificate();
-			EgBirthDtl birthDtl = getBirthDtlById((String) map.get("birthdtlid"));
+			EgBirthDtl birthDtl = getBirthDtlById((String) map.get("birthdtlid"),criteria.getTenantId());
 
 			birthCertificate.setId((String) map.get("id"));
 			birthCertificate.setBirthCertificateNo((String) map.get("birthcertificateno"));
@@ -160,13 +185,19 @@ public class BirthRepository {
 		return birthCertificates;
 	}
 
-	public EgBirthDtl getBirthDtlById(String id) {
-		String birthDtlQuery = "SELECT * FROM eg_birth_dtls WHERE id = ?";
+	public EgBirthDtl getBirthDtlById(String id, String tenantId) {
+		String birthDtlQuery = "SELECT * FROM {schema}.eg_birth_dtls WHERE id = ?";
+		try {
+			birthDtlQuery = centralInstanceUtil.replaceSchemaPlaceholder(birthDtlQuery, tenantId);
+		} catch (InvalidTenantIdException e) {
+			throw new CustomException("BIRTHCERT_SEARCH_TENANTID_ERROR",
+					"TenantId length is not sufficient to replace query schema in a multi state instance");
+		}
 		return (EgBirthDtl) jdbcTemplate.queryForObject(birthDtlQuery, new Object[]{id}, new BeanPropertyRowMapper(EgBirthDtl.class));
 	}
 
 	public void save(BirthCertRequest birthCertRequest) {
-		bndProducer.push(config.getSaveBirthTopic(), birthCertRequest);
+		bndProducer.push(birthCertRequest.getBirthCertificate().getTenantId(), config.getSaveBirthTopic(), birthCertRequest);
 	}
 
 	public EgovPdfResp saveBirthCertPdf(BirthPdfApplicationRequest pdfApplicationRequest) {
@@ -191,17 +222,24 @@ public class BirthRepository {
 			pdfApplicationRequest.getBirthCertificate().forEach(cert-> {
 				String uiHost = config.getEgovPdfHost();
 				String birthCertPath = config.getEgovPdfBirthEndPoint();
-				String tenantId = cert.getTenantid().split("\\.")[0];
+				/*String tenantId = cert.getTenantid().split("\\.")[0];*/
+				String tenantId = centralInstanceUtil.getStateLevelTenant(cert.getTenantid());
 				birthCertPath = birthCertPath.replace("$tenantId",tenantId);
 				String pdfFinalPath = uiHost + birthCertPath;
-				EgovPdfResp response = restTemplate.postForObject(pdfFinalPath, req, EgovPdfResp.class);
+
+				Object responseObject =  serviceRequestRepository.fetchResult(new StringBuilder(pdfFinalPath), req);
+				EgovPdfResp response = mapper.convertValue(responseObject, EgovPdfResp.class);
 				if (response != null && CollectionUtils.isEmpty(response.getFilestoreIds())) {
 					throw new CustomException("EMPTY_FILESTORE_IDS_FROM_PDF_SERVICE",
 							"No file store id found from pdf service");
 				}
 				result.setFilestoreIds(response.getFilestoreIds());
 			});
-		}catch(Exception e) {
+		}
+		catch (IllegalArgumentException e) {
+			throw new CustomException("PARSING ERROR","Failed to parse response of Filestore Service");
+		}
+		catch(Exception e) {
 			e.printStackTrace();
 			throw new CustomException("PDF_ERROR","Error in generating PDF");
 		}
@@ -211,6 +249,12 @@ public class BirthRepository {
 	public List<EgBirthDtl> getBirthDtlsAll(SearchCriteria criteria ,RequestInfo requestInfo) {
 		List<Object> preparedStmtList = new ArrayList<>();
         String query = allqueryBuilder.getBirtDtlsAll(criteria, preparedStmtList);
+		try {
+			query = centralInstanceUtil.replaceSchemaPlaceholder(query, criteria.getTenantId());
+		} catch (InvalidTenantIdException e) {
+			throw new CustomException("BIRTHCERT_SEARCH_TENANTID_ERROR",
+					"TenantId length is not sufficient to replace query schema in a multi state instance");
+		}
         List<EgBirthDtl> birthDtls =  jdbcTemplate.query(query, preparedStmtList.toArray(), allRowMapper);
 		if(birthDtls != null) {
 			birthDtls.forEach(birthDtl -> {
@@ -222,11 +266,17 @@ public class BirthRepository {
         return birthDtls;
 	}
 
-	public BirthCertificate getBirthCertReqByConsumerCode(String consumerCode, RequestInfo requestInfo) {
+	public BirthCertificate getBirthCertReqByConsumerCode(String consumerCode, RequestInfo requestInfo, String tenantId) {
 	try {
 		List<Object> preparedStmtList = new ArrayList<>();
 		SearchCriteria criteria = new SearchCriteria();
 		String query = allqueryBuilder.getBirthCertReq(consumerCode,requestInfo,preparedStmtList);
+		try {
+			query = centralInstanceUtil.replaceSchemaPlaceholder(query, tenantId);
+		} catch (InvalidTenantIdException e) {
+			throw new CustomException("BIRTHCERT_SEARCH_ERROR",
+					"TenantId length is not sufficient to replace query schema in a multi state instance");
+		}
 		List<BirthCertificate> birthCerts =  jdbcTemplate.query(query, preparedStmtList.toArray(), birthCertRowMapper);
 		if(null!=birthCerts && !birthCerts.isEmpty()) {
 			criteria.setTenantId(birthCerts.get(0).getTenantId());
@@ -249,12 +299,19 @@ public class BirthRepository {
 	return null;
 	}
 
-	public void updateCounter(String birthDtlId) {
+	public void updateCounter(String birthDtlId,String tenantId) {
 		try {
-			String updateQry="UPDATE public.eg_birth_dtls SET counter=counter+1 WHERE id=:id and tenantid not in (:tenantIds)";
+			String updateQry="UPDATE {schema}.eg_birth_dtls SET counter=counter+1 WHERE id=:id and tenantid not in (:tenantIds)";
 			Map<String, Object> params = new HashMap<>();
 			params.put("id", birthDtlId);
 			params.put("tenantIds",Arrays.asList(freeDownloadTenants.split(",")));
+			try {
+				//TODO: Update is being called here. need to check with kavi if we need to call here to
+				updateQry = centralInstanceUtil.replaceSchemaPlaceholder(updateQry, tenantId);
+			} catch (InvalidTenantIdException e) {
+				throw new CustomException("BIRTHCERT_UPDATE_TENANTID_ERROR",
+						"TenantId length is not sufficient to replace query schema in a multi state instance");
+			}
 			namedParameterJdbcTemplate.update(updateQry ,params);
 		}catch(Exception e) {
 			e.printStackTrace();
@@ -263,11 +320,18 @@ public class BirthRepository {
 		
 	}
 
-	public List<BirthCertAppln> searchApplications( String uuid) {
+	public List<BirthCertAppln> searchApplications( String uuid, String tenantId) {
 		List<BirthCertAppln> birthCertAppls = new ArrayList<>();
 		try {
 			List<Object> preparedStmtList = new ArrayList<>();
 			String applQuery=allqueryBuilder.searchApplications(uuid, preparedStmtList);
+			try {
+				//TODO: No tenantId , hence passing empty id check with kavi
+				applQuery = centralInstanceUtil.replaceSchemaPlaceholder(applQuery, tenantId);
+			} catch (InvalidTenantIdException e) {
+				throw new CustomException("BIRTHCERT_SEARCH_TENANTID_ERROR",
+						"TenantId length is not sufficient to replace query schema in a multi state instance");
+			}
 			birthCertAppls = jdbcTemplate.query(applQuery, preparedStmtList.toArray(), certApplnRowMapper);
 		}
 		catch(Exception e) {
@@ -279,7 +343,7 @@ public class BirthRepository {
 	}
 
 	public void update(BirthCertRequest certRequest) {
-		bndProducer.push(config.getUpdateBirthTopic(), certRequest);
+		bndProducer.push(certRequest.getBirthCertificate().getTenantId(), config.getUpdateBirthTopic(), certRequest);
 	}
 	
 	public String getShortenedUrl(String url){
@@ -287,7 +351,14 @@ public class BirthRepository {
 		body.put("url",url);
 		StringBuilder builder = new StringBuilder(config.getUrlShortnerHost());
 		builder.append(config.getUrlShortnerEndpoint());
-		String res = restTemplate.postForObject(builder.toString(), body, String.class);
+
+		String res = null;
+		try {
+			res = restTemplate.postForObject(builder.toString(), body, String.class);
+		} catch (IllegalArgumentException e) {
+			throw new CustomException("PARSING ERROR", "Failed to parse response of URL Shortening");
+		}
+
 		if(StringUtils.isEmpty(res)){
 			log.error("URL_SHORTENING_ERROR","Unable to shorten url: "+url);
 			return url;
@@ -297,7 +368,7 @@ public class BirthRepository {
 
 	public List<EgBirthDtl> viewCertificateData(SearchCriteria criteria) {
 		List<EgBirthDtl> certData = new ArrayList<>();
-		BirthCertificate certificate = getBirthCertReqByConsumerCode(criteria.getBirthcertificateno(),null);
+		BirthCertificate certificate = getBirthCertReqByConsumerCode(criteria.getBirthcertificateno(),null,criteria.getTenantId());
 		criteria.setId(certificate.getBirthDtlId());
 		certData = getBirthDtlsAll(criteria,null);
 		certData.get(0).setDateofissue(certificate.getDateofissue());
@@ -307,6 +378,12 @@ public class BirthRepository {
 	public List<EgBirthDtl> viewfullCertMasterData(SearchCriteria criteria,RequestInfo requestInfo) {
 		List<Object> preparedStmtList = new ArrayList<>();
         String query = allqueryBuilder.getBirthCertMasterDtl(criteria, preparedStmtList);
+		try {
+			query = centralInstanceUtil.replaceSchemaPlaceholder(query, criteria.getTenantId());
+		} catch (InvalidTenantIdException e) {
+			throw new CustomException("BIRTHCERT_SEARCH_ERROR",
+					"TenantId length is not sufficient to replace query schema in a multi state instance");
+		}
         List<EgBirthDtl> birthCertMasterDtl =  jdbcTemplate.query(query, preparedStmtList.toArray(), birthMasterDtlRowMapper);
 		if(birthCertMasterDtl != null) {
 			birthCertMasterDtl.forEach(birthDtl -> {

@@ -10,16 +10,17 @@ import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.UUID;
-
-import javax.validation.Valid;
 
 import org.egov.common.contract.request.RequestInfo;
 import org.egov.common.contract.request.Role;
 import org.egov.tracer.model.CustomException;
 import org.egov.vendor.config.VendorConfiguration;
+import org.egov.vendor.driver.repository.DriverRepository;
 import org.egov.vendor.driver.web.model.Driver;
 import org.egov.vendor.driver.web.model.DriverRequest;
+import org.egov.vendor.driver.web.model.DriverResponse;
 import org.egov.vendor.driver.web.model.DriverSearchCriteria;
 import org.egov.vendor.repository.ServiceRequestRepository;
 import org.egov.vendor.util.VendorConstants;
@@ -50,22 +51,23 @@ public class DriverUserService {
 	@Autowired
 	private ObjectMapper mapper;
 
+	@Autowired
+	private DriverRepository driverRepository;
+
 	/**
 	 * 
 	 * @param driverRequest
+	 * @param isCreateOrUpdate
 	 */
 	@SuppressWarnings("null")
-	public void manageDrivers(DriverRequest driverRequest) {
+	public void manageDrivers(DriverRequest driverRequest, boolean isCreateOrUpdate) {
 		Driver driver = driverRequest.getDriver();
 		RequestInfo requestInfo = driverRequest.getRequestInfo();
 		User driverInfo = driver.getOwner();
 		HashMap<String, String> errorMap = new HashMap<>();
 
-		UserDetailResponse userDetailResponse = null;
-
 		if (driverInfo != null && driverInfo.getMobileNumber() != null) {
-			driverInfoMobileNumber(driverInfo, requestInfo, errorMap, driver, driverRequest);
-
+			driverInfoMobileNumber(driverInfo, requestInfo, errorMap, driver, driverRequest, isCreateOrUpdate);
 		} else {
 			log.debug("MobileNo is not provided in Application.");
 			errorMap.put(VendorErrorConstants.INVALID_DRIVER_ERROR,
@@ -75,16 +77,53 @@ public class DriverUserService {
 		if (!errorMap.isEmpty()) {
 			throw new CustomException(errorMap);
 		}
+		licenseExistCheck(driverRequest);
 
 	}
 
+	private void licenseExistCheck(DriverRequest driverRequest) {
+		DriverResponse driverResponse = driverRepository.getDriverData(new DriverSearchCriteria());
+		
+		Optional<Driver> driver = Optional.ofNullable(driverResponse)
+		        .map(DriverResponse::getDriver)
+		        .orElse(Collections.emptyList())
+		        .stream()
+		        .filter(driverIdAndLicenseNumCheck ->
+		                driverIdAndLicenseNumCheck.getLicenseNumber().equalsIgnoreCase(driverRequest.getDriver().getLicenseNumber())
+		                && !driverIdAndLicenseNumCheck.getId().equalsIgnoreCase(driverRequest.getDriver().getId()))
+		        .findFirst();
+
+		if (driver.isPresent()) {
+			throw new CustomException("Invalid LicenseNumber", " Driver with the same license number already exist");
+		}
+	}
+
 	private void driverInfoMobileNumber(User driverInfo, RequestInfo requestInfo, HashMap<String, String> errorMap,
-			Driver driver, DriverRequest driverRequest) {
-		UserDetailResponse userDetailResponse = userExists(driverInfo);
+			Driver driver, DriverRequest driverRequest, boolean isCreateOrUpdate) {
+		UserDetailResponse userDetailResponse = userExists(driverInfo);// 1 user
+
 		User foundDriver = null;
 		if (userDetailResponse != null && !CollectionUtils.isEmpty(userDetailResponse.getUser())) {
-
 			for (int i = 0; i < userDetailResponse.getUser().size(); i++) {
+
+				if (driver.getOwner().getMobileNumber().equals(userDetailResponse.getUser().get(i).getMobileNumber())
+						&& !userDetailResponse.getUser().get(i).getUuid()
+								.equals(driverRequest.getDriver().getOwner().getUuid())) {
+
+					userDetailResponse.getUser().get(i).getRoles().forEach(getAllRoles -> {
+
+						if (getAllRoles.getCode().equals(VendorConstants.FSM_DRIVER)) {
+							log.debug("Driver with the same mobile number already exist.");
+							errorMap.put(VendorErrorConstants.MOBILE_NUMBER_ALREADY_EXIST,
+									"Driver with the same mobile number already exist ");
+
+						}
+						if (!errorMap.isEmpty()) {
+							throw new CustomException(errorMap);
+						}
+					});
+
+				}
 
 				if (isRoleAvailale(userDetailResponse.getUser().get(i), config.getDsoDriver(),
 						driver.getTenantId()) == Boolean.TRUE) {
@@ -99,11 +138,14 @@ public class DriverUserService {
 				updateUserDetails(driverInfo, requestInfo, errorMap);
 			}
 
-		} else {
+		} else if (isCreateOrUpdate) {
 			foundDriver = createDriver(driverInfo, requestInfo);
+			driverRequest.getDriver().setOwner(foundDriver);
+		} else {
+			updateUserDetails(driverInfo, requestInfo, errorMap);
+			driverRequest.getDriver().setOwner(driverRequest.getDriver().getOwner());
 		}
 
-		driverRequest.getDriver().setOwner(foundDriver);
 	}
 
 	private User updateUserDetails(User driverInfo, RequestInfo requestInfo, HashMap<String, String> errorMap) {
@@ -196,7 +238,7 @@ public class DriverUserService {
 	/**
 	 * create Employee in HRMS for Vendor owner
 	 * 
-	 * @param owner
+	 * @param driver
 	 * @param requestInfo
 	 * @return
 	 */

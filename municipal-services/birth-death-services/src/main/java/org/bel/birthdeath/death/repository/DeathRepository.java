@@ -8,12 +8,15 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.bel.birthdeath.common.Idgen.IdGenerationResponse;
 import org.bel.birthdeath.common.contract.BirthPdfApplicationRequest;
 import org.bel.birthdeath.common.contract.DeathPdfApplicationRequest;
 import org.bel.birthdeath.common.contract.EgovPdfResp;
 import org.bel.birthdeath.common.contract.EncryptionDecryptionUtil;
 import org.bel.birthdeath.common.model.AuditDetails;
 import org.bel.birthdeath.common.producer.BndProducer;
+import org.bel.birthdeath.common.repository.ServiceRequestRepository;
 import org.bel.birthdeath.config.BirthDeathConfiguration;
 import org.bel.birthdeath.death.certmodel.DeathCertAppln;
 import org.bel.birthdeath.death.certmodel.DeathCertRequest;
@@ -32,8 +35,11 @@ import org.bel.birthdeath.death.repository.rowmapper.DeathMasterDtlRowMapper;
 import org.bel.birthdeath.utils.BirthDeathConstants;
 import org.bel.birthdeath.utils.CommonUtils;
 import org.egov.common.contract.request.RequestInfo;
+import org.egov.common.exception.InvalidTenantIdException;
+import org.egov.common.utils.MultiStateInstanceUtil;
 import org.egov.tracer.model.CustomException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
@@ -98,10 +104,26 @@ public class DeathRepository {
 	
 	@Autowired
     private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
+
+	@Autowired
+	private MultiStateInstanceUtil centralInstanceUtil;
+
+	@Autowired
+	private ServiceRequestRepository serviceRequestRepository;
+
+	@Autowired
+	@Qualifier("objectMapperBnd")
+	private ObjectMapper mapper;
 	
 	public List<EgDeathDtl> getDeathDtls(SearchCriteria criteria) {
 		List<Object> preparedStmtList = new ArrayList<>();
         String query = allqueryBuilder.getDeathDtls(criteria, preparedStmtList);
+		try {
+			query = centralInstanceUtil.replaceSchemaPlaceholder(query, criteria.getTenantId());
+		} catch (InvalidTenantIdException e) {
+			throw new CustomException("DEATHCERT_SEARCH_TENANTID_ERROR",
+					"TenantId length is not sufficient to replace query schema in a multi state instance");
+		}
         return jdbcTemplate.query(query, preparedStmtList.toArray(), rowMapper);
 	}
 
@@ -119,13 +141,19 @@ public class DeathRepository {
 		if (criteria.getOffset() != null)
 			offset = criteria.getOffset();
 
-		String query = "SELECT * FROM eg_death_cert_request OFFSET " + offset + " LIMIT " + limit;
+		String query = "SELECT * FROM {schema}.eg_death_cert_request OFFSET " + offset + " LIMIT " + limit;
+		try {
+			query = centralInstanceUtil.replaceSchemaPlaceholder(query, criteria.getTenantId());
+		} catch (InvalidTenantIdException e) {
+			throw new CustomException("DEATHCERT_PLAINSEARCH_TENANTID_ERROR",
+					"TenantId length is not sufficient to replace query schema in a multi state instance");
+		}
 		List<Map<String, Object>> list =  jdbcTemplate.queryForList(query);
 
 		for(Map<String, Object> map: list) {
 			DeathCertificate deathCertificate = new DeathCertificate();
 			log.info("Death Detail ID = " + map.get("deathdtlid"));
-			EgDeathDtl deathDtl = getDeathDtlById((String) map.get("deathdtlid"));
+			EgDeathDtl deathDtl = getDeathDtlById((String) map.get("deathdtlid"), criteria.getTenantId());
 
 			deathCertificate.setId((String) map.get("id"));
 			deathCertificate.setDeathCertificateNo((String) map.get("deathcertificateno"));
@@ -159,13 +187,20 @@ public class DeathRepository {
 		return deathCertificates;
 	}
 
-	public EgDeathDtl getDeathDtlById(String id) {
-		String deathDtlQuery = "SELECT * FROM eg_death_dtls WHERE id = ?";
+	public EgDeathDtl getDeathDtlById(String id, String tenantId) {
+		String deathDtlQuery = "SELECT * FROM {schema}.eg_death_dtls WHERE id = ?";
+		try {
+			//TODO: Passing tenenantId as empty.Check with kavi
+			deathDtlQuery = centralInstanceUtil.replaceSchemaPlaceholder(deathDtlQuery, tenantId);
+		} catch (InvalidTenantIdException e) {
+			throw new CustomException("DEATHCERT_SEARCH_ERROR",
+					"TenantId length is not sufficient to replace query schema in a multi state instance");
+		}
 		return (EgDeathDtl) jdbcTemplate.queryForObject(deathDtlQuery, new Object[]{id}, new BeanPropertyRowMapper(EgDeathDtl.class));
 	}
 
 	public void save(DeathCertRequest deathCertRequest) {
-		bndProducer.push(config.getSaveDeathTopic(), deathCertRequest);
+		bndProducer.push(deathCertRequest.getDeathCertificate().getTenantId(), config.getSaveDeathTopic(), deathCertRequest);
 	}
 
 	public EgovPdfResp saveDeathCertPdf(DeathPdfApplicationRequest pdfApplicationRequest) {
@@ -191,16 +226,22 @@ public class DeathRepository {
 			pdfApplicationRequest.getDeathCertificate().forEach(cert-> {
 				String uiHost = config.getEgovPdfHost();
 				String deathCertPath = config.getEgovPdfDeathEndPoint();
-				String tenantId = cert.getTenantid().split("\\.")[0];
+				/*String tenantId = cert.getTenantid().split("\\.")[0];*/
+				String tenantId = centralInstanceUtil.getStateLevelTenant(cert.getTenantid());
 				deathCertPath = deathCertPath.replace("$tenantId",tenantId);
 				String pdfFinalPath = uiHost + deathCertPath;
-				EgovPdfResp response = restTemplate.postForObject(pdfFinalPath, req, EgovPdfResp.class);
+
+				Object responseObject =  serviceRequestRepository.fetchResult(new StringBuilder(pdfFinalPath), req);
+				EgovPdfResp response =  mapper.convertValue(responseObject,  EgovPdfResp.class);
+
 				if (response != null && CollectionUtils.isEmpty(response.getFilestoreIds())) {
 					throw new CustomException("EMPTY_FILESTORE_IDS_FROM_PDF_SERVICE",
 							"No file store id found from pdf service");
 				}
 				result.setFilestoreIds(response.getFilestoreIds());
 			});
+		} catch (IllegalArgumentException e) {
+			throw new CustomException("PARSING ERROR","Failed to parse response of PDF-Service");
 		}catch(Exception e) {
 			e.printStackTrace();
 			throw new CustomException("PDF_ERROR","Error in generating PDF");
@@ -212,6 +253,12 @@ public class DeathRepository {
 	public List<EgDeathDtl> getDeathDtlsAll(SearchCriteria criteria ,RequestInfo requestInfo) {
 		List<Object> preparedStmtList = new ArrayList<>();
         String query = allqueryBuilder.getDeathDtlsAll(criteria, preparedStmtList);
+		try {
+			query = centralInstanceUtil.replaceSchemaPlaceholder(query, criteria.getTenantId());
+		} catch (InvalidTenantIdException e) {
+			throw new CustomException("DEATHCERT_SEARCH_TENANTID_ERROR",
+					"TenantId length is not sufficient to replace query schema in a multi state instance");
+		}
         List<EgDeathDtl> deathDtls =  jdbcTemplate.query(query, preparedStmtList.toArray(), allRowMapper);
 		if(deathDtls != null) {
 			deathDtls.forEach(deathDtl -> {
@@ -227,11 +274,17 @@ public class DeathRepository {
         return deathDtls;
 	}
 
-	public DeathCertificate getDeathCertReqByConsumerCode(String consumerCode, RequestInfo requestInfo) {
+	public DeathCertificate getDeathCertReqByConsumerCode(String consumerCode, RequestInfo requestInfo, String tenantId) {
 		try {
 			List<Object> preparedStmtList = new ArrayList<>();
 			SearchCriteria criteria = new SearchCriteria();
 			String query = allqueryBuilder.getDeathCertReq(consumerCode, requestInfo, preparedStmtList);
+			try {
+				query = centralInstanceUtil.replaceSchemaPlaceholder(query, tenantId);
+			} catch (InvalidTenantIdException e) {
+				throw new CustomException("DEATHCERT_SEARCH_TENANTID_ERROR",
+						"TenantId length is not sufficient to replace query schema in a multi state instance");
+			}
 			List<DeathCertificate> deathCerts = jdbcTemplate.query(query, preparedStmtList.toArray(), deathCertRowMapper);
 			if (null != deathCerts && !deathCerts.isEmpty()) {
 				criteria.setTenantId(deathCerts.get(0).getTenantId());
@@ -254,25 +307,39 @@ public class DeathRepository {
 		return null;
 	}
 
-	public void updateCounter(String deathDtlId) {
+	public void updateCounter(String deathDtlId, String tenantId) {
 		try {
-			String updateQry="UPDATE public.eg_death_dtls SET counter=counter+1 WHERE id=:id and tenantid not in (:tenantIds)";
+			String updateQry = "UPDATE {schema}.eg_death_dtls SET counter=counter+1 WHERE id=:id and tenantid not in (:tenantIds)";
 			Map<String, Object> params = new HashMap<>();
 			params.put("id", deathDtlId);
-			params.put("tenantIds",Arrays.asList(freeDownloadTenants.split(",")));
-			namedParameterJdbcTemplate.update(updateQry ,params);
-		}catch(Exception e) {
+			params.put("tenantIds", Arrays.asList(freeDownloadTenants.split(",")));
+			try {
+				//TODO: Update is being called here. need to check with kavi if we need to call here to
+				updateQry = centralInstanceUtil.replaceSchemaPlaceholder(updateQry, tenantId);
+			} catch (InvalidTenantIdException e) {
+				throw new CustomException("DEATHCERT_UPDATE_TENANTID_ERROR",
+						"TenantId length is not sufficient to replace query schema in a multi state instance");
+			}
+			namedParameterJdbcTemplate.update(updateQry, params);
+		} catch (Exception e) {
 			e.printStackTrace();
-			throw new CustomException("Invalid_data","Error in updating");
+			throw new CustomException("Invalid_data", "Error in updating");
 		}
 		
 	}
 
-	public List<DeathCertAppln> searchApplications( String uuid) {
+	public List<DeathCertAppln> searchApplications( String uuid, String tenantId) {
 		List<DeathCertAppln> deathCertAppls = new ArrayList<>();
 		try {
 			List<Object> preparedStmtList = new ArrayList<>();
 			String applQuery=allqueryBuilder.searchApplications(uuid, preparedStmtList);
+			try {
+				//TODO:Passing empty tenantId as tenantId is not there.need to cjeck with kavi
+				applQuery = centralInstanceUtil.replaceSchemaPlaceholder(applQuery, tenantId);
+			} catch (InvalidTenantIdException e) {
+				throw new CustomException("DEATHCERT_SEARCH_TENANTID_ERROR",
+						"TenantId length is not sufficient to replace query schema in a multi state instance");
+			}
 			deathCertAppls = jdbcTemplate.query(applQuery, preparedStmtList.toArray(), certApplnRowMapper);
 		}
 		catch(Exception e) {
@@ -284,7 +351,7 @@ public class DeathRepository {
 	}
 
 	public void update(DeathCertRequest certRequest) {
-		bndProducer.push(config.getUpdateDeathTopic(), certRequest);
+		bndProducer.push(certRequest.getDeathCertificate().getTenantId(), config.getUpdateDeathTopic(), certRequest);
 	}
 	
 	public String getShortenedUrl(String url){
@@ -292,7 +359,14 @@ public class DeathRepository {
 		body.put("url",url);
 		StringBuilder builder = new StringBuilder(config.getUrlShortnerHost());
 		builder.append(config.getUrlShortnerEndpoint());
-		String res = restTemplate.postForObject(builder.toString(), body, String.class);
+
+		String res = null;
+		try {
+			 res = restTemplate.postForObject(builder.toString(), body, String.class);
+		} catch (IllegalArgumentException e) {
+			throw new CustomException("PARSING ERROR", "Failed to parse response of URL Shortening");
+		}
+
 		if(StringUtils.isEmpty(res)){
 			log.error("URL_SHORTENING_ERROR","Unable to shorten url: "+url);
 			return url;
@@ -302,8 +376,9 @@ public class DeathRepository {
 	
 	public List<EgDeathDtl> viewCertificateData(SearchCriteria criteria) {
 		List<EgDeathDtl> certData = new ArrayList<>();
-		DeathCertificate certificate = getDeathCertReqByConsumerCode(criteria.getDeathcertificateno(),null);
+		DeathCertificate certificate = getDeathCertReqByConsumerCode(criteria.getDeathcertificateno(),null, criteria.getTenantId());
 		criteria.setId(certificate.getDeathDtlId());
+		criteria.setTenantId(certificate.getTenantId());
 		certData= getDeathDtlsAll(criteria,null);
 		certData.get(0).setDateofissue(certificate.getDateofissue());
 		return certData;
@@ -312,6 +387,12 @@ public class DeathRepository {
 	public List<EgDeathDtl> viewfullCertMasterData(SearchCriteria criteria,RequestInfo requestInfo) {
 		List<Object> preparedStmtList = new ArrayList<>();
         String query = allqueryBuilder.getDeathCertMasterDtl(criteria, preparedStmtList);
+		try {
+			query = centralInstanceUtil.replaceSchemaPlaceholder(query, criteria.getTenantId());
+		} catch (InvalidTenantIdException e) {
+			throw new CustomException("DEATHCERT_SEARCH_TENANTID_ERROR",
+					"TenantId length is not sufficient to replace query schema in a multi state instance");
+		}
         List<EgDeathDtl> deathCertMasterDtl =  jdbcTemplate.query(query, preparedStmtList.toArray(), deathMasterDtlRowMapper);
 		if(deathCertMasterDtl != null) {
 			deathCertMasterDtl.forEach(deathDtl -> {

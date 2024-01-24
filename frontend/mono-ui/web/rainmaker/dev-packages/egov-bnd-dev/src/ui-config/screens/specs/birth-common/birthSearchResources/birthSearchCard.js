@@ -263,7 +263,7 @@ export const searchSetCommon = getCommonContainer({
     visible: process.env.REACT_APP_NAME === "Citizen" ? true : false,
   }),
   fromdate: getDateField({
-    label: { labelName: "DOB", labelKey: "BND_FROM_DATE" },
+    label: { labelName: "DOB", labelKey: "BND_BIRTH_FROM_DATE" },
     placeholder: {
       labelName: "FromDate of Search",
       labelKey: "BND_BIRTH_DOB_PLACEHOLDER",
@@ -284,7 +284,7 @@ export const searchSetCommon = getCommonContainer({
     visible: process.env.REACT_APP_NAME === "Employee" ? true : false,
   }),
   todate: getDateField({
-    label: { labelName: "DOB", labelKey: "BND_TO_DATE" },
+    label: { labelName: "DOB", labelKey: "BND_BIRTH_TO_DATE" },
     placeholder: {
       labelName: "ToDate of Search",
       labelKey: "BND_BIRTH_DOB_PLACEHOLDER",

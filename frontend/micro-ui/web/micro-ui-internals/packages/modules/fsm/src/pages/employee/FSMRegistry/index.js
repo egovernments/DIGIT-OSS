@@ -78,6 +78,11 @@ const FSMRegistry = () => {
   }, []);
 
   useEffect(() => {
+    setPageOffset(0);
+    refetch();
+  }, [searchParams]);
+
+  useEffect(() => {
     refetch();
   }, [searchParams, sortParams, pageOffset, pageSize]);
 

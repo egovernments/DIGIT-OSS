@@ -84,7 +84,6 @@ public class EnrichmentService {
 	@Autowired
 	private UnmaskingUtil unmaskingUtil;
 
-
 	/**
 	 * Enrich water connection
 	 * 
@@ -121,8 +120,8 @@ public class EnrichmentService {
 		waterConnectionRequest.getWaterConnection().setAdditionalDetails(additionalDetail);
 	    //Setting ApplicationType
 		String applicationType=null;
-		
-		
+
+
 		if(reqType==WCConstants.CREATE_APPLICATION) {
 			applicationType=WCConstants.NEW_WATER_CONNECTION;
 		}
@@ -132,9 +131,9 @@ public class EnrichmentService {
 		else {
 			applicationType=WCConstants.MODIFY_WATER_CONNECTION;
 		}
-		
+
 		waterConnectionRequest.getWaterConnection().setApplicationType(applicationType);
-		
+
 		setApplicationIdGenIds(waterConnectionRequest);
 		setStatusForCreate(waterConnectionRequest);
 
@@ -629,7 +628,8 @@ public class EnrichmentService {
 				auditObject.put("accessBy", requestInfo.getUserInfo().getUuid());
 				auditObject.put("purpose",DOCUMENT_ACCESS_AUDIT_MSG);
 
-				producer.push(config.getDocumentAuditTopic(), auditObject);
+				producer.push(propertyCriteria.getTenantId(),config.getDocumentAuditTopic(), auditObject);
+
 			}
 
 

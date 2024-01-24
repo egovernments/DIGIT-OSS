@@ -27,7 +27,7 @@ const MobileInbox = ({
   sortParams,
 }) => {
   const { t } = useTranslation();
-  const getData = () => data?.table.map(e => ({
+  const getData = () => data?.table?.map(e => ({
       [t("WF_INBOX_HEADER_APPLICATION_NO")]:e?.["applicationId"],
       [t("TL_COMMON_TABLE_COL_APP_DATE")]:convertEpochToDateDMY(e?.["date"]),
       [t("TL_COMMON_TABLE_COL_APP_TYPE")]:e?.["businessService"]?t(`CS_COMMON_INBOX_${e?.["businessService"]?.toUpperCase()}`):t("NA"),

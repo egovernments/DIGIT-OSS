@@ -29,6 +29,7 @@ const CashDetailsComponent = ({ ...props }) => {
   const { t } = useTranslation();
   const [manualReceiptDate, setManualReceiptDate] = useState(props?.value?.manualReceiptDate);
   const [manualReceiptNumber, setManualReceiptNumber] = useState(props?.value?.manualReceiptNumber);
+  const isFSM = window?.location.pathname.includes("FSM");
 
   useEffect(() => {
     if (props.onChange) {
@@ -65,6 +66,8 @@ const CashDetailsComponent = ({ ...props }) => {
               onChange={(d) => {
                 setManualReceiptDate(d);
               }}
+              min={isFSM ? Digit.Utils.date.getDate(Date.now() - 30 * 24 * 60 * 60 * 1000) : null}
+              max={isFSM ? Digit.Utils.date.getDate() : null}
             />
           </div>
         </div>

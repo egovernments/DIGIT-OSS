@@ -24,6 +24,7 @@ import MapChart from "../components/MapChart";
 import MapDrillChart from "../components/mapDrillDownTable";
 import NoData from "../components/NoData";
 import { ReactComponent as Arrow_Right } from "../images/Arrow_Right.svg";
+import { ReactComponent as Arrow_Right_White } from "../images/Arrow_Right_white.svg";
 import { checkCurrentScreen } from "../components/DSSCard";
 
 const key = "DSS_FILTERS";
@@ -38,7 +39,7 @@ const getInitialRange = () => {
   return { startDate, endDate, title, interval, denomination, tenantId };
 };
 const colors = [
-  { dark: "rgba(12, 157, 149, 0.85)", light: "rgba(11, 222, 133, 0.14)" },
+  { dark: "rgba(12, 157, 149, 0.85)", light: "rgba(11, 222, 133, 0.14)", defaultColor: "rgba(244, 119, 56, 1)"},
   { dark: "rgba(251, 192, 45, 0.85)", light: "rgba(255, 202, 69, 0.24)" },
   { dark: "rgba(75, 31, 165, 0.85)", light: "rgba(138, 83, 255, 0.24)" },
   { dark: "rgba(4, 139, 208, 0.85)", light: "rgba(4, 139, 208, 0.24)" },
@@ -233,6 +234,8 @@ const Home = ({ stateCode }) => {
   const [drillDownId, setdrillDownId] = useState("none");
   const [totalCount, setTotalCount] = useState("");
   const [liveCount, setLiveCount] = useState("");
+
+  const isLandingPage = window.location.href.includes("/dss/landing/home") || window.location.href.includes("dss/landing/NURT_DASHBOARD");
 
   const handleFilters = (data) => {
     Digit.SessionStorage.set(key, data);
@@ -456,11 +459,11 @@ const Home = ({ stateCode }) => {
                       }`}
                       style={
                         item.vizType == "collection" || item.name.includes("PROJECT_STAUS") || item.name.includes("LIVE_ACTIVE_ULBS")
-                          ? { backgroundColor: "#fff" }
-                          : { backgroundColor: colors[index].light, padding: "20px" }
+                          ? { backgroundColor: "#fff", position: "relative" }
+                          : { backgroundColor: colors[index].light, padding: "20px", paddingBottom: "40px", position: "relative" }
                       }
                       key={index}
-                      onClick={() => routeTo(`/digit-ui/employee/dss/dashboard/${item.ref.url}`)}
+                      // onClick={() => routeTo(`/digit-ui/employee/dss/dashboard/${item.ref.url}`)}
                     >
                       <div style={{ justifyContent: "space-between", display: "flex", flexDirection: "row" }}>
                         <div className="dss-card-header" style={{ marginBottom: "10px" }}>
@@ -479,22 +482,33 @@ const Home = ({ stateCode }) => {
                               flexDirection: "row",
                             }}
                           >
-                            <span style={{ paddingRight: 10 }}>{t("DSS_OVERVIEW")}</span>
-                            <span>
-                              {" "}
-                              <Arrow_Right />
-                            </span>
+                            {!isLandingPage && <span><span style={{ paddingRight: 10 }}>{t("DSS_OVERVIEW")}</span>
+                              <span>
+                                {" "}
+                                <Arrow_Right />
+                              </span></span>}
                           </div>
                         ) : null}
                       </div>
 
-                      <div className="dss-card-body">
+                      <div className="dss-card-body" style={{marginBottom: isLandingPage ? "20px" : ""}}>
                         {item.charts.map((chart, key) => (
                           <div style={item.vizType == "collection" ? { width: Digit.Utils.browser.isMobile() ? "50%" : "25%" } : { width: "50%" }}>
                             <Chart data={chart} key={key} moduleLevel={item.moduleLevel} overview={item.vizType === "collection"} />
                           </div>
                         ))}
                       </div>
+                      {isLandingPage && <div
+                        style={{ borderRadius: "0px 0px 4px 4px", position: "absolute", display: "flex", justifyContent: "center", alignItems: "center", bottom: "0px", left: "0px", width: "100%", background: item.vizType == "collection" || item.name.includes("PROJECT_STAUS") || item.name.includes("LIVE_ACTIVE_ULBS") ? colors?.[index]?.defaultColor : colors?.[index]?.dark }}
+                        onClick={() => routeTo(`/digit-ui/employee/dss/dashboard/${item.ref.url}`)}
+                      >
+                        <div style={{ padding: "10px", display: "flex", justifyContent: "center", alignItems: "center", height: "40px" }}>
+                          <span style={{ marginRight: "10px", color: "white" }}>
+                            {`${t("COMMON_DSS_VIEW_DASH_BOARD_LABEL")} `}
+                          </span>
+                          <Arrow_Right_White />
+                        </div>
+                      </div>}
                     </div>
                   );
                 }

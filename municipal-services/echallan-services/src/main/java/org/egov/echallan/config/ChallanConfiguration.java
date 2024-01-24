@@ -11,6 +11,7 @@ import org.springframework.http.converter.json.MappingJackson2HttpMessageConvert
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
+import java.util.Map;
 import java.util.TimeZone;
 
 
@@ -195,6 +196,9 @@ public class ChallanConfiguration {
     @Value("${state.level.tenant.id}")
     public String stateLevelTenantId;
 
+    @Value("#{${egov.ui.app.host.map}}")
+    private Map<String, String> uiAppHostMap;
+
     //collection
     @Value("${egov.collection.service.host}")
     private String collectionServiceHost;
@@ -204,10 +208,10 @@ public class ChallanConfiguration {
 
     @Value("${egov.download.receipt.link}")
     private String receiptDownloadLink;
-    
+
     @Value("${egov.dynamicdata.period}")
     private String numberOfMonths;
-    
+
     @Value("${egov.challan.validity}")
     private String challanValidity;
 

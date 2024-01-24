@@ -134,7 +134,7 @@ const CustomBarChart = ({
       </ResponsiveContainer>
       {chartData?.length > 3 && showDrillDown && (
         <p className="showMore" onClick={goToDrillDownCharts}>
-          {t("DSS_SHOW_MORE")}
+          {window.location.href.includes("fsm") ? "" : t("DSS_SHOW_MORE")}
         </p>
       )}
     </Fragment>

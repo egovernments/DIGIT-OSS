@@ -5,7 +5,9 @@ import lombok.extern.slf4j.Slf4j;
 import java.util.HashMap;
 
 import org.egov.wscalculation.config.WSCalculationConfiguration;
+import org.egov.wscalculation.constants.WSCalculationConstant;
 import org.egov.wscalculation.web.models.DemandNotificationObj;
+import org.slf4j.MDC;
 import org.egov.wscalculation.service.DemandNotificationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.annotation.KafkaListener;
@@ -43,6 +45,9 @@ public class DemandNotificationConsumer {
 				tenantId = tenantId.split("\\.")[0];
 			notificationObj.setTenantId(tenantId);
 
+			// Adding in MDC so that tracer can add it in header
+			MDC.put(WSCalculationConstant.TENANTID_MDC_STRING, tenantId);
+			
 //			notificationService.process(notificationObj, topic);
 		} catch (final Exception e) {
 			log.error("Error while listening to value: " + request + " on topic: " + topic + ": " + e);

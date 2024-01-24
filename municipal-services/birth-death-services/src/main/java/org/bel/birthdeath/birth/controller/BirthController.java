@@ -109,7 +109,7 @@ public class BirthController {
 	@PostMapping(value = { "/_searchapplications"})
     public ResponseEntity<BirthCertApplnResponse> searchApplications(@RequestBody RequestInfoWrapper requestInfoWrapper,
                                                         @ModelAttribute SearchCriteria criteria ) {
-        List<BirthCertAppln> applications = birthService.searchApplications(requestInfoWrapper);
+        List<BirthCertAppln> applications = birthService.searchApplications(requestInfoWrapper,criteria);
         BirthCertApplnResponse response = BirthCertApplnResponse.builder().applications(applications).responseInfo(
                 responseInfoFactory.createResponseInfoFromRequestInfo(requestInfoWrapper.getRequestInfo(), true))
                 .build();

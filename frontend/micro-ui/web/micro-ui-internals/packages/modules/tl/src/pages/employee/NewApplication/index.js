@@ -113,7 +113,7 @@ const NewApplication = () => {
 
     let accessories = [];
     if (data?.accessories?.length > 0) {
-      data?.accessories.map((data) => {
+      data?.accessories?.map((data) => {
         if (data?.accessoryCategory?.code) {
           accessories.push({
             accessoryCategory: data?.accessoryCategory?.code || null,
@@ -127,7 +127,7 @@ const NewApplication = () => {
 
     let tradeUnits = [];
     if (data?.tradeUnits?.length > 0) {
-      data?.tradeUnits.map((data) => {
+      data?.tradeUnits?.map((data) => {
         tradeUnits.push({
           tradeType: data?.tradeSubType?.code || null,
           uom: data?.tradeSubType?.uom || null,
@@ -153,7 +153,7 @@ const NewApplication = () => {
 
     let owners = [];
     if (data?.owners?.length > 0) {
-      data?.owners.map((data) => {
+      data?.owners?.map((data) => {
         let obj = {};
         obj.dob = data?.dob ? convertDateToEpoch(data?.dob) : null;
         if (data?.fatherOrHusbandName) obj.fatherOrHusbandName = data?.fatherOrHusbandName;
@@ -289,7 +289,7 @@ const NewApplication = () => {
         heading={t("")}
         isDisabled={!canSubmit}
         label={t("ES_COMMON_APPLICATION_SUBMIT")}
-        config={configs.map((config) => {
+        config={configs?.map((config) => {
           return {
             ...config,
             body: config.body.filter((a) => {

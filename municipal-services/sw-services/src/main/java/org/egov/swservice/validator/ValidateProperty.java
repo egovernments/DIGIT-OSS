@@ -4,6 +4,7 @@ import java.util.*;
 
 import org.apache.commons.lang3.StringUtils;
 import org.egov.common.contract.request.RequestInfo;
+import org.egov.common.utils.MultiStateInstanceUtil;
 import org.egov.swservice.util.SewerageServicesUtil;
 import org.egov.swservice.web.models.Property;
 import org.egov.swservice.web.models.SewerageConnection;
@@ -29,6 +30,9 @@ public class ValidateProperty {
 
 	@Autowired
 	private MDMSValidator mdmsValidator;
+
+	@Autowired
+	private MultiStateInstanceUtil centralInstanceUtil;
 
 	/**
 	 * 
@@ -79,7 +83,8 @@ public class ValidateProperty {
 		});
 	}
 	public JSONObject getWnsPTworkflowConfig(RequestInfo requestInfo, String tenantId){
-		tenantId = tenantId.split("\\.")[0];
+		//tenantId = tenantId.split("\\.")[0];
+		tenantId = centralInstanceUtil.getStateLevelTenant(tenantId);
 		List<String> propertyModuleMasters = new ArrayList<>(Arrays.asList("PTWorkflow"));
 		Map<String, List<String>> codes = mdmsValidator.getAttributeValues(tenantId,PROPERTY_MASTER_MODULE, propertyModuleMasters, "$.*",
 				PROPERTY_JSONPATH_ROOT,requestInfo);

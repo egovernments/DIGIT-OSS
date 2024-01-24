@@ -3,6 +3,7 @@ package org.egov.pt;
 
 import java.util.TimeZone;
 
+import org.egov.common.utils.MultiStateInstanceUtil;
 import org.egov.encryption.config.EncryptionConfiguration;
 import org.egov.tracer.config.TracerConfiguration;
 import org.springframework.beans.factory.annotation.Value;
@@ -18,7 +19,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 @SpringBootApplication
 @ComponentScan(basePackages = { "org.egov.pt", "org.egov.pt.web.controllers" , "org.egov.pt.config","org.egov.pt.repository"})
-@Import({ TracerConfiguration.class, EncryptionConfiguration.class })
+
+
+@Import({ TracerConfiguration.class, MultiStateInstanceUtil.class, EncryptionConfiguration.class })
 public class PropertyApplication {
 
     @Value("${app.timezone}")

@@ -30,9 +30,9 @@ const EmployeeModuleCard = ({ Icon, moduleName, kpis = [], links = [], isCitizen
             </div>
           )}
           <div className="links-wrapper" style={{ width: "80%" }}>
-            {links.map(({ count, label, link }, index) => (
+            {links.map(({ count, label, link, hyperlink }, index) => (
               <span className="link" key={index}>
-                {link ? <Link to={link}>{label}</Link> : null}
+                {link ? hyperlink ? <a href={link}>{label}</a> : <Link to={link}>{label}</Link> : null}
                 {count ? (
                   <>
                     {FsmHideCount ? null : <span className={"inbox-total"}>{count || "-"}</span>}

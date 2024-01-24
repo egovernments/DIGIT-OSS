@@ -1,25 +1,51 @@
 package org.egov.tl.util;
 
-import com.jayway.jsonpath.JsonPath;
-import lombok.extern.slf4j.Slf4j;
+import static org.egov.tl.util.TLConstants.ACTION_CANCEL_CANCELLED;
+import static org.egov.tl.util.TLConstants.ACTION_FORWARD_CITIZENACTIONREQUIRED;
+import static org.egov.tl.util.TLConstants.ACTION_SENDBACKTOCITIZEN_FIELDINSPECTION;
+import static org.egov.tl.util.TLConstants.ACTION_STATUS_APPLIED;
+import static org.egov.tl.util.TLConstants.ACTION_STATUS_FIELDINSPECTION;
+import static org.egov.tl.util.TLConstants.ACTION_STATUS_INITIATED;
+import static org.egov.tl.util.TLConstants.ACTION_STATUS_PENDINGAPPROVAL;
+import static org.egov.tl.util.TLConstants.ACTION_STATUS_REJECTED;
+import static org.egov.tl.util.TLConstants.ACTION_STATUS_RENEWAL_APPROVED;
+import static org.egov.tl.util.TLConstants.ACTION_STATUS_RENEWAL_INITIATE_APPROVED;
+import static org.egov.tl.util.TLConstants.BILL_AMOUNT_JSONPATH;
+import static org.egov.tl.util.TLConstants.DEFAULT_OBJECT_MODIFIED_MSG;
+import static org.egov.tl.util.TLConstants.NOTIFICATION_LOCALE;
+import static org.egov.tl.util.TLConstants.PAYMENT_LINK_PLACEHOLDER;
+import static org.egov.tl.util.TLConstants.TRADE_LICENSE_MODULE_CODE;
+import static org.egov.tl.util.TLConstants.businessService_TL;
+
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.LinkedHashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+
 import org.apache.commons.lang3.StringUtils;
-import org.apache.http.client.utils.URIBuilder;
 import org.egov.common.contract.request.RequestInfo;
 import org.egov.tl.config.TLConfiguration;
 import org.egov.tl.producer.Producer;
 import org.egov.tl.repository.ServiceRequestRepository;
-import org.egov.tl.web.models.*;
+import org.egov.tl.web.models.Difference;
+import org.egov.tl.web.models.EventRequest;
+import org.egov.tl.web.models.RequestInfoWrapper;
+import org.egov.tl.web.models.SMSRequest;
+import org.egov.tl.web.models.TradeLicense;
 import org.egov.tracer.model.CustomException;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
-import java.math.BigDecimal;
-import java.util.*;
+import com.jayway.jsonpath.JsonPath;
 
 import static org.egov.tl.util.TLConstants.*;
 import static org.springframework.util.StringUtils.capitalize;
+import lombok.extern.slf4j.Slf4j;
 
 @Component
 @Slf4j
@@ -197,6 +223,8 @@ public class TLRenewalNotificationUtil {
     }
 
     private String getReplacedMessage(TradeLicense license, String messageTemplate) {
+        String UIHost = notificationUtil.getHost(license.getTenantId());
+
         String message = messageTemplate.replace("YYYY", license.getBusinessService());
         message = message.replace("ZZZZ", license.getApplicationNumber());
 
@@ -204,7 +232,7 @@ public class TLRenewalNotificationUtil {
             message = message.replace("RRRR", license.getLicenseNumber());
         }
         message = message.replace("XYZ", capitalize(license.getTenantId().split("\\.")[1]));
-        message = message.replace("{PORTAL_LINK}",config.getUiAppHost());
+        message = message.replace("{PORTAL_LINK}",UIHost);
         //CCC - Designaion configurable according to ULB
         // message = message.replace("CCC","");
         return message;
@@ -241,7 +269,7 @@ public class TLRenewalNotificationUtil {
     public StringBuilder getUri(String tenantId, RequestInfo requestInfo) {
 
         if (config.getIsLocalizationStateLevel())
-            tenantId = tenantId.split("\\.")[0];
+            tenantId = tenantId.split("\\.")[0] + "." + tenantId.split("\\.")[1];
 
         String locale = NOTIFICATION_LOCALE;
         if (!StringUtils.isEmpty(requestInfo.getMsgId()) && requestInfo.getMsgId().split("|").length >= 2)
@@ -336,7 +364,7 @@ public class TLRenewalNotificationUtil {
         String date = epochToDate(license.getValidTo());
         message = message.replace("{4}", date);
 
-        String UIHost = config.getUiAppHost();
+        String UIHost = notificationUtil.getHost(license.getTenantId());
 
         String paymentPath = config.getPayLinkSMS();
         paymentPath = paymentPath.replace("$consumercode",license.getApplicationNumber());
@@ -496,22 +524,7 @@ public class TLRenewalNotificationUtil {
         return messageTemplate;
     }
 
-    /**
-     * Send the SMSRequest on the SMSNotification kafka topic
-     *
-     * @param smsRequestList
-     *            The list of SMSRequest to be sent
-     */
-    public void sendSMS(List<SMSRequest> smsRequestList, boolean isSMSEnabled) {
-        if (isSMSEnabled) {
-            if (CollectionUtils.isEmpty(smsRequestList))
-                log.info("Messages from localization couldn't be fetched!");
-            for (SMSRequest smsRequest : smsRequestList) {
-                producer.push(config.getSmsNotifTopic(), smsRequest);
-                log.info("SMS Sent! MobileNumber: " + smsRequest.getMobileNumber() + " Messages: " + smsRequest.getMessage());
-            }
-        }
-    }
+
 
     /**
      * Fetches the amount to be paid from getBill API
@@ -633,7 +646,7 @@ public class TLRenewalNotificationUtil {
      * @param request
      */
     public void sendEventNotification(EventRequest request) {
-        producer.push(config.getSaveUserEventsTopic(), request);
+        producer.push("", config.getSaveUserEventsTopic(), request);
     }
 
 }

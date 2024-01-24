@@ -44,7 +44,7 @@ const SelectTradeUnits = ({ t, config, onSelect, userType, formData }) => {
 
   Data &&
     Data.TradeLicense &&
-    Data.TradeLicense.TradeType.map((ob) => {
+    Data.TradeLicense?.TradeType?.map((ob) => {
       if (!TradeCategoryMenu2.some((TradeCategoryMenu) => TradeCategoryMenu.code === `${ob.code.split(".")[0]}`)) {
         TradeCategoryMenu2.push({ i18nKey: `TRADELICENSE_TRADETYPE_${ob.code.split(".")[0]}`, code: `${ob.code.split(".")[0]}` });
       }
@@ -52,14 +52,14 @@ const SelectTradeUnits = ({ t, config, onSelect, userType, formData }) => {
 
     billingSlabTradeTypeData &&
     billingSlabTradeTypeData.length > 0 &&
-    billingSlabTradeTypeData.filter((e) => e.structureType === formData?.TradeDetails?.BuildingType?.code.toString() ).map((ob) => {
+    billingSlabTradeTypeData.filter((e) => e.structureType === formData?.TradeDetails?.BuildingType?.code.toString() )?.map((ob) => {
         if (!TradeCategoryMenu.some((TradeCategoryMenu) => TradeCategoryMenu.code === `${ob.tradeType.split(".")[0]}`)) {
           TradeCategoryMenu.push({ i18nKey: `TRADELICENSE_TRADETYPE_${ob.tradeType.split(".")[0]}`, code: `${ob.tradeType.split(".")[0]}` });
         }
       });
     billingSlabTradeTypeData &&
     billingSlabTradeTypeData.length > 0 &&
-    billingSlabTradeTypeData.filter((e) => e.structureType === formData?.TradeDetails?.VehicleType?.code.toString() ).map((ob) => {
+    billingSlabTradeTypeData.filter((e) => e.structureType === formData?.TradeDetails?.VehicleType?.code.toString() )?.map((ob) => {
         if (!TradeCategoryMenu.some((TradeCategoryMenu) => TradeCategoryMenu.code === `${ob.tradeType.split(".")[0]}`)) {
           TradeCategoryMenu.push({ i18nKey: `TRADELICENSE_TRADETYPE_${ob.tradeType.split(".")[0]}`, code: `${ob.tradeType.split(".")[0]}` });
         }
@@ -175,12 +175,12 @@ const SelectTradeUnits = ({ t, config, onSelect, userType, formData }) => {
       units[i].unit = null;
       setUnitOfMeasure(null);
     }
-    Array.from(document.querySelectorAll("input")).forEach((input) => (input.value = ""));
+    Array.from(document.querySelectorAll("input"))?.forEach((input) => (input.value = ""));
     let uomFound = false;
     value &&
     billingSlabTradeTypeData &&
     billingSlabTradeTypeData?.length > 0 &&
-    billingSlabTradeTypeData.filter((e) => e.structureType === formData?.TradeDetails?.BuildingType?.code.toString() ).map((ob) => {
+    billingSlabTradeTypeData.filter((e) => e.structureType === formData?.TradeDetails?.BuildingType?.code.toString() )?.map((ob) => {
         if (value.code === ob.tradeType) {
           units[i].unit = ob.uom;
           uomFound = true;
@@ -192,7 +192,7 @@ const SelectTradeUnits = ({ t, config, onSelect, userType, formData }) => {
     value &&
     billingSlabTradeTypeData &&
     billingSlabTradeTypeData?.length > 0 &&
-    billingSlabTradeTypeData.filter((e) => e.structureType === formData?.TradeDetails?.VehicleType?.code.toString() ).map((ob) => {
+    billingSlabTradeTypeData.filter((e) => e.structureType === formData?.TradeDetails?.VehicleType?.code.toString() )?.map((ob) => {
         if (value.code === ob.tradeType) {
           units[i].unit = ob.uom;
           uomFound = true;
@@ -262,7 +262,7 @@ const SelectTradeUnits = ({ t, config, onSelect, userType, formData }) => {
   useEffect(() => {
     if(window.location.href.includes("renew-trade") && fields)
     {
-      fields.map((value) => {
+      fields?.map((value) => {
         if(value && billingSlabTradeTypeData?.filter((ob) => ob?.tradeType === value?.tradesubtype?.code && (ob?.structureType === formData?.TradeDetails?.VehicleType?.code || ob?.structureType === formData?.TradeDetails?.BuildingType?.code))?.length <= 0)
           {
             setError("TL_BILLING_SLAB_NOT_FOUND_FOR_COMB");
@@ -286,7 +286,7 @@ const SelectTradeUnits = ({ t, config, onSelect, userType, formData }) => {
           forcedError={t(error)}
           isDisabled={!fields[0].tradecategory || !fields[0].tradetype || !fields[0].tradesubtype}
         >
-          {fields.map((field, index) => {
+          {fields?.map((field, index) => {
             return (
               <div key={`${field}-${index}`}>
                 <div

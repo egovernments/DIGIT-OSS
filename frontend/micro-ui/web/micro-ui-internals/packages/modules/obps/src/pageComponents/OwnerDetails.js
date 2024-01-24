@@ -215,7 +215,7 @@ const OwnerDetails = ({ t, config, onSelect, userType, formData }) => {
             setShowToast({ key: "true", error: true, message: "ERR_OWNER_ALREADY_ADDED" });
             return;
         } else {
-            const usersResponse = await Digit.UserService.userSearch(Digit.ULBService.getStateId(), { userName: fields?.[indexValue]?.mobileNumber }, {});
+            const usersResponse = await Digit.UserService.userSearch(window?.globalConfigs?.getConfig("ENABLE_SINGLEINSTANCE") ? Digit.ULBService.getStateId()?.split(".")?.[0] : Digit.ULBService.getStateId(), { userName: fields?.[indexValue]?.mobileNumber }, {});
             let found = usersResponse?.user?.[0]?.roles?.filter(el => el.code === "BPA_ARCHITECT" || el.code === "BPA_SUPERVISOR")?.[0];
             if (usersResponse?.user?.length === 0) {
                 setShowToast({ key: "true", warning: true, message: "ERR_MOBILE_NUMBER_NOT_REGISTERED" });
@@ -250,7 +250,7 @@ const OwnerDetails = ({ t, config, onSelect, userType, formData }) => {
         let flag = false;
         let userresponse = [];
         userresponse = fields?.map((ob,indexValue) => {
-            return Digit.UserService.userSearch(Digit.ULBService.getStateId(), { userName: fields?.[indexValue]?.mobileNumber }, {}).then((ob) => {return ob})
+            return Digit.UserService.userSearch(window?.globalConfigs?.getConfig("ENABLE_SINGLEINSTANCE") ? Digit.ULBService.getStateId()?.split(".")?.[0] : Digit.ULBService.getStateId(), { userName: fields?.[indexValue]?.mobileNumber }, {});
         })
         //getting user data from citizen uuid
         userresponse = await Promise.all(userresponse);

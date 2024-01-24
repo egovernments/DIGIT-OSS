@@ -1,5 +1,7 @@
 package org.egov.swservice.config;
 
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -17,7 +19,7 @@ import lombok.Setter;
 
 @Component
 public class SWConfiguration {
-	
+
     @Value("${egov.sewerageservice.pagination.default.limit}")
     private Integer defaultLimit;
 
@@ -93,7 +95,7 @@ public class SWConfiguration {
 
     @Value("${egov.usr.events.create.topic}")
     private String saveUserEventsTopic;
-	
+
     @Value("${egov.user.event.notification.enabled}")
     private Boolean isUserEventsNotificationEnabled;
 
@@ -116,7 +118,7 @@ public class SWConfiguration {
 
     @Value("${egov.internal.microservice.user.uuid}")
     private String egovInternalMicroserviceUserUuid;
-	
+
     // sewerage connection Calculator
     @Value("${egov.sw.calculation.host}")
     private String calculatorHost;
@@ -128,7 +130,6 @@ public class SWConfiguration {
     private String receiptBusinessservice;
 
     // sewerage notification links configuration
-
     @Value("${sw.mseva.app.link}")
     private String mSevaAppLink;
 
@@ -208,8 +209,15 @@ public class SWConfiguration {
     @Value("${egov.mdms.search.endpoint}")
     private String mdmsUrl;
 
+    @Value("${egov.url.shortner.host}")
+    private String urlShortnerHost;
+
     @Value("${egov.disconnect.businessservice}")
     private String disconnectBusinessServiceName;
+
+    // central-instance configs
+    @Value("#{${egov.ui.app.host.map}}")
+    private Map<String, String> uiAppHostMap;
 
     @Value("${egov.idgen.sdcid.name}")
     private String sewerageDisconnectionIdGenName;

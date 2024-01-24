@@ -36,7 +36,6 @@ import lombok.ToString;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
 public class Property extends PropertyInfo {
 
 	@JsonProperty("acknowldgementNumber")
@@ -107,9 +106,6 @@ public class Property extends PropertyInfo {
 	@JsonProperty("AlternateUpdated")
 	private boolean AlternateUpdated;
 
-	@Builder.Default
-	@JsonProperty("isOldDataEncryptionRequest")
-	private boolean isOldDataEncryptionRequest = false;
 
 	@Builder
 	public Property(String id, String propertyId, String surveyId, List<String> linkedProperties, String tenantId,

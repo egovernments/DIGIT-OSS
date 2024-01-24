@@ -25,8 +25,10 @@ import org.egov.pt.models.PropertyCriteria;
 import org.egov.pt.models.enums.Status;
 import org.egov.pt.producer.PropertyProducer;
 import org.egov.pt.repository.PropertyRepository;
+import org.egov.pt.util.PTConstants;
 import org.egov.pt.web.contracts.PropertyRequest;
 import org.egov.tracer.model.CustomException;
+import org.slf4j.MDC;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.support.KafkaHeaders;
@@ -66,6 +68,9 @@ public class FileStoreConsumer {
             String tenantId = (String) job.get(KEY_PDF_TENANT_ID);
             String documentType = (String) job.get(KEY_PDF_DOCUMENTTYPE);
 
+            // Adding in MDC so that tracer can add it in header
+            MDC.put(PTConstants.TENANTID_MDC_STRING, tenantId);
+
             if(StringUtils.isEmpty(documentType))
                 throw new CustomException("INVALID_DOCUMENTTYPE","Document Type cannot be null or empty string");
 
@@ -85,7 +90,7 @@ public class FileStoreConsumer {
             RequestInfo requestInfo = new RequestInfo();
             PropertyRequest propertyRequest = PropertyRequest.builder().requestInfo(requestInfo).property(property).build();
 
-            producer.push(config.getUpdateDocumentTopic(),propertyRequest);
+            producer.push(tenantId, config.getUpdateDocumentTopic(),propertyRequest);
 
             log.info("Updating document for: "+id);
         }

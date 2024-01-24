@@ -45,6 +45,16 @@ export const UploadServices = {
         fileStoreIds: filesArray?.join(","),
       },
     };
+
+    if (window?.globalConfigs?.getConfig("ENABLE_SINGLEINSTANCE")) {
+      config = {
+        method: "get",
+        url:`${Urls.FileFetch}${tenantInfo}`, 
+        params: {
+          fileStoreIds: filesArray?.join(","),
+        },
+      };
+    }
     const res = await Axios(config);
     return res;
   },

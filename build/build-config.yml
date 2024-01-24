@@ -66,6 +66,14 @@ config:
       - work-dir: "business-services/egov-hrms/src/main/resources/db"
         image-name: "egov-hrms-db"
 
+  - name: "builds/digit-dev/business-services/health-hrms"
+    build:
+      - work-dir: "business-services/health-hrms"
+        image-name: "health-hrms"
+        dockerfile: "build/maven/Dockerfile"
+      - work-dir: "business-services/health-hrms/src/main/resources/db"
+        image-name: "health-hrms-db"
+
   - name: "builds/digit-dev/business-services/finance-collections-voucher-consumer"
     build:
       - work-dir: "business-services/finance-collections-voucher-consumer"
@@ -268,7 +276,6 @@ config:
       - work-dir: "core-services/service-request/src/main/resources/db"
         image-name: "service-request-db"
 
-
   - name: "builds/digit-dev/core-services/report"
     build:
       - work-dir: "core-services/report"
@@ -365,20 +372,26 @@ config:
       - work-dir: "core-services/libraries/enc-client"
         image-name: "enc-client"
 
+
   - name: "builds/digit-dev/core-services/libraries/services-common"
     build:
       - work-dir: "core-services/libraries/services-common"
         image-name: "services-common"
-        
+
   - name: "builds/digit-dev/core-services/libraries/digit-models"
     build:
       - work-dir: "core-services/libraries/digit-models"
         image-name: "digit-models"
-        
+
   - name: "builds/digit-dev/core-services/libraries/tracer"
     build:
       - work-dir: "core-services/libraries/tracer"
         image-name: "tracer"
+
+  - name: "builds/digit-dev/core-services/libraries/digit-models"
+    build:
+      - work-dir: "core-services/libraries/digit-models"
+        image-name: "digit-models"
 
   - name: "builds/digit-dev/core-services/nlp-engine"
     build:
@@ -609,15 +622,38 @@ config:
         dockerfile: "build/maven/Dockerfile"
       - work-dir: "municipal-services/birth-death-services/src/main/resources/db"
         image-name: "birth-death-services-db"
-  
-  - name: "builds/digit-dev/municipal-services/birth-registration"
+
+  - name: "builds/digit-dev/tutorials/backend-developer-guide/btr-services"
     build:
-      - work-dir: "municipal-services/birth-registration"
-        image-name: "birth-registration"
+      - work-dir: "tutorials/backend-developer-guide/btr-services"
+        image-name: "btr-services"
         dockerfile: "build/maven/Dockerfile"
-      - work-dir: "municipal-services/birth-registration/src/main/resources/db"
-        image-name: "birth-registration-db"
- 
+      - work-dir: "tutorials/backend-developer-guide/btr-services/src/main/resources/db"
+        image-name: "btr-services-db"
+
+  - name: "builds/digit-dev/municipal-services/pqm"
+    build:
+      - work-dir: "municipal-services/pqm"
+        image-name: "pqm-service"
+        dockerfile: "build/maven/Dockerfile"
+      - work-dir: "municipal-services/pqm/src/main/resources/db"
+        image-name: "pqm-service-db"
+
+  - name: "builds/digit-dev/municipal-services/pqm-scheduler"
+    build:
+      - work-dir: "municipal-services/pqm-scheduler"
+        image-name: "pqm-scheduler"
+        dockerfile: "municipal-services/pqm-scheduler/Dockerfile"
+
+  - name: "builds/digit-dev/municipal-services/pqm-anomaly-finder"
+    build:
+      - work-dir: "municipal-services/pqm-anomaly-finder"
+        image-name: "pqm-anomaly-finder"
+        dockerfile: "build/maven/Dockerfile"
+      - work-dir: "municipal-services/pqm-anomaly-finder/src/main/resources/db"
+        image-name: "pqm-anomaly-finder-db"
+
+  
  # Utilities
  
   - name: "builds/digit-dev/utilities/egov-weekly-impact-notifier"
@@ -686,7 +722,7 @@ config:
     build:
       - work-dir: "utilities/demo-utility"
         image-name: "demo-utility"
-        dockerfile: "build/maven/Dockerfile"      
+        dockerfile: "build/maven/Dockerfile"
 
   # Frontend
 
@@ -765,4 +801,4 @@ config:
       - work-dir: finance/egov
         image-name: egov-finance
         dockerfile: finance/Dockerfile
-  
+

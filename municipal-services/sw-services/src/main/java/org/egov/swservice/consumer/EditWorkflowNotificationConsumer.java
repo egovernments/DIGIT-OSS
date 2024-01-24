@@ -1,27 +1,27 @@
 package org.egov.swservice.consumer;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import lombok.extern.slf4j.Slf4j;
-import org.egov.common.contract.request.Role;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+
 import org.egov.swservice.service.DiffService;
 import org.egov.swservice.service.SewerageService;
 import org.egov.swservice.service.SewerageServiceImpl;
 import org.egov.swservice.util.EncryptionDecryptionUtil;
-import org.egov.swservice.web.models.OwnerInfo;
+import org.egov.swservice.util.SWConstants;
 import org.egov.swservice.web.models.SearchCriteria;
 import org.egov.swservice.web.models.SewerageConnection;
 import org.egov.swservice.web.models.SewerageConnectionRequest;
+import org.slf4j.MDC;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.support.KafkaHeaders;
 import org.springframework.messaging.handler.annotation.Header;
 import org.springframework.stereotype.Service;
 
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
-import static org.egov.swservice.util.SWConstants.*;
+import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Service
@@ -48,11 +48,16 @@ public class EditWorkflowNotificationConsumer {
 	 * @param record - Received record from Kafka
 	 * @param topic - Received Topic Name
 	 */
-	@KafkaListener(topics = { "${sw.editnotification.topic}" })
+	@KafkaListener(topicPattern = "${sw.kafka.edit.notification.topic.pattern}")
 	public void listen(final HashMap<String, Object> record, @Header(KafkaHeaders.RECEIVED_TOPIC) String topic) {
 		try {
 			SewerageConnectionRequest sewerageConnectionRequest = mapper.convertValue(record,
 					SewerageConnectionRequest.class);
+			String tenantId = sewerageConnectionRequest.getSewerageConnection().getTenantId();
+
+			// Adding in MDC so that tracer can add it in header
+			MDC.put(SWConstants.TENANTID_MDC_STRING, tenantId);
+
 			SewerageConnection sewerageConnection = sewerageConnectionRequest.getSewerageConnection();
 			SearchCriteria criteria = SearchCriteria.builder().applicationNumber(Collections.singleton(sewerageConnection.getApplicationNo()))
 					.tenantId(sewerageConnection.getTenantId()).isInternalCall(Boolean.TRUE).build();

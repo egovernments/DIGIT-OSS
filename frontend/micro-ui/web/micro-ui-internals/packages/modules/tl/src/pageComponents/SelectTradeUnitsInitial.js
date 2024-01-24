@@ -51,14 +51,14 @@ const SelectTradeUnitsInitial = ({ t, config, onSelect, userType, formData }) =>
 
     billingSlabTradeTypeData &&
     billingSlabTradeTypeData.length > 0 &&
-    billingSlabTradeTypeData.filter((e) => e.structureType === formData?.TradeDetails?.BuildingType?.code.toString() ).map((ob) => {
+    billingSlabTradeTypeData.filter((e) => e.structureType === formData?.TradeDetails?.BuildingType?.code.toString() )?.map((ob) => {
         if (!TradeCategoryMenu.some((TradeCategoryMenu) => TradeCategoryMenu.code === `${ob.tradeType.split(".")[0]}`)) {
           TradeCategoryMenu.push({ i18nKey: `TRADELICENSE_TRADETYPE_${ob.tradeType.split(".")[0]}`, code: `${ob.tradeType.split(".")[0]}` });
         }
       });
     billingSlabTradeTypeData &&
     billingSlabTradeTypeData.length > 0 &&
-    billingSlabTradeTypeData.filter((e) => e.structureType === formData?.TradeDetails?.VehicleType?.code.toString() ).map((ob) => {
+    billingSlabTradeTypeData.filter((e) => e.structureType === formData?.TradeDetails?.VehicleType?.code.toString() )?.map((ob) => {
         if (!TradeCategoryMenu.some((TradeCategoryMenu) => TradeCategoryMenu.code === `${ob.tradeType.split(".")[0]}`)) {
           TradeCategoryMenu.push({ i18nKey: `TRADELICENSE_TRADETYPE_${ob.tradeType.split(".")[0]}`, code: `${ob.tradeType.split(".")[0]}` });
         }
@@ -68,7 +68,7 @@ const SelectTradeUnitsInitial = ({ t, config, onSelect, userType, formData }) =>
     let TradeTypeMenu = [];
     if(billingSlabTradeTypeData && billingSlabTradeTypeData.length > 0){
       if(formData?.TradeDetails?.BuildingType){
-        billingSlabTradeTypeData.filter((e) => e.structureType === formData?.TradeDetails?.BuildingType?.code.toString() ).map((ob) => {
+        billingSlabTradeTypeData.filter((e) => e.structureType === formData?.TradeDetails?.BuildingType?.code.toString() )?.map((ob) => {
           if (
             ob.tradeType.split(".")[0] === TradeCategory.code &&
             !TradeTypeMenu.some((TradeTypeMenu) => TradeTypeMenu.code === `${ob.tradeType.split(".")[1]}`)
@@ -79,7 +79,7 @@ const SelectTradeUnitsInitial = ({ t, config, onSelect, userType, formData }) =>
         return TradeTypeMenu;
       }
       else if(formData?.TradeDetails?.VehicleType){
-        billingSlabTradeTypeData.filter((e) => e.structureType === formData?.TradeDetails?.VehicleType?.code.toString() ).map((ob) => {
+        billingSlabTradeTypeData.filter((e) => e.structureType === formData?.TradeDetails?.VehicleType?.code.toString() )?.map((ob) => {
           if (
             ob.tradeType.split(".")[0] === TradeCategory.code &&
             !TradeTypeMenu.some((TradeTypeMenu) => TradeTypeMenu.code === `${ob.tradeType.split(".")[1]}`)
@@ -96,7 +96,7 @@ const SelectTradeUnitsInitial = ({ t, config, onSelect, userType, formData }) =>
     let TradeSubTypeMenu = [];
     if(TradeType && billingSlabTradeTypeData && billingSlabTradeTypeData.length > 0){
       if(formData?.TradeDetails?.BuildingType){
-        billingSlabTradeTypeData.filter((e) => e.structureType === formData?.TradeDetails?.BuildingType?.code.toString() ).map((ob) => {
+        billingSlabTradeTypeData.filter((e) => e.structureType === formData?.TradeDetails?.BuildingType?.code.toString() )?.map((ob) => {
           if (ob.tradeType.split(".")[1] === TradeType.code && !TradeSubTypeMenu.some((TradeSubTypeMenu) => TradeSubTypeMenu.code === `${ob.tradeType}`)) {
             TradeSubTypeMenu.push({ i18nKey: `TL_${ob.tradeType}`, code: `${ob.tradeType}` });
           }
@@ -104,7 +104,7 @@ const SelectTradeUnitsInitial = ({ t, config, onSelect, userType, formData }) =>
         return TradeSubTypeMenu;
       }
       else if(formData?.TradeDetails?.VehicleType){
-        billingSlabTradeTypeData.filter((e) => e.structureType === formData?.TradeDetails?.VehicleType?.code.toString() ).map((ob) => {
+        billingSlabTradeTypeData.filter((e) => e.structureType === formData?.TradeDetails?.VehicleType?.code.toString() )?.map((ob) => {
           if (ob.tradeType.split(".")[1] === TradeType.code && !TradeSubTypeMenu.some((TradeSubTypeMenu) => TradeSubTypeMenu.code === `${ob.tradeType}`)) {
             TradeSubTypeMenu.push({ i18nKey: `TL_${ob.tradeType}`, code: `${ob.tradeType}` });
           }
@@ -142,11 +142,11 @@ const SelectTradeUnitsInitial = ({ t, config, onSelect, userType, formData }) =>
       units[i].unit = null;
       setUnitOfMeasure(null);
     }
-    Array.from(document.querySelectorAll("input")).forEach((input) => (input.value = ""));
+    Array.from(document.querySelectorAll("input"))?.forEach((input) => (input.value = ""));
     value &&
     billingSlabTradeTypeData &&
     billingSlabTradeTypeData?.length > 0 &&
-    billingSlabTradeTypeData.filter((e) => e.structureType === formData?.TradeDetails?.BuildingType?.code.toString() ).map((ob) => {
+    billingSlabTradeTypeData.filter((e) => e.structureType === formData?.TradeDetails?.BuildingType?.code.toString() )?.map((ob) => {
         if (value.code === ob.tradeType) {
           units[i].unit = ob.uom;
           setUnitOfMeasure(ob.uom);
@@ -157,7 +157,7 @@ const SelectTradeUnitsInitial = ({ t, config, onSelect, userType, formData }) =>
     value &&
     billingSlabTradeTypeData &&
     billingSlabTradeTypeData?.length > 0 &&
-    billingSlabTradeTypeData.filter((e) => e.structureType === formData?.TradeDetails?.VehicleType?.code.toString() ).map((ob) => {
+    billingSlabTradeTypeData.filter((e) => e.structureType === formData?.TradeDetails?.VehicleType?.code.toString() )?.map((ob) => {
         if (value.code === ob.tradeType) {
           units[i].unit = ob.uom;
           setUnitOfMeasure(ob.uom);
@@ -223,7 +223,7 @@ const SelectTradeUnitsInitial = ({ t, config, onSelect, userType, formData }) =>
           forcedError={t(error)}
           isDisabled={!fields[0].tradecategory || !fields[0].tradetype || !fields[0].tradesubtype}
         >
-          {fields.map((field, index) => {
+          {fields?.map((field, index) => {
             return (
               <div key={`${field}-${index}`}>
                 <div

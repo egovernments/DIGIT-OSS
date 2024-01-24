@@ -1,8 +1,6 @@
 package org.egov.noc.repository.builder;
 
-import java.util.Arrays;
-import java.util.List;
-
+import lombok.extern.slf4j.Slf4j;
 import org.egov.noc.config.NOCConfiguration;
 import org.egov.noc.web.model.NocSearchCriteria;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,7 +8,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
-import lombok.extern.slf4j.Slf4j;
+import java.util.Arrays;
+import java.util.List;
 
 @Component
 @Slf4j
@@ -26,8 +25,8 @@ public class NocQueryBuilder {
 			+ "noc_lastModifiedTime,noc.createdBy as noc_createdBy,noc.lastModifiedBy as noc_lastModifiedBy,noc.createdTime as "
 			+ "noc_createdTime,noc.additionalDetails,noc.landId as noc_landId, nocdoc.id as noc_doc_id, nocdoc.additionalDetails as doc_details, "
 			+ "nocdoc.documenttype as noc_doc_documenttype,nocdoc.filestoreid as noc_doc_filestore"
-			+ " FROM eg_noc noc  LEFT OUTER JOIN "
-			+ "eg_noc_document nocdoc ON nocdoc.nocid = noc.id WHERE 1=1 ";
+			+ " FROM {schema}.eg_noc noc  LEFT OUTER JOIN "
+			+ "{schema}.eg_noc_document nocdoc ON nocdoc.nocid = noc.id WHERE 1=1 ";
 
 	private final String paginationWrapper = "SELECT * FROM "
 			+ "(SELECT *, DENSE_RANK() OVER (ORDER BY noc_lastModifiedTime DESC) offset_ FROM " + "({})"
@@ -74,7 +73,6 @@ public class NocQueryBuilder {
                         addToPreparedStatement(preparedStmtList, applicationNos);
                     }
                 }
-
 		
 		String approvalNo = criteria.getNocNo();
                 if (approvalNo != null) {
@@ -88,7 +86,6 @@ public class NocQueryBuilder {
                         addToPreparedStatement(preparedStmtList, approvalNos);
                     }
                 }
-
 		
 		String source = criteria.getSource();
 		if (source!=null) {
@@ -112,7 +109,6 @@ public class NocQueryBuilder {
                         addToPreparedStatement(preparedStmtList, sourceRefIds);
                     }
                 }
-
 		
 		String nocType = criteria.getNocType();
 		if (nocType!=null) {
@@ -189,6 +185,7 @@ public class NocQueryBuilder {
 	}
 	
 	private void addToPreparedStatementForFuzzySearch(List<Object> preparedStmtList, List<String> ids) {
+
 	    ids.forEach(id -> preparedStmtList.add("%"+id.trim()+"%"));
 	}
 

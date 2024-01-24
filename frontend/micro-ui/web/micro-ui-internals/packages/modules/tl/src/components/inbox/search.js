@@ -10,7 +10,7 @@ const fieldComponents = {
   mobileNumber: MobileNumber,
 };
 
-const SearchApplication = ({ onSearch, type, onClose, searchFields, searchParams, isInboxPage, defaultSearchParams, clearSearch: _clearSearch, setSearchFieldsBackToOriginalState, setSetSearchFieldsBackToOriginalState }) => {
+const SearchLicenseApplication = ({ onSearch, type, onClose, searchFields, searchParams, isInboxPage, defaultSearchParams, clearSearch: _clearSearch, setSearchFieldsBackToOriginalState, setSetSearchFieldsBackToOriginalState }) => {
   const { t } = useTranslation();
   const { register, handleSubmit, reset, watch, control, setError, clearErrors, formState, setValue } = useForm({
     defaultValues: searchParams,
@@ -44,7 +44,7 @@ const SearchApplication = ({ onSearch, type, onClose, searchFields, searchParams
   }
 
   useEffect(() => {
-    searchFields.forEach(({ pattern, name, maxLength, minLength, errorMessages, ...el }) => {
+    searchFields?.forEach(({ pattern, name, maxLength, minLength, errorMessages, ...el }) => {
       const value = form[name];
       const error = formState.errors[name];
       if (pattern) {
@@ -76,7 +76,7 @@ const SearchApplication = ({ onSearch, type, onClose, searchFields, searchParams
     setSearchFieldsInCaseOfFilterTrigger({mobileNumber, applicationNumber})
     data.delete = [];
 
-    searchFields.forEach((field) => {
+    searchFields?.forEach((field) => {
       if (!data[field.name]) data.delete.push(field.name);
     });
 
@@ -93,7 +93,7 @@ const SearchApplication = ({ onSearch, type, onClose, searchFields, searchParams
     if (isInboxPage) {
       const _newParams = { ...searchParams };
       _newParams.delete = [];
-      searchFields.forEach((e) => {
+      searchFields?.forEach((e) => {
         _newParams.delete.push(e?.name);
       });
       setSearchFieldsInCaseOfFilterTrigger({applicationNumber: "", mobileNumber: ""});
@@ -209,4 +209,4 @@ const SearchApplication = ({ onSearch, type, onClose, searchFields, searchParams
   );
 };
 
-export default SearchApplication;
+export default SearchLicenseApplication;

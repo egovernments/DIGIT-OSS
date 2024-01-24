@@ -67,7 +67,7 @@ public class EditNotificationService {
 				if (config.getIsUserEventsNotificationEnabled() != null && config.getIsUserEventsNotificationEnabled()) {
 					EventRequest eventRequest = getEventRequest(request, property);
 					if (eventRequest != null) {
-						notificationUtil.sendEventNotification(eventRequest);
+						notificationUtil.sendEventNotification(eventRequest, property.getTenantId());
 					}
 				}
 			}
@@ -76,7 +76,7 @@ public class EditNotificationService {
 				if (config.getIsSMSEnabled() != null && config.getIsSMSEnabled()) {
 					List<SMSRequest> smsRequests = getSmsRequest(request, property);
 					if (!CollectionUtils.isEmpty(smsRequests)) {
-						notificationUtil.sendSMS(smsRequests);
+						notificationUtil.sendSMS(smsRequests, request.getSewerageConnection().getTenantId());
 					}
 				}
 			}

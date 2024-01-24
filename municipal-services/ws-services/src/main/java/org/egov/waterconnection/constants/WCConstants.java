@@ -139,7 +139,7 @@ public class WCConstants {
 
 
 	public static final List<String> NOTIFICATION_ENABLE_FOR_STATUS = Collections
-			.unmodifiableList(Arrays.asList(INITIATE_INITIATED, REJECT_REJECTED,
+			.unmodifiableList(Arrays.asList( REJECT_REJECTED,
 					SEND_BACK_TO_CITIZEN_PENDING_FOR_CITIZEN_ACTION, SEND_BACK_FOR_DO_PENDING_FOR_DOCUMENT_VERIFICATION,
 					SEND_BACK_PENDING_FOR_FIELD_INSPECTION, VERIFY_AND_FORWORD_PENDING_FOR_FIELD_INSPECTION,
 					VERIFY_AND_FORWARD_PENDING_APPROVAL_FOR_CONNECTION, APPROVE_FOR_CONNECTION_PENDING_FOR_PAYMENT,
@@ -262,11 +262,11 @@ public class WCConstants {
 	public static final int UPDATE_APPLICATION = 1;
 	public static final int MODIFY_CONNECTION =  2;
 	public static final int DISCONNECT_CONNECTION =  3;
-	
+
 	public static final String NEW_WATER_CONNECTION = "NEW_WATER_CONNECTION";
 	public static final String MODIFY_WATER_CONNECTION = "MODIFY_WATER_CONNECTION";
 	public static final String DISCONNECT_WATER_CONNECTION = "DISCONNECT_WATER_CONNECTION";
-	
+
 	public static final String WATER_SERVICE_BUSINESS_ID = "WS";
 
 	public static final String WATER_SERVICE_ONE_TIME_FEE_BUSINESS_ID = "WS.ONE_TIME_FEE";
@@ -307,7 +307,7 @@ public class WCConstants {
 	public static final String CHANNEL_LIST = "channelList";
 
 	public static final String CHANNEL = "Channel";
-	
+
 	public static final String ACTIVE = "ACTIVE";
 
 	public static final String EXECUTE_DISCONNECTION = "EXECUTE_DISCONNECTION";
@@ -370,5 +370,11 @@ public class WCConstants {
 	public static final String TENANTS_MASTER_ROOT = "tenants";
 
 	public static final String TENANTS_JSONPATH_ROOT = "$.MdmsRes.tenant.tenants";
+
+	public static String SCHEMA_REPLACE_STRING = "{schema}";
+
+	public static final String TENANTID_MDC_STRING = "TENANTID";
+
+	public static final List<String> TOPICS_TO_AVOID = Collections.unmodifiableList(Arrays.asList("create-meter-reading","editnotification", "ws-filestoreids-process"));
 
 }

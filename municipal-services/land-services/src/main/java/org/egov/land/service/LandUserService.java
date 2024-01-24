@@ -15,6 +15,7 @@ import javax.validation.Valid;
 
 import org.apache.commons.lang3.StringUtils;
 import org.egov.common.contract.request.RequestInfo;
+import org.egov.common.utils.MultiStateInstanceUtil;
 import org.egov.land.config.LandConfiguration;
 import org.egov.land.repository.ServiceRequestRepository;
 import org.egov.land.util.LandConstants;
@@ -48,6 +49,9 @@ public class LandUserService {
 	@Autowired
 	private ObjectMapper mapper;
 
+	@Autowired
+	MultiStateInstanceUtil centralInstanceUtil;
+
 	public void manageUser(LandInfoRequest landRequest) {
 		LandInfo landInfo = landRequest.getLandInfo();
 		 @Valid RequestInfo requestInfo = landRequest.getRequestInfo();
@@ -57,7 +61,7 @@ public class LandUserService {
 			if (owner.getMobileNumber() != null) {
 				
 				if (owner.getTenantId() == null) {
-					owner.setTenantId(landInfo.getTenantId().split("\\.")[0]);
+					owner.setTenantId(centralInstanceUtil.getStateLevelTenant(landInfo.getTenantId()));
 				}
 
 				userDetailResponse = userExists(owner, requestInfo);
@@ -109,7 +113,7 @@ public class LandUserService {
 	private UserDetailResponse userExists(OwnerInfo owner, @Valid RequestInfo requestInfo) {
 
 		UserSearchRequest userSearchRequest = new UserSearchRequest();
-		userSearchRequest.setTenantId(owner.getTenantId().split("\\.")[0]);
+		userSearchRequest.setTenantId(centralInstanceUtil.getStateLevelTenant(owner.getTenantId()));
 		userSearchRequest.setMobileNumber(owner.getMobileNumber());
 		if(!StringUtils.isEmpty(owner.getUuid())) {
 			List<String> uuids = new ArrayList<String>();
@@ -283,7 +287,7 @@ public class LandUserService {
 	private UserSearchRequest getUserSearchRequest(LandSearchCriteria criteria, RequestInfo requestInfo) {
 		UserSearchRequest userSearchRequest = new UserSearchRequest();
 		userSearchRequest.setRequestInfo(requestInfo);
-		userSearchRequest.setTenantId(criteria.getTenantId().split("\\.")[0]);
+		userSearchRequest.setTenantId(centralInstanceUtil.getStateLevelTenant(criteria.getTenantId()));
 		userSearchRequest.setMobileNumber(criteria.getMobileNumber());
 		userSearchRequest.setActive(true);
 		userSearchRequest.setUserType(LandConstants.CITIZEN);

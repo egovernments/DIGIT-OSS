@@ -12,7 +12,7 @@ const SelectBuildingType = ({ t, config, onSelect, userType, formData }) => {
   let menu = [];
   Menu &&
     Menu["common-masters"] &&
-    Menu["common-masters"].StructureType.map((ob) => {
+    Menu["common-masters"]?.StructureType?.map((ob) => {
       if (ob.code.includes("IMMOVABLE")) {
         menu.push({ i18nKey: `COMMON_MASTERS_STRUCTURETYPE_${ob.code.replaceAll(".", "_")}`, code: `${ob.code}` });
       }

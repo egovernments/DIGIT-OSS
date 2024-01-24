@@ -40,7 +40,7 @@ const CheckPage = ({ onSubmit, value }) => {
   const fetchBillParams = { consumerCode };
 
   const { data: paymentDetails } = Digit.Hooks.obps.useBPAREGgetbill(
-    { businessService: "BPAREG", ...fetchBillParams, tenantId: tenant ? tenant : tenantId.split(".")[0] },
+    { businessService: "BPAREG", ...fetchBillParams, tenantId: tenant },
     {
       enabled: consumerCode ? true : false,
       retry: false,

@@ -9,7 +9,7 @@
   </parent>
   <groupId>org.egov</groupId>
   <artifactId>egov-hrms</artifactId>
-  <version>1.2.5-SNAPSHOT</version>
+  <version>1.2.6-SNAPSHOT</version>
   <name>egov-hrms</name>
   <description>HR Management System</description>
   <properties>
@@ -97,6 +97,12 @@
       <artifactId>jsoup</artifactId>
       <version>1.10.2</version>
     </dependency>
+    <dependency>
+      <groupId>org.egov.common</groupId>
+      <artifactId>health-services-models</artifactId>
+      <version>1.0.6-SNAPSHOT</version>
+      <scope>compile</scope>
+    </dependency>
   </dependencies>
   <repositories>
     <repository>
@@ -108,6 +114,9 @@
       <id>repo.egovernments.org.snapshots</id>
       <name>eGov ERP Releases Repository</name>
       <url>https://nexus-repo.egovernments.org/nexus/content/repositories/snapshots/</url>
+      <snapshots>
+        <updatePolicy>always</updatePolicy>
+      </snapshots>
     </repository>
   </repositories>
   <build>

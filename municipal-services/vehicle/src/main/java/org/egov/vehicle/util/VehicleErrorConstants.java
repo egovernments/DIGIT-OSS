@@ -17,4 +17,6 @@ public class VehicleErrorConstants {
 	public static final String INVALID_OWNER_ERROR = "INVALID_OWNER_ERROR";
 	public static final String INVALID_VEHICLE_OWNER = "INVALID_VEHICLE_OWNER";
 	public static final String UPDATE_ERROR = "UPDATE_ERROR";
+	public static final String ALREADY_DRIVER_EXIST = "ALREADY_DRIVER_EXIST";
+	public static final String VEHICLE_ERROR_MESSAGE = "Vehicle with the same mobile number already exist";
 }

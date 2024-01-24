@@ -18,6 +18,7 @@ import org.egov.bpa.web.model.landInfo.LandSearchCriteria;
 import org.egov.bpa.web.model.landInfo.Source;
 import org.egov.bpa.web.model.user.UserDetailResponse;
 import org.egov.common.contract.request.RequestInfo;
+import org.egov.common.utils.MultiStateInstanceUtil;
 import org.egov.mdms.model.MasterDetail;
 import org.egov.mdms.model.MdmsCriteria;
 import org.egov.mdms.model.MdmsCriteriaReq;
@@ -44,12 +45,12 @@ public class BPANotificationService {
 	private ServiceRequestRepository serviceRequestRepository;
 
 	private NotificationUtil util;
-	
+
 	private BPAUtil bpaUtil;
 
 	@Autowired
 	private UserService userService;
-	
+
 	@Autowired
 	private BPALandService bpalandService;
 
@@ -59,6 +60,9 @@ public class BPANotificationService {
 	@Autowired
 	private EDCRService edcrService;
 
+	@Autowired
+	private MultiStateInstanceUtil centralInstanceUtil;
+
 	@Value("${egov.mdms.host}")
 	private String mdmsHost;
 
@@ -67,7 +71,7 @@ public class BPANotificationService {
 
 	@Autowired
 	public BPANotificationService(BPAConfiguration config, ServiceRequestRepository serviceRequestRepository,
-			NotificationUtil util, BPAUtil bpaUtil) {
+								  NotificationUtil util, BPAUtil bpaUtil) {
 		this.config = config;
 		this.serviceRequestRepository = serviceRequestRepository;
 		this.util = util;
@@ -76,7 +80,7 @@ public class BPANotificationService {
 
 	/**
 	 * Creates and send the sms based on the bpaRequest
-	 * 
+	 *
 	 * @param bpaRequest
 	 *            The bpaRequest consumed on the kafka topic
 	 */
@@ -93,25 +97,25 @@ public class BPANotificationService {
 			mobileNumbers.add(entryset.getKey());
 		}
 
-			if(configuredChannelNames.contains(CHANNEL_NAME_SMS)){
-		List<SMSRequest> smsRequests = new LinkedList<>();
-		if (null != config.getIsSMSEnabled()) {
-			if (config.getIsSMSEnabled()) {
-				enrichSMSRequest(bpaRequest, smsRequests);
-				if (!CollectionUtils.isEmpty(smsRequests))
-					util.sendSMS(smsRequests, config.getIsSMSEnabled());
+		if(configuredChannelNames.contains(CHANNEL_NAME_SMS)){
+			List<SMSRequest> smsRequests = new LinkedList<>();
+			if (null != config.getIsSMSEnabled()) {
+				if (config.getIsSMSEnabled()) {
+					enrichSMSRequest(bpaRequest, smsRequests);
+					if (!CollectionUtils.isEmpty(smsRequests))
+						util.sendSMS(smsRequests, config.getIsSMSEnabled(), tenantId);
+				}
 			}
-		}
 		}
 
 		if(configuredChannelNames.contains(CHANNEL_NAME_EVENT)){
 			if (null != config.getIsUserEventsNotificationEnabled()) {
 				if (config.getIsUserEventsNotificationEnabled()) {
-				EventRequest eventRequest = getEvents(bpaRequest);
-				if (null != eventRequest)
-					util.sendEventNotification(eventRequest);
-			    }
-		    }
+					EventRequest eventRequest = getEvents(bpaRequest);
+					if (null != eventRequest)
+						util.sendEventNotification(eventRequest, tenantId);
+				}
+			}
 		}
 
 		if(configuredChannelNames.contains(CHANNEL_NAME_EMAIL)){
@@ -122,7 +126,7 @@ public class BPANotificationService {
 					String localizationMessages = util.getLocalizationMessages(tenantId, bpaRequest.getRequestInfo());
 					String message = util.getEmailCustomizedMsg(bpaRequest.getRequestInfo(), bpaRequest.getBPA(), localizationMessages);
 					List<EmailRequest> emailRequests = util.createEmailRequest(bpaRequest, message, mapOfPhnoAndEmail,mobileNumberToOwner);
-					util.sendEmail(emailRequests);
+					util.sendEmail(emailRequests, tenantId);
 				}
 			}
 		}
@@ -131,9 +135,9 @@ public class BPANotificationService {
 	/**
 	 * Creates and registers an event at the egov-user-event service at defined
 	 * trigger points as that of sms notifs.
-	 * 
+	 *
 	 * Assumption - The bpaRequest received will always contain only one BPA.
-	 * 
+	 *
 	 * @param bpaRequest
 	 * @return
 	 */
@@ -144,7 +148,7 @@ public class BPANotificationService {
 		String localizationMessages = util.getLocalizationMessages(tenantId, bpaRequest.getRequestInfo()); // --need
 		Map<String, String> edcrResponse = edcrService.getEDCRDetails(bpaRequest.getRequestInfo(), bpaRequest.getBPA());
 		String applicationType = edcrResponse.get(BPAConstants.APPLICATIONTYPE);
-																											// changes.
+		// changes.
 		String message = util.getEventsCustomizedMsg(bpaRequest.getRequestInfo(), bpaRequest.getBPA(), edcrResponse, localizationMessages); // --need localization service changes.
 		BPA bpaApplication = bpaRequest.getBPA();
 		Map<String, String> mobileNumberToOwner = getUserList(bpaRequest);
@@ -174,7 +178,7 @@ public class BPANotificationService {
 				String actionLink = config.getPayLink().replace("$mobile", mobile)
 						.replace("$applicationNo", bpaApplication.getApplicationNo())
 						.replace("$tenantId", bpaApplication.getTenantId()).replace("$businessService", busineService);
-				actionLink = config.getUiAppHost() + actionLink;
+				actionLink = util.getUiAppHost(bpaApplication.getTenantId()) + actionLink;
 				ActionItem item = ActionItem.builder().actionUrl(actionLink).code(config.getPayCode()).build();
 				items.add(item);
 				action = Action.builder().actionUrls(items).build();
@@ -190,7 +194,7 @@ public class BPANotificationService {
 			if(status.equals(APPROVED_STATE) && applicationType.equals(BUILDING_PLAN))
 			{
 				List<ActionItem> items = new ArrayList<>();
-				String actionLink = config.getUiAppHost() + config.getDownloadPermitOrderLink();
+				String actionLink = util.getUiAppHost(bpaRequest.getBPA().getTenantId()) + config.getDownloadPermitOrderLink();
 				actionLink = actionLink.replace("$applicationNo", bpaRequest.getBPA().getApplicationNo());
 				ActionItem item = ActionItem.builder().actionUrl(actionLink).code(USREVENTS_EVENT_DOWNLOAD_PERMIT_ORDER_CODE).build();
 				items.add(item);
@@ -199,7 +203,7 @@ public class BPANotificationService {
 			if(status.equals(APPROVED_STATE) && applicationType.equals(BUILDING_PLAN_OC))
 			{
 				List<ActionItem> items = new ArrayList<>();
-				String actionLink = config.getUiAppHost() + config.getDownloadOccupancyCertificateLink();
+				String actionLink = util.getUiAppHost(bpaRequest.getBPA().getTenantId()) + config.getDownloadOccupancyCertificateLink();
 				actionLink = actionLink.replace("$applicationNo", bpaRequest.getBPA().getApplicationNo());
 				ActionItem item = ActionItem.builder().actionUrl(actionLink).code(USREVENTS_EVENT_DOWNLOAD_OCCUPANCY_CERTIFICATE_CODE).build();
 				items.add(item);
@@ -224,7 +228,7 @@ public class BPANotificationService {
 
 	/**
 	 * Fetches UUIDs of CITIZENs based on the phone number.
-	 * 
+	 *
 	 * @param mobileNumbers
 	 * @param requestInfo
 	 * @param tenantId
@@ -260,7 +264,7 @@ public class BPANotificationService {
 
 	/**
 	 * Enriches the smsRequest with the customized messages
-	 * 
+	 *
 	 * @param bpaRequest
 	 *            The bpaRequest from kafka topic
 	 * @param smsRequests
@@ -278,7 +282,7 @@ public class BPANotificationService {
 	/**
 	 * To get the Users to whom we need to send the sms notifications or event
 	 * notifications.
-	 * 
+	 *
 	 * @param bpaRequest
 	 * @return
 	 */
@@ -300,24 +304,24 @@ public class BPANotificationService {
 
 		mobileNumberToOwner.put(userDetailResponse.getUser().get(0).getUserName(),
 				userDetailResponse.getUser().get(0).getName());
-		
+
 
 		if (bpaRequest.getBPA().getLandInfo() == null) {
 			for (int j = 0; j < landInfo.size(); j++)
 				bpaRequest.getBPA().setLandInfo(landInfo.get(j));
 		}
-		
+
 		if (!(bpaRequest.getBPA().getWorkflow().getAction().equals(config.getActionsendtocitizen())
 				&& bpaRequest.getBPA().getStatus().equals("INITIATED"))
 				&& !(bpaRequest.getBPA().getWorkflow().getAction().equals(config.getActionapprove())
-						&& bpaRequest.getBPA().getStatus().equals("INPROGRESS"))) {
-			
+				&& bpaRequest.getBPA().getStatus().equals("INPROGRESS"))) {
+
 			bpaRequest.getBPA().getLandInfo().getOwners().forEach(owner -> {
-					if (owner.getMobileNumber() != null && owner.getIsPrimaryOwner()) {
-						mobileNumberToOwner.put(owner.getMobileNumber(), owner.getName());
-					}
+				if (owner.getMobileNumber() != null && owner.getIsPrimaryOwner()) {
+					mobileNumberToOwner.put(owner.getMobileNumber(), owner.getName());
+				}
 			});
-			
+
 		}
 		return mobileNumberToOwner;
 	}
@@ -328,7 +332,7 @@ public class BPANotificationService {
 		uri.append(mdmsHost).append(mdmsUrl);
 		if(StringUtils.isEmpty(tenantId))
 			return masterData;
-		MdmsCriteriaReq mdmsCriteriaReq = getMdmsRequestForChannelList(requestInfo, tenantId.split("\\.")[0]);
+		MdmsCriteriaReq mdmsCriteriaReq = getMdmsRequestForChannelList(requestInfo, centralInstanceUtil.getStateLevelTenant(tenantId));
 
 		Filter masterDataFilter = filter(
 				where(MODULE).is(moduleName).and(ACTION).is(action)

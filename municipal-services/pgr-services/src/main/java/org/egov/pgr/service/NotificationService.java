@@ -6,6 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.egov.common.contract.request.RequestInfo;
 import org.egov.common.contract.request.Role;
 import org.egov.common.contract.request.User;
+import org.egov.common.utils.MultiStateInstanceUtil;
 import org.egov.pgr.config.PGRConfiguration;
 import org.egov.pgr.repository.ServiceRequestRepository;
 import org.egov.pgr.util.HRMSUtil;
@@ -58,11 +59,17 @@ public class NotificationService {
     @Autowired
     private ObjectMapper mapper;
 
+    @Autowired
+    private MultiStateInstanceUtil centralInstanceUtil;
+
     public void process(ServiceRequest request, String topic) {
         try {
+            log.info("request for notification :" + request);
+            String tenantId = request.getService().getTenantId();
             ServiceWrapper serviceWrapper = ServiceWrapper.builder().service(request.getService()).workflow(request.getWorkflow()).build();
             String applicationStatus = request.getService().getApplicationStatus();
             String action = request.getWorkflow().getAction();
+
 
             if (!(NOTIFICATION_ENABLE_FOR_STATUS.contains(action+"_"+applicationStatus))) {
                 log.info("Notification Disabled For State :" + applicationStatus);
@@ -102,46 +109,45 @@ public class NotificationService {
                 employeeMobileNumber = fetchUserByUUID(request.getService().getAuditDetails().getCreatedBy(), request.getRequestInfo(), request.getService().getTenantId()).getMobileNumber();
             }
 
-            if(!StringUtils.isEmpty(finalMessage)){
+            if(!StringUtils.isEmpty(finalMessage)) {
                 if (config.getIsUserEventsNotificationEnabled() != null && config.getIsUserEventsNotificationEnabled()) {
-                    for (Map.Entry<String,List<String>> entry : finalMessage.entrySet()) {
-                        for(String msg : entry.getValue()) {
+                    for (Map.Entry<String, List<String>> entry : finalMessage.entrySet()) {
+                        for (String msg : entry.getValue()) {
                             EventRequest eventRequest = enrichEventRequest(request, msg);
                             if (eventRequest != null) {
-                                notificationUtil.sendEventNotification(eventRequest);
+                                notificationUtil.sendEventNotification(tenantId, eventRequest);
                             }
                         }
                     }
                 }
 
                 if (config.getIsSMSEnabled() != null && config.getIsSMSEnabled()) {
-                    for (Map.Entry<String,List<String>> entry : finalMessage.entrySet()) {
 
-                        if(entry.getKey().equalsIgnoreCase(CITIZEN)) {
-                            for(String msg : entry.getValue()) {
+                    for (Map.Entry<String, List<String>> entry : finalMessage.entrySet()) {
+
+                        if (entry.getKey().equalsIgnoreCase(CITIZEN)) {
+                            for (String msg : entry.getValue()) {
                                 List<SMSRequest> smsRequests = new ArrayList<>();
                                 smsRequests = enrichSmsRequest(citizenMobileNumber, msg);
                                 if (!CollectionUtils.isEmpty(smsRequests)) {
-                                    notificationUtil.sendSMS(smsRequests);
+                                    notificationUtil.sendSMS(tenantId, smsRequests);
                                 }
                             }
-                        }
-                        else {
-                            for(String msg : entry.getValue()) {
+                        } else {
+                            for (String msg : entry.getValue()) {
                                 List<SMSRequest> smsRequests = new ArrayList<>();
                                 smsRequests = enrichSmsRequest(employeeMobileNumber, msg);
                                 if (!CollectionUtils.isEmpty(smsRequests)) {
-                                    notificationUtil.sendSMS(smsRequests);
+                                    notificationUtil.sendSMS(tenantId, smsRequests);
                                 }
                             }
                         }
                     }
+
                 }
 
+
             }
-
-
-
 
         } catch (Exception ex) {
             log.error("Error occured while processing the record from topic : " + topic, ex);
@@ -184,10 +190,11 @@ public class NotificationService {
                 return null;
             }
 
-            if(defaultMessage.contains("{status}"))
+            if (defaultMessage.contains("{status}"))
                 defaultMessage = defaultMessage.replace("{status}", localisedStatus);
-        }
 
+
+        }
         /**
          * SMS to citizens and employee both, when a complaint is assigned to an employee
          */
@@ -281,6 +288,7 @@ public class NotificationService {
 
             if (messageForCitizen.contains("{emp_designation}"))
                 messageForCitizen = messageForCitizen.replace("{emp_designation}",reassigneeDetails.get(DESIGNATION));
+
 
             if (messageForCitizen.contains("{emp_name}"))
                 messageForCitizen = messageForCitizen.replace("{emp_name}", fetchUserByUUID(request.getWorkflow().getAssignes().get(0), request.getRequestInfo(), request.getService().getTenantId()).getName());
@@ -509,6 +517,7 @@ public class NotificationService {
             messageForEmployee = messageForEmployee.replace("{download_link}", appLink);
         }
 
+
         message.put(CITIZEN, Arrays.asList(new String[] {messageForCitizen, defaultMessage}));
         message.put(EMPLOYEE, Arrays.asList(messageForEmployee));
 
@@ -728,8 +737,8 @@ public class NotificationService {
             String reopenUrl = config.getReopenLink();
             rateLink = rateUrl.replace("{application-id}", request.getService().getServiceRequestId());
             reopenLink = reopenUrl.replace("{application-id}", request.getService().getServiceRequestId());
-            rateLink = config.getUiAppHost() + rateLink;
-            reopenLink = config.getUiAppHost() + reopenLink;
+            rateLink = getUiAppHost(tenantId) + rateLink;
+            reopenLink = getUiAppHost(tenantId) + reopenLink;
             ActionItem rateItem = ActionItem.builder().actionUrl(rateLink).code(config.getRateCode()).build();
             ActionItem reopenItem = ActionItem.builder().actionUrl(reopenLink).code(config.getReopenCode()).build();
             items.add(rateItem);
@@ -796,6 +805,12 @@ public class NotificationService {
                 .roles(Collections.singletonList(role)).id(0L).build();
 
         return userInfo;
+    }
+
+    public String getUiAppHost(String tenantId)
+    {
+        String stateLevelTenantId = centralInstanceUtil.getStateLevelTenant(tenantId);
+        return config.getUiAppHostMap().get(stateLevelTenantId);
     }
 
 }

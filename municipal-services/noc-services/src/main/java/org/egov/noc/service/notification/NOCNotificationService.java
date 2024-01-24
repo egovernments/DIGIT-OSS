@@ -1,11 +1,6 @@
 package org.egov.noc.service.notification;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-
+import lombok.extern.slf4j.Slf4j;
 import org.egov.noc.config.NOCConfiguration;
 import org.egov.noc.repository.ServiceRequestRepository;
 import org.egov.noc.service.UserService;
@@ -18,7 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
-import lombok.extern.slf4j.Slf4j;
+import java.util.*;
 
 @Slf4j
 @Service
@@ -44,7 +39,7 @@ public class NOCNotificationService {
 	/**
 	 * Creates and send the sms based on the NOCRequest
 	 * 
-	 * @param request
+	 * @param nocRequest
 	 *            The NOCRequest listenend on the kafka topic
 	 */
 	public void process(NocRequest nocRequest) {
@@ -53,7 +48,7 @@ public class NOCNotificationService {
 			if (config.getIsSMSEnabled()) {
 				enrichSMSRequest(nocRequest, smsRequests);
 				if (!CollectionUtils.isEmpty(smsRequests))
-					util.sendSMS(smsRequests, config.getIsSMSEnabled());
+					util.sendSMS(nocRequest.getNoc().getTenantId(),smsRequests, config.getIsSMSEnabled());
 			}
 		}
 	}
@@ -61,7 +56,7 @@ public class NOCNotificationService {
 	/**
 	 * Enriches the smsRequest with the customized messages
 	 * 
-	 * @param request
+	 * @param nocRequest
 	 *            The bpaRequest from kafka topic
 	 * @param smsRequests
 	 *            List of SMSRequets

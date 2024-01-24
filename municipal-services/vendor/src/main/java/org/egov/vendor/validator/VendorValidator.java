@@ -114,8 +114,10 @@ public class VendorValidator {
 	/**
 	 * 
 	 * @param vendorRequest
+	 * @param requestInfo
 	 */
-	public void validateCreateOrUpdateRequest(VendorRequest vendorRequest, Object mdmsData, boolean isCreate) {
+	public void validateCreateOrUpdateRequest(VendorRequest vendorRequest, Object mdmsData, boolean isCreate,
+			RequestInfo requestInfo) {
 
 		mdmsValidator.validateMdmsData(mdmsData);
 		mdmsValidator.validateAgencyType(vendorRequest);
@@ -123,7 +125,9 @@ public class VendorValidator {
 		boundaryService.getAreaType(vendorRequest, config.getHierarchyTypeCode());
 
 		vehicleService.manageVehicle(vendorRequest);
-
+		if (!isCreate) {
+			userService.vendorMobileExistanceCheck(vendorRequest, requestInfo);
+		}
 		if (isCreate) {
 			ownerService.manageOwner(vendorRequest);
 		} else {

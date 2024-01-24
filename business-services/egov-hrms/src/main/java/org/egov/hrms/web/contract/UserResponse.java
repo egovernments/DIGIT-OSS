@@ -43,6 +43,7 @@ package org.egov.hrms.web.contract;
 import java.util.ArrayList;
 import java.util.List;
 
+import lombok.Builder;
 import org.egov.common.contract.response.ResponseInfo;
 
 import lombok.AllArgsConstructor;
@@ -58,6 +59,7 @@ import lombok.ToString;
 @NoArgsConstructor
 @Setter
 @ToString
+@Builder
 public class UserResponse {
 
 	private ResponseInfo responseInfo;

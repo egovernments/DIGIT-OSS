@@ -1,4 +1,4 @@
-CREATE TABLE public.eg_birth_death_hospitals
+CREATE TABLE eg_birth_death_hospitals
 (
     id character varying(64)  NOT NULL,
     hospitalname character varying(500)  NOT NULL,
@@ -6,14 +6,14 @@ CREATE TABLE public.eg_birth_death_hospitals
     CONSTRAINT eg_birth_death_hospitals_pkey PRIMARY KEY (id)
 );
 
-CREATE SEQUENCE public.seq_eg_bnd_br_apl
+CREATE SEQUENCE seq_eg_bnd_br_apl
     INCREMENT 1
     START 1
     MINVALUE 1
     MAXVALUE 9223372036854775807
     CACHE 1;
 
-CREATE TABLE public.eg_birth_dtls
+CREATE TABLE eg_birth_dtls
 (
     id character varying(64)  NOT NULL,
     registrationno character varying(64)  NOT NULL,
@@ -38,12 +38,12 @@ CREATE TABLE public.eg_birth_dtls
     CONSTRAINT eg_birth_dtls_pkey PRIMARY KEY (id),
     CONSTRAINT eg_birth_dtls_ukey1 UNIQUE (registrationno, tenantid),
     CONSTRAINT eg_birth_dtls_fkey1 FOREIGN KEY (hospitalid)
-        REFERENCES public.eg_birth_death_hospitals (id) MATCH SIMPLE
+        REFERENCES eg_birth_death_hospitals (id) MATCH SIMPLE
         ON UPDATE CASCADE
         ON DELETE CASCADE
 );
 
-CREATE TABLE public.eg_birth_father_info
+CREATE TABLE eg_birth_father_info
 (
     id character varying(64)  NOT NULL,
     firstname character varying(200) ,
@@ -63,12 +63,12 @@ CREATE TABLE public.eg_birth_father_info
     birthdtlid character varying(64)  NOT NULL,
     CONSTRAINT eg_birth_father_info_pkey PRIMARY KEY (id),
     CONSTRAINT eg_birth_father_info_fkey1 FOREIGN KEY (birthdtlid)
-        REFERENCES public.eg_birth_dtls (id) MATCH SIMPLE
+        REFERENCES eg_birth_dtls (id) MATCH SIMPLE
         ON UPDATE CASCADE
         ON DELETE CASCADE
 );
 
-CREATE TABLE public.eg_birth_mother_info
+CREATE TABLE eg_birth_mother_info
 (
     id character varying(64)  NOT NULL,
     firstname character varying(200) ,
@@ -88,12 +88,12 @@ CREATE TABLE public.eg_birth_mother_info
     birthdtlid character varying(64)  NOT NULL,
     CONSTRAINT eg_birth_mother_info_pkey PRIMARY KEY (id),
     CONSTRAINT eg_birth_mother_info_fkey1 FOREIGN KEY (birthdtlid)
-        REFERENCES public.eg_birth_dtls (id) MATCH SIMPLE
+        REFERENCES eg_birth_dtls (id) MATCH SIMPLE
         ON UPDATE CASCADE
         ON DELETE CASCADE
 );
 
-CREATE TABLE public.eg_birth_permaddr
+CREATE TABLE eg_birth_permaddr
 (
     id character varying(64)  NOT NULL,
     buildingno character varying(1000) ,
@@ -113,12 +113,12 @@ CREATE TABLE public.eg_birth_permaddr
     birthdtlid character varying(64) ,
     CONSTRAINT eg_birth_permaddr_pkey PRIMARY KEY (id),
     CONSTRAINT eg_birth_permaddr_fkey1 FOREIGN KEY (birthdtlid)
-        REFERENCES public.eg_birth_dtls (id) MATCH SIMPLE
+        REFERENCES eg_birth_dtls (id) MATCH SIMPLE
         ON UPDATE CASCADE
         ON DELETE CASCADE
 );
 
-CREATE TABLE public.eg_birth_presentaddr
+CREATE TABLE eg_birth_presentaddr
 (
     id character varying(64)  NOT NULL,
     buildingno character varying(1000) ,
@@ -138,12 +138,12 @@ CREATE TABLE public.eg_birth_presentaddr
     birthdtlid character varying(64) ,
     CONSTRAINT eg_birth_presentaddr_pkey PRIMARY KEY (id),
     CONSTRAINT eg_birth_presentaddr_fkey1 FOREIGN KEY (birthdtlid)
-        REFERENCES public.eg_birth_dtls (id) MATCH SIMPLE
+        REFERENCES eg_birth_dtls (id) MATCH SIMPLE
         ON UPDATE CASCADE
         ON DELETE CASCADE
 );
 
-CREATE TABLE public.eg_birth_cert_request
+CREATE TABLE eg_birth_cert_request
 (
     id character varying(64)  NOT NULL,
     birthcertificateno character varying(25) ,
@@ -159,12 +159,12 @@ CREATE TABLE public.eg_birth_cert_request
     dateofissue bigint,
     CONSTRAINT eg_birth_cert_request_pkey PRIMARY KEY (id),
     CONSTRAINT eg_birth_cert_request_fkey1 FOREIGN KEY (birthdtlid)
-        REFERENCES public.eg_birth_dtls (id) MATCH SIMPLE
+        REFERENCES eg_birth_dtls (id) MATCH SIMPLE
         ON UPDATE CASCADE
         ON DELETE CASCADE
 );
 
-CREATE TABLE public.eg_birth_cert_request_audit
+CREATE TABLE eg_birth_cert_request_audit
 (
     id character varying(64)  NOT NULL,
     birthcertificateno character varying(25) ,

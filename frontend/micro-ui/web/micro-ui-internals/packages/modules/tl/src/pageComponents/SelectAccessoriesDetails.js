@@ -83,7 +83,7 @@ const SelectAccessoriesDetails = ({ t, config, onSelect, userType, formData }) =
         return { code: item.licenseType, active: true };
       });
 
-      accessories.forEach((data) => {
+      accessories?.((data) => {
         data.i18nKey = t(`TRADELICENSE_ACCESSORIESCATEGORY_${stringReplaceAll(data?.code?.toUpperCase(), "-", "_")}`);
       });
 
@@ -123,7 +123,7 @@ const SelectAccessoriesDetails = ({ t, config, onSelect, userType, formData }) =
     acc[i].uom = "";
     setenableUOM(true);
     acc[i].unit = value?.uom != null ?  value.uom : "";
-    Array.from(document.querySelectorAll("input")).forEach((input) => (input.value = ""));
+    Array.from(document.querySelectorAll("input"))?.forEach((input) => (input.value = ""));
     setUnitOfMeasure(value?.uom != null ? value.uom : null);
     // Data?.TradeLicense?.AccessoriesCategory.map((ob) => {
     //   if (value.code === ob.code && ob.uom != null) {

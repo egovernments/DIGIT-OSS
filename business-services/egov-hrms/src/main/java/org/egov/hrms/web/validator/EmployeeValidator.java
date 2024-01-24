@@ -8,7 +8,6 @@ import java.util.Date;
 
 import com.jayway.jsonpath.JsonPath;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.kafka.common.protocol.types.Field;
 import org.egov.common.contract.request.RequestInfo;
 import org.egov.common.contract.request.Role;
 import org.egov.hrms.config.PropertiesManager;
@@ -58,6 +57,7 @@ public class EmployeeValidator {
 	public void validateCreateEmployee(EmployeeRequest request) {
 		Map<String, String> errorMap = new HashMap<>();
 		validateExistingDuplicates(request ,errorMap);
+		validatePassword(request, errorMap);
 		if(!CollectionUtils.isEmpty(errorMap.keySet()))
 			throw new CustomException(errorMap);
 		Map<String, List<String>> boundaryMap = getBoundaryList(request.getRequestInfo(),request.getEmployees().get(0));
@@ -67,6 +67,16 @@ public class EmployeeValidator {
 		}
 		if(!CollectionUtils.isEmpty(errorMap.keySet()))
 			throw new CustomException(errorMap);
+	}
+
+	private void validatePassword(EmployeeRequest request, Map<String, String> errorMap) {
+		List<Employee> employees = request.getEmployees();
+		if (!propertiesManager.isAutoGeneratePassword()) {
+			employees.forEach(employee -> {
+				if (StringUtils.isEmpty(employee.getUser().getPassword()))
+					errorMap.put(ErrorConstants.HRMS_PASSWORD_REQUIRED, ErrorConstants.HRMS_PASSWORD_REQUIRED_MSG);
+			});
+		}
 	}
 
 	public Map<String, List<String>> getBoundaryList(RequestInfo requestInfo,Employee employee){
@@ -347,45 +357,48 @@ public class EmployeeValidator {
 	 * @param mdmsData
 	 */
 	private void validateAssignments(Employee employee, Map<String, String> errorMap, Map<String, List<String>> mdmsData) {
-		List<Assignment> currentAssignments = employee.getAssignments().stream().filter(assignment -> assignment.getIsCurrentAssignment()).collect(Collectors.toList());
-		if(currentAssignments.size() != 1){
-			errorMap.put(ErrorConstants.HRMS_INVALID_CURRENT_ASSGN_CODE, ErrorConstants.HRMS_INVALID_CURRENT_ASSGN_MSG);
-		}
-		employee.getAssignments().sort(new Comparator<Assignment>() {
-			@Override
-			public int compare(Assignment assignment1, Assignment assignment2) {
-				return assignment1.getFromDate().compareTo(assignment2.getFromDate());
+		if (employee.getAssignments() != null && !employee.getAssignments().isEmpty()) {
+			List<Assignment> currentAssignments = employee.getAssignments().stream().filter(assignment -> assignment.getIsCurrentAssignment()).collect(Collectors.toList());
+			if (currentAssignments.size() != 1) {
+				errorMap.put(ErrorConstants.HRMS_INVALID_CURRENT_ASSGN_CODE, ErrorConstants.HRMS_INVALID_CURRENT_ASSGN_MSG);
 			}
-		});
-		int length = employee.getAssignments().size();
-		boolean overlappingCheck =false;
-		for(int i=0;i<length-1;i++){
-			if(null != employee.getAssignments().get(i).getToDate() && employee.getAssignments().get(i).getToDate() > employee.getAssignments().get(i+1).getFromDate())
-				overlappingCheck=true;
+			employee.getAssignments().sort(new Comparator<Assignment>() {
+				@Override
+				public int compare(Assignment assignment1, Assignment assignment2) {
+					return assignment1.getFromDate().compareTo(assignment2.getFromDate());
+				}
+			});
+			int length = employee.getAssignments().size();
+			boolean overlappingCheck = false;
+			for (int i = 0; i < length - 1; i++) {
+				if (null != employee.getAssignments().get(i).getToDate() && employee.getAssignments().get(i).getToDate() > employee.getAssignments().get(i + 1).getFromDate())
+					overlappingCheck = true;
+			}
+			if (overlappingCheck)
+				errorMap.put(ErrorConstants.HRMS_OVERLAPPING_ASSGN_CODE, ErrorConstants.HRMS_OVERLAPPING_ASSGN_MSG);
+
+			for (Assignment assignment : employee.getAssignments()) {
+				if (!assignment.getIsCurrentAssignment() && !CollectionUtils.isEmpty(currentAssignments) && null != assignment.getToDate() && currentAssignments.get(0).getFromDate() < assignment.getToDate())
+					errorMap.put(ErrorConstants.HRMS_OVERLAPPING_ASSGN_CURRENT_CODE, ErrorConstants.HRMS_OVERLAPPING_ASSGN_CURRENT_MSG);
+				if (!mdmsData.get(HRMSConstants.HRMS_MDMS_DEPT_CODE).contains(assignment.getDepartment()))
+					errorMap.put(ErrorConstants.HRMS_INVALID_DEPT_CODE, ErrorConstants.HRMS_INVALID_DEPT_MSG);
+				/*if (!assignment.getDesignation().equalsIgnoreCase("undefined") &&
+						!mdmsData.get(HRMSConstants.HRMS_MDMS_DESG_CODE).contains(assignment.getDesignation()))
+					errorMap.put(ErrorConstants.HRMS_INVALID_DESG_CODE, ErrorConstants.HRMS_INVALID_DESG_MSG);*/
+				if (assignment.getIsCurrentAssignment() && null != assignment.getToDate())
+					errorMap.put(ErrorConstants.HRMS_INVALID_ASSIGNMENT_CURRENT_TO_DATE_CODE, ErrorConstants.HRMS_INVALID_ASSIGNMENT_CURRENT_TO_DATE_MSG);
+				if (!assignment.getIsCurrentAssignment() && null == assignment.getToDate())
+					errorMap.put(ErrorConstants.HRMS_INVALID_ASSIGNMENT_NON_CURRENT_TO_DATE_CODE, ErrorConstants.HRMS_INVALID_ASSIGNMENT_NON_CURRENT_TO_DATE_MSG);
+				if (null != assignment.getToDate() && assignment.getFromDate() > assignment.getToDate())
+					errorMap.put(ErrorConstants.HRMS_INVALID_ASSIGNMENT_PERIOD_CODE, ErrorConstants.HRMS_INVALID_ASSIGNMENT_PERIOD_MSG);
+				if (employee.getUser().getDob() != null)
+					if (assignment.getFromDate() < employee.getUser().getDob() || (null != assignment.getToDate() && assignment.getToDate() < employee.getUser().getDob()))
+						errorMap.put(ErrorConstants.HRMS_INVALID_ASSIGNMENT_DATES_CODE, ErrorConstants.HRMS_INVALID_ASSIGNMENT_DATES_MSG);
+				if (null != employee.getDateOfAppointment() && assignment.getFromDate() < employee.getDateOfAppointment())
+					errorMap.put(ErrorConstants.HRMS_INVALID_ASSIGNMENT_DATES_APPOINTMENT_CODE, ErrorConstants.HRMS_INVALID_ASSIGNMENT_DATES_APPOINTMENT_MSG);
+
+			}
 		}
-		if(overlappingCheck)
-			errorMap.put(ErrorConstants.HRMS_OVERLAPPING_ASSGN_CODE, ErrorConstants.HRMS_OVERLAPPING_ASSGN_MSG);
-
-		for(Assignment assignment: employee.getAssignments()) {
-			if(!assignment.getIsCurrentAssignment() && !CollectionUtils.isEmpty(currentAssignments) && null != assignment.getToDate()&& currentAssignments.get(0).getFromDate() < assignment.getToDate() )
-				errorMap.put(ErrorConstants.HRMS_OVERLAPPING_ASSGN_CURRENT_CODE,ErrorConstants.HRMS_OVERLAPPING_ASSGN_CURRENT_MSG);
-		    if(!mdmsData.get(HRMSConstants.HRMS_MDMS_DEPT_CODE).contains(assignment.getDepartment()))
-				errorMap.put(ErrorConstants.HRMS_INVALID_DEPT_CODE, ErrorConstants.HRMS_INVALID_DEPT_MSG);
-			if(!mdmsData.get(HRMSConstants.HRMS_MDMS_DESG_CODE).contains(assignment.getDesignation()))
-				errorMap.put(ErrorConstants.HRMS_INVALID_DESG_CODE, ErrorConstants.HRMS_INVALID_DESG_MSG);
-            if( assignment.getIsCurrentAssignment() && null != assignment.getToDate())
-                errorMap.put(ErrorConstants.HRMS_INVALID_ASSIGNMENT_CURRENT_TO_DATE_CODE,ErrorConstants.HRMS_INVALID_ASSIGNMENT_CURRENT_TO_DATE_MSG);
-            if(!assignment.getIsCurrentAssignment() && null == assignment.getToDate())
-                errorMap.put(ErrorConstants.HRMS_INVALID_ASSIGNMENT_NON_CURRENT_TO_DATE_CODE,ErrorConstants.HRMS_INVALID_ASSIGNMENT_NON_CURRENT_TO_DATE_MSG);
-			if(null != assignment.getToDate() && assignment.getFromDate() > assignment.getToDate())
-                errorMap.put(ErrorConstants.HRMS_INVALID_ASSIGNMENT_PERIOD_CODE, ErrorConstants.HRMS_INVALID_ASSIGNMENT_PERIOD_MSG);
-			if(employee.getUser().getDob()!=null )
-				if(assignment.getFromDate() < employee.getUser().getDob() || (null != assignment.getToDate() && assignment.getToDate() < employee.getUser().getDob()))
-                	errorMap.put(ErrorConstants.HRMS_INVALID_ASSIGNMENT_DATES_CODE, ErrorConstants.HRMS_INVALID_ASSIGNMENT_DATES_MSG);
-			if(null != employee.getDateOfAppointment() && assignment.getFromDate() <	 employee.getDateOfAppointment())
-				errorMap.put(ErrorConstants.HRMS_INVALID_ASSIGNMENT_DATES_APPOINTMENT_CODE, ErrorConstants.HRMS_INVALID_ASSIGNMENT_DATES_APPOINTMENT_MSG);
-
-        }
 		
 	}
 
@@ -559,7 +572,9 @@ public class EmployeeValidator {
 		Map<String, List<String>> boundaryMap = getBoundaryList(request.getRequestInfo(),request.getEmployees().get(0));
 		Map<String, List<String>> mdmsData = mdmsService.getMDMSData(request.getRequestInfo(), request.getEmployees().get(0).getTenantId());
 		List <String> uuidList = request.getEmployees().stream().map(Employee :: getUuid).collect(Collectors.toList()); 
-		EmployeeResponse existingEmployeeResponse = employeeService.search(EmployeeSearchCriteria.builder().uuids(uuidList).build(),request.getRequestInfo());
+		EmployeeResponse existingEmployeeResponse = employeeService.search(EmployeeSearchCriteria.builder().uuids(uuidList)
+				.tenantId(request.getEmployees().get(0).getTenantId())
+				.build(),request.getRequestInfo());
 		List <Employee> existingEmployees = existingEmployeeResponse.getEmployees();
 		for(Employee employee: request.getEmployees()){
 			if(validateEmployeeForUpdate(employee, errorMap)){
@@ -634,15 +649,17 @@ public class EmployeeValidator {
 	 * @param errorMap
 	 */
 	private void validateConsistencyAssignment(Employee existingEmp, Employee updatedEmployeeData, Map<String, String> errorMap) {
-		boolean check =
-				updatedEmployeeData.getAssignments().stream()
-						.map(assignment -> assignment.getId())
-						.collect(Collectors.toList())
-						.containsAll(existingEmp.getAssignments().stream()
-								.map(assignment -> assignment.getId())
-								.collect(Collectors.toList()));
-		if(!check){
-			errorMap.put(ErrorConstants.HRMS_UPDATE_ASSIGNEMENT_INCOSISTENT_CODE, ErrorConstants.HRMS_UPDATE_ASSIGNEMENT_INCOSISTENT_MSG);
+		if (updatedEmployeeData.getAssignments() != null && existingEmp.getAssignments() != null) {
+			boolean check =
+					updatedEmployeeData.getAssignments().stream()
+							.map(assignment -> assignment.getId())
+							.collect(Collectors.toList())
+							.containsAll(existingEmp.getAssignments().stream()
+									.map(assignment -> assignment.getId())
+									.collect(Collectors.toList()));
+			if (!check) {
+				errorMap.put(ErrorConstants.HRMS_UPDATE_ASSIGNEMENT_INCOSISTENT_CODE, ErrorConstants.HRMS_UPDATE_ASSIGNEMENT_INCOSISTENT_MSG);
+			}
 		}
 	}
 

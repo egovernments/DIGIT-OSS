@@ -62,7 +62,7 @@ const TLTradeDetailsEmployee = ({ config, onSelect, userType, formData, setError
   };
 
   useEffect(() => {
-    const data = tradedetils.map((e) => {
+    const data = tradedetils?.map((e) => {
       return e;
     });
     onSelect(config?.key, data);
@@ -112,7 +112,7 @@ const TLTradeDetailsEmployee = ({ config, onSelect, userType, formData, setError
 
   return (
     <React.Fragment>
-      {tradedetils.map((tradedetail, index) => (
+      {tradedetils?.map((tradedetail, index) => (
         <OwnerForm1 key={tradedetail.key} index={index} tradedetail={tradedetail} {...commonProps} />
       ))}
     </React.Fragment>
@@ -186,18 +186,18 @@ const OwnerForm1 = (_props) => {
             processedData.tradeTypeData,
             "licenseType"
         );
-        licenseTypes = licenseTypes.map(item => {
+        licenseTypes = licenseTypes?.map(item => {
             return { code: item.licenseType, active: true };
         });
         if (licenseTypes && licenseTypes.length > 0) {
-          licenseTypes.forEach(data => {
+          licenseTypes?.forEach(data => {
             data.i18nKey = `TRADELICENSE_LICENSETYPE_${data.code}`
           })
         };
         
         let licenseTypeValue = [];
         if (licenseTypes && licenseTypes.length > 0) {
-          licenseTypes.map(data =>{
+          licenseTypes?.map(data =>{
             if(data.code == "PERMANENT") licenseTypeValue.push(data);
           });
         }
@@ -210,7 +210,7 @@ const OwnerForm1 = (_props) => {
 
   let financialYearOptions = [];
   FinaceMenu && FinaceMenu["egf-master"] &&
-    FinaceMenu["egf-master"].FinancialYear.map(data => { if (data.module == "TL") financialYearOptions.push({ code: data.name, i18nKey: `FY${data.name}`, id: data.name.split('-')[0] }) });
+    FinaceMenu["egf-master"].FinancialYear?.map(data => { if (data.module == "TL") financialYearOptions.push({ code: data.name, i18nKey: `FY${data.name}`, id: data.name.split('-')[0] }) });
     
   if (financialYearOptions && financialYearOptions.length > 0) { financialYearOptions.sort(function (a, b) { return Number(a.id) - Number(b.id);});}
 
@@ -218,7 +218,7 @@ const OwnerForm1 = (_props) => {
   // let structureSubTypeOptions = [];
   // let optionsOfStructureType = []
   structureTypeOptions = Menu && Menu["common-masters"] &&
-    Menu["common-masters"].StructureType.map((e) => {
+    Menu["common-masters"].StructureType?.map((e) => {
       let code = e?.code.split('.')[0];
       return ({ i18nKey: t(`COMMON_MASTERS_STRUCTURETYPE_${stringReplaceAll(code?.toUpperCase(), ".", "_")}`), label: code, ...e })
     }) || [];
@@ -244,7 +244,7 @@ const OwnerForm1 = (_props) => {
     if (isRenewal && structureTypeOptions?.length > 0 && !menuLoading) {
       let selectedOption = tradedetail?.structureType?.code?.split('.')[0];
       let structureSubTypeOption = [];
-      structureTypeOptions.map(data => {
+      structureTypeOptions?.map(data => {
         if (selectedOption === data?.code?.split('.')[0]) {
           structureSubTypeOption.push({
             code: data?.code,
@@ -267,15 +267,15 @@ const OwnerForm1 = (_props) => {
   useEffect(() => {
     const keys = Object.keys(formValue);
     const part = {};
-    keys.forEach((key) => (part[key] = tradedetail[key]));
+    keys?.forEach((key) => (part[key] = tradedetail[key]));
     let _ownerType = {};
     if (!_.isEqual(formValue, part)) {
-      Object.keys(formValue).map(data => {
+      Object.keys(formValue)?.map(data => {
         if (data != "key" && formValue[data] != undefined && formValue[data] != "" && formValue[data] != null && !isErrors) {
           setIsErrors(true);
         }
       });
-      setTradedetils((prev) => prev.map((o) => {
+      setTradedetils((prev) => prev?.map((o) => {
         return (o.key && o.key === tradedetail.key ? { ...o, ...formValue, ..._ownerType } : { ...o })
       }));
       trigger();
@@ -389,7 +389,7 @@ const OwnerForm1 = (_props) => {
                   select={(e) => {
                     let selectedOption = e?.code?.split('.')[0];
                     let structureSubTypeOption = [];
-                    structureTypeOptions.map(data => {
+                    structureTypeOptions?.map(data => {
                       if (selectedOption === data?.code?.split('.')[0]) {
                         structureSubTypeOption.push({
                           code: data?.code,

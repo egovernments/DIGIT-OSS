@@ -151,10 +151,10 @@ export const WorkflowService = {
         "roles": "FSM_EMP_FSTPO,FSM_EMP_FSTPO"
       }]
 
-      const actionRolePair = nextActions?.map((action) => ({
-        action: action?.action,
-        roles: action.state?.actions?.map((action) => action.roles).join(","),
-      }));
+      // const actionRolePair = nextActions?.map((action) => ({
+      //   action: action?.action,
+      //   roles: action.state?.actions?.map((action) => action.roles).join(","),
+      // }));
 
       if (processInstances.length > 0) {
         const TLEnrichedWithWorflowData = await makeCommentsSubsidariesOfPreviousActions(processInstances)
@@ -262,10 +262,14 @@ export const WorkflowService = {
         }
 
       //Added the condition so that following filter can happen only for fsm and does not affect other module
-      let nextActions = [];
+      let nextStep = [];
       if(window.location.href?.includes("fsm")){
         // TAKING OUT CURRENT APPL STATUS
-        nextActions = location.pathname.includes("new-vehicle-entry") ? action_newVehicle : location.pathname.includes("dso") ? actionRolePair.filter((i)=> i.action !== "PAY") : actionRolePair;
+        const actionRolePair = nextActions?.map((action) => ({
+          action: action?.action,
+          roles: action.state?.actions?.map((action) => action.roles).join(","),
+        }));
+        nextStep = location.pathname.includes("new-vehicle-entry") ? action_newVehicle : location.pathname.includes("dso") ? actionRolePair.filter((i)=> i.action !== "PAY") : actionRolePair;
       }
 
         if (role !== "CITIZEN" && moduleCode === "PGR") {
@@ -285,7 +289,7 @@ export const WorkflowService = {
 
         const details = {
           timeline,
-          nextActions,
+          nextActions : window.location.href?.includes("fsm") ? nextStep : nextActions,
           actionState,
           applicationBusinessService: workflow?.ProcessInstances?.[0]?.businessService,
           processInstances: applicationProcessInstance,

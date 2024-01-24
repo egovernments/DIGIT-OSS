@@ -20,6 +20,7 @@ import {
   ActionLinks,
   Header,
   ImageViewer,
+  MultiLink,
 } from "@egovernments/digit-ui-react-components";
 
 import ActionModal from "./Modal";
@@ -29,6 +30,7 @@ import { useQueryClient } from "react-query";
 
 import { Link, useHistory, useParams } from "react-router-dom";
 import { ViewImages } from "../../../components/ViewImages";
+import getPDFData from "../../../getPDFData";
 
 const ApplicationDetails = (props) => {
   const tenantId = Digit.ULBService.getCurrentTenantId();
@@ -44,6 +46,12 @@ const ApplicationDetails = (props) => {
   const [showToast, setShowToast] = useState(null);
   const [imageZoom, setImageZoom] = useState(null);
   const DSO = Digit.UserService.hasAccess(["FSM_DSO"]) || false;
+  const [showOptions, setShowOptions] = useState(false);
+  const { data: storeData } = Digit.Hooks.useStore.getInitData();
+
+  const { tenants } = storeData || {};
+
+  const { data: paymentsHistory } = Digit.Hooks.fsm.usePaymentHistory(tenantId, applicationNumber);
 
   const { isLoading, isError, data: applicationDetails, error } = Digit.Hooks.fsm.useApplicationDetail(
     t,
@@ -220,6 +228,54 @@ const ApplicationDetails = (props) => {
     }
   };
 
+  const handleDownloadPdf = async () => {
+    const tenantInfo = tenants.find((tenant) => tenant.code === applicationDetails?.tenantId);
+    const data = getPDFData({ ...applicationDetails?.applicationDetailsResponse }, tenantInfo, t);
+    Digit.Utils.pdf.generate(data);
+    setShowOptions(false);
+  };
+
+  const downloadPaymentReceipt = async () => {
+    const receiptFile = {
+      filestoreIds: [paymentsHistory.Payments[0]?.fileStoreId],
+    };
+
+    if (!receiptFile?.fileStoreIds?.[0]) {
+      const newResponse = await Digit.PaymentService.generatePdf(state, { Payments: [paymentsHistory.Payments[0]] }, "fsm-receipt");
+      const fileStore = await Digit.PaymentService.printReciept(state, {
+        fileStoreIds: newResponse.filestoreIds[0],
+      });
+      window.open(fileStore[newResponse.filestoreIds[0]], "_blank");
+      setShowOptions(false);
+    } else {
+      const fileStore = await Digit.PaymentService.printReciept(state, {
+        fileStoreIds: receiptFile.filestoreIds[0],
+      });
+      window.open(fileStore[receiptFile.filestoreIds[0]], "_blank");
+      setShowOptions(false);
+    }
+  };
+  const [isDisplayDownloadMenu, setIsDisplayDownloadMenu] = useState(false);
+
+  let dowloadOptions =
+    paymentsHistory?.Payments?.length > 0
+      ? [
+          {
+            label: t("CS_COMMON_APPLICATION_ACKNOWLEDGEMENT"),
+            onClick: handleDownloadPdf,
+          },
+          {
+            label: t("CS_DOWNLOAD_RECEIPT"),
+            onClick: downloadPaymentReceipt,
+          },
+        ]
+      : [
+          {
+            label: t("CS_COMMON_APPLICATION_ACKNOWLEDGEMENT"),
+            onClick: handleDownloadPdf,
+          },
+        ];
+
   if (isLoading) {
     return <Loader />;
   }
@@ -228,7 +284,22 @@ const ApplicationDetails = (props) => {
     <React.Fragment>
       {!isLoading ? (
         <React.Fragment>
-          <Header style={{ marginBottom: "16px" }}>{t("ES_TITLE_APPLICATION_DETAILS")}</Header>
+          <div className="employee-application-details" style={{ marginBottom: "15px" }}>
+            <Header style={{ marginBottom: "16px" }}>{t("ES_TITLE_APPLICATION_DETAILS")}</Header>
+            <MultiLink
+              className="multilinkWrapper employee-mulitlink-main-div"
+              onHeadClick={() => setIsDisplayDownloadMenu(!isDisplayDownloadMenu)}
+              style={{ marginTop: "10px" }}
+              downloadBtnClassName={"employee-download-btn-className"}
+              optionsClassName={"employee-options-btn-className"}
+              options={dowloadOptions}
+              displayOptions={isDisplayDownloadMenu}
+
+              // displayOptions={showOptions}
+              // options={dowloadOptions}
+            />
+          </div>
+
           <Card className="fsm" style={{ position: "relative" }}>
             {/* {!DSO && (
               <LinkButton
@@ -339,7 +410,7 @@ const ApplicationDetails = (props) => {
               onClose={closeToast}
             />
           )}
-          {!workflowDetails?.isLoading && workflowDetails?.data?.nextActions?.length === 1 && (
+          {!workflowDetails?.isLoading && workflowDetails?.data?.nextActions?.length === 1 && workflowDetails?.data?.nextActions?.[0]?.action !== "RATE" && (
             <ActionBar style={{ zIndex: "19" }}>
               <SubmitBar
                 label={t(`ES_FSM_${workflowDetails?.data?.nextActions[0].action}`)}

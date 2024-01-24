@@ -9,7 +9,7 @@
   </parent>
   <groupId>org.egov</groupId>
   <artifactId>tl-services</artifactId>
-  <version>1.1.8-SNAPSHOT</version>
+  <version>1.1.9-SNAPSHOT</version>
   <name>tl-services</name>
   <properties>
     <log4j2.version>2.17.1</log4j2.version>
@@ -88,7 +88,6 @@
     <dependency>
       <groupId>org.postgresql</groupId>
       <artifactId>postgresql</artifactId>
-      <version>42.2.2.jre7</version>
     </dependency>
     <dependency>
       <groupId>org.egov</groupId>
@@ -97,7 +96,12 @@
       <scope>compile</scope>
     </dependency>
   </dependencies>
-  <repositories>
+  <repositories> 
+	<repository>
+	<id>repo.digit.org</id>
+	<name>eGov DIGIT Releases Repository</name>
+	<url>https://nexus-repo.digit.org/nexus/content/repositories/snapshots/</url>
+    </repository>
     <repository>
       <id>repo.egovernments.org</id>
       <name>eGov ERP Releases Repository</name>

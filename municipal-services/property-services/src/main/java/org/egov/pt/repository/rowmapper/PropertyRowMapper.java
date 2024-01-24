@@ -83,25 +83,32 @@ public class PropertyRowMapper implements ResultSetExtractor<List<Property>> {
 				String linkIdString = rs.getString("linkedProperties");
 				if (!StringUtils.isEmpty(linkIdString))
 					linkedProperties = Arrays.asList(linkIdString.split(","));
-				
+
 				currentProperty = Property.builder()
 						.source(org.egov.pt.models.enums.Source.fromValue(rs.getString("source")))
 						.creationReason(CreationReason.fromValue(rs.getString("creationReason")))
 						.additionalDetails(getadditionalDetail(rs, "padditionalDetails"))
 						.acknowldgementNumber(rs.getString("acknowldgementNumber"))
+						.status(Status.fromValue(rs.getString("propertystatus")))
 						.ownershipCategory(rs.getString("ownershipcategory"))
 						.channel(Channel.fromValue(rs.getString("channel")))
 						.superBuiltUpArea(rs.getBigDecimal("propertysbpa"))
 						.usageCategory(rs.getString("pusagecategory"))
+						.oldPropertyId(rs.getString("oldPropertyId"))
 						.propertyType(rs.getString("propertytype"))
+						.propertyId(rs.getString("propertyid"))
+						.accountId(rs.getString("accountid"))
 						.noOfFloors(rs.getLong("noOfFloors"))
+						.surveyId(rs.getString("surveyId"))
+						.linkedProperties(linkedProperties)
 						.auditDetails(auditdetails)
 						.institution(institute)
 						.landArea(landArea)
+						.tenantId(tenanId)
+						.id(propertyUuId)
+						.address(address)
 						.build();
 
-
-				setPropertyInfo(currentProperty, rs, tenanId, propertyUuId, linkedProperties, address);
 
 				addChildrenToProperty(rs, currentProperty);
 				propertyMap.put(propertyUuId, currentProperty);

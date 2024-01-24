@@ -1,16 +1,15 @@
 package org.egov.tl.consumer;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import java.util.HashMap;
+
 import org.egov.tl.service.PaymentUpdateService;
 import org.egov.tl.service.notification.PaymentNotificationService;
+import org.egov.tl.util.TLConstants;
+import org.slf4j.MDC;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.kafka.annotation.KafkaListener;
-import org.springframework.kafka.support.KafkaHeaders;
-import org.springframework.messaging.handler.annotation.Header;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
-
-import java.util.HashMap;
 
 @Component
 public class ReceiptConsumer {
@@ -18,6 +17,9 @@ public class ReceiptConsumer {
     private PaymentUpdateService paymentUpdateService;
 
     private PaymentNotificationService paymentNotificationService;
+    
+    @Value("${state.level.tenant.id}")
+	private String stateLevelTenantID;
 
 
     @Autowired
@@ -28,8 +30,12 @@ public class ReceiptConsumer {
 
 
 
-    @KafkaListener(topics = {"${kafka.topics.receipt.create}"})
+    @KafkaListener(topicPattern = "${kafka.topics.receipt.topic.pattern}")
     public void listenPayments(final HashMap<String, Object> record) {
+    	
+    	// Adding in MDC so that tracer can add it in header
+    	MDC.put(TLConstants.TENANTID_MDC_STRING, stateLevelTenantID);
+    				
         paymentUpdateService.process(record);
         paymentNotificationService.process(record);
     }

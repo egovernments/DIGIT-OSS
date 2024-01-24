@@ -108,7 +108,7 @@ public class DeathController {
 	@PostMapping(value = { "/_searchapplications"})
     public ResponseEntity<DeathCertApplnResponse> searchApplications(@RequestBody RequestInfoWrapper requestInfoWrapper,
                                                         @ModelAttribute SearchCriteria criteria ) {
-        List<DeathCertAppln> applications = deathService.searchApplications(requestInfoWrapper);
+        List<DeathCertAppln> applications = deathService.searchApplications(requestInfoWrapper, criteria);
         DeathCertApplnResponse response = DeathCertApplnResponse.builder().applications(applications).responseInfo(
                 responseInfoFactory.createResponseInfoFromRequestInfo(requestInfoWrapper.getRequestInfo(), true))
                 .build();

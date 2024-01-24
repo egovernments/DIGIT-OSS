@@ -5,7 +5,7 @@ import userService from "../services/userService";
 import isEmpty from "lodash/isEmpty";
 import { status } from "./search";
 
-export const addUUIDAndAuditDetails = async (request, method = "_update") => {
+export const addUUIDAndAuditDetails = async (request, method = "_update", header) => {
   let { FireNOCs, RequestInfo } = request;
   //for loop should be replaced new alternative
   for (var i = 0; i < FireNOCs.length; i++) {
@@ -27,7 +27,7 @@ export const addUUIDAndAuditDetails = async (request, method = "_update") => {
               tenantId: FireNOCs[i].tenantId,
               format: envVariables.EGOV_APPLICATION_FORMATE
             }
-          ]);
+          ], header);
     FireNOCs[i].fireNOCDetails.buildings = FireNOCs[
       i
     ].fireNOCDetails.buildings.map(building => {
@@ -91,23 +91,24 @@ export const addUUIDAndAuditDetails = async (request, method = "_update") => {
         userSearchReqCriteria.mobileNumber = owners[owneriter].mobileNumber;
         userSearchReqCriteria.name = owners[owneriter].name;
         userSearchReqCriteria.tenantId = envVariables.EGOV_DEFAULT_STATE_ID;
-
         userSearchResponse = await userService.searchUser(
           RequestInfo,
-          userSearchReqCriteria
+          userSearchReqCriteria,
+          header
         );
         
         if (get(userSearchResponse, "user", []).length > 0) {
         userResponse = await userService.updateUser(RequestInfo, {
         ...userSearchResponse.user[0],
         ...owners[owneriter]
-        });
+        }, header,userSearchReqCriteria.tenantId);
         }
         else{
           userResponse = await createUser(
             RequestInfo,
             owners[owneriter],
-            envVariables.EGOV_DEFAULT_STATE_ID
+            envVariables.EGOV_DEFAULT_STATE_ID,
+            header
           );
         }
 
@@ -133,13 +134,13 @@ export const addUUIDAndAuditDetails = async (request, method = "_update") => {
     };
     // FireNOCs[i].fireNOCDetails.status =
     //   status[FireNOCs[i].fireNOCDetails.action];
-    FireNOCs[i] = await checkApproveRecord(FireNOCs[i], RequestInfo);
+    FireNOCs[i] = await checkApproveRecord(FireNOCs[i], RequestInfo, header);
   }
   request.FireNOCs = FireNOCs;
   return request;
 };
 
-const createUser = async (requestInfo, owner, tenantId) => {
+const createUser = async (requestInfo, owner, tenantId, header) => {
   let userSearchReqCriteria = {};
   let userSearchResponse = {};
   let userCreateResponse = {};
@@ -150,7 +151,8 @@ const createUser = async (requestInfo, owner, tenantId) => {
     userSearchReqCriteria.mobileNumber = owner.mobileNumber;
     userSearchResponse = await userService.searchUser(
       requestInfo,
-      userSearchReqCriteria
+      userSearchReqCriteria,
+      header
     );
     if (get(userSearchResponse, "user", []).length > 0) {
       //assign to user
@@ -158,7 +160,7 @@ const createUser = async (requestInfo, owner, tenantId) => {
       userCreateResponse = await userService.updateUser(requestInfo, {
         ...userSearchResponse.user[0],
         ...owner
-      });
+      }, header, tenantId);
     } else {
       // console.log("user not found");
 
@@ -168,28 +170,31 @@ const createUser = async (requestInfo, owner, tenantId) => {
       userCreateResponse = await userService.createUser(requestInfo, {
         ...userSearchResponse.user[0],
         ...owner
-      });
+      }, header,
+      tenantId);
       // console.log("Create passed");
     }
   } else {
     //uuid present
     userSearchReqCriteria.uuid = [owner.uuid];
+    userSearchReqCriteria.tenantId = tenantId;
     userSearchResponse = await userService.searchUser(
       requestInfo,
-      userSearchReqCriteria
+      userSearchReqCriteria,
+      header
     );
     if (get(userSearchResponse, "user", []).length > 0) {
       userCreateResponse = await userService.updateUser(requestInfo, {
         ...userSearchResponse.user[0],
         ...owner
-      });
+      }, header, tenantId);
       // console.log("Update passed");
     }
   }
   return userCreateResponse;
 };
 
-const checkApproveRecord = async (fireNoc = {}, RequestInfo) => {
+const checkApproveRecord = async (fireNoc = {}, RequestInfo, header) => {
   if (fireNoc.fireNOCDetails.action == "APPROVE") {
     let fireNOCNumber = fireNoc.fireNOCNumber;
     fireNoc.fireNOCNumber = fireNOCNumber
@@ -200,7 +205,7 @@ const checkApproveRecord = async (fireNoc = {}, RequestInfo) => {
             tenantId: fireNoc.tenantId,
             format: envVariables.EGOV_CIRTIFICATE_FORMATE
           }
-        ]);
+        ], header);
     fireNoc.fireNOCDetails.validFrom = new Date().getTime();
     let validTo = new Date();
     validTo.setFullYear(validTo.getFullYear() + 1);
@@ -244,7 +249,7 @@ export const updateStatus = (FireNOCs, workflowResponse) => {
   return FireNOCs;
 };
 
-export const enrichAssignees = async (FireNOCs, RequestInfo) => {
+export const enrichAssignees = async (FireNOCs, RequestInfo, header) => {
 
   for (var i = 0; i < FireNOCs.length; i++) {
     if(FireNOCs[i].fireNOCDetails.action === 'SENDBACKTOCITIZEN'){
@@ -253,7 +258,7 @@ export const enrichAssignees = async (FireNOCs, RequestInfo) => {
       for (let owner of owners)
         assignes.push(owner.uuid);
 
-      let uuids = await getUUidFromUserName(owners, RequestInfo);
+      let uuids = await getUUidFromUserName(owners, RequestInfo, header);
       if(uuids.length > 0)
         assignes = [...new Set([...assignes, ...uuids])];
 
@@ -263,7 +268,7 @@ export const enrichAssignees = async (FireNOCs, RequestInfo) => {
   return FireNOCs;
 };
 
-const getUUidFromUserName = async (owners, RequestInfo) => {
+const getUUidFromUserName = async (owners, RequestInfo, header) => {
   let uuids = [];
   let mobileNumbers = [];
 
@@ -278,10 +283,10 @@ const getUUidFromUserName = async (owners, RequestInfo) => {
 
     userSearchReqCriteria.userName = mobileNumber;
     userSearchReqCriteria.tenantId = envVariables.EGOV_DEFAULT_STATE_ID;
-
     userSearchResponse = await userService.searchUser(
       RequestInfo,
-      userSearchReqCriteria
+      userSearchReqCriteria,
+      header
     );
 
     if (get(userSearchResponse, "user", []).length > 0) {

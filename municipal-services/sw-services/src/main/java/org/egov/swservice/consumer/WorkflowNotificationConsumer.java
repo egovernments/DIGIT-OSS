@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.egov.common.contract.request.Role;
 import org.egov.swservice.service.SewerageService;
 import org.egov.swservice.service.WorkflowNotificationService;
+import org.slf4j.MDC;
 import org.egov.swservice.util.EncryptionDecryptionUtil;
 import org.egov.swservice.util.SWConstants;
 import org.egov.swservice.web.models.OwnerInfo;
@@ -21,6 +22,8 @@ import java.util.List;
 
 import static org.egov.swservice.util.SWConstants.*;
 
+import static org.egov.swservice.util.SWConstants.TENANTID_MDC_STRING;
+
 @Service
 @Slf4j
 public class WorkflowNotificationConsumer {
@@ -35,7 +38,6 @@ public class WorkflowNotificationConsumer {
 	private EncryptionDecryptionUtil encryptionDecryptionUtil;
 	@Autowired
 	private ObjectMapper mapper;
-
 	/**
 	 * Consumes the sewerage connection record and send notification
 	 * 
@@ -44,12 +46,16 @@ public class WorkflowNotificationConsumer {
 	 * @param topic - Received Topic Name
 	 */
 
-	@KafkaListener(topics = { "${egov.sewarageservice.createconnection.topic}", "${egov.sewarageservice.updateconnection.topic}",
-			"${egov.sewerageservice.updatesewerageconnection.workflow.topic}" })
+	@KafkaListener(topicPattern = "${sw.kafka.consumer.topic.pattern}")
 	public void listen(final HashMap<String, Object> record, @Header(KafkaHeaders.RECEIVED_TOPIC) String topic) {
 		try {
 			SewerageConnectionRequest sewerageConnectionRequest = mapper.convertValue(record,
 					SewerageConnectionRequest.class);
+			String tenantId = sewerageConnectionRequest.getSewerageConnection().getTenantId();
+
+			// Adding in MDC so that tracer can add it in header
+			MDC.put(TENANTID_MDC_STRING, tenantId);
+
 			SewerageConnection sewerageConnection = sewerageConnectionRequest.getSewerageConnection();
 			String applicationStatus = sewerageConnection.getApplicationStatus();
 			if (!SWConstants.NOTIFICATION_ENABLE_FOR_STATUS.contains(sewerageConnection.getProcessInstance().getAction()+"_"+applicationStatus)) {

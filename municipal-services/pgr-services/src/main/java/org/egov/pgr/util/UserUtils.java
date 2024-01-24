@@ -1,7 +1,9 @@
 package org.egov.pgr.util;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.extern.slf4j.Slf4j;
 import org.egov.common.contract.request.Role;
+import org.egov.common.utils.MultiStateInstanceUtil;
 import org.egov.pgr.config.PGRConfiguration;
 import org.egov.pgr.repository.ServiceRequestRepository;
 import org.egov.pgr.web.models.User;
@@ -18,6 +20,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 
 @Component
+@Slf4j
 public class UserUtils {
 
 
@@ -26,6 +29,9 @@ public class UserUtils {
     private ServiceRequestRepository serviceRequestRepository;
 
     private PGRConfiguration config;
+
+    @Autowired
+    private MultiStateInstanceUtil centralInstanceUtil;
 
     @Autowired
     public UserUtils(ObjectMapper mapper, ServiceRequestRepository serviceRequestRepository, PGRConfiguration config) {
@@ -128,7 +134,9 @@ public class UserUtils {
     }
 
     public String getStateLevelTenant(String tenantId){
-        return tenantId.split("\\.")[0];
+       /* return tenantId.split("\\.")[0];*/
+        log.info("tenantId"+ tenantId);
+        return centralInstanceUtil.getStateLevelTenant(tenantId);
     }
 
 

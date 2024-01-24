@@ -3,6 +3,7 @@ package org.egov.waterconnection.validator;
 import java.util.*;
 
 import org.egov.common.contract.request.RequestInfo;
+import org.egov.common.utils.MultiStateInstanceUtil;
 import org.egov.tracer.model.CustomException;
 import org.egov.waterconnection.constants.WCConstants;
 import org.egov.waterconnection.util.WaterServicesUtil;
@@ -23,6 +24,10 @@ public class ValidateProperty {
 
 	@Autowired
 	private MDMSValidator mdmsValidator;
+
+	@Autowired
+	private MultiStateInstanceUtil centralInstanceUtil;
+
 	/**
 	 * 
 	 * @param property Property Objects
@@ -62,7 +67,8 @@ public class ValidateProperty {
 	}
 
 	public JSONObject getWnsPTworkflowConfig(RequestInfo requestInfo,String tenantId){
-		tenantId = tenantId.split("\\.")[0];
+		//tenantId = tenantId.split("\\.")[0];
+		tenantId = centralInstanceUtil.getStateLevelTenant(tenantId);
 		List<String> propertyModuleMasters = new ArrayList<>(Arrays.asList("PTWorkflow"));
 		Map<String, List<String>> codes = mdmsValidator.getAttributeValues(tenantId,WCConstants.PROPERTY_MASTER_MODULE, propertyModuleMasters, "$.*",
 				WCConstants.PROPERTY_JSONPATH_ROOT,requestInfo);

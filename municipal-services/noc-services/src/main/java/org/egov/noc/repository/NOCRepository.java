@@ -1,5 +1,7 @@
 package org.egov.noc.repository;
 
+import org.egov.common.exception.InvalidTenantIdException;
+import org.egov.common.utils.MultiStateInstanceUtil;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,9 +13,13 @@ import org.egov.noc.repository.rowmapper.NocRowMapper;
 import org.egov.noc.web.model.Noc;
 import org.egov.noc.web.model.NocRequest;
 import org.egov.noc.web.model.NocSearchCriteria;
+import org.egov.tracer.model.CustomException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Repository
 @Slf4j
@@ -33,13 +39,16 @@ public class NOCRepository {
 
 	@Autowired
 	private NocRowMapper rowMapper;
-	
+
+	@Autowired
+	private MultiStateInstanceUtil centralInstanceUtil;
+
 	/**
 	 * push the nocRequest object to the producer on the save topic
 	 * @param nocRequest
 	 */
 	public void save(NocRequest nocRequest) {
-		producer.push(config.getSaveTopic(), nocRequest);
+		producer.push(nocRequest.getNoc().getTenantId(),config.getSaveTopic(), nocRequest);
 	}
 	
 	/**
@@ -50,9 +59,9 @@ public class NOCRepository {
 	public void update(NocRequest nocRequest, boolean isStateUpdatable) {
 		log.info("Pushing NOC record with application status - "+nocRequest.getNoc().getApplicationStatus());
 		if (isStateUpdatable) {
-			producer.push(config.getUpdateTopic(), nocRequest);
+			producer.push(nocRequest.getNoc().getTenantId(),config.getUpdateTopic(), nocRequest);
 		} else {
-		    producer.push(config.getUpdateWorkflowTopic(), nocRequest);
+		    producer.push(nocRequest.getNoc().getTenantId(),config.getUpdateWorkflowTopic(), nocRequest);
 		}
 	}
 	/**
@@ -64,6 +73,12 @@ public class NOCRepository {
 	public List<Noc> getNocData(NocSearchCriteria criteria) {
 		List<Object> preparedStmtList = new ArrayList<>();
 		String query = queryBuilder.getNocSearchQuery(criteria, preparedStmtList, false);
+		try {
+			query = centralInstanceUtil.replaceSchemaPlaceholder(query, criteria.getTenantId());
+		} catch (InvalidTenantIdException e) {
+			throw new CustomException("EG_NOC_TENANTID_ERROR",
+					"TenantId length is not sufficient to replace query schema in a multi state instance");
+		}
 		List<Noc> nocList = jdbcTemplate.query(query, preparedStmtList.toArray(), rowMapper);
 		return nocList;
 	}
@@ -77,6 +92,12 @@ public class NOCRepository {
         public Integer getNocCount(NocSearchCriteria criteria) {
                 List<Object> preparedStmtList = new ArrayList<>();
                 String query = queryBuilder.getNocSearchQuery(criteria, preparedStmtList, true);
+				try {
+					query = centralInstanceUtil.replaceSchemaPlaceholder(query, criteria.getTenantId());
+				} catch (InvalidTenantIdException e) {
+					throw new CustomException("EG_NOC_TENANTID_ERROR",
+							"TenantId length is not sufficient to replace query schema in a multi state instance");
+				}
                 int count = jdbcTemplate.queryForObject(query, preparedStmtList.toArray(), Integer.class);
                 return count;
         }

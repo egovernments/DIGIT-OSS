@@ -164,5 +164,7 @@ public class BirthDeathConstants {
 
 	public static final String UPDATE_ERROR_MESSAGE = "UPDATE_ERROR";
 
+	public static final String TENANTID_MDC_STRING = "TENANTID";
+
 
 }

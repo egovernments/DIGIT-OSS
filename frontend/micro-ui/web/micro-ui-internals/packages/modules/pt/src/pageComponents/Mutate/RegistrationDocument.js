@@ -12,8 +12,17 @@ const RegistrationDocument = (props) => {
 
   const selectDocDate = (date) => {
     setLocalError(null);
-    const _date = new Date(date).getTime();
-    if (_date < Date.now()) setDocDate(date);
+    let _date = new Date(date);
+    let to_date = `${new Date().getFullYear()}-${(new Date().getMonth()+1).toLocaleString('en-US', {
+      minimumIntegerDigits: 2,
+      useGrouping: false
+    })}-${new Date().getDate().toLocaleString('en-US', {
+      minimumIntegerDigits: 2,
+      useGrouping: false
+    })}`
+
+
+    if (new Date(date).getTime() <= new Date(to_date).getTime()) setDocDate(date);
     else setLocalError("PT_DOCUMENT_DATE_ERROR_MESSAGE");
   };
 

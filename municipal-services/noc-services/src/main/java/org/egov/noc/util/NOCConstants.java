@@ -78,5 +78,7 @@ public class NOCConstants {
 	public static final String AIRPORT_NOC_TYPE = "AIRPORT_AUTHORITY";
 
 	public static final String PARSING_ERROR = "PARSING_ERROR";
+	
+	public static final String TENANTID_MDC_STRING = "TENANTID";
 
 }

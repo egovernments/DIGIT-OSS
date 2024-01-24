@@ -138,7 +138,7 @@ const CreateTradeLicence = ({ parentRoute }) => {
   const TLAcknowledgement = Digit?.ComponentRegistryService?.getComponent("TLAcknowledgement");
   return (
     <Switch>
-      {config.map((routeObj, index) => {
+      {config?.map((routeObj, index) => {
         const { component, texts, inputs, key, isSkipEnabled } = routeObj;
         const Component = typeof component === "string" ? Digit.ComponentRegistryService.getComponent(component) : component;
         return (

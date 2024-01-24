@@ -1,15 +1,9 @@
 package org.egov.noc.service;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-
+import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.extern.slf4j.Slf4j;
 import org.egov.common.contract.request.RequestInfo;
+import org.egov.common.utils.MultiStateInstanceUtil;
 import org.egov.noc.config.NOCConfiguration;
 import org.egov.noc.repository.NOCRepository;
 import org.egov.noc.repository.ServiceRequestRepository;
@@ -35,9 +29,7 @@ import org.springframework.util.CollectionUtils;
 import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-
-import lombok.extern.slf4j.Slf4j;
+import java.util.*;
 
 @Service
 @Slf4j
@@ -70,13 +62,15 @@ public class NOCService {
 	@Autowired
 	private ObjectMapper mapper;
 
+	@Autowired
+	private MultiStateInstanceUtil centralInstanceUtil;
 	/**
 	 * entry point from controller, takes care of next level logic from controller to create NOC application
 	 * @param nocRequest
 	 * @return
 	 */
 	public List<Noc> create(NocRequest nocRequest) {
-		String tenantId = nocRequest.getNoc().getTenantId().split("\\.")[0];
+		String tenantId = centralInstanceUtil.getStateLevelTenant(nocRequest.getNoc().getTenantId());
 		Object mdmsData = nocUtil.mDMSCall(nocRequest.getRequestInfo(), tenantId);
 		Map<String, String> additionalDetails = nocValidator.getOrValidateBussinessService(nocRequest.getNoc(), mdmsData);
 		nocValidator.validateCreate(nocRequest,  mdmsData);
@@ -96,7 +90,7 @@ public class NOCService {
 	 */
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public List<Noc> update(NocRequest nocRequest) {
-		String tenantId = nocRequest.getNoc().getTenantId().split("\\.")[0];
+		String tenantId = centralInstanceUtil.getStateLevelTenant(nocRequest.getNoc().getTenantId());
 		Object mdmsData = nocUtil.mDMSCall(nocRequest.getRequestInfo(), tenantId);
 		Map<String, String> additionalDetails  ;
 		if(!ObjectUtils.isEmpty(nocRequest.getNoc().getAdditionalDetails()))  {
@@ -133,7 +127,7 @@ public class NOCService {
 	/**
 	 * entry point from controller,applies the quired fileters and encrich search criteria and
 	 * return the noc application matching the search criteria
-	 * @param nocRequest
+	 * @param criteria
 	 * @return
 	 */
 	public List<Noc> search(NocSearchCriteria criteria, RequestInfo requestInfo) {
@@ -275,6 +269,7 @@ public class NOCService {
 	public Noc getNocForUpdate(NocRequest nocRequest) {		
 		List<String> ids = Arrays.asList(nocRequest.getNoc().getId());
 		NocSearchCriteria criteria = new NocSearchCriteria();
+		criteria.setTenantId(nocRequest.getNoc().getTenantId());
 		criteria.setIds(ids);
 		List<Noc> nocList = search(criteria, nocRequest.getRequestInfo());
 		if (CollectionUtils.isEmpty(nocList) ) {
@@ -292,7 +287,7 @@ public class NOCService {
 	/**
          * entry point from controller,applies the quired fileters and encrich search criteria and
          * return the noc application count the search criteria
-         * @param nocRequest
+         * @param criteria
          * @return
          */
         public Integer getNocCount(NocSearchCriteria criteria, RequestInfo requestInfo) {

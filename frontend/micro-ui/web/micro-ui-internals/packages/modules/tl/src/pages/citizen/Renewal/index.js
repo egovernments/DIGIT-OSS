@@ -32,7 +32,7 @@ export const TLList = () => {
       </Card>
       <div>
         {newapplicationlist?.length > 0 &&
-          newapplicationlist.map((application, index) => (
+          newapplicationlist?.map((application, index) => (
             <div key={index}>
               <TradeLicenseList application={application} />
             </div>

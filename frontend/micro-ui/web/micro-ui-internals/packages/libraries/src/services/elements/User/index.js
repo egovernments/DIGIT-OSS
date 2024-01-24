@@ -125,7 +125,7 @@ export const UserService = {
       method: "POST",
       auth: true,
       userService: true,
-      data: data.pageSize ? { tenantId, ...data } : { tenantId, ...data, pageSize: "100" },
+      data: data?.pageSize ? { tenantId, ...data } : { tenantId, ...data, pageSize: "100" },
     });
   },
 };

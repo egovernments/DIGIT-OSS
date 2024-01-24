@@ -2,9 +2,13 @@
 
 All notable changes to this module will be documented in this file.
 
-## 1.3.2 - 2023-02-01
+## 1.2.3 - 2023-08-10
 
-- Transition from 1.3.2-beta version to 1.3.2 version
+- Central Instance Library Integration
+
+## 1.2.2 - 2023-02-01
+
+- Transition from 1.2.2-beta version to 1.2.2 version
 
 ## 1.2.1 - 2022-01-13
 

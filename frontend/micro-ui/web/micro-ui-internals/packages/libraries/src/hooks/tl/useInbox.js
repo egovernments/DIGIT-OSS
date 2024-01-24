@@ -19,7 +19,7 @@ const useTLInbox = ({ tenantId, filters, config }) => {
             ...(applicationNumber ? {applicationNumber} : {}),
             ...(sortBy ? {sortBy} : {}),
             ...(sortOrder ? {sortOrder} : {}),
-            ...(locality?.length > 0 ? {locality: locality.map((item) => item.code.split("_").pop()).join(",")} : {}),
+            ...(locality?.length > 0 ? {locality: locality?.map((item) => item.code.split("_").pop()).join(",")} : {}),
         },
         limit,
         offset
@@ -28,7 +28,7 @@ const useTLInbox = ({ tenantId, filters, config }) => {
     return useInbox({tenantId, filters: _filters, config:{
         select: (data) =>({
             statuses: data.statusMap,
-            table: data?.items.map( application => ({
+            table: data?.items?.map( application => ({
                 applicationId: application.businessObject.applicationNumber,
                 date: application.businessObject.applicationDate,
                 businessService: application?.ProcessInstance?.businessService,
