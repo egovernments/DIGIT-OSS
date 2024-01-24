@@ -1029,7 +1029,7 @@ class ShowField extends Component {
     return (
       <tbody>
         {reportResult.hasOwnProperty("reportData") &&
-          reportResult.reportData.map((dataItem, dataIndex) => {
+          reportResultArray.map((dataItem, dataIndex) => {
             //array of array
             let reportHeaderObj = reportResult.reportHeader;
             return (

@@ -17,7 +17,6 @@ import javax.persistence.Transient;
 
 import org.egov.infra.filestore.entity.FileStoreMapper;
 import org.egov.infra.persistence.entity.AbstractAuditable;
-import org.hibernate.validator.constraints.SafeHtml;
 
 
 @Entity
@@ -49,9 +48,6 @@ public class EdcrPdfDetail extends AbstractAuditable {
 
     @Transient
     private List<String> violations;
-    
-    @SafeHtml
-    private String tenantId;
 
     @Override
     public Long getId() {
@@ -109,14 +105,6 @@ public class EdcrPdfDetail extends AbstractAuditable {
 
     public void setViolations(List<String> violations) {
         this.violations = violations;
-    }
-
-    public String getTenantId() {
-        return tenantId;
-    }
-
-    public void setTenantId(String tenantId) {
-        this.tenantId = tenantId;
     }
 
 }

@@ -40,7 +40,6 @@ import org.kabeja.parser.ParseException;
 import org.kabeja.parser.Parser;
 import org.kabeja.parser.ParserBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -59,8 +58,6 @@ public class ExtractService {
     private CityService cityService;
     @Autowired
     private MDMSValidator mdmsValidator;
-    @Value("${is.environment.central.instance}")
-    private String isEnvironmentCentralInstance;
 
     private Logger LOG = LogManager.getLogger(ExtractService.class);
 
@@ -99,15 +96,9 @@ public class ExtractService {
         Boolean mdmsEnabled = mdmsConfiguration.getMdmsEnabled();
         if (mdmsEnabled != null && mdmsEnabled) {
             City stateCity = cityService.fetchStateCityDetails();
-            String tenantID;
-            String[] tenantArr = ApplicationThreadLocals.getFullTenantID().split("\\.");
-            if(Boolean.TRUE.equals(Boolean.valueOf(isEnvironmentCentralInstance))) {
-                tenantID = tenantArr[0].concat(".").concat(tenantArr[1]);
-            } else
-                tenantID = tenantArr[0];
-            
+            String tenantID = ApplicationThreadLocals.getTenantID();
             Object mdmsData = edcrMdmsUtil.mDMSCall(new RequestInfo(),
-                    new StringBuilder().append(tenantID).toString());
+                    new StringBuilder().append(stateCity.getCode()).append(".").append(tenantID).toString());
 
             if (mdmsData == null) {
                 tenantID = stateCity.getCode();

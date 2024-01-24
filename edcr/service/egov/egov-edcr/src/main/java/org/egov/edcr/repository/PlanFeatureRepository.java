@@ -380,9 +380,8 @@ public class PlanFeatureRepository {
         pf = new PlanFeature(InfoCommsTechService.class);
         features.add(pf);
         
-        /*
-         * pf = new PlanFeature(DxfToPdfConverter.class); features.add(pf);
-         */
+        pf = new PlanFeature(DxfToPdfConverter.class);
+        features.add(pf);
         
         
         return features;
