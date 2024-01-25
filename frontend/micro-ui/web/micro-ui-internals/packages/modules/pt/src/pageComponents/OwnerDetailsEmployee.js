@@ -167,7 +167,7 @@ const OwnerForm = (_props) => {
 
   const institutionTypeMenu = useMemo(() => {
     const code = formData?.ownershipCategory?.code;
-    const arr = mdmsData?.PropertyTax?.OwnerShipCategory?.filter((e) => e.code != code && e.code?.includes(code));
+    const arr = mdmsData?.PropertyTax?.SubOwnerShipCategory?.filter((e) => e?.ownerShipCategory?.includes(code));
     return arr?.map((e) => ({ ...e, i18nKey: `COMMON_MASTERS_OWNERSHIPCATEGORY_${e.code?.replaceAll(".", "_")}` }));
   }, [mdmsData, formData?.ownershipCategory]);
 
@@ -224,7 +224,7 @@ const OwnerForm = (_props) => {
                     rules={{
                       required: t("CORE_COMMON_REQUIRED_ERRMSG"),
                       validate: {
-                        pattern: (v) => (/^[a-zA-Z\s]+$/.test(v) ? true : t("ERR_DEFAULT_INPUT_FIELD_MSG")),
+                        pattern: (v) => (/^[a-zA-Z_@./()#&+-\s]*$/.test(v) ? true : t("ERR_DEFAULT_INPUT_FIELD_MSG")),
                       },
                     }}
                     render={(props) => (

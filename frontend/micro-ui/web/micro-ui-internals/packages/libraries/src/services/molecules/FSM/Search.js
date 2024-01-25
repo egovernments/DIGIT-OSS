@@ -91,7 +91,6 @@ export const Search = {
         : demandDetails?.Demands[0]?.demandDetails[0]?.taxAmount || "N/A";
     // const totalAmount = response?.noOfTrips === 0 || amountPerTrip === "N/A" ? "N/A" : response?.noOfTrips * Number(amountPerTrip);
     const totalAmount = demandDetails?.Demands[0]?.demandDetails?.map((detail) => detail?.taxAmount)?.reduce((a, b) => a + b) || "N/A";
-
     const employeeResponse = [
       {
         title: "ES_TITLE_APPLICATION_DETAILS",
@@ -105,7 +104,10 @@ export const Search = {
         values: [
           { title: "ES_APPLICATION_DETAILS_APPLICANT_NAME", value: response?.citizen?.name },
           { title: "ES_APPLICATION_DETAILS_APPLICANT_MOBILE_NO", value: response?.citizen?.mobileNumber },
-          { title: "ES_FSM_PAYMENT_PREFERENCE", value: `ES_ACTION_${response?.paymentPreference}` },
+          response?.paymentPreference && {
+            title: "ES_FSM_PAYMENT_PREFERENCE",
+            value: response?.paymentPreference ? `ES_ACTION_${response?.paymentPreference}` : "N/A",
+          },
         ],
       },
       {
@@ -169,9 +171,13 @@ export const Search = {
           { title: "ES_APPLICATION_DETAILS_PAYMENT_NO_OF_TRIPS", value: response?.noOfTrips === 0 ? "N/A" : response?.noOfTrips },
           {
             title: "ES_APPLICATION_DETAILS_AMOUNT_PER_TRIP",
-            value: amountPerTrip,
+            value: amountPerTrip === "N/A" ? "N/A" : "₹ " + amountPerTrip,
           },
-          { title: "ES_PAYMENT_DETAILS_TOTAL_AMOUNT", value: totalAmount },
+          {
+            title: "ES_PAYMENT_DETAILS_TOTAL_AMOUNT",
+            value: totalAmount === "N/A" ? (amountPerTrip === "N/A" ? "N/A" : "₹ " + response?.noOfTrips * amountPerTrip) : "₹ " + totalAmount,
+          },
+          { title: "ES_PAYMENT_DETAILS_ADV_AMOUNT", value: response?.advanceAmount === null ? "N/A" : "₹ " + response?.advanceAmount },
         ],
       },
       {
@@ -182,7 +188,7 @@ export const Search = {
           { title: "ES_APPLICATION_DETAILS_VEHICLE_NO", value: vehicle?.registrationNumber || "N/A" },
           { title: "ES_APPLICATION_DETAILS_VEHICLE_CAPACITY", value: response?.vehicleCapacity || "N/A" },
           { title: "ES_APPLICATION_DETAILS_POSSIBLE_SERVICE_DATE", value: displayServiceDate(response?.possibleServiceDate) || "N/A" },
-          { title: "ES_APPLICATION_DETAILS_AMOUNT_RECEIVED", value: receivedPayment || "N/A" },
+          // { title: "ES_APPLICATION_DETAILS_AMOUNT_RECEIVED", value: receivedPayment || "N/A" },
         ],
       },
     ];
@@ -200,10 +206,11 @@ export const Search = {
         tenantId: response.tenantId,
         applicationDetails: employeeResponse,
         additionalDetails: response?.additionalDetails,
+        totalAmount: totalAmount,
       };
 
     const citizenResp = employeeResponse.reduce((arr, curr) => {
-      return arr.concat(curr.values);
+      return arr.concat(curr.values.filter((i) => i !== null));
     }, []);
 
     const citizenResponse = citizenResp.map((detail) => {

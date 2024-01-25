@@ -3,8 +3,7 @@ import React, { useState, useEffect } from "react";
 import { useQueryClient } from "react-query";
 import { UploadPitPhoto } from "@egovernments/digit-ui-react-components";
 
-import { configAssignDso, configCompleteApplication, configReassignDSO, configAcceptDso, configRejectApplication, configScheduleDso } from "../config";
-import { configRejectFstpo } from "../config/RejectFstpo";
+import { configAssignDso, configCompleteApplication, configReassignDSO, configAcceptDso, configRejectApplication, configScheduleDso, configUpdateTrips, configRejectFstpo } from "../config";
 
 const Heading = (props) => {
   return <h1 className="heading-m">{props.label}</h1>;
@@ -26,23 +25,23 @@ const CloseBtn = (props) => {
 };
 
 const popupActionBarStyles = {
-  boxShadow: "0 -2px 8px rgb(0 0 0 / 16%)",
-  maxWidth: "480px",
-  zIndex: "100",
-  left: "0",
-  bottom: "0",
-  width: "100%",
-  backgroundColor: "rgba(255, 255, 255)",
-  padding: "8px",
-  position: "fixed",
-  textAlign: "right",
-  display: "flex",
-  justifyContent: "space-around",
-};
+  boxShadow: '0 -2px 8px rgb(0 0 0 / 16%)',
+  maxWidth: '480px',
+  zIndex: '100',
+  left: '0',
+  bottom: '0',
+  width: '100%',
+  backgroundColor: 'rgba(255, 255, 255)',
+  padding: '8px',
+  position: 'fixed',
+  textAlign: 'right',
+  display: 'flex',
+  justifyContent: 'space-around'
+}
 
-const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction, actionData }) => {
+const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction, actionData, module }) => {
   const mobileView = Digit.Utils.browser.isMobile() ? true : false;
-  const { data: dsoData, isLoading: isDsoLoading, isSuccess: isDsoSuccess, error: dsoError } = Digit.Hooks.fsm.useDsoSearch(tenantId, { limit: "-1", status: 'ACTIVE' });
+  const { data: dsoData, isLoading: isDsoLoading, isSuccess: isDsoSuccess, error: dsoError } = Digit.Hooks.fsm.useDsoSearch(tenantId, { limit: '-1', status: 'ACTIVE' });
   const { isLoading, isSuccess, isError, data: applicationData, error } = Digit.Hooks.fsm.useSearch(
     tenantId,
     { applicationNos: id },
@@ -63,8 +62,6 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction,
   );
   const client = useQueryClient();
   const stateCode = Digit.ULBService.getStateId();
-
-  const { data: ReceivedPaymentTypeData, isLoading: receivedPaymentLoad } = Digit.Hooks.fsm.useMDMS(stateCode, "FSM", "ReceivedPaymentType");
 
   const { data: vehicleList, isLoading: isVehicleData, isSuccess: isVehicleDataLoaded } = Digit.Hooks.fsm.useMDMS(
     stateCode,
@@ -98,7 +95,7 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction,
     "ReassignReason",
     "RejectionReason",
     "DeclineReason",
-    "CancelReason",
+    "CancelReason"
   ]);
 
   const { data: FSTPORejectionReasons, isLoading: isFSTPORejectionReasonData } = Digit.Hooks.fsm.useMDMS(
@@ -132,29 +129,22 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction,
   const [pitDetail, setPitDetail] = useState();
   const [fstpoRejectionReason, setFstpoRejectionReason] = useState();
   const [noOfTrips, setNoOfTrips] = useState(null);
-  const [receivedPaymentType, setReceivedPaymentType] = useState(null);
 
   const [defaultValues, setDefautValue] = useState({
     capacity: vehicle?.capacity,
     wasteCollected: vehicle?.capacity,
-    propertyType: applicationData?.propertyUsage.split(".")[0],
+    propertyType: applicationData?.propertyUsage.split('.')[0],
     subtype: applicationData?.propertyUsage,
     pitType: applicationData?.sanitationtype,
     pitDetail: applicationData?.pitDetail,
   });
 
   useEffect(() => {
-    if (!receivedPaymentLoad) {
-      setReceivedPaymentType(ReceivedPaymentTypeData);
-    }
-  }, [receivedPaymentLoad, ReceivedPaymentTypeData]);
-
-  useEffect(() => {
     if (isSuccess && isVehicleDataLoaded && applicationData) {
       const [vehicle] = vehicleList.filter((item) => item.code === applicationData.vehicleType);
-      let arrayList = defaultValues;
+      let arrayList = defaultValues
       arrayList.capacity = applicationData?.vehicleCapacity;
-      arrayList.wasteCollected = applicationData?.vehicleCapacity;
+      arrayList.wasteCollected = applicationData?.vehicleCapacity
       setVehicleMenu([vehicle]);
       setVehicle(vehicle);
       setDefautValue(arrayList);
@@ -163,7 +153,7 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction,
 
   useEffect(() => {
     if (isSuccess && isPropertyDataLoaded && applicationData) {
-      const [property] = propertyList.filter((item) => item.code === applicationData.propertyUsage.split(".")[0]);
+      const [property] = propertyList.filter((item) => item.code === applicationData.propertyUsage.split('.')[0]);
       let arrayList = defaultValues;
       arrayList.propertyType = property;
       setPropertyMenu([property]);
@@ -190,8 +180,8 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction,
       arrayList.pitType = pitType;
       arrayList.pitDetail = pitDetail;
       setPitType(pitType);
-      setPitDetail(applicationData.pitDetail);
-      setDefautValue(arrayList);
+      setPitDetail(applicationData.pitDetail)
+      setDefautValue(arrayList)
 
     }
   }, [isPitDataLoaded, isSuccess]);
@@ -206,7 +196,8 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction,
   useEffect(() => {
     if (isSuccess && isDsoSuccess && applicationData && applicationData.dsoId) {
       const [dso] = dsoData.filter((dso) => dso.id === applicationData.dsoId);
-      const vehicleNoList = dso?.vehicles?.filter((vehicle) => vehicle.capacity == applicationData?.vehicleCapacity);
+      const tempList = dso?.vehicles?.filter((vehicle) => vehicle.capacity == applicationData?.vehicleCapacity);
+      const vehicleNoList = tempList.sort((a,b) => (a.registrationNumber > b.registrationNumber ? 1 : -1 ));
       setVehicleNoList(vehicleNoList);
     }
   }, [isSuccess, isDsoSuccess]);
@@ -282,10 +273,9 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction,
     if (data.pitDetail) applicationData.pitDetail.diameter = Number(data.pitDetail.diameter);
     if (data.pitDetail) applicationData.pitDetail.length = Number(data.pitDetail.length);
     if (data.pitType) applicationData.sanitationtype = data.pitType.code;
-    if (data.subtype && typeof data.subtype === "object") applicationData.propertyUsage = data.subtype.code;
-    if (data.subtype && typeof data.subtype === "string") applicationData.propertyUsage = data.subtype;
+    if (data.subtype && typeof (data.subtype) === "object") applicationData.propertyUsage = data.subtype.code;
+    if (data.subtype && typeof (data.subtype) === "string") applicationData.propertyUsage = data.subtype;
     if (data.noOfTrips) applicationData.noOfTrips = data.noOfTrips;
-    if (data.paymentMode) applicationData.additionalDetails.receivedPayment = data.paymentMode.code;
 
     if (fileStoreId) {
       if (applicationData.pitDetail.additionalDetails && applicationData.pitDetail.additionalDetails.fileStoreId) {
@@ -308,6 +298,17 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction,
   }
   useEffect(() => {
     switch (action) {
+      case "UPDATE":
+      case "SCHEDULE":
+      case "ES_FSM_SCHEDULE":
+        setFormValve(true);
+        return setConfig(
+          configUpdateTrips({
+            t,
+            noOfTrips: applicationData?.noOfTrips,
+            action,
+          })
+        );
       case "DSO_ACCEPT":
       case "ACCEPT":
         //TODO: add accept UI
@@ -347,7 +348,8 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction,
       case "REASSIGN":
       case "REASSING":
       case "FSM_REASSING":
-        dso && (reassignReason || (actionData && actionData[0] && actionData[0].comment?.length > 0 && actionData[0]?.status === "DSO_REJECTED"))
+        dso &&
+          (reassignReason || (actionData && actionData[0] && actionData[0].comment?.length > 0 && actionData[0]?.status === "DSO_REJECTED"))
           ? setFormValve(true)
           : setFormValve(false);
         return setConfig(
@@ -371,17 +373,7 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction,
       case "COMPLETE":
       case "COMPLETED":
         setFormValve(true);
-        return setConfig(
-          configCompleteApplication({
-            t,
-            vehicle,
-            vehicleCapacity: applicationData?.vehicleCapacity,
-            noOfTrips: applicationData?.noOfTrips,
-            applicationCreatedTime: applicationData?.auditDetails?.createdTime,
-            receivedPaymentType,
-            action,
-          })
-        );
+        return setConfig(configCompleteApplication({ t, vehicle, vehicleCapacity: applicationData?.vehicleCapacity, noOfTrips: applicationData?.noOfTrips, applicationCreatedTime: applicationData?.auditDetails?.createdTime, action, module }));
       case "SUBMIT":
       case "FSM_SUBMIT":
         return history.push("/digit-ui/employee/fsm/modify-application/" + applicationNumber);
@@ -424,22 +416,22 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction,
             action,
           })
         );
-      case "SCHEDULE":
-      case "ES_FSM_SCHEDULE":
-        setFormValve(true);
-        return setConfig(
-          configScheduleDso({
-            t,
-            rejectMenu: Reason?.DeclineReason,
-            setReason: setDeclineReason,
-            reason: declineReason,
-            applicationCreatedTime: applicationData?.auditDetails?.createdTime,
-            vehicle,
-            vehicleCapacity: applicationData?.vehicleCapacity,
-            action,
-            noOfTrips: applicationData?.noOfTrips,
-          })
-        );
+      // case "SCHEDULE":
+      // case "ES_FSM_SCHEDULE":
+        // setFormValve(true);
+        // return setConfig(
+          // configScheduleDso({
+            // t,
+            // rejectMenu: Reason?.DeclineReason,
+            // setReason: setDeclineReason,
+            // reason: declineReason,
+            // applicationCreatedTime: applicationData?.auditDetails?.createdTime,
+            // vehicle,
+            // vehicleCapacity: applicationData?.vehicleCapacity,
+            // action,
+            // noOfTrips: applicationData?.noOfTrips
+          // })
+        // );
 
       case "PAY":
       case "ADDITIONAL_PAY_REQUEST":
@@ -465,7 +457,7 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction,
 
   return action && config.form && !isDsoLoading && !isReasonLoading && isVehicleDataLoaded ? (
     <Modal
-      popupStyles={mobileView ? { height: "fit-content", minHeight: "100vh" } : { height: "fit-content" }}
+      popupStyles={mobileView ? { height: 'fit-content', minHeight: '100vh' } : { height: "fit-content" }}
       headerBarMain={<Heading label={t(config.label.heading)} />}
       headerBarEnd={<CloseBtn onClick={closeModal} />}
       actionCancelLabel={t(config.label.cancel)}
@@ -474,6 +466,8 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction,
       actionSaveOnSubmit={() => { }}
       formId="modal-action"
       isDisabled={!formValve}
+      popupModuleMianStyles={mobileView ? { paddingBottom: '60px' } : {}}
+      popupModuleActionBarStyles={mobileView ? popupActionBarStyles : {}}
     >
       <FormComposer
         config={config.form}
@@ -483,7 +477,8 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction,
         onSubmit={submit}
         formId="modal-action"
         defaultValues={defaultValues}
-      ></FormComposer>
+      >
+      </FormComposer>
       {action === "COMPLETED" ? <UploadPitPhoto
         header=""
         tenantId={tenantId}

@@ -12,9 +12,7 @@ import org.egov.fsm.web.model.AuditDetails;
 import org.egov.fsm.web.model.vehicle.Vehicle;
 import org.springframework.validation.annotation.Validated;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonValue;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -36,24 +34,24 @@ import lombok.Setter;
 public class VehicleTrip   {
 
   @JsonProperty("id")
-  private String id = null;
+  private String id ;
 
   @NotNull
   @NotBlank
   @JsonProperty("tenantId")
-  private String tenantId = null;
+  private String tenantId ;
   
   @JsonProperty("tripOwner")
-  private User tripOwner = null;
+  private User tripOwner;
   
   @JsonProperty("tripOwnerId")
-  private String tripOwnerId = null;
+  private String tripOwnerId ;
   
   @JsonProperty("driver")
-  private User driver = null;
+  private User driver;
   
   @JsonProperty("driverId")
-  private String driverId = null;
+  private String driverId ;
   
 
   @NotNull
@@ -62,10 +60,10 @@ public class VehicleTrip   {
   
 
   @JsonProperty("vehicleId")
-  private String vehicleId = null;
+  private String vehicleId ;
 
   @JsonProperty("applicationNo")
-  private String applicationNo = null;
+  private String applicationNo;
   
   /**
    * Gets or Sets status
@@ -80,57 +78,41 @@ public class VehicleTrip   {
     StatusEnum(String value) {
       this.value = value;
     }
-
-    @Override
-    @JsonValue
-    public String toString() {
-      return String.valueOf(value);
-    }
-
-    @JsonCreator
-    public static StatusEnum fromValue(String text) {
-      for (StatusEnum b : StatusEnum.values()) {
-        if (String.valueOf(b.value).equals(text)) {
-          return b;
-        }
-      }
-      return null;
-    }
   }
   @JsonProperty("status")
-  private StatusEnum status = null;
+  private StatusEnum status ;
 
   @NotNull
   @NotBlank
   @JsonProperty("businessService")
-  private String businessService = null;
+  private String businessService ;
   
   
   @JsonProperty("applicationStatus")
-  private String applicationStatus = null;
+  private String applicationStatus ;
 
 
   @JsonProperty("additionalDetails")
-  private Object additionalDetails = null;
+  private Object additionalDetails;
   
   @NotNull
   @NotEmpty
   @Valid
   @JsonProperty("tripDetails")
-  private List<VehicleTripDetail> tripDetails = null;
+  private List<VehicleTripDetail> tripDetails ;
 
 
   @JsonProperty("tripStartTime")
-  private Long tripStartTime = null;
+  private Long tripStartTime ;
   
   @JsonProperty("tripEndTime")
-  private Long tripEndTime = null;
+  private Long tripEndTime ;
   
   @JsonProperty("volumeCarried")
-  private Double volumeCarried = null;
+  private Double volumeCarried ;
   
   @JsonProperty("auditDetails")
-  private AuditDetails auditDetails = null;
+  private AuditDetails auditDetails ;
   
 
 

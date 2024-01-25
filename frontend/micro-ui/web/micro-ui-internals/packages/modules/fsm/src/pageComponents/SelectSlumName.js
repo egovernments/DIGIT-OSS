@@ -12,7 +12,7 @@ const SelectSlumName = ({ config, onSelect, t, userType, formData }) => {
   const [slumMenu, setSlumMenu] = useState();
 
   useEffect(() => {
-    if (userType !== "employee" && formData?.address?.slumArea?.code === false) onSelect(config.key, {}, true);
+    if (userType !== "employee" && formData?.address?.slumArea?.code !== true) onSelect(config.key, { slumData: null, slum: null }, true);
   }, [formData?.address?.slumArea]);
 
   useEffect(() => {
@@ -76,6 +76,7 @@ const SelectSlumName = ({ config, onSelect, t, userType, formData }) => {
   }
 
   function goNext() {
+    sessionStorage.removeItem("Digit.total_amount");
     onSelect(config.key, { ...formData[config.key], slum: slum.code, slumData: slum });
   }
 

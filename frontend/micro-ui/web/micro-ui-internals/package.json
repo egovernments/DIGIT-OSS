@@ -9,20 +9,19 @@
     "packages/react-components",
     "packages/modules/bills",
     "packages/modules/common",
-    "packages/modules/commonPt",
     "packages/modules/core",
     "packages/modules/dss",
     "packages/modules/engagement",
-    "packages/modules/pgr",
     "packages/modules/pt",
     "packages/modules/tl",
-    "packages/modules/ws"
+    "packages/modules/ws",
+    "packages/modules/fsm"
   ],
   "author": "Abhinav Kushwaha <abhinav.kushwaha@egovernments.org>",
   "license": "MIT",
   "private": true,
   "engines": {
-    "node": ">=10"
+    "node": ">=14"
   },
   "scripts": {
     "start": "SKIP_PREFLIGHT_CHECK=true run-s build start:dev",
@@ -56,10 +55,10 @@
     "build:components": "cd packages/react-components && yarn build",
     "build:common": "cd packages/modules/common && yarn build",
     "build:pt": "cd packages/modules/pt && yarn build",
-    "build:commonPt": "cd packages/modules/commonPt && yarn build",
+    "buildD:commonPt": "cd packages/modules/commonPt && yarn build",
     "build:core": "cd packages/modules/core && yarn build",
-    "build:pgr": "cd packages/modules/pgr && yarn build",
-    "buildD:fsm": "cd packages/modules/fsm && yarn build",
+    "buildD:pgr": "cd packages/modules/pgr && yarn build",
+    "build:fsm": "cd packages/modules/fsm && yarn build",
     "build:dss": "cd packages/modules/dss && yarn build",
     "buildD:mcollect": "cd packages/modules/mCollect && yarn build",
     "buildD:receipts": "cd packages/modules/receipts && yarn build",
@@ -86,7 +85,8 @@
   "dependencies": {
     "lodash": "4.17.21",
     "microbundle-crl": "0.13.11"
-  } ,"resolutions": {
+  },
+  "resolutions": {
     "**/babel-loader": "8.2.2",
     "**/@babel/core": "7.14.0",
     "**/@babel/preset-env": "7.14.0",

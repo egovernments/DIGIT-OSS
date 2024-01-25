@@ -1,7 +1,7 @@
 import React, { Fragment, useState, useEffect, useRef } from "react";
-import { useParams, useHistory } from "react-router-dom";
+import { useParams, useHistory, useLocation } from "react-router-dom";
 import TimePicker from "react-time-picker";
-import { Dropdown, Header, MultiUploadWrapper, TextArea } from "@egovernments/digit-ui-react-components";
+import { Dropdown, Header, InfoIcon, MultiUploadWrapper, TextArea } from "@egovernments/digit-ui-react-components";
 import {
   Card,
   CardLabel,
@@ -74,6 +74,7 @@ const FstpOperatorDetails = () => {
   const [newLocality, setNewLocality] = useState(null);
   const [newDsoName, setNewDsoName] = useState(null);
   const [comments, setComments] = useState();
+  const location = useLocation();
 
   const onChangeVehicleNumber = (value) => {
     setNewVehicleNumber(value);
@@ -205,11 +206,12 @@ const FstpOperatorDetails = () => {
   };
 
   const handleCreate = () => {
-    if (newVehicleNumber === null || newVehicleNumber?.trim()?.length === 0) {
-      setShowToast({ key: "error", action: `ES_FSTP_INVALID_VEHICLE_NUMBER` });
+    const re = new RegExp("^[A-Z]{2}\\s{1}[0-9]{2}\\s{0,1}[A-Z]{1,2}\\s{1}[0-9]{4}$");
+    if (!re.test(newVehicleNumber)) {
+      setShowToast({ key: "error", action: `ES_FSM_VEHICLE_FORMAT_TIP` });
       setTimeout(() => {
         closeToast();
-      }, 2000);
+      }, 5000);
       return;
     }
     if (newDsoName === null || newDsoName?.trim()?.length === 0) {
@@ -232,7 +234,7 @@ const FstpOperatorDetails = () => {
       return;
     }
 
-    if (wasteCollected === null || wasteCollected?.trim()?.length === 0) {
+    if (!wasteCollected || wasteCollected?.trim()?.length === 0) {
       setShowToast({ key: "error", action: `ES_FSTP_INVALID_WASTE_AMOUNT` });
       setTimeout(() => {
         closeToast();
@@ -320,7 +322,7 @@ const FstpOperatorDetails = () => {
     setShowToast({ key: "success", action: `ES_FSM_DISPOSE_UPDATE_SUCCESS` });
     setTimeout(() => {
       closeToast();
-      history.push(`/digit-ui/employee/fsm/fstp-operations`);
+      history.push(`/digit-ui/employee`);
     }, 5000);
   };
 
@@ -354,11 +356,18 @@ const FstpOperatorDetails = () => {
     {
       title: `${t("ES_INBOX_VEHICLE_NO")} *`,
       value: vehicle?.vehicle?.registrationNumber || applicationNos || (
-        <TextInput
-          //style={{ width: "40%" }}
-          onChange={(e) => onChangeVehicleNumber(e.target.value)}
-          value={newVehicleNumber}
-        />
+        <TextInput onChange={(e) => onChangeVehicleNumber(e.target.value)} value={newVehicleNumber} />
+      ),
+      labelChildren: (
+        <div className="tooltip" style={{ paddingLeft: "10px", marginBottom: "-3px" }}>
+          <InfoIcon />
+          <span
+            className="tooltiptext"
+            style={{ width: "150px", left: "230%", fontSize: "14px", height: "fit-content", top: "20px", display: "flex" }}
+          >
+            {t("ES_FSM_VEHICLE_FORMAT_TIP")}
+          </span>
+        </div>
       ),
     },
     {
@@ -417,7 +426,7 @@ const FstpOperatorDetails = () => {
     <div>
       <Header styles={{ marginLeft: "16px" }}>{t("ES_INBOX_VEHICLE_LOG")}</Header>
       <Card>
-        <StatusTable>
+        <StatusTable styles={{ marginLeft: "16ox" }}>
           {vehicleData?.map((row, index) => (
             <Row
               rowContainerStyle={
@@ -428,7 +437,12 @@ const FstpOperatorDetails = () => {
               label={row.title}
               text={row.value || "N/A"}
               last={false}
-              labelStyle={{ fontWeight: "normal" }}
+              labelStyle={
+                isMobile && history.location.pathname.includes("new-vehicle-entry")
+                  ? { fontWeight: "normal", display: "contents" }
+                  : { fontWeight: "normal" }
+              }
+              labelChildren={history.location.pathname.includes("new-vehicle-entry") ? row.labelChildren : ""}
             />
           ))}
           <div ref={tripStartTimeRef}>
@@ -520,19 +534,28 @@ const FstpOperatorDetails = () => {
               text={<MultiUploadWrapper t={t} module="fsm" tenantId={stateId} getFormState={(e) => getData(e)} />}
             />
 
-            {!workflowDetails?.isLoading && workflowDetails?.data?.nextActions?.length > 0 && (
-              <ActionBar>
-                {displayMenu && workflowDetails?.data?.nextActions ? (
-                  <Menu
-                    localeKeyPrefix={""}
-                    options={workflowDetails?.data?.nextActions.map((action) => action.action)}
-                    t={t}
-                    onSelect={onActionSelect}
+            {!workflowDetails?.isLoading &&
+              workflowDetails?.data?.nextActions?.length > 0 &&
+              (workflowDetails?.data?.nextActions?.length === 1 ? (
+                <ActionBar>
+                  <SubmitBar
+                    label={t(`CS_ACTION_${workflowDetails?.data?.nextActions?.[0]?.action}`)}
+                    onSubmit={() => onActionSelect(workflowDetails?.data?.nextActions?.[0]?.action)}
                   />
-                ) : null}
-                <SubmitBar label={t("ES_COMMON_TAKE_ACTION")} onSubmit={() => setDisplayMenu(!displayMenu)} />
-              </ActionBar>
-            )}
+                </ActionBar>
+              ) : (
+                <ActionBar>
+                  {displayMenu && workflowDetails?.data?.nextActions ? (
+                    <Menu
+                      localeKeyPrefix={""}
+                      options={workflowDetails?.data?.nextActions.map((action) => action.action)}
+                      t={t}
+                      onSelect={onActionSelect}
+                    />
+                  ) : null}
+                  <SubmitBar label={t("ES_COMMON_TAKE_ACTION")} onSubmit={() => setDisplayMenu(!displayMenu)} />
+                </ActionBar>
+              ))}
           </form>
           {showModal ? (
             <ActionModal

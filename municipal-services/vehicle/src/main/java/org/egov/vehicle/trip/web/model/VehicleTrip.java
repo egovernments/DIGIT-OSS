@@ -35,111 +35,114 @@ import lombok.Setter;
 @NoArgsConstructor
 @Getter
 @Setter
-public class VehicleTrip {
+public class VehicleTrip   {
 
-	@SafeHtml
-	@JsonProperty("id")
-	private String id = null;
+  @SafeHtml
+  @JsonProperty("id")
+  private String id = null;
 
-	@NotNull
-	@NotBlank
-	@SafeHtml
-	@Size(max = 64)
-	@JsonProperty("tenantId")
-	private String tenantId = null;
+  @NotNull
+  @NotBlank
+  @SafeHtml
+  @Size(max=64)
+  @JsonProperty("tenantId")
+  private String tenantId = null;
+  
+  @JsonProperty("tripOwner")
+  @Valid
+  private User tripOwner = null;
+  
+  @SafeHtml
+  @JsonProperty("tripOwnerId")
+  private String tripOwnerId = null;
+  
+  @JsonProperty("driver")
+  @Valid
+  private User driver = null;
+  
+  @JsonProperty("driverId")
+  @SafeHtml
+  @Size(max=64)
+  private String driverId = null;
+  
 
-	@JsonProperty("tripOwner")
-	@Valid
-	private User tripOwner = null;
+  @JsonProperty("vehicle")
+  @Valid
+  private Vehicle vehicle;
+  
+  @SafeHtml
+  @JsonProperty("vehicleId")
+  private String vehicleId = null;
 
-	@SafeHtml
-	@JsonProperty("tripOwnerId")
-	private String tripOwnerId = null;
+  @SafeHtml
+  @JsonProperty("applicationNo")
+  private String applicationNo = null;
+  
+  /**
+   * Gets or Sets status
+   */
+  public enum StatusEnum {
+    ACTIVE("ACTIVE"),
+    
+    INACTIVE("INACTIVE");
 
-	@JsonProperty("driver")
-	@Valid
-	private User driver = null;
+    private String value;
 
-	@JsonProperty("driverId")
-	@SafeHtml
-	@Size(max = 64)
-	private String driverId = null;
+    StatusEnum(String value) {
+      this.value = value;
+    }
 
-	@JsonProperty("vehicle")
-	@Valid
-	private Vehicle vehicle;
+    @Override
+    @JsonValue
+    public String toString() {
+      return String.valueOf(value);
+    }
 
-	@SafeHtml
-	@JsonProperty("vehicleId")
-	private String vehicleId = null;
+    @JsonCreator
+    public static StatusEnum fromValue(String text) {
+      for (StatusEnum b : StatusEnum.values()) {
+        if (String.valueOf(b.value).equals(text)) {
+          return b;
+        }
+      }
+      return null;
+    }
+  }
+  @JsonProperty("status")
+  private StatusEnum status = null;
 
-	@SafeHtml
-	@JsonProperty("applicationNo")
-	private String applicationNo = null;
+  @NotNull
+  @NotBlank
+  @SafeHtml
+  @JsonProperty("businessService")
+  private String businessService = null;
 
-	/**
-	 * Gets or Sets status
-	 */
-	public enum StatusEnum {
-		ACTIVE("ACTIVE"),
+  @SafeHtml
+  @JsonProperty("applicationStatus")
+  private String applicationStatus = null;
 
-		INACTIVE("INACTIVE");
 
-		private String value;
+  @JsonProperty("additionalDetails")
+  private Object additionalDetails = null;
+  
+  @NotNull
+  @NotEmpty
+  @Valid
+  @JsonProperty("tripDetails")
+  private List<VehicleTripDetail> tripDetails = null;
 
-		StatusEnum(String value) {
-			this.value = value;
-		}
 
-		@Override
-		@JsonValue
-		public String toString() {
-			return String.valueOf(value);
-		}
-
-		@JsonCreator
-		public static StatusEnum fromValue(String text) {
-			for (StatusEnum b : StatusEnum.values()) {
-				if (String.valueOf(b.value).equals(text)) {
-					return b;
-				}
-			}
-			return null;
-		}
-	}
-
-	@JsonProperty("status")
-	private StatusEnum status = null;
-
-	@NotNull
-	@NotBlank
-	@SafeHtml
-	@JsonProperty("businessService")
-	private String businessService = null;
-
-	@SafeHtml
-	@JsonProperty("applicationStatus")
-	private String applicationStatus = null;
-
-	@JsonProperty("additionalDetails")
-	private Object additionalDetails = null;
-
-	@NotNull
-	@NotEmpty
-	@Valid
-	@JsonProperty("tripDetails")
-	private List<VehicleTripDetail> tripDetails = null;
-
-	@JsonProperty("tripStartTime")
-	private Long tripStartTime = null;
-
-	@JsonProperty("tripEndTime")
-	private Long tripEndTime = null;
-
-	@JsonProperty("volumeCarried")
-	private Double volumeCarried = null;
-
-	@JsonProperty("auditDetails")
-	private AuditDetails auditDetails = null;
-
+  @JsonProperty("tripStartTime")
+  private Long tripStartTime = null;
+  
+  @JsonProperty("tripEndTime")
+  private Long tripEndTime = null;
+  
+  @JsonProperty("volumeCarried")
+  private Double volumeCarried = null;
+  
+  @JsonProperty("auditDetails")
+  private AuditDetails auditDetails = null;
+  
+ 
 }

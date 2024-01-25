@@ -31,13 +31,11 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
-import static com.jayway.jsonpath.Criteria.where;
-import static com.jayway.jsonpath.Filter.filter;
 import static org.egov.pt.util.PTConstants.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.client.RestTemplate;
+import com.jayway.jsonpath.JsonPath;
 
-import static org.egov.pt.util.PTConstants.*;
 @Slf4j
 @Service
 public class NotificationService {
@@ -77,6 +75,7 @@ public class NotificationService {
 
 		case WF_STATUS_APPROVED:
 			msg = getMsgForMutation(property, completeMsgs, WF_MT_STATUS_APPROVED_CODE, NOTIFICATION_MUTATION_LINK);
+			sendNotificationForCitizenFeedback(property,completeMsgs,MUTATED_STRING);
 			break;
 
 		case WF_STATUS_PAYMENT_PENDING:
@@ -136,6 +135,7 @@ public class NotificationService {
 		case WF_STATUS_APPROVED:
 			createOrUpdate = isCreate ? CREATED_STRING : UPDATED_STRING;
 			msg = getMsgForUpdate(property, WF_UPDATE_STATUS_APPROVED_CODE, completeMsgs, createOrUpdate);
+			sendNotificationForCitizenFeedback(property,completeMsgs,createOrUpdate);
 			break;
 
 		default:
@@ -270,7 +270,7 @@ public class NotificationService {
 	/**
 	 * Prepares msg for each owner and send 
 	 *
-	 * @param property
+	 * @param request
 	 * @param msg
 	 */
 	private void prepareMsgAndSend(PropertyRequest request, String msg, String state) {
@@ -470,6 +470,31 @@ public class NotificationService {
 		});
 		
 		
+	}
+
+
+
+	/**
+	 * Method to send notifications for citizen feedback
+	 *
+	 * @param property
+	 * @param localizationMsgs
+	 * @param serviceType
+	 * @return
+	 */
+	private void sendNotificationForCitizenFeedback(Property property, String localizationMsgs, String serviceType) {
+
+		String citizenFeedackMessage = notifUtil.getMsgForCitizenFeedbackNotification(property, localizationMsgs, serviceType);
+		Map<String, String> mobileNumberToOwner = new HashMap<>();
+
+		property.getOwners().forEach(owner -> {
+			if (owner.getMobileNumber() != null)
+				mobileNumberToOwner.put(owner.getMobileNumber(), owner.getName());
+		});
+
+		List<SMSRequest> smsRequests = notifUtil.createSMSRequest(citizenFeedackMessage, mobileNumberToOwner);
+		notifUtil.sendSMS(smsRequests);
+
 	}
 
 }

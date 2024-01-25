@@ -31,6 +31,8 @@ const Response = ({ data, onSuccess }) => {
   const [errorInfo, setErrorInfo, clearError] = Digit.Hooks.useSessionStorage("FSM_ERROR_DATA", false);
   const [successData, setsuccessData, clearSuccessData] = Digit.Hooks.useSessionStorage("FSM_MUTATION_SUCCESS_DATA", false);
   const [paymentPreference, setPaymentPreference] = useState(null);
+  const [advancePay, setAdvancePay] = useState(null);
+  const [zeroPay, setZeroPay] = useState(null);
 
   const Data = mutation?.data || successData;
   const localityCode = Data?.fsm?.[0].address?.locality?.code;
@@ -47,12 +49,18 @@ const Response = ({ data, onSuccess }) => {
   useEffect(() => {
     if (mutation.data) setsuccessData(mutation.data);
   }, [mutation.data]);
+
   useEffect(() => {
     if (!mutationHappened && !errorInfo) {
       try {
+        const amount = Digit.SessionStorage.get("total_amount");
+        const amountPerTrip = Digit.SessionStorage.get("amount_per_trip");
         const { subtype, pitDetail, address, pitType, source, selectGender, selectPaymentPreference, selectTripNo } = data;
         const { city, locality, geoLocation, pincode, street, doorNo, landmark, slum } = address;
         setPaymentPreference(selectPaymentPreference?.code);
+        const advanceAmount = amount === 0 ? null : selectPaymentPreference?.advanceAmount;
+        amount === 0 ? setZeroPay(true) : setZeroPay(false);
+        advanceAmount === 0 ? setAdvancePay(true) : setAdvancePay(false);
         const formdata = {
           fsm: {
             citizen: {
@@ -80,12 +88,23 @@ const Response = ({ data, onSuccess }) => {
                 additionalDetails: {},
               },
             },
-            pitDetail: { ...pitDetail },
+            pitDetail: {
+              additionalDetails: {
+                fileStoreId: {
+                  CITIZEN: pitDetail?.images,
+                },
+              },
+            },
             source,
             sanitationtype: pitType?.code,
-            paymentPreference: selectPaymentPreference ? selectPaymentPreference?.code : "POST_PAY",
+            paymentPreference: amount === 0 ? null : selectPaymentPreference?.paymentType ? selectPaymentPreference?.paymentType?.code : null,
             noOfTrips: selectTripNo ? selectTripNo?.tripNo?.code : 1,
             vehicleCapacity: selectTripNo ? selectTripNo?.vehicleCapacity?.capacity : "",
+            additionalDetails: {
+              totalAmount: amount,
+              tripAmount: amountPerTrip,
+            },
+            advanceAmount,
           },
           workflow: null,
         };
@@ -96,6 +115,7 @@ const Response = ({ data, onSuccess }) => {
             onSuccess();
           },
         });
+        sessionStorage.removeItem("Digit.total_amount");
       } catch (err) {}
     }
   }, []);
@@ -116,7 +136,7 @@ const Response = ({ data, onSuccess }) => {
     <Card>
       <BannerPicker t={t} data={Data} isSuccess={isSuccess} isLoading={(mutation.isIdle && !mutationHappened) || mutation?.isLoading} />
       <CardText>
-        {t(paymentPreference && paymentPreference == "POST_PAY" ? "CS_FILE_PROPERTY_RESPONSE_POST_PAY" : "CS_FILE_PROPERTY_RESPONSE")}
+        {t((paymentPreference && paymentPreference == "POST_PAY") || advancePay ? "CS_FILE_PROPERTY_RESPONSE_POST_PAY" : zeroPay ? "CS_FSM_RESPONSE_CREATE_DISPLAY_ZERO_PAY" : "CS_FILE_PROPERTY_RESPONSE")}
       </CardText>
       {isSuccess && (
         <LinkButton

@@ -32,31 +32,27 @@ public class NotificationService {
 
 	@Autowired
 	private UserService userService;
-	
 	@Autowired
 	public NotificationService(VehicleConfiguration config) {
 		this.config = config;
 
 	}
 
-	
 	/**
 	 * @param vehicleTripRequest
 	 */
 	public void process(VehicleTripRequest vehicleTripRequest) {
 		List<SMSRequest> smsRequests = new LinkedList<>();
-		if (null != config.getIsSMSEnabled()) {
-			if (config.getIsSMSEnabled()) {
-				enrichSMSRequest(vehicleTripRequest, smsRequests);
-				if (!CollectionUtils.isEmpty(smsRequests))
-					util.sendSMS(smsRequests, config.getIsSMSEnabled());
-			}
+		if (null != config.getIsSMSEnabled() && config.getIsSMSEnabled()) {
+
+			enrichSMSRequest(vehicleTripRequest, smsRequests);
+			if (!CollectionUtils.isEmpty(smsRequests))
+				util.sendSMS(smsRequests, config.getIsSMSEnabled());
+
 		}
-		
+
 	}
 
-
-	
 	/**
 	 * @param tripRequest
 	 * @param smsRequests
@@ -64,14 +60,14 @@ public class NotificationService {
 	private void enrichSMSRequest(VehicleTripRequest tripRequest, List<SMSRequest> smsRequests) {
 		String tenantId = tripRequest.getVehicleTrip().get(0).getTenantId();
 		String localizationMessages = util.getLocalizationMessages(tenantId, tripRequest.getRequestInfo());
-		String message = util.getCustomizedMsg(tripRequest, localizationMessages,Constants.FSM_SMS_FSTPO_TRIP_DECLINED);
+		String message = util.getCustomizedMsg(tripRequest, localizationMessages,
+				Constants.FSM_SMS_FSTPO_TRIP_DECLINED);
 		Map<String, String> mobileNumberToOwner = getUserList(tripRequest);
-			
+
 		smsRequests.addAll(util.createSMSRequest(message, mobileNumberToOwner));
-		
+
 	}
 
-	
 	/**
 	 * @param tripRequest
 	 * @return
@@ -79,20 +75,20 @@ public class NotificationService {
 	private Map<String, String> getUserList(VehicleTripRequest tripRequest) {
 		Map<String, String> mobileNumberToOwner = new HashMap<>();
 		String tenantId = tripRequest.getVehicleTrip().get(0).getTenantId();
-		UserSearchRequest userSearchRequest  = new UserSearchRequest();
+		UserSearchRequest userSearchRequest = new UserSearchRequest();
 		userSearchRequest.setRequestInfo(tripRequest.getRequestInfo());
 		userSearchRequest.setTenantId(tenantId);
 		userSearchRequest.setActive(true);
 		List<String> rolesCodes = Arrays.asList(config.getUserRoleCodes().split(","));
 		userSearchRequest.setRoleCodes(rolesCodes);
-		
-		UserDetailResponse userDetailResponse=userService.searchUsersByCriteria(userSearchRequest);
-		 
-		if(null!=userDetailResponse && !CollectionUtils.isEmpty(userDetailResponse.getUser()))
+
+		UserDetailResponse userDetailResponse = userService.searchUsersByCriteria(userSearchRequest);
+
+		if (null != userDetailResponse && !CollectionUtils.isEmpty(userDetailResponse.getUser()))
 			userDetailResponse.getUser().forEach(user -> {
 				mobileNumberToOwner.put(user.getMobileNumber(), user.getName());
-             });
-		 
+			});
+
 		return mobileNumberToOwner;
 	}
 }

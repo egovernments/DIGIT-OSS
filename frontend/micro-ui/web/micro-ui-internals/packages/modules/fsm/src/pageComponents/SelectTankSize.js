@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from "react";
-import { FormStep, PitDimension } from "@egovernments/digit-ui-react-components";
+import { FormStep, PitDimension, ImageUploadHandler } from "@egovernments/digit-ui-react-components";
 import Timeline from "../components/TLTimelineInFSM";
 
 const isConventionalSpecticTank = (tankDimension) => tankDimension === "lbd";
 
 const SelectTankSize = ({ config, onSelect, t, formData = {}, userType }) => {
+  const tenantId = Digit.ULBService.getCurrentTenantId();
   const tankDimension = formData?.pitType?.dimension;
   const [disable, setDisable] = useState(true);
-
+  const [images, setImages] = useState(formData?.pitDetail?.images || null);
   const [size, setSize] = useState();
 
   useEffect(() => {
@@ -22,18 +23,16 @@ const SelectTankSize = ({ config, onSelect, t, formData = {}, userType }) => {
     } else {
       setSize({ ...formData?.pitDetail, length: 0, width: 0, ...(formData?.pitDetail?.diameter === 0 && { height: 0 }) });
     }
+    if (formData && formData.pitDetail) {
+      setImages(formData?.pitDetail?.images || null)
+    }
   }, [tankDimension]);
 
   useEffect(() => {
-    const pitDetailValues = size ? Object.values(size).filter((value) => value > 0) : null;
-    if (isConventionalSpecticTank(tankDimension) && pitDetailValues?.length >= 3) {
+    if (images && images.length) {
       setDisable(false);
-    } else if (!isConventionalSpecticTank(tankDimension) && pitDetailValues?.length >= 2) {
-      setDisable(false);
-    } else {
-      setDisable(true);
     }
-  }, [size]);
+  }, [images]);
 
   const handleChange = (event) => {
     const { name, value } = event.target;
@@ -46,7 +45,11 @@ const SelectTankSize = ({ config, onSelect, t, formData = {}, userType }) => {
   };
 
   const handleSubmit = () => {
-    onSelect(config.key, size);
+    onSelect(config.key, { images: images });
+  };
+
+  const handleUpload = (ids) => {
+    setImages(ids);
   };
 
   const onSkip = () => onSelect();
@@ -58,7 +61,11 @@ const SelectTankSize = ({ config, onSelect, t, formData = {}, userType }) => {
     <React.Fragment>
       <Timeline currentStep={1} flow="APPLY" />
       <FormStep config={config} onSkip={onSkip} onSelect={handleSubmit} isDisabled={disable} t={t}>
-        <PitDimension sanitationType={formData.pitType} size={size} handleChange={handleChange} t={t} />
+        <ImageUploadHandler
+          tenantId={tenantId}
+          onPhotoChange={handleUpload}
+          uploadedImages={images}
+        />
       </FormStep>
     </React.Fragment>
   );

@@ -1,6 +1,6 @@
 {
   "name": "@egovernments/digit-ui-module-bills",
-  "version": "1.6.0",
+  "version": "1.7.0-beta.1",
   "description": "BILLS",
   "license": "MIT",
   "main": "dist/index.js",
@@ -15,7 +15,7 @@
     "prepublish": "yarn build"
   },
   "dependencies": {
-    "@egovernments/digit-ui-react-components": "^1.3.0",
+    "@egovernments/digit-ui-react-components": "^1.7.0-beta.1",
     "react": "17.0.2",
     "react-dom": "17.0.2",
     "react-hook-form": "6.15.8",

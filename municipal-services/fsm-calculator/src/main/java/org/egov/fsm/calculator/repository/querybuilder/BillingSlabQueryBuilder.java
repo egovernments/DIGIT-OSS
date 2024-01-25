@@ -14,53 +14,50 @@ import org.springframework.util.StringUtils;
 public class BillingSlabQueryBuilder {
 
 	private static final String QUERY_BILLINGSLAB_COMBINATION_COUNT = "SELECT count(*) FROM eg_billing_slab where tenantid=? AND capacityfrom=? AND capacityto=? AND propertytype=? AND slum=?";
-	private static final String QUERY_BILLINGSLAB_COMBINATION_For_UPDATE_COUNT = "SELECT count(*) FROM eg_billing_slab where tenantid=? AND capacityfrom=? AND capacityto=? AND propertytype=? AND slum=? AND id!=?";
+	private static final String QUERY_BILLINGSLAB_COMBINATION_FOR_UPDATE_COUNT = "SELECT count(*) FROM eg_billing_slab where tenantid=? AND capacityfrom=? AND capacityto=? AND propertytype=? AND slum=? AND id!=?";
 	private static final String QUERY_BILLINGSLAB_EXIST = "SELECT count(*) FROM eg_billing_slab where id =?";
 	private static final String QUERY_BILLING_SLAB_SEARCH = "SELECT * FROM eg_billing_slab where tenantid=?";
-	private final String paginationWrapper = "{} {orderby} OFFSET ? LIMIT ?";
+	private static final String PAGINATION_WRAPPER = "{} {orderby} OFFSET ? LIMIT ?";
+	private static final String QUERY_PROPERTY_AND_SUBPROPERTY_TYPE_EXIST = "SELECT count(*) FROM eg_zero_pricing where LOWER(propertyType) =? AND LOWER(subPropertytype) =?";
 
 	@Autowired
 	private BillingSlabConfig config;
 
-
-	
-	public String getBillingSlabCombinationCountQuery(String tenantId, BigDecimal capacityFrom, BigDecimal capacityTo, String propertType,
-			String slum, List<Object> preparedStmtList) {
+	public String getBillingSlabCombinationCountQuery(String tenantId, BigDecimal capacityFrom, BigDecimal capacityTo,
+			String propertType, String slum, List<Object> preparedStmtList) {
 		preparedStmtList.add(tenantId);
 		preparedStmtList.add(capacityFrom);
 		preparedStmtList.add(capacityTo);
 		preparedStmtList.add(propertType);
 		preparedStmtList.add(slum);
 		return QUERY_BILLINGSLAB_COMBINATION_COUNT;
-		
+
 	}
 
-	public String getBillingSlabCombinationCountForUpdateQuery(String tenantId, BigDecimal capacityFrom, BigDecimal capacityTo,
-			String propertType, String slum, String id, List<Object> preparedStmtList) {
+	public String getBillingSlabCombinationCountForUpdateQuery(String tenantId, BigDecimal capacityFrom,
+			BigDecimal capacityTo, String propertType, String slum, String id, List<Object> preparedStmtList) {
 		preparedStmtList.add(tenantId);
 		preparedStmtList.add(capacityFrom);
 		preparedStmtList.add(capacityTo);
 		preparedStmtList.add(propertType);
 		preparedStmtList.add(slum);
 		preparedStmtList.add(id);
-		return QUERY_BILLINGSLAB_COMBINATION_For_UPDATE_COUNT;
+		return QUERY_BILLINGSLAB_COMBINATION_FOR_UPDATE_COUNT;
 	}
-
-	
 
 	public String getBillingSlabExistQuery(String id, List<Object> preparedStmtList) {
 		preparedStmtList.add(id);
 		return QUERY_BILLINGSLAB_EXIST;
 	}
-	
+
 	public String getBillingSlabSearchQuery(BillingSlabSearchCriteria criteria, List<Object> preparedStmtList) {
 		StringBuilder query = new StringBuilder(QUERY_BILLING_SLAB_SEARCH);
 		if (criteria.getTenantId() != null) {
 			if (criteria.getTenantId().split("\\.").length == 1) {
-				
+
 				preparedStmtList.add('%' + criteria.getTenantId() + '%');
 			} else {
-				
+
 				preparedStmtList.add(criteria.getTenantId());
 			}
 		}
@@ -72,24 +69,25 @@ public class BillingSlabQueryBuilder {
 			query.append(" AND propertytype=?");
 			preparedStmtList.add(criteria.getPropertyType());
 		}
-		if(criteria.getCapacity() != null) {
+		if (criteria.getCapacity() != null) {
 			query.append(" AND capacityto>=? AND capacityfrom<=?");
 			preparedStmtList.add(criteria.getCapacity());
 			preparedStmtList.add(criteria.getCapacity());
 		}
-		
-		if(criteria.getSlum() != null) {
+
+		if (criteria.getSlum() != null) {
 			query.append(" AND slum=?");
 			preparedStmtList.add(criteria.getSlum().toString());
 		}
-		return addPaginationWrapper(query.toString(), preparedStmtList,  criteria);
+		return addPaginationWrapper(query.toString(), preparedStmtList, criteria);
 	}
 
-	private String addPaginationWrapper(String query, List<Object> preparedStmtList, BillingSlabSearchCriteria criteria) {
+	private String addPaginationWrapper(String query, List<Object> preparedStmtList,
+			BillingSlabSearchCriteria criteria) {
 
 		int limit = config.getDefaultLimit();
 		int offset = config.getDefaultOffset();
-		String finalQuery = paginationWrapper.replace("{}", query);
+		String finalQuery = PAGINATION_WRAPPER.replace("{}", query);
 
 		if (criteria.getLimit() != null && criteria.getLimit() <= config.getMaxSearchLimit())
 			limit = criteria.getLimit();
@@ -109,7 +107,7 @@ public class BillingSlabQueryBuilder {
 			finalQuery = finalQuery.replace("OFFSET ? LIMIT ?", "");
 		} else {
 			preparedStmtList.add(offset);
-			preparedStmtList.add(limit );
+			preparedStmtList.add(limit);
 		}
 
 		return finalQuery;
@@ -121,10 +119,10 @@ public class BillingSlabQueryBuilder {
 		if (StringUtils.isEmpty(criteria.getSortBy()))
 			builder.append(" ORDER BY lastmodifiedtime ");
 
-		else if (criteria.getSortBy() == BillingSlabSearchCriteria.SortBy.id)
+		else if (criteria.getSortBy() == BillingSlabSearchCriteria.SortBy.ID)
 			builder.append(" ORDER BY id ");
 
-		else if (criteria.getSortBy() == BillingSlabSearchCriteria.SortBy.propertyType)
+		else if (criteria.getSortBy() == BillingSlabSearchCriteria.SortBy.PROPERTYTYPE)
 			builder.append(" ORDER BY propertytype ");
 
 		if (criteria.getSortOrder() == BillingSlabSearchCriteria.SortOrder.ASC)
@@ -133,7 +131,7 @@ public class BillingSlabQueryBuilder {
 			builder.append(" DESC ");
 
 	}
-	
+
 	private void addToPreparedStatement(List<Object> preparedStmtList, List<String> ids) {
 		ids.forEach(id -> {
 			preparedStmtList.add(id);
@@ -152,4 +150,10 @@ public class BillingSlabQueryBuilder {
 		return builder.toString();
 	}
 
+	public String getPropertyTypeExistQuery(String propertyType, String subPropertyType,
+			List<Object> preparedStmtList) {
+		preparedStmtList.add(propertyType);
+		preparedStmtList.add(subPropertyType);
+		return QUERY_PROPERTY_AND_SUBPROPERTY_TYPE_EXIST;
+	}
 }

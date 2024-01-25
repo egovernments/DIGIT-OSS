@@ -222,6 +222,9 @@ import OpenLinkContainer from "./atoms/OpenLinkContainer";
 import UploadPitPhoto from "./molecules/UploadPitPhoto";
 import { DownloadBtnCommon } from "./atoms/svgindex";
 import ToggleSwitch from "./atoms/ToggleSwitch";
+
+import CitizenConsentForm from "./atoms/CitizenConsentForm";
+
 export {
   Phone,
   Body,
@@ -453,4 +456,5 @@ export {
   FirenocIcon,
   InfoIcon,
   LoginIcon,
+  CitizenConsentForm
 };

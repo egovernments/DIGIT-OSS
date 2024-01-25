@@ -3,7 +3,7 @@ import React from "react";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 
-const PTApplication = ({ application, tenantId }) => {
+const PTApplication = ({ application, tenantId, buttonLabel }) => {
   const { t } = useTranslation();
   return (
     <Card>
@@ -13,7 +13,7 @@ const PTApplication = ({ application, tenantId }) => {
       <KeyNote keyValue={t("PT_COMMON_TABLE_COL_APP_TYPE")} note={(application?.creationReason && t(`PT.${application.creationReason}`)) || t("CS_NA")} />
       <KeyNote keyValue={t("PT_COMMON_TABLE_COL_STATUS_LABEL")} note={t(`PT_COMMON_${application?.status}`)} />
       <Link to={`/digit-ui/citizen/pt/property/application/${application?.acknowldgementNumber}/${application?.tenantId}`}>
-        <SubmitBar label={t("PT_MY_APPLICATION_TRACK")} />
+        <SubmitBar label={buttonLabel} />
       </Link>
     </Card>
   );

@@ -39,7 +39,6 @@ public class ActionValidator {
 	 */
 	public void validateUpdateRequest(FSMRequest request, BusinessService businessService) {
 		validateRoleAction(request,businessService);
-//		validateAction(request);
 		validateIds(request, businessService);
 	}
 
@@ -90,18 +89,8 @@ public class ActionValidator {
 		Map<String, String> errorMap = new HashMap<>();
 		FSM fsm = request.getFsm();
 		
-		if( !workflowService.isStateUpdatable(fsm.getApplicationStatus(), businessService)) {
-			if(fsm.getId() == null) {
+		if( !workflowService.isStateUpdatable(fsm.getApplicationStatus(), businessService)&& fsm.getId() == null) {
 				errorMap.put(FSMErrorConstants.INVALID_UPDATE, "Id of Application cannot be null");
-			}
-			
-//			 if(!CollectionUtils.isEmpty(fsm.getDocuments())){
-//				 fsm.getDocuments().forEach(document -> {
-//                     if(document.getId()==null)
-//                         errorMap.put(fsmConstants.INVALID_UPDATE, "Id of applicationDocument cannot be null");
-//                 });
-//             }
-			
 		}
 		if (!errorMap.isEmpty())
 			throw new CustomException(errorMap);

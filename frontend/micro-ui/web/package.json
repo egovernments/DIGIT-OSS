@@ -1,6 +1,6 @@
 {
   "name": "micro-ui",
-  "version":"1.6.0",
+  "version": "1.7.0-beta.1",
   "private": true,
   "homepage": "/digit-ui",
   "workspaces": [
@@ -8,47 +8,48 @@
     "micro-ui-internals/packages/react-components",
     "micro-ui-internals/packages/modules/bills",
     "micro-ui-internals/packages/modules/common",
-    "micro-ui-internals/packages/modules/commonPt",
     "micro-ui-internals/packages/modules/core",
     "micro-ui-internals/packages/modules/dss",
     "micro-ui-internals/packages/modules/engagement",
-    "micro-ui-internals/packages/modules/pgr",
     "micro-ui-internals/packages/modules/pt",
     "micro-ui-internals/packages/modules/tl",
-    "micro-ui-internals/packages/modules/ws"
+    "micro-ui-internals/packages/modules/ws",
+    "micro-ui-internals/packages/modules/fsm"
   ],
+  "engines": {
+    "node": ">=14"
+  },
   "dependencies": {
-    "@egovernments/digit-ui-libraries":"1.6.0",
-    "@egovernments/digit-ui-module-bills": "1.6.0",
-    "@egovernments/digit-ui-module-common":"1.6.0",
-    "@egovernments/digit-ui-module-core":"1.6.0",
-    "@egovernments/digit-ui-module-engagement":"1.6.0",
-    "@egovernments/digit-ui-module-dss":"1.6.0",
-    "@egovernments/digit-ui-module-fsm":"1.6.0",
-    "@egovernments/digit-ui-module-hrms":"1.6.0",
-    "@egovernments/digit-ui-module-mcollect":"1.6.0",
-    "@egovernments/digit-ui-module-obps":"1.6.0",
-    "@egovernments/digit-ui-module-noc":"1.6.0",
-    "@egovernments/digit-ui-module-pgr":"1.6.0",
-    "@egovernments/digit-ui-module-pt":"1.6.0",
-    "@egovernments/digit-ui-module-receipts":"1.6.0",
-    "@egovernments/digit-ui-module-tl":"1.6.0",
-    "@egovernments/digit-ui-module-ws":"1.6.0",
-    "@egovernments/digit-ui-react-components": "1.6.0",
+    "@egovernments/digit-ui-libraries": "1.7.0-beta.1",
+    "@egovernments/digit-ui-module-bills": "1.7.0-beta.1",
+    "@egovernments/digit-ui-module-common": "1.7.0-beta.1",
+    "@egovernments/digit-ui-module-core": "1.7.0-beta.1",
+    "@egovernments/digit-ui-module-engagement": "1.7.0-beta.1",
+    "@egovernments/digit-ui-module-dss": "1.7.0-beta.1",
+    "@egovernments/digit-ui-module-fsm": "1.7.0-beta.1",
+    "@egovernments/digit-ui-module-hrms": "1.7.0-beta.1",
+    "@egovernments/digit-ui-module-mcollect": "1.7.0-beta.1",
+    "@egovernments/digit-ui-module-commonpt":"1.7.0-beta.1",
+    "@egovernments/digit-ui-module-obps": "1.7.0-beta.1",
+    "@egovernments/digit-ui-module-noc": "1.7.0-beta.1",
+    "@egovernments/digit-ui-module-pgr": "1.7.0-beta.1",
+    "@egovernments/digit-ui-module-pt": "1.7.0-beta.1",
+    "@egovernments/digit-ui-module-receipts": "1.7.0-beta.1",
+    "@egovernments/digit-ui-module-tl": "1.7.0-beta.1",
+    "@egovernments/digit-ui-module-ws": "1.7.0-beta.1",
+    "@egovernments/digit-ui-react-components": "1.7.0-beta.1",
     "babel-loader": "8.1.0",
     "react": "17.0.2",
     "react-dom": "17.0.2",
     "react-router-dom": "5.3.0",
     "react-scripts": "4.0.1",
     "web-vitals": "1.1.2",
-     "terser-brunch": "^4.1.0"
+    "terser-brunch": "^4.1.0"
   },
   "devDependencies": {
     "http-proxy-middleware": "1.3.1"
-   
   },
-  
-  "resolutions":  {
+  "resolutions": {
     "**/babel-loader": "8.2.2",
     "**/@babel/core": "7.14.0",
     "**/@babel/preset-env": "7.14.0",

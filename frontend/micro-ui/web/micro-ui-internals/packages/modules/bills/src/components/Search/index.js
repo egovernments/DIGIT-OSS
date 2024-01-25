@@ -70,7 +70,6 @@ const SearchApplication = ({ showTable, showLoader, isLoading, tenantId, t, onSu
     setValue("sortBy", args.id);
     setValue("sortOrder", args.desc ? "DESC" : "ASC");
   }, []);
-
   function onPageSizeChange(e) {
     setValue("limit", Number(e.target.value));
     handleSubmit(onSubmit)();

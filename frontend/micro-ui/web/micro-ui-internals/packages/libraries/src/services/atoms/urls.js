@@ -50,7 +50,7 @@ const Urls = {
     createDriver: "/vendor/driver/v1/_create",
     updateDriver: "/vendor/driver/v1/_update",
     vehicleTripCreate: "/vehicle/trip/v1/_create",
-    advanceBalanceCalculate: "/fsm-calculator/v1/_advanceBalanceCalculate",
+    advanceBalanceCalculate: "/fsm-calculator/v1/_advancebalancecalculate",
   },
 
   payment: {
@@ -79,6 +79,9 @@ const Urls = {
     assessment_search: "/property-services/assessment/_search",
     payment_search: "/collection-services/payments/PT/_search",
     pt_calculate_mutation: "/pt-calculator-v2/propertytax/mutation/_calculate",
+    cfcreate: "/service-request/service/v1/_create",
+    cfdefinitionsearch: "/service-request/service/definition/v1/_search",
+    cfsearch: "/service-request/service/v1/_search",
   },
 
   dss: {

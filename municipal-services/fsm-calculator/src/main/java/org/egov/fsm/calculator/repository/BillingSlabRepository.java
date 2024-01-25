@@ -17,7 +17,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
+import lombok.extern.slf4j.Slf4j;
+
 @Repository
+@Slf4j
 public class BillingSlabRepository {
 
 	@Autowired
@@ -31,15 +34,14 @@ public class BillingSlabRepository {
 
 	@Autowired
 	private BillingSlabQueryBuilder queryBuilder;
-	
+
 	@Autowired
 	private BillingSlabRowMapper mapper;
-	
 
 	public void save(BillingSlabRequest request) {
 		producer.push(config.getSaveBillingSlabTopic(), request);
 	}
-	
+
 	public void update(BillingSlabRequest request) {
 		producer.push(config.getUpdateBillingSlabTopic(), request);
 	}
@@ -49,33 +51,44 @@ public class BillingSlabRepository {
 		try {
 			count = jdbcTemplate.queryForObject(query, preparedStmtList.toArray(), Integer.class);
 		} catch (Exception e) {
-			throw new CustomException(CalculatorConstants.INVALID_BILLING_SLAB_ERROR,"Invalid Billing Slab");
+			throw new CustomException(CalculatorConstants.INVALID_BILLING_SLAB_ERROR, "Invalid Billing Slab");
 		}
 		return count;
 	}
-	
+
 	public BigDecimal getBillingSlabPrice(String query, List<Object> preparedStmtList) {
 		BigDecimal billingSlabPrice = null;
 		try {
-			billingSlabPrice = jdbcTemplate.queryForObject(query, preparedStmtList.toArray(),  BigDecimal.class);
+			billingSlabPrice = jdbcTemplate.queryForObject(query, preparedStmtList.toArray(), BigDecimal.class);
 		} catch (Exception e) {
-			if(!e.getMessage().equalsIgnoreCase("Incorrect result size: expected 1, actual 0")) {
-				throw new CustomException(CalculatorConstants.INVALID_BILLING_SLAB_ERROR,"Invalid Billing Slab Price");
+			if (!e.getMessage().equalsIgnoreCase("Incorrect result size: expected 1, actual 0")) {
+				throw new CustomException(CalculatorConstants.INVALID_BILLING_SLAB_ERROR, "Invalid Billing Slab Price");
 			}
 		}
 		return billingSlabPrice;
 	}
-	
+
 	public List<BillingSlab> getBillingSlabData(BillingSlabSearchCriteria criteria) {
 		List<BillingSlab> billingSlabList = null;
 		List<Object> preparedStmtList = new ArrayList<>();
 		String query = queryBuilder.getBillingSlabSearchQuery(criteria, preparedStmtList);
+		log.info("Billing slab QUERY :: " + query);
 		try {
 			billingSlabList = jdbcTemplate.query(query, preparedStmtList.toArray(), mapper);
 		} catch (Exception e) {
-			throw new CustomException(CalculatorConstants.INVALID_BILLING_SLAB_ERROR,"Invalid Billing Slab Data");
+			throw new CustomException(CalculatorConstants.INVALID_BILLING_SLAB_ERROR, "Invalid Billing Slab Data");
 		}
 		return billingSlabList;
 	}
-	
+
+	public Integer checkPropertyTypeAvailability(String query, List<Object> preparedStmtList) {
+		Integer count = null;
+		try {
+			count = jdbcTemplate.queryForObject(query, preparedStmtList.toArray(), Integer.class);
+		} catch (Exception e) {
+			throw new CustomException(CalculatorConstants.INVALID_ZERO_PRICE_ERROR,
+					"Invalid Zero Price Error" + e.getMessage());
+		}
+		return count;
+	}
 }
