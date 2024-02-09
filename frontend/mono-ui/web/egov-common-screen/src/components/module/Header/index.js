@@ -1,9 +1,23 @@
 import React from "react";
 import "./index.css";
+import {
+  Grid,
+  Card,
+  CardActions,
+  CardContent,
+  List,
+  ListItem,
+  ListItemText,
+  Typography,
+  Link,
+} from "@material-ui/core";
 import { withStyles } from "@material-ui/core/styles";
 import axios from "axios";
-/* import rightImage from "../Header/img/stateLogo.png";
-import leftImage from "../Header/img/logo.png"; */
+import rightImage from "./logo.png";
+import bannerImage from "./banner.jpeg";
+import leftImage from "./stateLogo.png";
+//import {Link} from 'react-router-dom';
+
 
 const styles = (theme) => ({
   root: {
@@ -43,7 +57,6 @@ class Header extends React.Component {
       ? document.location.search.split("=")[1]
       : "uk";
     console.log(tenantIdFromPath, "tenant");
-    
     const RequestInfo = {
       RequestInfo: {
         apiId: "Rainmaker",
@@ -55,7 +68,6 @@ class Header extends React.Component {
         msgId: "20170310130900|en_IN",
         authToken: null,
       },
-      
       MdmsCriteria: {
         tenantId: tenantIdFromPath,
         moduleDetails: [
@@ -91,13 +103,11 @@ class Header extends React.Component {
         console.log(err, "error");
       });
   }
-  
   setValuestoState = (property, value) => {
     this.setState({
       [property]: value,
     });
   };
-  
   render() {
     const { classes } = this.props;
     const { backgroundUrl, logoUrl } = this.state;
@@ -108,7 +118,7 @@ class Header extends React.Component {
       <div style={{ backgroundColor: "#f3f4f5 !important" }}>
         <div id="flex-container">
           <div style={{ width: "30%", float: "left", marginLeft: "10%" }}>
-            {/* <img
+            <img
               src={leftImage}
               alt="..."
               style={{
@@ -117,25 +127,20 @@ class Header extends React.Component {
                 left: "130px",
                 top: "7px",
               }}
-            /> */}
+            />
           </div>
 
           <div style={{ width: "70%", float: "right", marginRight: "10%" }}>
             <div id="links">
-              <p id="emplogin">
-                <a href="/citizen/user/login">Citizen Login </a>
+              <p id="servicelist">
+                <a href="/servicelist">List of Services</a>
               </p>
             </div>
-            {/* <img src={rightImage} alt="..." id="rightimg" style={{}} /> */}
+            <img src={rightImage} alt="..." id="rightimg" style={{}} />
           </div>
-        </div>
-        <div id="bannerimage">
-          {/* <img
-            src={bannerImage}
-            alt="..."
-            style={{ maxWidth: "100%", maxHeight: "100%", width: "inherit" }}/> */}
-        </div>
-      </div>
+    
+    </div>
+    </div>
     );
   }
 }

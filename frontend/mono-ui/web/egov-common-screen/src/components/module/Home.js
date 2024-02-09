@@ -5,6 +5,7 @@ import Message from "../Message";
 import Faqs from "../Faqs";
 import Testimonials from "../Testimonials";
 import Footer from "../Footer";
+import digitLogo from './digit-footer.png';
 
 function Home() {
   return (
@@ -74,13 +75,12 @@ function Home() {
       <div style={{ backgroundColor: "#ffffff" }}>
         <br />
         <center>
-          {/* <a href="https://www.digit.org/" target="_blank">
+          <a href="https://www.digit.org/" target="_blank">
       <img style={{ height: "1.4em" }} src={digitLogo} />
-    </a> */}
+    </a>
         </center>{" "}
         <br />
       </div>
-      <h1>This is home page</h1>
     </div>
   );
 }

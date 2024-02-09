@@ -193,7 +193,7 @@ export default function CenteredGrid() {
                 <p id="paylink3">
                   <a
                     style={{ color: "#ffffff", marginLeft: "20px" }}
-                    href="/citizen/external/create-license"
+                    href="/external/create-license"
                     target="_blank"
                     rel="noreferrer"
                   >
@@ -273,7 +273,7 @@ export default function CenteredGrid() {
                 style={{ marginTop: "-51px", color: "rgba(0, 0, 0, 0.6)" }}
               >
                 <br />
-                Use this module to raise grievances and complaints related to
+                Raise grievances and complaints related to
                 issues in your NN, NP, and NPP.
                 <br />
                 <p id="paylink3">

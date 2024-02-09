@@ -1,0 +1,60 @@
+/* General styling */
+body {
+    font-family: sans-serif;
+    margin: 40px;
+  }
+  
+  label {
+    font-weight: bold;
+    margin-bottom: 5px;
+  }
+  
+  input,
+  select {
+    width: 150px;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box; /* Ensure consistent sizing */
+    margin-bottom: 10px;
+  }
+  
+  /* Error styling */
+  .error {
+    color: red;
+    font-size: 0.8rem;
+    margin-top: 5px;
+  }
+  
+  /* Button styling */
+  button {
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  button:hover {
+    background-color: #45a049;
+  }
+  
+  /* Stepper styling */
+  .stepper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .stepper h2 {
+    margin-bottom: 20px;
+  }
+  
+  /* Additional styling for better visual appeal */
+  .input-container {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  

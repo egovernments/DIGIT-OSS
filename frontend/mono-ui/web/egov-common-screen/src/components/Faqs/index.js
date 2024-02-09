@@ -2,7 +2,6 @@ import React from "react";
 import Faq from "react-faq-component";
 import "./index.css";
 
-
 const data = {
     title: "",
     rows: [
