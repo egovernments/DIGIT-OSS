@@ -64,7 +64,7 @@ function StepOneForm() {
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
       {/* Stepper header */}
-      <h2>Step 1: Business Information</h2>
+      <h2>Step 1: Trade Details</h2>
 
       {/* Fields */}
       <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
