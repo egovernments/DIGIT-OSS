@@ -7,6 +7,8 @@ import SampleInbox from "./SampleInbox";
 import SampleSearch from "./SampleSearch";
 import AdvancedCreate from "./AdvancedForm";
 import Response from "./Response";
+import SearchIndividual from "../SearchIndividual";
+import CreateIndividual from "../CreateIndividual";
 
 const ProjectBreadCrumb = ({ location }) => {
   const { t } = useTranslation();
@@ -39,6 +41,8 @@ const App = ({ path, stateCode, userType, tenants }) => {
         <PrivateRoute path={`${path}/inbox`} component={() => <SampleInbox></SampleInbox>} />
         <PrivateRoute path={`${path}/search`} component={() => <SampleSearch></SampleSearch>} />
         <PrivateRoute path={`${path}/response`} component={() => <Response></Response>} />
+        <PrivateRoute path={`${path}/create-individual`} component={() => <CreateIndividual />} />
+        <PrivateRoute path={`${path}/search-individual`} component={() => <SearchIndividual></SearchIndividual>} />
       </AppContainer>
     </Switch>
   );

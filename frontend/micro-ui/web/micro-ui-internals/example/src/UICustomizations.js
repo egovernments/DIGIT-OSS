@@ -323,6 +323,111 @@ export const UICustomizations = {
       };
     },
   },
+  SearchIndividualConfig: {
+    // customValidationCheck: (data) => {
+    //   //checking locale must be present 
+    //   const { locale } = data;
+    //   if (locale === "")
+    //     return { warning: true, label: "WBH_LOC_WARNING_LOCALE_MUST_BE_PRESENT" };
+
+    //   return false;
+    // },
+    // preProcess: (data, additionalDetails) => {
+
+    //   delete data.body.custom
+    //   const tenant = Digit.ULBService.getCurrentTenantId();
+
+    //   const { locale = undefined, module: modulee = undefined, codes = undefined, message = undefined } = data.params
+
+    //   delete data.params.locale
+    //   delete data.params.module
+    //   delete data.params.codes
+    //   delete data.params.message
+
+    //   data.params.tenantId = tenant
+    //   if (locale) {
+    //     data.params.locale = locale.value
+    //   }
+    //   if (modulee) {
+    //     data.params.module = modulee.value
+    //   }
+    //   if (codes) {
+    //     data.params.codes = codes
+    //   }
+
+    //   return data;
+    // },
+    preProcess: (data, additionalDetails) => {
+      // Remove any custom properties from the request body
+      delete data.body.custom;
+    
+      // Get the current tenant ID using Digit's ULBService
+      const tenant = Digit.ULBService.getCurrentTenantId();
+    
+      // Destructure properties from 'data.params' with default values
+      const { individualId = undefined, apiOperation = undefined } = data.params;
+    
+      // Remove specific properties from 'data.params'
+      delete data.params.individualId;
+      delete data.params.apiOperation;
+    
+      // Set the 'tenantId' in 'data.params' to the current tenant ID
+      data.params.tenantId = tenant;
+    
+      // If 'individualId' is provided, set it in 'data.params'
+      if (individualId) {
+        data.params.individualId = individualId;
+      }
+    
+      // If 'apiOperation' is provided, set it in 'data.params'
+      if (apiOperation) {
+        data.params.apiOperation = apiOperation;
+      }
+    
+      // Additional modifications based on your data structure
+    
+      // Return the modified data
+      return data;
+    },
+    additionalCustomizations: (row, key, column, value, t, searchResult) => {
+      console.log(searchResult);
+      console.log(key, "key");
+      console.log(value, "value");
+      console.log(row, 'ccccccccccccccccc');
+    
+      switch (key) {
+        case "Address":
+          const addressData = value && value.length > 0 ? value[0] : null;
+         
+
+    
+          if (addressData) {
+            console.log(addressData, "addressData");
+            const { doorNo, street, locality, city, pincode } = addressData;
+            const formattedAddress = [
+              String(doorNo),
+              String(street),
+              String(locality.code),
+              String(city),
+              String(pincode)
+            ].filter(Boolean).join(', ');
+    
+            console.log(formattedAddress, "formattedAddress");
+    
+            return formattedAddress || t("ES_COMMON_NA");
+          } else {
+            return t("ES_COMMON_NA");
+          }
+    
+        // Add more cases for other columns as needed...
+    
+        default:
+          return value !== undefined && value !== null ? String(value) : t("ES_COMMON_NA");
+      }
+    },
+    
+    
+    
   SearchWageSeekerConfig:  {
     customValidationCheck: (data) => {
       //checking both to and from date are present
@@ -425,4 +530,5 @@ export const UICustomizations = {
       }
     }
   },
-};
+},
+}
