@@ -213,7 +213,7 @@
         <httpclient-version>4.5.3</httpclient-version>
         <sitemesh-version>2.4.2</sitemesh-version>
         <ehcache-web-version>2.0.4</ehcache-web-version>
-        <joda-time-version>2.9.9</joda-time-version>
+        <joda-time-version>2.12.7</joda-time-version>
         <joda-time-jsptag-version>1.1.1</joda-time-jsptag-version>
         <jsoup-version>1.10.3</jsoup-version>
         <jython-version>2.7.1b3</jython-version>
