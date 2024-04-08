@@ -6,7 +6,7 @@
     <groupId>org.springframework.boot</groupId>
     <artifactId>spring-boot-starter-parent</artifactId>
     <version>1.5.22.RELEASE</version>
-    <relativePath></relativePath>
+    <relativePath/>
   </parent>
   <groupId>org.egov.services</groupId>
   <artifactId>tracer</artifactId>
@@ -104,7 +104,7 @@
     <dependency>
       <groupId>io.jaegertracing</groupId>
       <artifactId>jaeger-client</artifactId>
-      <version>0.31.0</version>
+      <version>0.34.1</version>
     </dependency>
     <dependency>
       <groupId>net.logstash.logback</groupId>
