@@ -231,7 +231,7 @@
         <recaptcha.version>0.0.8</recaptcha.version>
         <jcaptcha.version>2.0-alpha-1</jcaptcha.version>
         <javaxt.core.version>1.7.8</javaxt.core.version>
-        <pdfbox.version>2.0.4</pdfbox.version>
+        <pdfbox.version>2.0.30</pdfbox.version>
         <bouncycastle.version>1.60</bouncycastle.version>
         <!-- Plugin dependency versions-->
         <mvn.javadoc.plugin.version>2.10.4</mvn.javadoc.plugin.version>
