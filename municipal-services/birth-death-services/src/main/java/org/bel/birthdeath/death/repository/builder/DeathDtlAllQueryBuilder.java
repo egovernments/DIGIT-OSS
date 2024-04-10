@@ -36,12 +36,12 @@ public class DeathDtlAllQueryBuilder {
 			"bpmad.district pmdistrict,bpmad.city pmcity ,bpmad.state pmstate,bpmad.pinno pmpinno,bpmad.country pmcountry, " + 
 			"bpsad.houseno pshouseno,bpsad.buildingno psbuildingno,bpsad.streetname psstreetname,bpsad.locality pslocality,bpsad.tehsil pstehsil, " + 
 			"bpsad.district psdistrict,bpsad.city pscity ,bpsad.state psstate,bpsad.pinno pspinno,bpsad.country pscountry  " + 
-			"FROM public.eg_death_dtls bdtl  " + 
-			"left join eg_death_father_info bfat on bfat.deathdtlid = bdtl.id    " + 
-			"left join eg_death_mother_info bmot on bmot.deathdtlid = bdtl.id  " + 
-			"left join eg_death_spouse_info bsps on bsps.deathdtlid = bdtl.id  " + 
-			"left join eg_death_permaddr bpmad on bpmad.deathdtlid = bdtl.id    " + 
-			"left join eg_death_presentaddr bpsad on bpsad.deathdtlid = bdtl.id";
+			"FROM {schema}.eg_death_dtls bdtl  " +
+			"left join {schema}.eg_death_father_info bfat on bfat.deathdtlid = bdtl.id    " +
+			"left join {schema}.eg_death_mother_info bmot on bmot.deathdtlid = bdtl.id  " +
+			"left join {schema}.eg_death_spouse_info bsps on bsps.deathdtlid = bdtl.id  " +
+			"left join {schema}.eg_death_permaddr bpmad on bpmad.deathdtlid = bdtl.id    " +
+			"left join {schema}.eg_death_presentaddr bpsad on bpsad.deathdtlid = bdtl.id";
 	
     private static String QUERY_MASTER_ALL = "SELECT bdtl.id deathdtlid, bdtl.tenantid tenantid, registrationno, dateofdeath, counter, gender , age , "
     		+ "CASE WHEN gender = '1' THEN 'Male' WHEN gender = '2' THEN 'Female' WHEN gender = '3' THEN 'Transgender'  END AS genderstr ,"
@@ -54,12 +54,12 @@ public class DeathDtlAllQueryBuilder {
     		+ "bpsad.houseno pshouseno,bpsad.buildingno psbuildingno,bpsad.streetname psstreetname,bpsad.locality pslocality,bpsad.tehsil pstehsil,"
     		+ "bpsad.district psdistrict,bpsad.city pscity ,bpsad.state psstate,bpsad.pinno pspinno,bpsad.country pscountry,"
     		+ "bdtl.aadharno bdtlaadharno ,bfat.aadharno bfataadharno ,bmot.aadharno bmotaadharno , bsps.aadharno bspsaadharno "+
-    		"FROM public.eg_death_dtls bdtl " + 
-    		"left join eg_death_father_info bfat on bfat.deathdtlid = bdtl.id " + 
-    		"left join eg_death_mother_info bmot on bmot.deathdtlid = bdtl.id " +
-    		"left join eg_death_permaddr bpmad on bpmad.deathdtlid = bdtl.id " + 
-    		"left join eg_death_presentaddr bpsad on bpsad.deathdtlid = bdtl.id "+
-    		"left join eg_death_spouse_info bsps on bsps.deathdtlid = bdtl.id " ;
+    		"FROM {schema}.eg_death_dtls bdtl " +
+    		"left join {schema}.eg_death_father_info bfat on bfat.deathdtlid = bdtl.id " +
+    		"left join {schema}.eg_death_mother_info bmot on bmot.deathdtlid = bdtl.id " +
+    		"left join {schema}.eg_death_permaddr bpmad on bpmad.deathdtlid = bdtl.id " +
+    		"left join {schema}.eg_death_presentaddr bpsad on bpsad.deathdtlid = bdtl.id "+
+    		"left join {schema}.eg_death_spouse_info bsps on bsps.deathdtlid = bdtl.id " ;
     
     private static final String QUERY_MASTER = "SELECT bdtl.id deathdtlid, tenantid, registrationno, dateofdeath, counter, gender, hospitalname, "+
     		"CASE WHEN gender = '1' THEN 'Male' WHEN gender = '2' THEN 'Female' WHEN gender = '3' THEN 'Transgender'  END AS genderstr ," +
@@ -67,15 +67,15 @@ public class DeathDtlAllQueryBuilder {
     		"bfat.firstname bfatfn ,bmot.firstname bmotfn , bdtl.firstname bdtlfn ,bsps.firstname bspsfn , "+
     		"bfat.middlename bfatmn ,bmot.middlename bmotmn , bdtl.middlename bdtlmn ,bsps.middlename bspsmn , "+
     		"bfat.lastname bfatln ,bmot.lastname bmotln , bdtl.lastname bdtlln ,bsps.lastname bspsln "+
-    		"FROM public.eg_death_dtls bdtl " + 
-    		"left join eg_death_father_info bfat on bfat.deathdtlid = bdtl.id " + 
-    		"left join eg_death_mother_info bmot on bmot.deathdtlid = bdtl.id " +
-    		"left join eg_death_spouse_info bsps on bsps.deathdtlid = bdtl.id " ;
+    		"FROM {schema}.eg_death_dtls bdtl " +
+    		"left join {schema}.eg_death_father_info bfat on bfat.deathdtlid = bdtl.id " +
+    		"left join {schema}.eg_death_mother_info bmot on bmot.deathdtlid = bdtl.id " +
+    		"left join {schema}.eg_death_spouse_info bsps on bsps.deathdtlid = bdtl.id " ;
     
     private static String APPLSQUERY ="select breq.deathCertificateNo, breq.createdtime, breq.status, bdtl.registrationno, bdtl.tenantid, "
     		+ "concat(COALESCE(bdtl.firstname,'') , ' ', COALESCE(bdtl.middlename,'') ,' ', COALESCE(bdtl.lastname,'')) as name, "
     		+ "CASE WHEN breq.lastmodifiedtime/1000 < (extract(epoch from NOW())-?*24*60*60) THEN 'EXPIRED' ELSE breq.filestoreid END as filestoreid "
-    		+ "from eg_death_cert_request breq left join eg_death_dtls bdtl on bdtl.id=breq.deathDtlId where  "
+    		+ "from {schema}.eg_death_cert_request breq left join {schema}.eg_death_dtls bdtl on bdtl.id=breq.deathDtlId where  "
     		+ "breq.createdby=? order by breq.createdtime DESC ";
     
     private final String PAGINATIONWRAPPER = "SELECT * FROM " +
@@ -94,7 +94,7 @@ public class DeathDtlAllQueryBuilder {
 
 
 	public String getDeathCertReq(String consumerCode, RequestInfo requestInfo, List<Object> preparedStmtList) {
-		StringBuilder builder = new StringBuilder("select req.*,(select tenantid from eg_death_dtls dtl where req.deathdtlid=dtl.id) from eg_death_cert_request req");
+		StringBuilder builder = new StringBuilder("select req.*,(select tenantid from {schema}.eg_death_dtls dtl where req.deathdtlid=dtl.id) from {schema}.eg_death_cert_request req");
 		if (consumerCode != null && !consumerCode.isEmpty()) {
 			addClauseIfRequired(preparedStmtList, builder);
 			builder.append(" deathcertificateno=? ");

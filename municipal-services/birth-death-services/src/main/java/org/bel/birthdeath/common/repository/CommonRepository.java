@@ -36,6 +36,8 @@ import org.bel.birthdeath.death.validator.DeathValidator;
 import org.bel.birthdeath.utils.BirthDeathConstants;
 import org.bel.birthdeath.utils.CommonUtils;
 import org.egov.common.contract.request.RequestInfo;
+import org.egov.common.exception.InvalidTenantIdException;
+import org.egov.common.utils.MultiStateInstanceUtil;
 import org.egov.tracer.model.CustomException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
@@ -77,115 +79,118 @@ public class CommonRepository {
 	EncryptionDecryptionUtil encryptionDecryptionUtil;
 
 	@Autowired
+	private MultiStateInstanceUtil centralInstanceUtil;
+
+	@Autowired
 	@Lazy
 	public CommonRepository(CommonService commonService) {
 		this.commonService = commonService;
 	}
 
-	private static final String BIRTHDTLDELETEQRY="Delete from eg_birth_dtls where tenantid = :tenantid and registrationno = :registrationno; ";
-	
-	private static final String DEATHDTLDELETEQRY="Delete from eg_death_dtls where tenantid = :tenantid and registrationno = :registrationno; ";
-	
-	private static final String BIRTHDTLSAVEQRY="INSERT INTO public.eg_birth_dtls(id, registrationno, hospitalname, dateofreport, "
+	private static final String BIRTHDTLDELETEQRY="Delete from {schema}.eg_birth_dtls where tenantid = :tenantid and registrationno = :registrationno; ";
+
+	private static final String DEATHDTLDELETEQRY="Delete from {schema}.eg_death_dtls where tenantid = :tenantid and registrationno = :registrationno; ";
+
+	private static final String BIRTHDTLSAVEQRY="INSERT INTO {schema}.eg_birth_dtls(id, registrationno, hospitalname, dateofreport, "
     		+ "dateofbirth, firstname, middlename, lastname, placeofbirth, informantsname, informantsaddress, "
     		+ "createdtime, createdby, lastmodifiedtime, lastmodifiedby, counter, tenantid, gender, remarks, hospitalid, islegacyrecord) "
     		+ "VALUES (:id, :registrationno, :hospitalname, :dateofreport, :dateofbirth, :firstname, :middlename, :lastname, "
     		+ ":placeofbirth, :informantsname, :informantsaddress, :createdtime, :createdby, :lastmodifiedtime, "
     		+ ":lastmodifiedby, :counter, :tenantid, :gender, :remarks, :hospitalid, :islegacyrecord); ";
 	
-	private static final String BIRTHFATHERINFOSAVEQRY="INSERT INTO public.eg_birth_father_info( id, firstname, middlename, lastname, aadharno, "
+	private static final String BIRTHFATHERINFOSAVEQRY="INSERT INTO {schema}.eg_birth_father_info( id, firstname, middlename, lastname, aadharno, "
 			+ "emailid, mobileno, education, proffession, nationality, religion, createdtime, createdby, lastmodifiedtime, lastmodifiedby, birthdtlid) "
 			+ "VALUES (:id, :firstname, :middlename, :lastname, :aadharno, :emailid, :mobileno, :education, :proffession, :nationality,"
 			+ " :religion, :createdtime, :createdby, :lastmodifiedtime, :lastmodifiedby, :birthdtlid);";
 	
-	private static final String BIRTHMOTHERINFOSAVEQRY="INSERT INTO public.eg_birth_mother_info(id, firstname, middlename, lastname, aadharno, "
+	private static final String BIRTHMOTHERINFOSAVEQRY="INSERT INTO {schema}.eg_birth_mother_info(id, firstname, middlename, lastname, aadharno, "
 			+ "emailid, mobileno, education, proffession, nationality, religion, createdtime, createdby, lastmodifiedtime, lastmodifiedby, birthdtlid) "
 			+ "VALUES (:id, :firstname, :middlename, :lastname, :aadharno, :emailid, :mobileno, :education, :proffession, :nationality,"
 			+ " :religion, :createdtime, :createdby, :lastmodifiedtime, :lastmodifiedby, :birthdtlid);";
 	
-	private static final String BIRTHPERMADDRSAVEQRY="INSERT INTO public.eg_birth_permaddr(id, buildingno, houseno, streetname, locality, tehsil, "
+	private static final String BIRTHPERMADDRSAVEQRY="INSERT INTO {schema}.eg_birth_permaddr(id, buildingno, houseno, streetname, locality, tehsil, "
 			+ "district, city, state, pinno, country, createdby, createdtime, lastmodifiedby, lastmodifiedtime, birthdtlid) "
 			+ "VALUES (:id, :buildingno, :houseno, :streetname, :locality, :tehsil, :district, :city, :state, :pinno, :country,"
 			+ " :createdby, :createdtime, :lastmodifiedby, :lastmodifiedtime, :birthdtlid);";
 	
-	private static final String BIRTHPRESENTADDRSAVEQRY="INSERT INTO public.eg_birth_presentaddr(id, buildingno, houseno, streetname, locality, tehsil, "
+	private static final String BIRTHPRESENTADDRSAVEQRY="INSERT INTO {schema}.eg_birth_presentaddr(id, buildingno, houseno, streetname, locality, tehsil, "
 			+ "district, city, state, pinno, country, createdby, createdtime, lastmodifiedby, lastmodifiedtime, birthdtlid) "
 			+ "VALUES (:id, :buildingno, :houseno, :streetname, :locality, :tehsil, :district, :city, :state, :pinno, :country, "
 			+ ":createdby, :createdtime, :lastmodifiedby, :lastmodifiedtime, :birthdtlid);";
 	
-	private static final String DEATHDTLSAVEQRY="INSERT INTO public.eg_death_dtls(id, registrationno, hospitalname, dateofreport, "
+	private static final String DEATHDTLSAVEQRY="INSERT INTO {schema}.eg_death_dtls(id, registrationno, hospitalname, dateofreport, "
     		+ "dateofdeath, firstname, middlename, lastname, placeofdeath, informantsname, informantsaddress, "
     		+ "createdtime, createdby, lastmodifiedtime, lastmodifiedby, counter, tenantid, gender, remarks, hospitalid, age, eidno, aadharno, nationality, religion, icdcode, islegacyrecord) "
     		+ "VALUES (:id, :registrationno, :hospitalname, :dateofreport, :dateofdeath, :firstname, :middlename, :lastname, "
     		+ ":placeofdeath, :informantsname, :informantsaddress, :createdtime, :createdby, :lastmodifiedtime, "
     		+ ":lastmodifiedby, :counter, :tenantid, :gender, :remarks, :hospitalid, :age, :eidno, :aadharno, :nationality, :religion, :icdcode, :islegacyrecord); ";
 	
-	private static final String DEATHFATHERINFOSAVEQRY="INSERT INTO public.eg_death_father_info( id, firstname, middlename, lastname, aadharno, "
+	private static final String DEATHFATHERINFOSAVEQRY="INSERT INTO {schema}.eg_death_father_info( id, firstname, middlename, lastname, aadharno, "
 			+ "emailid, mobileno, createdtime, createdby, lastmodifiedtime, lastmodifiedby, deathdtlid) "
 			+ "VALUES (:id, :firstname, :middlename, :lastname, :aadharno, :emailid, :mobileno, :createdtime, :createdby, :lastmodifiedtime, :lastmodifiedby, :deathdtlid);";
-	
-	private static final String DEATHMOTHERINFOSAVEQRY="INSERT INTO public.eg_death_mother_info(id, firstname, middlename, lastname, aadharno, "
+
+	private static final String DEATHMOTHERINFOSAVEQRY="INSERT INTO {schema}.eg_death_mother_info(id, firstname, middlename, lastname, aadharno, "
 			+ "emailid, mobileno, createdtime, createdby, lastmodifiedtime, lastmodifiedby, deathdtlid) "
 			+ "VALUES (:id, :firstname, :middlename, :lastname, :aadharno, :emailid, :mobileno, :createdtime, :createdby, :lastmodifiedtime, :lastmodifiedby, :deathdtlid);";
-	
-	private static final String DEATHSPOUSEINFOSAVEQRY="INSERT INTO public.eg_death_spouse_info(id, firstname, middlename, lastname, aadharno, "
+
+	private static final String DEATHSPOUSEINFOSAVEQRY="INSERT INTO {schema}.eg_death_spouse_info(id, firstname, middlename, lastname, aadharno, "
 			+ "emailid, mobileno, createdtime, createdby, lastmodifiedtime, lastmodifiedby, deathdtlid) "
 			+ "VALUES (:id, :firstname, :middlename, :lastname, :aadharno, :emailid, :mobileno, :createdtime, :createdby, :lastmodifiedtime, :lastmodifiedby, :deathdtlid);";
-	
-	private static final String DEATHPERMADDRSAVEQRY="INSERT INTO public.eg_death_permaddr(id, buildingno, houseno, streetname, locality, tehsil, "
+
+	private static final String DEATHPERMADDRSAVEQRY="INSERT INTO {schema}.eg_death_permaddr(id, buildingno, houseno, streetname, locality, tehsil, "
 			+ "district, city, state, pinno, country, createdby, createdtime, lastmodifiedby, lastmodifiedtime, deathdtlid) "
 			+ "VALUES (:id, :buildingno, :houseno, :streetname, :locality, :tehsil, :district, :city, :state, :pinno, :country,"
 			+ " :createdby, :createdtime, :lastmodifiedby, :lastmodifiedtime, :deathdtlid);";
 	
-	private static final String DEATHPRESENTADDRSAVEQRY="INSERT INTO public.eg_death_presentaddr(id, buildingno, houseno, streetname, locality, tehsil, "
+	private static final String DEATHPRESENTADDRSAVEQRY="INSERT INTO {schema}.eg_death_presentaddr(id, buildingno, houseno, streetname, locality, tehsil, "
 			+ "district, city, state, pinno, country, createdby, createdtime, lastmodifiedby, lastmodifiedtime, deathdtlid) "
 			+ "VALUES (:id, :buildingno, :houseno, :streetname, :locality, :tehsil, :district, :city, :state, :pinno, :country, "
 			+ ":createdby, :createdtime, :lastmodifiedby, :lastmodifiedtime, :deathdtlid);";
 	
-	private static final String HOSPITALINSERTSQL="INSERT INTO public.eg_birth_death_hospitals(id, hospitalname, tenantid) VALUES "
+	private static final String HOSPITALINSERTSQL="INSERT INTO {schema}.eg_birth_death_hospitals(id, hospitalname, tenantid) VALUES "
 			+ " (?, ?, ?) ;";
-	
-	private static final String BIRTHDTLUPDATEQRY="UPDATE public.eg_birth_dtls SET registrationno = :registrationno, hospitalname = :hospitalname, dateofreport = :dateofreport, "
+
+	private static final String BIRTHDTLUPDATEQRY="UPDATE {schema}.eg_birth_dtls SET registrationno = :registrationno, hospitalname = :hospitalname, dateofreport = :dateofreport, "
 			+ "dateofbirth = :dateofbirth , firstname= :firstname, middlename = :middlename, lastname = :lastname, placeofbirth= :placeofbirth, informantsname = :informantsname, "
 			+ "informantsaddress = :informantsaddress, lastmodifiedtime = :lastmodifiedtime, lastmodifiedby= :lastmodifiedby, gender = :gender, remarks = :remarks, "
 			+ "hospitalid = :hospitalid, islegacyrecord =:islegacyrecord WHERE id = :id;";
 	
-	private static final String BIRTHFATHERINFOUPDATEQRY="UPDATE public.eg_birth_father_info SET firstname = :firstname, middlename = :middlename, lastname = :lastname, "
+	private static final String BIRTHFATHERINFOUPDATEQRY="UPDATE {schema}.eg_birth_father_info SET firstname = :firstname, middlename = :middlename, lastname = :lastname, "
 			+ "aadharno = :aadharno, emailid = :emailid, mobileno = :mobileno, education = :education, proffession = :proffession, nationality = :nationality, "
 			+ "religion = :religion, lastmodifiedtime = :lastmodifiedtime, lastmodifiedby = :lastmodifiedby WHERE birthdtlid = :birthdtlid;";
 	
-	private static final String BIRTHMOTHERINFOUPDATEQRY="UPDATE public.eg_birth_mother_info SET firstname = :firstname, middlename = :middlename, lastname = :lastname, "
+	private static final String BIRTHMOTHERINFOUPDATEQRY="UPDATE {schema}.eg_birth_mother_info SET firstname = :firstname, middlename = :middlename, lastname = :lastname, "
 			+ "aadharno = :aadharno, emailid = :emailid, mobileno = :mobileno, education = :education, proffession = :proffession, nationality = :nationality, "
 			+ "religion = :religion, lastmodifiedtime = :lastmodifiedtime, lastmodifiedby = :lastmodifiedby WHERE birthdtlid = :birthdtlid;";
 	
-	private static final String BIRTHPERMADDRUPDATEQRY = "UPDATE public.eg_birth_permaddr SET buildingno = :buildingno, houseno = :houseno, streetname = :streetname, "
+	private static final String BIRTHPERMADDRUPDATEQRY = "UPDATE {schema}.eg_birth_permaddr SET buildingno = :buildingno, houseno = :houseno, streetname = :streetname, "
 			+ "locality = :locality, tehsil = :tehsil, district = :district, city = :city, state = :state, pinno = :pinno, country = :country, "
 			+ "lastmodifiedby = :lastmodifiedby, lastmodifiedtime = :lastmodifiedtime WHERE birthdtlid = :birthdtlid;";
 	
-	private static final String BIRTHPRESENTADDRUPDATEQRY="UPDATE public.eg_birth_presentaddr SET buildingno = :buildingno, houseno = :houseno, streetname = :streetname, "
+	private static final String BIRTHPRESENTADDRUPDATEQRY="UPDATE {schema}.eg_birth_presentaddr SET buildingno = :buildingno, houseno = :houseno, streetname = :streetname, "
 			+ "locality = :locality, tehsil = :tehsil, district = :district, city = :city, state = :state, pinno = :pinno, country = :country, "
 			+ "lastmodifiedby = :lastmodifiedby, lastmodifiedtime = :lastmodifiedtime WHERE birthdtlid = :birthdtlid;";
 	
 	
-	private static final String DEATHDTLUPDATEQRY="UPDATE public.eg_death_dtls SET registrationno = :registrationno, hospitalname = :hospitalname, dateofreport = :dateofreport, "
+	private static final String DEATHDTLUPDATEQRY="UPDATE {schema}.eg_death_dtls SET registrationno = :registrationno, hospitalname = :hospitalname, dateofreport = :dateofreport, "
 			+ "dateofdeath = :dateofdeath , firstname= :firstname, middlename = :middlename, lastname = :lastname, placeofdeath= :placeofdeath, informantsname = :informantsname, "
 			+ "informantsaddress = :informantsaddress, lastmodifiedtime = :lastmodifiedtime, lastmodifiedby= :lastmodifiedby, gender = :gender, remarks = :remarks, "
 			+ "hospitalid = :hospitalid , age = :age, eidno = :eidno, aadharno = :aadharno, nationality = :nationality, religion = :religion, icdcode = :icdcode, islegacyrecord =:islegacyrecord WHERE id = :id;";
 	
-	private static final String DEATHFATHERINFOUPDATEQRY="UPDATE public.eg_death_father_info SET firstname = :firstname, middlename = :middlename, lastname = :lastname, "
+	private static final String DEATHFATHERINFOUPDATEQRY="UPDATE {schema}.eg_death_father_info SET firstname = :firstname, middlename = :middlename, lastname = :lastname, "
 			+ "aadharno = :aadharno, emailid = :emailid, mobileno = :mobileno, lastmodifiedtime = :lastmodifiedtime, lastmodifiedby = :lastmodifiedby WHERE deathdtlid = :deathdtlid;";
-	
-	private static final String DEATHMOTHERINFOUPDATEQRY="UPDATE public.eg_death_mother_info SET firstname = :firstname, middlename = :middlename, lastname = :lastname, "
+
+	private static final String DEATHMOTHERINFOUPDATEQRY="UPDATE {schema}.eg_death_mother_info SET firstname = :firstname, middlename = :middlename, lastname = :lastname, "
 			+ "aadharno = :aadharno, emailid = :emailid, mobileno = :mobileno, lastmodifiedtime = :lastmodifiedtime, lastmodifiedby = :lastmodifiedby WHERE deathdtlid = :deathdtlid;";
-	
-	private static final String DEATHSPOUSEINFOUPDATEQRY="UPDATE public.eg_death_spouse_info SET firstname = :firstname, middlename = :middlename, lastname = :lastname, "
+
+	private static final String DEATHSPOUSEINFOUPDATEQRY="UPDATE {schema}.eg_death_spouse_info SET firstname = :firstname, middlename = :middlename, lastname = :lastname, "
 			+ "aadharno = :aadharno, emailid = :emailid, mobileno = :mobileno, lastmodifiedtime = :lastmodifiedtime, lastmodifiedby = :lastmodifiedby WHERE deathdtlid = :deathdtlid;";
-	
-	private static final String DEATHPERMADDRUPDATEQRY = "UPDATE public.eg_death_permaddr SET buildingno = :buildingno, houseno = :houseno, streetname = :streetname, "
+
+	private static final String DEATHPERMADDRUPDATEQRY = "UPDATE {schema}.eg_death_permaddr SET buildingno = :buildingno, houseno = :houseno, streetname = :streetname, "
 			+ "locality = :locality, tehsil = :tehsil, district = :district, city = :city, state = :state, pinno = :pinno, country = :country, "
 			+ "lastmodifiedby = :lastmodifiedby, lastmodifiedtime = :lastmodifiedtime WHERE deathdtlid = :deathdtlid;";
-	
-	private static final String DEATHPRESENTADDRUPDATEQRY="UPDATE public.eg_death_presentaddr SET buildingno = :buildingno, houseno = :houseno, streetname = :streetname, "
+
+	private static final String DEATHPRESENTADDRUPDATEQRY="UPDATE {schema}.eg_death_presentaddr SET buildingno = :buildingno, houseno = :houseno, streetname = :streetname, "
 			+ "locality = :locality, tehsil = :tehsil, district = :district, city = :city, state = :state, pinno = :pinno, country = :country, "
 			+ "lastmodifiedby = :lastmodifiedby, lastmodifiedtime = :lastmodifiedtime WHERE deathdtlid = :deathdtlid;";
 	
@@ -193,6 +198,12 @@ public class CommonRepository {
 	public List<EgHospitalDtl> getHospitalDtls(String tenantId) {
 		List<Object> preparedStmtList = new ArrayList<>();
         String query = queryBuilder.getHospitalDtls(tenantId, preparedStmtList);
+		try {
+			query = centralInstanceUtil.replaceSchemaPlaceholder(query, tenantId);
+		} catch (InvalidTenantIdException e) {
+			throw new CustomException("WS_AS_TENANTID_ERROR",
+					"TenantId length is not sufficient to replace query schema in a multi state instance");
+		}
         List<EgHospitalDtl> hospitalDtls =  jdbcTemplate.query(query, preparedStmtList.toArray(), rowMapper);
         return hospitalDtls;
 	}
@@ -277,11 +288,11 @@ public class CommonRepository {
 			}
 			if(birthValidator.validateUniqueRegNo(birthDtl,importBirthWrapper) && birthValidator.validateImportFields(birthDtl,importBirthWrapper)){
 				try {
-					namedParameterJdbcTemplate.update(BIRTHDTLSAVEQRY, getParametersForBirthDtl(birthDtl, auditDetails, true));
-					namedParameterJdbcTemplate.update(BIRTHFATHERINFOSAVEQRY, getParametersForFatherInfo(birthDtl, auditDetails, true));
-					namedParameterJdbcTemplate.update(BIRTHMOTHERINFOSAVEQRY, getParametersForMotherInfo(birthDtl, auditDetails, true));
-					namedParameterJdbcTemplate.update(BIRTHPERMADDRSAVEQRY, getParametersForPermAddr(birthDtl, auditDetails, true));
-					namedParameterJdbcTemplate.update(BIRTHPRESENTADDRSAVEQRY, getParametersForPresentAddr(birthDtl, auditDetails, true));
+					namedParameterJdbcTemplate.update(callToReplaceSchemaPlaceHolder(BIRTHDTLSAVEQRY, birthDtl.getTenantid()), getParametersForBirthDtl(birthDtl, auditDetails, true));
+					namedParameterJdbcTemplate.update(callToReplaceSchemaPlaceHolder(BIRTHFATHERINFOSAVEQRY, birthDtl.getTenantid()), getParametersForFatherInfo(birthDtl, auditDetails, true));
+					namedParameterJdbcTemplate.update(callToReplaceSchemaPlaceHolder(BIRTHMOTHERINFOSAVEQRY, birthDtl.getTenantid()), getParametersForMotherInfo(birthDtl, auditDetails, true));
+					namedParameterJdbcTemplate.update(callToReplaceSchemaPlaceHolder(BIRTHPERMADDRSAVEQRY, birthDtl.getTenantid()), getParametersForPermAddr(birthDtl, auditDetails, true));
+					namedParameterJdbcTemplate.update(callToReplaceSchemaPlaceHolder(BIRTHPRESENTADDRSAVEQRY, birthDtl.getTenantid()), getParametersForPresentAddr(birthDtl, auditDetails, true));
 					finalCount++;
 				}
 				catch (Exception e) {
@@ -290,7 +301,7 @@ public class CommonRepository {
 					Map<String, String> params = new HashMap<>();
 					params.put("tenantid", birthDtl.getTenantid());
 					params.put("registrationno", birthDtl.getRegistrationno());
-					namedParameterJdbcTemplate.update(BIRTHDTLDELETEQRY, params);
+					namedParameterJdbcTemplate.update(callToReplaceSchemaPlaceHolder(BIRTHDTLDELETEQRY,birthDtl.getTenantid()), params);
 					e.printStackTrace();
 				}
 			}
@@ -324,7 +335,7 @@ public class CommonRepository {
 				if(!dbHospNameIdMap.containsKey(hospName))
 				{
 					String id = tenantid.split("\\.")[1] + "_" + (dbHospNameIdMap.keySet().size() + 1);
-					jdbcTemplate.update(HOSPITALINSERTSQL, id,hospName,tenantid);
+					jdbcTemplate.update(callToReplaceSchemaPlaceHolder(HOSPITALINSERTSQL, tenantid), id,hospName,tenantid);
 					dbHospNameIdMap.put(hospName,id);
 				}
 				for (EgBirthDtl bdtl : uniqueHospList.get(hospName)) {
@@ -346,7 +357,7 @@ public class CommonRepository {
 				if(!dbHospNameIdMap.containsKey(hospName))
 				{
 					String id = tenantid.split("\\.")[1] + "_" + (dbHospNameIdMap.keySet().size() + 1);
-					jdbcTemplate.update(HOSPITALINSERTSQL, id,hospName,tenantid);
+					jdbcTemplate.update(callToReplaceSchemaPlaceHolder(HOSPITALINSERTSQL,tenantid), id,hospName,tenantid);
 					dbHospNameIdMap.put(hospName,id);
 				}
 				for (EgDeathDtl bdtl : uniqueHospList.get(hospName)) {
@@ -585,12 +596,12 @@ public class CommonRepository {
 			}
 			if(deathValidator.validateUniqueRegNo(deathDtl,importDeathWrapper) && deathValidator.validateImportFields(deathDtl,importDeathWrapper)){
 				try {
-					namedParameterJdbcTemplate.update(DEATHDTLSAVEQRY, getParametersForDeathDtl(deathDtl, auditDetails, true));
-					namedParameterJdbcTemplate.update(DEATHFATHERINFOSAVEQRY, getParametersForFatherInfo(deathDtl, auditDetails, true));
-					namedParameterJdbcTemplate.update(DEATHMOTHERINFOSAVEQRY, getParametersForMotherInfo(deathDtl, auditDetails, true));
-					namedParameterJdbcTemplate.update(DEATHSPOUSEINFOSAVEQRY, getParametersForSpouseInfo(deathDtl, auditDetails, true));
-					namedParameterJdbcTemplate.update(DEATHPERMADDRSAVEQRY, getParametersForPermAddr(deathDtl, auditDetails, true));
-					namedParameterJdbcTemplate.update(DEATHPRESENTADDRSAVEQRY, getParametersForPresentAddr(deathDtl, auditDetails, true));
+					namedParameterJdbcTemplate.update(callToReplaceSchemaPlaceHolder(DEATHDTLSAVEQRY, deathDtl.getTenantid()), getParametersForDeathDtl(deathDtl, auditDetails, true));
+					namedParameterJdbcTemplate.update(callToReplaceSchemaPlaceHolder(DEATHFATHERINFOSAVEQRY, deathDtl.getTenantid()), getParametersForFatherInfo(deathDtl, auditDetails, true));
+					namedParameterJdbcTemplate.update(callToReplaceSchemaPlaceHolder(DEATHMOTHERINFOSAVEQRY, deathDtl.getTenantid()), getParametersForMotherInfo(deathDtl, auditDetails, true));
+					namedParameterJdbcTemplate.update(callToReplaceSchemaPlaceHolder(DEATHSPOUSEINFOSAVEQRY, deathDtl.getTenantid()), getParametersForSpouseInfo(deathDtl, auditDetails, true));
+					namedParameterJdbcTemplate.update(callToReplaceSchemaPlaceHolder(DEATHPERMADDRSAVEQRY, deathDtl.getTenantid()), getParametersForPermAddr(deathDtl, auditDetails, true));
+					namedParameterJdbcTemplate.update(callToReplaceSchemaPlaceHolder(DEATHPRESENTADDRSAVEQRY,deathDtl.getTenantid()), getParametersForPresentAddr(deathDtl, auditDetails, true));
 					finalCount++;
 				}
 				catch (Exception e) {
@@ -599,7 +610,7 @@ public class CommonRepository {
 					Map<String, String> params = new HashMap<>();
 					params.put("tenantid", deathDtl.getTenantid());
 					params.put("registrationno", deathDtl.getRegistrationno());
-					namedParameterJdbcTemplate.update(DEATHDTLDELETEQRY, params);
+					namedParameterJdbcTemplate.update(callToReplaceSchemaPlaceHolder(DEATHDTLDELETEQRY, deathDtl.getTenantid()), params);
 					e.printStackTrace();
 				}
 			}
@@ -872,11 +883,11 @@ public class CommonRepository {
 			}
 			if(birthValidator.validateImportFields(birthDtl,importBirthWrapper)){
 				try {
-					namedParameterJdbcTemplate.update(BIRTHDTLUPDATEQRY, getParametersForBirthDtl(birthDtl, auditDetails, false));
-					namedParameterJdbcTemplate.update(BIRTHFATHERINFOUPDATEQRY, getParametersForFatherInfo(birthDtl, auditDetails, false));
-					namedParameterJdbcTemplate.update(BIRTHMOTHERINFOUPDATEQRY, getParametersForMotherInfo(birthDtl, auditDetails, false));
-					namedParameterJdbcTemplate.update(BIRTHPERMADDRUPDATEQRY, getParametersForPermAddr(birthDtl, auditDetails, false));
-					namedParameterJdbcTemplate.update(BIRTHPRESENTADDRUPDATEQRY, getParametersForPresentAddr(birthDtl, auditDetails, false));
+					namedParameterJdbcTemplate.update(callToReplaceSchemaPlaceHolder(BIRTHDTLUPDATEQRY, birthDtl.getTenantid()), getParametersForBirthDtl(birthDtl, auditDetails, false));
+					namedParameterJdbcTemplate.update(callToReplaceSchemaPlaceHolder(BIRTHFATHERINFOUPDATEQRY, birthDtl.getTenantid()),getParametersForFatherInfo(birthDtl, auditDetails, false));
+					namedParameterJdbcTemplate.update(callToReplaceSchemaPlaceHolder(BIRTHMOTHERINFOUPDATEQRY, birthDtl.getTenantid()),getParametersForMotherInfo(birthDtl, auditDetails, false));
+					namedParameterJdbcTemplate.update(callToReplaceSchemaPlaceHolder(BIRTHPERMADDRUPDATEQRY, birthDtl.getTenantid()),getParametersForPermAddr(birthDtl, auditDetails, false));
+					namedParameterJdbcTemplate.update(callToReplaceSchemaPlaceHolder(BIRTHPRESENTADDRUPDATEQRY,birthDtl.getTenantid()), getParametersForPresentAddr(birthDtl, auditDetails, false));
 					finalCount++;
 				}
 				catch (Exception e) {
@@ -981,12 +992,12 @@ public class CommonRepository {
 			}
 			if(deathValidator.validateImportFields(deathDtl,importDeathWrapper)){
 				try {
-					namedParameterJdbcTemplate.update(DEATHDTLUPDATEQRY, getParametersForDeathDtl(deathDtl, auditDetails, false));
-					namedParameterJdbcTemplate.update(DEATHFATHERINFOUPDATEQRY, getParametersForFatherInfo(deathDtl, auditDetails, false));
-					namedParameterJdbcTemplate.update(DEATHMOTHERINFOUPDATEQRY, getParametersForMotherInfo(deathDtl, auditDetails, false));
-					namedParameterJdbcTemplate.update(DEATHSPOUSEINFOUPDATEQRY, getParametersForSpouseInfo(deathDtl, auditDetails, false));
-					namedParameterJdbcTemplate.update(DEATHPERMADDRUPDATEQRY, getParametersForPermAddr(deathDtl, auditDetails, false));
-					namedParameterJdbcTemplate.update(DEATHPRESENTADDRUPDATEQRY, getParametersForPresentAddr(deathDtl, auditDetails, false));
+					namedParameterJdbcTemplate.update(callToReplaceSchemaPlaceHolder(DEATHDTLUPDATEQRY, deathDtl.getTenantid()), getParametersForDeathDtl(deathDtl, auditDetails, false));
+					namedParameterJdbcTemplate.update(callToReplaceSchemaPlaceHolder(DEATHFATHERINFOUPDATEQRY, deathDtl.getTenantid()), getParametersForFatherInfo(deathDtl, auditDetails, false));
+					namedParameterJdbcTemplate.update(callToReplaceSchemaPlaceHolder(DEATHMOTHERINFOUPDATEQRY, deathDtl.getTenantid()), getParametersForMotherInfo(deathDtl, auditDetails, false));
+					namedParameterJdbcTemplate.update(callToReplaceSchemaPlaceHolder(DEATHSPOUSEINFOUPDATEQRY, deathDtl.getTenantid()), getParametersForSpouseInfo(deathDtl, auditDetails, false));
+					namedParameterJdbcTemplate.update(callToReplaceSchemaPlaceHolder(DEATHPERMADDRUPDATEQRY, deathDtl.getTenantid()), getParametersForPermAddr(deathDtl, auditDetails, false));
+					namedParameterJdbcTemplate.update(callToReplaceSchemaPlaceHolder(DEATHPRESENTADDRUPDATEQRY, deathDtl.getTenantid()), getParametersForPresentAddr(deathDtl, auditDetails, false));
 					finalCount++;
 				}
 				catch (Exception e) {
@@ -1012,6 +1023,17 @@ public class CommonRepository {
 			e.printStackTrace();
 		}
 		return importDeathWrapper;
+	}
+
+	public String callToReplaceSchemaPlaceHolder(String query, String tenantId){
+		try {
+			//TODO: Need to check with kavi if we need to do this or if its correct
+			query = centralInstanceUtil.replaceSchemaPlaceholder(query, tenantId);
+		} catch (InvalidTenantIdException e) {
+			throw new CustomException("WS_AS_TENANTID_ERROR",
+					"TenantId length is not sufficient to replace query schema in a multi state instance");
+		}
+		return query;
 	}
 
 }

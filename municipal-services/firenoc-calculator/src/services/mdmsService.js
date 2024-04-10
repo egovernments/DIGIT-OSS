@@ -2,7 +2,7 @@ import { httpRequest } from "../utils/api";
 import envVariables from "../envVariables";
 import { constants } from "../config/constants";
 
-export const mdmsData = async (requestInfo = {}, tenantId) => {
+export const mdmsData = async (requestInfo = {}, tenantId, header) => {
   var requestBody = {
     RequestInfo: requestInfo,
     MdmsCriteria: {
@@ -33,15 +33,30 @@ export const mdmsData = async (requestInfo = {}, tenantId) => {
       ]
     }
   };
+
+  let headers;
+  var isCentralInstance  = envVariables.IS_ENVIRONMENT_CENTRAL_INSTANCE;
+  if(typeof isCentralInstance =="string")
+    isCentralInstance = (isCentralInstance.toLowerCase() == "true");
+
+  if(isCentralInstance){
+    header['tenantId']=header.tenantid;
+  }
+  else
+    header['tenantId']=tenantId;
+
+  headers = header;
+
   var mdmsResponse = await httpRequest({
-    hostURL: envVariables.EGOV_MDMS_HOST,
+    hostURL: `${envVariables.EGOV_MDMS_HOST}`,
     endPoint: `${envVariables.EGOV_MDMS_SEARCH_ENDPOINT}`,
-    requestBody
+    requestBody,
+    headers
   });
   return mdmsResponse;
 };
 
-export const mdmsFiananceYear = async (requestInfo = {}, tenantId) => {
+export const mdmsFiananceYear = async (requestInfo = {}, tenantId, header) => {
   var requestBody = {
     RequestInfo: requestInfo,
     MdmsCriteria: {
@@ -59,10 +74,25 @@ export const mdmsFiananceYear = async (requestInfo = {}, tenantId) => {
       ]
     }
   };
+
+  let headers;
+  var isCentralInstance  = envVariables.IS_ENVIRONMENT_CENTRAL_INSTANCE;
+  if(typeof isCentralInstance =="string")
+    isCentralInstance = (isCentralInstance.toLowerCase() == "true");
+
+  if(isCentralInstance){
+    header['tenantId']=header.tenantid;
+  }
+  else
+    header['tenantId']=tenantId;
+
+  headers = header;
+
   var mdmsResponse = await httpRequest({
-    hostURL: envVariables.EGOV_MDMS_HOST,
+    hostURL: `${envVariables.EGOV_MDMS_HOST}`,
     endPoint: `${envVariables.EGOV_MDMS_SEARCH_ENDPOINT}`,
-    requestBody
+    requestBody,
+    headers
   });
   return mdmsResponse;
 };

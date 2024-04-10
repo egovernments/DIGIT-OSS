@@ -307,7 +307,7 @@ export const CollectPayment = (props) => {
   ];
 
   const getDefaultValues = () => ({
-    payerName: bill?.payerName || formState?.payerName || "",
+    payerName: ((bill?.payerName || formState?.payerName || "")?.trim()) || "",
   });
 
   const getFormConfig = () => {

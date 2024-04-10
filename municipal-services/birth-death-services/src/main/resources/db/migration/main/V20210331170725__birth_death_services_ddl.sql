@@ -1,4 +1,4 @@
-CREATE TABLE public.eg_death_dtls_audit
+CREATE TABLE eg_death_dtls_audit
 (
      operation char(1)  NOT NULL,
 	 stamp timestamp NOT NULL, 
@@ -48,7 +48,7 @@ CREATE TRIGGER eg_death_dtls_audit
 BEFORE UPDATE OR DELETE ON eg_death_dtls
     FOR EACH ROW EXECUTE PROCEDURE process_eg_death_dtls_audit();
 
-CREATE TABLE public.eg_death_father_info_audit
+CREATE TABLE eg_death_father_info_audit
 (
      operation char(1)  NOT NULL,
 	 stamp timestamp NOT NULL, 
@@ -85,7 +85,7 @@ BEFORE UPDATE OR DELETE ON eg_death_father_info
     FOR EACH ROW EXECUTE PROCEDURE process_eg_death_father_info_audit();
 	
 
-CREATE TABLE public.eg_death_mother_info_audit
+CREATE TABLE eg_death_mother_info_audit
 (
      operation char(1)  NOT NULL,
 	 stamp timestamp NOT NULL, 
@@ -122,7 +122,7 @@ BEFORE UPDATE OR DELETE ON eg_death_mother_info
     FOR EACH ROW EXECUTE PROCEDURE process_eg_death_mother_info_audit();
 	
 	
-CREATE TABLE public.eg_death_permaddr_audit
+CREATE TABLE eg_death_permaddr_audit
 (
      operation char(1)  NOT NULL,
 	 stamp timestamp NOT NULL, 
@@ -162,7 +162,7 @@ CREATE TRIGGER eg_death_permaddr_audit
 BEFORE UPDATE OR DELETE ON eg_death_permaddr
     FOR EACH ROW EXECUTE PROCEDURE process_eg_death_permaddr_audit();
 
-CREATE TABLE public.eg_death_presentaddr_audit
+CREATE TABLE eg_death_presentaddr_audit
 (
      operation char(1)  NOT NULL,
 	 stamp timestamp NOT NULL, 
@@ -202,7 +202,7 @@ CREATE TRIGGER eg_death_presentaddr_audit
 BEFORE UPDATE OR DELETE ON eg_death_presentaddr
     FOR EACH ROW EXECUTE PROCEDURE process_eg_death_presentaddr_audit();
 
-CREATE TABLE public.eg_death_spouse_info_audit
+CREATE TABLE eg_death_spouse_info_audit
 (
      operation char(1)  NOT NULL,
 	 stamp timestamp NOT NULL, 

@@ -224,7 +224,7 @@ public class SWConstants {
 					"connectionCategory", "connectionType", "documentType", "fileStoreId", "licenseNo"));
 
 	public static final String SUBMIT_APPLICATION_CONST = "SUBMIT_APPLICATION";
-	
+
 	public static final List<String> IGNORE_CLASS_ADDED = Collections.unmodifiableList(Arrays.asList("PlumberInfo"));
 	
 	public static final String PENDING_FOR_CONNECTION_ACTIVATION = "PENDING_FOR_CONNECTION_ACTIVATION";
@@ -245,7 +245,7 @@ public class SWConstants {
 	public static final int UPDATE_APPLICATION = 1;
 
 	public static final int MODIFY_CONNECTION = 2;
-	
+
 	public static final int DISCONNECT_CONNECTION =  3;
 
 	public static final String APPROVE_CONNECTION = "APPROVE_CONNECTION";
@@ -253,7 +253,7 @@ public class SWConstants {
 	public static final String NEW_SEWERAGE_CONNECTION ="NEW_SEWERAGE_CONNECTION";
 	public static final String MODIFY_SEWERAGE_CONNECTION = "MODIFY_SEWERAGE_CONNECTION";
 	public static final String DISCONNECT_SEWERAGE_CONNECTION = "DISCONNECT_SEWERAGE_CONNECTION";
-	
+
 	public static final String SEWERAGE_SERVICE_BUSINESS_ID = "SW";
 
 	public static final String SEWERAGE_SERVICE_ONE_TIME_FEE_BUSINESS_ID = "SW.ONE_TIME_FEE";
@@ -292,7 +292,14 @@ public class SWConstants {
 	public static final String CHANNEL_LIST = "channelList";
 
 	public static final String CHANNEL = "Channel";
-	
+
+	public static String SCHEMA_REPLACE_STRING = "{schema}";
+
+	public static final String TENANTID_MDC_STRING = "TENANTID";
+
+	public static final List<String> TOPICS_TO_AVOID = Collections.unmodifiableList(Arrays.asList("editnotificationsewerage", "sw-filestoreids-process"));
+
+
 	public static final String ACTIVE = "ACTIVE";
 
 	public static final String EXECUTE_DISCONNECTION = "EXECUTE_DISCONNECTION";
@@ -315,7 +322,6 @@ public class SWConstants {
 	public static final String WNS_OWNER_PLAIN_DECRYPTION_MODEL = "WnSConnectionOwnerDecrypDisabled";
 
 	public static final String WNS_PLUMBER_PLAIN_DECRYPTION_MODEL = "WnSConnectionPlumberDecrypDisabled";
-
 
 	public static final String WNS_PLUMBER_ENCRYPTION_MODEL = "WnSConnectionPlumber";
 

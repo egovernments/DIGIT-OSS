@@ -20,7 +20,8 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
-import static org.egov.waterconnection.constants.WCConstants.*;
+import org.slf4j.MDC;
+import static org.egov.waterconnection.constants.WCConstants.TENANTID_MDC_STRING;
 
 @Slf4j
 @Service
@@ -44,10 +45,15 @@ public class EditWorkFlowNotificationConsumer {
 	 * @param record Received Topic Record
 	 * @param topic Name of the Topic
 	 */
-	@KafkaListener(topics = { "${ws.editnotification.topic}"})
+	@KafkaListener(topicPattern = "${ws.kafka.edit.notification.topic.pattern}")
 	public void listen(final HashMap<String, Object> record, @Header(KafkaHeaders.RECEIVED_TOPIC) String topic) {
 		try {
 			WaterConnectionRequest waterConnectionRequest = mapper.convertValue(record, WaterConnectionRequest.class);
+			String tenantId = waterConnectionRequest.getWaterConnection().getTenantId();
+
+			// Adding in MDC so that tracer can add it in header
+			MDC.put(TENANTID_MDC_STRING, tenantId);
+
 			WaterConnection waterConnection = waterConnectionRequest.getWaterConnection();
 			SearchCriteria criteria = SearchCriteria.builder().applicationNumber(Collections.singleton(waterConnection.getApplicationNo()))
 					.tenantId(waterConnectionRequest.getWaterConnection().getTenantId()).isInternalCall(Boolean.TRUE).build();

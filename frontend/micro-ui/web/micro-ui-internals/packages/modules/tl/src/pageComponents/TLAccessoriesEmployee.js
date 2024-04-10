@@ -48,7 +48,7 @@ const TLAccessoriesEmployee = ({ config, onSelect, userType, formData, setError,
     };
 
     useEffect(() => {
-        const data = accessoriesList.map((e) => {
+        const data = accessoriesList?.map((e) => {
             return e;
         });
         onSelect(config?.key, data);
@@ -57,13 +57,13 @@ const TLAccessoriesEmployee = ({ config, onSelect, userType, formData, setError,
     useEffect(() => {
         if (formData?.accessories?.length > 0 && !isRenewal) {
           let flag = true;
-          accessoriesList.map(data => {
-            Object.keys(data).map(dta => {
+          accessoriesList?.map(data => {
+            Object.keys(data)?.map(dta => {
               if(dta != "key" &&  data[dta]) flag = false;
             });
           });
-          formData?.accessories.map(data => {
-            Object.keys(data).map(dta => {
+          formData?.accessories?.map(data => {
+            Object.keys(data)?.map(dta => {
               if (dta != "key" && data[dta] != undefined && data[data] != "" && data[data] != null) {
     
               } else {
@@ -109,7 +109,7 @@ const TLAccessoriesEmployee = ({ config, onSelect, userType, formData, setError,
 
     return (
         <React.Fragment>
-            {accessoriesList.map((accessor, index) => (
+            {accessoriesList?.map((accessor, index) => (
                 <AccessoriersForm key={accessor.key} index={index} accessor={accessor} {...commonProps} />
             ))}
             <LinkButton label={`${t("TL_NEW_TRADE_DETAILS_NEW_ACCESSORIES")}`} onClick={addAccessories} style={{ color: "#F47738", width: "fit-content" }} />
@@ -204,7 +204,7 @@ const AccessoriersForm = (_props) => {
             );
             structureTypes = commonTransform(
                 {
-                    StructureType: structureTypes.map(item => {
+                    StructureType: structureTypes?.map(item => {
                         return { code: item.structureType, active: true };
                     })
                 },
@@ -214,11 +214,11 @@ const AccessoriersForm = (_props) => {
                 processedData.tradeTypeData,
                 "licenseType"
             );
-            licenseTypes = licenseTypes.map(item => {
+            licenseTypes = licenseTypes?.map(item => {
                 return { code: item.licenseType, active: true };
             });
 
-            accessories.forEach(data => {
+            accessories?.forEach(data => {
                 data.i18nKey = t(`TRADELICENSE_ACCESSORIESCATEGORY_${stringReplaceAll(data?.code?.toUpperCase(), "-", "_")}`);
             });
 
@@ -235,18 +235,18 @@ const AccessoriersForm = (_props) => {
             formValue.uomValue = "";
         }
         const part = {};
-        keys.forEach((key) => (part[key] = accessor[key]));
+        keys?.forEach((key) => (part[key] = accessor[key]));
 
         let _ownerType = isIndividualTypeOwner ? {} : { ownerType: { code: "NONE" } };
 
         if (!_.isEqual(formValue, part)) {
-            Object.keys(formValue).map(data => {
+            Object.keys(formValue)?.map(data => {
                 if (data != "key" && formValue[data] != undefined && formValue[data] != "" && formValue[data] != null && !isErrors) {
                   setIsErrors(true); 
                 }
               });
 
-            setAccessoriesList((prev) => prev.map((o) => {
+            setAccessoriesList((prev) => prev?.map((o) => {
                 return (o.key && o.key === accessor.key ? { ...o, ...formValue, ..._ownerType } : { ...o })
             }));
             trigger();

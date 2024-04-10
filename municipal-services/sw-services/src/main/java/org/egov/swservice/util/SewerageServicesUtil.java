@@ -99,6 +99,10 @@ public class SewerageServicesUtil {
 			propertyCriteria.setTenantId(sewerageConnectionRequest.getSewerageConnection().getTenantId());
 			propertyCriteria.setLocality(addDetail.get(localityCode).toString());
 		}
+		if (sewerageConnectionRequest.getRequestInfo().getUserInfo() != null
+				&& "CITIZEN".equalsIgnoreCase(sewerageConnectionRequest.getRequestInfo().getUserInfo().getType())) {
+			propertyCriteria.setTenantId(sewerageConnectionRequest.getSewerageConnection().getTenantId());
+		}
 		Object result = serviceRequestRepository.fetchResult(
 				getPropertyURL(propertyCriteria),
 				RequestInfoWrapper.builder().requestInfo(sewerageConnectionRequest.getRequestInfo()).build());
@@ -238,7 +242,7 @@ public class SewerageServicesUtil {
 	public String getShortenedURL(String actualURL) {
 		JSONObject obj = new JSONObject();
 		obj.put(URL, actualURL);
-		String url = config.getNotificationUrl() + config.getShortenerURL();
+		String url = config.getUrlShortnerHost() + config.getShortenerURL();
 
 		Object response = serviceRequestRepository.getShortningURL(new StringBuilder(url), obj);
 		return response.toString();

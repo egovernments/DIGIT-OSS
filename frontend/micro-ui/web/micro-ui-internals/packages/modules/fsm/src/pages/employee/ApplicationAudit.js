@@ -32,7 +32,6 @@ const ApplicationAudit = ({ parentRoute }) => {
   const uuids = auditResponse?.fsmAudit?.map((e) => e.who);
 
   const userList = Digit.Hooks.useUserSearch(
-    // tenantId.includes(".") ? tenantId.split(".")[0] : tenantId,
     null,
     { uuid: uuids },
     {},

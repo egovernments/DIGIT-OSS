@@ -19,7 +19,7 @@ import ReactTooltip from 'react-tooltip';
 import { useTranslation } from 'react-i18next';
 
 const NavItem = props => {
-  let { label, icon, to, children } = props.item;
+  let { label, icon, to, children } = props?.item;
   const { t } = useTranslation();
   const IconsObject = {
     home: <HomeIcon />,
@@ -48,7 +48,7 @@ const NavItem = props => {
   const trimModuleName = t(appendTranslate?.length > 20 ? appendTranslate.substring(0, 20) + "..." : appendTranslate);
 
   if (children) {
-    return <NavItemHeader item={props.item} />;
+    return <NavItemHeader item={props?.item} />;
   }
 
   return (

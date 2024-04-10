@@ -96,6 +96,7 @@ public class PropertyService {
 
 		propertyValidator.validateCreateRequest(request);
 		enrichmentService.enrichCreateRequest(request);
+		String tenantId = request.getProperty().getTenantId();
 		userService.createUser(request);
 		if (config.getIsWorkflowEnabled()
 				&& !request.getProperty().getCreationReason().equals(CreationReason.DATA_UPLOAD)) {
@@ -106,19 +107,11 @@ public class PropertyService {
 			request.getProperty().setStatus(Status.ACTIVE);
 		}
 
-		/* Fix this.
-		 * For FUZZY-search, This code to be un-commented when privacy is enabled
-		 
-		//Push PLAIN data to fuzzy search index
-		producer.push(config.getSavePropertyFuzzyTopic(), request);
-		*
-		*/
-		//Push data after encryption
 		producer.pushAfterEncrytpion(config.getSavePropertyTopic(), request);
 		request.getProperty().setWorkflow(null);
 
 		/* decrypt here */
-		return encryptionDecryptionUtil.decryptObject(request.getProperty(), PTConstants.PROPERTY_MODEL, Property.class, request.getRequestInfo());
+		return encryptionDecryptionUtil.decryptObject(request.getProperty(), "Property", Property.class, request.getRequestInfo());
 		//return request.getProperty();
 	}
 
@@ -153,21 +146,8 @@ public class PropertyService {
 
 		request.getProperty().setWorkflow(null);
 
-		//Push PLAIN data to fuzzy search index
-		PropertyRequest fuzzyPropertyRequest = new PropertyRequest(request.getRequestInfo(),request.getProperty());
-		fuzzyPropertyRequest.setProperty(encryptionDecryptionUtil.decryptObject(request.getProperty(), PTConstants.PROPERTY_DECRYPT_MODEL,
-				Property.class, request.getRequestInfo()));
-
-		/* Fix this.
-		 * For FUZZY-search, This code to be un-commented when privacy is enabled
-		 
-		//Push PLAIN data to fuzzy search index
-		producer.push(config.getSavePropertyFuzzyTopic(), fuzzyPropertyRequest);
-		*
-		*/
-
 		/* decrypt here */
-		return encryptionDecryptionUtil.decryptObject(request.getProperty(), PTConstants.PROPERTY_MODEL, Property.class, request.getRequestInfo());
+		return encryptionDecryptionUtil.decryptObject(request.getProperty(), "Property", Property.class, request.getRequestInfo());
 	}
 	
 	/*
@@ -221,6 +201,7 @@ public class PropertyService {
 	 */
 	private void processPropertyUpdate(PropertyRequest request, Property propertyFromSearch) {
 
+		String tenantId = request.getProperty().getTenantId();
 		propertyValidator.validateRequestForUpdate(request, propertyFromSearch);
 		if (CreationReason.CREATE.equals(request.getProperty().getCreationReason())) {
 			userService.createUser(request);
@@ -251,7 +232,7 @@ public class PropertyService {
 					&& !propertyFromSearch.getStatus().equals(Status.INWORKFLOW)) {
 
 				propertyFromSearch.setStatus(Status.INACTIVE);
-				producer.pushAfterEncrytpion(config.getUpdatePropertyTopic(), OldPropertyRequest);
+				producer.push(tenantId, config.getUpdatePropertyTopic(), OldPropertyRequest);
 				util.saveOldUuidToRequest(request, propertyFromSearch.getId());
 				producer.pushAfterEncrytpion(config.getSavePropertyTopic(), request);
 
@@ -301,6 +282,7 @@ public class PropertyService {
 	 */
 	private void processOwnerMutation(PropertyRequest request, Property propertyFromSearch) {
 
+		String tenantId = request.getProperty().getTenantId();
 		propertyValidator.validateMutation(request, propertyFromSearch);
 		userService.createUserForMutation(request, !propertyFromSearch.getStatus().equals(Status.INWORKFLOW));
 		enrichmentService.enrichAssignes(request.getProperty());
@@ -328,7 +310,7 @@ public class PropertyService {
 					&& !propertyFromSearch.getStatus().equals(Status.INWORKFLOW)) {
 
 				propertyFromSearch.setStatus(Status.INACTIVE);
-				producer.pushAfterEncrytpion(config.getUpdatePropertyTopic(), oldPropertyRequest);
+				producer.push(tenantId, config.getUpdatePropertyTopic(), oldPropertyRequest);
 
 				util.saveOldUuidToRequest(request, propertyFromSearch.getId());
 				/* save new record */
@@ -356,6 +338,7 @@ public class PropertyService {
 
 	private void terminateWorkflowAndReInstatePreviousRecord(PropertyRequest request, Property propertyFromSearch) {
 
+		String tenantId = request.getProperty().getTenantId();
 		/* current record being rejected */
 		producer.pushAfterEncrytpion(config.getUpdatePropertyTopic(), request);
 
@@ -377,7 +360,6 @@ public class PropertyService {
 		previousPropertyToBeReInstated.setAuditDetails(util.getAuditDetails(request.getRequestInfo().getUserInfo().getUuid().toString(), true));
 		previousPropertyToBeReInstated.setStatus(Status.ACTIVE);
 		request.setProperty(previousPropertyToBeReInstated);
-
 		producer.pushAfterEncrytpion(config.getUpdatePropertyTopic(), request);
 	}
 
@@ -392,7 +374,7 @@ public class PropertyService {
 		List<Property> properties;
 		/* encrypt here */
 		if(!criteria.getIsRequestForOldDataEncryption())
-			criteria = encryptionDecryptionUtil.encryptObject(criteria, PTConstants.PROPERTY_MODEL, PropertyCriteria.class);
+			criteria = encryptionDecryptionUtil.encryptObject(criteria, "Property", PropertyCriteria.class);
 
 		/*
 		 * throw error if audit request is with no proeprty id or multiple propertyids
@@ -403,34 +385,35 @@ public class PropertyService {
 			throw new CustomException("EG_PT_PROPERTY_AUDIT_ERROR", "Audit can only be provided for a single propertyId");
 		}
 
-		if (criteria.getDoorNo() != null || criteria.getName() != null || criteria.getOldPropertyId() != null) {
-			properties = fuzzySearchService.getProperties(requestInfo, criteria);
-		} else {
-			if (criteria.getMobileNumber() != null || criteria.getName() != null || criteria.getOwnerIds() != null) {
-
-				/* converts owner information to associated property ids */
-				Boolean shouldReturnEmptyList = repository.enrichCriteriaFromUser(criteria, requestInfo);
-
-				if (shouldReturnEmptyList)
-					return Collections.emptyList();
-
-				properties = repository.getPropertiesWithOwnerInfo(criteria, requestInfo, false);
-				filterPropertiesForUser(properties, criteria.getOwnerIds());
-			} else {
-				properties = repository.getPropertiesWithOwnerInfo(criteria, requestInfo, false);
-			}
-
-			properties.forEach(property -> {
-				enrichmentService.enrichBoundary(property, requestInfo);
-			});
+		if(criteria.getDoorNo()!=null || criteria.getName()!=null || criteria.getOldPropertyId()!=null){
+			return fuzzySearchService.getProperties(requestInfo, criteria);
 		}
+
+		if (criteria.getMobileNumber() != null || criteria.getName() != null || criteria.getOwnerIds() != null) {
+
+			/* converts owner information to associated property ids */
+			Boolean shouldReturnEmptyList = repository.enrichCriteriaFromUser(criteria, requestInfo);
+
+			if (shouldReturnEmptyList)
+				return Collections.emptyList();
+
+			properties = repository.getPropertiesWithOwnerInfo(criteria, requestInfo, false);
+			filterPropertiesForUser(properties, criteria.getOwnerIds());
+		} else {
+			properties = repository.getPropertiesWithOwnerInfo(criteria, requestInfo, false);
+		}
+
+		properties.forEach(property -> {
+			enrichmentService.enrichBoundary(property, requestInfo);
+		});
 
 		/* Decrypt here */
 		 if(criteria.getIsSearchInternal())
-			return encryptionDecryptionUtil.decryptObject(properties, PTConstants.PROPERTY_DECRYPT_MODEL, Property.class, requestInfo);
+			return encryptionDecryptionUtil.decryptObject(properties, "PropertyDecrypDisabled", Property.class, requestInfo);
 		else if(!criteria.getIsRequestForOldDataEncryption())
-			return encryptionDecryptionUtil.decryptObject(properties, PTConstants.PROPERTY_MODEL, Property.class, requestInfo);
+			return encryptionDecryptionUtil.decryptObject(properties, "Property", Property.class, requestInfo);
 
+		
 		return properties;
 	}
 
@@ -464,7 +447,12 @@ public class PropertyService {
 
 
 	List<Property> getPropertiesPlainSearch(PropertyCriteria criteria, RequestInfo requestInfo) {
-		
+		String schemaTenantId = null;
+		if(criteria.getTenantId()!=null){
+			schemaTenantId = criteria.getTenantId();
+		} else if (!CollectionUtils.isEmpty(criteria.getTenantIds())) {
+			schemaTenantId = criteria.getTenantIds().iterator().next();
+		}
 		if (criteria.getLimit() != null && criteria.getLimit() > config.getMaxSearchLimit())
 			criteria.setLimit(config.getMaxSearchLimit());
 		if(criteria.getLimit()==null)
@@ -478,17 +466,14 @@ public class PropertyService {
 			if (criteria.getPropertyIds() != null)
 				propertyCriteria.setPropertyIds(criteria.getPropertyIds());
 
-		} else if(criteria.getIsRequestForOldDataEncryption()){
-			propertyCriteria.setTenantIds(criteria.getTenantIds());
-		}
-		else {
+		} else {
 			List<String> uuids = repository.fetchIds(criteria, true);
 			if (uuids.isEmpty())
 				return Collections.emptyList();
 			propertyCriteria.setUuids(new HashSet<>(uuids));
 		}
 		propertyCriteria.setLimit(criteria.getLimit());
-		List<Property> properties = repository.getPropertiesForBulkSearch(propertyCriteria, true);
+		List<Property> properties = repository.getPropertiesForBulkSearch(propertyCriteria, schemaTenantId, true);
 		if(properties.isEmpty())
 			return Collections.emptyList();
 		Set<String> ownerIds = properties.stream().map(Property::getOwners).flatMap(List::stream)
@@ -527,9 +512,10 @@ public class PropertyService {
 		//enrichmentService.enrichUpdateRequest(request, propertyFromSearch);
 		util.mergeAdditionalDetails(request, propertyFromSearch);
 		
-		producer.pushAfterEncrytpion(config.getUpdatePropertyTopic(), request);
+		producer.push(request.getProperty().getTenantId() , config.getUpdatePropertyTopic(), request);
 		
 		request.getProperty().setWorkflow(null);
+		
 		
 		return request.getProperty();
 	}

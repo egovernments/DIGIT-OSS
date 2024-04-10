@@ -7,9 +7,11 @@ import java.util.List;
 import java.util.Optional;
 
 import org.egov.common.contract.request.RequestInfo;
+import org.egov.common.utils.MultiStateInstanceUtil;
 import org.egov.tracer.model.CustomException;
 import org.egov.waterconnection.config.WSConfiguration;
 import org.egov.waterconnection.constants.WCConstants;
+import org.egov.waterconnection.util.NotificationUtil;
 import org.egov.waterconnection.web.models.Calculation;
 import org.egov.waterconnection.web.models.CalculationCriteria;
 import org.egov.waterconnection.web.models.CalculationReq;
@@ -57,6 +59,12 @@ public class PdfFileStoreService {
 	
 	@Autowired
 	private ValidateProperty validateProperty;
+
+	@Autowired
+	private NotificationUtil notificationUtil;
+
+	@Autowired
+	private MultiStateInstanceUtil centralInstanceUtil;
 
 	String tenantIdReplacer = "$tenantId";
 	String fileStoreIdsReplacer = "$.filestoreIds";
@@ -121,8 +129,11 @@ public class PdfFileStoreService {
 					waterConnectionRequest.getRequestInfo(),applicationStatus, config.getBusinessServiceValue());
 			waterObject.put(sla, slaDays.divide(BigDecimal.valueOf(WCConstants.DAYS_CONST)));
 			waterObject.put(slaDate, slaDays.add(new BigDecimal(System.currentTimeMillis())));
-			String[] tenantDetails = property.getTenantId().split("\\."); 
-			String tenantId = tenantDetails[0];
+			String[] tenantDetails = property.getTenantId().split("\\.");
+			String tenantId = property.getTenantId();
+			if(tenantDetails.length > centralInstanceUtil.getStateLevelTenantIdLength()){
+				tenantId = tenantDetails[0] + "." + tenantDetails[1];
+			}
 			if(tenantDetails.length > 1)
 			{
 				waterObject.put(tenantName, tenantDetails[1].toUpperCase());

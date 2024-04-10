@@ -102,7 +102,7 @@ public class UnmaskingUtil {
 
 	private void updateMaskedOwnerInfoWithUnmaskedFields(OwnerInfo ownerInfo, OwnerInfo unmaskedUser) {
 
-		if (!StringUtils.isEmpty(ownerInfo.getFatherOrHusbandName()) && ownerInfo.getFatherOrHusbandName().contains("*")) {
+		if (ownerInfo.getFatherOrHusbandName().contains("*")) {
 			ownerInfo.setFatherOrHusbandName(unmaskedUser.getFatherOrHusbandName());
 		}
 		if (ownerInfo.getMobileNumber().contains("*")) {
@@ -118,13 +118,13 @@ public class UnmaskingUtil {
 				&& ownerInfo.getCorrespondenceAddress().contains("*")) {
 			ownerInfo.setCorrespondenceAddress(unmaskedUser.getCorrespondenceAddress());
 		}
-		if (!StringUtils.isEmpty(ownerInfo.getUserName()) && ownerInfo.getUserName().contains("*")) {
+		if (ownerInfo.getUserName().contains("*")) {
 			ownerInfo.setUserName(unmaskedUser.getUserName());
 		}
-		if (!StringUtils.isEmpty(ownerInfo.getName()) &&  ownerInfo.getName().contains("*")) {
+		if (ownerInfo.getName().contains("*")) {
 			ownerInfo.setName(unmaskedUser.getName());
 		}
-		if (!StringUtils.isEmpty(ownerInfo.getGender()) && ownerInfo.getGender().contains("*")) {
+		if (ownerInfo.getGender().contains("*")) {
 			ownerInfo.setGender(unmaskedUser.getGender());
 		}
 	}

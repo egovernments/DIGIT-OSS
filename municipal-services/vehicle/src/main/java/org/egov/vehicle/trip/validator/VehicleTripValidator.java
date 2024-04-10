@@ -79,12 +79,6 @@ public class VehicleTripValidator {
 
 			} else {
 
-				if (vehicleTrip.getTripStartTime() <= 0 || vehicleTrip.getTripEndTime() <= 0
-						|| vehicleTrip.getTripStartTime() > vehicleTrip.getTripEndTime()) {
-					throw new CustomException(VehicleTripConstants.INVALID_TRIDETAIL_ERROR,
-							"Trip Start and End Time are invalid: ");
-				}
-
 				if (vehicleTrip.getVolumeCarried() == null || vehicleTrip.getVolumeCarried() <= 0) {
 					throw new CustomException(VehicleTripConstants.INVALID_VOLUME, "Invalid volume carried");
 				}
@@ -273,8 +267,6 @@ public class VehicleTripValidator {
 			throw new CustomException(VehicleTripConstants.INVALID_TRIP_ENDTIME, "Invalid Trip end time");
 		}
 
-		validateTripInOutTime(vehicleTrip, vehicleTrip.getTripDetails().get(0));
-
 		if (VehicleTripConstants.FSM_VEHICLE_TRIP_BUSINESSSERVICE.equalsIgnoreCase(vehicleTrip.getBusinessService())) {
 			PlantMapping plantMapping = vehicleTripFSMService.getPlantMapping(request.getRequestInfo(),
 					vehicleTrip.getTenantId(), request.getRequestInfo().getUserInfo().getUuid());
@@ -396,16 +388,6 @@ public class VehicleTripValidator {
 
 		VehicleTripResponse response = vehicleTripRepository.getVehicleLogData(tripSearchCriteria);
 
-		if (response.getVehicleTrip() != null && !CollectionUtils.isEmpty(response.getVehicleTrip())) {
-			response.getVehicleTrip().forEach(vehicletrip -> {
-				if (requestVehicleTrip.getTripStartTime() <= vehicletrip.getTripEndTime()) {
-					throw new CustomException(VehicleTripConstants.INVALID_TRIDETAIL_ERROR,
-							"Current Trip Start time: " + requestVehicleTrip.getTripStartTime()
-									+ "should be after the previous trip end time : "
-									+ requestVehicleTrip.getTripEndTime());
-				}
-			});
-		}
 	}
 
 	public void validateSearch(VehicleTripSearchCriteria criteria) {

@@ -58,7 +58,6 @@ const NewBuildingPermit = () => {
   };
   const handleSkip = () => {};
 
-  // const state = tenantId.split(".")[0];
   let config = [];
   newConfig = newConfig?.BuildingPermitConfig ? newConfig?.BuildingPermitConfig : newConfigBPA;
   newConfig.forEach((obj) => {

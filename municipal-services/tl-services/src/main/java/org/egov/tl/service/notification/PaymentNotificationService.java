@@ -19,6 +19,7 @@ import org.egov.tl.web.models.collection.PaymentDetail;
 import org.egov.tl.web.models.collection.PaymentRequest;
 import org.egov.tracer.model.CustomException;
 import org.json.JSONObject;
+import org.slf4j.MDC;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
@@ -105,6 +106,9 @@ public class PaymentNotificationService {
             Map<String, Object> info = documentContext.read("$.RequestInfo");
             RequestInfo requestInfo = mapper.convertValue(info, RequestInfo.class);
 
+            // Adding in MDC so that tracer can add it in header
+            MDC.put(TENANTID_MDC_STRING, valMap.get(tenantIdKey));
+
             if(valMap.get(businessServiceKey).equalsIgnoreCase(config.getBusinessServiceTL())||valMap.get(businessServiceKey).equalsIgnoreCase(config.getBusinessServiceBPA())){
                 TradeLicense license = getTradeLicenseFromConsumerCode(valMap.get(tenantIdKey),valMap.get(consumerCodeKey),
                         requestInfo,valMap.get(businessServiceKey));
@@ -121,24 +125,16 @@ public class PaymentNotificationService {
                         if (applicationType.equals(APPLICATION_TYPE_RENEWAL)) {
                             String localizationMessages = tlRenewalNotificationUtil.getLocalizationMessages(license.getTenantId(), requestInfo);
                             List<SMSRequest> smsRequests = getSMSRequests(license, valMap, localizationMessages);
-                            util.sendSMS(smsRequests, config.getIsTLSMSEnabled());
+                            util.sendSMS(smsRequests, config.getIsTLSMSEnabled(), valMap.get(tenantIdKey));
+                        }
+                        else{
+                            String localizationMessages = util.getLocalizationMessages(license.getTenantId(), requestInfo);
+                            List<SMSRequest> smsRequests = getSMSRequests(license, valMap, localizationMessages);
+                            util.sendSMS(smsRequests, config.getIsTLSMSEnabled(), valMap.get(tenantIdKey));
                             //message = tlRenewalNotificationUtil.getOwnerPaymentMsg(license,valMap,localizationMessages);
 
                             // Event Flow
                             String message = tlRenewalNotificationUtil.getOwnerPaymentMsg(license,valMap,localizationMessages);
-                            log.info("Message to be sent: ",message);
-                            TradeLicenseRequest tradeLicenseRequest=TradeLicenseRequest.builder().requestInfo(requestInfo).licenses(Collections.singletonList(license)).build();
-                            EventRequest eventRequest = bpaNotificationUtil.getEventsForBPA(tradeLicenseRequest,true, message,receiptno, USREVENTS_EVENT_NAME);
-                            if(null != eventRequest)
-                                util.sendEventNotification(eventRequest);
-
-                        } else {
-                            String localizationMessages = util.getLocalizationMessages(license.getTenantId(), requestInfo);
-                            List<SMSRequest> smsRequests = getSMSRequests(license, valMap, localizationMessages);
-                            util.sendSMS(smsRequests, config.getIsTLSMSEnabled());
-
-                            // Event Flow
-                            String message = util.getOwnerPaymentMsg(license,valMap,localizationMessages);
                             log.info("Message to be sent: ",message);
                             TradeLicenseRequest tradeLicenseRequest=TradeLicenseRequest.builder().requestInfo(requestInfo).licenses(Collections.singletonList(license)).build();
                             EventRequest eventRequest = bpaNotificationUtil.getEventsForBPA(tradeLicenseRequest,true, message,receiptno, USREVENTS_EVENT_NAME);
@@ -168,7 +164,7 @@ public class PaymentNotificationService {
 
                                 List<SMSRequest> smsList = new ArrayList<>();
                                 smsList.addAll(bpaNotificationUtil.createSMSRequestForBPA(message, mobileNumberToOwner,license,receiptno));
-                                util.sendSMS(smsList, config.getIsBPASMSEnabled());
+                                util.sendSMS(smsList, config.getIsBPASMSEnabled(),valMap.get(tenantIdKey));
                             }
 
                         if (!CollectionUtils.isEmpty(configuredChannelNames) && configuredChannelNames.contains(CHANNEL_NAME_EVENT))
@@ -200,7 +196,7 @@ public class PaymentNotificationService {
                                     List<EmailRequest> emailRequestsForBPA = new LinkedList<>();
                                     emailRequestsForBPA.addAll(bpaNotificationUtil.createEmailRequestForBPA(requestInfo,message, mobileNumberToEmail,license,receiptno));
                                     if (!CollectionUtils.isEmpty(emailRequestsForBPA))
-                                        util.sendEmail(emailRequestsForBPA, config.getIsEmailNotificationEnabledForBPA());
+                                        util.sendEmail(emailRequestsForBPA, config.getIsEmailNotificationEnabledForBPA(), tenantId);
 
                         }
                         break;

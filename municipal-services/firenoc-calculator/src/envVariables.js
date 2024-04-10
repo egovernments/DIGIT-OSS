@@ -75,7 +75,12 @@ const envVariables = {
   TRACER_ENABLE_REQUEST_LOGGING:
     process.env.TRACER_ENABLE_REQUEST_LOGGING || false,
   HTTP_CLIENT_DETAILED_LOGGING_ENABLED:
-    process.env.HTTP_CLIENT_DETAILED_LOGGING_ENABLED || false
+    process.env.HTTP_CLIENT_DETAILED_LOGGING_ENABLED || false,
+
+  // default state // IDEA:
+  EGOV_DEFAULT_STATE_ID: process.env.EGOV_DEFAULT_STATE_ID || "pb",
+  STATE_LEVEL_TENANTID_LENGTH: process.env.STATE_LEVEL_TENANTID_LENGTH || 1,
+  IS_ENVIRONMENT_CENTRAL_INSTANCE: process.env.IS_ENVIRONMENT_CENTRAL_INSTANCE || false
 };
 
 export default envVariables;

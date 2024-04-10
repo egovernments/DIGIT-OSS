@@ -3,6 +3,7 @@ package org.egov.echallan.util;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jayway.jsonpath.*;
 
+import org.egov.tracer.model.CustomException;
 import org.egov.echallan.model.*;
 import org.egov.echallan.producer.Producer;
 import org.egov.echallan.web.models.collection.PaymentResponse;
@@ -22,6 +23,7 @@ import org.egov.echallan.repository.ServiceRequestRepository;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.util.ObjectUtils;
 import org.egov.echallan.util.ChallanConstants.*;
 
 
@@ -48,7 +50,7 @@ public class NotificationUtil {
 	public static final String LOCALIZATION_TEMPLATEID_JSONPATH = "$.messages[0].templateId";
 	public static final String MSG_KEY="message";
 	public static final String TEMPLATE_KEY="templateId";
-//	private static final String CREATE_CODE = "echallan.create.sms";
+	//	private static final String CREATE_CODE = "echallan.create.sms";
 //	private static final String UPDATE_CODE = "echallan.update.sms";
 //	private static final String CANCEL_CODE = "echallan.cancel.sms";
 	private ChallanConfiguration config;
@@ -64,7 +66,7 @@ public class NotificationUtil {
 
 	@Autowired
 	public NotificationUtil(ChallanConfiguration config, ServiceRequestRepository serviceRequestRepository,
-			RestTemplate restTemplate, Producer producer) {
+							RestTemplate restTemplate, Producer producer) {
 		this.config = config;
 		this.serviceRequestRepository = serviceRequestRepository;
 		this.restTemplate = restTemplate;
@@ -72,7 +74,7 @@ public class NotificationUtil {
 	}
 
 
-	
+
 	private String getReplacedMsg(RequestInfo requestInfo,Challan challan, String message) {
 		if (challan.getApplicationStatus() != Challan.StatusEnum.CANCELLED) {
 			String billDetails = getBillDetails(requestInfo, challan);
@@ -82,7 +84,7 @@ public class NotificationUtil {
 		}
 
 		message = message.replace("{User}",challan.getCitizen().getName());
-        message = message.replace("{challanno}", challan.getChallanNo());
+		message = message.replace("{challanno}", challan.getChallanNo());
 		if(message.contains("{ULB}"))
 			message = message.replace("{ULB}", capitalize(challan.getTenantId().split("\\.")[1]));
 
@@ -90,7 +92,7 @@ public class NotificationUtil {
 		String service = String.join(" ", split_array);
 		message = message.replace("{service}", service);
 
-        String UIHost = config.getUiAppHost();
+		String UIHost = getHost(challan.getTenantId());
 		String paymentPath = config.getPayLinkSMS();
 		paymentPath = paymentPath.replace("$consumercode",challan.getChallanNo());
 		paymentPath = paymentPath.replace("$tenantId",challan.getTenantId());
@@ -99,8 +101,8 @@ public class NotificationUtil {
 		if(message.contains("{Link}"))
 			message = message.replace("{Link}",getShortenedUrl(finalPath));
 
-        return message;
-    }
+		return message;
+	}
 
 	private String getPaymentMsg(RequestInfo requestInfo,Challan challan, String message) {
 		ChallanRequest challanRequest = new ChallanRequest(requestInfo,challan);
@@ -117,7 +119,7 @@ public class NotificationUtil {
 		if(message.contains("{Online_Receipt_Link}"))
 			message = message.replace("{Online_Receipt_Link}", getRecepitDownloadLink(challanRequest,paymentResponse,challanRequest.getChallan().getCitizen().getMobileNumber()));
 
-	    if(message.contains("{ULB}"))
+		if(message.contains("{ULB}"))
 			message = message.replace("{ULB}", capitalize(challan.getTenantId().split("\\.")[1]));
 
 		return message;
@@ -131,17 +133,17 @@ public class NotificationUtil {
 		return BUSINESSSERVICELOCALIZATION_CODE_PREFIX + code.toUpperCase();
 	}
 
-	
+
 	private String getBillDetails(RequestInfo requestInfo, Challan challan) {
 
 		LinkedHashMap responseMap = (LinkedHashMap) serviceRequestRepository.fetchResult(getBillUri(challan),
 				new RequestInfoWrapper(requestInfo));
-		
+
 		String jsonString = new JSONObject(responseMap).toString();
 
 		return jsonString;
 	}
-	
+
 	public String getShortenedUrl(String url){
 		HashMap<String,String> body = new HashMap<>();
 		body.put("url",url);
@@ -157,7 +159,7 @@ public class NotificationUtil {
 
 	/**
 	 * Returns the uri for the localization call
-	 * 
+	 *
 	 * @param tenantId
 	 *            TenantId of the challan
 	 * @return The uri for localization search call
@@ -165,8 +167,8 @@ public class NotificationUtil {
 	public StringBuilder getUri(String tenantId, RequestInfo requestInfo) {
 
 		if (config.getIsLocalizationStateLevel())
-			tenantId = tenantId.split("\\.")[0];
-		
+			tenantId = tenantId.split("\\.")[0] + "." + tenantId.split("\\.")[1];
+
 		String locale = NOTIFICATION_LOCALE;
 		if (!StringUtils.isEmpty(requestInfo.getMsgId()) && requestInfo.getMsgId().split("|").length >= 2)
 			locale = requestInfo.getMsgId().split("\\|")[1];
@@ -178,7 +180,7 @@ public class NotificationUtil {
 
 		return uri;
 	}
-	
+
 	private StringBuilder getBillUri(Challan challan) {
 		StringBuilder builder = new StringBuilder(config.getBillingHost());
 		builder.append(config.getFetchBillEndpoint());
@@ -189,6 +191,22 @@ public class NotificationUtil {
 		builder.append("&businessService=");
 		builder.append(challan.getBusinessService());
 		return builder;
+	}
+
+	public String getHost(String tenantId){
+		log.info("INCOMING TENANTID FOR NOTIF HOST: " + tenantId);
+		Integer tenantLength = tenantId.split("\\.").length;
+		String topLevelTenant = tenantId;
+		if(tenantLength == 3){
+			topLevelTenant = tenantId.split("\\.")[0] + "." + tenantId.split("\\.")[1];
+		}
+		log.info(config.getUiAppHostMap().toString());
+		log.info(topLevelTenant);
+		String host = config.getUiAppHostMap().get(topLevelTenant);
+		if(ObjectUtils.isEmpty(host)){
+			throw new CustomException("EG_NOTIF_HOST_ERR", "No host found for tenantid: " + topLevelTenant);
+		}
+		return host;
 	}
 
 	public List<String> fetchChannelList(RequestInfo requestInfo, String tenantId, String moduleName, String action){
@@ -241,13 +259,13 @@ public class NotificationUtil {
 	 * @param emailRequestList
 	 *            The list of EmailRequest to be sent
 	 */
-	public void sendEmail(List<EmailRequest> emailRequestList) {
+	public void sendEmail(String tenantId, List<EmailRequest> emailRequestList) {
 
 		if (config.getIsEmailNotificationEnabled()) {
 			if (CollectionUtils.isEmpty(emailRequestList))
 				log.debug("Messages from localization couldn't be fetched!");
 			for (EmailRequest emailRequest : emailRequestList) {
-				producer.push(config.getEmailNotifTopic(), emailRequest);
+				producer.push(tenantId, config.getEmailNotifTopic(), emailRequest);
 				log.debug("Email Request -> "+emailRequest.getEmail().toString());
 				log.debug("EMAIL notification sent!");
 			}
@@ -260,21 +278,17 @@ public class NotificationUtil {
 	 * @param smsRequestList
 	 *            The list of SMSRequest to be sent
 	 */
-	public void sendSMS(List<SMSRequest> smsRequestList, boolean isSMSEnabled) {
+	public void sendSMS(String tenantId, List<SMSRequest> smsRequestList, boolean isSMSEnabled) {
 		if (isSMSEnabled) {
 			if (CollectionUtils.isEmpty(smsRequestList))
 				log.debug("Messages from localization couldn't be fetched!");
 			for (SMSRequest smsRequest : smsRequestList) {
-				producer.push(config.getSmsNotifTopic(), smsRequest);
+				producer.push(tenantId, config.getSmsNotifTopic(), smsRequest);
 				log.debug("MobileNumber: " + smsRequest.getMobileNumber() + " Messages: " + smsRequest.getMessage());
 			}
 		}
 	}
 
-
-	public void sendEventNotification(EventRequest request) {
-		producer.push(config.getSaveUserEventsTopic(), request);
-	}
 
 
 	/**

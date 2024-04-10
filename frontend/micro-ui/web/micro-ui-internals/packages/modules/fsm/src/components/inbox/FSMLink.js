@@ -20,7 +20,7 @@ const FSMLink = ({ parentRoute, isMobile, data }) => {
     },
     {
       text: t("ES_TITLE_REPORTS"),
-      link: `/employee/report/fsm/FSMDailyDesludingReport`,
+      link: "/employee/report/fsm/FSMDailyDesludingReport",
       roles: ["FSM_ADMIN"],
       hyperlink: true,
     },
@@ -60,7 +60,7 @@ const FSMLink = ({ parentRoute, isMobile, data }) => {
           {links.map(({ link, text, hyperlink = false, accessTo = [] }, index) => {
             return (
               <span className="link" key={index}>
-                {hyperlink ? <a href={link}>{text}</a> : <Link to={link}>{text}</Link>}
+                {hyperlink ? <a href={link}>{t(text)}</a> : <Link to={link}>{t(text)}</Link>}
               </span>
             );
           })}

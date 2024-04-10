@@ -7,6 +7,7 @@ import some from "lodash/some";
 import keys from "lodash/keys";
 import { actions } from "../utils/search";
 import { validateFireNOCSearchModel } from "../utils/modelValidation";
+import { replaceSchemaPlaceholder, replaceSchemaPlaceholderCentralInstance} from "../utils/index";
 import envVariables from "../envVariables";
 const asyncHandler = require("express-async-handler");
 import db from "../db";
@@ -28,9 +29,29 @@ export const searchApiResponse = async (request, next = {}) => {
     FireNOCs: []
   };
   const queryObj = JSON.parse(JSON.stringify(request.query));
-  //console.log("request", request.query);
-  //console.log("Query object:"+JSON.stringify(queryObj));
+  var header = JSON.parse(JSON.stringify(request.headers));
+
+  console.log("request", request.query);
+  console.log("Query object:"+JSON.stringify(queryObj));
   let errors = validateFireNOCSearchModel(queryObj);
+
+  var isCentralInstance  = envVariables.IS_ENVIRONMENT_CENTRAL_INSTANCE;
+  if(typeof isCentralInstance =="string")
+  isCentralInstance = (isCentralInstance.toLowerCase() == "true");
+
+  var stateLevelTenantIdLength = envVariables.STATE_LEVEL_TENANTID_LENGTH;
+  if(typeof stateLevelTenantIdLength == "string")
+    stateLevelTenantIdLength = parseInt(envVariables.STATE_LEVEL_TENANTID_LENGTH);
+
+  if(isCentralInstance && queryObj.tenantId == null){
+    let error = {"FIRE_NOC_INVALID_SEARCH":" TenantId is mandatory for search "};
+    errors.push(error);
+  }
+  else if(isCentralInstance && queryObj.tenantId.split('.').length < stateLevelTenantIdLength){
+    let error = {"FIRE_NOC_INVALID_SEARCH":" TenantId should be mandatorily " + stateLevelTenantIdLength + " levels for search"};
+    errors.push(error);
+  }
+
   if (errors.length > 0) {
     next({
       errorType: "custom",
@@ -43,7 +64,8 @@ export const searchApiResponse = async (request, next = {}) => {
   }
   console.log("QUERY OBJECT --> "+JSON.stringify(queryObj));
   let text =
-    " SELECT * FROM (SELECT FN.uuid as FID,FN.tenantid,FN.fireNOCNumber,FN.provisionfirenocnumber,FN.oldfirenocnumber,FN.dateofapplied,FN.createdBy,FN.createdTime,FN.lastModifiedBy,FN.lastModifiedTime,FD.uuid as firenocdetailsid,FD.action,FD.applicationnumber,FD.fireNOCType,FD.applicationdate,FD.financialYear,FD.firestationid,FD.issuedDate,FD.validFrom,FD.validTo,FD.action,FD.status,FD.channel,FD.propertyid,FD.noofbuildings,FD.additionaldetail,FBA.uuid as puuid,FBA.doorno as pdoorno,FBA.latitude as platitude,FBA.longitude as plongitude,FBA.buildingName as pbuildingname,FBA.addressnumber as paddressnumber,FBA.pincode as ppincode,FBA.locality as plocality,FBA.city as pcity,FBA.street as pstreet,FB.uuid as buildingid ,FB.name as buildingname,FB.usagetype,FO.uuid as ownerid,FO.ownertype,FO.applicantcategory,FO.useruuid,FO.relationship,FUOM.uuid as uomuuid,FUOM.code,FUOM.value,FUOM.activeuom,FBD.uuid as documentuuid,FUOM.active,FBD.documentType,FBD.filestoreid,FBD.documentuid,FBD.createdby as documentCreatedBy,FBD.lastmodifiedby as documentLastModifiedBy,FBD.createdtime as documentCreatedTime,FBD.lastmodifiedtime as documentLastModifiedTime,DENSE_RANK () OVER(ORDER BY FN.uuid) rn FROM eg_fn_firenoc FN JOIN eg_fn_firenocdetail FD ON (FN.uuid = FD.firenocuuid) JOIN eg_fn_address FBA ON (FD.uuid = FBA.firenocdetailsuuid) JOIN eg_fn_owner FO ON (FD.uuid = FO.firenocdetailsuuid) JOIN eg_fn_buidlings FB ON (FD.uuid = FB.firenocdetailsuuid) JOIN eg_fn_buildinguoms FUOM ON (FB.uuid = FUOM.buildinguuid) LEFT OUTER JOIN eg_fn_buildingdocuments FBD on(FB.uuid = FBD.buildinguuid) ";
+
+    " SELECT * FROM (SELECT FN.uuid as FID,FN.tenantid,FN.fireNOCNumber,FN.provisionfirenocnumber,FN.oldfirenocnumber,FN.dateofapplied,FN.createdBy,FN.createdTime,FN.lastModifiedBy,FN.lastModifiedTime,FD.uuid as firenocdetailsid,FD.action,FD.applicationnumber,FD.fireNOCType,FD.applicationdate,FD.financialYear,FD.firestationid,FD.issuedDate,FD.validFrom,FD.validTo,FD.action,FD.status,FD.channel,FD.propertyid,FD.noofbuildings,FD.additionaldetail,FBA.uuid as puuid,FBA.doorno as pdoorno,FBA.latitude as platitude,FBA.longitude as plongitude,FBA.buildingName as pbuildingname,FBA.addressnumber as paddressnumber,FBA.pincode as ppincode,FBA.locality as plocality,FBA.city as pcity,FBA.street as pstreet,FB.uuid as buildingid ,FB.name as buildingname,FB.usagetype,FO.uuid as ownerid,FO.ownertype,FO.applicantcategory,FO.useruuid,FO.relationship,FUOM.uuid as uomuuid,FUOM.code,FUOM.value,FUOM.activeuom,FBD.uuid as documentuuid,FUOM.active,FBD.documentType,FBD.filestoreid,FBD.documentuid,FBD.createdby as documentCreatedBy,FBD.lastmodifiedby as documentLastModifiedBy,FBD.createdtime as documentCreatedTime,FBD.lastmodifiedtime as documentLastModifiedTime,DENSE_RANK () OVER(ORDER BY FN.uuid) rn FROM {schema}.eg_fn_firenoc FN JOIN {schema}.eg_fn_firenocdetail FD ON (FN.uuid = FD.firenocuuid) JOIN {schema}.eg_fn_address FBA ON (FD.uuid = FBA.firenocdetailsuuid) JOIN {schema}.eg_fn_owner FO ON (FD.uuid = FO.firenocdetailsuuid) JOIN {schema}.eg_fn_buidlings FB ON (FD.uuid = FB.firenocdetailsuuid) JOIN {schema}.eg_fn_buildinguoms FUOM ON (FB.uuid = FUOM.buildinguuid) LEFT OUTER JOIN {schema}.eg_fn_buildingdocuments FBD on(FB.uuid = FBD.buildinguuid) ";
   // FBD.active=true AND FO.active=true AND FUOM.active=true AND";
   //if citizen
   const roles = get(request.body, "RequestInfo.userInfo.roles");
@@ -51,9 +73,9 @@ export const searchApiResponse = async (request, next = {}) => {
   const isUser = some(roles, { code: "CITIZEN" }) && userUUID;
   if (isUser) {
     const mobileNumber = get(request.body, "RequestInfo.userInfo.mobileNumber");
-    const tenantId = envVariables.EGOV_DEFAULT_STATE_ID;
-    
-    const noFieldsPresent = null == queryObj.applicationNumber 
+    const tenantId = get(request.body, "RequestInfo.userInfo.permanentCity");
+
+    const noFieldsPresent = null == queryObj.applicationNumber
       && null == queryObj.createdby;
 
     if(noFieldsPresent) {
@@ -62,21 +84,27 @@ export const searchApiResponse = async (request, next = {}) => {
       : mobileNumber;
       }
     queryObj.tenantId = queryObj.tenantId ? queryObj.tenantId : tenantId;
+    console.log("mobileNumber", mobileNumber);
+    console.log("tenedrIDD", tenantId);
 
-    if(queryObj.tenantId == envVariables.EGOV_DEFAULT_STATE_ID)
-      text = `${text} where FN.tenantid LIKE '${queryObj.tenantId}%' AND`;
-    else
+    if(queryObj.tenantId.split('.').length <= stateLevelTenantIdLength){
+      text = `${text} where FN.tenantid LIKE '${queryObj.tenantId}%' AND`;  // is tenantid statelevel
+    }
+    else{
       text = `${text} where FN.tenantid = '${queryObj.tenantId}' AND`;
+    }
   } else {
-    if (!isEmpty(queryObj) && !(keys(queryObj).length==2 && 
+    if (!isEmpty(queryObj) && !(keys(queryObj).length==2 &&
     queryObj.hasOwnProperty("offset") && queryObj.hasOwnProperty("limit"))) {
       text = text + " where ";
     }
     if (queryObj.tenantId) {
-      if(queryObj.tenantId == envVariables.EGOV_DEFAULT_STATE_ID)
+      if(queryObj.tenantId.split('.').length <= stateLevelTenantIdLength){
         text = `${text} FN.tenantid LIKE '${queryObj.tenantId}%' AND`;
-      else
+      }
+      else{
         text = `${text} FN.tenantid = '${queryObj.tenantId}' AND`;
+      }
     }
   }
   // if (queryObj.status) {
@@ -88,23 +116,24 @@ export const searchApiResponse = async (request, next = {}) => {
     // console.log("mobile number");
     let userSearchResponse = await searchByMobileNumber(
       queryObj.mobileNumber,
-      envVariables.EGOV_DEFAULT_STATE_ID
+      envVariables.EGOV_DEFAULT_STATE_ID,
+      header
     );
     // console.log(userSearchResponse);
     let searchUserUUID = get(userSearchResponse, "user.0.uuid");
     // if (searchUserUUID) {
     //   // console.log(searchUserUUID);
     var userSearchResponseJson = JSON.parse(JSON.stringify(userSearchResponse));
-    var userUUIDArray = [];
-    for (var i = 0; i < userSearchResponseJson.user.length; i++) {
+    var userUUIDArray =[];
+    for(var i =0;i<userSearchResponseJson.user.length;i++){
       userUUIDArray.push(userSearchResponseJson.user[i].uuid);
     }
 
-    let firenocIdQuery = `SELECT FN.uuid as FID FROM eg_fn_firenoc FN JOIN eg_fn_firenocdetail FD ON (FN.uuid = FD.firenocuuid) JOIN eg_fn_owner FO ON (FD.uuid = FO.firenocdetailsuuid) where `;
+    let firenocIdQuery = `SELECT FN.uuid as FID FROM {schema}.eg_fn_firenoc FN JOIN {schema}.eg_fn_firenocdetail FD ON (FN.uuid = FD.firenocuuid) JOIN {schema}.eg_fn_owner FO ON (FD.uuid = FO.firenocdetailsuuid) where `;
 
     if (queryObj.tenantId) {
-      if (queryObj.tenantId == envVariables.EGOV_DEFAULT_STATE_ID) {
-        firenocIdQuery = `${firenocIdQuery} FN.tenantid LIKE '${queryObj.tenantId}%' AND`;
+      if (queryObj.tenantId.split('.').length <= stateLevelTenantIdLength) {
+        firenocIdQuery = `${firenocIdQuery} FN.tenantid LIKE '${queryObj.tenantId}%' AND`;  //is state level tenantId
       } else {
         firenocIdQuery = `${firenocIdQuery} FN.tenantid = '${queryObj.tenantId}' AND`;
       }
@@ -122,12 +151,12 @@ export const searchApiResponse = async (request, next = {}) => {
               sqlQuery = `${sqlQuery}'${userUUIDArray[j]}'`;
 
             sqlQuery = `${sqlQuery}, '${userUUIDArray[j]}'`;
-          }      
+          }
         }
         else
           sqlQuery = `${sqlQuery}'${queryObj.mobileNumber}'`;
 
-        sqlQuery = `${sqlQuery}) AND`;  
+        sqlQuery = `${sqlQuery}) AND`;
     }*/
 
     firenocIdQuery = `${firenocIdQuery} FO.useruuid in (`;
@@ -142,7 +171,11 @@ export const searchApiResponse = async (request, next = {}) => {
     } else firenocIdQuery = `${firenocIdQuery}'${queryObj.mobileNumber}'`;
 
     firenocIdQuery = `${firenocIdQuery} )`;
+
+    firenocIdQuery = replaceSchemaPlaceholderCentralInstance(firenocIdQuery, queryObj.tenantId);
+
     console.log("Firenoc ID Query -> " + firenocIdQuery);
+
     const dbResponse = await db.query(firenocIdQuery);
     let firenocIds = [];
     console.log("dbResponse" + JSON.stringify(dbResponse));
@@ -202,18 +235,25 @@ export const searchApiResponse = async (request, next = {}) => {
     queryObj.hasOwnProperty("fromDate") &&
     !queryObj.hasOwnProperty("toDate")
   ) {
-    sqlQuery = `${sqlQuery} FN.createdtime >= ${queryObj.fromDate} AND`;
+    sqlQuery = `${sqlQuery} FN.createdtime >= ${queryObj.fromDate} `;
   }
 
-  
-  
+    try {
+      sqlQuery = replaceSchemaPlaceholderCentralInstance(sqlQuery, queryObj.tenantId);
+    } catch (error) {
+      var errorResponse = error.response;
+      logger.error(error.stack || error) ;
+      throw {message:"TenantId length is not sufficient to replace query schema in a multi state instance :"+(errorResponse ? parseInt(errorResponse.status, 10):error.message)};
+    }
+
+
 
   if (!isEmpty(queryObj) && ( queryObj.hasOwnProperty("limit" || queryObj.hasOwnProperty("offset")))) {
     let offset =0;
     let limit =10;
     if( queryObj.hasOwnProperty("offset") ){
       offset = queryObj.offset*1;
-      
+
    }
   if( queryObj.hasOwnProperty("limit") ){
     limit = (queryObj.limit*1)+offset;
@@ -226,7 +266,7 @@ export const searchApiResponse = async (request, next = {}) => {
  }else{
   sqlQuery = `${sqlQuery}  ) s WHERE s.rn  BETWEEN ${offset} AND ${limit} ORDER BY fid `;
  }
-  
+
 }else if(isEmpty(queryObj)){
   sqlQuery = `${sqlQuery}  ) s`;
 }else if(!isEmpty(queryObj)){
@@ -245,7 +285,8 @@ export const searchApiResponse = async (request, next = {}) => {
         ? await mergeSearchResults(
             dbResponse.rows,
             request.query,
-            request.body.RequestInfo
+            request.body.RequestInfo,
+            header
           )
         : [];
   }

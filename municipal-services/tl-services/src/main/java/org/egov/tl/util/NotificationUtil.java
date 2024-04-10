@@ -1,10 +1,34 @@
 package org.egov.tl.util;
 
-import com.jayway.jsonpath.JsonPath;
-import lombok.extern.slf4j.Slf4j;
+import static org.egov.tl.util.TLConstants.ACTION_CANCEL_CANCELLED;
+import static org.egov.tl.util.TLConstants.ACTION_FORWARD_CITIZENACTIONREQUIRED;
+import static org.egov.tl.util.TLConstants.ACTION_SENDBACKTOCITIZEN_FIELDINSPECTION;
+import static org.egov.tl.util.TLConstants.ACTION_STATUS_APPLIED;
+import static org.egov.tl.util.TLConstants.ACTION_STATUS_APPROVED;
+import static org.egov.tl.util.TLConstants.ACTION_STATUS_FIELDINSPECTION;
+import static org.egov.tl.util.TLConstants.ACTION_STATUS_INITIATED;
+import static org.egov.tl.util.TLConstants.ACTION_STATUS_REJECTED;
+import static org.egov.tl.util.TLConstants.APPLICATION_TYPE_RENEWAL;
+import static org.egov.tl.util.TLConstants.BILL_AMOUNT_JSONPATH;
+import static org.egov.tl.util.TLConstants.DEFAULT_OBJECT_MODIFIED_MSG;
+import static org.egov.tl.util.TLConstants.DEFAULT_OBJECT_RENEWAL_MODIFIED_MSG;
+import static org.egov.tl.util.TLConstants.NOTIFICATION_CODES;
+import static org.egov.tl.util.TLConstants.NOTIFICATION_LOCALE;
+import static org.egov.tl.util.TLConstants.NOTIF_EXPIRY_DATE_KEY;
+import static org.egov.tl.util.TLConstants.NOTIF_OWNER_NAME_KEY;
+import static org.egov.tl.util.TLConstants.NOTIF_TRADE_LICENSENUMBER_KEY;
+import static org.egov.tl.util.TLConstants.NOTIF_TRADE_NAME_KEY;
+import static org.egov.tl.util.TLConstants.PAYMENT_LINK_PLACEHOLDER;
+import static org.egov.tl.util.TLConstants.TRADE_LICENSE_MODULE_CODE;
+import static org.egov.tl.util.TLConstants.businessService_TL;
+
+import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
+import java.util.*;
+
 import org.apache.commons.lang3.StringUtils;
-import org.apache.http.client.utils.URIBuilder;
 import org.egov.common.contract.request.RequestInfo;
+import org.egov.common.utils.MultiStateInstanceUtil;
 import org.egov.tl.config.TLConfiguration;
 import org.egov.tl.producer.Producer;
 import org.egov.tl.repository.ServiceRequestRepository;
@@ -17,14 +41,14 @@ import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
+import org.springframework.util.ObjectUtils;
 import org.springframework.web.client.RestTemplate;
 
-import java.math.BigDecimal;
-import java.text.SimpleDateFormat;
-import java.util.*;
+import com.jayway.jsonpath.JsonPath;
 
 import static org.egov.tl.util.TLConstants.*;
 import static org.springframework.util.StringUtils.capitalize;
+import lombok.extern.slf4j.Slf4j;
 
 @Component
 @Slf4j
@@ -39,6 +63,8 @@ public class NotificationUtil {
 	private RestTemplate restTemplate;
 
 	private CalculationService calculationService;
+
+	private MultiStateInstanceUtil centralInstanceUtil;
 
 	@Autowired
 	public NotificationUtil(TLConfiguration config, ServiceRequestRepository serviceRequestRepository, Producer producer, RestTemplate restTemplate,CalculationService calculationService) {
@@ -221,6 +247,7 @@ public class NotificationUtil {
 	 * @return customized message with replaced placeholders
 	 * */
 	private String getReplacedMessage(TradeLicense license, String messageTemplate) {
+		String UIHost = getHost(license.getTenantId());
 		String message = messageTemplate.replace("YYYY", license.getBusinessService());
 		message = message.replace("ZZZZ", license.getApplicationNumber());
 
@@ -228,7 +255,8 @@ public class NotificationUtil {
 			message = message.replace("RRRR", license.getLicenseNumber());
 		}
 		message = message.replace("XYZ", capitalize(license.getTenantId().split("\\.")[1]));
-		message = message.replace("{PORTAL_LINK}",config.getUiAppHost());
+
+		message = message.replace("{PORTAL_LINK}", UIHost);
 
 		//CCC - Designaion configurable according to ULB
 		// message = message.replace("CCC","");
@@ -267,7 +295,7 @@ public class NotificationUtil {
 	public StringBuilder getUri(String tenantId, RequestInfo requestInfo) {
 
 		if (config.getIsLocalizationStateLevel())
-			tenantId = tenantId.split("\\.")[0];
+			tenantId = tenantId.split("\\.")[0] + "." + tenantId.split("\\.")[1];
 
 		String locale = NOTIFICATION_LOCALE;
 		if (!StringUtils.isEmpty(requestInfo.getMsgId()) && requestInfo.getMsgId().split("|").length >= 2)
@@ -308,7 +336,7 @@ public class NotificationUtil {
 	 * @return customized message for initiate
 	 */
 	private String getInitiatedMsg(TradeLicense license, String message) {
-		// message = message.replace("{1}",license.);
+		// message = message.replace("<1>",license.);
 		message = message.replace("{2}", license.getTradeName());
 		message = message.replace("{3}", license.getApplicationNumber());
 
@@ -377,7 +405,7 @@ public class NotificationUtil {
 		message = message.replace("{3}", amountToBePaid.toString());
 
 
-		String UIHost = config.getUiAppHost();
+		String UIHost = getHost(license.getTenantId());
 
 		String paymentPath = config.getPayLinkSMS();
 		paymentPath = paymentPath.replace("$consumercode",license.getApplicationNumber());
@@ -546,12 +574,12 @@ public class NotificationUtil {
 	 * @param smsRequestList
 	 *            The list of SMSRequest to be sent
 	 */
-	public void sendSMS(List<SMSRequest> smsRequestList, boolean isSMSEnabled) {
+	public void sendSMS(List<SMSRequest> smsRequestList, boolean isSMSEnabled, String tenantId) {
 		if (isSMSEnabled) {
 			if (CollectionUtils.isEmpty(smsRequestList))
 				log.info("Messages from localization couldn't be fetched!");
 			for (SMSRequest smsRequest : smsRequestList) {
-				producer.push(config.getSmsNotifTopic(), smsRequest);
+				producer.push(tenantId, config.getSmsNotifTopic(), smsRequest);
 				log.info("SMS SENT!");
 			}
 		}
@@ -591,12 +619,12 @@ public class NotificationUtil {
 	 * @param emailRequestList
 	 *            The list of EmailRequest to be sent
 	 */
-	public void sendEmail(List<EmailRequest> emailRequestList, boolean isEmailEnabled) {
+	public void sendEmail(List<EmailRequest> emailRequestList, boolean isEmailEnabled, String tenantId) {
 		if (isEmailEnabled) {
 			if (CollectionUtils.isEmpty(emailRequestList))
 				log.info("Messages from localization couldn't be fetched!");
 			for (EmailRequest emailRequest : emailRequestList) {
-				producer.push(config.getEmailNotifTopic(), emailRequest);
+				producer.push(tenantId ,config.getEmailNotifTopic(), emailRequest);
 				log.info("EMAIL notification sent!");
 			}
 		}
@@ -737,7 +765,7 @@ public class NotificationUtil {
 	 * @param request
 	 */
 	public void sendEventNotification(EventRequest request) {
-		producer.push(config.getSaveUserEventsTopic(), request);
+		producer.push("", config.getSaveUserEventsTopic(), request);
 	}
 
 
@@ -798,6 +826,15 @@ public class NotificationUtil {
 		return mapOfPhnoAndEmailIds;
 	}
 
+	public String getHost(String tenantId){
+		log.info("INCOMING TENANTID FOR NOTIF HOST: " + tenantId);
+		String stateLevelTenantId = centralInstanceUtil.getStateLevelTenant(tenantId);
+		String host = config.getUiAppHostMap().get(stateLevelTenantId);
+		if(ObjectUtils.isEmpty(host)){
+			throw new CustomException("EG_NOTIF_HOST_ERR", "No host found for tenantid: " + stateLevelTenantId);
+		}
+		return host;
+	}
 
 	/**
 	 * Fetches UUIDs of CITIZENs based on the phone number.
@@ -833,5 +870,4 @@ public class NotificationUtil {
 		}
 		return mapOfPhnoAndUUIDs;
 	}
-
 }

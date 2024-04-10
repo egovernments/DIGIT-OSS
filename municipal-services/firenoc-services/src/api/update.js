@@ -4,6 +4,7 @@ import envVariables from "../envVariables";
 const asyncHandler = require("express-async-handler");
 import mdmsData from "../utils/mdmsData";
 import { addUUIDAndAuditDetails, updateStatus,  enrichAssignees} from "../utils/create";
+import { getUpdatedTopic, getStateSpecificTopicName } from "../utils/index";
 import { getApprovedList } from "../utils/update";
 
 import {
@@ -22,8 +23,8 @@ export default ({ config }) => {
   let api = Router();
   api.post(
     "/_update",
-    asyncHandler(async ({ body }, res, next) => {
-      let response = await updateApiResponse({ body }, true, next);
+    asyncHandler(async (request, res, next) => {
+      let response = await updateApiResponse(request, true, next);
       if(response.Errors)
         res.status(400);
       res.json(response);
@@ -31,15 +32,18 @@ export default ({ config }) => {
   );
   return api;
 };
-export const updateApiResponse = async ({ body }, isExternalCall, next = {}) => {
+export const updateApiResponse = async (request, isExternalCall, next = {}) => {
   //console.log("Update Body: "+JSON.stringify(body));
+  var body = JSON.parse(JSON.stringify(request.body));
+  var header = JSON.parse(JSON.stringify(request.headers));
   let payloads = [];
-  let mdms = await mdmsData(body.RequestInfo, body.FireNOCs[0].tenantId);
+  let mdms = await mdmsData(body.RequestInfo, body.FireNOCs[0].tenantId, header);
   //model validator
   //location data
   let locationResponse = await getLocationDetails(
     body.RequestInfo,
-    body.FireNOCs[0].tenantId
+    body.FireNOCs[0].tenantId,
+    header
   );
 
   set(
@@ -60,7 +64,7 @@ export const updateApiResponse = async ({ body }, isExternalCall, next = {}) => 
     return;
   }
 
-  body = await addUUIDAndAuditDetails(body);
+  body = await addUUIDAndAuditDetails(body, "_update", header);
   let { FireNOCs = [], RequestInfo = {} } = body;
   let errorMap = [];
 
@@ -68,10 +72,10 @@ export const updateApiResponse = async ({ body }, isExternalCall, next = {}) => 
   // let approvedList=await getApprovedList(cloneDeep(body));
 
   //Enrich assignee
-  body.FireNOCs = await enrichAssignees(FireNOCs, RequestInfo);
+  body.FireNOCs = await enrichAssignees(FireNOCs, RequestInfo, header);
 
   //applay workflow
-  let workflowResponse = await createWorkFlow(body);
+  let workflowResponse = await createWorkFlow(body, header);
 
 
 
@@ -94,14 +98,28 @@ export const updateApiResponse = async ({ body }, isExternalCall, next = {}) => 
 
   //calculate call
   for (var i = 0; i < FireNOCs.length; i++) {
-    let firenocResponse = await calculate(FireNOCs[i], RequestInfo);
+    let firenocResponse = await calculate(FireNOCs[i], RequestInfo, header);
   }
 
   body.FireNOCs = updateStatus(FireNOCs, workflowResponse);
   //console.log("Fire NoC body"+JSON.stringify(body.FireNOCs));
+  let topic = envVariables.KAFKA_TOPICS_FIRENOC_UPDATE;
+  let tenantId = body.FireNOCs[0].tenantId;
+
+  var isCentralInstance  = envVariables.IS_ENVIRONMENT_CENTRAL_INSTANCE;
+  if(typeof isCentralInstance =="string")
+  isCentralInstance = (isCentralInstance.toLowerCase() == "true");
+
+  if(isCentralInstance)
+    topic = getStateSpecificTopicName(tenantId, topic);
+    
+  payloads.push({
+    topic: topic,
+    messages: JSON.stringify(body)
+  });
 
   payloads.push({
-    topic: envVariables.KAFKA_TOPICS_FIRENOC_UPDATE,
+    topic: envVariables.KAFKA_TOPICS_FIRENOC_UPDATE_SMS,
     messages: JSON.stringify(body)
   });
 
@@ -112,8 +130,23 @@ export const updateApiResponse = async ({ body }, isExternalCall, next = {}) => 
 
   // console.log("list length",approvedList.length);
   if (approvedList.length > 0) {
+    let topic = envVariables.KAFKA_TOPICS_FIRENOC_WORKFLOW;
+    let tenantId = body.FireNOCs[0].tenantId;
+
+    var isCentralInstance  = envVariables.IS_ENVIRONMENT_CENTRAL_INSTANCE;
+    if(typeof isCentralInstance =="string")
+      isCentralInstance = (isCentralInstance.toLowerCase() == "true");
+
+    if(isCentralInstance)
+      topic = getStateSpecificTopicName(tenantId, topic);
+
     payloads.push({
-      topic: envVariables.KAFKA_TOPICS_FIRENOC_WORKFLOW,
+      topic: topic,
+      messages: JSON.stringify({ RequestInfo, FireNOCs: approvedList })
+    });
+
+    payloads.push({
+      topic: envVariables.KAFKA_TOPICS_FIRENOC_WORKFLOW_SMS,
       messages: JSON.stringify({ RequestInfo, FireNOCs: approvedList })
     });
   }

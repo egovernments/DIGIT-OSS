@@ -3,6 +3,7 @@ package org.egov.pt.service;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jayway.jsonpath.JsonPath;
 import org.egov.common.contract.request.RequestInfo;
+import org.egov.pt.config.PropertyConfiguration;
 import org.egov.pt.models.Property;
 import org.egov.pt.models.PropertyCriteria;
 import org.egov.pt.repository.ElasticSearchRepository;
@@ -29,16 +30,21 @@ public class FuzzySearchService {
 
     private PropertyRepository propertyRepository;
 
+    private PropertyConfiguration config;
+
     @Autowired
-    public FuzzySearchService(ElasticSearchRepository elasticSearchRepository, ObjectMapper mapper, PropertyRepository repository) {
+    public FuzzySearchService(ElasticSearchRepository elasticSearchRepository, ObjectMapper mapper, PropertyRepository repository,PropertyConfiguration config) {
         this.elasticSearchRepository = elasticSearchRepository;
         this.mapper = mapper;
         this.propertyRepository = repository;
+        this.config=config;
     }
 
 
     public List<Property> getProperties(RequestInfo requestInfo, PropertyCriteria criteria) {
 
+        if(criteria.getTenantId() == null)
+        {	criteria.setTenantId(config.getStateLevelTenantId()); }
 
         List<String> idsFromDB = propertyRepository.getPropertyIds(criteria);
 

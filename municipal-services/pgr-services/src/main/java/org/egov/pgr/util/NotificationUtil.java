@@ -4,6 +4,7 @@ import com.jayway.jsonpath.JsonPath;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.egov.common.contract.request.RequestInfo;
+import org.egov.common.utils.MultiStateInstanceUtil;
 import org.egov.pgr.config.PGRConfiguration;
 import org.egov.pgr.producer.Producer;
 import org.egov.pgr.repository.ServiceRequestRepository;
@@ -35,6 +36,10 @@ public class NotificationUtil {
     @Autowired
     private RestTemplate restTemplate;
 
+    @Autowired
+    private MultiStateInstanceUtil centralInstanceUtil;
+
+
     /**
      *
      * @param tenantId Tenant ID
@@ -58,9 +63,10 @@ public class NotificationUtil {
      */
     public StringBuilder getUri(String tenantId, RequestInfo requestInfo, String module) {
 
-        if (config.getIsLocalizationStateLevel())
-            tenantId = tenantId.split("\\.")[0];
-
+        /*if (config.getIsLocalizationStateLevel())
+            tenantId= centralInstanceUtil.getStateLevelTenant(tenantId);*/
+        tenantId= centralInstanceUtil.getStateLevelTenant(tenantId);
+        log.info("tenantId after calling central instance method :"+ tenantId);
         String locale = NOTIFICATION_LOCALE;
         if (!StringUtils.isEmpty(requestInfo.getMsgId()) && requestInfo.getMsgId().split("|").length >= 2)
             locale = requestInfo.getMsgId().split("\\|")[1];
@@ -130,14 +136,14 @@ public class NotificationUtil {
      * Send the SMSRequest on the SMSNotification kafka topic
      * @param smsRequestList The list of SMSRequest to be sent
      */
-    public void sendSMS(List<SMSRequest> smsRequestList) {
+    public void sendSMS(String tenantId, List<SMSRequest> smsRequestList) {
         if (config.getIsSMSEnabled()) {
             if (CollectionUtils.isEmpty(smsRequestList)) {
                 log.info("Messages from localization couldn't be fetched!");
                 return;
             }
             for (SMSRequest smsRequest : smsRequestList) {
-                producer.push(config.getSmsNotifTopic(), smsRequest);
+                producer.push(tenantId,config.getSmsNotifTopic(), smsRequest);
                 log.info("Messages: " + smsRequest.getMessage());
             }
         }
@@ -148,8 +154,8 @@ public class NotificationUtil {
      *
      * @param request EventRequest Object
      */
-    public void sendEventNotification(EventRequest request) {
-        producer.push(config.getSaveUserEventsTopic(), request);
+    public void sendEventNotification(String tenantId, EventRequest request) {
+        producer.push(tenantId,config.getSaveUserEventsTopic(), request);
     }
 
     /**

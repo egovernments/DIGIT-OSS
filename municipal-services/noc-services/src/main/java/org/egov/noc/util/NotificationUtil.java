@@ -1,12 +1,10 @@
 package org.egov.noc.util;
 
-import java.util.LinkedHashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-
+import com.jayway.jsonpath.JsonPath;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.egov.common.contract.request.RequestInfo;
+import org.egov.common.utils.MultiStateInstanceUtil;
 import org.egov.noc.config.NOCConfiguration;
 import org.egov.noc.producer.Producer;
 import org.egov.noc.repository.ServiceRequestRepository;
@@ -16,14 +14,13 @@ import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
-import static org.egov.noc.util.NOCConstants.ACTION_STATUS_CREATED;
-import static org.egov.noc.util.NOCConstants.ACTION_STATUS_INITIATED;
-import static org.egov.noc.util.NOCConstants.ACTION_STATUS_REJECTED;
-import static org.egov.noc.util.NOCConstants.ACTION_STATUS_APPROVED;
 
-import com.jayway.jsonpath.JsonPath;
+import java.util.LinkedHashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 
-import lombok.extern.slf4j.Slf4j;
+import static org.egov.noc.util.NOCConstants.*;
 
 @Component
 @Slf4j
@@ -38,6 +35,8 @@ public class NotificationUtil {
 	@Autowired
 	private ServiceRequestRepository serviceRequestRepository;
 
+	@Autowired
+	private MultiStateInstanceUtil centralInstanceUtil;
 	
 
 	/**
@@ -46,12 +45,12 @@ public class NotificationUtil {
 	 * @param smsRequestList
 	 *            The list of SMSRequest to be sent
 	 */
-	public void sendSMS(List<SMSRequest> smsRequestList, boolean isSMSEnabled) {
+	public void sendSMS(String tenantId, List<SMSRequest> smsRequestList, boolean isSMSEnabled) {
 		if (isSMSEnabled) {
 			if (CollectionUtils.isEmpty(smsRequestList))
 				log.info("Messages from localization couldn't be fetched!");
 			for (SMSRequest smsRequest : smsRequestList) {
-				producer.push(config.getSmsNotifTopic(), smsRequest);
+				producer.push(tenantId, config.getSmsNotifTopic(), smsRequest);
 				log.info("MobileNumber: " + smsRequest.getMobileNumber() + " Messages: " + smsRequest.getMessage());
 			}
 		}
@@ -62,7 +61,7 @@ public class NotificationUtil {
 	 * 
 	 * @param message
 	 *            The message for the specific noc
-	 * @param mobileNumberToOwnerName
+	 * @param mobileNumberToOwner
 	 *            Map of mobileNumber to OwnerName
 	 * @return List of SMSRequest
 	 */
@@ -83,7 +82,7 @@ public class NotificationUtil {
 	 */
 	public StringBuilder getUri(String tenantId, RequestInfo requestInfo) {
 		if (config.getIsLocalizationStateLevel())
-			tenantId = tenantId.split("\\.")[0];
+			tenantId = centralInstanceUtil.getStateLevelTenant(tenantId);
 		String locale = "en_IN";
 		if (!StringUtils.isEmpty(requestInfo.getMsgId()) && requestInfo.getMsgId().split("|").length >= 2)
 			locale = requestInfo.getMsgId().split("\\|")[1];

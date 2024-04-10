@@ -8,6 +8,7 @@ import {
   import Timeline from "../../../components/Timeline";
   import { convertEpochToDateDMY, stringReplaceAll, getOrderDocuments } from "../../../utils";
   import DocumentsPreview from "../../../../../templates/ApplicationDetails/components/DocumentsPreview";
+  import { format } from "date-fns";
 
   const CheckPage = ({ onSubmit, value }) => {
     const { t } = useTranslation();
@@ -168,7 +169,7 @@ import {
     <Card style={{paddingRight:"16px"}}>
     <CardHeader>{t(`BPA_BASIC_DETAILS_TITLE`)}</CardHeader>
         <StatusTable>
-          <Row className="border-none" label={t(`BPA_BASIC_DETAILS_APP_DATE_LABEL`)} text={convertEpochToDateDMY(Number(data?.applicationDate))} />
+          <Row className="border-none" label={t(`BPA_BASIC_DETAILS_APP_DATE_LABEL`)} text={data?.applicationDate?.includes("-") ? format(new Date(data?.applicationDate), "dd/MM/yyyy") : convertEpochToDateDMY(Number(data?.applicationDate))} />
           <Row className="border-none" label={t(`BPA_BASIC_DETAILS_APPLICATION_TYPE_LABEL`)} text={t(`WF_BPA_${data?.applicationType}`)}/>
           <Row className="border-none" label={t(`BPA_BASIC_DETAILS_SERVICE_TYPE_LABEL`)} text={t(data?.serviceType)} />
           <Row className="border-none" label={t(`BPA_BASIC_DETAILS_OCCUPANCY_LABEL`)} text={data?.occupancyType}/>

@@ -378,6 +378,13 @@ async function getPropertyDeatils(requestinfo,tenantId,propertyIds,connectionnoT
 
 
 async function create_pdf(tenantId, key, data, requestinfo) {
+  let headers = {
+    // Add your desired headers here
+    "content-type": "application/json;charset=UTF-8",
+    accept: "application/json, text/plain, */*",
+    "TENANTID":tenantId
+  };
+
   return await axios({
     responseType: "stream",
     method: "post",
@@ -387,6 +394,7 @@ async function create_pdf(tenantId, key, data, requestinfo) {
       tenantId: tenantId,
       key: key,
     },
+    headers: headers, // Include the headers in the request
   });
 }
 

@@ -1,4 +1,4 @@
-CREATE TABLE public.eg_death_dtls
+CREATE TABLE eg_death_dtls
 (
     id character varying(64)  NOT NULL,
     registrationno character varying(64)  NOT NULL,
@@ -29,12 +29,12 @@ CREATE TABLE public.eg_death_dtls
     CONSTRAINT eg_death_dtls_pkey PRIMARY KEY (id),
     CONSTRAINT eg_death_dtls_ukey1 UNIQUE (registrationno, tenantid),
     CONSTRAINT eg_death_dtls_fkey1 FOREIGN KEY (hospitalid)
-        REFERENCES public.eg_birth_death_hospitals (id) MATCH SIMPLE
+        REFERENCES eg_birth_death_hospitals (id) MATCH SIMPLE
         ON UPDATE CASCADE
         ON DELETE CASCADE
 );
 
-CREATE TABLE public.eg_death_father_info
+CREATE TABLE eg_death_father_info
 (
     id character varying(64)  NOT NULL,
     firstname character varying(200) ,
@@ -50,12 +50,12 @@ CREATE TABLE public.eg_death_father_info
     deathdtlid character varying(64)  NOT NULL,
     CONSTRAINT eg_death_father_info_pkey PRIMARY KEY (id),
     CONSTRAINT eg_death_father_info_fkey1 FOREIGN KEY (deathdtlid)
-        REFERENCES public.eg_death_dtls (id) MATCH SIMPLE
+        REFERENCES eg_death_dtls (id) MATCH SIMPLE
         ON UPDATE CASCADE
         ON DELETE CASCADE
 );
 
-CREATE TABLE public.eg_death_mother_info
+CREATE TABLE eg_death_mother_info
 (
     id character varying(64)  NOT NULL,
     firstname character varying(200) ,
@@ -71,12 +71,12 @@ CREATE TABLE public.eg_death_mother_info
     deathdtlid character varying(64)  NOT NULL,
     CONSTRAINT eg_death_mother_info_pkey PRIMARY KEY (id),
     CONSTRAINT eg_death_mother_info_fkey1 FOREIGN KEY (deathdtlid)
-        REFERENCES public.eg_death_dtls (id) MATCH SIMPLE
+        REFERENCES eg_death_dtls (id) MATCH SIMPLE
         ON UPDATE CASCADE
         ON DELETE CASCADE
 );
 
-CREATE TABLE public.eg_death_permaddr
+CREATE TABLE eg_death_permaddr
 (
     id character varying(64)  NOT NULL,
     buildingno character varying(1000) ,
@@ -96,12 +96,12 @@ CREATE TABLE public.eg_death_permaddr
     deathdtlid character varying(64) ,
     CONSTRAINT eg_death_permaddr_pkey PRIMARY KEY (id),
     CONSTRAINT eg_death_permaddr_fkey1 FOREIGN KEY (deathdtlid)
-        REFERENCES public.eg_death_dtls (id) MATCH SIMPLE
+        REFERENCES eg_death_dtls (id) MATCH SIMPLE
         ON UPDATE CASCADE
         ON DELETE CASCADE
 );
 
-CREATE TABLE public.eg_death_presentaddr
+CREATE TABLE eg_death_presentaddr
 (
     id character varying(64)  NOT NULL,
     buildingno character varying(1000) ,
@@ -121,12 +121,12 @@ CREATE TABLE public.eg_death_presentaddr
     deathdtlid character varying(64) ,
     CONSTRAINT eg_death_presentaddr_pkey PRIMARY KEY (id),
     CONSTRAINT eg_death_presentaddr_fkey1 FOREIGN KEY (deathdtlid)
-        REFERENCES public.eg_death_dtls (id) MATCH SIMPLE
+        REFERENCES eg_death_dtls (id) MATCH SIMPLE
         ON UPDATE CASCADE
         ON DELETE CASCADE
 );
 
-CREATE TABLE public.eg_death_spouse_info
+CREATE TABLE eg_death_spouse_info
 (
     id character varying(64)  NOT NULL,
     firstname character varying(200) ,
@@ -142,12 +142,12 @@ CREATE TABLE public.eg_death_spouse_info
     deathdtlid character varying(64) ,
     CONSTRAINT eg_death_spouse_info_pkey PRIMARY KEY (id),
     CONSTRAINT eg_death_spouse_info_fkey1 FOREIGN KEY (deathdtlid)
-        REFERENCES public.eg_death_dtls (id) MATCH SIMPLE
+        REFERENCES eg_death_dtls (id) MATCH SIMPLE
         ON UPDATE CASCADE
         ON DELETE CASCADE
 );
 
-CREATE TABLE public.eg_death_cert_request
+CREATE TABLE eg_death_cert_request
 (
     id character varying(64)  NOT NULL,
     deathcertificateno character varying(25)  NOT NULL,
@@ -163,12 +163,12 @@ CREATE TABLE public.eg_death_cert_request
     dateofissue bigint,
     CONSTRAINT eg_death_cert_request_pkey PRIMARY KEY (id),
     CONSTRAINT eg_death_cert_request_fkey1 FOREIGN KEY (deathdtlid)
-        REFERENCES public.eg_death_dtls (id) MATCH SIMPLE
+        REFERENCES eg_death_dtls (id) MATCH SIMPLE
         ON UPDATE CASCADE
         ON DELETE CASCADE
 );
 
-CREATE TABLE public.eg_death_cert_request_audit
+CREATE TABLE eg_death_cert_request_audit
 (
     id character varying(64)  NOT NULL,
     deathcertificateno character varying(25)  NOT NULL,
@@ -186,37 +186,37 @@ CREATE TABLE public.eg_death_cert_request_audit
 
 
 CREATE INDEX idx_eg_death_dtls_tenantid
-    ON public.eg_death_dtls USING btree
+    ON eg_death_dtls USING btree
     (tenantid ASC NULLS LAST) ;    
 CREATE INDEX idx_eg_birth_dtls_tenantid
-    ON public.eg_birth_dtls USING btree
+    ON eg_birth_dtls USING btree
     (tenantid ASC NULLS LAST)  ;
 
 CREATE INDEX idx_eg_birth_father_info_birthdtlid
-    ON public.eg_birth_father_info USING btree
+    ON eg_birth_father_info USING btree
     (birthdtlid ASC NULLS LAST)  ;    
 CREATE INDEX idx_eg_birth_mother_info_birthdtlid
-    ON public.eg_birth_mother_info USING btree
+    ON eg_birth_mother_info USING btree
     (birthdtlid ASC NULLS LAST)  ;    
  CREATE INDEX idx_eg_birth_permaddr_info_birthdtlid
-    ON public.eg_birth_permaddr USING btree
+    ON eg_birth_permaddr USING btree
     (birthdtlid ASC NULLS LAST)  ;       
 CREATE INDEX idx_eg_birth_presentaddr_birthdtlid
-    ON public.eg_birth_presentaddr USING btree
+    ON eg_birth_presentaddr USING btree
     (birthdtlid ASC NULLS LAST)  ;
     
 CREATE INDEX idx_eg_death_father_info_deathdtlid
-    ON public.eg_death_father_info USING btree
+    ON eg_death_father_info USING btree
     (deathdtlid ASC NULLS LAST)  ;    
 CREATE INDEX idx_eg_death_mother_info_deathdtlid
-    ON public.eg_death_mother_info USING btree
+    ON eg_death_mother_info USING btree
     (deathdtlid ASC NULLS LAST)  ;
 CREATE INDEX idx_eg_death_spouse_info_deathdtlid
-    ON public.eg_death_spouse_info USING btree
+    ON eg_death_spouse_info USING btree
     (deathdtlid ASC NULLS LAST)  ;    
 CREATE INDEX idx_eg_death_permaddr_info_deathdtlid
-    ON public.eg_death_permaddr USING btree
+    ON eg_death_permaddr USING btree
     (deathdtlid ASC NULLS LAST)  ;       
 CREATE INDEX idx_eg_death_presentaddr_deathdtlid
-    ON public.eg_death_presentaddr USING btree
+    ON eg_death_presentaddr USING btree
     (deathdtlid ASC NULLS LAST)  ;

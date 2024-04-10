@@ -116,8 +116,8 @@ public class EnrichmentService {
 		sewerageConnectionRequest.getSewerageConnection().setAdditionalDetails(additionalDetail);
 		// Setting ApplicationType
 		String applicationType=null;
-		
-		
+
+
 		if(reqType==SWConstants.CREATE_APPLICATION) {
 			applicationType=SWConstants.NEW_SEWERAGE_CONNECTION;
 		}
@@ -127,9 +127,9 @@ public class EnrichmentService {
 		else {
 			applicationType=SWConstants.MODIFY_SEWERAGE_CONNECTION;
 		}
-		
+
 		sewerageConnectionRequest.getSewerageConnection().setApplicationType(applicationType);
-		
+
 		setSewarageApplicationIdgenIds(sewerageConnectionRequest);
 		setStatusForCreate(sewerageConnectionRequest);
 
@@ -615,7 +615,7 @@ public class EnrichmentService {
 				auditObject.put("accessBy", requestInfo.getUserInfo().getUuid());
 				auditObject.put("purpose",DOCUMENT_ACCESS_AUDIT_MSG);
 
-				producer.push(config.getDocumentAuditTopic(), auditObject);
+				producer.push(propertyCriteria.getTenantId(), config.getDocumentAuditTopic(), auditObject);
 			}
 
 		}
@@ -649,5 +649,5 @@ public class EnrichmentService {
 		enrichConnectionHolderInfo(userDetailResponse, sewerageConnectionList, requestInfo);
 		return userDetailResponse.getUser().get(0);
 	}
-	
+
 }

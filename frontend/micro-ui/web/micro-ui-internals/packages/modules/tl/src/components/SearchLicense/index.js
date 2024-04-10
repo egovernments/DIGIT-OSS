@@ -108,7 +108,7 @@ const SearchLicense = ({tenantId, t, onSubmit, data, count }) => {
             {
             t(data.display)
                 .split("\\n")
-                .map((text, index) => (
+                ?.map((text, index) => (
                 <p key={index} style={{ textAlign: "center" }}>
                     {text}
                 </p>

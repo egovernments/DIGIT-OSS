@@ -18,7 +18,7 @@ const SelectVehicleType = ({ t, config, onSelect, userType, formData, setValue }
       const vehicleType = vehicleData.filter((vehicle) => vehicle.code === (formData?.vehicle?.type?.code || formData?.vehicle?.type));
       setSelectedModal(...vehicleModal);
       setSelectedType(...vehicleType);
-      setSelectedCapacity(formData?.vehicle?.tankCapacity);
+      setSelectedCapacity(formData?.vehicle?.type?.capacity || formData?.vehicle?.tankCapacity);
     }
   }, [formData?.vehicle, vehicleData]);
 
