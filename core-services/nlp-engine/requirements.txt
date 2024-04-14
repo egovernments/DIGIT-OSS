@@ -14,7 +14,7 @@ hstspreload==2020.9.9
 httpcore==0.9.1
 httpx==0.13.3
 hyperframe==5.2.0
-idna==2.10
+idna==3.7
 itsdangerous==1.1.0
 Jinja2==2.11.2
 joblib==0.16.0
