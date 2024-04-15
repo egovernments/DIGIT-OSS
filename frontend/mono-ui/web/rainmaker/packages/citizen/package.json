@@ -32,7 +32,7 @@
     "jsonpath": "1.0.0",
     "jspdf": "1.5.3",
     "jszip": "3.1.5",
-    "lodash": "4.17.11",
+    "lodash": "4.17.17",
     "material-ui": "0.20.2",
     "mui-datatables": "2.0.0-beta.56",
     "node-sass": "4.14.1",
