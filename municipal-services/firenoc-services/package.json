@@ -43,7 +43,7 @@
     "resource-router-middleware": "^0.6.0",
     "swagger-express-validator": "^1.0.0",
     "swagger-model-validator": "^3.0.10",
-    "swagger-ui-express": "^4.0.2",
+    "swagger-ui-express": "^4.3.0",
     "util": "^0.12.0",
     "uuid": "^3.3.2",
     "winston": "^3.2.1",
