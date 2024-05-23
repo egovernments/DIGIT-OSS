@@ -23,7 +23,7 @@ nltk==3.5
 pickle-mixin==1.0.2
 protobuf==3.13.0
 regex==2020.7.14
-requests==2.24.0
+requests==2.32.0
 rfc3986==1.4.0
 six==1.15.0
 sniffio==1.1.0
