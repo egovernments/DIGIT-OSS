@@ -1,0 +1,35 @@
+swagger: "2.0"
+info:
+  title: Employeee Management System
+  description: Demo API specs for Tech Council
+  contact:
+    name: eGov Foundation
+    url: https://core.digit.org
+  version: 1.0.0
+paths:
+  /employee/_create:
+    post:
+      summary: Operation to create a new employee on the server
+      parameters:
+        - name: EmployeeRequest
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/EmployeeRequest'
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: Employee creation failed
+        '403':
+          description: Forbidden
+definitions:
+  EmployeeRequest:
+    type: object
+    properties:
+      employeeId:
+        type: integer
+        example: 3
+      name:
+        type: string
+        example: Ramesh
