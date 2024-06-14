@@ -165,10 +165,8 @@ public class EstimationService {
 				for (Slab slab : billSlab.getSlabs()) {
 					if (totalUOM > slab.getTo()) {
 						waterCharge = waterCharge.add(BigDecimal.valueOf(((slab.getTo()) - (slab.getFrom())) * slab.getCharge()));
-						totalUOM = totalUOM - ((slab.getTo()) - (slab.getFrom()));
-					} else if (totalUOM < slab.getTo()) {
-						waterCharge = waterCharge.add(BigDecimal.valueOf(totalUOM * slab.getCharge()));
-						totalUOM = ((slab.getTo()) - (slab.getFrom())) - totalUOM;
+					} else if (totalUOM <= slab.getTo()) {
+						waterCharge = waterCharge.add(BigDecimal.valueOf((totalUOM-slab.getFrom()) * slab.getCharge()));
 						break;
 					}
 				}
