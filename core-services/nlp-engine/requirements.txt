@@ -28,5 +28,5 @@ rfc3986==1.4.0
 six==1.15.0
 sniffio==1.1.0
 tqdm==4.48.2
-urllib3==1.25.10
+urllib3==1.26.19
 Werkzeug==1.0.1
