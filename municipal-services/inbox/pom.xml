@@ -5,7 +5,7 @@
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
 		<version>2.2.6.RELEASE</version>
-		<relativePath /> <!-- lookup parent from repository -->
+		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>org.egov</groupId>
 	<artifactId>inbox</artifactId>
@@ -152,7 +152,7 @@
 		<dependency>
 			<groupId>cz.habarta.typescript-generator</groupId>
 			<artifactId>typescript-generator-maven-plugin</artifactId>
-			<version>2.35.1025</version>
+			<version>3.0.1157</version>
 		</dependency>
 		<dependency>
 			<groupId>org.egov</groupId>
