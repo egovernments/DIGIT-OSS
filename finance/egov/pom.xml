@@ -179,14 +179,14 @@
         <spring-data-jpa-envers-version>1.0.6.RELEASE</spring-data-jpa-envers-version>
         <spring-security-version>4.2.3.RELEASE</spring-security-version>
         <spring-security-oauth2-version>2.2.0.RELEASE</spring-security-oauth2-version>
-        <spring-data-elasticsearch>2.0.6.RELEASE</spring-data-elasticsearch>
-        <elastic-search-version>2.4.6</elastic-search-version>
+        <spring-data-elasticsearch>5.1.0</spring-data-elasticsearch>
+        <elastic-search-version>6.3.0</elastic-search-version>
         <apache-tiles-version>3.0.7</apache-tiles-version>
         <embedded-redis-version>0.6</embedded-redis-version>
         <quartz-version>2.3.0</quartz-version>
         <jasper-report-version>6.1.0</jasper-report-version>
         <json-simple-version>1.1.1</json-simple-version>
-        <jackson-version>2.9.2</jackson-version>
+        <jackson-version>2.15.0</jackson-version>
         <orika-core.version>1.5.2</orika-core.version>
         <gson-version>2.8.2</gson-version>
         <antisamy-version>1.5.7</antisamy-version>
