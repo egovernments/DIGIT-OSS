@@ -19,7 +19,7 @@ itsdangerous==1.1.0
 Jinja2==2.11.2
 joblib==0.16.0
 MarkupSafe==1.1.1
-nltk==3.5
+nltk==3.8.2
 pickle-mixin==1.0.2
 protobuf==3.13.0
 regex==2020.7.14
