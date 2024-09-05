@@ -45,17 +45,17 @@
     "lodash.set": "^4.3.2",
     "moment-timezone": "^0.5.28",
     "morgan": "^1.8.0",
-    "pdfmake": "0.2.4",
+    "pdfmake": "0.2.3",
     "pg": "^8.7.1",
-    "qrcode": "^1.4.1",
+    "qrcode": "^1.5.0",
     "request": "^2.88.0",
     "resource-router-middleware": "^0.6.0",
     "uuid": "^3.3.3",
-    "winston": "^3.2.1",
+    "winston": "^3.3.4",
     "pdf-merger-js": "3.2.1",
     "base64-stream": "1.0.0",
     "node-cache": "5.1.2",
-    "async": "3.2.3"
+    "async": "3.0.0"
   },
   "devDependencies": {
     "babel-cli": "^6.9.0",
@@ -68,7 +68,7 @@
     "eslint": "^3.1.1",
     "mustache": "^3.0.1",
     "nodemon": "^1.19.4",
-    "pdfmake": "^0.2.2"
+    "pdfmake": "^0.2.3"
   },
   "bugs": {
     "url": "https://github.com/egovernments/core-services/issues"
