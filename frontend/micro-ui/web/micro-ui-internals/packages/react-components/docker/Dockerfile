@@ -12,7 +12,7 @@ RUN node envs.js \
     && yarn install \
     && yarn build-storybook
 
-FROM nginx:mainline-alpine
+FROM nginx:1-alpine3.20
 ENV WORK_DIR=/var/web/storybook
 
 RUN mkdir -p ${WORK_DIR}
