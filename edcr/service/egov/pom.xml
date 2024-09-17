@@ -179,7 +179,7 @@
 		<recaptcha.version>0.0.8</recaptcha.version>
 		<jcaptcha.version>2.0-alpha-1</jcaptcha.version>
 		<pdfbox.version>2.0.4</pdfbox.version>
-		<itextpdf.version>5.0.6</itextpdf.version>
+		<itextpdf.version>5.1.0</itextpdf.version>
 
 		<!-- Plugin dependency versions -->
 		<mvn.release.plugin.version>2.5.3</mvn.release.plugin.version>
