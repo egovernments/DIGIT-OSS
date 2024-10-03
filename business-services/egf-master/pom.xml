@@ -6,7 +6,7 @@
     <groupId>org.springframework.boot</groupId>
     <artifactId>spring-boot-starter-parent</artifactId>
     <version>2.2.6.RELEASE</version>
-    <relativePath></relativePath>
+    <relativePath/>
   </parent>
   <groupId>org.egov</groupId>
   <artifactId>egf-master</artifactId>
@@ -83,7 +83,7 @@
     <dependency>
       <groupId>commons-io</groupId>
       <artifactId>commons-io</artifactId>
-      <version>2.5</version>
+      <version>2.14.0</version>
     </dependency>
     <dependency>
       <groupId>org.springframework.boot</groupId>
