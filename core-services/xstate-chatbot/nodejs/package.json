@@ -12,7 +12,7 @@
         "JSONPath": "^0.11.2",
         "axios": "^0.18.1",
         "body-parser": "^1.18.3",
-        "express": "^4.16.4",
+        "express": "^4.21.1",
         "express-cluster": "0.0.5",
         "form-data": "^3.0.0",
         "kafka-node": "^5.0.0",
