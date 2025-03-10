@@ -10,7 +10,7 @@
     "@material-ui/core": "1.5.1",
     "@material-ui/icons": "^2.0.0",
     "autoselector": "1.5.8",
-    "axios": "0.17.1",
+    "axios": "1.8.2",
     "babel-polyfill": "6.26.0",
     "babel-runtime": "6.26.0",
     "disable-browser-back-navigation": "0.1.0",
