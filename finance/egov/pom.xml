@@ -179,8 +179,8 @@
         <spring-data-jpa-envers-version>1.0.6.RELEASE</spring-data-jpa-envers-version>
         <spring-security-version>4.2.3.RELEASE</spring-security-version>
         <spring-security-oauth2-version>2.2.0.RELEASE</spring-security-oauth2-version>
-        <spring-data-elasticsearch>2.0.6.RELEASE</spring-data-elasticsearch>
-        <elastic-search-version>2.4.6</elastic-search-version>
+        <spring-data-elasticsearch>3.0.9.RELEASE</spring-data-elasticsearch>
+        <elastic-search-version>7.17.25</elastic-search-version>
         <apache-tiles-version>3.0.7</apache-tiles-version>
         <embedded-redis-version>0.6</embedded-redis-version>
         <quartz-version>2.3.0</quartz-version>
@@ -232,7 +232,7 @@
         <jcaptcha.version>2.0-alpha-1</jcaptcha.version>
         <javaxt.core.version>1.7.8</javaxt.core.version>
         <pdfbox.version>2.0.4</pdfbox.version>
-        <bouncycastle.version>1.60</bouncycastle.version>
+        <bouncycastle.version>1.69</bouncycastle.version>
         <!-- Plugin dependency versions-->
         <mvn.javadoc.plugin.version>2.10.4</mvn.javadoc.plugin.version>
         <mvn.release.plugin.version>2.5.3</mvn.release.plugin.version>
