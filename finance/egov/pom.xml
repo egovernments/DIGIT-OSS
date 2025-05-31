@@ -197,7 +197,7 @@
         <itext-version>2.1.7</itext-version>
         <commons-javaflow-version>20060411</commons-javaflow-version>
         <jexcelapi-version>2.6.12</jexcelapi-version>
-        <commons-beanutils-version>1.9.3</commons-beanutils-version>
+        <commons-beanutils-version>1.11.0</commons-beanutils-version>
         <commons-config-version>1.10</commons-config-version>
         <commons-lang-version>2.6</commons-lang-version>
         <commons-lang3-version>3.6</commons-lang3-version>
