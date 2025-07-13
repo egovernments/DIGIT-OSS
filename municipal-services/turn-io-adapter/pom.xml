@@ -6,7 +6,7 @@
     <groupId>org.springframework.boot</groupId>
     <artifactId>spring-boot-starter-parent</artifactId>
     <version>2.2.6.RELEASE</version>
-    <relativePath></relativePath>
+    <relativePath/>
   </parent>
   <groupId>org.egov.io</groupId>
   <artifactId>turn-io-adapter</artifactId>
@@ -72,12 +72,12 @@
     <dependency>
       <groupId>com.fasterxml.jackson.dataformat</groupId>
       <artifactId>jackson-dataformat-yaml</artifactId>
-      <version>2.10.3</version>
+      <version>2.15.0</version>
     </dependency>
     <dependency>
       <groupId>com.fasterxml.jackson.core</groupId>
       <artifactId>jackson-databind</artifactId>
-      <version>2.10.3</version>
+      <version>2.15.0</version>
     </dependency>
     <dependency>
       <groupId>com.fasterxml.jackson.core</groupId>
