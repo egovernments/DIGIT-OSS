@@ -21,12 +21,12 @@ joblib==0.16.0
 MarkupSafe==1.1.1
 nltk==3.5
 pickle-mixin==1.0.2
-protobuf==3.13.0
+protobuf==4.25.8
 regex==2020.7.14
 requests==2.24.0
 rfc3986==1.4.0
 six==1.15.0
 sniffio==1.1.0
 tqdm==4.48.2
-urllib3==1.25.10
+urllib3==2.5.0
 Werkzeug==1.0.1
