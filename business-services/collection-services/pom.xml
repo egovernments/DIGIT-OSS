@@ -6,7 +6,7 @@
     <groupId>org.springframework.boot</groupId>
     <artifactId>spring-boot-starter-parent</artifactId>
     <version>2.2.6.RELEASE</version>
-    <relativePath></relativePath>
+    <relativePath/>
   </parent>
   <groupId>collection-services</groupId>
   <artifactId>collection-services</artifactId>
@@ -66,7 +66,7 @@
     <dependency>
       <groupId>org.apache.commons</groupId>
       <artifactId>commons-lang3</artifactId>
-      <version>3.0</version>
+      <version>3.18.0</version>
     </dependency>
     <dependency>
       <groupId>joda-time</groupId>
@@ -211,7 +211,7 @@
     								</goals>
     							</pluginExecutionFilter>
     							<action>
-    								<ignore></ignore>
+    								<ignore/>
     							</action>
     						</pluginExecution>
     					</pluginExecutions>
