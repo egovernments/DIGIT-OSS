@@ -110,7 +110,7 @@
         <spring-data-jpa-envers-version>1.0.6.RELEASE</spring-data-jpa-envers-version>
         <spring-security-version>4.2.3.RELEASE</spring-security-version>
         <spring-security-oauth2-version>2.2.0.RELEASE</spring-security-oauth2-version>
-        <spring-data-elasticsearch>2.0.6.RELEASE</spring-data-elasticsearch>
+        <spring-data-elasticsearch>3.0.9.RELEASE</spring-data-elasticsearch>
         <elastic-search-version>2.4.6</elastic-search-version>
         <apache-tiles-version>3.0.7</apache-tiles-version>
         <embedded-redis-version>0.6</embedded-redis-version>
@@ -131,7 +131,7 @@
         <commons-beanutils-version>1.9.3</commons-beanutils-version>
         <commons-config-version>1.10</commons-config-version>
         <commons-lang-version>2.6</commons-lang-version>
-        <commons-lang3-version>3.6</commons-lang3-version>
+        <commons-lang3-version>3.18.0</commons-lang3-version>
         <commons-email-version>1.5</commons-email-version>
         <commons-collections-version>3.2.2</commons-collections-version>
         <commons-collections4-version>4.1</commons-collections4-version>
