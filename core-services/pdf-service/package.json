@@ -33,10 +33,10 @@
   "license": "MIT",
   "dependencies": {
     "axios": "^0.18.0",
-    "body-parser": "^1.13.3",
+    "body-parser": "^1.20.4",
     "compression": "^1.5.2",
     "cors": "^2.7.1",
-    "express": "^4.13.3",
+    "express": "^4.22.0",
     "express-async-handler": "^1.1.4",
     "form-data": "^2.5.0",
     "jsonpath": "^1.0.2",
