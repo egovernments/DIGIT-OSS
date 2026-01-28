@@ -12,7 +12,7 @@
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
         <version>1.5.22.RELEASE</version>
-        <relativePath></relativePath>
+        <relativePath/>
     </parent>
     <properties>
         <log4j2.version>2.17.1</log4j2.version>
@@ -26,7 +26,7 @@
         <dependency>
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-classic</artifactId>
-            <version>1.2.0</version>
+            <version>1.5.25</version>
         </dependency>
         <dependency>
             <groupId>org.egov.services</groupId>
